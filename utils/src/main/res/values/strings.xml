@@ -1,0 +1,3 @@
+<resources>
+    <string name="error_activity_not_found">No application found to open this URL.</string>
+</resources>
