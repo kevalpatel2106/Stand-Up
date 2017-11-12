@@ -62,6 +62,7 @@ android {
 
     defaultConfig {
         applicationId buidlConfig.applicationId
+        multiDexEnabled true
 
         //sdks
         minSdkVersion buidlConfig.min
@@ -136,27 +137,28 @@ tasks.withType(Test) {
 dependencies {
     implementation project(':base')
     implementation project(':utils')
+    implementation project(':network')
+    androidTestImplementation project(':test-utils')
+    implementation 'com.android.support:multidex:1.0.2'
 
     implementation ide.kotlin
     implementation ide.constrainlayout
 
     //Testing
     testImplementation testLib.junit
-    androidTestCompile project(':test-utils')
     androidTestImplementation(testLib.rules, excludeGrp)
-    androidTestImplementation(testLib.esspresso, excludeGrp)
+    androidTestImplementation testLib.esspresso
     androidTestImplementation(testLib.runner, excludeGrp)
     androidTestImplementation(testLib.esspressoIntents, excludeGrp)
     androidTestImplementation(testLib.contrib, excludeGrp)
-    androidTestImplementation(testLib.idling, excludeGrp)
-    androidTestImplementation(testLib.uiAutomator, excludeGrp)
+    androidTestImplementation testLib.idling
+    androidTestImplementation testLib.uiAutomator
 
     //Butter knife
-    implementation butterKnifeLib.butterKnife
-    kapt butterKnifeLib.annotationProcessor
+    implementation(butterKnifeLib.butterKnife, excludeGrp)
+    kapt(butterKnifeLib.annotationProcessor, excludeGrp)
 
-    //Other
-    implementation(otherLib.glide, excludeGrp)
+    //Loggers
     implementation(otherLib.timber, excludeGrp)
     debugImplementation(otherLib.shetho, excludeGrp)
     debugImplementation(otherLib.shethoOkhttp, excludeGrp)
@@ -164,17 +166,15 @@ dependencies {
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
-    implementation supportLib.recyclerView
-    implementation supportLib.cardView
+    implementation(supportLib.recyclerView, excludeGrp)
+    implementation(supportLib.cardView, excludeGrp)
     implementation supportLib.design
 
     //Arch component
-    implementation archComponent.runtime
     implementation archComponent.lifecycle
     kapt archComponent.lifecycleAnotations
 
     //Rx
     implementation rxLib.rxJava
-    implementation rxLib.rxAndroid
-    implementation rxLib.rxBus
+    implementation(rxLib.rxAndroid, excludeGrp)
 }

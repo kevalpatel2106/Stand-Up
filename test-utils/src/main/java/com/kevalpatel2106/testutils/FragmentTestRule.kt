@@ -18,7 +18,6 @@ package com.kevalpatel2106.testutils
 
 import android.support.test.rule.ActivityTestRule
 import android.support.v4.app.Fragment
-import org.junit.Assert
 
 /**
  * Created by Keval on 21-Jul-17.
@@ -41,12 +40,12 @@ class FragmentTestRule<F : Fragment>(private val mFragmentClass: Class<F>)
             transaction.replace(R.id.container, fragment)
             transaction.commit()
         } catch (e: InstantiationException) {
-            Assert.fail(String.format("%s: Could not insert %s into FragmentRuleActivity: %s",
+            org.junit.Assert.fail(String.format("%s: Could not insert %s into FragmentRuleActivity: %s",
                     javaClass.simpleName,
                     mFragmentClass.simpleName,
                     e.message))
         } catch (e: IllegalAccessException) {
-            Assert.fail(String.format("%s: Could not insert %s into FragmentRuleActivity: %s", javaClass.simpleName, mFragmentClass.simpleName, e.message))
+            org.junit.Assert.fail(String.format("%s: Could not insert %s into FragmentRuleActivity: %s", javaClass.simpleName, mFragmentClass.simpleName, e.message))
         }
 
     }

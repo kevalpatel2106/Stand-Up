@@ -28,6 +28,11 @@ import android.content.SharedPreferences
 class SharedPrefsProvider(context: Context) {
 
     /**
+     * Name of the shared preference file.
+     */
+    private val PREF_FILE = "app_prefs"
+
+    /**
      * shared preference object.
      */
     private val mSharedPreference: SharedPreferences
@@ -158,19 +163,5 @@ class SharedPrefsProvider(context: Context) {
      * @return int value for given key else -1 if key not found.
      */
     fun getIntFromPreference(key: String): Int = mSharedPreference.getInt(key, -1)
-
-    companion object {
-
-        /**
-         * Name of the shared preference file.
-         */
-        private val PREF_FILE = "app_prefs"
-
-        /**
-         * Key for the preference to hold boolean which indicates if app has to display music visualizer
-         * in feeds or not?
-         */
-        val IS_MUSIC_VISULAIZER_ON = "is_music_visualizer_on"
-    }
 
 }

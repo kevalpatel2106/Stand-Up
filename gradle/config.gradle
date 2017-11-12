@@ -16,7 +16,7 @@
 
 ext {
     buidlConfig = [
-            min             : 19,
+            min             : 21,
             target          : 27,
             compile         : 27,
             buildToolVersion: '26.0.2',
@@ -45,6 +45,7 @@ ext {
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/rxjava.properties'
+        exclude 'protobuf.meta'
     }
 
     lintOption = {

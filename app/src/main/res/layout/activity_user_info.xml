@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kevalpatel2106.standup.UserInfoActivity">
+
+    <!--Toolbar-->
+    <include
+        layout="@layout/layout_simple_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--Scrollview container-->
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--User name input box-->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/md_activity_vertical_margin"
+                android:textColorHint="?android:attr/textColorSecondary"
+                app:counterEnabled="true"
+                app:counterMaxLength="40"
+                app:counterTextAppearance="@style/NanoText.Secondary"
+                app:errorEnabled="true"
+                app:hintAnimationEnabled="true"
+                app:hintTextAppearance="@style/SmallText.Secondary"
+                app:layout_constraintLeft_toRightOf="@id/guideline"
+                app:layout_constraintRight_toLeftOf="@id/guideline1"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.kevalpatel2106.base.BaseEditText
+                    style="@style/MediumText.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:maxLength="40"
+                    tools:text="@tools:sample/lorem" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/md_activity_vertical_margin" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/md_activity_vertical_margin" />
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

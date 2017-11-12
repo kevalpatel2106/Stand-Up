@@ -15,23 +15,33 @@
  */
 
 ext {
-    def playServiceVersion = "11.4.0"
+    def playServiceVersion = "11.6.0"
     def supportLibVersion = "27.0.0"
-    def shethoVersion = "1.5.0"
+    def kotlinVersion = '1.1.51'
+
+    def okHttpVersion = "3.8.1"
     def retrofitVersion = "2.3.0"
+
     def espressoVersion = "3.0.0"
     def butterKnifeVersion = "8.8.1"
-    def kotlinVersion = '1.1.51'
-    def archComponentVersion = '1.0.0-rc1'
+    def archComponentVersion = '1.0.0'
+    def shethoVersion = "1.5.0"
 
     //Exclude group for the test dependency
     excludeGrp = {
+        exclude group: 'com.android.support.test.espresso', module: 'espresso-core'
+        exclude group: 'com.android.support.test.espresso', module: 'espresso-idling-resource'
         exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'recyclerview-v7'
-        exclude group: 'com.android.support', module: 'cardview-v7'
-        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'support-compat'
+        exclude group: 'com.android.support', module: 'support-fragment'
         exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'android.arch.lifecycle', module: 'common'
+        exclude group: 'android.arch.core', module: 'common'
+        exclude group: 'android.arch.core', module: 'common'
+        exclude group: 'android.arch.lifecycle', module: 'runtime'
         exclude group: 'com.jakewharton.timber', module: 'timber'
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
     }
 
     //Testing dependency
@@ -44,6 +54,7 @@ ext {
             contrib         : 'com.android.support.test.espresso:espresso-contrib:' + espressoVersion,
             idling          : 'com.android.support.test.espresso:espresso-idling-resource:' + espressoVersion,
             uiAutomator     : 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2',
+            mockwebserver   : 'com.squareup.okhttp3:mockwebserver:' + okHttpVersion,
     ]
 
     //Support library dependency
@@ -61,7 +72,6 @@ ext {
             room               : 'android.arch.persistence.room:runtime:' + archComponentVersion,
             roomAnnotation     : 'android.arch.persistence.room:compiler:' + archComponentVersion,
             roomRx             : 'android.arch.persistence.room:rxjava2:' + archComponentVersion,
-            runtime            : 'android.arch.lifecycle:runtime:' + archComponentVersion,
             lifecycle          : 'android.arch.lifecycle:extensions:' + archComponentVersion,
             lifecycleAnotations: 'android.arch.lifecycle:compiler:' + archComponentVersion,
     ]
@@ -74,8 +84,10 @@ ext {
 
     //Firebase dependency
     firebaseLib = [
-            core     : 'com.google.firebase:firebase-messaging:' + playServiceVersion,
-            fcm      : 'com.google.firebase:firebase-core:' + playServiceVersion,
+            core     : 'com.google.firebase:firebase-core:' + playServiceVersion,
+            fcm      : 'com.google.firebase:firebase-messaging:' + playServiceVersion,
+            auth     : 'com.google.firebase:firebase-auth:' + playServiceVersion,
+            ads      : 'com.google.firebase:firebase-ads:' + playServiceVersion,
             dispacher: 'com.firebase:firebase-jobdispatcher:0.8.2',
     ]
 
@@ -89,7 +101,7 @@ ext {
             retrofit  : 'com.squareup.retrofit2:retrofit:' + retrofitVersion,
             gsonPlugin: 'com.squareup.retrofit2:converter-gson:' + retrofitVersion,
             rxPlugin  : 'com.squareup.retrofit2:adapter-rxjava2:' + retrofitVersion,
-            logger    : 'com.squareup.okhttp3:logging-interceptor:3.8.1',
+            logger    : 'com.squareup.okhttp3:logging-interceptor:' + okHttpVersion,
     ]
 
     //butter knife dependency
@@ -107,11 +119,12 @@ ext {
 
     //Other libs
     otherLib = [
-            gson          : 'com.google.code.gson:gson:2.8.1',
-            glide         : 'com.github.bumptech.glide:glide:3.8.0',
-            timber        : 'com.jakewharton.timber:timber:4.5.1',
-            circleImagView: 'de.hdodenhof:circleimageview:2.1.0',
-            shetho        : 'com.facebook.stetho:stetho:' + shethoVersion,
-            shethoOkhttp  : 'com.facebook.stetho:stetho-okhttp3:' + shethoVersion,
+            gson           : 'com.google.code.gson:gson:2.8.1',
+            glide          : 'com.github.bumptech.glide:glide:4.3.1',
+            glideAnnotation: 'com.github.bumptech.glide:compiler:4.3.1',
+            timber         : 'com.jakewharton.timber:timber:4.6.0',
+            circleImagView : 'de.hdodenhof:circleimageview:2.1.0',
+            shetho         : 'com.facebook.stetho:stetho:' + shethoVersion,
+            shethoOkhttp   : 'com.facebook.stetho:stetho-okhttp3:' + shethoVersion,
     ]
 }

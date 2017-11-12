@@ -1,0 +1,154 @@
+/*
+ *  Copyright 2017 Keval Patel.
+ *
+ *  Licensed under the GNU General Public License, Version 3.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  https://www.gnu.org/licenses/gpl-3.0.en.html
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'jacoco-android'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+apply from: '../gradle/config.gradle'
+apply from: '../gradle/deps.gradle'
+
+
+android {
+    signingConfigs {
+        //This are th play store signing config.
+        playStore {
+            if (System.getenv("IS_CI_BUILD") == "true") {
+                //It is CI build, load it from the environment variables.
+                //See circle.yml file.
+                storeFile file("../misc/keystore.jks")
+                storePassword System.getenv("KEY_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("ALIAS_PASSWORD")
+            } else {
+                //If this is the local build, load it from the keystore.properties file
+                File signFile = rootProject.file('./misc/keystore.properties')
+                if (signFile.exists()) {
+                    Properties props = new Properties()
+                    props.load(new FileInputStream(signFile))
+
+                    keyAlias props['keystore.alias']
+                    keyPassword props['keystore.password']
+                    storeFile file(props['keystore.file'])
+                    storePassword props['keystore.aliaspassword']
+                } else {
+                    throw new GradleException("keystore.properties file not found.")
+                }
+            }
+        }
+    }
+
+    compileSdkVersion buidlConfig.compile
+    buildToolsVersion buidlConfig.buildToolVersion
+
+    compileOptions {
+        sourceCompatibility javaCompatibility.sourceCompatibility
+        targetCompatibility javaCompatibility.targetCompatibility
+    }
+
+    defaultConfig {
+        //sdks
+        minSdkVersion buidlConfig.min
+        targetSdkVersion buidlConfig.target
+
+        //strip other than english resources
+        resConfigs "en"
+
+        consumerProguardFiles proguardConfig.proguardPath
+
+        testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
+        defaultPublishConfig "debug"
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.playStore
+        }
+        debug {
+            testCoverageEnabled true
+            signingConfig signingConfigs.playStore
+        }
+    }
+
+    packagingOptions packageExcludes
+    lintOptions lintOption
+    aaptOptions aaptOption
+    dexOptions dexOption
+}
+
+// Grant animation permissions to avoid test failure because of ui sync.
+task grantAnimationPermissions(type: Exec, dependsOn: 'installMock') {
+    group = 'test'
+    description = 'Grant permissions for testing.'
+
+    def absolutePath = file('..') // Get project absolute path
+    commandLine "$absolutePath/misc/set_animation_permissions.sh com.kevalpatel2106.base".split(" ")
+}
+
+// Source: http://stackoverflow.com/q/29908110/112705
+afterEvaluate {
+    // When launching individual tests from Android Studio, it seems that only the assemble tasks
+    // get called directly, not the install* versions
+    tasks.each { task ->
+        if (task.name.startsWith('assembleMockAndroidTest')) {
+            task.dependsOn grantAnimationPermissions
+        }
+    }
+}
+
+// Test Logging
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat = 'full'
+        events "started", "passed", "skipped", "failed"
+    }
+}
+
+dependencies {
+    implementation project(':base')
+    implementation project(':utils')
+    androidTestImplementation project(':test-utils')
+
+    implementation ide.kotlin
+
+    //Support
+    implementation supportLib.appCompat
+    implementation supportLib.supportv4
+
+    //Glide
+    implementation(otherLib.glide, excludeGrp)
+    kapt(otherLib.glideAnnotation, excludeGrp)
+
+    //GSON
+    implementation otherLib.gson
+    debugImplementation(otherLib.shetho, excludeGrp)
+    debugImplementation(otherLib.shethoOkhttp, excludeGrp)
+
+    //Retrofit
+    implementation retrofitLib.retrofit
+    implementation retrofitLib.gsonPlugin
+    implementation retrofitLib.rxPlugin
+    implementation retrofitLib.logger
+
+    //Rx
+    implementation rxLib.rxJava
+    implementation (rxLib.rxAndroid, excludeGrp)
+
+    //Other
+    implementation(otherLib.timber, excludeGrp)
+}

@@ -121,30 +121,40 @@ tasks.withType(Test) {
 
 dependencies {
     implementation project(':utils')
-    androidTestApi project( ':test-utils')
+    androidTestImplementation project(':test-utils')
 
     implementation ide.kotlin
 
     //Testing
     testImplementation testLib.junit
     androidTestImplementation(testLib.rules, excludeGrp)
-    androidTestImplementation(testLib.esspresso, excludeGrp)
+    androidTestImplementation testLib.esspresso
     androidTestImplementation(testLib.runner, excludeGrp)
     androidTestImplementation(testLib.esspressoIntents, excludeGrp)
     androidTestImplementation(testLib.contrib, excludeGrp)
-    androidTestImplementation(testLib.idling, excludeGrp)
-    androidTestImplementation(testLib.uiAutomator, excludeGrp)
+    androidTestImplementation testLib.idling
+    androidTestImplementation testLib.uiAutomator
+
     //Butter knife
-    implementation butterKnifeLib.butterKnife
-    kapt butterKnifeLib.annotationProcessor
+    implementation(butterKnifeLib.butterKnife, excludeGrp)
+    kapt(butterKnifeLib.annotationProcessor, excludeGrp)
+
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
     implementation supportLib.recyclerView
     implementation supportLib.design
+
+    //Firebase
+    implementation firebaseLib.core
+    implementation firebaseLib.auth
+
+
     //Rx
     implementation rxLib.rxJava
-    implementation rxLib.rxAndroid
+    implementation (rxLib.rxAndroid, excludeGrp)
+
+
     //Other
     implementation(otherLib.timber, excludeGrp)
 }

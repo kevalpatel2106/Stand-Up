@@ -119,23 +119,22 @@ tasks.withType(Test) {
 }
 dependencies {
     implementation ide.kotlin
-    androidTestApi project( ':test-utils')
+    androidTestImplementation project(':test-utils')
 
     //Testing
     testImplementation testLib.junit
     androidTestImplementation(testLib.rules, excludeGrp)
-    androidTestImplementation(testLib.esspresso, excludeGrp)
+    androidTestImplementation testLib.esspresso
     androidTestImplementation(testLib.runner, excludeGrp)
     androidTestImplementation(testLib.esspressoIntents, excludeGrp)
-    androidTestImplementation(testLib.contrib, excludeGrp)
-    androidTestImplementation(testLib.idling, excludeGrp)
-    androidTestImplementation(testLib.uiAutomator, excludeGrp)
+    androidTestImplementation testLib.contrib
+    androidTestImplementation testLib.idling
+    androidTestImplementation testLib.uiAutomator
 
 
     implementation supportLib.supportv4
     implementation supportLib.appCompat
     implementation rxLib.rxJava
-    implementation rxLib.rxAndroid
-    implementation(rxLib.rxBus, excludeGrp)
+    implementation(rxLib.rxAndroid, excludeGrp)
     implementation(otherLib.timber, excludeGrp)
 }

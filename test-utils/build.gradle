@@ -95,12 +95,14 @@ dependencies {
     implementation supportLib.supportv4
     implementation supportLib.design
 
-    implementation testLib.junit
-    implementation(testLib.rules, excludeGrp)
-    implementation(testLib.esspresso, excludeGrp)
-    implementation(testLib.runner, excludeGrp)
-    implementation(testLib.esspressoIntents, excludeGrp)
-    implementation(testLib.contrib, excludeGrp)
-    implementation(testLib.idling, excludeGrp)
-    implementation(testLib.uiAutomator, excludeGrp)
+    //Testing
+    api testLib.junit
+    api testLib.rules
+    api testLib.esspresso
+    api testLib.runner
+    api testLib.esspressoIntents
+    api testLib.contrib
+    api testLib.idling
+    api testLib.uiAutomator
+    api testLib.mockwebserver
 }
