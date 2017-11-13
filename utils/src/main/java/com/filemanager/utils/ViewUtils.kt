@@ -29,6 +29,7 @@ import android.view.inputmethod.InputMethodManager
 
 /**
  * Created by Keval on 08-Sep-17.
+ * View utils for handling the view operations.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
@@ -44,9 +45,8 @@ object ViewUtils {
         return color
     }
 
-    fun toPx(context: Context, dp: Int): Int = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-            dp.toFloat(),
-            context.resources.displayMetrics)
+    fun toPx(context: Context, dp: Int): Int = TypedValue
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), context.resources.displayMetrics)
             .toInt()
 
     private fun isTablet(resources: Resources): Boolean = resources.configuration.screenLayout and

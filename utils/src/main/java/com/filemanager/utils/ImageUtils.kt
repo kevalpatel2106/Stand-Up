@@ -26,6 +26,7 @@ import java.io.IOException
 
 /**
  * Created by Kevalpatel2106 on 30-Sep-17.
+ * Utils to deal with images and bitmaps.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */

@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.test.runner.AndroidJUnitRunner;
-import android.util.Log;
 
 import java.lang.reflect.Method;
 
@@ -138,9 +137,8 @@ public final class CustomTestRunner extends AndroidJUnitRunner {
                 currentScales[i] = animationScale;
             }
             setAnimationScales.invoke(windowManagerObj, new Object[]{currentScales});
-            Log.d(TAG, "Changed permissions of animations");
         } catch (Exception e) {
-            Log.e(TAG, "Could not change animation scale to " + animationScale + " :'(");
+            e.printStackTrace();
         }
     }
 }

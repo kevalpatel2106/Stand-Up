@@ -22,12 +22,18 @@ import java.io.File
 
 /**
  * Created by Keval on 20-Dec-16.
- * Utility functions related to file and storage.
+ * Utility functions related to files and storage.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
 object FileUtils {
-    fun getCacheDir(context: Context): File =
-            if (context.externalCacheDir == null) context.cacheDir else context.externalCacheDir
+
+    /**
+     * Get the cache directory for the application. If external cache directory is not available,
+     * it will return internal (data/data) cache directory.
+     *
+     * @param context Instance of the caller.
+     */
+    fun getCacheDir(context: Context): File = context.externalCacheDir ?: context.cacheDir
 }

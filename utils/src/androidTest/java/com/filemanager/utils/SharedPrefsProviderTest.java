@@ -24,6 +24,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.kevalpatel2106.testutils.BaseTestClass;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +48,6 @@ public final class SharedPrefsProviderTest extends BaseTestClass {
     @Before
     public void setUp() throws Exception {
         mSharedPrefsProvider = new SharedPrefsProvider(InstrumentationRegistry.getContext());
-
         mSharedPreferences = InstrumentationRegistry.getContext().getSharedPreferences("app_prefs",
                 Context.MODE_PRIVATE);
 
@@ -62,6 +63,9 @@ public final class SharedPrefsProviderTest extends BaseTestClass {
         assertNotNull(mSharedPreferences);
         try {
             new SharedPrefsProvider(null);
+
+            //Fail
+            Assert.fail();
         } catch (RuntimeException e) {
             //Success
         }
