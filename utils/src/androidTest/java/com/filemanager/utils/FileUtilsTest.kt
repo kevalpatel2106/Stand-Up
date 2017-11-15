@@ -42,9 +42,7 @@ class FileUtilsTest : BaseTestClass() {
         mContext = InstrumentationRegistry.getTargetContext()
     }
 
-    override fun getActivity(): Activity? {
-        return null
-    }
+    override fun getActivity(): Activity? = null
 
     @Test
     fun getCacheDir() {

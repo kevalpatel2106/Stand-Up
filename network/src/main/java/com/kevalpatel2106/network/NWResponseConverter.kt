@@ -20,9 +20,7 @@ internal class NWResponseConverter(private val gson: Gson) : Converter.Factory()
     companion object {
 
         @JvmStatic
-        fun create(gson: Gson): NWResponseConverter {
-            return NWResponseConverter(gson)
-        }
+        fun create(gson: Gson): NWResponseConverter = NWResponseConverter(gson)
     }
 
     override fun responseBodyConverter(type: Type,

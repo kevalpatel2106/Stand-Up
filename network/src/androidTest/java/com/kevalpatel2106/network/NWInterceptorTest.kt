@@ -8,6 +8,8 @@ import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import io.reactivex.functions.Consumer
+import okhttp3.Request
+import okhttp3.Response
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Assert
 import org.junit.Test
@@ -25,6 +27,39 @@ import java.net.HttpURLConnection
 class NWInterceptorTest : BaseTestClass() {
 
     @Test
+    fun checkAddAuthHeader() {
+        val request = Request.Builder()
+                .addHeader("Username", "TestUserName")
+                .addHeader("Token", "TestToken")
+                .build()
+
+        val modifiedRequest = NWInterceptor(InstrumentationRegistry.getContext())
+                .addAuthHeader(request)
+
+        Assert.assertNull(modifiedRequest.headers().get("Username"))
+        Assert.assertNull(modifiedRequest.headers().get("Token"))
+
+        Assert.assertNotNull(modifiedRequest.headers().get("Authentication"))
+        Assert.assertEquals(modifiedRequest.headers().get("Authentication"),
+                "Basic " + Base64.encodeToString(("TestUserName" + ":" + "TestToken").toByteArray(),
+                        Base64.NO_WRAP))
+    }
+
+    @Test
+    fun checkAddCachingHeaders() {
+        val request = Request.Builder()
+                .addHeader("Cache-Time", "5000")
+                .build()
+        val response = Response.Builder().build()
+        val modifiedResponse = NWInterceptor(InstrumentationRegistry.getContext())
+                .addCachingHeaders(request, response)
+
+        Assert.assertNull(modifiedResponse.headers().get("Cache-Time"))
+        Assert.assertNotNull(modifiedResponse.headers().get("Cache-Control"))
+        Assert.assertEquals(modifiedResponse.headers().get("Cache-Control"), "public, max-age=5000")
+    }
+
+    @Test
     fun checkNoCacheHeader() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse()
@@ -34,8 +69,7 @@ class NWInterceptorTest : BaseTestClass() {
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
         BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer),
-                        "TestUserName", "TestToken")
+                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithoutCache()
                 .subscribe(Consumer<retrofit2.Response<TestData>> {
@@ -63,8 +97,7 @@ class NWInterceptorTest : BaseTestClass() {
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
         BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer),
-                        "TestUserName", "TestToken")
+                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithCache()
                 .subscribe(Consumer<retrofit2.Response<TestData>> {
@@ -80,7 +113,6 @@ class NWInterceptorTest : BaseTestClass() {
                         Assert.fail("Internet is there")
                     }
                 })
-
     }
 
     @Test
@@ -93,12 +125,11 @@ class NWInterceptorTest : BaseTestClass() {
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
         BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer),
-                        "TestUserName", "TestToken")
+                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithoutAuthHeader()
                 .subscribe(Consumer<retrofit2.Response<TestData>> {
-                    Assert.assertNull(it.headers().get("Authentication"))
+                    Assert.assertNull(it.raw().request().headers().get("Authentication"))
                 }, object : NWErrorConsumer() {
 
                     override fun onError(code: Int, message: String) {
@@ -122,13 +153,12 @@ class NWInterceptorTest : BaseTestClass() {
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
         BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer),
-                        "TestUserName", "TestToken")
+                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithAuthHeader()
                 .subscribe(Consumer<retrofit2.Response<TestData>> {
                     Assert.assertNotNull(it.headers().get("Authentication"))
-                    Assert.assertEquals(it.headers().get("Authentication"),
+                    Assert.assertEquals(it.raw().request().headers().get("Authentication"),
                             "Basic " + Base64.encodeToString(("TestUserName" + ":" + "TestToken").toByteArray(),
                                     Base64.NO_WRAP))
                 }, object : NWErrorConsumer() {
@@ -143,7 +173,5 @@ class NWInterceptorTest : BaseTestClass() {
 
     }
 
-    override fun getActivity(): Activity? {
-        return null
-    }
+    override fun getActivity(): Activity? = null
 }

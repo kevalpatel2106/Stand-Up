@@ -14,10 +14,10 @@ internal interface TestApiService {
     @GET("test")
     fun callBase(): Observable<Response<TestData>>
 
-    @Headers("No-Authorization: true")
     @GET("test")
     fun callBaseWithoutAuthHeader(): Observable<retrofit2.Response<TestData>>
 
+    @Headers("Username: TestUserName", "Token: TestToken")
     @GET("test")
     fun callBaseWithAuthHeader(): Observable<retrofit2.Response<TestData>>
 

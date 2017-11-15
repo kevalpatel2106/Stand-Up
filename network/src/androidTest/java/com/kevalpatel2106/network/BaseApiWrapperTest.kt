@@ -36,7 +36,7 @@ class BaseApiWrapperTest : BaseTestClass() {
     @SmallTest
     fun checkOkHttpClient() {
         val okHttpClient = BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getOkHttpClientBuilder(null, null)
+                .getOkHttpClientBuilder()
 
         Assert.assertEquals(okHttpClient.interceptors().size, 2)
         Assert.assertEquals(okHttpClient.readTimeoutMillis(), 60 * 1000)
@@ -100,7 +100,6 @@ class BaseApiWrapperTest : BaseTestClass() {
                         Assert.fail("Internet is there")
                     }
                 })
-
     }
 
     @Test

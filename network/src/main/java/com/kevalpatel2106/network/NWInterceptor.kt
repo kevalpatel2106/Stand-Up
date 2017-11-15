@@ -33,14 +33,10 @@ import java.net.HttpURLConnection
  * Network interceptor that will handle authentication headers and caching in the request/response.
  *
  * @property context Instance of the caller.
- * @property username User name for the authentication.
- * @property token Token for the authentication.
  *
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
-internal class NWInterceptor(private val context: Context,
-                             private val username: String?,
-                             private val token: String?) : Interceptor {
+internal class NWInterceptor(private val context: Context) : Interceptor {
 
     companion object {
         internal val CACHE_SIZE = 5242880L          //5 MB //Cache size.
@@ -64,7 +60,7 @@ internal class NWInterceptor(private val context: Context,
         var request = chain.request()
 
         //Set the authorization header
-        request = addAuthHeader(request, username, token)
+        request = addAuthHeader(request)
 
         var response = chain.proceed(request)
 
@@ -75,7 +71,8 @@ internal class NWInterceptor(private val context: Context,
         return preprocessedResponse(response)
     }
 
-    private fun preprocessedResponse(response: Response): Response {
+    @Suppress("DEPRECATION")
+    fun preprocessedResponse(response: Response): Response {
         return if (response.code() == HttpURLConnection.HTTP_OK) {   //HTTP OK
 
             if (response.header("Content-type").equals("application/json")) {   //Check if the json resposne.
@@ -85,9 +82,10 @@ internal class NWInterceptor(private val context: Context,
 
                 val code = status.getInt("c")
                 when {
-                    code == APIStatusCodes.SUCCESS_CODE -> {
+                    code == APIStatusCodes.SUCCESS_CODE && responseStr != null -> {
                         //Success
                         //Nothing to do. Go ahead.
+                        //We consumed the response body once so we need to build it again.
                         response.newBuilder()
                                 .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
                                 .build()
@@ -143,7 +141,7 @@ internal class NWInterceptor(private val context: Context,
      * This will add cache control header to the response base on the time provided in "Cache-Time"
      * header value.
      */
-    private fun addCachingHeaders(request: Request, response: Response): Response {
+    fun addCachingHeaders(request: Request, response: Response): Response {
         var response1 = response
         request.header("Cache-Time")?.let {
             response1 = if (isNetworkAvailable(context)) {
@@ -164,17 +162,19 @@ internal class NWInterceptor(private val context: Context,
      * Adds the auth header if the username and passwords are provided for the authentication and
      * there is no "No-Authorization" header.
      */
-    private fun addAuthHeader(request: Request, username: String?, token: String?): Request {
+    fun addAuthHeader(request: Request): Request {
         var request1 = request
-        if (username != null
-                && token != null
-                && request1.header("No-Authorization") != null) {
-
+        if (request1.header("Username") != null
+                && request1.header("Token") != null) {
             request1 = request1
                     .newBuilder()
-                    .header("Authorization",
-                            "Basic " + Base64.encodeToString((username + ":" + token).toByteArray(),
+                    .header("Authorization", "Basic " + Base64
+                            .encodeToString((request1.header("Username")
+                                    + ":"
+                                    + request1.header("Token")).toByteArray(),
                                     Base64.NO_WRAP))
+                    .removeHeader("Token")
+                    .removeHeader("Username")
                     .build()
         }
         return request1

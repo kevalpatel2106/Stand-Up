@@ -89,15 +89,11 @@ class BaseApiWrapper(private val context: Context) {
      * Get the retrofit client instance for given base URL.
      *
      * @param baseUrl Base url of the api.
-     * @param username User name for the authentication.
-     * @param token Token for the authentication.
      */
-    fun getRetrofitClient(baseUrl: String,
-                          username: String? = null,
-                          token: String? = null): Retrofit {
+    fun getRetrofitClient(baseUrl: String): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .client(getOkHttpClientBuilder(username, token))
+                .client(getOkHttpClientBuilder())
                 .addConverterFactory(NWResponseConverter.create(sGson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
@@ -111,16 +107,13 @@ class BaseApiWrapper(private val context: Context) {
      * Authentication header : Enabled. Basic authentication header will be Base64 encoded from
      * username and token provided.
      *
-     * @param username         Username
-     * @param token         Password
      * @return [OkHttpClient]
      */
-    internal fun getOkHttpClientBuilder(username: String?,
-                                        token: String?): OkHttpClient {
+    internal fun getOkHttpClientBuilder(): OkHttpClient {
         return sOkHttpClient
                 .newBuilder()   /* Make shallow copy of existing client. */
                 .cache(NWInterceptor.getCache(context)) /* Add caching */
-                .addInterceptor(NWInterceptor(context, username, token))  /* Add the interceptor. */
+                .addInterceptor(NWInterceptor(context))  /* Add the interceptor. */
                 .build()
     }
 }

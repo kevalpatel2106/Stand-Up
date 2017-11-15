@@ -2,12 +2,18 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/StandUp.iml" filepath="$PROJECT_DIR$/StandUp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Stand-Up.iml" filepath="$PROJECT_DIR$/Stand-Up.iml" />
+      <module fileurl="file://F:\Stand-Up\StandUp.iml" filepath="F:\Stand-Up\StandUp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://F:\Stand-Up\app\app.iml" filepath="F:\Stand-Up\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
+      <module fileurl="file://F:\Stand-Up\base\base.iml" filepath="F:\Stand-Up\base\base.iml" />
       <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />
+      <module fileurl="file://F:\Stand-Up\network\network.iml" filepath="F:\Stand-Up\network\network.iml" />
       <module fileurl="file://$PROJECT_DIR$/test-utils/test-utils.iml" filepath="$PROJECT_DIR$/test-utils/test-utils.iml" />
+      <module fileurl="file://F:\Stand-Up\test-utils\test-utils.iml" filepath="F:\Stand-Up\test-utils\test-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils/utils.iml" filepath="$PROJECT_DIR$/utils/utils.iml" />
+      <module fileurl="file://F:\Stand-Up\utils\utils.iml" filepath="F:\Stand-Up\utils\utils.iml" />
     </modules>
   </component>
 </project>
