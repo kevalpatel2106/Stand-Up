@@ -36,6 +36,7 @@ import android.view.inputmethod.InputMethodManager
 
 object ViewUtils {
 
+    @JvmStatic
     @ColorInt
     private fun getColorAttr(context: Context, attr: Int): Int {
         val theme = context.theme
@@ -45,26 +46,32 @@ object ViewUtils {
         return color
     }
 
+    @JvmStatic
     fun toPx(context: Context, dp: Int): Int = TypedValue
             .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), context.resources.displayMetrics)
             .toInt()
 
+    @JvmStatic
     private fun isTablet(resources: Resources): Boolean = resources.configuration.screenLayout and
             Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
 
+    @JvmStatic
     fun getLayoutPosition(view: View): Rect {
         val myViewRect = Rect()
         view.getGlobalVisibleRect(myViewRect)
         return myViewRect
     }
 
+    @JvmStatic
     fun showKeyboard(v: View, activity: Context) {
         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(v, 0)
     }
 
+    @JvmStatic
     fun showKeyboard(v: View) = showKeyboard(v, v.context)
 
+    @JvmStatic
     fun hideKeyboard(view: View?) {
         if (view != null) {
             val inputManager = view.context.getSystemService(Context.INPUT_METHOD_SERVICE)
@@ -73,9 +80,11 @@ object ViewUtils {
         }
     }
 
+    @JvmStatic
     @ColorInt
     fun generateTextColor(background: Int): Int = getContrastColor(background)
 
+    @JvmStatic
     @ColorInt
     private fun getContrastColor(@ColorInt color: Int): Int {
         val a = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 *
@@ -86,6 +95,7 @@ object ViewUtils {
     /**
      * @return width of your device
      */
+    @JvmStatic
     fun getDeviceWidth(): Int {
         return Resources.getSystem().displayMetrics.widthPixels
     }
@@ -93,6 +103,7 @@ object ViewUtils {
     /**
      * Returns darker version of specified `color`.
      */
+    @JvmStatic
     fun darker(color: Int, factor: Float): Int {
         val a = Color.alpha(color)
         val r = Color.red(color)

@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.StrictMode
 
 import com.facebook.stetho.Stetho
+import com.filemanager.utils.SharedPrefsProvider
 
 import timber.log.Timber
 
@@ -34,6 +35,9 @@ class SUApplication : Application() {
 
         //Initialize firebase.
         //TODO Initialize
+
+        //Initialize shared preference
+        SharedPrefsProvider.init(this)
 
         //Enable timber
         Timber.plant(object : Timber.DebugTree() {

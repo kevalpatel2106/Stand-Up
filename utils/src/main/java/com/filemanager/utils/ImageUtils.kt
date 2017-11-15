@@ -39,6 +39,7 @@ object ImageUtils {
      * @param bitmap  Bitmap to save
      * @return new file or null if error occurs while saving the file.
      */
+    @JvmStatic
     @WorkerThread
     fun saveImageFile(context: Context,
                       bitmap: Bitmap): File? {
@@ -69,6 +70,7 @@ object ImageUtils {
      * @param bitmap Original bitmap.
      * @param maxDimension Max allowed dimensions.
      */
+    @JvmStatic
     @WorkerThread
     fun resizeImage(bitmap: Bitmap, maxDimension: Int): Bitmap {
         val width = bitmap.width

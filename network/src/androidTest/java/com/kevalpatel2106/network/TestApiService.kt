@@ -17,4 +17,14 @@ internal interface TestApiService {
     @Headers("No-Authorization: true")
     @GET("test")
     fun callBaseWithoutAuthHeader(): Observable<retrofit2.Response<TestData>>
+
+    @GET("test")
+    fun callBaseWithAuthHeader(): Observable<retrofit2.Response<TestData>>
+
+    @GET("test")
+    fun callBaseWithoutCache(): Observable<retrofit2.Response<TestData>>
+
+    @Headers("Cache-Time: 5000")
+    @GET("test")
+    fun callBaseWithCache(): Observable<retrofit2.Response<TestData>>
 }

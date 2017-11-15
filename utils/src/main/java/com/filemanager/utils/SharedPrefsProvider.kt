@@ -21,11 +21,21 @@ import android.content.SharedPreferences
 
 /**
  * Created by Keval on 20-Aug-16.
- * Class contains all the helper functions to deal with shared prefs.
+ * Class contains all the helper functions to deal with shared prefs. You need to call [SharedPrefsProvider.init]
+ * to initialize the shared preferences in your application class.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class SharedPrefsProvider(context: Context) {
+object SharedPrefsProvider {
+
+    /**
+     * Object class to hold the keys used for shared preferences.
+     */
+    object Keys {
+
+        @JvmStatic
+        val USER_NAME = "user_name"
+    }
 
     /**
      * Name of the shared preference file.
@@ -35,9 +45,15 @@ class SharedPrefsProvider(context: Context) {
     /**
      * Shared preference object.
      */
-    private val sSharedPreference: SharedPreferences
+    private lateinit var sSharedPreference: SharedPreferences
 
-    init {
+    /**
+     * Get the singleton instance of the shared preference provider.
+     *
+     * @param context Application Context.
+     */
+    @JvmStatic
+    fun init(context: Context) {
         sSharedPreference = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
     }
 

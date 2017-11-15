@@ -36,7 +36,7 @@ class BaseApiWrapperTest : BaseTestClass() {
     @SmallTest
     fun checkOkHttpClient() {
         val okHttpClient = BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getOkHttpClientBuilder(0, null, null)
+                .getOkHttpClientBuilder(null, null)
 
         Assert.assertEquals(okHttpClient.interceptors().size, 2)
         Assert.assertEquals(okHttpClient.readTimeoutMillis(), 60 * 1000)

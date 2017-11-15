@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Created by Keval Patel on 10/09/17.
+ * This class deals with the API and network calls using the RxJava and retrofit.
  *
  * @author 'https://github.com/kevalpatel2106'
  */
@@ -46,7 +47,7 @@ class BaseApiWrapper(private val context: Context) {
         /**
          * Gson instance with custom gson deserializers.
          */
-        val sGson: Gson = GsonBuilder()
+        private val sGson: Gson = GsonBuilder()
                 .setLenient()
                 .create()
 
@@ -84,14 +85,19 @@ class BaseApiWrapper(private val context: Context) {
                 .subscribeOn(Schedulers.newThread())
     }
 
-    @JvmOverloads
+    /**
+     * Get the retrofit client instance for given base URL.
+     *
+     * @param baseUrl Base url of the api.
+     * @param username User name for the authentication.
+     * @param token Token for the authentication.
+     */
     fun getRetrofitClient(baseUrl: String,
-                          cacheTimeInMills: Long = 0,
                           username: String? = null,
                           token: String? = null): Retrofit {
         return Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .client(getOkHttpClientBuilder(cacheTimeInMills, username, token))
+                .client(getOkHttpClientBuilder(username, token))
                 .addConverterFactory(NWResponseConverter.create(sGson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
@@ -99,24 +105,22 @@ class BaseApiWrapper(private val context: Context) {
 
     /**
      * Build the OkHTTP client.
-     *  * Logging : Enabled for Debuggable builds.
-     *  * Caching : Enabled.
-     *  * Authentication header : Enabled. Basic authentication header will be Base64 encoded from
+     *
+     * Logging : Enabled for Debuggable builds.
+     * Caching : Enabled.
+     * Authentication header : Enabled. Basic authentication header will be Base64 encoded from
      * username and token provided.
      *
-     * @param cacheTimeInMills Response cache timing. If 0, caching will be disabled.
      * @param username         Username
      * @param token         Password
      * @return [OkHttpClient]
      */
-    internal fun getOkHttpClientBuilder(cacheTimeInMills: Long,
-                                        username: String?,
+    internal fun getOkHttpClientBuilder(username: String?,
                                         token: String?): OkHttpClient {
-        val builder = sOkHttpClient.newBuilder()
-
-        // Add the interceptor and cache
-        builder.cache(NWInterceptor.getCache(context))
-                .addInterceptor(NWInterceptor(context, cacheTimeInMills, username, token))
-        return builder.build()
+        return sOkHttpClient
+                .newBuilder()   /* Make shallow copy of existing client. */
+                .cache(NWInterceptor.getCache(context)) /* Add caching */
+                .addInterceptor(NWInterceptor(context, username, token))  /* Add the interceptor. */
+                .build()
     }
 }

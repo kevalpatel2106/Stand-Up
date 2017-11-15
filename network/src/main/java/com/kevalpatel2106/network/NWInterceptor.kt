@@ -30,14 +30,17 @@ import java.net.HttpURLConnection
 
 /**
  * Created by Keval on 16-Jun-17.
+ * Network interceptor that will handle authentication headers and caching in the request/response.
+ *
+ * @property context Instance of the caller.
+ * @property username User name for the authentication.
+ * @property token Token for the authentication.
  *
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
-internal class NWInterceptor(private val mContext: Context,
-                             cacheTimeMins: Long,
+internal class NWInterceptor(private val context: Context,
                              private val username: String?,
                              private val token: String?) : Interceptor {
-    private val mCacheTimeMills: Long = cacheTimeMins * 60000
 
     companion object {
         internal val CACHE_SIZE = 5242880L          //5 MB //Cache size.
@@ -52,7 +55,7 @@ internal class NWInterceptor(private val mContext: Context,
         fun getCache(context: Context): Cache {
             //Define mCache
             val httpCacheDirectory = File(context.cacheDir, "responses")
-            return Cache(httpCacheDirectory, CACHE_SIZE.toLong())
+            return Cache(httpCacheDirectory, CACHE_SIZE)
         }
     }
 
@@ -61,12 +64,12 @@ internal class NWInterceptor(private val mContext: Context,
         var request = chain.request()
 
         //Set the authorization header
-        request = addAuthorisationHeader(request, username, token)
+        request = addAuthHeader(request, username, token)
 
         var response = chain.proceed(request)
 
         //Enable caching if you need.
-        response = addCachingHeaders(response, mCacheTimeMills)
+        response = addCachingHeaders(request, response)
 
         //Prepossess the response to find out errors based on the server response/status code.
         return preprocessedResponse(response)
@@ -93,7 +96,7 @@ internal class NWInterceptor(private val mContext: Context,
 
                         //Broadcast to the app module that user is not authorized.
                         //Log out.
-                        LocalBroadcastManager.getInstance(mContext)
+                        LocalBroadcastManager.getInstance(context)
                                 .sendBroadcast(Intent(APIStatusCodes.BROADCAST_UNAUTHORIZED))
                         response
                     }
@@ -114,7 +117,7 @@ internal class NWInterceptor(private val mContext: Context,
 
             //Broadcast to the app module that user is not authorized.
             //Log out.
-            LocalBroadcastManager.getInstance(mContext)
+            LocalBroadcastManager.getInstance(context)
                     .sendBroadcast(Intent(APIStatusCodes.BROADCAST_UNAUTHORIZED))
 
             throw NWException(response.code(), APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG)
@@ -136,12 +139,16 @@ internal class NWInterceptor(private val mContext: Context,
         }
     }
 
-    private fun addCachingHeaders(response: Response, cacheTimeMills: Long): Response {
+    /**
+     * This will add cache control header to the response base on the time provided in "Cache-Time"
+     * header value.
+     */
+    private fun addCachingHeaders(request: Request, response: Response): Response {
         var response1 = response
-        if (mCacheTimeMills > 0) {
-            response1 = if (isNetworkAvailable(mContext)) {
+        request.header("Cache-Time")?.let {
+            response1 = if (isNetworkAvailable(context)) {
                 response1.newBuilder()
-                        .header("Cache-Control", "public, max-age=" + cacheTimeMills)
+                        .header("Cache-Control", "public, max-age=" + request.header("Cache-Time"))
                         .build()
             } else {
                 val maxStale = 2419200 // tolerate 4-weeks stale
@@ -153,7 +160,11 @@ internal class NWInterceptor(private val mContext: Context,
         return response1
     }
 
-    private fun addAuthorisationHeader(request: Request, username: String?, token: String?): Request {
+    /**
+     * Adds the auth header if the username and passwords are provided for the authentication and
+     * there is no "No-Authorization" header.
+     */
+    private fun addAuthHeader(request: Request, username: String?, token: String?): Request {
         var request1 = request
         if (username != null
                 && token != null
@@ -177,7 +188,6 @@ internal class NWInterceptor(private val mContext: Context,
      */
     private fun isNetworkAvailable(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
         val networkInfo = cm.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnected
     }

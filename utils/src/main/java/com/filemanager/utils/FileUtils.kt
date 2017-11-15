@@ -35,5 +35,6 @@ object FileUtils {
      *
      * @param context Instance of the caller.
      */
+    @JvmStatic
     fun getCacheDir(context: Context): File = context.externalCacheDir ?: context.cacheDir
 }
