@@ -1,1 +1,7 @@
-include ':app', ':base', ':utils', ':test-utils', ':network'
+include ':app',
+        ':base',
+        ':utils',
+        ':test-utils',
+        ':network',
+        ':facebook-auth',
+        ':google-auth'

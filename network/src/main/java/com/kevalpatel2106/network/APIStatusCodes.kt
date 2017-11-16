@@ -22,7 +22,7 @@ import java.net.HttpURLConnection
  * Created by Keval on 08-Feb-17.
  * This class contains status codes for the api responses from the server.
  *
- * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
+ * @author <a href="https://github.com/kevalpatel2106">Keval</a>
  */
 
 object APIStatusCodes {

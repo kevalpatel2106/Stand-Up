@@ -18,6 +18,7 @@ package com.kevalpatel2106.base
 
 import android.content.Context
 import android.support.annotation.CallSuper
+import android.support.annotation.MainThread
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -34,73 +35,209 @@ import com.kevalpatel2106.base.PageRecyclerViewAdapter.RecyclerViewListener
  * @see RecyclerViewListener
  */
 
-abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHolder>(
+abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHolder, T>(
         protected val context: Context,
-        private val mCollection: Collection<*>,
-        protected val listener: RecyclerViewListener?
+        protected val collection: ArrayList<T>,
+        protected val listener: RecyclerViewListener<T>?
 ) : RecyclerView.Adapter<PageRecyclerViewAdapter.PageViewHolder>() {
 
-    companion object {
-        @Suppress("PrivatePropertyName")
-        const val TYPE_LOADER = 5364
+    constructor(context: Context, listener: RecyclerViewListener<T>?) : this(context, ArrayList<T>(), listener)
+
+    @Suppress("PrivatePropertyName")
+    private val TYPE_LOADER = 5364
+
+    @Suppress("PrivatePropertyName")
+    private val INITIAL_PAGE_NUMBER = 0 /* Considering first page is 0 */
+
+    /**
+     * Add new item at the given position of the array list.
+     *
+     * @param item Item to add into the list
+     * @param position Position where the item should be added. Default value is the last item of the list.
+     */
+    @JvmOverloads
+    @CallSuper
+    open fun add(item: T, position: Int = collection.size) {
+        collection.add(position, item)
+        notifyItemInserted(position)
     }
 
-    private var mHasNext = false
+    @CallSuper
+    open fun add(item: Collection<T>) {
+        collection.addAll(item)
+        notifyDataSetChanged()
+    }
 
     @CallSuper
-    override fun getItemCount(): Int =
-            if (mHasNext && listener != null)
-                mCollection.size + 1
-            else
-                mCollection.size
+    open fun remove(item: T) {
+        collection.remove(item)
+        notifyDataSetChanged()
+    }
+
+    @CallSuper
+    open fun remove(position: Int) {
+        collection.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    @CallSuper
+    open fun remove(item: Collection<T>) {
+        collection.removeAll(item)
+        notifyDataSetChanged()
+    }
+
+    @CallSuper
+    open fun replace(item: T, position: Int) {
+        collection[position] = item
+        notifyItemChanged(position)
+    }
+
+    /**
+     * Clear the items list/collection and reset the adapter to it's initial state.
+     */
+    fun reset() {
+        collection.clear()
+        notifyDataSetChanged()
+
+        //Release pagination lock
+        lockPagination = false
+
+        //Consider next page
+        hasNextPage = true
+
+        //Reset page count
+        pageCount = INITIAL_PAGE_NUMBER
+    }
+
+    /**
+     * Current page count.
+     */
+    private var pageCount = INITIAL_PAGE_NUMBER
+
+    /**
+     * Boolean to indicate if there are any more pages?
+     */
+    var hasNextPage = true
+
+    /**
+     * Boolean to set true to lock the pagination. Once the loading of next page completes, we will
+     * release the lock and enable page complete callbacks again.
+     *
+     * @see onPageLoadComplete
+     */
+    private var lockPagination = false
+
+    /**
+     * Get the item for the given position in the adapter.
+     *
+     * @param pos Position of the item to get.
+     * @return Item from the list at given position or null if the position is greater than or
+     * equal to the adapter data list size.
+     */
+    protected fun getItem(pos: Int): T? = if (pos < collection.size) {
+        collection[pos]
+    } else {
+        null
+    }
+
+    @CallSuper
+    override fun getItemCount(): Int = if (!collection.isEmpty() && hasNextPage && listener != null)
+        collection.size + 1 /* Number items + Loader */
+    else
+        collection.size /* Number items */
 
     @CallSuper
     override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-        //notify on pag complete
-        if (listener != null && mHasNext && position == mCollection.size - 1) listener.onPageComplete()
+        //Notify on page complete
+        if (listener != null
+                && hasNextPage
+                && !lockPagination
+                && position == collection.size - 1 /* Last item in the list */) {
+            listener.onPageComplete(pageCount + 1)
+            lockPagination = true
+        }
 
         if (holder is LoaderViewHolder) {
-            //Progressbar will start loading automatically.
-
+            // Progressbar will start loading automatically.
+            // Do nothing.
         } else {
+
+            val item = getItem(position)!!
+
             //Call abstract method
             @Suppress("UNCHECKED_CAST")
-            bindView(holder as VH, position)
+            bindView(holder as VH, item)
+
+            //Set the click listener for the root view.
+            holder.itemView.setOnClickListener {
+                listener?.onItemSelected(position, item)
+            }
         }
     }
 
     @CallSuper
     override fun getItemViewType(position: Int): Int {
-        return if (position == mCollection.size) TYPE_LOADER else prepareViewType(position)
+        return if (position == collection.size) {   /* This is page loader view */
+            TYPE_LOADER
+        } else {
+            prepareViewType(position)    /* Ask for the view type to concrete class */
+        }
     }
 
     @CallSuper
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PageViewHolder {
         return if (viewType == TYPE_LOADER) {
+
+            //Prepare view holder for loader row.
             LoaderViewHolder(LayoutInflater.from(context)
                     .inflate(R.layout.layout_loader, parent, false))
         } else {
+
+            //Prepare the view holder by view type.
             prepareViewHolder(parent, viewType)
         }
+    }
+
+    /**
+     * Call this method to release pagination lock once you complete the loading of next page.
+     *
+     * @param isLoadSuccessful True if the page loading is successful else false..
+     */
+    fun onPageLoadComplete(isLoadSuccessful: Boolean) {
+        //Release the pagination lock
+        lockPagination = false
+
+        //Increase the page count.
+        if (isLoadSuccessful) pageCount++
     }
 
     /**
      * Here you should bind the view holder with your view and data.
 
      * @param holder   [RecyclerView.ViewHolder]
-     * *
-     * @param position position of the row.
+     * @param item Item to bind with the view holder.
+     * @see RecyclerView.Adapter.bindViewHolder
      */
-    abstract fun bindView(holder: VH, position: Int)
+    @MainThread
+    abstract fun bindView(holder: VH, item: T)
 
+    /**
+     * Prepare the view hoder for the given view type.
+     *
+     * @param parent Parent view.
+     * @param viewType View holder type.
+     * @see RecyclerView.Adapter.createViewHolder
+     */
+    @MainThread
     abstract fun prepareViewHolder(parent: ViewGroup?, viewType: Int): VH
 
+    /**
+     * Get the view holder type.
+     *
+     * @see RecyclerView.Adapter.getItemViewType
+     */
+    @MainThread
     abstract fun prepareViewType(position: Int): Int
-
-
-    fun setHasNext(hasNext: Boolean) {
-        mHasNext = hasNext
-    }
 
     /**
      * Loading view holder
@@ -115,18 +252,20 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
     /**
      * Listener to get notify when the list ends.
      */
-    interface RecyclerViewListener {
+    interface RecyclerViewListener<in T> {
 
         /**
          * Callback to call when whole list is displayed.
+         *
+         * @param nextPageCount Next page count.
          */
-        fun onPageComplete()
+        @MainThread
+        fun onPageComplete(nextPageCount: Int)
 
         /**
          * Callback  to get notify when any item from the list gets selected.
          */
-        fun onItemSelected(pos: Int)
+        @MainThread
+        fun onItemSelected(pos: Int, item: T)
     }
 }
-
-

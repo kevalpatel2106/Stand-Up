@@ -106,53 +106,17 @@ android {
     dexOptions dexOption
 }
 
-// Grant animation permissions to avoid test failure because of ui sync.
-task grantAnimationPermissions(type: Exec, dependsOn: 'installMock') {
-    group = 'test'
-    description = 'Grant permissions for testing.'
-
-    def absolutePath = file('..') // Get project absolute path
-    commandLine "$absolutePath/misc/set_animation_permissions.sh com.kevalpatel2106.standup".split(" ")
-}
-
-// Source: http://stackoverflow.com/q/29908110/112705
-afterEvaluate {
-    // When launching individual tests from Android Studio, it seems that only the assemble tasks
-    // get called directly, not the install* versions
-    tasks.each { task ->
-        if (task.name.startsWith('assembleMockAndroidTest')) {
-            task.dependsOn grantAnimationPermissions
-        }
-    }
-}
-
-// Test Logging
-tasks.withType(Test) {
-    testLogging {
-        exceptionFormat = 'full'
-        events "started", "passed", "skipped", "failed"
-    }
-}
-
 dependencies {
     implementation project(':base')
     implementation project(':utils')
     implementation project(':network')
+    implementation project(':facebook-auth')
+    implementation project(':google-auth')
+    testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
-    implementation 'com.android.support:multidex:1.0.2'
 
     implementation ide.kotlin
     implementation ide.constrainlayout
-
-    //Testing
-    testImplementation testLib.junit
-    androidTestImplementation(testLib.rules, excludeGrp)
-    androidTestImplementation testLib.esspresso
-    androidTestImplementation(testLib.runner, excludeGrp)
-    androidTestImplementation(testLib.esspressoIntents, excludeGrp)
-    androidTestImplementation(testLib.contrib, excludeGrp)
-    androidTestImplementation testLib.idling
-    androidTestImplementation testLib.uiAutomator
 
     //Butter knife
     implementation(butterKnifeLib.butterKnife, excludeGrp)
@@ -160,14 +124,13 @@ dependencies {
 
     //Loggers
     implementation(otherLib.timber, excludeGrp)
-    debugImplementation(otherLib.shetho, excludeGrp)
-    debugImplementation(otherLib.shethoOkhttp, excludeGrp)
 
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
     implementation(supportLib.recyclerView, excludeGrp)
     implementation(supportLib.cardView, excludeGrp)
+    implementation supportLib.multidex
     implementation supportLib.design
 
     //Arch component

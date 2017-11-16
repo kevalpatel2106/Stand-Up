@@ -12,23 +12,41 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|screenLayout|screenSize"
             android:launchMode="singleInstance"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:resizeableActivity="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Splash"
+            tools:ignore="UnusedAttribute">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Dashboard"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionbar"
+            tools:ignore="UnusedAttribute" />
+        <activity
+            android:name=".UserInfoActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionbar"
+            tools:ignore="UnusedAttribute" />
 
-        <activity android:name=".Dashboard" />
+        <receiver
+            android:name=".UnauthorizedReceiver"
+            android:enabled="false"
+            android:exported="false">
 
-        <activity android:name=".UserInfoActivity" />
+            <intent-filter>
+                <action android:name="com.kevalpatel2106.network.unauthorized" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

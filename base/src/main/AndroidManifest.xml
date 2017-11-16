@@ -14,11 +14,4 @@
   ~  limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kevalpatel2106.base">
-    <application>
-        <activity
-            android:name=".TestActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-    </application>
-</manifest>
+<manifest package="com.kevalpatel2106.base" />

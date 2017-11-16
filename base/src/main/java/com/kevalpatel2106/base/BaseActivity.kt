@@ -24,7 +24,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import butterknife.ButterKnife
-import com.filemanager.utils.ViewUtils
+import com.kevalpatel2106.utils.ViewUtils
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
@@ -52,7 +52,9 @@ abstract class BaseActivity : AppCompatActivity() {
         if (savedInstanceState == null) runItForFirstCreation()
     }
 
-    abstract fun runItForFirstCreation()
+    open fun runItForFirstCreation() {
+        /* Do nothing */
+    }
 
     /**
      * Set the toolbar of the activity.

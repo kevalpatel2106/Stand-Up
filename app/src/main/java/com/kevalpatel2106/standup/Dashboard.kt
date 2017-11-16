@@ -5,6 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
+/**
+ * Main activity which user will see after opening the application.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">Keval</a>
+ */
 class Dashboard : AppCompatActivity() {
 
     companion object {
@@ -16,7 +21,9 @@ class Dashboard : AppCompatActivity() {
          */
         @JvmStatic
         fun launch(context: Context) {
-            context.startActivity(Intent(context, Dashboard::class.java))
+            val launchIntent = Intent(context, Dashboard::class.java)
+            launchIntent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            context.startActivity(launchIntent)
         }
     }
 

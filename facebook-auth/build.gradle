@@ -1,0 +1,85 @@
+apply plugin: 'com.android.library'
+apply plugin: 'jacoco-android'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+apply from: '../gradle/config.gradle'
+apply from: '../gradle/deps.gradle'
+android {
+    signingConfigs {
+        //This are th play store signing config.
+        playStore {
+            if (System.getenv("IS_CI_BUILD") == "true") {
+                //It is CI build, load it from the environment variables.
+                //See circle.yml file.
+                storeFile file("../misc/keystore.jks")
+                storePassword System.getenv("KEY_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("ALIAS_PASSWORD")
+            } else {
+                //If this is the local build, load it from the keystore.properties file
+                File signFile = rootProject.file('./misc/keystore.properties')
+                if (signFile.exists()) {
+                    Properties props = new Properties()
+                    props.load(new FileInputStream(signFile))
+
+                    keyAlias props['keystore.alias']
+                    keyPassword props['keystore.password']
+                    storeFile file(props['keystore.file'])
+                    storePassword props['keystore.aliaspassword']
+                } else {
+                    throw new GradleException("keystore.properties file not found.")
+                }
+            }
+        }
+    }
+
+    compileSdkVersion buidlConfig.compile
+    buildToolsVersion buidlConfig.buildToolVersion
+
+    compileOptions {
+        sourceCompatibility javaCompatibility.sourceCompatibility
+        targetCompatibility javaCompatibility.targetCompatibility
+    }
+
+    defaultConfig {
+        //sdks
+        minSdkVersion buidlConfig.min
+        targetSdkVersion buidlConfig.target
+
+        //strip other than english resources
+        resConfigs "en"
+
+        consumerProguardFiles proguardConfig.proguardPath
+
+        testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
+        defaultPublishConfig "debug"
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.playStore
+        }
+        debug {
+            testCoverageEnabled true
+            signingConfig signingConfigs.playStore
+        }
+    }
+
+    packagingOptions packageExcludes
+    lintOptions lintOption
+    aaptOptions aaptOption
+    dexOptions dexOption
+}
+
+dependencies {
+    implementation ide.kotlin
+    testImplementation project(':test-utils')
+    androidTestImplementation project(':test-utils')
+    implementation(otherLib.timber, excludeGrp)
+
+    api(otherLib.facebook, excludeGrp)
+    implementation supportLib.appCompat
+    implementation supportLib.supportv4
+}

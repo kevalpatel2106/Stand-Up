@@ -4,10 +4,12 @@ import android.app.Activity
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.network.consumer.NWSuccessConsumer
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.MockWebserverUtils
+import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Assert
 import org.junit.Test
@@ -38,9 +40,27 @@ class BaseApiWrapperTest : BaseTestClass() {
         val okHttpClient = BaseApiWrapper(InstrumentationRegistry.getContext())
                 .getOkHttpClientBuilder()
 
-        Assert.assertEquals(okHttpClient.interceptors().size, 2)
+        if (BuildConfig.DEBUG) {
+            /**
+             * For Debug there will be three interceptors.
+             *
+             * 1. [HttpLoggingInterceptor]
+             * 2. [StethoInterceptor]
+             * 3. [NWInterceptor]
+             */
+            Assert.assertEquals(okHttpClient.interceptors().size, 3)
+        } else {
+            /**
+             * For Release there will be three interceptors.
+             *
+             * 1. [NWInterceptor]
+             */
+            Assert.assertEquals(okHttpClient.interceptors().size, 1)
+        }
+
         Assert.assertEquals(okHttpClient.readTimeoutMillis(), 60 * 1000)
         Assert.assertEquals(okHttpClient.writeTimeoutMillis(), 60 * 1000)
+        Assert.assertEquals(okHttpClient.connectTimeoutMillis(), 60 * 1000)
         Assert.assertEquals(okHttpClient.cache().directory(),
                 File(InstrumentationRegistry.getContext().cacheDir, "responses"))
         Assert.assertEquals(okHttpClient.cache().maxSize(), NWInterceptor.CACHE_SIZE)

@@ -39,7 +39,7 @@ abstract class BaseFragment : Fragment() {
     /**
      * [CompositeDisposable] that holds all the subscriptions.
      */
-    private val mCompositeDisposable = CompositeDisposable()
+    internal val mCompositeDisposable = CompositeDisposable()
 
     /**
      * Boolean to indicate the fragment is already created before.
@@ -76,7 +76,10 @@ abstract class BaseFragment : Fragment() {
      *
      * Note: Make sure you set retain instance to true while creating the fragment.
      */
-    abstract fun runForFirstCreation()
+    open fun runForFirstCreation() {
+        //Do nothing
+        //Empty method
+    }
 
 
     /**
@@ -84,7 +87,7 @@ abstract class BaseFragment : Fragment() {
 
      * @param disposable [Disposable]
      */
-    protected fun addSubscription(disposable: Disposable?) {
+    fun addSubscription(disposable: Disposable?) {
         if (disposable == null) return
         mCompositeDisposable.add(disposable)
     }
@@ -124,5 +127,5 @@ abstract class BaseFragment : Fragment() {
      *
      * @return True if the back pressed event is handled by the fragment else false.
      */
-    abstract fun onBackPressed(): Boolean
+    open fun onBackPressed(): Boolean = false
 }

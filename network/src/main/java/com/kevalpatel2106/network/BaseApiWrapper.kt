@@ -17,6 +17,7 @@
 package com.kevalpatel2106.network
 
 import android.content.Context
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.reactivex.Observable
@@ -52,18 +53,20 @@ class BaseApiWrapper(private val context: Context) {
                 .create()
 
         init {
-            //Log interceptor
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = if (BuildConfig.DEBUG)
-                HttpLoggingInterceptor.Level.BODY
-            else
-                HttpLoggingInterceptor.Level.NONE
-
-            sOkHttpClient = OkHttpClient.Builder()
+            val httpClientBuilder = OkHttpClient.Builder()
                     .readTimeout(1, TimeUnit.MINUTES)
                     .writeTimeout(1, TimeUnit.MINUTES)
-                    .addInterceptor(loggingInterceptor)         //Add interceptor for logging the request
-                    .build()
+                    .connectTimeout(1, TimeUnit.MINUTES)
+
+            //Add debug interceptors
+            if (BuildConfig.DEBUG) {
+                val loggingInterceptor = HttpLoggingInterceptor()
+                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+                httpClientBuilder.addInterceptor(StethoInterceptor())
+                        .addInterceptor(loggingInterceptor)
+            }
+
+            sOkHttpClient = httpClientBuilder.build()
         }
     }
 

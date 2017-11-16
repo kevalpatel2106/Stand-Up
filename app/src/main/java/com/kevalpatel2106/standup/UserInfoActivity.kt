@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
  * This activity will take the user information like weight, height and sleep hours while user
  * opens app for the first time.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author <a href="https://github.com/kevalpatel2106">Keval</a>
  */
 class UserInfoActivity : AppCompatActivity() {
 

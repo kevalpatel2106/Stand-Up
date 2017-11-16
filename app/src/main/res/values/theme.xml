@@ -51,11 +51,11 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="AppTheme.Translucent.NoBackground">
-        <item name="android:windowBackground">@null</item>
+    <style name="AppTheme.Splash" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
     </style>
 
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
-        <item name="android:textColorSecondary">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 </resources>

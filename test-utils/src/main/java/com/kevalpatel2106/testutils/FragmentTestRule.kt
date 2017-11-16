@@ -26,8 +26,7 @@ import android.support.v4.app.Fragment
 class FragmentTestRule<F : Fragment>(private val mFragmentClass: Class<F>)
     : ActivityTestRule<FragmentRuleActivity>(FragmentRuleActivity::class.java, true, false) {
 
-    var fragment: F? = null
-        private set
+    lateinit var fragment: F
 
     override fun afterActivityLaunched() {
         super.afterActivityLaunched()
