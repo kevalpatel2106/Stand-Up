@@ -68,14 +68,11 @@ android {
         //strip other than english resources
         resConfigs "en"
 
-        consumerProguardFiles proguardConfig.proguardPath
+        consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
         defaultPublishConfig "debug"
     }
 
     buildTypes {
-        release {
-            signingConfig signingConfigs.playStore
-        }
         debug {
             testCoverageEnabled true
             signingConfig signingConfigs.playStore

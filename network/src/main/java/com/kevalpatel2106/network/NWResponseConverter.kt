@@ -49,8 +49,6 @@ internal class NWResponseConverter(private val gson: Gson) : Converter.Factory()
 
     private class StringResponseConverter : Converter<ResponseBody, String> {
         @Throws(IOException::class)
-        override fun convert(value: ResponseBody): String {
-            return value.string()
-        }
+        override fun convert(value: ResponseBody): String = value.string()
     }
 }

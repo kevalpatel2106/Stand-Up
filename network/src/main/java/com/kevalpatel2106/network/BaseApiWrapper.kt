@@ -54,9 +54,9 @@ class BaseApiWrapper(private val context: Context) {
 
         init {
             val httpClientBuilder = OkHttpClient.Builder()
-                    .readTimeout(1, TimeUnit.MINUTES)
-                    .writeTimeout(1, TimeUnit.MINUTES)
-                    .connectTimeout(1, TimeUnit.MINUTES)
+                    .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
+                    .writeTimeout(NetworkConfig.WRITE_TIMEOUT, TimeUnit.MINUTES)
+                    .connectTimeout(NetworkConfig.CONNECTION_TIMEOUT, TimeUnit.MINUTES)
 
             //Add debug interceptors
             if (BuildConfig.DEBUG) {

@@ -69,7 +69,7 @@ android {
         //strip other than english resources
         resConfigs "en"
 
-        consumerProguardFiles proguardConfig.proguardPath
+        consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
 
         testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
         defaultPublishConfig "debug"

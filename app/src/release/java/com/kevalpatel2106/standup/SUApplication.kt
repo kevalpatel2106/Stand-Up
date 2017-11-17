@@ -1,9 +1,8 @@
 package com.kevalpatel2106.standup
 
 import android.app.Application
-
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
-import com.filemanager.utils.SharedPrefsProvider
 
 /**
  * Created by Keval on 07-11-17.

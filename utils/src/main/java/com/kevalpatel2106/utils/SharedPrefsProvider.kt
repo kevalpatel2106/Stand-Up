@@ -27,16 +27,6 @@ import android.content.SharedPreferences
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 object SharedPrefsProvider {
-
-    /**
-     * Object class to hold the keys used for shared preferences.
-     */
-    object Keys {
-
-        @JvmStatic
-        val USER_NAME = "user_name"
-    }
-
     /**
      * Name of the shared preference file.
      */

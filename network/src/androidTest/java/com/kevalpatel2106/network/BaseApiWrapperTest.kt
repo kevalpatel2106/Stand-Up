@@ -58,9 +58,9 @@ class BaseApiWrapperTest : BaseTestClass() {
             Assert.assertEquals(okHttpClient.interceptors().size, 1)
         }
 
-        Assert.assertEquals(okHttpClient.readTimeoutMillis(), 60 * 1000)
-        Assert.assertEquals(okHttpClient.writeTimeoutMillis(), 60 * 1000)
-        Assert.assertEquals(okHttpClient.connectTimeoutMillis(), 60 * 1000)
+        Assert.assertEquals(okHttpClient.readTimeoutMillis(), NetworkConfig.READ_TIMEOUT * 60 * 1000)
+        Assert.assertEquals(okHttpClient.writeTimeoutMillis(), NetworkConfig.WRITE_TIMEOUT * 60 * 1000)
+        Assert.assertEquals(okHttpClient.connectTimeoutMillis(), NetworkConfig.CONNECTION_TIMEOUT * 60 * 1000)
         Assert.assertEquals(okHttpClient.cache().directory(),
                 File(InstrumentationRegistry.getContext().cacheDir, "responses"))
         Assert.assertEquals(okHttpClient.cache().maxSize(), NWInterceptor.CACHE_SIZE)
@@ -85,7 +85,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, HttpURLConnection.HTTP_NOT_FOUND)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_NOT_FOUND)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_NOT_FOUND)
                     }
 
                     override fun onInternetUnavailable(message: String) {
@@ -141,7 +141,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, HttpURLConnection.HTTP_BAD_REQUEST)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_BAD_REQUEST)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_BAD_REQUEST)
                     }
 
                     override fun onInternetUnavailable(message: String) {
@@ -171,7 +171,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, HttpURLConnection.HTTP_SERVER_ERROR)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_SERVER_BUSY)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_SERVER_BUSY)
                     }
 
                     override fun onInternetUnavailable(message: String) {
@@ -199,7 +199,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, 103)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
                     }
 
                     override fun onInternetUnavailable(message: String) {
@@ -292,7 +292,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, APIStatusCodes.ERROR_CODE_EXCEPTION)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
                     }
 
                     override fun onInternetUnavailable(message: String) {
