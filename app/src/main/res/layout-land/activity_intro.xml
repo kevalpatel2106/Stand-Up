@@ -14,50 +14,136 @@
   ~ limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:gravity="center"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/md_activity_horizontal_margin"
-    android:paddingRight="@dimen/md_activity_horizontal_margin"
-    android:paddingTop="@dimen/md_activity_vertical_margin">
+    android:orientation="vertical">
 
     <!--intro view pager-->
-    <android.support.v4.view.ViewPager
-        android:id="@+id/intro_view_pager"
-        android:layout_width="250dp"
-        android:layout_height="match_parent" />
 
     <!--Divider-->
+
+    <!--Sign in with Google button-->
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/md_activity_vertical_margin" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/md_activity_vertical_margin" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/md_activity_horizontal_margin" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/md_activity_horizontal_margin" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/intro_view_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/spacing_small"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/login_divider"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
     <View
         android:id="@+id/login_divider"
         android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_marginRight="20sp"
+        android:layout_height="0dp"
         android:layout_toEndOf="@id/intro_view_pager"
-        android:background="@android:color/white" />
+        android:background="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+
+    <com.kevalpatel2106.base.BaseButton
+        android:id="@+id/btn_create_account"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/md_button_height"
+        android:layout_above="@id/btn_login_using_email"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:backgroundTint="?attr/colorPrimaryDark"
+        android:text="@string/create_account"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login_using_email"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/guideline5" />
 
     <com.kevalpatel2106.base.BaseButton
         android:id="@+id/btn_login_using_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/md_button_height"
+        android:layout_marginStart="@dimen/spacing_small"
         android:layout_toEndOf="@id/login_divider"
-        android:background="@drawable/rect_round_corner_white_stroke"
-        android:text="Login using email"
-        android:textColor="@android:color/white"
-        android:textSize="16sp" />
+        android:backgroundTint="?attr/colorAccent"
+        android:text="@string/login_using_email"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login_google_signin"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/btn_create_account" />
 
-    <!--Sign in with Google button-->
-    <com.google.android.gms.common.SignInButton
+    <com.kevalpatel2106.base.BaseButton
         android:id="@+id/btn_login_google_signin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/md_button_height"
         android:layout_below="@id/btn_login_using_email"
+        android:layout_marginStart="@dimen/spacing_small"
         android:layout_toEndOf="@id/login_divider"
-        android:textAlignment="center" />
+        android:backgroundTint="@android:color/white"
+        android:text="@string/sign_in_with_google"
+        android:textAlignment="center"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login_fb_signin"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login_using_email" />
 
-</RelativeLayout>
+    <com.kevalpatel2106.base.BaseButton
+        android:id="@+id/btn_login_fb_signin"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/md_button_height"
+        android:layout_below="@id/btn_login_using_email"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_toEndOf="@id/login_divider"
+        android:backgroundTint="@color/fb"
+        android:text="@string/sign_in_with_facebook"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login_google_signin" />
+</android.support.constraint.ConstraintLayout>

@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit
  *
  * @author 'https://github.com/kevalpatel2106'
  */
-class BaseApiWrapper(private val context: Context) {
+class ApiProvider(private val context: Context) {
 
     companion object {
         /**
@@ -81,7 +81,6 @@ class BaseApiWrapper(private val context: Context) {
      */
     fun makeApiCall(observable: Observable<*>,
                     isRetryOnNetworkFail: Boolean): Observable<*> {
-        //noinspection unchecked,Convert2Lambda
         return observable
                 .retryWhen(RetryWithDelay(if (isRetryOnNetworkFail) 3 else 0, 10000))
                 .observeOn(AndroidSchedulers.mainThread())

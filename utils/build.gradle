@@ -35,19 +35,10 @@ android {
                 keyAlias System.getenv("KEY_ALIAS")
                 keyPassword System.getenv("ALIAS_PASSWORD")
             } else {
-                //If this is the local build, load it from the keystore.properties file
-                File signFile = rootProject.file('./misc/keystore.properties')
-                if (signFile.exists()) {
-                    Properties props = new Properties()
-                    props.load(new FileInputStream(signFile))
-
-                    keyAlias props['keystore.alias']
-                    keyPassword props['keystore.password']
-                    storeFile file(props['keystore.file'])
-                    storePassword props['keystore.aliaspassword']
-                } else {
-                    throw new GradleException("keystore.properties file not found.")
-                }
+                keyAlias keystore_alias
+                keyPassword keystore_password
+                storeFile file(keystore_file)
+                storePassword keystore_aliaspassword
             }
         }
     }
@@ -97,6 +88,7 @@ dependencies {
 
     implementation supportLib.supportv4
     implementation supportLib.appCompat
+    implementation supportLib.design
     implementation rxLib.rxJava
     implementation(rxLib.rxAndroid, excludeGrp)
     implementation(otherLib.timber, excludeGrp)

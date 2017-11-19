@@ -76,7 +76,7 @@ class NWInterceptorTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithoutCache()
@@ -104,7 +104,7 @@ class NWInterceptorTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithCache()
@@ -132,7 +132,7 @@ class NWInterceptorTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithoutAuthHeader()
@@ -160,7 +160,7 @@ class NWInterceptorTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithAuthHeader()

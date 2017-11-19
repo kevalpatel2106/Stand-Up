@@ -16,7 +16,7 @@
 
 ext {
     def playServiceVersion = "11.6.0"
-    def supportLibVersion = "27.0.0"
+    def supportLibVersion = "27.0.1"
     def kotlinVersion = '1.1.51'
 
     def okHttpVersion = "3.8.1"
@@ -128,6 +128,6 @@ ext {
             circleImagView : 'de.hdodenhof:circleimageview:2.1.0',
             shetho         : 'com.facebook.stetho:stetho:' + shethoVersion,
             shethoOkhttp   : 'com.facebook.stetho:stetho-okhttp3:' + shethoVersion,
-            facebook       : 'com.facebook.android:facebook-android-sdk:4.7.0',
+            facebook       : 'com.facebook.android:facebook-android-sdk:4.28.0',
     ]
 }

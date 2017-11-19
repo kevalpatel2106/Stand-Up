@@ -16,4 +16,15 @@
 
 <resources>
 
+    <string name="login_using_email">Login using email</string>
+    <string name="tag_line">Sitting is next cancer.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="create_account">Create account</string>
+    <string name="error_google_signin_fail">Cannot login with Google account.</string>
+    <string name="error_facebook_signin_fail">Cannot login with Facebook account.</string>
+    <string name="error_retry_try_again">Try Again</string>
 </resources>

@@ -25,11 +25,11 @@ import java.net.HttpURLConnection
  */
 
 @RunWith(AndroidJUnit4::class)
-class BaseApiWrapperTest : BaseTestClass() {
+class ApiProviderTest : BaseTestClass() {
 
     @SmallTest
     fun checkBaseUrl() {
-        val retrofit = BaseApiWrapper(InstrumentationRegistry.getContext())
+        val retrofit = ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient("http://google.com")
 
         Assert.assertEquals(retrofit.baseUrl().toString(), "http://google.com/")
@@ -37,7 +37,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
     @SmallTest
     fun checkOkHttpClient() {
-        val okHttpClient = BaseApiWrapper(InstrumentationRegistry.getContext())
+        val okHttpClient = ApiProvider(InstrumentationRegistry.getContext())
                 .getOkHttpClientBuilder()
 
         if (BuildConfig.DEBUG) {
@@ -72,7 +72,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         //404 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
@@ -101,7 +101,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         //404 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
@@ -128,7 +128,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         //400 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
@@ -158,7 +158,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         //500 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_SERVER_ERROR))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
@@ -186,7 +186,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse().setResponseCode(103))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
@@ -217,7 +217,7 @@ class BaseApiWrapperTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
@@ -248,7 +248,7 @@ class BaseApiWrapperTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.required_field_missing_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
@@ -279,7 +279,7 @@ class BaseApiWrapperTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.exception_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
+        ApiProvider(InstrumentationRegistry.getContext())
                 .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
