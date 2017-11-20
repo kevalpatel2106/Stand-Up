@@ -1,5 +1,5 @@
-<manifest package="com.kevalpatel2106.testutils"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.kevalpatel2106.testutils">
 
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
@@ -13,5 +13,9 @@
         <activity
             android:name="com.kevalpatel2106.testutils.FragmentRuleActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+
+        <activity
+            android:name="com.kevalpatel2106.testutils.TestActivity"
+            android:theme="@style/Theme.AppCompat"/>
     </application>
 </manifest>

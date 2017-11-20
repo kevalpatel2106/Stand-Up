@@ -1,0 +1,40 @@
+{
+  "id": "398475894375893",
+  "name": "John Doe",
+  "email": "john@example.com",
+  "gender": "female",
+  "birthday": "12\/12\/1989",
+  "about": "This is the test about.",
+  "bio": "This is the test bio.",
+  "picture": {
+    "data": {
+      "height": 50,
+      "is_silhouette": false,
+      "url": "https:\/\/scontent.xx.fbcdn.net\/v\/t1.0-1\/c154.33.413.413\/s50x50\/427144_108142642648116_878107670_n.jpg?oh=a0dd9353b55c083bab97c5a46dd4ce04&oe=5A94F71A",
+      "width": 50
+    }
+  },
+  "cover": {
+    "source": "https:\/\/scontent.xx.fbcdn.net\/v\/t1.0-1\/c154.33.413.413\/s50x50\/427144_108142642648116_878107670_n.jpg?oh=a0dd9353b55c083bab97c5a46dd4ce04&oe=5A94F71A"
+  },
+  "friends": {
+    "data": [
+      {
+        "name": "Marry",
+        "id": "43464536546546"
+      },
+      {
+        "name": "Jone",
+        "id": "3464356435654"
+      },
+      {
+        "name": "Testss",
+        "id": "456345643565463"
+      },
+      {
+        "name": "Qatest",
+        "id": "3645654654"
+      }
+    ]
+  }
+}

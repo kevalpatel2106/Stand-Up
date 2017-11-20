@@ -8,27 +8,25 @@ import org.json.JSONObject
  *
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
-data class FacebookUser(
-        var name: String?,
+data class FacebookUser(val facebookID: String,
+                        /**
+                         * JSON response received. If you want to parse more fields.
+                         */
+                        val response: JSONObject) {
 
-        var email: String?,
+    var name: String? = null
+    var email: String? = null
+    var gender: String? = null
+    var about: String? = null
+    var bio: String? = null
+    var coverPicUrl: String? = null
+    var profilePic: String? = null
+    override fun hashCode(): Int = facebookID.hashCode()
 
-        var facebookID: String?,
-
-        var gender: String?,
-
-        var about: String?,
-
-        var bio: String?,
-
-        var coverPicUrl: String?,
-
-        var profilePic: String?,
-
-        /**
-         * JSON response received. If you want to parse more fields.
-         */
-        val response: JSONObject) {
-
-    constructor(response: JSONObject) : this(null, null, null, null, null, null, null, null, response)
+    override fun equals(other: Any?): Boolean {
+        other?.let {
+            return (other is FacebookUser && other.facebookID == facebookID)
+        }
+        return false
+    }
 }
