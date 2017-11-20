@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.kevalpatel2106.standup">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.kevalpatel2106.standup">
 
     <application
         android:name=".SUApplication"
@@ -14,7 +14,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"/>
 
         <activity
             android:name=".SplashActivity"
@@ -26,37 +26,40 @@
             android:theme="@style/AppTheme.Splash"
             tools:ignore="UnusedAttribute">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".Dashboard"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".UserInfoActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".authentication.intro.IntroActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
+        <activity
+            android:name=".authentication.login.LoginActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionbar"
+            tools:ignore="UnusedAttribute"/>
 
         <receiver
             android:name=".UnauthorizedReceiver"
             android:enabled="false"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.kevalpatel2106.network.unauthorized" />
+                <action android:name="com.kevalpatel2106.network.unauthorized"/>
             </intent-filter>
         </receiver>
-
-        <activity android:name=".authentication.login.LoginActivity"></activity>
     </application>
 
 </manifest>

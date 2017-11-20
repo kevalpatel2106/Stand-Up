@@ -2,6 +2,8 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.network.Response
+import com.kevalpatel2106.standup.authentication.login.LoginRequest
+import com.kevalpatel2106.standup.authentication.login.LoginResponseData
 import com.kevalpatel2106.standup.authentication.signUp.SignUpRequest
 import com.kevalpatel2106.standup.authentication.signUp.SignUpResponseData
 import com.kevalpatel2106.testutils.MockWebserverUtils
@@ -19,8 +21,23 @@ import java.net.HttpURLConnection
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
-class UserAuthRepositoryTestImpl : UserAuthRepository, Closeable {
+class MockUserAuthRepository : UserAuthRepository, Closeable {
     private var mockWebServer: MockWebServer = MockWebserverUtils.startMockWebServer()
+
+    override fun login(loginRequest: LoginRequest): Observable<Response<LoginResponseData>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun signUp(signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun socialSignUp(signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>> =
+            ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+                    .create(UserAuthRepository::class.java)
+                    .socialSignUp(signUpRequest)
+
+
 
     fun enqueueResponse(response: String) {
         mockWebServer.enqueue(MockResponse().setBody(response).setResponseCode(HttpURLConnection.HTTP_OK))
@@ -33,13 +50,4 @@ class UserAuthRepositoryTestImpl : UserAuthRepository, Closeable {
     override fun close() {
         mockWebServer.close()
     }
-
-    /**
-     * This method provides [Observable] to login/sign up user using the social accounts.
-     */
-    override fun authSocialUser(requestData: SignUpRequest): Observable<Response<SignUpResponseData>> =
-            ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
-                    .create(AuthApiService::class.java)
-                    .socialSignUp(requestData)
-
 }

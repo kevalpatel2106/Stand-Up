@@ -77,10 +77,10 @@ class GoogleSignInHelper(private val context: FragmentActivity,
 
     private fun parseToGoogleUser(account: GoogleSignInAccount): GoogleAuthUser {
         val user = GoogleAuthUser(id = account.id!!)
-        user.name = account.displayName
+        user.name = account.displayName!!
         user.familyName = account.familyName
         user.idToken = account.idToken
-        user.email = account.email
+        user.email = account.email!!
         user.photoUrl = account.photoUrl
         return user
     }

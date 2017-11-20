@@ -7,8 +7,8 @@ import android.net.Uri
  */
 data class GoogleAuthUser(var id: String) {
     var idToken: String? = null
-    var name: String? = null
-    var email: String? = null
+    lateinit var name: String
+    lateinit var email: String
     var familyName: String? = null
     var photoUrl: Uri? = null
 

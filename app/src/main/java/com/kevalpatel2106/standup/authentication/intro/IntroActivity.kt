@@ -23,7 +23,6 @@ import com.kevalpatel2106.googleauth.GoogleAuthResponse
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.googleauth.GoogleSignInHelper
 import com.kevalpatel2106.standup.Dashboard
-import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.login.LoginActivity
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_intro.*
@@ -164,14 +163,14 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         mGoogleSignInHelper.onActivityResult(requestCode, resultCode, data)
         mFacebookSignInHelper.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onGoogleAuthSignIn(user: GoogleAuthUser) =
-            if (user.email.isNullOrEmpty() || user.name.isNullOrEmpty()) {
+            if (user.email.isEmpty() || user.name.isEmpty()) {
                 showSnack(getString(R.string.error_google_login_email_not_found))
             } else {
                 //Perform the authentication

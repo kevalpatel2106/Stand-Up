@@ -37,7 +37,7 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
     @Suppress("unused")
     @VisibleForTesting
     constructor(userAuthRepo: UserAuthRepository) : super() {
-        this.mUserAuthRepo = userAuthRepo
+        mUserAuthRepo = userAuthRepo
     }
 
     /**
@@ -45,7 +45,8 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
      */
     @Suppress("unused")
     constructor() : super() {
-        this.mUserAuthRepo = UserAuthRepositoryImpl()
+        //This is the original user authentication repo.
+        mUserAuthRepo = UserAuthRepositoryImpl()
     }
 
     /**
@@ -84,7 +85,8 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun authenticateSocialUser(requestData: SignUpRequest) {
         mIsAuthenticationRunning.value = true
-        mUserAuthRepo.authSocialUser(requestData)
+
+        mUserAuthRepo.socialSignUp(requestData)
                 .subscribe(object : NWSuccessConsumer<SignUpResponseData>() {
 
                     /**
