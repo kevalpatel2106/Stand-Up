@@ -109,16 +109,11 @@ dependencies {
     implementation supportLib.recyclerView
     implementation supportLib.design
 
-    //Firebase
-    implementation firebaseLib.core
-    implementation firebaseLib.auth
-
-
     //Rx
     implementation rxLib.rxJava
     implementation (rxLib.rxAndroid, excludeGrp)
 
 
     //Other
-    implementation(otherLib.timber, excludeGrp)
+    implementation(debugLibs.timber, excludeGrp)
 }

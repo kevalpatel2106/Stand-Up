@@ -70,9 +70,14 @@ dependencies {
     implementation ide.kotlin
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
-    implementation(otherLib.timber, excludeGrp)
 
-    api(otherLib.facebook, excludeGrp)
+    //Loggers
+    implementation(debugLibs.timber, excludeGrp)
+
+    //Facebook Lib
+    implementation(otherLib.facebook, excludeGrp)
+
+    //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="@drawable/bg_splash"
-    tools:context="com.kevalpatel2106.standup.intro.IntroFragment">
+    tools:context=".authentication.intro.IntroFragment">
 
     <com.kevalpatel2106.base.BaseImageView
         android:id="@+id/intro_iv"

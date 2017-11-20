@@ -25,3 +25,6 @@ SERVER_CLIENT_ID=your_client_id_from_google_console
 # Facebook credentials
 FACEBOOK_APP_ID=facebook_app_id
 FB_LOGIN_PROTOCOL_SCHEME=schecme_from_facebook_app
+
+# Server config
+SERVER_BASE_URL=api.server.url

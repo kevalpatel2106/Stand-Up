@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.intro
+package com.kevalpatel2106.standup.authentication.intro
 
 
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kevalpatel2106.base.BaseFragment
+import com.kevalpatel2106.base.annotations.UIController
 
 import com.kevalpatel2106.standup.R
 import kotlinx.android.synthetic.main.fragment_intro.*
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_intro.*
  * @see [IntroPagerAdapter]
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@UIController
 class IntroFragment : BaseFragment() {
     companion object {
         private val ARG_CAPTION = "ARG_CAPTION"

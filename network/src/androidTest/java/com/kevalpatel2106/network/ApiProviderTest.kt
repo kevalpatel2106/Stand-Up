@@ -12,6 +12,7 @@ import com.kevalpatel2106.testutils.MockWebserverUtils
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
@@ -21,24 +22,26 @@ import java.net.HttpURLConnection
 /**
  * Created by Keval on 12/11/17.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
 @RunWith(AndroidJUnit4::class)
 class ApiProviderTest : BaseTestClass() {
 
+    @Before
+    fun setUp() {
+        ApiProvider.init(InstrumentationRegistry.getContext().applicationContext)
+    }
+
     @SmallTest
     fun checkBaseUrl() {
-        val retrofit = ApiProvider(InstrumentationRegistry.getContext())
-                .getRetrofitClient("http://google.com")
-
+        val retrofit = ApiProvider.getRetrofitClient("http://google.com")
         Assert.assertEquals(retrofit.baseUrl().toString(), "http://google.com/")
     }
 
     @SmallTest
     fun checkOkHttpClient() {
-        val okHttpClient = ApiProvider(InstrumentationRegistry.getContext())
-                .getOkHttpClientBuilder()
+        val okHttpClient = ApiProvider.sOkHttpClient
 
         if (BuildConfig.DEBUG) {
             /**
@@ -72,8 +75,7 @@ class ApiProviderTest : BaseTestClass() {
         //404 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND))
 
-        ApiProvider(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -101,8 +103,7 @@ class ApiProviderTest : BaseTestClass() {
         //404 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED))
 
-        ApiProvider(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -128,8 +129,7 @@ class ApiProviderTest : BaseTestClass() {
         //400 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST))
 
-        ApiProvider(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -158,8 +158,7 @@ class ApiProviderTest : BaseTestClass() {
         //500 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_SERVER_ERROR))
 
-        ApiProvider(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -186,8 +185,7 @@ class ApiProviderTest : BaseTestClass() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse().setResponseCode(103))
 
-        ApiProvider(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -217,8 +215,7 @@ class ApiProviderTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        ApiProvider(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -248,8 +245,7 @@ class ApiProviderTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.required_field_missing_sample)))
 
-        ApiProvider(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -279,8 +275,7 @@ class ApiProviderTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.exception_sample)))
 
-        ApiProvider(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {

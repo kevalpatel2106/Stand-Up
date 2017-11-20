@@ -12,7 +12,7 @@ import java.lang.reflect.Type
 /**
  * Created by Keval on 12/11/17.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
 internal class NWResponseConverter(private val gson: Gson) : Converter.Factory() {

@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
-package com.kevalpatel2106.network
+package com.kevalpatel2106.standup.authentication.signUp
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.kevalpatel2106.network.BaseData
 
 /**
  * Created by Keval on 27-Dec-16.
- * Basic response that is use to parse the normal response pattern.
- * `{"d":{...},"s":{"c":0,"m":"Error message"}}`
- *
- *
- * <B>NOTE:</B>
- * Here generic T indicates the POJO that represents "d" in above response. Each response will have it's
- * different POJOs for  response data.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class Response<T : BaseData> {
 
-    @SerializedName("d")
-    @Expose
-    lateinit var data: T
-}
+data class SignUpResponseData(
+        @SerializedName("uid")
+        @Expose
+        val uid: Long,
+
+        @SerializedName("is_new_user")
+        @Expose
+        val isNewUser: Boolean = false,
+
+        @SerializedName("photo")
+        @Expose
+        val photoUrl: String? = null
+) : BaseData()

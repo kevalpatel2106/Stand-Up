@@ -1,8 +1,9 @@
-package com.kevalpatel2106.standup.intro
+package com.kevalpatel2106.standup.authentication.intro
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.standup.R
 
 /**
@@ -11,6 +12,7 @@ import com.kevalpatel2106.standup.R
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@UIController
 internal class IntroPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
     //TODO Add the proper captions

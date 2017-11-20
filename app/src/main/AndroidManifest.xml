@@ -42,7 +42,7 @@
             android:theme="@style/AppTheme.NoActionbar"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".intro.IntroActivity"
+            android:name=".authentication.intro.IntroActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             tools:ignore="UnusedAttribute" />
@@ -55,6 +55,8 @@
                 <action android:name="com.kevalpatel2106.network.unauthorized" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".authentication.login.LoginActivity"></activity>
     </application>
 
 </manifest>

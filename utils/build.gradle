@@ -86,10 +86,11 @@ dependencies {
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
+    //Support
     implementation supportLib.supportv4
     implementation supportLib.appCompat
     implementation supportLib.design
-    implementation rxLib.rxJava
-    implementation(rxLib.rxAndroid, excludeGrp)
-    implementation(otherLib.timber, excludeGrp)
+
+    //Loggers
+    implementation(debugLibs.timber, excludeGrp)
 }

@@ -1,8 +1,10 @@
 @file:Suppress("PrivatePropertyName")
 
-package com.kevalpatel2106.standup.intro
+package com.kevalpatel2106.standup.authentication.intro
 
 import android.Manifest
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,16 +15,18 @@ import android.view.View
 import butterknife.OnClick
 import butterknife.Optional
 import com.kevalpatel2106.base.BaseActivity
+import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.facebookauth.FacebookHelper
 import com.kevalpatel2106.facebookauth.FacebookResponse
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthResponse
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.googleauth.GoogleSignInHelper
+import com.kevalpatel2106.standup.Dashboard
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.login.LoginActivity
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_intro.*
-import timber.log.Timber
 
 
 /**
@@ -30,8 +34,8 @@ import timber.log.Timber
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@UIController
 class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
-
     private val REQ_CODE_GET_ACCOUNTS_GOOGLE = 38947
     private val REQ_CODE_GET_ACCOUNTS_FACEBOOK = 3456
 
@@ -49,10 +53,30 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
 
     private lateinit var mGoogleSignInHelper: GoogleSignInHelper
     private lateinit var mFacebookSignInHelper: FacebookHelper
+    private lateinit var mModel: IntroViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
+
+        mModel = ViewModelProviders.of(this).get(IntroViewModel::class.java)
+
+        //Observer the api call changes
+        mModel.mIsAuthenticationRunning.observe(this@IntroActivity, Observer<Boolean> {
+            manageButtons(!it!!)
+        })
+
+        //Observer the api responses.
+        mModel.mIntroApiResponse.observe(this@IntroActivity, Observer<IntroViewModel.IntroApiResponseModel> {
+            if (it!!.isSuccess) {
+                Dashboard.launch(this@IntroActivity)
+                finish()
+            } else {
+                showSnack(it.errorMsg!!)
+            }
+        })
+        manageButtons(!mModel.mIsAuthenticationRunning.value!!)
+
         intro_view_pager.adapter = IntroPagerAdapter(supportFragmentManager)
 
         //Initialize helpers
@@ -62,6 +86,17 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         mFacebookSignInHelper = FacebookHelper(this,
                 getString(R.string.fb_login_field_string),
                 this)
+    }
+
+    /**
+     * Enable/Disable all the buttons.
+     */
+    @Suppress("PLUGIN_WARNING")
+    private fun manageButtons(enableAllViews: Boolean) {
+        btn_login_fb_signin?.let { it.isEnabled = enableAllViews }
+        btn_create_account.isEnabled = enableAllViews
+        btn_login_google_signin.isEnabled = enableAllViews
+        btn_login_using_email.isEnabled = enableAllViews
     }
 
     @OnClick(R.id.btn_login_google_signin)
@@ -91,10 +126,14 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         }
     }
 
+    /**
+     * Launch [LoginActivity] to sign in using the email.
+     */
     @OnClick(R.id.btn_login_using_email)
     fun emailSignIn() {
-
+        LoginActivity.launch(this@IntroActivity)
     }
+
 
     @OnClick(R.id.btn_create_account)
     fun createAccount() {
@@ -131,10 +170,13 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onGoogleAuthSignIn(user: GoogleAuthUser?) {
-        Timber.e("user:" + user)
-        //TODO make login api call.
-    }
+    override fun onGoogleAuthSignIn(user: GoogleAuthUser) =
+            if (user.email.isNullOrEmpty() || user.name.isNullOrEmpty()) {
+                showSnack(getString(R.string.error_google_login_email_not_found))
+            } else {
+                //Perform the authentication
+                mModel.authenticateSocialUser(user)
+            }
 
     override fun onGoogleAuthSignInFailed() {
         showSnack(getString(R.string.error_google_signin_fail),
@@ -161,9 +203,13 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      *
      * @param facebookUser [FacebookUser].
      */
-    override fun onFbProfileReceived(facebookUser: FacebookUser) {
-        //TODO make login api call.
-    }
+    override fun onFbProfileReceived(facebookUser: FacebookUser) =
+            if (facebookUser.email.isNullOrEmpty() || facebookUser.name.isNullOrEmpty()) {
+                showSnack(getString(R.string.error_fb_login_email_not_found))
+            } else {
+                //Perform the authentication
+                mModel.authenticateSocialUser(facebookUser)
+            }
 
     /**
      * This callback will be available whenever facebook sign out call completes. No matter success of

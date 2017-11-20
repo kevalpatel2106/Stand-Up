@@ -68,7 +68,7 @@ dependencies {
     implementation ide.kotlin
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
-    implementation(otherLib.timber, excludeGrp)
+    implementation(debugLibs.timber, excludeGrp)
 
     implementation supportLib.appCompat
     implementation supportLib.supportv4

@@ -80,6 +80,7 @@ android {
             pseudoLocalesEnabled false
             zipAlignEnabled true
 
+            buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
             resValue "string", "server_client_id", SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID
         }
@@ -92,6 +93,7 @@ android {
             minifyEnabled false
             zipAlignEnabled true
 
+            buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
             resValue "string", "server_client_id", SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID
         }
@@ -120,7 +122,8 @@ dependencies {
     kapt(butterKnifeLib.annotationProcessor, excludeGrp)
 
     //Loggers
-    implementation(otherLib.timber, excludeGrp)
+    debugImplementation(debugLibs.dbdebug, excludeGrp)
+    implementation(debugLibs.timber, excludeGrp)
 
     //Support
     implementation supportLib.appCompat
