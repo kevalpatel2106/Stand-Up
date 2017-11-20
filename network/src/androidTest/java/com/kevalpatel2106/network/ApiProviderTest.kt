@@ -94,7 +94,6 @@ class ApiProviderTest : BaseTestClass() {
                         Assert.fail("Internet is there")
                     }
                 })
-
     }
 
     @Test

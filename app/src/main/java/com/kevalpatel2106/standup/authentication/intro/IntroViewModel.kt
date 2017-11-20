@@ -96,7 +96,7 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
                      */
                     override fun onSuccess(data: SignUpResponseData?) {
                         val apiResponse = IntroApiResponseModel(true)
-                        apiResponse.name = data
+                        apiResponse.signUpResponseData = data
                         mIntroApiResponse.value = apiResponse
 
                         mIsAuthenticationRunning.value = false
@@ -147,7 +147,7 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
         /**
          * Response received from the server.
          */
-        var name: SignUpResponseData? = null
+        var signUpResponseData: SignUpResponseData? = null
 
         /**
          * Error message to display when the user authentication fails.

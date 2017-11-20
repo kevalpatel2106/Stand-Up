@@ -26,8 +26,8 @@ object MockWebserverUtils {
             return mockWebServer
         } catch (e: IOException) {
             e.printStackTrace()
-            fail("Failed to startTimeMills mock server.")
-            throw RuntimeException("Failed to startTimeMills mock server.")
+            fail("Failed to start mock server.")
+            throw RuntimeException("Failed to start mock server.")
         }
 
     }

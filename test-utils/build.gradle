@@ -109,6 +109,7 @@ dependencies {
     //Testing
     api testLib.junit
     api testLib.rules
+    api testLib.arch
     api testLib.esspresso
     api testLib.runner
     api testLib.esspressoIntents

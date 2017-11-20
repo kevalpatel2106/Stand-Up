@@ -5,7 +5,6 @@ import com.kevalpatel2106.network.NWException
 import com.kevalpatel2106.network.NetworkConfig
 import io.reactivex.functions.Consumer
 import retrofit2.HttpException
-import timber.log.Timber
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -30,7 +29,6 @@ abstract class NWErrorConsumer : Consumer<Throwable> {
         val errorCode: Int
         val message: String
 
-        Timber.e(throwable)
         when (throwable) {
             is NWException -> {  //Exception/Error in the server response.
                 //Internet not available.

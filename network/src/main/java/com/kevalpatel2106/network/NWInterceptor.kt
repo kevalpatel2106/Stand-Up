@@ -18,12 +18,14 @@ package com.kevalpatel2106.network
 
 import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
+import android.support.annotation.VisibleForTesting
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Base64
+import com.google.gson.Gson
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 import okhttp3.*
 import okhttp3.Response
-import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -32,11 +34,9 @@ import java.net.HttpURLConnection
  * Created by Keval on 16-Jun-17.
  * Network interceptor that will handle authentication headers and caching in the request/response.
  *
- * @property context Instance of the caller.
- *
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
-internal class NWInterceptor(private val context: Context) : Interceptor {
+internal class NWInterceptor(private val context: Context?) : Interceptor {
 
     companion object {
         internal val CACHE_SIZE = 5242880L          //5 MB //Cache size.
@@ -78,11 +78,9 @@ internal class NWInterceptor(private val context: Context) : Interceptor {
             if (response.header("Content-type").equals("application/json")) {   //Check if the json resposne.
                 //Check for the error code other than the success.
                 val responseStr = response.body()?.string()
-                val status = JSONObject(responseStr).getJSONObject("s")
-
-                val code = status.getInt("c")
+                val statusObj = Gson().fromJson(responseStr, Resp::class.java)
                 when {
-                    code == APIStatusCodes.SUCCESS_CODE && responseStr != null -> {
+                    statusObj.status.statusCode == APIStatusCodes.SUCCESS_CODE && responseStr != null -> {
                         //Success
                         //Nothing to do. Go ahead.
                         //We consumed the response body once so we need to build it again.
@@ -90,20 +88,22 @@ internal class NWInterceptor(private val context: Context) : Interceptor {
                                 .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
                                 .build()
                     }
-                    code == APIStatusCodes.ERROR_CODE_UNAUTHORIZED -> {     //You are unauthorized.
+                    statusObj.status.statusCode == APIStatusCodes.ERROR_CODE_UNAUTHORIZED -> {     //You are unauthorized.
 
                         //Broadcast to the app module that user is not authorized.
                         //Log out.
-                        LocalBroadcastManager.getInstance(context)
-                                .sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
+                        context?.let {
+                            LocalBroadcastManager.getInstance(context)
+                                    .sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
+                        }
                         response
                     }
-                    code < APIStatusCodes.SUCCESS_CODE -> {       //Exception occurred on the server
-                        throw NWException(code, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                    statusObj.status.statusCode < APIStatusCodes.SUCCESS_CODE -> {       //Exception occurred on the server
+                        throw NWException(statusObj.status.statusCode, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
                     }
                     else -> {   //Some recoverable error occurred on the server
-                        val message = status.getString("m")
-                        throw NWException(code, message)
+                        throw NWException(statusObj.status.statusCode,
+                                statusObj.status.message ?: NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
                     }
                 }
             } else {
@@ -115,8 +115,10 @@ internal class NWInterceptor(private val context: Context) : Interceptor {
 
             //Broadcast to the app module that user is not authorized.
             //Log out.
-            LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
+            context?.let {
+                LocalBroadcastManager.getInstance(context)
+                        .sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
+            }
 
             throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
         } else if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST
@@ -144,16 +146,9 @@ internal class NWInterceptor(private val context: Context) : Interceptor {
     fun addCachingHeaders(request: Request, response: Response): Response {
         var response1 = response
         request.header("Cache-Time")?.let {
-            response1 = if (isNetworkAvailable(context)) {
-                response1.newBuilder()
-                        .header("Cache-Control", "public, max-age=" + request.header("Cache-Time"))
-                        .build()
-            } else {
-                val maxStale = 2419200 // tolerate 4-weeks stale
-                response1.newBuilder()
-                        .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                        .build()
-            }
+            response1 = response.newBuilder()
+                    .header("Cache-Control", "public, max-age=" + request.header("Cache-Time"))
+                    .build()
         }
         return response1
     }
@@ -180,15 +175,16 @@ internal class NWInterceptor(private val context: Context) : Interceptor {
         return request1
     }
 
-    /**
-     * Check if the internet is available?
-     *
-     * @param context instance.
-     * @return True if the internet is available else false.
-     */
-    private fun isNetworkAvailable(context: Context): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = cm.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
+    class Resp {
+        @SerializedName("s")
+        @Expose
+        lateinit var status: Status
+
+        data class Status(
+                @SerializedName("c")
+                val statusCode: Int,
+                @SerializedName("m")
+                val message: String? = null
+        )
     }
 }

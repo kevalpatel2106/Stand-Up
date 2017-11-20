@@ -48,6 +48,7 @@ ext {
     testLib = [
             junit           : 'junit:junit:4.12',
             rules           : 'com.android.support.test:rules:1.0',
+            arch            : 'android.arch.core:core-testing:' + archComponentVersion,
             runner          : 'com.android.support.test:runner:1.0',
             esspresso       : 'com.android.support.test.espresso:espresso-core:' + espressoVersion,
             esspressoIntents: 'com.android.support.test.espresso:espresso-intents:' + espressoVersion,

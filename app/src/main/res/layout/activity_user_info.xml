@@ -34,8 +34,8 @@
                 app:errorEnabled="true"
                 app:hintAnimationEnabled="true"
                 app:hintTextAppearance="@style/SmallText.Secondary"
-                app:layout_constraintLeft_toRightOf="@id/guideline"
-                app:layout_constraintRight_toLeftOf="@id/guideline1"
+                app:layout_constraintLeft_toRightOf="@+id/guideline"
+                app:layout_constraintRight_toLeftOf="@+id/guideline1"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.kevalpatel2106.base.BaseEditText

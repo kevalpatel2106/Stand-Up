@@ -40,7 +40,10 @@ class MockUserAuthRepository : UserAuthRepository, Closeable {
 
 
     fun enqueueResponse(response: String) {
-        mockWebServer.enqueue(MockResponse().setBody(response).setResponseCode(HttpURLConnection.HTTP_OK))
+        mockWebServer.enqueue(MockResponse()
+                .setHeader("Content-type","application/json")
+                .setBody(response)
+                .setResponseCode(HttpURLConnection.HTTP_OK))
     }
 
     fun enqueueResponse(response: File) {

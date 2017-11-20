@@ -17,6 +17,7 @@
 package com.kevalpatel2106.network
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -42,7 +43,24 @@ object ApiProvider {
      *
      * @see .getOkHttpClientBuilder
      */
-    internal lateinit var sOkHttpClient: OkHttpClient
+    internal var sOkHttpClient: OkHttpClient
+
+    init {
+        val httpClientBuilder = OkHttpClient.Builder()
+                .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
+                .writeTimeout(NetworkConfig.WRITE_TIMEOUT, TimeUnit.MINUTES)
+                .connectTimeout(NetworkConfig.CONNECTION_TIMEOUT, TimeUnit.MINUTES)
+
+        //Add debug interceptors
+        if (BuildConfig.DEBUG) {
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+            httpClientBuilder.addInterceptor(StethoInterceptor())
+                    .addInterceptor(loggingInterceptor)
+        }
+        sOkHttpClient = httpClientBuilder.build()
+    }
 
     /**
      * Gson instance with custom gson deserializers.
@@ -58,23 +76,21 @@ object ApiProvider {
      */
     @JvmStatic
     fun init(context: Context) {
-        val httpClientBuilder = OkHttpClient.Builder()
-                .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
-                .writeTimeout(NetworkConfig.WRITE_TIMEOUT, TimeUnit.MINUTES)
-                .connectTimeout(NetworkConfig.CONNECTION_TIMEOUT, TimeUnit.MINUTES)
+        sOkHttpClient = sOkHttpClient.newBuilder()
                 .cache(NWInterceptor.getCache(context)) /* Add caching */
                 .addInterceptor(NWInterceptor(context))  /* Add the interceptor. */
+                .build()
+    }
 
-        //Add debug interceptors
-        if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-
-            httpClientBuilder.addInterceptor(StethoInterceptor())
-                    .addInterceptor(loggingInterceptor)
-        }
-
-        sOkHttpClient = httpClientBuilder.build()
+    /**
+     * Get the singleton instance of the shared preference provider.
+     */
+    @VisibleForTesting
+    @JvmStatic
+    fun init() {
+        sOkHttpClient = sOkHttpClient.newBuilder()
+                .addInterceptor(NWInterceptor(null))  /* Add the interceptor. */
+                .build()
     }
 
     /**

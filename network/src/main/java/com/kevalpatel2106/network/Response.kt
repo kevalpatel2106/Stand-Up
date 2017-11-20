@@ -35,5 +35,5 @@ class Response<T : BaseData> {
 
     @SerializedName("d")
     @Expose
-    lateinit var data: T
+    var data: T? = null
 }

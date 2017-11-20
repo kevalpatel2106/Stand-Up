@@ -2,4 +2,5 @@
     package="com.kevalpatel2106.network">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
