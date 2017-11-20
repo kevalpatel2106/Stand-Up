@@ -35,19 +35,10 @@ android {
                 keyAlias System.getenv("KEY_ALIAS")
                 keyPassword System.getenv("ALIAS_PASSWORD")
             } else {
-                //If this is the local build, load it from the keystore.properties file
-                File signFile = rootProject.file('./misc/keystore.properties')
-                if (signFile.exists()) {
-                    Properties props = new Properties()
-                    props.load(new FileInputStream(signFile))
-
-                    keyAlias props['keystore.alias']
-                    keyPassword props['keystore.password']
-                    storeFile file(props['keystore.file'])
-                    storePassword props['keystore.aliaspassword']
-                } else {
-                    throw new GradleException("keystore.properties file not found.")
-                }
+                keyAlias keystore_alias
+                keyPassword keystore_password
+                storeFile file(keystore_file)
+                storePassword keystore_aliaspassword
             }
         }
     }
@@ -68,7 +59,7 @@ android {
         //strip other than english resources
         resConfigs "en"
 
-        consumerProguardFiles proguardConfig.proguardPath
+        consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
 
         testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
         defaultPublishConfig "debug"
@@ -102,17 +93,11 @@ dependencies {
     implementation supportLib.appCompat
     implementation supportLib.supportv4
 
-    //Glide
-    implementation(otherLib.glide, excludeGrp)
-    kapt(otherLib.glideAnnotation, excludeGrp)
-
     //GSON
-    implementation otherLib.gson
-    debugApi(otherLib.shetho, excludeGrp)
-    implementation(otherLib.shethoOkhttp, excludeGrp)
+    api otherLib.gson
 
     //Retrofit
-    implementation retrofitLib.retrofit
+    api retrofitLib.retrofit
     implementation retrofitLib.gsonPlugin
     implementation retrofitLib.rxPlugin
     implementation retrofitLib.logger
@@ -121,6 +106,8 @@ dependencies {
     implementation rxLib.rxJava
     implementation (rxLib.rxAndroid, excludeGrp)
 
-    //Other
-    implementation(otherLib.timber, excludeGrp)
+    //Loggers
+    debugApi(debugLibs.shetho, excludeGrp)
+    implementation(debugLibs.shethoOkhttp, excludeGrp)
+    implementation(debugLibs.timber, excludeGrp)
 }

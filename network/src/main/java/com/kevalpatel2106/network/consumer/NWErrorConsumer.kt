@@ -2,6 +2,7 @@ package com.kevalpatel2106.network.consumer
 
 import com.kevalpatel2106.network.APIStatusCodes
 import com.kevalpatel2106.network.NWException
+import com.kevalpatel2106.network.NetworkConfig
 import io.reactivex.functions.Consumer
 import retrofit2.HttpException
 import timber.log.Timber
@@ -34,29 +35,29 @@ abstract class NWErrorConsumer : Consumer<Throwable> {
             is NWException -> {  //Exception/Error in the server response.
                 //Internet not available.
                 errorCode = throwable.errorCode
-                message = throwable.message ?: APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG
+                message = throwable.message ?: NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG
 
                 onError(errorCode, message)
             }
             is HttpException -> { //Error frm the server. (e.g. 500)
                 //Nothing in response body
                 errorCode = APIStatusCodes.ERROR_CODE_UNKNOWN_ERROR
-                message = APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG
+                message = NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG
 
                 onError(errorCode, message)
             }
             is UnknownHostException -> {    //Cannot resolve host.
                 //Internet not available.
-                onInternetUnavailable(APIStatusCodes.ERROR_MESSAGE_INTERNET_NOT_AVAILABLE)
+                onInternetUnavailable(NetworkConfig.ERROR_MESSAGE_INTERNET_NOT_AVAILABLE)
             }
             is SocketTimeoutException -> {  //Cannot connect to the server.
                 //Internet not available.
-                onInternetUnavailable(APIStatusCodes.ERROR_MESSAGE_INTERNET_NOT_AVAILABLE)
+                onInternetUnavailable(NetworkConfig.ERROR_MESSAGE_INTERNET_NOT_AVAILABLE)
             }
             else -> {     //Any other unknown exception.
                 //Any other exception
                 errorCode = APIStatusCodes.ERROR_CODE_UNKNOWN_ERROR
-                message = APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG
+                message = NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG
 
                 onError(errorCode, message)
             }

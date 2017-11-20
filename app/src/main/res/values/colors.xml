@@ -31,4 +31,6 @@
     <color name="colorWindowBackground">#EEEEEE</color>
 
     <color name="divider">#BDBDBD</color>
+
+    <color name="fb">#3B5998</color>
 </resources>

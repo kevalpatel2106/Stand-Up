@@ -3,16 +3,13 @@ package com.kevalpatel2106.testutils
 import android.content.Context
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.fail
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
+import java.io.*
 
 
 /**
  * Created by Keval on 12/11/17.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
 object MockWebserverUtils {
@@ -35,9 +32,7 @@ object MockWebserverUtils {
 
     }
 
-    fun getBaseUrl(mockWebServer: MockWebServer): String {
-        return mockWebServer.url("/").toString()
-    }
+    fun getBaseUrl(mockWebServer: MockWebServer): String = mockWebServer.url("/").toString()
 
     private fun getStringFromInputStream(`is`: InputStream): String {
         var br: BufferedReader? = null
@@ -67,7 +62,9 @@ object MockWebserverUtils {
         return sb.toString()
     }
 
-    fun getStringFromFile(context: Context, filename: Int): String {
-        return getStringFromInputStream(context.resources.openRawResource(filename))
-    }
+    fun getStringFromFile(context: Context, filename: Int): String =
+            getStringFromInputStream(context.resources.openRawResource(filename))
+
+
+    fun getStringFromFile(file: File): String = getStringFromInputStream(FileInputStream(file))
 }

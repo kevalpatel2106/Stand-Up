@@ -72,7 +72,7 @@ internal class NWInterceptor(private val context: Context) : Interceptor {
     }
 
     @Suppress("DEPRECATION")
-    fun preprocessedResponse(response: Response): Response {
+    private fun preprocessedResponse(response: Response): Response {
         return if (response.code() == HttpURLConnection.HTTP_OK) {   //HTTP OK
 
             if (response.header("Content-type").equals("application/json")) {   //Check if the json resposne.
@@ -95,11 +95,11 @@ internal class NWInterceptor(private val context: Context) : Interceptor {
                         //Broadcast to the app module that user is not authorized.
                         //Log out.
                         LocalBroadcastManager.getInstance(context)
-                                .sendBroadcast(Intent(APIStatusCodes.BROADCAST_UNAUTHORIZED))
+                                .sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
                         response
                     }
                     code < APIStatusCodes.SUCCESS_CODE -> {       //Exception occurred on the server
-                        throw NWException(code, APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG)
+                        throw NWException(code, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
                     }
                     else -> {   //Some recoverable error occurred on the server
                         val message = status.getString("m")
@@ -116,24 +116,24 @@ internal class NWInterceptor(private val context: Context) : Interceptor {
             //Broadcast to the app module that user is not authorized.
             //Log out.
             LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(Intent(APIStatusCodes.BROADCAST_UNAUTHORIZED))
+                    .sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
 
-            throw NWException(response.code(), APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG)
+            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
         } else if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST
                 || response.code() == HttpURLConnection.HTTP_BAD_METHOD) {  //Bad request
 
-            throw NWException(response.code(), APIStatusCodes.ERROR_MESSAGE_BAD_REQUEST)
+            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_BAD_REQUEST)
         } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND
                 || response.code() == HttpURLConnection.HTTP_NOT_IMPLEMENTED) {  //404. Not found
 
-            throw NWException(response.code(), APIStatusCodes.ERROR_MESSAGE_NOT_FOUND)
+            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_NOT_FOUND)
         } else if (response.code() == HttpURLConnection.HTTP_SERVER_ERROR
                 || response.code() == HttpURLConnection.HTTP_UNAVAILABLE) {  //500. Server is busy.
 
-            throw NWException(response.code(), APIStatusCodes.ERROR_MESSAGE_SERVER_BUSY)
+            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_SERVER_BUSY)
         } else {
             //No specific error
-            throw NWException(response.code(), APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG)
+            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
         }
     }
 

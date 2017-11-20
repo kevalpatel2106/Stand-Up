@@ -26,21 +26,10 @@ import java.net.HttpURLConnection
  */
 
 object APIStatusCodes {
-
     const val SUCCESS_CODE = 0                              //Status code for success
     const val ERROR_CODE_REQUIRED_FIELD_MISSING = 1         //Status code for the error
     const val ERROR_CODE_GENERAL = 2                        //Status code for the error
     const val ERROR_CODE_EXCEPTION = -1                     //Status code for exception
     const val ERROR_CODE_UNAUTHORIZED = HttpURLConnection.HTTP_UNAUTHORIZED                 //Status code for unauthorized
     const val ERROR_CODE_UNKNOWN_ERROR = -1001              //Status code for the error code that is not
-
-    //Error messages.
-    internal const val ERROR_MESSAGE_INTERNET_NOT_AVAILABLE = "Internet is not available. Please try again."
-    internal const val ERROR_MESSAGE_SOMETHING_WRONG = "Something went wrong."
-    internal const val ERROR_MESSAGE_BAD_REQUEST = "Invalid request. Please try again."
-    internal const val ERROR_MESSAGE_NOT_FOUND = "Cannot perform the request. Please try again."
-    internal const val ERROR_MESSAGE_SERVER_BUSY = "Server is too busy at this moment. Please try again."
-
-    //Unauthorized broadcast action
-    const val BROADCAST_UNAUTHORIZED = "com.kevalpatel2106.network.unauthorized"
 }

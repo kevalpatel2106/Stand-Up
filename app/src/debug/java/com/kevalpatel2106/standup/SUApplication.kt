@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.StrictMode
 
 import com.facebook.stetho.Stetho
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.utils.SharedPrefsProvider
 
 import timber.log.Timber
@@ -35,6 +36,9 @@ class SUApplication : Application() {
 
         //Initialize firebase.
         //TODO Initialize
+
+        //Initialize the api module
+        ApiProvider.init(this@SUApplication)
 
         //Initialize shared preference
         SharedPrefsProvider.init(this)

@@ -35,19 +35,10 @@ android {
                 keyAlias System.getenv("KEY_ALIAS")
                 keyPassword System.getenv("ALIAS_PASSWORD")
             } else {
-                //If this is the local build, load it from the keystore.properties file
-                File signFile = rootProject.file('./misc/keystore.properties')
-                if (signFile.exists()) {
-                    Properties props = new Properties()
-                    props.load(new FileInputStream(signFile))
-
-                    keyAlias props['keystore.alias']
-                    keyPassword props['keystore.password']
-                    storeFile file(props['keystore.file'])
-                    storePassword props['keystore.aliaspassword']
-                } else {
-                    throw new GradleException("keystore.properties file not found.")
-                }
+                keyAlias keystore_alias
+                keyPassword keystore_password
+                storeFile file(keystore_file)
+                storePassword keystore_aliaspassword
             }
         }
     }
@@ -68,14 +59,11 @@ android {
         //strip other than english resources
         resConfigs "en"
 
-        consumerProguardFiles proguardConfig.proguardPath
+        consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
         defaultPublishConfig "debug"
     }
 
     buildTypes {
-        release {
-            signingConfig signingConfigs.playStore
-        }
         debug {
             testCoverageEnabled true
             signingConfig signingConfigs.playStore
@@ -87,7 +75,6 @@ android {
     aaptOptions aaptOption
     dexOptions dexOption
 }
-
 
 // Source: http://stackoverflow.com/q/29908110/112705
 afterEvaluate {
@@ -115,6 +102,9 @@ dependencies {
     implementation supportLib.appCompat
     implementation supportLib.supportv4
     implementation supportLib.design
+
+    //Loggers
+    implementation(debugLibs.timber, excludeGrp)
 
     //Testing
     api testLib.junit

@@ -35,19 +35,10 @@ android {
                 keyAlias System.getenv("KEY_ALIAS")
                 keyPassword System.getenv("ALIAS_PASSWORD")
             } else {
-                //If this is the local build, load it from the keystore.properties file
-                File signFile = rootProject.file('./misc/keystore.properties')
-                if (signFile.exists()) {
-                    Properties props = new Properties()
-                    props.load(new FileInputStream(signFile))
-
-                    keyAlias props['keystore.alias']
-                    keyPassword props['keystore.password']
-                    storeFile file(props['keystore.file'])
-                    storePassword props['keystore.aliaspassword']
-                } else {
-                    throw new GradleException("keystore.properties file not found.")
-                }
+                keyAlias keystore_alias
+                keyPassword keystore_password
+                storeFile file(keystore_file)
+                storePassword keystore_aliaspassword
             }
         }
     }
@@ -81,13 +72,17 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), proguardConfig.proguardPath
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), proguardConfig.proguardPath, proguardConfig.removeLogs
             debuggable false
             jniDebuggable false
             renderscriptDebuggable false
             signingConfig signingConfigs.playStore
             pseudoLocalesEnabled false
             zipAlignEnabled true
+
+            buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
+            resValue "string", "server_client_id", SERVER_CLIENT_ID
+            resValue "string", "facebook_app_id", FACEBOOK_APP_ID
         }
         debug {
             testCoverageEnabled true
@@ -97,6 +92,10 @@ android {
             signingConfig signingConfigs.playStore
             minifyEnabled false
             zipAlignEnabled true
+
+            buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
+            resValue "string", "server_client_id", SERVER_CLIENT_ID
+            resValue "string", "facebook_app_id", FACEBOOK_APP_ID
         }
     }
 
@@ -123,7 +122,8 @@ dependencies {
     kapt(butterKnifeLib.annotationProcessor, excludeGrp)
 
     //Loggers
-    implementation(otherLib.timber, excludeGrp)
+    debugImplementation(debugLibs.dbdebug, excludeGrp)
+    implementation(debugLibs.timber, excludeGrp)
 
     //Support
     implementation supportLib.appCompat
@@ -137,7 +137,11 @@ dependencies {
     implementation archComponent.lifecycle
     kapt archComponent.lifecycleAnotations
 
+    //Firebase
+    implementation(firebaseLib.core, excludeGrp)
+
     //Rx
     implementation rxLib.rxJava
     implementation(rxLib.rxAndroid, excludeGrp)
 }
+apply plugin: 'com.google.gms.google-services'

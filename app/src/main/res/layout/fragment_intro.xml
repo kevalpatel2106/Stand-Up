@@ -1,0 +1,40 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@drawable/bg_splash"
+    tools:context=".authentication.intro.IntroFragment">
+
+    <com.kevalpatel2106.base.BaseImageView
+        android:id="@+id/intro_iv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/spacing_micro"
+        android:layout_marginEnd="@dimen/spacing_micro"
+        android:layout_marginStart="@dimen/spacing_micro"
+        android:layout_marginTop="@dimen/spacing_micro"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@+id/intro_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+    <com.kevalpatel2106.base.BaseTextView
+        android:id="@+id/intro_tv"
+        style="@style/MediumText.Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_micro"
+        android:layout_marginEnd="@dimen/spacing_micro"
+        android:layout_marginStart="@dimen/spacing_micro"
+        android:gravity="center_horizontal"
+        android:lines="4"
+        android:scrollbars="vertical"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@tools:sample/lorem/random" />
+</android.support.constraint.ConstraintLayout>

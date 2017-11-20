@@ -21,25 +21,10 @@
 -verbose
 
 # Keep name of all the classes
--keepnames class ** { *; } #Remove if you don't have to stake trace
+#-keepnames class ** { *; } #Remove if you don't have to stake trace
 
 #Keep anotations there
 -keepattributes *Annotation*
-
-######################## Remnove logs
-#remove log class
--assumenosideeffects class android.util.Log {
-    public static *** d(...);
-    public static *** v(...);
-    public static *** i(...);
-    public static *** w(...);
-    public static *** e(...);
-}
-# Remove sout
--assumenosideeffects class java.io.PrintStream {
-     public void println(%);
-     public void println(**);
- }
 
 ##---------------Begin: proguard configuration for supprot lib  ----------
 -dontwarn android.support.design.**
@@ -102,9 +87,6 @@
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
 -keepattributes Signature
-
-# For using GSON @Expose annotation
--keepattributes *Annotation*
 
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }

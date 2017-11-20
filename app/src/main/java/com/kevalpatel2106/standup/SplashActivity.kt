@@ -4,6 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.base.BaseActivity
+import com.kevalpatel2106.standup.authentication.intro.IntroActivity
+import com.kevalpatel2106.standup.constants.SharedPrefranceKeys
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 
 /**
  * This is the launch activity for the application. It handles redirection logic for login, notifications
@@ -29,8 +33,13 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //TODO Logic for login navigation.
-        //Launch the dashboard.
-        Dashboard.launch(this@SplashActivity)
+        if (!SharedPrefsProvider.getBoolFromPreferences(SharedPrefranceKeys.IS_APP_INTRO_DISPLAYED)) {
+            IntroActivity.launch(this@SplashActivity)
+        } else if (!UserSessionManager.isUserLoggedIn) {
+            //TODO Open the login activity
+        } else {
+            //Launch the dashboard.
+            Dashboard.launch(this@SplashActivity)
+        }
     }
 }

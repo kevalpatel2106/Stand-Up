@@ -31,6 +31,7 @@ ext {
 
     proguardConfig = [
             proguardPath: '../misc/proguard-rules.pro',
+            removeLogs: '../misc/proguard-rules-remove-logs.pro',
     ]
 
     javaCompatibility = [

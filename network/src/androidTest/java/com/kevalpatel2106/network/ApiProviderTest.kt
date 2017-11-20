@@ -12,6 +12,7 @@ import com.kevalpatel2106.testutils.MockWebserverUtils
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
@@ -21,24 +22,26 @@ import java.net.HttpURLConnection
 /**
  * Created by Keval on 12/11/17.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
 @RunWith(AndroidJUnit4::class)
-class BaseApiWrapperTest : BaseTestClass() {
+class ApiProviderTest : BaseTestClass() {
+
+    @Before
+    fun setUp() {
+        ApiProvider.init(InstrumentationRegistry.getContext().applicationContext)
+    }
 
     @SmallTest
     fun checkBaseUrl() {
-        val retrofit = BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient("http://google.com")
-
+        val retrofit = ApiProvider.getRetrofitClient("http://google.com")
         Assert.assertEquals(retrofit.baseUrl().toString(), "http://google.com/")
     }
 
     @SmallTest
     fun checkOkHttpClient() {
-        val okHttpClient = BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getOkHttpClientBuilder()
+        val okHttpClient = ApiProvider.sOkHttpClient
 
         if (BuildConfig.DEBUG) {
             /**
@@ -58,9 +61,9 @@ class BaseApiWrapperTest : BaseTestClass() {
             Assert.assertEquals(okHttpClient.interceptors().size, 1)
         }
 
-        Assert.assertEquals(okHttpClient.readTimeoutMillis(), 60 * 1000)
-        Assert.assertEquals(okHttpClient.writeTimeoutMillis(), 60 * 1000)
-        Assert.assertEquals(okHttpClient.connectTimeoutMillis(), 60 * 1000)
+        Assert.assertEquals(okHttpClient.readTimeoutMillis(), NetworkConfig.READ_TIMEOUT * 60 * 1000)
+        Assert.assertEquals(okHttpClient.writeTimeoutMillis(), NetworkConfig.WRITE_TIMEOUT * 60 * 1000)
+        Assert.assertEquals(okHttpClient.connectTimeoutMillis(), NetworkConfig.CONNECTION_TIMEOUT * 60 * 1000)
         Assert.assertEquals(okHttpClient.cache().directory(),
                 File(InstrumentationRegistry.getContext().cacheDir, "responses"))
         Assert.assertEquals(okHttpClient.cache().maxSize(), NWInterceptor.CACHE_SIZE)
@@ -72,8 +75,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         //404 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -85,7 +87,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, HttpURLConnection.HTTP_NOT_FOUND)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_NOT_FOUND)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_NOT_FOUND)
                     }
 
                     override fun onInternetUnavailable(message: String) {
@@ -101,8 +103,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         //404 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -128,8 +129,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         //400 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -141,7 +141,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, HttpURLConnection.HTTP_BAD_REQUEST)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_BAD_REQUEST)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_BAD_REQUEST)
                     }
 
                     override fun onInternetUnavailable(message: String) {
@@ -158,8 +158,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         //500 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_SERVER_ERROR))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -171,7 +170,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, HttpURLConnection.HTTP_SERVER_ERROR)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_SERVER_BUSY)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_SERVER_BUSY)
                     }
 
                     override fun onInternetUnavailable(message: String) {
@@ -186,8 +185,7 @@ class BaseApiWrapperTest : BaseTestClass() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse().setResponseCode(103))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -199,7 +197,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, 103)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
                     }
 
                     override fun onInternetUnavailable(message: String) {
@@ -217,8 +215,7 @@ class BaseApiWrapperTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -248,8 +245,7 @@ class BaseApiWrapperTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.required_field_missing_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -279,8 +275,7 @@ class BaseApiWrapperTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.exception_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
                 .subscribe(object : NWSuccessConsumer<TestData>() {
@@ -292,7 +287,7 @@ class BaseApiWrapperTest : BaseTestClass() {
 
                     override fun onError(code: Int, message: String) {
                         Assert.assertEquals(code, APIStatusCodes.ERROR_CODE_EXCEPTION)
-                        Assert.assertEquals(message, APIStatusCodes.ERROR_MESSAGE_SOMETHING_WRONG)
+                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
                     }
 
                     override fun onInternetUnavailable(message: String) {

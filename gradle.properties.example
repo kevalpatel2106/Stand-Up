@@ -1,0 +1,30 @@
+#Enable daemon
+org.gradle.daemon=true
+
+# Try and findout the best heap fileSize for your project build.
+org.gradle.jvmargs=-Xmx3096m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+
+# Modularise your project and enable parallel build
+org.gradle.parallel=true
+
+# Enable configure on demand.
+org.gradle.configureondemand=true
+
+# Use D8
+android.enableD8=true
+
+# Key store config
+keystore_file=path/to/keystore.jks
+keystore_alias=your_alias
+keystore_aliaspassword=your_password
+keystore_password=your_password
+
+# Google keys
+SERVER_CLIENT_ID=your_client_id_from_google_console
+
+# Facebook credentials
+FACEBOOK_APP_ID=facebook_app_id
+FB_LOGIN_PROTOCOL_SCHEME=schecme_from_facebook_app
+
+# Server config
+SERVER_BASE_URL=api.server.url

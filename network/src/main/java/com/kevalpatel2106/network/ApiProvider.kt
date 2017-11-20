@@ -35,39 +35,46 @@ import java.util.concurrent.TimeUnit
  *
  * @author 'https://github.com/kevalpatel2106'
  */
-class BaseApiWrapper(private val context: Context) {
+object ApiProvider {
 
-    companion object {
-        /**
-         * OkHttp instance. New instances will be shallow copy of this instance.
-         *
-         * @see .getOkHttpClientBuilder
-         */
-        private var sOkHttpClient: OkHttpClient
+    /**
+     * OkHttp instance. New instances will be shallow copy of this instance.
+     *
+     * @see .getOkHttpClientBuilder
+     */
+    internal lateinit var sOkHttpClient: OkHttpClient
 
-        /**
-         * Gson instance with custom gson deserializers.
-         */
-        private val sGson: Gson = GsonBuilder()
-                .setLenient()
-                .create()
+    /**
+     * Gson instance with custom gson deserializers.
+     */
+    private val sGson: Gson = GsonBuilder()
+            .setLenient()
+            .create()
 
-        init {
-            val httpClientBuilder = OkHttpClient.Builder()
-                    .readTimeout(1, TimeUnit.MINUTES)
-                    .writeTimeout(1, TimeUnit.MINUTES)
-                    .connectTimeout(1, TimeUnit.MINUTES)
+    /**
+     * Get the singleton instance of the shared preference provider.
+     *
+     * @param context Application Context.
+     */
+    @JvmStatic
+    fun init(context: Context) {
+        val httpClientBuilder = OkHttpClient.Builder()
+                .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
+                .writeTimeout(NetworkConfig.WRITE_TIMEOUT, TimeUnit.MINUTES)
+                .connectTimeout(NetworkConfig.CONNECTION_TIMEOUT, TimeUnit.MINUTES)
+                .cache(NWInterceptor.getCache(context)) /* Add caching */
+                .addInterceptor(NWInterceptor(context))  /* Add the interceptor. */
 
-            //Add debug interceptors
-            if (BuildConfig.DEBUG) {
-                val loggingInterceptor = HttpLoggingInterceptor()
-                loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-                httpClientBuilder.addInterceptor(StethoInterceptor())
-                        .addInterceptor(loggingInterceptor)
-            }
+        //Add debug interceptors
+        if (BuildConfig.DEBUG) {
+            val loggingInterceptor = HttpLoggingInterceptor()
+            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-            sOkHttpClient = httpClientBuilder.build()
+            httpClientBuilder.addInterceptor(StethoInterceptor())
+                    .addInterceptor(loggingInterceptor)
         }
+
+        sOkHttpClient = httpClientBuilder.build()
     }
 
     /**
@@ -81,7 +88,6 @@ class BaseApiWrapper(private val context: Context) {
      */
     fun makeApiCall(observable: Observable<*>,
                     isRetryOnNetworkFail: Boolean): Observable<*> {
-        //noinspection unchecked,Convert2Lambda
         return observable
                 .retryWhen(RetryWithDelay(if (isRetryOnNetworkFail) 3 else 0, 10000))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -93,30 +99,10 @@ class BaseApiWrapper(private val context: Context) {
      *
      * @param baseUrl Base url of the api.
      */
-    fun getRetrofitClient(baseUrl: String): Retrofit {
-        return Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .client(getOkHttpClientBuilder())
-                .addConverterFactory(NWResponseConverter.create(sGson))
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
-    }
-
-    /**
-     * Build the OkHTTP client.
-     *
-     * Logging : Enabled for Debuggable builds.
-     * Caching : Enabled.
-     * Authentication header : Enabled. Basic authentication header will be Base64 encoded from
-     * username and token provided.
-     *
-     * @return [OkHttpClient]
-     */
-    internal fun getOkHttpClientBuilder(): OkHttpClient {
-        return sOkHttpClient
-                .newBuilder()   /* Make shallow copy of existing client. */
-                .cache(NWInterceptor.getCache(context)) /* Add caching */
-                .addInterceptor(NWInterceptor(context))  /* Add the interceptor. */
-                .build()
-    }
+    fun getRetrofitClient(baseUrl: String): Retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(sOkHttpClient)
+            .addConverterFactory(NWResponseConverter.create(sGson))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
 }

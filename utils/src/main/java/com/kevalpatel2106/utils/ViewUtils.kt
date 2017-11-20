@@ -35,6 +35,27 @@ import android.view.inputmethod.InputMethodManager
  */
 
 object ViewUtils {
+    @ColorInt
+    fun getPrimaryDarkColor(context: Context): Int = getColorAttr(context, R.attr.colorPrimaryDark)
+
+    @ColorInt
+    fun getPrimaryColor(context: Context): Int = getColorAttr(context, R.attr.colorPrimary)
+
+    @ColorInt
+    fun getPrimaryTextColor(context: Context): Int = getColorAttr(context, android.R.attr.textColorPrimary)
+
+    @ColorInt
+    fun getSecondaryTextColor(context: Context): Int = getColorAttr(context, android.R.attr.textColorSecondary)
+
+    @ColorInt
+    fun getTertiaryTextColor(context: Context): Int = getColorAttr(context, android.R.attr.textColorTertiary)
+
+    @ColorInt
+    fun getAccentColor(context: Context): Int = getColorAttr(context, R.attr.colorAccent)
+
+    @ColorInt
+    fun getWindowBackground(context: Context): Int = getColorAttr(context, android.R.attr.windowBackground)
+
 
     @JvmStatic
     @ColorInt

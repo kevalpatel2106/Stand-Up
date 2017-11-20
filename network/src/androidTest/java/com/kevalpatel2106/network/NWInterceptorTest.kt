@@ -13,6 +13,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.net.HttpURLConnection
@@ -26,6 +27,11 @@ import java.net.HttpURLConnection
  */
 @RunWith(AndroidJUnit4::class)
 class NWInterceptorTest : BaseTestClass() {
+
+    @Before
+    fun setUp() {
+        ApiProvider.init(InstrumentationRegistry.getContext().applicationContext)
+    }
 
     @Test
     fun checkAddAuthHeader() {
@@ -76,8 +82,7 @@ class NWInterceptorTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithoutCache()
                 .subscribe(Consumer<retrofit2.Response<TestData>> {
@@ -104,8 +109,7 @@ class NWInterceptorTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithCache()
                 .subscribe(Consumer<retrofit2.Response<TestData>> {
@@ -132,8 +136,7 @@ class NWInterceptorTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithoutAuthHeader()
                 .subscribe(Consumer<retrofit2.Response<TestData>> {
@@ -160,8 +163,7 @@ class NWInterceptorTest : BaseTestClass() {
                 .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                         com.kevalpatel2106.network.test.R.raw.sucess_sample)))
 
-        BaseApiWrapper(InstrumentationRegistry.getContext())
-                .getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithAuthHeader()
                 .subscribe(Consumer<retrofit2.Response<TestData>> {

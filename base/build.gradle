@@ -36,19 +36,10 @@ android {
                 keyAlias System.getenv("KEY_ALIAS")
                 keyPassword System.getenv("ALIAS_PASSWORD")
             } else {
-                //If this is the local build, load it from the keystore.properties file
-                File signFile = rootProject.file('./misc/keystore.properties')
-                if (signFile.exists()) {
-                    Properties props = new Properties()
-                    props.load(new FileInputStream(signFile))
-
-                    keyAlias props['keystore.alias']
-                    keyPassword props['keystore.password']
-                    storeFile file(props['keystore.file'])
-                    storePassword props['keystore.aliaspassword']
-                } else {
-                    throw new GradleException("keystore.properties file not found.")
-                }
+                keyAlias keystore_alias
+                keyPassword keystore_password
+                storeFile file(keystore_file)
+                storePassword keystore_aliaspassword
             }
         }
     }
@@ -69,7 +60,7 @@ android {
         //strip other than english resources
         resConfigs "en"
 
-        consumerProguardFiles proguardConfig.proguardPath
+        consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
 
         testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
         defaultPublishConfig "debug"
@@ -118,16 +109,11 @@ dependencies {
     implementation supportLib.recyclerView
     implementation supportLib.design
 
-    //Firebase
-    implementation firebaseLib.core
-    implementation firebaseLib.auth
-
-
     //Rx
     implementation rxLib.rxJava
     implementation (rxLib.rxAndroid, excludeGrp)
 
 
     //Other
-    implementation(otherLib.timber, excludeGrp)
+    implementation(debugLibs.timber, excludeGrp)
 }

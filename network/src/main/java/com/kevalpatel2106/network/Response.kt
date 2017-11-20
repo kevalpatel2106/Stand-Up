@@ -29,11 +29,11 @@ import com.google.gson.annotations.SerializedName
  * Here generic T indicates the POJO that represents "d" in above response. Each response will have it's
  * different POJOs for  response data.
  *
- * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+class Response<T : BaseData> {
 
-internal class Response<out T : BaseData> {
     @SerializedName("d")
     @Expose
-    val data: T? = null
+    lateinit var data: T
 }
