@@ -15,47 +15,35 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_intro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingBottom="@dimen/md_activity_vertical_margin"
     android:paddingLeft="@dimen/md_activity_horizontal_margin"
     android:paddingRight="@dimen/md_activity_horizontal_margin"
-    android:paddingTop="@dimen/md_activity_vertical_margin">
+    android:paddingTop="@dimen/md_activity_vertical_margin"
+    tools:background="?attr/colorPrimaryDark">
 
     <!--Sign in with Google button-->
     <com.kevalpatel2106.base.BaseButton
         android:id="@+id/btn_login_google_signin"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/md_button_height"
+        style="@style/GoogleSignInBtn"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:backgroundTint="@android:color/white"
-        android:text="@string/sign_in_with_google"
-        android:textAlignment="center"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:text="@string/sign_in_with_google" />
 
     <com.kevalpatel2106.base.BaseButton
         android:id="@+id/btn_login_using_email"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/md_button_height"
-        android:layout_above="@id/btn_login_google_signin"
-        android:backgroundTint="?attr/colorAccent"
-        android:text="@string/login_using_email" />
+        style="@style/LoginBtn"
+        android:layout_above="@id/btn_login_google_signin" />
 
     <com.kevalpatel2106.base.BaseButton
         android:id="@+id/btn_create_account"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/md_button_height"
-        android:layout_above="@id/btn_login_using_email"
-        android:layout_marginTop="@dimen/spacing_small"
-        android:backgroundTint="?attr/colorPrimaryDark"
-        android:text="@string/create_account"
-        android:textAlignment="center"
-        android:textColor="@android:color/white" />
+        style="@style/CreateAccountBtn"
+        android:layout_marginTop="@dimen/spacing_small" />
 
     <!--Divider-->
     <View

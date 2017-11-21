@@ -45,6 +45,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.setContentView(layoutResID)
         //Bind butter knife
         ButterKnife.bind(this)
+        onNewIntent(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,7 +87,6 @@ abstract class BaseActivity : AppCompatActivity() {
                    title: String,
                    showUpButton: Boolean) {
         val toolbar = findViewById<Toolbar>(toolbarId)
-        Timber.e(toolbar.toString())
         setSupportActionBar(toolbar)
         setToolbar(title, showUpButton)
     }

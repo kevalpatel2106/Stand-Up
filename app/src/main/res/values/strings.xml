@@ -29,4 +29,12 @@
     <string name="error_retry_try_again">Try Again</string>
     <string name="error_google_login_email_not_found">Cannot authenticate you with Google. Try creating new account or logging with email.</string>
     <string name="error_fb_login_email_not_found">Cannot authenticate you with Facebook. Try creating new account or logging with email.</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="login">Login</string>
+    <string name="login_create_account">Create account</string>
+    <string name="login_already_account">Already have account?</string>
+    <string name="login_with_email_sign_in">Login</string>
 </resources>

@@ -131,13 +131,13 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      */
     @OnClick(R.id.btn_login_using_email)
     fun emailSignIn() {
-        LoginActivity.launch(this@IntroActivity)
+        LoginActivity.launch(this@IntroActivity, false)
     }
 
 
     @OnClick(R.id.btn_create_account)
     fun createAccount() {
-
+        LoginActivity.launch(this@IntroActivity, true)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,

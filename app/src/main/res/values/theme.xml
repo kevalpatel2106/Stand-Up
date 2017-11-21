@@ -46,6 +46,10 @@
         <item name="android:windowBackground">@null</item>
     </style>
 
+    <style name="AppTheme.NoActionbar.GreenBg" parent="AppTheme.NoActionbar">
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+    </style>
+
     <style name="AppTheme.Translucent" parent="AppTheme.NoActionbar">
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowTranslucentStatus">true</item>
@@ -53,6 +57,8 @@
 
     <style name="AppTheme.Splash" parent="AppTheme.NoActionbar">
         <item name="android:windowBackground">@drawable/bg_splash</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
