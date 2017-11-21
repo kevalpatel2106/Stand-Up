@@ -126,7 +126,6 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
                         mIntroApiResponse.value = apiResponse
                         mIsAuthenticationRunning.value = false
                     }
-
                 })
     }
 

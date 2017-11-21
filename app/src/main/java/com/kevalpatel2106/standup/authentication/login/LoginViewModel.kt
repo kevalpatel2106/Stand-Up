@@ -3,8 +3,13 @@ package com.kevalpatel2106.standup.authentication.login
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.annotations.ViewModel
+import com.kevalpatel2106.network.consumer.NWErrorConsumer
+import com.kevalpatel2106.network.consumer.NWSuccessConsumer
+import com.kevalpatel2106.standup.authentication.intro.IntroViewModel
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.standup.authentication.signUp.SignUpRequest
+import com.kevalpatel2106.standup.authentication.signUp.SignUpResponseData
 import io.reactivex.disposables.CompositeDisposable
 
 /**
@@ -62,5 +67,76 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
 
         //Delete all the API connections.
         mCompositeDisposable.dispose()
+    }
+
+    fun performSignUp(email: String, password: String, name: String) {
+        mIsAuthenticationRunning.value = true
+
+        mUserAuthRepo.signUp(SignUpRequest(email, name, password, null))
+                .subscribe(object : NWSuccessConsumer<SignUpResponseData>() {
+
+                    /**
+                     * Success api response.
+                     *
+                     * @param data [SignUpResponseData]
+                     */
+                    override fun onSuccess(data: SignUpResponseData?) {
+                        mIsAuthenticationRunning.value = false
+                    }
+
+                }, object : NWErrorConsumer() {
+
+                    /**
+                     * Implement this method the get the error when application cannot connect to the server or the
+                     * internet is down.
+                     */
+                    override fun onInternetUnavailable(message: String) {
+                        mIsAuthenticationRunning.value = false
+                    }
+
+                    /**
+                     * Implement this method the get the error code for the request and get the message to show to
+                     * to the user.
+                     */
+                    override fun onError(code: Int, message: String) {
+                        mIsAuthenticationRunning.value = false
+                    }
+
+                })
+    }
+
+    fun performSignIn(email: String, password: String) {
+        mIsAuthenticationRunning.value = true
+        mUserAuthRepo.login(LoginRequest(email, password))
+                .subscribe(object : NWSuccessConsumer<LoginResponseData>() {
+
+                    /**
+                     * Success api response.
+                     *
+                     * @param data [LoginResponseData]
+                     */
+                    override fun onSuccess(data: LoginResponseData?) {
+                        mIsAuthenticationRunning.value = false
+                    }
+
+                }, object : NWErrorConsumer() {
+
+                    /**
+                     * Implement this method the get the error when application cannot connect to the server or the
+                     * internet is down.
+                     */
+                    override fun onInternetUnavailable(message: String) {
+                        mIsAuthenticationRunning.value = false
+                    }
+
+                    /**
+                     * Implement this method the get the error code for the request and get the message to show to
+                     * to the user.
+                     */
+                    override fun onError(code: Int, message: String) {
+                        mIsAuthenticationRunning.value = false
+                    }
+
+                })
     }
 }

@@ -17,6 +17,7 @@
 package com.kevalpatel2106.testutils;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
@@ -72,5 +73,15 @@ public abstract class BaseTestClass {
                     WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                     WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         });
+    }
+
+    protected void switchToLandscape() {
+        if (getActivity() != null)
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    protected void switchToPortrait() {
+        if (getActivity() != null)
+            getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

@@ -18,11 +18,19 @@ import io.reactivex.schedulers.Schedulers
 class UserAuthRepositoryImpl : UserAuthRepository {
 
     override fun login(loginRequest: LoginRequest): Observable<Response<LoginResponseData>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return ApiProvider.getRetrofitClient(UserAuthRepository.baseUrl())
+                .create(UserAuthRepository::class.java)
+                .login(loginRequest)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
     }
 
     override fun signUp(signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return ApiProvider.getRetrofitClient(UserAuthRepository.baseUrl())
+                .create(UserAuthRepository::class.java)
+                .signUp(signUpRequest)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
     }
 
     override fun socialSignUp(signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>> {
@@ -32,5 +40,4 @@ class UserAuthRepositoryImpl : UserAuthRepository {
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())
     }
-
 }

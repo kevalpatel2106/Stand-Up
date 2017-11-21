@@ -3,12 +3,14 @@
 package com.kevalpatel2106.standup.authentication.intro
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.View
@@ -53,8 +55,11 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
 
     private lateinit var mGoogleSignInHelper: GoogleSignInHelper
     private lateinit var mFacebookSignInHelper: FacebookHelper
-    private lateinit var mModel: IntroViewModel
 
+    @VisibleForTesting
+    internal lateinit var mModel: IntroViewModel
+
+    @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
@@ -92,7 +97,8 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      * Enable/Disable all the buttons.
      */
     @Suppress("PLUGIN_WARNING")
-    private fun manageButtons(enableAllViews: Boolean) {
+    @VisibleForTesting
+    fun manageButtons(enableAllViews: Boolean) {
         btn_login_fb_signin?.let { it.isEnabled = enableAllViews }
         btn_create_account.isEnabled = enableAllViews
         btn_login_google_signin.isEnabled = enableAllViews

@@ -37,4 +37,9 @@
     <string name="login_create_account">Create account</string>
     <string name="login_already_account">Already have account?</string>
     <string name="login_with_email_sign_in">Login</string>
+    <string name="error_login_invalid_email">Enter valid email address.</string>
+    <string name="login_error_password_did_not_match">Password did not match.</string>
+    <string name="login_with_email_create_account">Create account</string>
+    <string name="error_login_invalid_name">Enter valid name.</string>
+    <string name="error_login_invalid_password">Enter valid password.</string>
 </resources>

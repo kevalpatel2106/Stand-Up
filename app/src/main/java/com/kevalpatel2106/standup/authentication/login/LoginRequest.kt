@@ -25,13 +25,13 @@ import com.google.gson.annotations.SerializedName
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
-class LoginRequest {
+data class LoginRequest(
 
-    @SerializedName("email")
-    @Expose
-    lateinit var email: String
+        @SerializedName("email")
+        @Expose
+        var email: String,
 
-    @SerializedName("password")
-    @Expose
-    lateinit var password: String
-}
+        @SerializedName("password")
+        @Expose
+        var password: String
+)

@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.kevalpatel2106.standup">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
     <application
         android:name=".SUApplication"
         android:allowBackup="false"

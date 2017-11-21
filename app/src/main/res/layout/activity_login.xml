@@ -40,6 +40,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:id="@+id/login_scroll"
         android:layout_height="match_parent"
         android:fillViewport="false">
 
@@ -149,7 +150,6 @@
                     android:id="@+id/login_confirm_password_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20sp"
                     android:hint="@string/confirm_password"
                     android:inputType="textPassword"
                     android:maxLength="@integer/password_max_length"

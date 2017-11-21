@@ -191,4 +191,18 @@ public final class CustomMatchers {
             }
         };
     }
+
+    public static Matcher<View> matchAlpha(final float actual) {
+        return new TypeSafeMatcher<View>() {
+
+            @Override
+            public boolean matchesSafely(View view) {
+                return actual == view.getAlpha();
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+        };
+    }
 }

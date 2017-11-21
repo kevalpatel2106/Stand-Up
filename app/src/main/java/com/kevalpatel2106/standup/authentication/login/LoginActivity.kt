@@ -12,6 +12,8 @@ import butterknife.OnClick
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.signUp.SignUpRequest
+import com.kevalpatel2106.utils.Validator
 import kotlinx.android.synthetic.main.activity_login.*
 
 @UIController
@@ -43,7 +45,6 @@ class LoginActivity : BaseActivity() {
     private val ANIMATION_DURATION = 500L
 
     private var isSignUp = false
-
     private lateinit var mModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,6 +114,46 @@ class LoginActivity : BaseActivity() {
                 .setInterpolator(DecelerateInterpolator())
                 .start()
     }
+
+    /**
+     *
+     */
+    @OnClick(R.id.btn_login)
+    fun submitData() =
+            //validate the email
+            if (Validator.isValidEmail(login_email_et.getTrimmedText())) {
+
+                //validate password
+                if (Validator.isValidPassword(login_password_et.getTrimmedText())) {
+
+                    if (!isSignUp) {
+                        //Perform the sign in  action.
+                        mModel.performSignIn(login_email_et.getTrimmedText(), login_password_et.getTrimmedText())
+                    } else {
+                        //Validate confirm password.
+                        if (login_password_et.getTrimmedText() == login_confirm_password_et.getTrimmedText()) {
+
+                            //Validate the user name
+                            if (Validator.isValidName(login_name_et.getTrimmedText())) {
+
+                                //Perform user sign up.
+                                mModel.performSignUp(login_email_et.getTrimmedText(),
+                                        login_password_et.getTrimmedText(),
+                                        login_name_et.getTrimmedText())
+                            } else {
+                                login_name_et.setError(getString(R.string.error_login_invalid_name))
+                            }
+                        } else {
+                            login_confirm_password_et.setError(getString(R.string.login_error_password_did_not_match))
+                        }
+                    }
+                } else {
+                    login_password_et.setError(getString(R.string.error_login_invalid_password))
+                }
+
+            } else {
+                login_email_et.setError(getString(R.string.error_login_invalid_email))
+            }
 
     /**
      * Switch between login and sign up view.
