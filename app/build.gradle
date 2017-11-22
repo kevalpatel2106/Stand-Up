@@ -139,6 +139,7 @@ dependencies {
 
     //Firebase
     implementation(firebaseLib.core, excludeGrp)
+    implementation(firebaseLib.fcm, excludeGrp)
 
     //Rx
     implementation rxLib.rxJava

@@ -26,7 +26,7 @@ import android.support.v4.app.Fragment
  */
 class FragmentTestRule<F : Fragment>(fragmentClass: Class<F>,
                                      fragmentInstance: F? = null)
-    : ActivityTestRule<FragmentRuleActivity>(FragmentRuleActivity::class.java, true, true) {
+    : ActivityTestRule<FragmentRuleActivity>(FragmentRuleActivity::class.java) {
 
     lateinit var fragment: F
 
@@ -43,7 +43,7 @@ class FragmentTestRule<F : Fragment>(fragmentClass: Class<F>,
                 org.junit.Assert.fail(String.format("%s: Could not insert %s into FragmentRuleActivity: %s", javaClass.simpleName, fragmentClass.simpleName, e.message))
             }
         } else {
-            fragment = fragmentClass.newInstance()
+            fragment = fragmentInstance
         }
     }
 

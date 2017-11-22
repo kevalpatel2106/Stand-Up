@@ -14,32 +14,24 @@
  * limitations under the License.
  */
 
-package com.kevalpatel2106.standup.authentication.login
+package com.kevalpatel2106.standup.authentication.deviceReg
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.kevalpatel2106.network.BaseData
 
 /**
- * Created by Keval on 27-Dec-16.
+ * Created by Keval on 02-Jan-17.
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
 
-data class LoginResponseData(
+data class DeviceRegisterData(
+        @SerializedName("token")
+        @Expose
+        val token: String? = null,
+
         @SerializedName("uid")
         @Expose
-        val uid: Long,
-
-        @SerializedName("name")
-        @Expose
-        var name: String? = null,
-
-        @SerializedName("email")
-        @Expose
-        var email: String? = null,
-
-        @SerializedName("photo")
-        @Expose
-        val photoUrl: String? = null
+        val userId: Long = 0
 ) : BaseData()

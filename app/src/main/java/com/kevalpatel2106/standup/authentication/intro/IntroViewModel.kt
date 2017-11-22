@@ -10,8 +10,8 @@ import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.network.consumer.NWSuccessConsumer
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
-import com.kevalpatel2106.standup.authentication.signUp.SignUpRequest
-import com.kevalpatel2106.standup.authentication.signUp.SignUpResponseData
+import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
+import com.kevalpatel2106.standup.authentication.repo.SignUpResponseData
 import io.reactivex.disposables.CompositeDisposable
 
 /**
@@ -61,10 +61,10 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
     internal val mIsAuthenticationRunning: MutableLiveData<Boolean> = MutableLiveData()
 
     /**
-     * [IntroApiResponseModel] to hold the response form the user authentication. UI element can
+     * [IntroUiModel] to hold the response form the user authentication. UI element can
      * observe this [MutableLiveData] to change the state when user authentication succeed or fails.
      */
-    internal val mIntroApiResponse: MutableLiveData<IntroApiResponseModel> = MutableLiveData()
+    internal val mIntroUiModel: MutableLiveData<IntroUiModel> = MutableLiveData()
 
     init {
         mIsAuthenticationRunning.value = false
@@ -82,6 +82,9 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
     @SuppressLint("VisibleForTests")
     fun authenticateSocialUser(googleUser: GoogleAuthUser) = authenticateSocialUser(SignUpRequest(googleUser = googleUser))
 
+    /**
+     * Authenticate the user using the social signin.
+     */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun authenticateSocialUser(requestData: SignUpRequest) {
         mIsAuthenticationRunning.value = true
@@ -95,9 +98,11 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
                      * @param data [SignUpResponseData]
                      */
                     override fun onSuccess(data: SignUpResponseData?) {
-                        val apiResponse = IntroApiResponseModel(true)
-                        apiResponse.signUpResponseData = data
-                        mIntroApiResponse.value = apiResponse
+                        if (data != null) {
+                            val introUiModel = IntroUiModel(true)
+                            introUiModel.isNewUser = data.isNewUser
+                            mIntroUiModel.value = introUiModel
+                        }
 
                         mIsAuthenticationRunning.value = false
                     }
@@ -109,9 +114,9 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
                      * internet is down.
                      */
                     override fun onInternetUnavailable(message: String) {
-                        val apiResponse = IntroApiResponseModel(false)
+                        val apiResponse = IntroUiModel(false)
                         apiResponse.errorMsg = message
-                        mIntroApiResponse.value = apiResponse
+                        mIntroUiModel.value = apiResponse
 
                         mIsAuthenticationRunning.value = false
                     }
@@ -121,9 +126,10 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
                      * to the user.
                      */
                     override fun onError(code: Int, message: String) {
-                        val apiResponse = IntroApiResponseModel(false)
+                        val apiResponse = IntroUiModel(false)
                         apiResponse.errorMsg = message
-                        mIntroApiResponse.value = apiResponse
+                        mIntroUiModel.value = apiResponse
+
                         mIsAuthenticationRunning.value = false
                     }
                 })
@@ -134,23 +140,5 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
 
         //Delete all the API connections.
         mCompositeDisposable.dispose()
-    }
-
-    /**
-     * Model to hold the response from the user authentication with server.
-     *
-     * @property isSuccess True if the user authenticated.
-     */
-    class IntroApiResponseModel(val isSuccess: Boolean) {
-
-        /**
-         * Response received from the server.
-         */
-        var signUpResponseData: SignUpResponseData? = null
-
-        /**
-         * Error message to display when the user authentication fails.
-         */
-        var errorMsg: String? = null
     }
 }

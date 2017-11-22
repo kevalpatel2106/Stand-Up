@@ -43,14 +43,14 @@ object ApiProvider {
      *
      * @see .getOkHttpClientBuilder
      */
-    internal var sOkHttpClient: OkHttpClient
+    internal lateinit var sOkHttpClient: OkHttpClient
+
+    private val httpClientBuilder = OkHttpClient.Builder()
+            .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
+            .writeTimeout(NetworkConfig.WRITE_TIMEOUT, TimeUnit.MINUTES)
+            .connectTimeout(NetworkConfig.CONNECTION_TIMEOUT, TimeUnit.MINUTES)
 
     init {
-        val httpClientBuilder = OkHttpClient.Builder()
-                .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
-                .writeTimeout(NetworkConfig.WRITE_TIMEOUT, TimeUnit.MINUTES)
-                .connectTimeout(NetworkConfig.CONNECTION_TIMEOUT, TimeUnit.MINUTES)
-
         //Add debug interceptors
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
@@ -59,7 +59,6 @@ object ApiProvider {
             httpClientBuilder.addInterceptor(StethoInterceptor())
                     .addInterceptor(loggingInterceptor)
         }
-        sOkHttpClient = httpClientBuilder.build()
     }
 
     /**
@@ -76,7 +75,7 @@ object ApiProvider {
      */
     @JvmStatic
     fun init(context: Context) {
-        sOkHttpClient = sOkHttpClient.newBuilder()
+        sOkHttpClient = httpClientBuilder
                 .cache(NWInterceptor.getCache(context)) /* Add caching */
                 .addInterceptor(NWInterceptor(context))  /* Add the interceptor. */
                 .build()
@@ -88,26 +87,9 @@ object ApiProvider {
     @VisibleForTesting
     @JvmStatic
     fun init() {
-        sOkHttpClient = sOkHttpClient.newBuilder()
+        sOkHttpClient = httpClientBuilder
                 .addInterceptor(NWInterceptor(null))  /* Add the interceptor. */
                 .build()
-    }
-
-    /**
-     * Make in api call on the separate thread.
-     *
-     * @param observable           [Observable]
-     * @param isRetryOnNetworkFail If set true, this method will try for the api call on network not
-     * available situation for three times with the period of 10 seconds.
-     * @return [Observable]
-     * @see [How to handle exceptions and errors?](https://github.com/ReactiveX/RxJava/issues/4942)
-     */
-    fun makeApiCall(observable: Observable<*>,
-                    isRetryOnNetworkFail: Boolean): Observable<*> {
-        return observable
-                .retryWhen(RetryWithDelay(if (isRetryOnNetworkFail) 3 else 0, 10000))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
     }
 
     /**

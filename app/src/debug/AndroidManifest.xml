@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kevalpatel2106.standup">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.kevalpatel2106.standup">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
-    <application>
+    <application tools:ignore="GoogleAppIndexingWarning">
         <!--suppress AndroidDomInspection -->
         <activity
             android:name="com.kevalpatel2106.testutils.FragmentRuleActivity"

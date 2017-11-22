@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kevalpatel2106.standup.authentication.signUp
+package com.kevalpatel2106.standup.authentication.repo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -26,14 +26,18 @@ import com.kevalpatel2106.network.BaseData
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
-data class SignUpResponseData(
+data class LoginResponseData(
         @SerializedName("uid")
         @Expose
         val uid: Long,
 
-        @SerializedName("is_new_user")
+        @SerializedName("name")
         @Expose
-        val isNewUser: Boolean = false,
+        var name: String,
+
+        @SerializedName("email")
+        @Expose
+        var email: String,
 
         @SerializedName("photo")
         @Expose

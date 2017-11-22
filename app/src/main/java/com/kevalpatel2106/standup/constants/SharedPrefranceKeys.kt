@@ -10,7 +10,12 @@ package com.kevalpatel2106.standup.constants
 internal object SharedPrefranceKeys {
 
     /**
-     * This key holds to boolean to indicate if the app intro screen jhas been displayed or not?
+     * This key holds to boolean to indicate if the app intro screen has been displayed or not?
      */
     const val IS_APP_INTRO_DISPLAYED = "is_app_intro_displayed"
+
+    /**
+     * This key holds to boolean to indicate if fcm token is synced or not?
+     */
+    const val IS_DEVICE_REGISTERED: String = "is_device_registered"
 }

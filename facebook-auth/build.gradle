@@ -75,7 +75,7 @@ dependencies {
     implementation(debugLibs.timber, excludeGrp)
 
     //Facebook Lib
-    implementation(otherLib.facebook, excludeGrp)
+    api(otherLib.facebook, excludeGrp)
 
     //Support
     implementation supportLib.appCompat

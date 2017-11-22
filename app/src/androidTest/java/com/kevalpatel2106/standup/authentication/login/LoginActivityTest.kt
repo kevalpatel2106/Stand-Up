@@ -1,19 +1,30 @@
 package com.kevalpatel2106.standup.authentication.login
 
 import android.Manifest
+import android.content.ComponentName
+import android.support.test.InstrumentationRegistry
+import android.support.test.InstrumentationRegistry.getTargetContext
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.intent.Intents
+import android.support.test.espresso.intent.Intents.intended
+import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
+import com.kevalpatel2106.standup.Dashboard
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
+import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.utils.UserSessionManager
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.not
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -328,54 +339,64 @@ class LoginActivityTest : BaseTestClass() {
     /**
      * Test if in login flow everything is working correctly?
      */
-//    @Test
-//    @Throws(Exception::class)
-//    fun testFullLogin() {
-//        //Enter valid email
-//        onView(withId(R.id.login_email_et)).perform(clearText(), typeText("test@example.com"))
-//
-//        //Enter valid password
-//        onView(withId(R.id.login_password_et)).perform(clearText(), typeText("123456789"))
-//
-//        //Check that there are no errors
-//        onView(withId(R.id.login_password_et)).check(matches(not(CustomMatchers.hasError())))
-//        onView(withId(R.id.login_email_et)).check(matches(not(CustomMatchers.hasError())))
-//    }
+    @Test
+    @Throws(Exception::class)
+    fun testFullLogin() {
+        val mockRepo = MockUiUserAuthRepository()
+        mockRepo.enqueueResponse(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+                com.kevalpatel2106.standup.test.R.raw.user_login_success))
+        activity.mModel.mUserAuthRepo = mockRepo
+
+        onView(withId(R.id.login_email_et)).perform(clearText(), typeText("test@example.com"))
+        onView(withId(R.id.login_password_et)).perform(clearText(), typeText("123456789"))
+        onView(withId(R.id.login_scroll)).perform(swipeUp())
+        onView(withId(R.id.btn_login)).perform(closeSoftKeyboard(), click())
+
+        //Check that there are no errors
+        onView(withId(R.id.login_password_et)).check(matches(not(CustomMatchers.hasError())))
+        onView(withId(R.id.login_email_et)).check(matches(not(CustomMatchers.hasError())))
+
+        Intents.init()
+        intended(hasComponent(ComponentName(getTargetContext(), Dashboard::class.java.name)))
+        Intents.release()
+
+        Assert.assertEquals(UserSessionManager.displayName, "Test user")
+        Assert.assertEquals(UserSessionManager.email, "test@example.com")
+        Assert.assertEquals(UserSessionManager.userId, 5629499534213120)
+    }
 
     /**
      * Test if in sign in flow everything is working correctly?
      */
-//    @Test
-//    @Throws(Exception::class)
-//    fun testFullSignUp() {
-//        //Switch form login to sign up by clicking go to button
-//        onView(withId(R.id.btn_login_toggle))
-//                .perform(click())
-//                .perform(ViewActions.closeSoftKeyboard())
-//
-//        //Enter valid email
-//        onView(withId(R.id.login_email_et))
-//                .perform(clearText(), typeText("test@example.com"))
-//
-//        //Enter valid password
-//        onView(withId(R.id.login_password_et))
-//                .perform(clearText(), typeText("123456789"))
-//
-//        //Enter same password
-//        onView(withId(R.id.login_confirm_password_et))
-//                .perform(clearText(), typeText("123456789"))
-//
-//        //Enter valid name
-//        onView(withId(R.id.login_name_et))
-//                .perform(clearText(), typeText("12345 6789"))
-//
-//        // Perform click
-//        onView(withId(R.id.login_name_et)).perform(click())
-//
-//        //Check that there are no errors
-//        onView(withId(R.id.login_name_et)).check(matches(not(CustomMatchers.hasError())))
-//        onView(withId(R.id.login_confirm_password_et)).check(matches(not(CustomMatchers.hasError())))
-//        onView(withId(R.id.login_password_et)).check(matches(not(CustomMatchers.hasError())))
-//        onView(withId(R.id.login_email_et)).check(matches(not(CustomMatchers.hasError())))
-//    }
+    @Test
+    @Throws(Exception::class)
+    fun testFullSignUp() {
+        val mockRepo = MockUiUserAuthRepository()
+        mockRepo.enqueueResponse(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+                com.kevalpatel2106.standup.test.R.raw.user_sign_up_success))
+        activity.mModel.mUserAuthRepo = mockRepo
+
+        //Switch form login to sign up by clicking go to button
+        onView(withId(R.id.btn_login_toggle)).perform(click()).perform(ViewActions.closeSoftKeyboard())
+
+        onView(withId(R.id.login_email_et)).perform(clearText(), typeText("test@example.com"))
+        onView(withId(R.id.login_name_et)).perform(clearText(), typeText("test user"))
+        onView(withId(R.id.login_password_et)).perform(clearText(), typeText("123456789"))
+        onView(withId(R.id.login_scroll)).perform(swipeUp())
+        onView(withId(R.id.login_confirm_password_et)).perform(clearText(), typeText("123456789"))
+        onView(withId(R.id.btn_login)).perform(closeSoftKeyboard(), click())
+
+        //Check that there are no errors
+        onView(withId(R.id.login_password_et)).check(matches(not(CustomMatchers.hasError())))
+        onView(withId(R.id.login_email_et)).check(matches(not(CustomMatchers.hasError())))
+        onView(withId(R.id.login_name_et)).check(matches(not(CustomMatchers.hasError())))
+
+        Intents.init()
+        intended(hasComponent(ComponentName(getTargetContext(), Dashboard::class.java.name)))
+        Intents.release()
+
+        Assert.assertEquals(UserSessionManager.displayName, "test user")
+        Assert.assertEquals(UserSessionManager.email, "test@example.com")
+        Assert.assertEquals(UserSessionManager.userId, 5629499534213120)
+    }
 }

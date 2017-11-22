@@ -7,13 +7,7 @@ import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterRequest
 import com.kevalpatel2106.testutils.MockRepository
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import java.io.Closeable
-import java.io.File
-import java.net.HttpURLConnection
 
 
 /**
@@ -22,8 +16,7 @@ import java.net.HttpURLConnection
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
-class MockUserAuthRepository : MockRepository(), UserAuthRepository, Closeable {
-
+class MockUiUserAuthRepository : MockRepository(), UserAuthRepository, Closeable {
 
     override fun registerDevice(request: DeviceRegisterRequest): Observable<Response<DeviceRegisterData>> {
         return ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))

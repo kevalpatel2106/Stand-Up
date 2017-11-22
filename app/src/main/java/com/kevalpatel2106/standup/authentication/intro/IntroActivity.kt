@@ -72,8 +72,9 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         })
 
         //Observer the api responses.
-        mModel.mIntroApiResponse.observe(this@IntroActivity, Observer<IntroViewModel.IntroApiResponseModel> {
+        mModel.mIntroUiModel.observe(this@IntroActivity, Observer<IntroUiModel> {
             if (it!!.isSuccess) {
+                //User successfully logged in.
                 Dashboard.launch(this@IntroActivity)
                 finish()
             } else {
@@ -105,6 +106,9 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         btn_login_using_email.isEnabled = enableAllViews
     }
 
+    /**
+     * Start sign in with the google.
+     */
     @OnClick(R.id.btn_login_google_signin)
     fun googleSignIn() {
         //check fot the get account permission
@@ -118,6 +122,9 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         }
     }
 
+    /**
+     * Start sign in with the facebook.
+     */
     @Optional
     @OnClick(R.id.btn_login_fb_signin)
     fun facebookSignIn() {

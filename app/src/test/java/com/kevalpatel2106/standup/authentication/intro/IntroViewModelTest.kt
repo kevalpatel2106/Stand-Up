@@ -1,15 +1,15 @@
 package com.kevalpatel2106.standup.authentication.intro
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.support.test.InstrumentationRegistry
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.authentication.repo.MockUserAuthRepository
-import com.kevalpatel2106.standup.authentication.signUp.SignUpRequest
+import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
+import java.io.IOException
 
 
 /**
@@ -38,12 +38,14 @@ class IntroViewModelTest {
     }
 
     @Test
+    @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(introViewModel.mIsAuthenticationRunning.value!!)
     }
 
     @Test
-    fun checkAuthenticateSocialUserSuccess() {
+    @Throws(IOException::class)
+    fun checkAuthenticateSocialUserSignUpSuccess() {
         mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_sign_up_success.json"))
 
         //Make the api call to the mock server
@@ -52,21 +54,37 @@ class IntroViewModelTest {
 
         //There should be success.
         Assert.assertFalse(introViewModel.mIsAuthenticationRunning.value!!)
-        Assert.assertTrue(introViewModel.mIntroApiResponse.value!!.isSuccess)
-        Assert.assertEquals(introViewModel.mIntroApiResponse.value!!.signUpResponseData!!.uid, 5629499534213120)
+        Assert.assertTrue(introViewModel.mIntroUiModel.value!!.isSuccess)
+        Assert.assertTrue(introViewModel.mIntroUiModel.value!!.isNewUser)
     }
 
     @Test
+    @Throws(IOException::class)
+    fun checkAuthenticateSocialUserLoginSuccess() {
+        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_login_success.json"))
+
+        //Make the api call to the mock server
+        val signInRequest = SignUpRequest("test@example.com", "Test User", null, null);
+        introViewModel.authenticateSocialUser(signInRequest)
+
+        //There should be success.
+        Assert.assertFalse(introViewModel.mIsAuthenticationRunning.value!!)
+        Assert.assertTrue(introViewModel.mIntroUiModel.value!!.isSuccess)
+        Assert.assertFalse(introViewModel.mIntroUiModel.value!!.isNewUser)
+    }
+
+    @Test
+    @Throws(IOException::class)
     fun checkAuthenticateSocialUserFieldMissing() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_field_missing.json"))
+        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         //Make the api call to the mock server
         introViewModel.authenticateSocialUser(SignUpRequest("test@example.com", "Test User", null, null))
 
         //There should be success.
         Assert.assertFalse(introViewModel.mIsAuthenticationRunning.value!!)
-        Assert.assertFalse(introViewModel.mIntroApiResponse.value!!.isSuccess)
-        Assert.assertEquals(introViewModel.mIntroApiResponse.value!!.errorMsg, "Required field missing.")
+        Assert.assertFalse(introViewModel.mIntroUiModel.value!!.isSuccess)
+        Assert.assertEquals(introViewModel.mIntroUiModel.value!!.errorMsg, "Required field missing.")
     }
 
     @After

@@ -25,6 +25,7 @@ import java.util.*
 class FacebookHelper(private val listener: FacebookResponse,
                      private val fieldString: String,
                      context: Activity) {
+
     /**
      * Get the [CallbackManager] for managing callbacks.
      *
@@ -33,8 +34,6 @@ class FacebookHelper(private val listener: FacebookResponse,
     private val callbackManager = CallbackManager.Factory.create()
 
     init {
-        FacebookSdk.sdkInitialize(context.applicationContext)
-
         //Prepare the login manager
         LoginManager.getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
@@ -63,7 +62,6 @@ class FacebookHelper(private val listener: FacebookResponse,
         parameters.putString("fields", fieldString)
 
         val request = GraphRequest.newMeRequest(loginResult.accessToken) { `object`, response ->
-            Timber.d("response: " + response + "")
 
             try {
                 listener.onFbProfileReceived(parseResponse(`object`))

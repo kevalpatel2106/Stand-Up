@@ -2,6 +2,7 @@ package com.kevalpatel2106.standup
 
 import android.app.Application
 import android.os.StrictMode
+import com.facebook.FacebookSdk
 
 import com.facebook.stetho.Stetho
 import com.kevalpatel2106.network.ApiProvider
@@ -31,14 +32,16 @@ class SUApplication : Application() {
                 .penaltyLog()
                 .build())
 
+        //Initialize the api module
+        ApiProvider.init(this@SUApplication)
+
         //Init shetho
         Stetho.initializeWithDefaults(this)
 
         //Initialize firebase.
         //TODO Initialize
 
-        //Initialize the api module
-        ApiProvider.init(this@SUApplication)
+        FacebookSdk.sdkInitialize(this@SUApplication)
 
         //Initialize shared preference
         SharedPrefsProvider.init(this)
