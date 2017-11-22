@@ -21,31 +21,41 @@ import android.support.v4.app.Fragment
 
 /**
  * Created by Keval on 21-Jul-17.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-
-class FragmentTestRule<F : Fragment>(private val mFragmentClass: Class<F>)
-    : ActivityTestRule<FragmentRuleActivity>(FragmentRuleActivity::class.java, true, false) {
+class FragmentTestRule<F : Fragment>(fragmentClass: Class<F>,
+                                     fragmentInstance: F? = null)
+    : ActivityTestRule<FragmentRuleActivity>(FragmentRuleActivity::class.java, true, true) {
 
     lateinit var fragment: F
+
+    init {
+        if (fragmentInstance == null) {
+            try {
+                fragment = fragmentClass.newInstance()
+            } catch (e: InstantiationException) {
+                org.junit.Assert.fail(String.format("%s: Could not insert %s into FragmentRuleActivity: %s",
+                        javaClass.simpleName,
+                        fragmentClass.simpleName,
+                        e.message))
+            } catch (e: IllegalAccessException) {
+                org.junit.Assert.fail(String.format("%s: Could not insert %s into FragmentRuleActivity: %s", javaClass.simpleName, fragmentClass.simpleName, e.message))
+            }
+        } else {
+            fragment = fragmentClass.newInstance()
+        }
+    }
 
     override fun afterActivityLaunched() {
         super.afterActivityLaunched()
 
-        try {
-            //Instantiate and insert the fragment into the container layout
-            val manager = activity.supportFragmentManager
-            val transaction = manager.beginTransaction()
-            fragment = mFragmentClass.newInstance()
-            transaction.replace(R.id.container, fragment)
-            transaction.commit()
-        } catch (e: InstantiationException) {
-            org.junit.Assert.fail(String.format("%s: Could not insert %s into FragmentRuleActivity: %s",
-                    javaClass.simpleName,
-                    mFragmentClass.simpleName,
-                    e.message))
-        } catch (e: IllegalAccessException) {
-            org.junit.Assert.fail(String.format("%s: Could not insert %s into FragmentRuleActivity: %s", javaClass.simpleName, mFragmentClass.simpleName, e.message))
-        }
+        //Instantiate and insert the fragment into the container layout
+        val manager = activity.supportFragmentManager
+        val transaction = manager.beginTransaction()
+        transaction.replace(R.id.container, fragment)
+        transaction.commit()
+
 
     }
 }

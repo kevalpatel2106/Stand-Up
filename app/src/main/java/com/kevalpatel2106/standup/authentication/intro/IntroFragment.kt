@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_intro.*
  */
 @UIController
 class IntroFragment : BaseFragment() {
+
     companion object {
         private val ARG_CAPTION = "ARG_CAPTION"
         private val ARG_IMAGE = "ARG_IMAGE"

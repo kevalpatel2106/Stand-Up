@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-./gradlew clean connectedAndroidTest test jacocoTestReport mergeAndroidReports --continue --stacktrace --profile
+./gradlew clean connectedAndroidTest --continue --stacktrace --profile
+./gradlew clean test --continue --stacktrace --profile

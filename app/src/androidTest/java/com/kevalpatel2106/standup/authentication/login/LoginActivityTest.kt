@@ -33,9 +33,32 @@ class LoginActivityTest : BaseTestClass() {
 
     @JvmField
     @Rule
-    var mGetAccountPermissionRule = GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS)
+    var mGetAccountPermissionRule: GrantPermissionRule = GrantPermissionRule
+            .grant(Manifest.permission.GET_ACCOUNTS)
 
     override fun getActivity(): LoginActivity = mLoginActivityRule.activity
+
+    @Test
+    @Throws(Exception::class)
+    fun checkApiRunningStateChange() {
+        onView(withId(R.id.login_scroll)).perform(swipeUp())
+
+        onView(withId(R.id.btn_login_fb_signin)).check(matches(isEnabled()))
+        onView(withId(R.id.btn_login_google_signin)).check(matches(isEnabled()))
+        onView(withId(R.id.btn_login)).check(matches(isEnabled()))
+
+        activity.runOnUiThread { activity.mModel.mIsAuthenticationRunning.value = true }
+
+        onView(withId(R.id.btn_login_fb_signin)).check(matches(not(isEnabled())))
+        onView(withId(R.id.btn_login_google_signin)).check(matches(not(isEnabled())))
+        onView(withId(R.id.btn_login)).check(matches(not(isEnabled())))
+
+        //switch to the landscape
+        switchToLandscape()
+        onView(withId(R.id.btn_login_fb_signin)).check(matches(not(isEnabled())))
+        onView(withId(R.id.btn_login_google_signin)).check(matches(not(isEnabled())))
+        onView(withId(R.id.btn_login)).check(matches(not(isEnabled())))
+    }
 
     /**
      * Test if the invalid emails are being rejected in email edit text.

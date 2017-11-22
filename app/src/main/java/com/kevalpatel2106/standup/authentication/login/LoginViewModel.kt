@@ -5,7 +5,6 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.network.consumer.NWSuccessConsumer
-import com.kevalpatel2106.standup.authentication.intro.IntroViewModel
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.authentication.signUp.SignUpRequest
@@ -71,7 +70,6 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
 
     fun performSignUp(email: String, password: String, name: String) {
         mIsAuthenticationRunning.value = true
-
         mUserAuthRepo.signUp(SignUpRequest(email, name, password, null))
                 .subscribe(object : NWSuccessConsumer<SignUpResponseData>() {
 

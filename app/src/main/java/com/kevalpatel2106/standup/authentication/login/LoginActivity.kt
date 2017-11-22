@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import butterknife.OnClick
@@ -45,11 +46,18 @@ class LoginActivity : BaseActivity() {
     private val ANIMATION_DURATION = 500L
 
     private var isSignUp = false
-    private lateinit var mModel: LoginViewModel
+
+    @VisibleForTesting
+    internal lateinit var mModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        mModel.mIsAuthenticationRunning.observe(this@LoginActivity, Observer<Boolean> {
+            btn_login_fb_signin.isEnabled = !it!!
+            btn_login_google_signin.isEnabled = !it
+            btn_login.isEnabled = !it
+        })
 
         setContentView(R.layout.activity_login)
 

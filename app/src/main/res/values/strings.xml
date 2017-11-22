@@ -17,6 +17,7 @@
 <resources>
 
     <string name="login_using_email">Login using email</string>
+    <string name="sample_text">Sample text.</string>
     <string name="tag_line">Sitting is next cancer.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
