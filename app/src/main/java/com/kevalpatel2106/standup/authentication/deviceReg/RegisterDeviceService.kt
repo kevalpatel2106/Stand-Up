@@ -26,13 +26,12 @@ import android.os.Build
 import android.os.IBinder
 import android.support.annotation.VisibleForTesting
 import com.google.firebase.iid.FirebaseInstanceId
-import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.network.consumer.NWSuccessConsumer
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
-import com.kevalpatel2106.standup.constants.SharedPrefranceKeys
+import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
@@ -80,7 +79,7 @@ class RegisterDeviceService : Service() {
         val regId = FirebaseInstanceId.getInstance().token
         if (regId == null) {
             //Error occurred. Mark device as not registered.
-            SharedPrefsProvider.savePreferences(SharedPrefranceKeys.IS_DEVICE_REGISTERED, false)
+            SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
             stopSelf()
         } else {
             sendDeviceDataToServer(regId, Utils.getDeviceId(this))
@@ -120,7 +119,7 @@ class RegisterDeviceService : Service() {
                 .subscribe(object : NWSuccessConsumer<DeviceRegisterData>() {
                     override fun onSuccess(data: DeviceRegisterData?) {
                         data?.let {
-                            SharedPrefsProvider.savePreferences(SharedPrefranceKeys.IS_DEVICE_REGISTERED, true)
+                            SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
                             UserSessionManager.token = data.token
                         }
 
@@ -129,12 +128,12 @@ class RegisterDeviceService : Service() {
                 }, object : NWErrorConsumer() {
 
                     override fun onInternetUnavailable(message: String) {
-                        SharedPrefsProvider.savePreferences(SharedPrefranceKeys.IS_DEVICE_REGISTERED, false)
+                        SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
                         stopSelf()
                     }
 
                     override fun onError(code: Int, message: String) {
-                        SharedPrefsProvider.savePreferences(SharedPrefranceKeys.IS_DEVICE_REGISTERED, false)
+                        SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
                         stopSelf()
                     }
                 })
@@ -143,7 +142,7 @@ class RegisterDeviceService : Service() {
     override fun onTaskRemoved(rootIntent: Intent) {
         super.onTaskRemoved(rootIntent)
         //Error occurred. Mark device as not registered.
-        SharedPrefsProvider.savePreferences(SharedPrefranceKeys.IS_DEVICE_REGISTERED, false)
+        SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
 
         if (mDisposable != null) mDisposable!!.dispose()
         stopForeground(true)

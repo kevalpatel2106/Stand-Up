@@ -26,6 +26,7 @@ import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.googleauth.GoogleSignInHelper
 import com.kevalpatel2106.standup.Dashboard
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.login.LoginActivity
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_intro.*
@@ -74,6 +75,9 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         //Observer the api responses.
         mModel.mIntroUiModel.observe(this@IntroActivity, Observer<IntroUiModel> {
             if (it!!.isSuccess) {
+                //Start syncing the token
+                RegisterDeviceService.start(this)
+
                 //User successfully logged in.
                 Dashboard.launch(this@IntroActivity)
                 finish()

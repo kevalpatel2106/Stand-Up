@@ -3,7 +3,7 @@ package com.kevalpatel2106.standup.authentication.deviceReg
 import android.app.Activity
 import android.support.test.InstrumentationRegistry
 import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
-import com.kevalpatel2106.standup.constants.SharedPrefranceKeys
+import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -46,7 +46,7 @@ class RegisterDeviceServiceTest : BaseTestClass() {
                         com.kevalpatel2106.standup.test.R.raw.device_reg_success))
         mRegisterDeviceService.sendDeviceDataToServer("test.reg.id", "test.device.id")
 
-        assertTrue(SharedPrefsProvider.getBoolFromPreferences(SharedPrefranceKeys.IS_DEVICE_REGISTERED))
+        assertTrue(SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
         assertNotNull(UserSessionManager.token)
     }
 
@@ -58,7 +58,7 @@ class RegisterDeviceServiceTest : BaseTestClass() {
                         com.kevalpatel2106.standup.test.R.raw.authentication_field_missing))
         mRegisterDeviceService.sendDeviceDataToServer("test.reg.id", "test.device.id")
 
-        assertFalse(SharedPrefsProvider.getBoolFromPreferences(SharedPrefranceKeys.IS_DEVICE_REGISTERED))
+        assertFalse(SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
     }
 
 

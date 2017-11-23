@@ -71,8 +71,7 @@ object UserSessionManager {
      * @return true if the user is currently logged in.
      */
     val isUserLoggedIn: Boolean
-        get() = SharedPrefsProvider.getLongFromPreference(USER_ID) > 0
-                && SharedPrefsProvider.getStringFromPreferences(USER_TOKEN) != null
+        get() = userId > 0 && token != null
 
     /**
      * Set user session detail.

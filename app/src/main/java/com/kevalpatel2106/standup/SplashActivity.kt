@@ -4,8 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.base.BaseActivity
+import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
-import com.kevalpatel2106.standup.constants.SharedPrefranceKeys
+import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 
@@ -33,13 +34,15 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!SharedPrefsProvider.getBoolFromPreferences(SharedPrefranceKeys.IS_APP_INTRO_DISPLAYED)) {
+        if (!UserSessionManager.isUserLoggedIn) {
             IntroActivity.launch(this@SplashActivity)
-        } else if (!UserSessionManager.isUserLoggedIn) {
-            //TODO Open the login activity
         } else {
             //Launch the dashboard.
             Dashboard.launch(this@SplashActivity)
+
+            //Sync the device token
+            if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
+                RegisterDeviceService.start(this@SplashActivity)
         }
     }
 }

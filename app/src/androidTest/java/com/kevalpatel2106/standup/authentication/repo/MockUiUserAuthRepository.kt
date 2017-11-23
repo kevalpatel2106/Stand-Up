@@ -7,6 +7,8 @@ import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterRequest
 import com.kevalpatel2106.testutils.MockRepository
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.io.Closeable
 
 
@@ -28,14 +30,16 @@ class MockUiUserAuthRepository : MockRepository(), UserAuthRepository, Closeable
             ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                     .create(UserAuthRepository::class.java)
                     .login(loginRequest)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
 
     override fun signUp(signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>> =
             ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                     .create(UserAuthRepository::class.java)
                     .signUp(signUpRequest)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
 
     override fun socialSignUp(signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>> =
-            ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
-                    .create(UserAuthRepository::class.java)
-                    .socialSignUp(signUpRequest)
+            throw NotImplementedError("No required.")
 }

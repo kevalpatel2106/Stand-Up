@@ -342,6 +342,8 @@ class LoginActivityTest : BaseTestClass() {
     @Test
     @Throws(Exception::class)
     fun testFullLogin() {
+        Intents.init()
+
         val mockRepo = MockUiUserAuthRepository()
         mockRepo.enqueueResponse(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.standup.test.R.raw.user_login_success))
@@ -352,17 +354,14 @@ class LoginActivityTest : BaseTestClass() {
         onView(withId(R.id.login_scroll)).perform(swipeUp())
         onView(withId(R.id.btn_login)).perform(closeSoftKeyboard(), click())
 
-        //Check that there are no errors
-        onView(withId(R.id.login_password_et)).check(matches(not(CustomMatchers.hasError())))
-        onView(withId(R.id.login_email_et)).check(matches(not(CustomMatchers.hasError())))
-
-        Intents.init()
+        Thread.sleep(1000)
         intended(hasComponent(ComponentName(getTargetContext(), Dashboard::class.java.name)))
-        Intents.release()
 
         Assert.assertEquals(UserSessionManager.displayName, "Test user")
         Assert.assertEquals(UserSessionManager.email, "test@example.com")
         Assert.assertEquals(UserSessionManager.userId, 5629499534213120)
+
+        Intents.release()
     }
 
     /**
@@ -371,6 +370,8 @@ class LoginActivityTest : BaseTestClass() {
     @Test
     @Throws(Exception::class)
     fun testFullSignUp() {
+        Intents.init()
+
         val mockRepo = MockUiUserAuthRepository()
         mockRepo.enqueueResponse(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.standup.test.R.raw.user_sign_up_success))
@@ -386,17 +387,13 @@ class LoginActivityTest : BaseTestClass() {
         onView(withId(R.id.login_confirm_password_et)).perform(clearText(), typeText("123456789"))
         onView(withId(R.id.btn_login)).perform(closeSoftKeyboard(), click())
 
-        //Check that there are no errors
-        onView(withId(R.id.login_password_et)).check(matches(not(CustomMatchers.hasError())))
-        onView(withId(R.id.login_email_et)).check(matches(not(CustomMatchers.hasError())))
-        onView(withId(R.id.login_name_et)).check(matches(not(CustomMatchers.hasError())))
-
-        Intents.init()
+        Thread.sleep(1000)
         intended(hasComponent(ComponentName(getTargetContext(), Dashboard::class.java.name)))
-        Intents.release()
 
         Assert.assertEquals(UserSessionManager.displayName, "test user")
         Assert.assertEquals(UserSessionManager.email, "test@example.com")
         Assert.assertEquals(UserSessionManager.userId, 5629499534213120)
+
+        Intents.release()
     }
 }

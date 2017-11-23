@@ -80,7 +80,9 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                     //Start syncing the token
                     RegisterDeviceService.start(this)
 
+                    //Open the dash board.
                     Dashboard.launch(this@LoginActivity)
+                    finish()
                 } else it.errorMsg?.let {
                     showSnack(it)
                 }

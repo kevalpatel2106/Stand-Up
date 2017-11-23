@@ -22,7 +22,7 @@ class Dashboard : AppCompatActivity() {
         @JvmStatic
         fun launch(context: Context) {
             val launchIntent = Intent(context, Dashboard::class.java)
-            launchIntent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+            launchIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(launchIntent)
         }
     }
