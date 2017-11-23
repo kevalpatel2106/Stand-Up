@@ -31,11 +31,23 @@ data class SignUpResponseData(
         @Expose
         val uid: Long,
 
-        @SerializedName("is_new_user")
+        @SerializedName("isNewUser")
         @Expose
         val isNewUser: Boolean = false,
 
+        @SerializedName("isVerified")
+        @Expose
+        val isVerified: Boolean = false,
+
         @SerializedName("photo")
         @Expose
-        val photoUrl: String? = null
+        val photoUrl: String? = null,
+
+        @SerializedName("name")
+        @Expose
+        val name: String,
+
+        @SerializedName("email")
+        @Expose
+        val email: String
 ) : BaseData()

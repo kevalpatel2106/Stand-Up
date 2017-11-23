@@ -104,6 +104,7 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
 
                             val loginUiModel = LoginUiModel(true)
                             loginUiModel.isNewUser = data.isNewUser
+                            loginUiModel.isVerify = data.isVerified
                             mLoginUiModel.value = loginUiModel
                         }
 

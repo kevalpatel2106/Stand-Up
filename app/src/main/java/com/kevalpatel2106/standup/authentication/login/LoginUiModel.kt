@@ -23,4 +23,10 @@ internal data class LoginUiModel(var isSuccess: Boolean) {
      */
     var isNewUser: Boolean = false
         get() = if (!isSuccess) false else field
+
+    /**
+     * Boolean to indicate weather the user is new user/signed up.
+     */
+    var isVerify: Boolean = true
+        get() = if (!isSuccess) false else field
 }

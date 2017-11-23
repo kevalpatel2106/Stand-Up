@@ -12,6 +12,7 @@ import android.support.annotation.VisibleForTesting
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.DecelerateInterpolator
 import butterknife.OnClick
 import butterknife.Optional
@@ -26,10 +27,16 @@ import com.kevalpatel2106.googleauth.GoogleSignInHelper
 import com.kevalpatel2106.standup.Dashboard
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
+import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
 import com.kevalpatel2106.utils.Validator
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_login.*
 
+
+/**
+ * This activity servers as the login/sign up screen for the application. This will switch between
+ * login/sign up field using some nice animations!
+ */
 @UIController
 class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
 
@@ -80,8 +87,13 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                     //Start syncing the token
                     RegisterDeviceService.start(this)
 
-                    //Open the dash board.
-                    Dashboard.launch(this@LoginActivity)
+                    if (!it.isVerify) {
+                        //Open the email verify.
+                        VerifyEmailActivity.launch(this@LoginActivity)
+                    } else {
+                        //Open the dashboard.
+                        Dashboard.launch(this@LoginActivity)
+                    }
                     finish()
                 } else it.errorMsg?.let {
                     showSnack(it)
@@ -98,20 +110,21 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         //Play the loading animations
         if (savedInstanceState == null) {
             playLoadAnimations()
+
+            //Switch between login/sign up based on the argument
+            isSignUp = intent.getBooleanExtra(ARG_IS_SIGN_UP, false)
+            if (isSignUp) {
+                switchToSignUp()
+            } else {
+                tiv_name.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        tiv_name.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        switchToLogin()
+                    }
+                })
+            }
         } else {
             login_logo_iv.alpha = 1f
-        }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        isSignUp = intent.getBooleanExtra(ARG_IS_SIGN_UP, false)
-        if (isSignUp) {
-            switchToSignUp()
-        } else {
-            switchToLogin()
-            tiv_confirm_password.visibility = View.GONE
-            tiv_name.visibility = View.GONE
         }
     }
 
@@ -138,9 +151,12 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         if (isSignUp) {
             switchToSignUp()
         } else {
-            switchToLogin()
-            tiv_confirm_password.visibility = View.GONE
-            tiv_name.visibility = View.GONE
+            tiv_name.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    tiv_name.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    switchToLogin()
+                }
+            })
         }
     }
 
@@ -275,26 +291,42 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      */
     private fun switchToSignUp() {
         isSignUp = true
-        btn_login_toggle.isEnabled = false
-        btn_login_toggle.setText(R.string.login_already_account)
 
+        //Make login button disable while animations are running
+        btn_login_toggle.isEnabled = false
+
+        //Change the texts for user to know the screen switched to sign up.
+        btn_login_toggle.setText(R.string.login_already_account)
         btn_login.setText(R.string.login_create_account)
 
-        //Allow fade animation
-        container_btn.animate()
+        //Start animations
+        //1. Email button doesn't move
+        //2. Name button moves down by it's height with fade in animation
+        tiv_name.visibility = View.VISIBLE
+        tiv_name.alpha = 0F
+        tiv_name.animate()
+                .translationYBy(tiv_name.height.toFloat())
                 .setDuration(ANIMATION_DURATION)
-                .translationYBy(tiv_name.height.toFloat() + tiv_confirm_password.height.toFloat())
+                .alpha(1f)
                 .start()
+        //3. Password field has to move down by height of name
         tiv_password.animate()
                 .setDuration(ANIMATION_DURATION)
                 .translationYBy(tiv_name.height.toFloat())
+                .start()
+        //4. Forgot password button will move up by the name height with fade out animation
+        btn_forgot_password.alpha = 1F
+        btn_forgot_password.animate()
+                .translationYBy(tiv_name.height.toFloat() - btn_forgot_password.height.toFloat())
+                .setDuration(ANIMATION_DURATION)
+                .alpha(0f)
                 .setListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(p0: Animator?) {
                         throw IllegalStateException("Method should not call.")
                     }
 
                     override fun onAnimationEnd(p0: Animator?) {
-                        btn_login_toggle.isEnabled = true
+                        //Do nothing
                     }
 
                     override fun onAnimationCancel(p0: Animator?) {
@@ -302,24 +334,45 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                     }
 
                     override fun onAnimationStart(p0: Animator?) {
-                        //Do nothing
+                        btn_forgot_password.isEnabled = false
                     }
                 })
                 .start()
+        //5. Confirm password has to move down by it's height + name - forgot button height and fade in animations
         tiv_confirm_password.visibility = View.VISIBLE
         tiv_confirm_password.alpha = 0F
         tiv_confirm_password.animate()
-                .translationYBy(tiv_confirm_password.height.toFloat())
+                .translationYBy(-btn_forgot_password.height.toFloat() + tiv_name.height.toFloat() + tiv_confirm_password.height.toFloat())
                 .setDuration(ANIMATION_DURATION)
                 .alpha(1f)
                 .start()
-
-        tiv_name.visibility = View.VISIBLE
-        tiv_name.alpha = 0F
-        tiv_name.animate()
-                .translationYBy(tiv_name.height.toFloat())
+        //6. Container of button has to move up/down by confirm password + name - forgot button height
+        container_btn.animate()
                 .setDuration(ANIMATION_DURATION)
-                .alpha(1f)
+                .translationYBy(tiv_name.height.toFloat() + tiv_confirm_password.height.toFloat() - btn_forgot_password.height.toFloat())
+                .setListener(object : Animator.AnimatorListener {
+                    override fun onAnimationRepeat(p0: Animator?) {
+                        throw IllegalStateException("Method should not call.")
+                    }
+
+                    override fun onAnimationEnd(p0: Animator?) {
+                        btn_login_toggle.isEnabled = true
+                        btn_login_fb_signin.isEnabled = true
+                        btn_login_google_signin.isEnabled = true
+                        btn_login.isEnabled = true
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) {
+                        //Do nothing
+                    }
+
+                    override fun onAnimationStart(p0: Animator?) {
+                        //Disable all buttons
+                        btn_login_fb_signin.isEnabled = false
+                        btn_login_google_signin.isEnabled = false
+                        btn_login.isEnabled = false
+                    }
+                })
                 .start()
     }
 
@@ -328,25 +381,45 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      */
     private fun switchToLogin() {
         isSignUp = false
+        //Make login button disable while animations are running
         btn_login_toggle.isEnabled = false
-        btn_login_toggle.setText(R.string.login_create_account)
 
+        //Change the texts for user to know the screen switched to sign up.
+        btn_login_toggle.setText(R.string.login_create_account)
         btn_login.setText(R.string.login_with_email_sign_in)
 
-        container_btn.animate()
+        //Clear all the fields
+        login_confirm_password_et.clear()
+        login_name_et.clear()
+
+        //Start animations
+        //1. Email button doesn't move
+        //2. Name button moves up by it's height with fade out animation
+        tiv_name.alpha = 1F
+        tiv_name.animate()
+                .translationYBy(-tiv_name.height.toFloat())
                 .setDuration(ANIMATION_DURATION)
-                .translationYBy(-tiv_name.height.toFloat() - tiv_confirm_password.height.toFloat())
+                .alpha(0F)
                 .start()
+        //3. Password field has to move up by height of name
         tiv_password.animate()
                 .setDuration(ANIMATION_DURATION)
                 .translationYBy(-tiv_name.height.toFloat())
+                .start()
+        //4. Forgot password button will move by the name height with fade in animation
+        btn_forgot_password.visibility = View.VISIBLE
+        btn_forgot_password.alpha = 0F
+        btn_forgot_password.animate()
+                .translationYBy(-tiv_name.height.toFloat() + btn_forgot_password.height.toFloat())
+                .setDuration(ANIMATION_DURATION)
+                .alpha(1f)
                 .setListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(p0: Animator?) {
                         throw IllegalStateException("Method should not call.")
                     }
 
                     override fun onAnimationEnd(p0: Animator?) {
-                        btn_login_toggle.isEnabled = true
+                        //Do nothing
                     }
 
                     override fun onAnimationCancel(p0: Animator?) {
@@ -354,26 +427,44 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                     }
 
                     override fun onAnimationStart(p0: Animator?) {
+                        btn_forgot_password.isEnabled = true
+                    }
+                })
+                .start()
+        //5. Confirm password has to move down by it's height + name - forgot button height and fade out animations
+        tiv_confirm_password.alpha = 1F
+        tiv_confirm_password.animate()
+                .translationYBy(btn_forgot_password.height.toFloat() - tiv_name.height.toFloat() - tiv_confirm_password.height.toFloat())
+                .setDuration(ANIMATION_DURATION)
+                .alpha(0f)
+                .start()
+        //6. Container of button has to move up/down by confirm password + name - forgot button height
+        container_btn.animate()
+                .setDuration(ANIMATION_DURATION)
+                .translationYBy(-tiv_name.height.toFloat() - tiv_confirm_password.height.toFloat() + btn_forgot_password.height.toFloat())
+                .setListener(object : Animator.AnimatorListener {
+                    override fun onAnimationRepeat(p0: Animator?) {
+                        throw IllegalStateException("Method should not call.")
+                    }
+
+                    override fun onAnimationEnd(p0: Animator?) {
+                        btn_login_toggle.isEnabled = true
+                        btn_login_fb_signin.isEnabled = true
+                        btn_login_google_signin.isEnabled = true
+                        btn_login.isEnabled = true
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) {
                         //Do nothing
                     }
 
+                    override fun onAnimationStart(p0: Animator?) {
+                        //Disable all buttons
+                        btn_login_fb_signin.isEnabled = false
+                        btn_login_google_signin.isEnabled = false
+                        btn_login.isEnabled = false
+                    }
                 })
-                .start()
-
-        //Clear all the fields
-        login_confirm_password_et.clear()
-        login_name_et.clear()
-
-        //Start fade out animation for password/name fields.
-        tiv_confirm_password.animate()
-                .translationYBy(-tiv_confirm_password.height.toFloat())
-                .setDuration(ANIMATION_DURATION)
-                .alpha(0f)
-                .start()
-        tiv_name.animate()
-                .translationYBy(-tiv_name.height.toFloat())
-                .setDuration(ANIMATION_DURATION)
-                .alpha(0f)
                 .start()
     }
 

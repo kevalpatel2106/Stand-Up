@@ -55,8 +55,8 @@
             android:src="@mipmap/ic_launcher"/>
 
         <ScrollView
-            android:layout_width="match_parent"
             android:id="@+id/login_scroll"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"
             android:fillViewport="false">
@@ -94,8 +94,7 @@
                     android:id="@+id/tiv_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
-                    android:layout_marginTop="10dp"
+                    android:paddingTop="10dp"
                     android:textColorHint="@color/white_60">
 
                     <com.kevalpatel2106.base.BaseEditText
@@ -116,7 +115,7 @@
                     android:id="@+id/tiv_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:paddingTop="10dp"
                     android:textColorHint="@color/white_60"
                     app:counterEnabled="true"
                     app:counterMaxLength="@integer/password_max_length"
@@ -139,12 +138,23 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+                <com.kevalpatel2106.base.BaseButton
+                    android:id="@+id/btn_forgot_password"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="end"
+                    android:text="@string/btn_title_forgot_password"
+                    android:textAppearance="@style/SmallText.Primary"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone"/>
+
                 <!--Enter confirm password-->
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/tiv_confirm_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:paddingTop="10dp"
                     android:textColorHint="@color/white_60"
                     app:counterEnabled="true"
                     app:counterMaxLength="@integer/password_max_length"
@@ -176,6 +186,8 @@
                     <com.kevalpatel2106.base.BaseButton
                         android:id="@+id/btn_login"
                         style="@style/LoginBtn"
+                        android:layout_marginEnd="@dimen/spacing_large"
+                        android:layout_marginStart="@dimen/spacing_large"
                         android:layout_marginTop="20dp"
                         tools:text="@string/login"/>
 
@@ -183,12 +195,16 @@
                     <com.kevalpatel2106.base.BaseButton
                         android:id="@+id/btn_login_google_signin"
                         style="@style/GoogleSignInBtn"
+                        android:layout_marginEnd="@dimen/spacing_large"
+                        android:layout_marginStart="@dimen/spacing_large"
                         android:layout_marginTop="10dp"/>
 
                     <!--Sign in with Fb button-->
                     <com.kevalpatel2106.base.BaseButton
                         android:id="@+id/btn_login_fb_signin"
                         style="@style/FbSignInBtn"
+                        android:layout_marginEnd="@dimen/spacing_large"
+                        android:layout_marginStart="@dimen/spacing_large"
                         android:layout_marginTop="10dp"/>
                 </LinearLayout>
 

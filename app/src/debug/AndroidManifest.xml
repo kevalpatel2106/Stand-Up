@@ -4,6 +4,11 @@
           package="com.kevalpatel2106.standup">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- Disable animations on debug builds so that the animations do not interfere with Espresso
+            tests.  Adding this permission to the manifest is not sufficient - you must also grant the
+            permission over adb! -->
+    <uses-permission android:name="android.permission.SET_ANIMATION_SCALE"/>
 
     <application tools:ignore="GoogleAppIndexingWarning">
         <!--suppress AndroidDomInspection -->

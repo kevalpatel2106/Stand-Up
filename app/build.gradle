@@ -105,12 +105,24 @@ android {
     dexOptions dexOption
 }
 
+task grantAnimationPermission(type: Exec, dependsOn: 'installDebug') {
+//    commandLine "adb shell pm grant $android.defaultConfig.applicationId android.permission.SET_ANIMATION_SCALE"
+    commandLine "adb devices"
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.endsWith('assembleDebugAndroidTest') || task.name.endsWith('connectedAndroidTest')) {
+        task.dependsOn grantAnimationPermission
+    }
+}
+
 dependencies {
     implementation project(':base')
     implementation project(':utils')
     implementation project(':network')
     implementation project(':facebook-auth')
     implementation project(':google-auth')
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 

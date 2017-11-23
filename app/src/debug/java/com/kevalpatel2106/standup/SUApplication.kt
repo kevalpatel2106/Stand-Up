@@ -5,6 +5,7 @@ import android.os.StrictMode
 import com.facebook.FacebookSdk
 
 import com.facebook.stetho.Stetho
+import com.google.firebase.FirebaseApp
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.utils.SharedPrefsProvider
 
@@ -39,8 +40,10 @@ class SUApplication : Application() {
         Stetho.initializeWithDefaults(this)
 
         //Initialize firebase.
-        //TODO Initialize
+        FirebaseApp.initializeApp(this@SUApplication)
 
+        //Initialize facebook
+        @Suppress("DEPRECATION")
         FacebookSdk.sdkInitialize(this@SUApplication)
 
         //Initialize shared preference

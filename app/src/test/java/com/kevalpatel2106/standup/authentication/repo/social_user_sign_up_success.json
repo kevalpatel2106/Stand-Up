@@ -1,8 +1,11 @@
 {
   "d": {
     "uid": 5629499534213120,
+    "name": "Test user",
+    "email": "test@example.com",
     "photo": "https://lh4.googleusercontent.com/-q8RGEpH6lEk/AAAAAAAAAAI/AAAAAAAAdXo/3Ddnk6Ck2bA/s96-c/photo.jpg",
-    "is_new_user": true
+    "isNewUser": true,
+    "isVerified": true
   },
   "s": {
     "c": 0

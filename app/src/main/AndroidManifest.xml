@@ -85,6 +85,11 @@
         <service
             android:name=".authentication.deviceReg.RegisterDeviceService"
             tools:ignore="ExportedService"/>
+
+        <activity android:name=".authentication.forgotPwd.ForgotPasswordActivity">
+        </activity>
+        <activity android:name=".authentication.verifyEmail.VerifyEmailActivity">
+        </activity>
     </application>
 
 </manifest>

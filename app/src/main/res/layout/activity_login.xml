@@ -15,13 +15,13 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_intro"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:background="@color/colorPrimaryDark">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_intro"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:background="@color/colorPrimaryDark">
 
     <!--Toolbar of the activity-->
     <com.kevalpatel2106.base.BaseButton
@@ -36,11 +36,11 @@
         android:textAllCaps="false"
         android:textAppearance="@style/MediumText.Primary"
         android:textColor="@android:color/white"
-        tools:text="Create Account" />
+        tools:text="Create Account"/>
 
     <ScrollView
-        android:layout_width="match_parent"
         android:id="@+id/login_scroll"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="false">
 
@@ -61,7 +61,7 @@
                 android:layout_width="@dimen/intro_screen_logo_dimen"
                 android:layout_height="@dimen/intro_screen_logo_dimen"
                 android:layout_gravity="center_horizontal"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/ic_launcher"/>
 
             <!--Enter email-->
             <android.support.design.widget.TextInputLayout
@@ -79,7 +79,7 @@
                     android:maxLines="1"
                     android:textColor="@android:color/white"
                     android:textColorHint="@color/white_60"
-                    tools:text="test@example.com" />
+                    tools:text="test@example.com"/>
             </android.support.design.widget.TextInputLayout>
 
 
@@ -88,8 +88,7 @@
                 android:id="@+id/tiv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
                 android:textColorHint="@color/white_60">
 
                 <com.kevalpatel2106.base.BaseEditText
@@ -101,16 +100,15 @@
                     android:maxLines="1"
                     android:textColor="@android:color/white"
                     android:textColorHint="@color/white_60"
-                    tools:text="@tools:sample/full_names" />
+                    tools:text="@tools:sample/full_names"/>
             </android.support.design.widget.TextInputLayout>
-
 
             <!--Enter password-->
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/tiv_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
                 android:textColorHint="@color/white_60"
                 app:counterEnabled="true"
                 app:counterMaxLength="@integer/password_max_length"
@@ -129,16 +127,27 @@
                     android:maxLines="1"
                     android:textColor="@android:color/white"
                     android:textColorHint="@color/white_60"
-                    tools:text="@tools:sample/full_names" />
+                    tools:text="@tools:sample/full_names"/>
 
             </android.support.design.widget.TextInputLayout>
+
+            <com.kevalpatel2106.base.BaseButton
+                android:id="@+id/btn_forgot_password"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_gravity="end"
+                android:text="@string/btn_title_forgot_password"
+                android:textAppearance="@style/SmallText.Primary"
+                android:textColor="@android:color/white"
+                android:visibility="gone"/>
 
             <!--Enter confirm password-->
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/tiv_confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
                 android:textColorHint="@color/white_60"
                 app:counterEnabled="true"
                 app:counterMaxLength="@integer/password_max_length"
@@ -156,34 +165,34 @@
                     android:maxLines="1"
                     android:textColor="@android:color/white"
                     android:textColorHint="@color/white_60"
-                    tools:text="@tools:sample/full_names" />
+                    tools:text="@tools:sample/full_names"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
                 android:id="@+id/container_btn"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <!--Perform login button-->
                 <com.kevalpatel2106.base.BaseButton
                     android:id="@+id/btn_login"
                     style="@style/LoginBtn"
                     android:layout_marginTop="20dp"
-                    tools:text="@string/login" />
+                    tools:text="@string/login"/>
 
                 <!--Sign in with Google button-->
                 <com.kevalpatel2106.base.BaseButton
                     android:id="@+id/btn_login_google_signin"
                     style="@style/GoogleSignInBtn"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"/>
 
                 <!--Sign in with Fb button-->
                 <com.kevalpatel2106.base.BaseButton
                     android:id="@+id/btn_login_fb_signin"
                     style="@style/FbSignInBtn"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"/>
             </LinearLayout>
 
         </LinearLayout>

@@ -50,12 +50,13 @@ class LoginViewModelTest {
         mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_sign_up_success.json"))
 
         //Make the api call to the mock server
-        val signInRequest = SignUpRequest("test@example.com", "Test User", null, null);
+        val signInRequest = SignUpRequest("test@example.com", "Test User", null, null)
         loginViewModel.authenticateSocialUser(signInRequest)
 
         //There should be success.
         Assert.assertFalse(loginViewModel.mIsAuthenticationRunning.value!!)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isSuccess)
+        Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isVerify)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isNewUser)
     }
 
@@ -65,12 +66,13 @@ class LoginViewModelTest {
         mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_login_success.json"))
 
         //Make the api call to the mock server
-        val signInRequest = SignUpRequest("test@example.com", "Test User", null, null);
+        val signInRequest = SignUpRequest("test@example.com", "Test User", null, null)
         loginViewModel.authenticateSocialUser(signInRequest)
 
         //There should be success.
         Assert.assertFalse(loginViewModel.mIsAuthenticationRunning.value!!)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isSuccess)
+        Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isVerify)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isNewUser)
     }
 
@@ -101,6 +103,7 @@ class LoginViewModelTest {
         //There should be success.
         Assert.assertFalse(loginViewModel.mIsAuthenticationRunning.value!!)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isSuccess)
+        Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isVerify)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isNewUser)
     }
 
@@ -114,6 +117,7 @@ class LoginViewModelTest {
 
         //There should be success.
         Assert.assertFalse(loginViewModel.mIsAuthenticationRunning.value!!)
+        Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isVerify)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isSuccess)
         Assert.assertEquals(loginViewModel.mLoginUiModel.value!!.errorMsg, "Required field missing.")
     }
@@ -130,6 +134,7 @@ class LoginViewModelTest {
         //There should be success.
         Assert.assertFalse(loginViewModel.mIsAuthenticationRunning.value!!)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isSuccess)
+        Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isVerify)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isNewUser)
     }
 
@@ -144,6 +149,8 @@ class LoginViewModelTest {
         //There should be success.
         Assert.assertFalse(loginViewModel.mIsAuthenticationRunning.value!!)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isSuccess)
+        Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isVerify)
+        Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isVerify)
         Assert.assertEquals(loginViewModel.mLoginUiModel.value!!.errorMsg, "Required field missing.")
     }
 
