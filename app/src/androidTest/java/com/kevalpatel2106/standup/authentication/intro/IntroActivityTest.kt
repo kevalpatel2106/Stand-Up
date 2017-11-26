@@ -1,6 +1,7 @@
 package com.kevalpatel2106.standup.authentication.intro
 
 import android.Manifest
+import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
@@ -8,14 +9,17 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.login.LoginActivity
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.InstrumentationTestUtils
+import com.kevalpatel2106.utils.UserSessionManager
 import kotlinx.android.synthetic.main.activity_intro.*
 import org.hamcrest.Matchers.not
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,6 +42,12 @@ class IntroActivityTest : BaseTestClass() {
     var mGetAccountPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS)
 
     override fun getActivity(): IntroActivity = mIntroActivityTestRule.activity
+
+    @Before
+    fun setUp() {
+        UserSessionManager.clearUserSession()
+        ApiProvider.init(InstrumentationRegistry.getContext())
+    }
 
     @Test
     @Throws(Exception::class)

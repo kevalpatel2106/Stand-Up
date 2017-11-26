@@ -1,15 +1,19 @@
 package com.kevalpatel2106.standup.authentication.intro
 
 import android.app.Activity
+import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.runner.AndroidJUnit4
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
 import com.kevalpatel2106.testutils.FragmentTestRule
-import org.junit.Assert.*
+import com.kevalpatel2106.utils.UserSessionManager
+import org.junit.Assert.assertNotNull
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,6 +26,11 @@ import java.io.IOException
  */
 @RunWith(AndroidJUnit4::class)
 class IntroFragmentTest : BaseTestClass(){
+    @Before
+    fun setUp() {
+        UserSessionManager.clearUserSession()
+        ApiProvider.init(InstrumentationRegistry.getContext())
+    }
 
     @JvmField
     @Rule

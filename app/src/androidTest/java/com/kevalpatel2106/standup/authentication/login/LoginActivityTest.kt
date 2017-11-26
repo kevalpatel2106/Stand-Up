@@ -16,6 +16,7 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.Dashboard
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
@@ -27,6 +28,7 @@ import com.kevalpatel2106.utils.UserSessionManager
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.not
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -50,6 +52,12 @@ class LoginActivityTest : BaseTestClass() {
             .grant(Manifest.permission.GET_ACCOUNTS)
 
     override fun getActivity(): LoginActivity = mLoginActivityRule.activity
+
+    @Before
+    fun setUp() {
+        UserSessionManager.clearUserSession()
+        ApiProvider.init(InstrumentationRegistry.getContext())
+    }
 
     @Test
     @Throws(Exception::class)

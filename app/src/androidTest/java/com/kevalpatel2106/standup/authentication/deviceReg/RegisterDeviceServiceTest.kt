@@ -2,6 +2,7 @@ package com.kevalpatel2106.standup.authentication.deviceReg
 
 import android.app.Activity
 import android.support.test.InstrumentationRegistry
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.testutils.BaseTestClass
@@ -30,8 +31,11 @@ class RegisterDeviceServiceTest : BaseTestClass() {
 
     @Before
     fun setUp() {
+        UserSessionManager.clearUserSession()
+        ApiProvider.init(InstrumentationRegistry.getContext())
         mRegisterDeviceService.mUserAuthRepository = mMockUserAuthRepository
     }
+
 
     @After
     fun tearUp() {

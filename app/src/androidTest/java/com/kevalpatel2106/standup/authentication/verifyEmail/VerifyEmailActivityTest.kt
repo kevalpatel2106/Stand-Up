@@ -16,6 +16,7 @@ import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
 import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.utils.UserSessionManager
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.junit.Before
@@ -38,6 +39,7 @@ class VerifyEmailActivityTest : BaseTestClass() {
 
     @Before
     fun setUp() {
+        UserSessionManager.clearUserSession()
         ApiProvider.init(InstrumentationRegistry.getContext())
     }
 
