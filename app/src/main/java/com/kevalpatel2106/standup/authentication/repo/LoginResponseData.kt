@@ -39,6 +39,10 @@ data class LoginResponseData(
         @Expose
         var email: String,
 
+        @SerializedName("isVerified")
+        @Expose
+        var isVerified: Boolean,
+
         @SerializedName("photo")
         @Expose
         val photoUrl: String? = null

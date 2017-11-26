@@ -31,12 +31,7 @@ ext {
 
     proguardConfig = [
             proguardPath: '../misc/proguard-rules.pro',
-            removeLogs: '../misc/proguard-rules-remove-logs.pro',
-    ]
-
-    javaCompatibility = [
-            sourceCompatibility: JavaVersion.VERSION_1_8,
-            targetCompatibility: JavaVersion.VERSION_1_8,
+            removeLogs  : '../misc/proguard-rules-remove-logs.pro',
     ]
 
     packageExcludes = {
@@ -53,15 +48,88 @@ ext {
         abortOnError false
         htmlReport true
         xmlReport true
+        textReport true
         disable 'InvalidPackage'
     }
 
     aaptOption = {
-        cruncherEnabled false
+        cruncherProcesses 4
+    }
+
+    compileOption = {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    libDefaultConfig = {
+        //sdks
+        minSdkVersion buidlConfig.min
+        targetSdkVersion buidlConfig.target
+
+        //strip other than english resources
+        resConfigs "en"
+
+        consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
+
+        testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
+    }
+
+    libBuildTypes = {
+        release {
+            signingConfig signingConfigs.playStore
+        }
+        debug {
+            crunchPngs false
+            testCoverageEnabled true
+            signingConfig signingConfigs.playStore
+        }
+    }
+
+    adbOption = {
+        timeOutInMs 60000   //1 min
+    }
+
+    signingConfig = {
+        //This are th play store signing config.
+        playStore {
+            if (System.getenv("IS_CI_BUILD") == "true") {
+                //It is CI build, load it from the environment variables.
+                //See circle.yml file.
+                storeFile file("../misc/keystore.jks")
+                storePassword System.getenv("KEY_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("ALIAS_PASSWORD")
+            } else {
+                keyAlias keystore_alias
+                keyPassword keystore_password
+                storeFile file(keystore_file)
+                storePassword keystore_aliaspassword
+            }
+        }
     }
 
     dexOption = {
         preDexLibraries true
         maxProcessCount 6
+    }
+
+    testOption = {
+        animationsDisabled true
+        unitTests.all {
+            // set heap size for the test JVM(s)
+            minHeapSize = "1024m"
+            maxHeapSize = "3096m"
+            // listen to events in the test execution lifecycle
+            beforeTest { descriptor ->
+                logger.lifecycle("Running test: " + descriptor)
+            }
+            // listen to standard out and standard error of the test JVM(s)
+            onOutput { descriptor, event ->
+                logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message)
+            }
+            testLogging {
+                events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+            }
+        }
     }
 }

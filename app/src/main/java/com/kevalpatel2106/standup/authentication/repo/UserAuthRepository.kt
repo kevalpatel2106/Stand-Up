@@ -2,10 +2,9 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.kevalpatel2106.network.Response
 import com.kevalpatel2106.standup.BuildConfig
-import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterData
-import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterRequest
 import io.reactivex.Observable
 import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 
@@ -30,8 +29,15 @@ interface UserAuthRepository {
     @POST("signUp")
     fun signUp(@Body signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>>
 
+    @POST("forgotPassword")
+    fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest): Observable<Response<ForgotPasswordResponseData>>
+
     @POST("socialLogin")
     fun socialSignUp(@Body signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>>
+
+    @Headers("Add-Auth: true")
+    @POST("resendVerifyMail")
+    fun resendVerifyEmail(@Body request: ResendVerificationRequest): Observable<Response<ResendVerificationResponseData>>
 
 //    @POST("logout")
 //    fun logout(@Body logoutRequest: LogoutRequest): Observable<Response<LogoutData>>

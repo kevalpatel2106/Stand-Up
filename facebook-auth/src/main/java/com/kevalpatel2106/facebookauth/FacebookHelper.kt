@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import com.facebook.*
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.GraphRequest
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import org.json.JSONException
@@ -19,12 +22,10 @@ import java.util.*
  * @property listener [FacebookResponse] listener to get call back response.
  * @property fieldString      name of the fields required. (e.g. latlong,name,email,gender,birthday,picture,cover)
  * See [&#39;https://developers.facebook.com/docs/graph-api/reference/user&#39;]['https://developers.facebook.com/docs/graph-api/reference/user'] for more info on user node.
- * @property context          instance of the caller activity
- * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
+ * @author 'https://github.com/kevalpatel2106'
  */
 class FacebookHelper(private val listener: FacebookResponse,
-                     private val fieldString: String,
-                     context: Activity) {
+                     private val fieldString: String) {
 
     /**
      * Get the [CallbackManager] for managing callbacks.

@@ -1,13 +1,9 @@
 package com.kevalpatel2106.network
 
-import android.app.Activity
-import android.support.test.InstrumentationRegistry
-import android.support.test.filters.SmallTest
-import android.support.test.runner.AndroidJUnit4
+import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.network.consumer.NWSuccessConsumer
-import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.mockwebserver.MockResponse
@@ -15,7 +11,10 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import org.mockito.Mockito
 import java.io.File
+import java.io.IOException
 import java.net.HttpURLConnection
 
 
@@ -25,22 +24,27 @@ import java.net.HttpURLConnection
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
-@RunWith(AndroidJUnit4::class)
-class ApiProviderTest : BaseTestClass() {
+@RunWith(JUnit4::class)
+class ApiProviderTest {
+    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", File(File("").absolutePath))
 
     @Before
     fun setUp() {
-        ApiProvider.init(InstrumentationRegistry.getContext().applicationContext)
+        ApiProvider.init()
     }
 
-    @SmallTest
+    @Test
+    @Throws(IOException::class)
     fun checkBaseUrl() {
         val retrofit = ApiProvider.getRetrofitClient("http://google.com")
         Assert.assertEquals(retrofit.baseUrl().toString(), "http://google.com/")
     }
 
-    @SmallTest
+    @Test
+    @Throws(IOException::class)
     fun checkOkHttpClient() {
+        val context = Mockito.mock(Context::class.java)
+        ApiProvider.init(context)
         val okHttpClient = ApiProvider.sOkHttpClient
 
         if (BuildConfig.DEBUG) {
@@ -51,25 +55,23 @@ class ApiProviderTest : BaseTestClass() {
              * 2. [StethoInterceptor]
              * 3. [NWInterceptor]
              */
-            Assert.assertEquals(okHttpClient.interceptors().size, 3)
+            Assert.assertEquals(okHttpClient.interceptors().size, 4)
         } else {
             /**
              * For Release there will be three interceptors.
              *
              * 1. [NWInterceptor]
              */
-            Assert.assertEquals(okHttpClient.interceptors().size, 1)
+            Assert.assertEquals(okHttpClient.interceptors().size, 2)
         }
 
-        Assert.assertEquals(okHttpClient.readTimeoutMillis(), NetworkConfig.READ_TIMEOUT * 60 * 1000)
-        Assert.assertEquals(okHttpClient.writeTimeoutMillis(), NetworkConfig.WRITE_TIMEOUT * 60 * 1000)
-        Assert.assertEquals(okHttpClient.connectTimeoutMillis(), NetworkConfig.CONNECTION_TIMEOUT * 60 * 1000)
-        Assert.assertEquals(okHttpClient.cache().directory(),
-                File(InstrumentationRegistry.getContext().cacheDir, "responses"))
-        Assert.assertEquals(okHttpClient.cache().maxSize(), NWInterceptor.CACHE_SIZE)
+        Assert.assertEquals(okHttpClient.readTimeoutMillis().toLong(), NetworkConfig.READ_TIMEOUT * 60 * 1000)
+        Assert.assertEquals(okHttpClient.writeTimeoutMillis().toLong(), NetworkConfig.WRITE_TIMEOUT * 60 * 1000)
+        Assert.assertEquals(okHttpClient.connectTimeoutMillis().toLong(), NetworkConfig.CONNECTION_TIMEOUT * 60 * 1000)
     }
 
     @Test
+    @Throws(IOException::class)
     fun checkPageNotFound() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         //404 response
@@ -78,9 +80,9 @@ class ApiProviderTest : BaseTestClass() {
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<TestData>() {
+                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") data: TestData?) {
+                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
                         Assert.fail("This cannot give success.")
                     }
                 }, object : NWErrorConsumer() {
@@ -97,6 +99,7 @@ class ApiProviderTest : BaseTestClass() {
     }
 
     @Test
+    @Throws(IOException::class)
     fun checkUnAuthorise() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         //404 response
@@ -105,9 +108,9 @@ class ApiProviderTest : BaseTestClass() {
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<TestData>() {
+                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") data: TestData?) {
+                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
                         Assert.fail("This cannot give success.")
                     }
                 }, object : NWErrorConsumer() {
@@ -123,6 +126,7 @@ class ApiProviderTest : BaseTestClass() {
     }
 
     @Test
+    @Throws(IOException::class)
     fun checkBadRequest() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         //400 response
@@ -131,9 +135,9 @@ class ApiProviderTest : BaseTestClass() {
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<TestData>() {
+                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") data: TestData?) {
+                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
                         Assert.fail("This cannot give success.")
                     }
                 }, object : NWErrorConsumer() {
@@ -152,6 +156,7 @@ class ApiProviderTest : BaseTestClass() {
 
     @Suppress("DEPRECATION")
     @Test
+    @Throws(IOException::class)
     fun checkServerBusy() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         //500 response
@@ -160,9 +165,9 @@ class ApiProviderTest : BaseTestClass() {
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<TestData>() {
+                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") data: TestData?) {
+                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
                         Assert.fail("This cannot give success.")
                     }
                 }, object : NWErrorConsumer() {
@@ -180,6 +185,7 @@ class ApiProviderTest : BaseTestClass() {
     }
 
     @Test
+    @Throws(IOException::class)
     fun checkUnknownResponseCode() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse().setResponseCode(103))
@@ -187,9 +193,9 @@ class ApiProviderTest : BaseTestClass() {
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<TestData>() {
+                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") data: TestData?) {
+                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
                         Assert.fail("This cannot give success.")
                     }
                 }, object : NWErrorConsumer() {
@@ -206,21 +212,21 @@ class ApiProviderTest : BaseTestClass() {
     }
 
     @Test
+    @Throws(IOException::class)
     fun checkSuccessResponse() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
                 .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
-                        com.kevalpatel2106.network.test.R.raw.sucess_sample)))
+                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<TestData>() {
+                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") data: TestData?) {
-                        Assert.assertNotNull(data)
+                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
+                        Assert.assertNotNull(dataUnit)
                     }
                 }, object : NWErrorConsumer() {
 
@@ -236,20 +242,20 @@ class ApiProviderTest : BaseTestClass() {
     }
 
     @Test
+    @Throws(IOException::class)
     fun checkFieldMissingResponse() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
                 .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
-                        com.kevalpatel2106.network.test.R.raw.required_field_missing_sample)))
+                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/required_field_missing_sample.json"))))
 
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<TestData>() {
+                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") data: TestData?) {
+                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
                         Assert.fail("This cannot give success.")
                     }
                 }, object : NWErrorConsumer() {
@@ -266,20 +272,20 @@ class ApiProviderTest : BaseTestClass() {
     }
 
     @Test
+    @Throws(IOException::class)
     fun checkServerExceptionResponse() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
                 .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
-                        com.kevalpatel2106.network.test.R.raw.exception_sample)))
+                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/exception_sample.json"))))
 
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<TestData>() {
+                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") data: TestData?) {
+                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
                         Assert.fail("This cannot give success.")
                     }
                 }, object : NWErrorConsumer() {
@@ -293,9 +299,5 @@ class ApiProviderTest : BaseTestClass() {
                         Assert.fail("Internet is there")
                     }
                 })
-    }
-
-    override fun getActivity(): Activity? {
-        return null
     }
 }

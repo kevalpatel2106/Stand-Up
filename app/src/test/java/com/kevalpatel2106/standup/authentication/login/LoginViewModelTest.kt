@@ -1,7 +1,7 @@
 package com.kevalpatel2106.standup.authentication.login
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.standup.UnitTestUtils
 import com.kevalpatel2106.standup.authentication.repo.MockUserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import org.junit.*
@@ -26,14 +26,18 @@ class LoginViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var loginViewModel: LoginViewModel
-    private lateinit var mTestRepoMock: MockUserAuthRepository
+    private var mTestRepoMock = MockUserAuthRepository()
+
+    companion object {
+
+        @JvmStatic
+        @BeforeClass
+        fun setGlobal() = UnitTestUtils.initApp()
+    }
 
     @Before
     fun setUp() {
-        //Init server
-        ApiProvider.init()
-
-        mTestRepoMock = MockUserAuthRepository()
+        //Swap the repo
         loginViewModel = LoginViewModel(mTestRepoMock)
     }
 
@@ -72,7 +76,7 @@ class LoginViewModelTest {
         //There should be success.
         Assert.assertFalse(loginViewModel.mIsAuthenticationRunning.value!!)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isSuccess)
-        Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isVerify)
+        Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isVerify)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isNewUser)
     }
 

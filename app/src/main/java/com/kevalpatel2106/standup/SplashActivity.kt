@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
+import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
@@ -36,6 +37,8 @@ class SplashActivity : BaseActivity() {
 
         if (!UserSessionManager.isUserLoggedIn) {
             IntroActivity.launch(this@SplashActivity)
+        } else if (!UserSessionManager.isUserVerified) {
+            VerifyEmailActivity.launch(this@SplashActivity)
         } else {
             //Launch the dashboard.
             Dashboard.launch(this@SplashActivity)

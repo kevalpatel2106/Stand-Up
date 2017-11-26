@@ -1,13 +1,24 @@
 package com.kevalpatel2106.standup.authentication.verifyEmail
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.annotation.VisibleForTesting
+import android.view.View
+import butterknife.OnClick
+import com.cocosw.bottomsheet.BottomSheet
+import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.standup.Dashboard
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.utils.Utils
+import com.kevalpatel2106.utils.showSnack
+import kotlinx.android.synthetic.main.activity_verify_email.*
 
-class VerifyEmailActivity : AppCompatActivity() {
+
+class VerifyEmailActivity : BaseActivity() {
 
     companion object {
         /**
@@ -21,11 +32,64 @@ class VerifyEmailActivity : AppCompatActivity() {
         }
     }
 
+    @VisibleForTesting
+    internal lateinit var mModel: VerifyEmailViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mModel = ViewModelProviders.of(this).get(VerifyEmailViewModel::class.java)
+        mModel.mIsAuthenticationRunning.observe(this@VerifyEmailActivity, Observer<Boolean> {
+            verify_btn_skip.isEnabled = !it!!
+            verify_btn_resend.isEnabled = !it
+            verify_btn_open_mail_btn.isEnabled = !it
+        })
+        mModel.mUiModel.observe(this@VerifyEmailActivity, Observer<VerifyEmailUiModel> {
+            it?.let {
+                if (it.isSuccess) {
+                    showSnack(getString(R.string.message_verification_email_sent))
+                } else it.errorMsg?.let {
+                    showSnack(it, R.string.error_retry_try_again, View.OnClickListener { onResendEmail() })
+                }
+            }
+        })
+
         setContentView(R.layout.activity_verify_email)
 
-        //TODO set the view.
+        verify_description_text.text = String.format(getString(R.string.verify_email_screen_message),
+                UserSessionManager.email)
+    }
+
+    @OnClick(R.id.verify_btn_skip)
+    fun onSkip() {
         Dashboard.launch(this@VerifyEmailActivity)
+    }
+
+
+    @OnClick(R.id.verify_btn_resend)
+    fun onResendEmail() {
+        mModel.resendEmail(UserSessionManager.userId)
+    }
+
+    @OnClick(R.id.verify_btn_open_mail_btn)
+    fun onOpenEmail() {
+        val bottomSheet = BottomSheet.Builder(this@VerifyEmailActivity).title("Open mail")
+
+        //Get the list of email clients.
+        val emailAppsList = Utils.getEmailApplications(packageManager)
+
+        //Add each items to the bottom sheet
+        for (i in 0 until emailAppsList.size) {
+            val s = emailAppsList[i]
+            Utils.getApplicationName(s.activityInfo.packageName, packageManager)?.let {
+                bottomSheet.sheet(i, s.loadIcon(packageManager), it)
+            }
+        }
+
+        //On clicking any item, open the email application
+        bottomSheet.listener { _, pos ->
+            startActivity(packageManager.getLaunchIntentForPackage(emailAppsList[pos].activityInfo.packageName))
+        }
+        bottomSheet.build()
+        bottomSheet.show()
     }
 }

@@ -27,8 +27,10 @@ import com.kevalpatel2106.googleauth.GoogleSignInHelper
 import com.kevalpatel2106.standup.Dashboard
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
+import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
 import com.kevalpatel2106.utils.Validator
+import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -105,7 +107,7 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
 
         //Initialize helpers
         mGoogleSignInHelper = GoogleSignInHelper(this, getString(R.string.server_client_id), this)
-        mFacebookSignInHelper = FacebookHelper(this, getString(R.string.fb_login_field_string), this)
+        mFacebookSignInHelper = FacebookHelper(this, getString(R.string.fb_login_field_string))
 
         //Play the loading animations
         if (savedInstanceState == null) {
@@ -173,11 +175,23 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 .start()
     }
 
+
+    /**
+     * Open the for got password screen.
+     */
+    @OnClick(R.id.btn_forgot_password)
+    fun openForgotPassword() {
+        ViewUtils.hideKeyboard(login_email_et)
+        ForgotPasswordActivity.launch(this@LoginActivity)
+    }
+
     /**
      * Start sign in with the google.
      */
     @OnClick(R.id.btn_login_google_signin)
     fun googleSignIn() {
+        ViewUtils.hideKeyboard(login_email_et)
+
         //check fot the get account permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -195,6 +209,8 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
     @Optional
     @OnClick(R.id.btn_login_fb_signin)
     fun facebookSignIn() {
+        ViewUtils.hideKeyboard(login_email_et)
+
         //check fot the get account permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -241,6 +257,8 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      */
     @OnClick(R.id.btn_login)
     fun submitData() {
+        ViewUtils.hideKeyboard(login_email_et)
+
         //validate the email
         if (Validator.isValidEmail(login_email_et.getTrimmedText())) {
 
@@ -308,13 +326,16 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 .translationYBy(tiv_name.height.toFloat())
                 .setDuration(ANIMATION_DURATION)
                 .alpha(1f)
+                .setListener(null)
                 .start()
         //3. Password field has to move down by height of name
         tiv_password.animate()
                 .setDuration(ANIMATION_DURATION)
                 .translationYBy(tiv_name.height.toFloat())
+                .setListener(null)
                 .start()
         //4. Forgot password button will move up by the name height with fade out animation
+        btn_forgot_password.visibility = View.VISIBLE
         btn_forgot_password.alpha = 1F
         btn_forgot_password.animate()
                 .translationYBy(tiv_name.height.toFloat() - btn_forgot_password.height.toFloat())
@@ -345,6 +366,7 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 .translationYBy(-btn_forgot_password.height.toFloat() + tiv_name.height.toFloat() + tiv_confirm_password.height.toFloat())
                 .setDuration(ANIMATION_DURATION)
                 .alpha(1f)
+                .setListener(null)
                 .start()
         //6. Container of button has to move up/down by confirm password + name - forgot button height
         container_btn.animate()
@@ -395,11 +417,29 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         //Start animations
         //1. Email button doesn't move
         //2. Name button moves up by it's height with fade out animation
+        tiv_name.visibility = View.VISIBLE
         tiv_name.alpha = 1F
         tiv_name.animate()
                 .translationYBy(-tiv_name.height.toFloat())
                 .setDuration(ANIMATION_DURATION)
                 .alpha(0F)
+                .setListener(object : Animator.AnimatorListener {
+                    override fun onAnimationRepeat(p0: Animator?) {
+                        throw IllegalStateException("Method should not call.")
+                    }
+
+                    override fun onAnimationEnd(p0: Animator?) {
+                        tiv_name.visibility = View.INVISIBLE
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) {
+                        //Do nothing
+                    }
+
+                    override fun onAnimationStart(p0: Animator?) {
+                        //Do nothing
+                    }
+                })
                 .start()
         //3. Password field has to move up by height of name
         tiv_password.animate()
@@ -432,11 +472,29 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 })
                 .start()
         //5. Confirm password has to move down by it's height + name - forgot button height and fade out animations
+        tiv_confirm_password.visibility = View.VISIBLE
         tiv_confirm_password.alpha = 1F
         tiv_confirm_password.animate()
                 .translationYBy(btn_forgot_password.height.toFloat() - tiv_name.height.toFloat() - tiv_confirm_password.height.toFloat())
                 .setDuration(ANIMATION_DURATION)
                 .alpha(0f)
+                .setListener(object : Animator.AnimatorListener {
+                    override fun onAnimationRepeat(p0: Animator?) {
+                        throw IllegalStateException("Method should not call.")
+                    }
+
+                    override fun onAnimationEnd(p0: Animator?) {
+                        tiv_confirm_password.visibility = View.INVISIBLE
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) {
+                        //Do nothing
+                    }
+
+                    override fun onAnimationStart(p0: Animator?) {
+                        //Do nothing
+                    }
+                })
                 .start()
         //6. Container of button has to move up/down by confirm password + name - forgot button height
         container_btn.animate()

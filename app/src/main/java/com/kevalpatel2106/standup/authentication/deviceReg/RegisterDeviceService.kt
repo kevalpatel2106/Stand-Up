@@ -29,6 +29,8 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.network.consumer.NWSuccessConsumer
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterData
+import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys

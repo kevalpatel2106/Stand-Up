@@ -1,7 +1,7 @@
 package com.kevalpatel2106.standup.authentication.intro
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.standup.UnitTestUtils
 import com.kevalpatel2106.standup.authentication.repo.MockUserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import org.junit.*
@@ -26,14 +26,17 @@ class IntroViewModelTest {
     val rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var introViewModel: IntroViewModel
-    private lateinit var mTestRepoMock: MockUserAuthRepository
+    private var mTestRepoMock = MockUserAuthRepository()
+
+    companion object {
+
+        @JvmStatic
+        @BeforeClass
+        fun setGlobal() = UnitTestUtils.initApp()
+    }
 
     @Before
     fun setUp() {
-        //Init server
-        ApiProvider.init()
-
-        mTestRepoMock = MockUserAuthRepository()
         introViewModel = IntroViewModel(mTestRepoMock)
     }
 
@@ -49,7 +52,7 @@ class IntroViewModelTest {
         mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_sign_up_success.json"))
 
         //Make the api call to the mock server
-        val signInRequest = SignUpRequest("test@example.com", "Test User", null, null);
+        val signInRequest = SignUpRequest("test@example.com", "Test User", null, null)
         introViewModel.authenticateSocialUser(signInRequest)
 
         //There should be success.
@@ -64,7 +67,7 @@ class IntroViewModelTest {
         mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_login_success.json"))
 
         //Make the api call to the mock server
-        val signInRequest = SignUpRequest("test@example.com", "Test User", null, null);
+        val signInRequest = SignUpRequest("test@example.com", "Test User", null, null)
         introViewModel.authenticateSocialUser(signInRequest)
 
         //There should be success.

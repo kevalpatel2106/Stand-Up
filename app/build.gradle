@@ -24,32 +24,9 @@ apply from: '../gradle/config.gradle'
 apply from: '../gradle/deps.gradle'
 
 android {
-    signingConfigs {
-        //This are th play store signing config.
-        playStore {
-            if (System.getenv("IS_CI_BUILD") == "true") {
-                //It is CI build, load it from the environment variables.
-                //See circle.yml file.
-                storeFile file("../misc/keystore.jks")
-                storePassword System.getenv("KEY_PASSWORD")
-                keyAlias System.getenv("KEY_ALIAS")
-                keyPassword System.getenv("ALIAS_PASSWORD")
-            } else {
-                keyAlias keystore_alias
-                keyPassword keystore_password
-                storeFile file(keystore_file)
-                storePassword keystore_aliaspassword
-            }
-        }
-    }
-
+    signingConfigs signingConfig
     compileSdkVersion buidlConfig.compile
     buildToolsVersion buidlConfig.buildToolVersion
-
-    compileOptions {
-        sourceCompatibility javaCompatibility.sourceCompatibility
-        targetCompatibility javaCompatibility.targetCompatibility
-    }
 
     defaultConfig {
         applicationId buidlConfig.applicationId
@@ -83,8 +60,10 @@ android {
             buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
             resValue "string", "server_client_id", SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID
+            resValue "string", "android_api_key", ANDROID_API_KEY
         }
         debug {
+            crunchPngs false
             testCoverageEnabled true
             debuggable true
             jniDebuggable true
@@ -96,24 +75,17 @@ android {
             buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
             resValue "string", "server_client_id", SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID
+            resValue "string", "android_api_key", ANDROID_API_KEY
         }
     }
 
+    compileOptions compileOption
     packagingOptions packageExcludes
     lintOptions lintOption
     aaptOptions aaptOption
     dexOptions dexOption
-}
-
-task grantAnimationPermission(type: Exec, dependsOn: 'installDebug') {
-//    commandLine "adb shell pm grant $android.defaultConfig.applicationId android.permission.SET_ANIMATION_SCALE"
-    commandLine "adb devices"
-}
-
-tasks.whenTaskAdded { task ->
-    if (task.name.endsWith('assembleDebugAndroidTest') || task.name.endsWith('connectedAndroidTest')) {
-        task.dependsOn grantAnimationPermission
-    }
+    testOptions testOption
+    adbOptions adbOption
 }
 
 dependencies {
@@ -122,7 +94,7 @@ dependencies {
     implementation project(':network')
     implementation project(':facebook-auth')
     implementation project(':google-auth')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation project(':activity-engine')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -156,5 +128,8 @@ dependencies {
     //Rx
     implementation rxLib.rxJava
     implementation(rxLib.rxAndroid, excludeGrp)
+
+    //Other libs
+    implementation (otherLib.bottomsheet, excludeGrp)
 }
 apply plugin: 'com.google.gms.google-services'

@@ -18,6 +18,7 @@ package com.kevalpatel2106.base
 
 import android.content.Context
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -39,6 +40,7 @@ abstract class BaseFragment : Fragment() {
     /**
      * [CompositeDisposable] that holds all the subscriptions.
      */
+    @VisibleForTesting
     internal val mCompositeDisposable = CompositeDisposable()
 
     /**

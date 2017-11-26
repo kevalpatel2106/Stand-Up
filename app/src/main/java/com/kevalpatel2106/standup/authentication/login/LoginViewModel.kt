@@ -100,7 +100,8 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
                                     displayName = name,
                                     token = null,
                                     email = email,
-                                    photoUrl = data.photoUrl)
+                                    photoUrl = data.photoUrl,
+                                    isVerified = it.isVerified)
 
                             val loginUiModel = LoginUiModel(true)
                             loginUiModel.isNewUser = data.isNewUser
@@ -162,7 +163,8 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
                                     displayName = data.name,
                                     token = null,
                                     email = data.email,
-                                    photoUrl = data.photoUrl)
+                                    photoUrl = data.photoUrl,
+                                    isVerified = it.isVerified)
 
                             val loginUiModel = LoginUiModel(true)
                             mLoginUiModel.value = loginUiModel
@@ -238,7 +240,8 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
                                     displayName = requestData.displayName,
                                     token = null,
                                     email = requestData.email,
-                                    photoUrl = data.photoUrl)
+                                    photoUrl = data.photoUrl,
+                                    isVerified = it.isVerified)
 
                             val loginUiModel = LoginUiModel(true)
                             loginUiModel.isNewUser = data.isNewUser

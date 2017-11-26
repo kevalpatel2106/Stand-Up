@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import butterknife.OnClick
 import butterknife.Optional
+import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.facebookauth.FacebookHelper
@@ -94,8 +95,8 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 getString(R.string.server_client_id),
                 this)
         mFacebookSignInHelper = FacebookHelper(this,
-                getString(R.string.fb_login_field_string),
-                this)
+                getString(R.string.fb_login_field_string))
+        ActivityDetector(applicationContext).startDetection()
     }
 
     /**

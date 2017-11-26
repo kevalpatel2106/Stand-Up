@@ -2,8 +2,6 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.network.Response
-import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterData
-import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterRequest
 import com.kevalpatel2106.testutils.MockRepository
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import io.reactivex.Observable
@@ -19,11 +17,20 @@ import java.io.Closeable
  */
 
 class MockUiUserAuthRepository : MockRepository(), UserAuthRepository, Closeable {
+    override fun forgotPassword(forgotPasswordRequest: ForgotPasswordRequest): Observable<Response<ForgotPasswordResponseData>> {
+        throw NotImplementedError("No required.")
+    }
+
+    override fun resendVerifyEmail(request: ResendVerificationRequest): Observable<Response<ResendVerificationResponseData>> {
+        throw NotImplementedError("No required.")
+    }
 
     override fun registerDevice(request: DeviceRegisterRequest): Observable<Response<DeviceRegisterData>> {
         return ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(UserAuthRepository::class.java)
                 .registerDevice(request)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
     }
 
     override fun login(loginRequest: LoginRequest): Observable<Response<LoginResponseData>> =

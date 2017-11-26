@@ -31,6 +31,7 @@ object UserSessionManager {
     private val USER_EMAIL = "USER_EMAIL"                  //Email address of the user
     private val USER_TOKEN = "USER_TOKEN"                  //Authentication token
     private val USER_PHOTO = "USER_PHOTO"                  //User photo
+    private val USER_IS_VERIFIED = "USER_IS_VERIFIED"        //Is the user verified.
 
     /**
      * Get the user id of current user.
@@ -74,6 +75,15 @@ object UserSessionManager {
         get() = userId > 0 && token != null
 
     /**
+     * Check if the user is currently logged in?
+     *
+     * @return true if the user is currently logged in.
+     */
+    var isUserVerified: Boolean
+        get() = SharedPrefsProvider.getBoolFromPreferences(USER_IS_VERIFIED)
+        set(isVerified) = SharedPrefsProvider.savePreferences(USER_IS_VERIFIED, isVerified)
+
+    /**
      * Set user session detail.
      *
      * @param userId unique id of the user.
@@ -89,7 +99,8 @@ object UserSessionManager {
                       displayName: String,
                       email: String,
                       token: String? = null,
-                      photoUrl: String?) {
+                      photoUrl: String?,
+                      isVerified: Boolean) {
 
         synchronized(this) {
 
@@ -99,6 +110,7 @@ object UserSessionManager {
                     email = email,
                     photoUrl = photoUrl)
             this.token = token
+            this.isUserVerified = isVerified
         }
     }
 

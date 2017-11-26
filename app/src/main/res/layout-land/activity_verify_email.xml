@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@color/colorPrimary"
+    tools:context="com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/md_activity_horizontal_margin" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/md_activity_vertical_margin" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/md_activity_horizontal_margin" />
+
+    <com.kevalpatel2106.base.BaseImageView
+        android:id="@+id/verify_iv_email"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline7"
+        app:srcCompat="@drawable/ic_verify_email" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/guideline10"
+        app:layout_constraintEnd_toEndOf="@id/guideline8"
+        app:layout_constraintStart_toEndOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/guideline7">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <com.kevalpatel2106.base.BaseTextView
+                android:id="@+id/verify_title_text"
+                style="@style/LargeText.White"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/verify_email_send_screen_title" />
+
+            <com.kevalpatel2106.base.BaseTextView
+                android:id="@+id/verify_description_text"
+                style="@style/MediumText.White"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_horizontal"
+                tools:text="We sent an email to you at test@example.com. It has a link that will verify your email address." />
+
+            <com.kevalpatel2106.base.BaseButton
+                android:id="@+id/verify_btn_open_mail_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/spacing_micro"
+                android:layout_marginTop="@dimen/spacing_micro"
+                android:backgroundTint="?attr/colorAccent"
+                android:paddingEnd="@dimen/spacing_large"
+                android:paddingStart="@dimen/spacing_large"
+                android:text="@string/open_mail" />
+
+
+            <com.kevalpatel2106.base.BaseButton
+                android:id="@+id/verify_btn_resend"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_xxlarge"
+                android:layout_margin="@dimen/spacing_micro"
+                android:layout_marginBottom="@dimen/spacing_micro"
+                android:background="@drawable/rect_round_corner_white_stroke"
+                android:text="@string/resend_mail"
+                android:textAppearance="@style/MediumText.White" />
+
+            <com.kevalpatel2106.base.BaseButton
+                android:id="@+id/verify_btn_skip"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_xxlarge"
+                android:layout_margin="@dimen/spacing_micro"
+                android:background="@drawable/rect_round_corner_white_stroke"
+                android:text="@string/skip"
+                android:textAppearance="@style/MediumText.White" />
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

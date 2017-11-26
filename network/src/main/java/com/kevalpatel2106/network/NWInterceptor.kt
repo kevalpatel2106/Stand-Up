@@ -18,14 +18,14 @@ package com.kevalpatel2106.network
 
 import android.content.Context
 import android.content.Intent
-import android.support.annotation.VisibleForTesting
 import android.support.v4.content.LocalBroadcastManager
-import android.util.Base64
 import com.google.gson.Gson
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.kevalpatel2106.utils.UserSessionManager
 import okhttp3.*
 import okhttp3.Response
+import org.apache.commons.codec.binary.Base64
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -159,17 +159,13 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
      */
     fun addAuthHeader(request: Request): Request {
         var request1 = request
-        if (request1.header("Username") != null
-                && request1.header("Token") != null) {
+        if (request1.header("Add-Auth") != null) {
             request1 = request1
                     .newBuilder()
-                    .header("Authorization", "Basic " + Base64
-                            .encodeToString((request1.header("Username")
-                                    + ":"
-                                    + request1.header("Token")).toByteArray(),
-                                    Base64.NO_WRAP))
-                    .removeHeader("Token")
-                    .removeHeader("Username")
+                    .header("Authorization", "Basic " + String(
+                            Base64.encodeBase64((UserSessionManager.userId.toString()
+                                    + ":" + UserSessionManager.token).toByteArray())))
+                    .removeHeader("Add-Auth")
                     .build()
         }
         return request1

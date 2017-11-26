@@ -21,6 +21,7 @@ keystore_password=your_password
 
 # Google keys
 SERVER_CLIENT_ID=your_client_id_from_google_console
+ANDROID_API_KEY=your_android_api_key
 
 # Facebook credentials
 FACEBOOK_APP_ID=facebook_app_id

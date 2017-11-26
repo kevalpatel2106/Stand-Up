@@ -27,13 +27,11 @@ import org.junit.runner.RunWith
 /**
  * Created by Keval on 15/10/17.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author 'https://github.com/kevalpatel2106'
  */
 @RunWith(AndroidJUnit4::class)
 class ImageUtilsTest : BaseTestClass() {
-    override fun getActivity(): Activity? {
-        return null
-    }
+    override fun getActivity(): Activity? = null
 
     @Test
     fun resizeImage() {

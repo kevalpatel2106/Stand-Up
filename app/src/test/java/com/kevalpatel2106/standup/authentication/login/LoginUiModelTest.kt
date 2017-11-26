@@ -1,6 +1,5 @@
 package com.kevalpatel2106.standup.authentication.login
 
-import com.kevalpatel2106.standup.authentication.intro.IntroUiModel
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -10,7 +9,7 @@ import java.io.IOException
 /**
  * Created by Kevalpatel2106 on 22-Nov-17.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author 'https://github.com/kevalpatel2106'
  */
 @RunWith(JUnit4::class)
 class LoginUiModelTest {
@@ -28,7 +27,7 @@ class LoginUiModelTest {
     @Test
     @Throws(IOException::class)
     fun checkErrorMsg() {
-        val loginUiModel = IntroUiModel(true)
+        val loginUiModel = LoginUiModel(true)
         assertNull(loginUiModel.errorMsg)
 
         loginUiModel.errorMsg = "This is the test."
@@ -41,7 +40,7 @@ class LoginUiModelTest {
     @Test
     @Throws(IOException::class)
     fun checkIsNewUser() {
-        val loginUiModel = IntroUiModel(true)
+        val loginUiModel = LoginUiModel(true)
         assertFalse(loginUiModel.isNewUser)
 
         loginUiModel.isNewUser = true
@@ -49,5 +48,18 @@ class LoginUiModelTest {
 
         loginUiModel.isSuccess = false
         assertFalse(loginUiModel.isNewUser)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkIsVerified() {
+        val loginUiModel = LoginUiModel(true)
+        assertTrue(loginUiModel.isVerify)
+
+        loginUiModel.isNewUser = true
+        assertTrue(loginUiModel.isVerify)
+
+        loginUiModel.isSuccess = false
+        assertFalse(loginUiModel.isVerify)
     }
 }

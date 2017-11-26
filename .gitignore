@@ -12,3 +12,5 @@
 /misc/keystore.properties
 /app/google-services.json
 /gradle.properties
+/responses/
+/projectFilesBackup/

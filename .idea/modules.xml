@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Stand-Up.iml" filepath="$PROJECT_DIR$/Stand-Up.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StandUp.iml" filepath="$PROJECT_DIR$/StandUp.iml" />
       <module fileurl="file://F:\git-clone\Stand-Up\StandUp.iml" filepath="F:\git-clone\Stand-Up\StandUp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/activity-engine/activity-engine.iml" filepath="$PROJECT_DIR$/activity-engine/activity-engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
       <module fileurl="file://$PROJECT_DIR$/facebook-auth/facebook-auth.iml" filepath="$PROJECT_DIR$/facebook-auth/facebook-auth.iml" />

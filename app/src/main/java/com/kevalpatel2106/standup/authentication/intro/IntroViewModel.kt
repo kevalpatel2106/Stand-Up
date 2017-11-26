@@ -8,10 +8,11 @@ import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.network.consumer.NWSuccessConsumer
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.SignUpResponseData
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.disposables.CompositeDisposable
 
 /**
@@ -99,6 +100,14 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
                      */
                     override fun onSuccess(data: SignUpResponseData?) {
                         if (data != null) {
+                            //Save into the user session
+                            UserSessionManager.setNewSession(userId = data.uid,
+                                    displayName = requestData.displayName,
+                                    token = null,
+                                    email = requestData.email,
+                                    photoUrl = data.photoUrl,
+                                    isVerified = data.isVerified)
+
                             val introUiModel = IntroUiModel(true)
                             introUiModel.isNewUser = data.isNewUser
                             mIntroUiModel.value = introUiModel

@@ -14,24 +14,35 @@
  * limitations under the License.
  */
 
-package com.kevalpatel2106.standup.authentication.deviceReg
+package com.kevalpatel2106.standup.authentication.repo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.kevalpatel2106.network.BaseData
+import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.utils.Utils
 
 /**
  * Created by Keval on 02-Jan-17.
  *
- * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
-data class DeviceRegisterData(
-        @SerializedName("token")
+data class DeviceRegisterRequest(
+        @SerializedName("deviceId")
         @Expose
-        val token: String? = null,
+        val deviceId: String ,
 
-        @SerializedName("uid")
+        @SerializedName("gcmKey")
         @Expose
-        val userId: Long = 0
-) : BaseData()
+        var gcmKey: String?)
+    : BaseData() {
+
+    @SerializedName("deviceName")
+    @Expose
+    val deviceName: String = Utils.getDeviceName()
+
+    @SerializedName("uid")
+    @Expose
+    val userId: Long = UserSessionManager.userId
+}

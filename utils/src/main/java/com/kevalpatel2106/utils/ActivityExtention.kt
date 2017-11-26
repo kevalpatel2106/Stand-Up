@@ -33,6 +33,13 @@ fun AppCompatActivity.showSnack(message: String,
     snackbar.show()
 }
 
+fun AppCompatActivity.showSnack(message: String,
+                                actionName: Int,
+                                actionListener: View.OnClickListener? = null,
+                                duration: Int = Snackbar.LENGTH_SHORT) {
+    showSnack(message, getString(actionName), actionListener, duration)
+}
+
 /**
  * Display the snack bar.
  */

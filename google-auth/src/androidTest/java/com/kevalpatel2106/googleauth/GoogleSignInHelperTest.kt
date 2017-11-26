@@ -4,7 +4,6 @@ import android.app.Activity
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.v4.app.FragmentActivity
-import com.google.android.gms.auth.api.Auth
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.TestActivity
 import org.junit.Assert
@@ -43,24 +42,5 @@ class GoogleSignInHelperTest : BaseTestClass() {
         val gso = googleSignInHelper.buildSignInOptions("testServerClientId")
         Assert.assertTrue(gso.isIdTokenRequested)
         Assert.assertEquals(gso.serverClientId, "testServerClientId")
-    }
-
-    @Test
-    fun checkGoogleApiClient() {
-        val googleSignInHelper = GoogleSignInHelper(activity as FragmentActivity,
-                "testServerClientId",
-                object : GoogleAuthResponse {
-                    override fun onGoogleAuthSignIn(user: GoogleAuthUser) {
-                    }
-
-                    override fun onGoogleAuthSignInFailed() {
-                    }
-
-                    override fun onGoogleAuthSignOut(isSuccess: Boolean) {
-                    }
-                })
-        val googleApiClient = googleSignInHelper.buildGoogleApiClient(googleSignInHelper
-                .buildSignInOptions("testServerClientId"))
-        Assert.assertTrue(googleApiClient.hasConnectedApi(Auth.GOOGLE_SIGN_IN_API))
     }
 }

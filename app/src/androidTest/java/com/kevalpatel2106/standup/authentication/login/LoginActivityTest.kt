@@ -10,6 +10,7 @@ import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.Intents.intended
+import android.support.test.espresso.intent.matcher.IntentMatchers
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
@@ -17,6 +18,7 @@ import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
 import com.kevalpatel2106.standup.Dashboard
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
 import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
@@ -361,6 +363,19 @@ class LoginActivityTest : BaseTestClass() {
         Assert.assertEquals(UserSessionManager.email, "test@example.com")
         Assert.assertEquals(UserSessionManager.userId, 5629499534213120)
 
+        Intents.release()
+    }
+
+    /**
+     * Test if the forgot password opens.
+     */
+    @Test
+    @Throws(Exception::class)
+    fun checkOpenForgotPassword() {
+        Intents.init()
+        onView(withId(R.id.btn_forgot_password)).perform(click())
+        Intents.intended(IntentMatchers.hasComponent(ComponentName(InstrumentationRegistry.getTargetContext(),
+                ForgotPasswordActivity::class.java.name)))
         Intents.release()
     }
 

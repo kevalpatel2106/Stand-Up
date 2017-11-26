@@ -16,7 +16,7 @@ import org.junit.Test
 /**
  * Created by Kevalpatel2106 on 16-Nov-17.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author 'https://github.com/kevalpatel2106'
  */
 class FacebookHelperTest : BaseTestClass() {
 
@@ -27,10 +27,13 @@ class FacebookHelperTest : BaseTestClass() {
     override fun getActivity(): Activity = activityRule.activity
 
     companion object {
+        @Suppress("DEPRECATION")
         @JvmStatic
         @BeforeClass
-        fun setSdk(){
+        fun setSdk() {
             FacebookSdk.setApplicationId("72467826426")
+            if (!FacebookSdk.isInitialized())
+                FacebookSdk.sdkInitialize(InstrumentationRegistry.getContext().applicationContext)
         }
     }
 
@@ -45,7 +48,7 @@ class FacebookHelperTest : BaseTestClass() {
 
             override fun onFBSignOut() {
             }
-        }, "", activity)
+        }, "")
 
         Assert.assertTrue(FacebookSdk.isInitialized())
     }
@@ -64,7 +67,7 @@ class FacebookHelperTest : BaseTestClass() {
             override fun onFBSignOut() {
                 //Do nothing
             }
-        }, "", activity)
+        }, "")
 
         val response = JSONObject(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.facebookauth.test.R.raw.fb_response))

@@ -7,11 +7,12 @@ import io.reactivex.Observable
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Keval on 15/11/17.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author 'https://github.com/kevalpatel2106'
  */
 class BaseFragmentTest : BaseTestClass() {
 
@@ -27,11 +28,13 @@ class BaseFragmentTest : BaseTestClass() {
     fun checkAddDisposable() {
         Assert.assertNotNull(fragmentRule.fragment.mCompositeDisposable)
 
-        fragmentRule.fragment.addSubscription(null)
-        Assert.assertEquals(fragmentRule.fragment.mCompositeDisposable.size().toLong(), 0)
+        fragmentRule.fragment.addSubscription(Observable.timer(10, TimeUnit.SECONDS).subscribe())
+        Assert.assertEquals(fragmentRule.fragment.mCompositeDisposable.size(), 1)
 
-        fragmentRule.fragment.addSubscription(Observable.just("1").subscribe())
-        Assert.assertEquals(fragmentRule.fragment.mCompositeDisposable.size().toLong(), 1)
+        fragmentRule.fragment.mCompositeDisposable.dispose()
+
+        fragmentRule.fragment.addSubscription(null)
+        Assert.assertEquals(fragmentRule.fragment.mCompositeDisposable.size(), 0)
     }
 
 }

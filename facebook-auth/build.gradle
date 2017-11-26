@@ -7,46 +7,10 @@ apply plugin: 'kotlin-kapt'
 apply from: '../gradle/config.gradle'
 apply from: '../gradle/deps.gradle'
 android {
-    signingConfigs {
-        //This are th play store signing config.
-        playStore {
-            if (System.getenv("IS_CI_BUILD") == "true") {
-                //It is CI build, load it from the environment variables.
-                //See circle.yml file.
-                storeFile file("../misc/keystore.jks")
-                storePassword System.getenv("KEY_PASSWORD")
-                keyAlias System.getenv("KEY_ALIAS")
-                keyPassword System.getenv("ALIAS_PASSWORD")
-            } else {
-                keyAlias keystore_alias
-                keyPassword keystore_password
-                storeFile file(keystore_file)
-                storePassword keystore_aliaspassword
-            }
-        }
-    }
-
     compileSdkVersion buidlConfig.compile
     buildToolsVersion buidlConfig.buildToolVersion
-
-    compileOptions {
-        sourceCompatibility javaCompatibility.sourceCompatibility
-        targetCompatibility javaCompatibility.targetCompatibility
-    }
-
-    defaultConfig {
-        //sdks
-        minSdkVersion buidlConfig.min
-        targetSdkVersion buidlConfig.target
-
-        //strip other than english resources
-        resConfigs "en"
-
-        consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
-
-        testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
-        defaultPublishConfig "debug"
-    }
+    signingConfigs signingConfig
+    defaultConfig libDefaultConfig
 
     buildTypes {
         release {
@@ -54,28 +18,20 @@ android {
             resValue "string", "fb_login_protocol_scheme", FB_LOGIN_PROTOCOL_SCHEME
         }
         debug {
+            crunchPngs false
             testCoverageEnabled true
             signingConfig signingConfigs.playStore
             resValue "string", "fb_login_protocol_scheme", FB_LOGIN_PROTOCOL_SCHEME
         }
     }
 
+    compileOptions compileOption
     packagingOptions packageExcludes
     lintOptions lintOption
     aaptOptions aaptOption
     dexOptions dexOption
-}
-
-
-task grantAnimationPermission(type: Exec, dependsOn: 'installDebug') {
-    // or install{productFlavour}{buildType}
-    commandLine "adb shell pm grant $android.defaultConfig.applicationId android.permission.SET_ANIMATION_SCALE".split(' ')
-}
-
-tasks.whenTaskAdded { task ->
-    if (task.name.startsWith('connectedAndroidTest')) {
-        task.dependsOn grantAnimationPermission
-    }
+    testOptions testOption
+    adbOptions adbOption
 }
 
 dependencies {
