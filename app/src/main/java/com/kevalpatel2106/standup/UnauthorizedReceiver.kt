@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.authentication.logout.Logout
 
 /**
  * This receiver will listen for the action "com.kevalpatel2106.network.unauthorized" action broadcast
@@ -22,8 +22,8 @@ class UnauthorizedReceiver : BroadcastReceiver() {
                 context.getString(R.string.error_unauthorised_response),
                 Toast.LENGTH_LONG).show()
 
-        //Clear the user session.
-        UserSessionManager.clearUserSession()
+        //Clear the session
+        Logout.clearSession(context)
 
         //Launch the splash screen
         context.startActivity(SplashActivity.getLaunchIntent(context))

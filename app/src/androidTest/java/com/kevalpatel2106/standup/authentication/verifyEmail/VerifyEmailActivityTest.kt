@@ -17,7 +17,6 @@ import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import com.kevalpatel2106.utils.UserSessionManager
-import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
@@ -81,10 +80,10 @@ class VerifyEmailActivityTest : BaseTestClass() {
                 com.kevalpatel2106.standup.test.R.raw.resend_verification_email_success))
         activity.mModel.mUserAuthRepo = mockRepo
 
-        onView(withId(R.id.verify_btn_skip)).perform(click())
+        onView(withId(R.id.verify_btn_resend)).perform(click())
 
-        onView(allOf(withId(android.support.design.R.id.snackbar_text), withText(R.string.message_verification_email_sent)))
-                .check(matches(isDisplayed()))
+        Thread.sleep(2000)
+        onView(withText(R.string.message_verification_email_sent)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -94,7 +93,8 @@ class VerifyEmailActivityTest : BaseTestClass() {
         onView(withId(R.id.verify_btn_skip)).check(matches(isClickable()))
         onView(withId(R.id.verify_btn_open_mail_btn)).check(matches(isClickable()))
         onView(withId(R.id.verify_iv_email)).check(matches(CustomMatchers.hasImage()))
-        onView(withId(R.id.verify_description_text)).check(matches(withText(R.string.verify_email_screen_message)))
+        onView(withId(R.id.verify_description_text))
+                .check(matches(withText(String.format(activity.getString(R.string.verify_email_screen_message), UserSessionManager.email))))
         onView(withId(R.id.verify_title_text)).check(matches(withText(R.string.verify_email_send_screen_title)))
 
         switchToLandscape()
@@ -103,7 +103,8 @@ class VerifyEmailActivityTest : BaseTestClass() {
         onView(withId(R.id.verify_btn_skip)).check(matches(isClickable()))
         onView(withId(R.id.verify_btn_open_mail_btn)).check(matches(isClickable()))
         onView(withId(R.id.verify_iv_email)).check(matches(CustomMatchers.hasImage()))
-        onView(withId(R.id.verify_description_text)).check(matches(withText(R.string.verify_email_screen_message)))
+        onView(withId(R.id.verify_description_text))
+                .check(matches(withText(String.format(activity.getString(R.string.verify_email_screen_message), UserSessionManager.email))))
         onView(withId(R.id.verify_title_text)).check(matches(withText(R.string.verify_email_send_screen_title)))
     }
 }

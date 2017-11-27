@@ -12,7 +12,23 @@ import io.reactivex.schedulers.Schedulers
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class UserAuthRepositoryImpl : UserAuthRepository {
+internal class UserAuthRepositoryImpl : UserAuthRepository {
+    override fun logout(logoutRequest: LogoutRequest): Observable<Response<LoginResponseData>> {
+        return ApiProvider.getRetrofitClient(UserAuthRepository.baseUrl())
+                .create(UserAuthRepository::class.java)
+                .logout(logoutRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+    }
+
+    override fun verifyEmailLink(url: String): Observable<String> {
+        return ApiProvider.getRetrofitClient(UserAuthRepository.baseUrl())
+                .create(UserAuthRepository::class.java)
+                .verifyEmailLink(url)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+    }
+
     override fun forgotPassword(forgotPasswordRequest: ForgotPasswordRequest): Observable<Response<ForgotPasswordResponseData>> {
         return ApiProvider.getRetrofitClient(UserAuthRepository.baseUrl())
                 .create(UserAuthRepository::class.java)

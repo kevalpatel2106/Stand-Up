@@ -73,12 +73,6 @@ class LoginActivityTest : BaseTestClass() {
         onView(withId(R.id.btn_login_fb_signin)).check(matches(not(isEnabled())))
         onView(withId(R.id.btn_login_google_signin)).check(matches(not(isEnabled())))
         onView(withId(R.id.btn_login)).check(matches(not(isEnabled())))
-
-        //switch to the landscape
-        switchToLandscape()
-        onView(withId(R.id.btn_login_fb_signin)).check(matches(not(isEnabled())))
-        onView(withId(R.id.btn_login_google_signin)).check(matches(not(isEnabled())))
-        onView(withId(R.id.btn_login)).check(matches(not(isEnabled())))
     }
 
     /**

@@ -11,7 +11,7 @@ import java.net.HttpURLConnection
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-abstract class MockRepository: Closeable{
+abstract class MockRepository : Closeable {
     /**
      * Mock web server.
      */
@@ -20,9 +20,10 @@ abstract class MockRepository: Closeable{
     /**
      * Enqueue the next response in [mockWebServer].
      */
-    fun enqueueResponse(response: String) {
+    @JvmOverloads
+    fun enqueueResponse(response: String, type: String = "application/json") {
         mockWebServer.enqueue(MockResponse()
-                .setHeader("Content-type","application/json")
+                .setHeader("Content-type", type)
                 .setBody(response)
                 .setResponseCode(HttpURLConnection.HTTP_OK))
     }
@@ -30,8 +31,9 @@ abstract class MockRepository: Closeable{
     /**
      * Enqueue the next response in [mockWebServer].
      */
-    fun enqueueResponse(response: File) {
-        enqueueResponse(MockWebserverUtils.getStringFromFile(file = response))
+    @JvmOverloads
+    fun enqueueResponse(response: File, type: String = "application/json") {
+        enqueueResponse(response = MockWebserverUtils.getStringFromFile(file = response), type = type)
     }
 
     override fun close() {

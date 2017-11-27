@@ -17,12 +17,34 @@ import java.io.Closeable
  */
 
 class MockUiUserAuthRepository : MockRepository(), UserAuthRepository, Closeable {
+
+    fun getBase() = MockWebserverUtils.getBaseUrl(mockWebServer)
+
+    override fun logout(logoutRequest: LogoutRequest): Observable<Response<LoginResponseData>> {
+        return ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+                .create(UserAuthRepository::class.java)
+                .logout(logoutRequest)
+    }
+
+    override fun verifyEmailLink(url: String): Observable<String> {
+        return ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+                .create(UserAuthRepository::class.java)
+                .verifyEmailLink(url.replace(com.kevalpatel2106.standup.BuildConfig.BASE_URL,
+                        MockWebserverUtils.getBaseUrl(mockWebServer)))
+    }
+
     override fun forgotPassword(forgotPasswordRequest: ForgotPasswordRequest): Observable<Response<ForgotPasswordResponseData>> {
-        throw NotImplementedError("No required.")
+        return ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+                .create(UserAuthRepository::class.java)
+                .forgotPassword(forgotPasswordRequest)
     }
 
     override fun resendVerifyEmail(request: ResendVerificationRequest): Observable<Response<ResendVerificationResponseData>> {
-        throw NotImplementedError("No required.")
+        return ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+                .create(UserAuthRepository::class.java)
+                .resendVerifyEmail(request)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
     }
 
     override fun registerDevice(request: DeviceRegisterRequest): Observable<Response<DeviceRegisterData>> {

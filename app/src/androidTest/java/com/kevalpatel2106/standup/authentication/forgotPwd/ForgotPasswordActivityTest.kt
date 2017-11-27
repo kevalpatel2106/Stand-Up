@@ -93,15 +93,15 @@ class ForgotPasswordActivityTest : BaseTestClass() {
     @Test
     @Throws(IOException::class)
     fun checkUi() {
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(ViewMatchers.isClickable()))
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et)).check(ViewAssertions.matches(ViewMatchers.isClickable()))
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_logo_iv)).check(ViewAssertions.matches(ViewMatchers.isClickable()))
+        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(ViewMatchers.isEnabled()))
+        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et)).check(ViewAssertions.matches(ViewMatchers.isEnabled()))
+        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_logo_iv)).check(ViewAssertions.matches(ViewMatchers.isEnabled()))
 
         switchToLandscape()
 
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(ViewMatchers.isClickable()))
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et)).check(ViewAssertions.matches(ViewMatchers.isClickable()))
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_logo_iv)).check(ViewAssertions.matches(ViewMatchers.isClickable()))
+        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(ViewMatchers.isEnabled()))
+        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et)).check(ViewAssertions.matches(ViewMatchers.isEnabled()))
+        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_logo_iv)).check(ViewAssertions.matches(ViewMatchers.isEnabled()))
     }
 
     /**
@@ -126,7 +126,6 @@ class ForgotPasswordActivityTest : BaseTestClass() {
 
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et))
                 .check(ViewAssertions.matches(Matchers.not(CustomMatchers.hasError())))
-        Assert.assertTrue(activity.isFinishing)
     }
 
     /**

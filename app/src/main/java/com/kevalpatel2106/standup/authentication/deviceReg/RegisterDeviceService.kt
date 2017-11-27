@@ -38,6 +38,7 @@ import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
 import io.reactivex.disposables.Disposable
+import timber.log.Timber
 
 
 /**
@@ -49,9 +50,10 @@ import io.reactivex.disposables.Disposable
 
 class RegisterDeviceService : Service() {
     companion object {
+        private val ARG_STOP_SERVICE = "arg_stop_service"
 
         /**
-         * Start th service.
+         * Start the service.
          *
          * @param context Instance of caller.
          */
@@ -60,6 +62,21 @@ class RegisterDeviceService : Service() {
                 context.startService(Intent(context, RegisterDeviceService::class.java))
             } else {
                 context.startForegroundService(Intent(context, RegisterDeviceService::class.java))
+            }
+        }
+
+        /**
+         * Stop the service.
+         *
+         * @param context Instance of caller.
+         */
+        fun stop(context: Context) {
+            val launchIntent = Intent(context, RegisterDeviceService::class.java)
+            launchIntent.putExtra(ARG_STOP_SERVICE, true)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                context.startService(launchIntent)
+            } else {
+                context.startForegroundService(launchIntent)
             }
         }
     }
@@ -72,20 +89,32 @@ class RegisterDeviceService : Service() {
 
     override fun onBind(intent: Intent): IBinder? = null
 
-    @SuppressLint("VisibleForTests")
     override fun onCreate() {
         super.onCreate()
-        makeForeground()
 
-        //Get the GCM Id.
-        val regId = FirebaseInstanceId.getInstance().token
-        if (regId == null) {
-            //Error occurred. Mark device as not registered.
-            SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+        //Make the service foreground by assigning notification
+        makeForeground()
+    }
+
+    @SuppressLint("VisibleForTests")
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        if (intent.getBooleanExtra(ARG_STOP_SERVICE, false)) {   //Stop the service
             stopSelf()
         } else {
-            sendDeviceDataToServer(regId, Utils.getDeviceId(this))
+            //Get the GCM Id.
+            val regId = FirebaseInstanceId.getInstance().token
+            if (regId == null) {
+                Timber.i("Firebase id is not available.")
+
+                //Error occurred. Mark device as not registered.
+                SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+
+                stopSelf()
+            } else {
+                sendDeviceDataToServer(regId, Utils.getDeviceId(this))
+            }
         }
+        return START_NOT_STICKY
     }
 
     /**

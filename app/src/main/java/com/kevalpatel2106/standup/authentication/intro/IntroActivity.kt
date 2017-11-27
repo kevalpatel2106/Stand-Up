@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import butterknife.OnClick
 import butterknife.Optional
-import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.facebookauth.FacebookHelper
@@ -50,8 +49,13 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
          *
          * @param context Instance of the caller.
          */
-        fun launch(context: Context) {
-            context.startActivity(Intent(context, IntroActivity::class.java))
+        @JvmStatic
+        @JvmOverloads
+        fun launch(context: Context, isNewTask: Boolean = false) {
+            val launchIntent = Intent(context, IntroActivity::class.java)
+            if (isNewTask)
+                launchIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(launchIntent)
         }
     }
 
@@ -96,7 +100,6 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 this)
         mFacebookSignInHelper = FacebookHelper(this,
                 getString(R.string.fb_login_field_string))
-        ActivityDetector(applicationContext).startDetection()
     }
 
     /**

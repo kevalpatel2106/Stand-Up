@@ -153,6 +153,7 @@ object UserSessionManager {
         SharedPrefsProvider.removePreferences(USER_DISPLAY_NAME)
         SharedPrefsProvider.removePreferences(USER_EMAIL)
         SharedPrefsProvider.removePreferences(USER_PHOTO)
+        SharedPrefsProvider.removePreferences(USER_IS_VERIFIED)
 
         clearToken()
     }

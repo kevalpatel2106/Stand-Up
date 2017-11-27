@@ -65,4 +65,8 @@
     <string name="title_activity_forggot_password">Forgot Password</string>
     <string name="submit">Submit</string>
     <string name="error_unauthorised_response">Looks like your session has been expired. Please login again.</string>
+    <string name="verify_email_link_description_verifying">Verifying your email...</string>
+    <string name="verify_email_link_success">Your email verified successfully.</string>
+    <string name="verify_email_link_fail">Verification failed.</string>
+    <string name="logout_succesfull_message">Logout successful.</string>
 </resources>

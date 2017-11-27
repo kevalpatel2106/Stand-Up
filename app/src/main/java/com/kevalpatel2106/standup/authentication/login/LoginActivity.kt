@@ -83,6 +83,7 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
             btn_login_google_signin.isEnabled = !it
             btn_login.isEnabled = !it
         })
+
         mModel.mLoginUiModel.observe(this@LoginActivity, Observer<LoginUiModel> {
             it?.let {
                 if (it.isSuccess) {

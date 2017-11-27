@@ -49,7 +49,7 @@ object TestNotification {
 
                 // Set required fields, including the small icon, the
                 // notification title, and text.
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.drawable.common_google_signin_btn_icon_dark_normal)
                 .setContentTitle(exampleString)
                 .setContentText(exampleString)
 

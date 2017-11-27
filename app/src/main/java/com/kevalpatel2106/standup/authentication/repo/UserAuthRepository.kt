@@ -3,9 +3,7 @@ package com.kevalpatel2106.standup.authentication.repo
 import com.kevalpatel2106.network.Response
 import com.kevalpatel2106.standup.BuildConfig
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 /**
@@ -39,6 +37,10 @@ interface UserAuthRepository {
     @POST("resendVerifyMail")
     fun resendVerifyEmail(@Body request: ResendVerificationRequest): Observable<Response<ResendVerificationResponseData>>
 
-//    @POST("logout")
-//    fun logout(@Body logoutRequest: LogoutRequest): Observable<Response<LogoutData>>
+    @GET
+    fun verifyEmailLink(@Url url: String): Observable<String>
+
+    @Headers("Add-Auth: true")
+    @POST("logout")
+    fun logout(@Body logoutRequest: LogoutRequest): Observable<Response<LoginResponseData>>
 }

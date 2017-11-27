@@ -53,8 +53,8 @@ android {
 dependencies {
     implementation ide.kotlin
     testImplementation project(':test-utils')
-    testImplementation project(':utils')
     androidTestImplementation project(':test-utils')
+    implementation project(':utils')
 
     //Support
     implementation supportLib.supportv4

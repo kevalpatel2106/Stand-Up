@@ -6,6 +6,7 @@ import com.facebook.FacebookSdk
 
 import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
+import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.utils.SharedPrefsProvider
 
@@ -33,22 +34,6 @@ class SUApplication : Application() {
                 .penaltyLog()
                 .build())
 
-        //Initialize the api module
-        ApiProvider.init(this@SUApplication)
-
-        //Init shetho
-        Stetho.initializeWithDefaults(this)
-
-        //Initialize firebase.
-        FirebaseApp.initializeApp(this@SUApplication)
-
-        //Initialize facebook
-        @Suppress("DEPRECATION")
-        FacebookSdk.sdkInitialize(this@SUApplication)
-
-        //Initialize shared preference
-        SharedPrefsProvider.init(this)
-
         //Enable timber
         Timber.plant(object : Timber.DebugTree() {
             override fun createStackElementTag(element: StackTraceElement): String? {
@@ -56,5 +41,24 @@ class SUApplication : Application() {
                         + " ->L" + element.lineNumber)
             }
         })
+
+        //Initialize shared preference
+        SharedPrefsProvider.init(this)
+
+        //Init shetho
+        Stetho.initializeWithDefaults(this)
+
+        //Initialize the api module
+        ApiProvider.init(this@SUApplication)
+
+        //Initialize the activity detection module.
+        ActivityDetector.init(this@SUApplication)
+
+        //Initialize firebase.
+        FirebaseApp.initializeApp(this@SUApplication)
+
+        //Initialize facebook
+        @Suppress("DEPRECATION")
+        FacebookSdk.sdkInitialize(this@SUApplication)
     }
 }

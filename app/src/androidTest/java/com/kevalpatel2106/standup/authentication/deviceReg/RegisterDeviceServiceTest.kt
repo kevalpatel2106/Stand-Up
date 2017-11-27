@@ -50,6 +50,7 @@ class RegisterDeviceServiceTest : BaseTestClass() {
                         com.kevalpatel2106.standup.test.R.raw.device_reg_success))
         mRegisterDeviceService.sendDeviceDataToServer("test.reg.id", "test.device.id")
 
+        Thread.sleep(2000)
         assertTrue(SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
         assertNotNull(UserSessionManager.token)
     }
@@ -62,6 +63,7 @@ class RegisterDeviceServiceTest : BaseTestClass() {
                         com.kevalpatel2106.standup.test.R.raw.authentication_field_missing))
         mRegisterDeviceService.sendDeviceDataToServer("test.reg.id", "test.device.id")
 
+        Thread.sleep(2000)
         assertFalse(SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
     }
 

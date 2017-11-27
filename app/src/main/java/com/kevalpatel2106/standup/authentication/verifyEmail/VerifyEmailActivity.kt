@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
+import android.support.design.widget.Snackbar
 import android.view.View
 import butterknife.OnClick
 import com.cocosw.bottomsheet.BottomSheet
@@ -46,9 +47,10 @@ class VerifyEmailActivity : BaseActivity() {
         mModel.mUiModel.observe(this@VerifyEmailActivity, Observer<VerifyEmailUiModel> {
             it?.let {
                 if (it.isSuccess) {
-                    showSnack(getString(R.string.message_verification_email_sent))
+                    showSnack(message = getString(R.string.message_verification_email_sent), duration = Snackbar.LENGTH_LONG)
                 } else it.errorMsg?.let {
-                    showSnack(it, R.string.error_retry_try_again, View.OnClickListener { onResendEmail() })
+                    showSnack(message = it, actionName = R.string.error_retry_try_again, duration = Snackbar.LENGTH_LONG,
+                            actionListener = View.OnClickListener { onResendEmail() })
                 }
             }
         })

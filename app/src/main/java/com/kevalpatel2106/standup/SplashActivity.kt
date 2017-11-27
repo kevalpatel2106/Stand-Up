@@ -3,6 +3,7 @@ package com.kevalpatel2106.standup
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
@@ -40,12 +41,15 @@ class SplashActivity : BaseActivity() {
         } else if (!UserSessionManager.isUserVerified) {
             VerifyEmailActivity.launch(this@SplashActivity)
         } else {
-            //Launch the dashboard.
-            Dashboard.launch(this@SplashActivity)
+            //Start activity detection.
+            ActivityDetector.startDetection()
 
             //Sync the device token
             if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
                 RegisterDeviceService.start(this@SplashActivity)
+
+            //Launch the dashboard.
+            Dashboard.launch(this@SplashActivity)
         }
     }
 }

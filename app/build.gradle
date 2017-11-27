@@ -58,6 +58,7 @@ android {
             zipAlignEnabled true
 
             buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
+            resValue "string", "api_host", "\"" + SERVER_BASE_URL.replace("https://", "") + "\""
             resValue "string", "server_client_id", SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID
             resValue "string", "android_api_key", ANDROID_API_KEY
@@ -73,6 +74,7 @@ android {
             zipAlignEnabled true
 
             buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
+            resValue "string", "api_host", "\"" + SERVER_BASE_URL.replace("https://", "") + "\""
             resValue "string", "server_client_id", SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID
             resValue "string", "android_api_key", ANDROID_API_KEY
@@ -130,6 +132,6 @@ dependencies {
     implementation(rxLib.rxAndroid, excludeGrp)
 
     //Other libs
-    implementation (otherLib.bottomsheet, excludeGrp)
+    implementation(otherLib.bottomsheet, excludeGrp)
 }
 apply plugin: 'com.google.gms.google-services'

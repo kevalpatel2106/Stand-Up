@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.support.annotation.VisibleForTesting
 import com.google.android.gms.location.ActivityRecognitionClient
-import com.kevalpatel2106.activityengine.DetectorConfig.DETECTION_BROADCAST_ACTION
 import timber.log.Timber
 
 
@@ -16,13 +15,16 @@ import timber.log.Timber
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @SuppressLint("StaticFieldLeak")
-class ActivityDetector(private val context: Context) {
+object ActivityDetector {
 
-    private var isUpdatesRegistered = false
+    private lateinit var context: Context
 
-    @SuppressLint("StaticFieldLeak")
     @VisibleForTesting
-    internal var activityRecognitionClient = ActivityRecognitionClient(context)
+    internal var activityRecognitionClient: ActivityRecognitionClient? = null
+
+    fun init(context: Context) {
+        this.context = context
+    }
 
     /**
      * Registers for context recognition updates using [ActivityRecognitionClient.requestActivityUpdates].
@@ -30,18 +32,24 @@ class ActivityDetector(private val context: Context) {
      */
     @SuppressLint("VisibleForTests")
     fun startDetection() {
-        val task = activityRecognitionClient.requestActivityUpdates(DetectorConfig.DETECTION_INTERVAL,
-                getActivityDetectionPendingIntent())
+        if (activityRecognitionClient == null) {
 
-        task.addOnSuccessListener({
-            Timber.i("Activity detector connected successfully.")
-            isUpdatesRegistered = true
-        })
+            activityRecognitionClient = ActivityRecognitionClient(context)
+            val task = activityRecognitionClient!!.requestActivityUpdates(DetectorConfig.DETECTION_INTERVAL,
+                    getActivityDetectionPendingIntent())
 
-        task.addOnFailureListener({
-            Timber.e("Activity detector cannot be connected.")
-            isUpdatesRegistered = false
-        })
+            task.addOnSuccessListener({
+                //Do nothing
+                Timber.i("Activity detector connected successfully.")
+            })
+
+            task.addOnFailureListener({
+                Timber.e("Activity detector cannot be connected.")
+
+                //Make the client null
+                activityRecognitionClient = null
+            })
+        }
     }
 
     /**
@@ -50,16 +58,19 @@ class ActivityDetector(private val context: Context) {
      */
     @SuppressLint("VisibleForTests")
     fun stopDetection() {
-        val task = activityRecognitionClient.removeActivityUpdates(getActivityDetectionPendingIntent())
-        task.addOnSuccessListener({
-            Timber.i("Activity detector connection successfully terminated.")
-            isUpdatesRegistered = false
-        })
+        activityRecognitionClient?.let {
+            val task = activityRecognitionClient!!.removeActivityUpdates(getActivityDetectionPendingIntent())
+            task.addOnSuccessListener({
+                Timber.i("Activity detector connection successfully terminated.")
 
-        task.addOnFailureListener({
-            Timber.i("Error occurred while terminating context detector connection .")
-            isUpdatesRegistered = true
-        })
+                //Make the client null
+                activityRecognitionClient = null
+            })
+
+            task.addOnFailureListener({
+                Timber.i("Error occurred while terminating context detector connection .")
+            })
+        }
     }
 
     /**
@@ -67,7 +78,7 @@ class ActivityDetector(private val context: Context) {
      */
     @VisibleForTesting
     internal fun getActivityDetectionPendingIntent(): PendingIntent {
-        val intent = Intent(DETECTION_BROADCAST_ACTION)
+        val intent = Intent(DetectorConfig.DETECTION_BROADCAST_ACTION)
 
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // requestActivityUpdates() and removeActivityUpdates().

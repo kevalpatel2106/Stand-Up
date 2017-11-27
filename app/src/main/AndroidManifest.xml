@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.kevalpatel2106.standup">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.kevalpatel2106.standup">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".SUApplication"
@@ -17,12 +17,34 @@
         <!-- =============================== META-DATA ================================ -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"/>
         <meta-data
             android:name="com.google.android.awareness.API_KEY"
-            android:value="@string/android_api_key" />
+            android:value="@string/android_api_key"/>
 
         <!-- =============================== ACTIVITIES ================================ -->
+
+        <!--Activity to handle deep links.-->
+        <activity
+            android:name=".deeplink.DeepLinkActivity"
+            android:configChanges="orientation|screenSize|keyboard"
+            android:noHistory="true"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionbar.GreenBg"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="@string/api_host"
+                    android:scheme="https"/>
+            </intent-filter>
+        </activity>
+
         <!--Splash screen for the redirection. This is the single entry point to the application.-->
         <activity
             android:name=".SplashActivity"
@@ -34,9 +56,9 @@
             android:theme="@style/AppTheme.Splash"
             tools:ignore="UnusedAttribute">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -46,7 +68,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!--Login/Sign Up the user screen-->
         <activity
@@ -54,7 +76,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!--Forgot password request screen-->
         <activity
@@ -62,7 +84,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!--Verify your email reminder screen.-->
         <activity
@@ -70,15 +92,16 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!--Verify the user email with the deep link.-->
         <activity
             android:name=".authentication.verifyEmail.EmailLinkVerificationActivity"
+            android:configChanges="orientation|screenSize|keyboard"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!--The Dashboard-->
         <activity
@@ -86,7 +109,16 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
+
+        <!--Web view activity-->
+        <activity
+            android:name=".deeplink.WebViewActivity"
+            android:configChanges="orientation|screenSize|keyboard"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionbar"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute"/>
 
         <!--User profile edit screen-->
         <activity
@@ -94,7 +126,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
 
         <!-- =============================== RECEIVER ================================ -->
@@ -104,7 +136,7 @@
             android:enabled="false"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.kevalpatel2106.network.unauthorized" />
+                <action android:name="com.kevalpatel2106.network.unauthorized"/>
             </intent-filter>
         </receiver>
 
@@ -115,7 +147,7 @@
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="com.kevalpatel2106.activityengine.update" />
+                <action android:name="com.kevalpatel2106.activityengine.update"/>
             </intent-filter>
         </receiver>
 
@@ -125,14 +157,14 @@
             android:name=".notification.FcmMessagingService"
             tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
         <service
             android:name=".notification.InstanceIdService"
             tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
         <!-- End: Firebase service -->
@@ -140,7 +172,7 @@
         <!--Service to register the device firebase token and other detail-->
         <service
             android:name=".authentication.deviceReg.RegisterDeviceService"
-            tools:ignore="ExportedService" />
+            tools:ignore="ExportedService"/>
     </application>
 
 </manifest>

@@ -15,6 +15,17 @@ import java.io.Closeable
  */
 
 class MockUserAuthRepository : MockRepository(), UserAuthRepository, Closeable {
+    override fun logout(logoutRequest: LogoutRequest): Observable<Response<LoginResponseData>> {
+        throw NotImplementedError("No required.")
+    }
+
+    override fun verifyEmailLink(url: String): Observable<String> {
+        return ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+                .create(UserAuthRepository::class.java)
+                .verifyEmailLink(url.replace(com.kevalpatel2106.standup.BuildConfig.BASE_URL,
+                        MockWebserverUtils.getBaseUrl(mockWebServer)))
+    }
+
     override fun forgotPassword(forgotPasswordRequest: ForgotPasswordRequest): Observable<Response<ForgotPasswordResponseData>> {
         return ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(UserAuthRepository::class.java)

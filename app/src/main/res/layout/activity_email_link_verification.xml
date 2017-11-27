@@ -1,8 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="?attr/colorPrimaryDark">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <com.kevalpatel2106.base.BaseImageView
+        android:id="@+id/verify_email_link_logo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginEnd="@dimen/md_activity_horizontal_margin"
+        android:layout_marginStart="@dimen/md_activity_horizontal_margin"
+        app:layout_constraintBottom_toTopOf="@+id/guideline11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
+        app:srcCompat="@mipmap/ic_launcher"/>
+
+    <ProgressBar
+        android:id="@+id/verify_email_link_progressbar"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/md_activity_horizontal_margin"
+        android:layout_marginStart="@dimen/md_activity_horizontal_margin"
+        android:layout_marginTop="@dimen/spacing_xlarge"
+        android:indeterminate="true"
+        android:indeterminateBehavior="cycle"
+        android:paddingEnd="@dimen/spacing_xxlarge"
+        android:paddingStart="@dimen/spacing_xxlarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline11"/>
+
+    <com.kevalpatel2106.base.BaseTextView
+        android:id="@+id/verify_email_link_description_tv"
+        style="@style/LargeText.White"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/md_activity_horizontal_margin"
+        android:layout_marginStart="@dimen/md_activity_horizontal_margin"
+        android:layout_marginTop="@dimen/spacing_large"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/verify_email_link_progressbar"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="Verifying..."/>
 
 </android.support.constraint.ConstraintLayout>
