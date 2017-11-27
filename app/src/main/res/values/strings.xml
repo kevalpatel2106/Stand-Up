@@ -64,4 +64,5 @@
     <string name="verify_email_screen_message">We sent an email to you at %s. It has a link that will verify your email address.</string>
     <string name="title_activity_forggot_password">Forgot Password</string>
     <string name="submit">Submit</string>
+    <string name="error_unauthorised_response">Looks like your session has been expired. Please login again.</string>
 </resources>

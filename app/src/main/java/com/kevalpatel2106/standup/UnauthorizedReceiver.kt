@@ -3,6 +3,7 @@ package com.kevalpatel2106.standup
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import com.kevalpatel2106.utils.UserSessionManager
 
 /**
@@ -15,6 +16,11 @@ import com.kevalpatel2106.utils.UserSessionManager
 class UnauthorizedReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+
+        //Toast the user.
+        Toast.makeText(context,
+                context.getString(R.string.error_unauthorised_response),
+                Toast.LENGTH_LONG).show()
 
         //Clear the user session.
         UserSessionManager.clearUserSession()

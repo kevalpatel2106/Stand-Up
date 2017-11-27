@@ -1,7 +1,8 @@
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.profile
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.kevalpatel2106.standup.R
 
 /**
  * This activity will take the user information like weight, height and sleep hours while user
