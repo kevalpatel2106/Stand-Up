@@ -10,7 +10,7 @@ import android.support.test.espresso.intent.matcher.IntentMatchers
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.standup.Dashboard
+import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
 import com.kevalpatel2106.testutils.BaseTestClass

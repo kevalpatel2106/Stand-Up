@@ -1,9 +1,10 @@
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.dashboard
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.kevalpatel2106.standup.R
 
 /**
  * Main activity which user will see after opening the application.

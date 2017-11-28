@@ -1,6 +1,7 @@
 package com.kevalpatel2106.standup
 
 import android.util.Log
+import com.crashlytics.android.Crashlytics
 
 import timber.log.Timber
 
@@ -23,7 +24,8 @@ class ReleaseTree : Timber.Tree() {
         if (isLoggable(tag, priority)) {
             Log.println(priority, tag, message)
 
-            //TODO Add creashlytics
+            //Log to crashalytics
+            Crashlytics.log(message)
         }
     }
 

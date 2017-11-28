@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.kevalpatel2106.standup">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.kevalpatel2106.standup">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- Disable animations on debug builds so that the animations do not interfere with Espresso
             tests.  Adding this permission to the manifest is not sufficient - you must also grant the
             permission over adb! -->
-    <uses-permission android:name="android.permission.SET_ANIMATION_SCALE"/>
+    <uses-permission android:name="android.permission.SET_ANIMATION_SCALE" />
 
     <application tools:ignore="GoogleAppIndexingWarning">
+
+        <!--Disable firebase analytics-->
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="true" />
+
         <!--suppress AndroidDomInspection -->
         <activity
             android:name="com.kevalpatel2106.testutils.FragmentRuleActivity"

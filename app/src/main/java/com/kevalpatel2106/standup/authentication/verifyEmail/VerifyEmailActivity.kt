@@ -11,7 +11,7 @@ import android.view.View
 import butterknife.OnClick
 import com.cocosw.bottomsheet.BottomSheet
 import com.kevalpatel2106.base.BaseActivity
-import com.kevalpatel2106.standup.Dashboard
+import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils

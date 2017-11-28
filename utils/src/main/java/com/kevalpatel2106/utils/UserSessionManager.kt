@@ -83,6 +83,8 @@ object UserSessionManager {
         get() = SharedPrefsProvider.getBoolFromPreferences(USER_IS_VERIFIED)
         set(isVerified) = SharedPrefsProvider.savePreferences(USER_IS_VERIFIED, isVerified)
 
+    fun isItMe(id: Long) = userId == id
+
     /**
      * Set user session detail.
      *

@@ -15,12 +15,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:fillViewport="true"
+        android:layout_height="match_parent">
 
         <!--Scrollview container-->
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <!--User name input box-->
             <android.support.design.widget.TextInputLayout

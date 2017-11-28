@@ -19,6 +19,8 @@ apply plugin: 'jacoco-android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 apply from: '../gradle/config.gradle'
 apply from: '../gradle/deps.gradle'
@@ -93,10 +95,11 @@ android {
 dependencies {
     implementation project(':base')
     implementation project(':utils')
-    implementation project(':network')
+    implementation project(':network')//TODO Remove this dependency
     implementation project(':facebook-auth')
     implementation project(':google-auth')
     implementation project(':activity-engine')
+    implementation project(':vault:vault')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -126,6 +129,8 @@ dependencies {
     //Firebase
     implementation(firebaseLib.core, excludeGrp)
     implementation(firebaseLib.fcm, excludeGrp)
+    implementation(firebaseLib.preformance, excludeGrp)
+    implementation(firebaseLib.remoteConfig, excludeGrp)
 
     //Rx
     implementation rxLib.rxJava
@@ -133,5 +138,8 @@ dependencies {
 
     //Other libs
     implementation(otherLib.bottomsheet, excludeGrp)
+    implementation(otherLib.crashalytics) {
+        transitive = true
+    }
 }
 apply plugin: 'com.google.gms.google-services'
