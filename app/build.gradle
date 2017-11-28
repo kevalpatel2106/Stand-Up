@@ -99,7 +99,6 @@ dependencies {
     implementation project(':facebook-auth')
     implementation project(':google-auth')
     implementation project(':activity-engine')
-    implementation project(':vault:vault')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 

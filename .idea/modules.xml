@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/StandUp.iml" filepath="$PROJECT_DIR$/StandUp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/StandUp-app.iml" filepath="$PROJECT_DIR$/app/StandUp-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vault/StandUp-vault.iml" filepath="$PROJECT_DIR$/vault/StandUp-vault.iml" />
       <module fileurl="file://$PROJECT_DIR$/activity-engine/activity-engine.iml" filepath="$PROJECT_DIR$/activity-engine/activity-engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/base/base.iml" filepath="$PROJECT_DIR$/base/base.iml" />
       <module fileurl="file://$PROJECT_DIR$/facebook-auth/facebook-auth.iml" filepath="$PROJECT_DIR$/facebook-auth/facebook-auth.iml" />
@@ -12,7 +11,6 @@
       <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />
       <module fileurl="file://$PROJECT_DIR$/test-utils/test-utils.iml" filepath="$PROJECT_DIR$/test-utils/test-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils/utils.iml" filepath="$PROJECT_DIR$/utils/utils.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vault/vault/vault-vault.iml" filepath="$PROJECT_DIR$/vault/vault/vault-vault.iml" />
     </modules>
   </component>
 </project>

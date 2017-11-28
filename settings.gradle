@@ -1,8 +1,6 @@
 include ':app',
         ':activity-engine',
         ':base',
-        ':vault:vault',
-//        ':vault:sample-java',
         ':utils',
         ':test-utils',
         ':network',
