@@ -110,3 +110,7 @@
 # If you are using custom exceptions, add this line so that custom exception types are skipped during obfuscation:
 -keep public class * extends java.lang.Exception
 ##---------------End: proguard configuration for Crashalytics 2.x ----------
+
+-keepclassmembers class com.tistory.dwfox.dwrulerviewlibrary.view.LineRulerView {
+    public *;
+}
