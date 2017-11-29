@@ -100,6 +100,7 @@ dependencies {
     implementation project(':facebook-auth')
     implementation project(':google-auth')
     implementation project(':activity-engine')
+    implementation project(':data-vault')
     implementation project(':ruler-view')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')

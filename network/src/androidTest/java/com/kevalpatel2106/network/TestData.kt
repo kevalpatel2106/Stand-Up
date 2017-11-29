@@ -6,4 +6,4 @@ package com.kevalpatel2106.network
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 
-internal class TestData : BaseData()
+internal class TestData

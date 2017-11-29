@@ -1,8 +1,6 @@
 package com.kevalpatel2106.network
 
-import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.testutils.MockWebserverUtils
-import io.reactivex.functions.Consumer
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
@@ -62,22 +60,14 @@ class NWInterceptorTest {
                 .setHeader("Content-Type", "application/json")
                 .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithoutCache()
-                .subscribe(Consumer<retrofit2.Response<UnitTestData>> {
-                    Assert.assertNull(it.headers().get("Cache-Control"))
-                }, object : NWErrorConsumer() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onError(code: Int, message: String) {
-                        Assert.fail("There shouldn't be error. Error code: " + code)
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
-
+        Assert.assertTrue(response.isSuccessful)
+        Assert.assertNull(response.headers().get("Cache-Control"))
     }
 
     @Test
@@ -89,22 +79,15 @@ class NWInterceptorTest {
                 .setHeader("Content-Type", "application/json")
                 .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithCache()
-                .subscribe(Consumer<retrofit2.Response<UnitTestData>> {
-                    Assert.assertNotNull(it.headers().get("Cache-Control"))
-                    Assert.assertEquals(it.headers().get("Cache-Control"), "public, max-age=5000")
-                }, object : NWErrorConsumer() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onError(code: Int, message: String) {
-                        Assert.fail("There shouldn't be error. Error code: " + code)
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
+        Assert.assertTrue(response.isSuccessful)
+        Assert.assertNotNull(response.headers().get("Cache-Control"))
+        Assert.assertEquals(response.headers().get("Cache-Control"), "public, max-age=5000")
     }
 
     @Test
@@ -116,21 +99,13 @@ class NWInterceptorTest {
                 .setHeader("Content-Type", "application/json")
                 .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBaseWithoutAuthHeader()
-                .subscribe(Consumer<retrofit2.Response<UnitTestData>> {
-                    Assert.assertNull(it.raw().request().headers().get("Authorization"))
-                }, object : NWErrorConsumer() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onError(code: Int, message: String) {
-                        Assert.fail("There shouldn't be error. Error code: " + code)
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
-
+        Assert.assertTrue(response.isSuccessful)
+        Assert.assertNull(response.raw().request().headers().get("Authorization"))
     }
 }

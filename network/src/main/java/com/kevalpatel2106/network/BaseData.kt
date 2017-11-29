@@ -22,5 +22,5 @@ package com.kevalpatel2106.network
  *
  * @author 'https://github.com/kevalpatel2106'
  */
-
+@Deprecated("Not use")
 abstract class BaseData

@@ -18,6 +18,7 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.kevalpatel2106.base.annotations.Model
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 
@@ -26,7 +27,7 @@ import com.kevalpatel2106.googleauth.GoogleAuthUser
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-
+@Model
 data class SignUpRequest(
 
         @SerializedName("email")

@@ -6,9 +6,10 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
-import com.kevalpatel2106.network.consumer.NWErrorConsumer
-import com.kevalpatel2106.network.consumer.NWSuccessConsumer
-import com.kevalpatel2106.standup.authentication.repo.*
+import com.kevalpatel2106.standup.authentication.repo.LoginRequest
+import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.disposables.CompositeDisposable
 
@@ -86,57 +87,29 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
     fun performSignUp(email: String, password: String, name: String) {
         mIsAuthenticationRunning.value = true
         mUserAuthRepo.signUp(SignUpRequest(email, name, password, null))
-                .subscribe(object : NWSuccessConsumer<SignUpResponseData>() {
+                .subscribe({ data ->
+                    data?.let {
+                        //Save into the user session
+                        UserSessionManager.setNewSession(userId = data.uid,
+                                displayName = name,
+                                token = null,
+                                email = email,
+                                photoUrl = data.photoUrl,
+                                isVerified = it.isVerified)
 
-                    /**
-                     * Success api response.
-                     *
-                     * @param data [SignUpResponseData]
-                     */
-                    override fun onSuccess(data: SignUpResponseData?) {
-                        data?.let {
-                            //Save into the user session
-                            UserSessionManager.setNewSession(userId = data.uid,
-                                    displayName = name,
-                                    token = null,
-                                    email = email,
-                                    photoUrl = data.photoUrl,
-                                    isVerified = it.isVerified)
-
-                            val loginUiModel = LoginUiModel(true)
-                            loginUiModel.isNewUser = data.isNewUser
-                            loginUiModel.isVerify = data.isVerified
-                            mLoginUiModel.value = loginUiModel
-                        }
-
-                        mIsAuthenticationRunning.value = false
-                    }
-
-                }, object : NWErrorConsumer() {
-
-                    /**
-                     * Implement this method the get the error when application cannot connect to the server or the
-                     * internet is down.
-                     */
-                    override fun onInternetUnavailable(message: String) {
-                        val loginUiModel = LoginUiModel(false)
-                        loginUiModel.errorMsg = message
+                        val loginUiModel = LoginUiModel(true)
+                        loginUiModel.isNewUser = data.isNewUser
+                        loginUiModel.isVerify = data.isVerified
                         mLoginUiModel.value = loginUiModel
-
-                        mIsAuthenticationRunning.value = false
                     }
 
-                    /**
-                     * Implement this method the get the error code for the request and get the message to show to
-                     * to the user.
-                     */
-                    override fun onError(code: Int, message: String) {
-                        val loginUiModel = LoginUiModel(false)
-                        loginUiModel.errorMsg = message
-                        mLoginUiModel.value = loginUiModel
+                    mIsAuthenticationRunning.value = false
+                }, { t ->
+                    val loginUiModel = LoginUiModel(false)
+                    loginUiModel.errorMsg = t.message
+                    mLoginUiModel.value = loginUiModel
 
-                        mIsAuthenticationRunning.value = false
-                    }
+                    mIsAuthenticationRunning.value = false
                 })
     }
 
@@ -149,56 +122,27 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
     fun performSignIn(email: String, password: String) {
         mIsAuthenticationRunning.value = true
         mUserAuthRepo.login(LoginRequest(email, password))
-                .subscribe(object : NWSuccessConsumer<LoginResponseData>() {
+                .subscribe({ data ->
+                    data?.let {
+                        //Save into the user session
+                        UserSessionManager.setNewSession(userId = data.uid,
+                                displayName = data.name,
+                                token = null,
+                                email = data.email,
+                                photoUrl = data.photoUrl,
+                                isVerified = it.isVerified)
 
-                    /**
-                     * Success api response.
-                     *
-                     * @param data [LoginResponseData]
-                     */
-                    override fun onSuccess(data: LoginResponseData?) {
-                        data?.let {
-                            //Save into the user session
-                            UserSessionManager.setNewSession(userId = data.uid,
-                                    displayName = data.name,
-                                    token = null,
-                                    email = data.email,
-                                    photoUrl = data.photoUrl,
-                                    isVerified = it.isVerified)
-
-                            val loginUiModel = LoginUiModel(true)
-                            mLoginUiModel.value = loginUiModel
-                        }
-
-                        mIsAuthenticationRunning.value = false
-                    }
-
-                }, object : NWErrorConsumer() {
-
-                    /**
-                     * Implement this method the get the error when application cannot connect to the server or the
-                     * internet is down.
-                     */
-                    override fun onInternetUnavailable(message: String) {
-                        val loginUiModel = LoginUiModel(false)
-                        loginUiModel.errorMsg = message
+                        val loginUiModel = LoginUiModel(true)
                         mLoginUiModel.value = loginUiModel
-
-                        mIsAuthenticationRunning.value = false
                     }
 
-                    /**
-                     * Implement this method the get the error code for the request and get the message to show to
-                     * to the user.
-                     */
-                    override fun onError(code: Int, message: String) {
-                        val loginUiModel = LoginUiModel(false)
-                        loginUiModel.errorMsg = message
-                        mLoginUiModel.value = loginUiModel
+                    mIsAuthenticationRunning.value = false
+                }, {
+                    val loginUiModel = LoginUiModel(false)
+                    loginUiModel.errorMsg = it.message
+                    mLoginUiModel.value = loginUiModel
 
-                        mIsAuthenticationRunning.value = false
-                    }
-
+                    mIsAuthenticationRunning.value = false
                 })
     }
 
@@ -225,57 +169,28 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
         mIsAuthenticationRunning.value = true
 
         mUserAuthRepo.socialSignUp(requestData)
-                .subscribe(object : NWSuccessConsumer<SignUpResponseData>() {
+                .subscribe({ data ->
+                    data?.let {
+                        //Save into the user session
+                        UserSessionManager.setNewSession(userId = data.uid,
+                                displayName = requestData.displayName,
+                                token = null,
+                                email = requestData.email,
+                                photoUrl = data.photoUrl,
+                                isVerified = it.isVerified)
 
-                    /**
-                     * Success api response.
-                     *
-                     * @param data [SignUpResponseData]
-                     */
-                    override fun onSuccess(data: SignUpResponseData?) {
-
-                        data?.let {
-                            //Save into the user session
-                            UserSessionManager.setNewSession(userId = data.uid,
-                                    displayName = requestData.displayName,
-                                    token = null,
-                                    email = requestData.email,
-                                    photoUrl = data.photoUrl,
-                                    isVerified = it.isVerified)
-
-                            val loginUiModel = LoginUiModel(true)
-                            loginUiModel.isNewUser = data.isNewUser
-                            mLoginUiModel.value = loginUiModel
-                        }
-
-                        mIsAuthenticationRunning.value = false
-                    }
-
-                }, object : NWErrorConsumer() {
-
-                    /**
-                     * Implement this method the get the error when application cannot connect to the server or the
-                     * internet is down.
-                     */
-                    override fun onInternetUnavailable(message: String) {
-                        val loginUiModel = LoginUiModel(false)
-                        loginUiModel.errorMsg = message
+                        val loginUiModel = LoginUiModel(true)
+                        loginUiModel.isNewUser = data.isNewUser
                         mLoginUiModel.value = loginUiModel
-
-                        mIsAuthenticationRunning.value = false
                     }
 
-                    /**
-                     * Implement this method the get the error code for the request and get the message to show to
-                     * to the user.
-                     */
-                    override fun onError(code: Int, message: String) {
-                        val loginUiModel = LoginUiModel(false)
-                        loginUiModel.errorMsg = message
-                        mLoginUiModel.value = loginUiModel
+                    mIsAuthenticationRunning.value = false
+                }, { t ->
+                    val loginUiModel = LoginUiModel(false)
+                    loginUiModel.errorMsg = t.message
+                    mLoginUiModel.value = loginUiModel
 
-                        mIsAuthenticationRunning.value = false
-                    }
+                    mIsAuthenticationRunning.value = false
                 })
     }
 }

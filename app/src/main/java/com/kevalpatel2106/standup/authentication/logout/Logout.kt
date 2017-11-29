@@ -1,12 +1,8 @@
 package com.kevalpatel2106.standup.authentication.logout
 
 import android.content.Context
-import android.widget.Toast
 import com.kevalpatel2106.activityengine.ActivityDetector
-import com.kevalpatel2106.network.consumer.NWErrorConsumer
-import com.kevalpatel2106.network.consumer.NWSuccessConsumer
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
-import com.kevalpatel2106.standup.authentication.repo.LoginResponseData
 import com.kevalpatel2106.standup.authentication.repo.LogoutRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
@@ -46,23 +42,13 @@ internal object Logout {
      */
     internal fun logout(context: Context, userAuthRepository: UserAuthRepository) = userAuthRepository
             .logout(LogoutRequest(UserSessionManager.userId, Utils.getDeviceId(context)))
-            .subscribe(object : NWSuccessConsumer<LoginResponseData>() {
-
-                override fun onSuccess(data: LoginResponseData?) {
-                    //Clear all the data.
-                    clearSession(context)
-                }
-            }, object : NWErrorConsumer() {
-
-                override fun onInternetUnavailable(message: String) {
-                    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-                }
-
-                override fun onError(code: Int, message: String) {
-                    //Even though there is error, we will treat it as the success response and clear
-                    //all user data.
-                    //Clear all the data.
-                    clearSession(context)
-                }
+            .subscribe({
+                //Clear all the data.
+                clearSession(context)
+            }, {
+                //Even though there is error, we will treat it as the success response and clear
+                //all user data.
+                //Clear all the data.
+                clearSession(context)
             })
 }

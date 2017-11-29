@@ -1,8 +1,7 @@
 package com.kevalpatel2106.standup.authentication.repo
 
-import com.kevalpatel2106.network.Response
-import com.kevalpatel2106.standup.BuildConfig
-import io.reactivex.Observable
+import com.kevalpatel2106.base.annotations.Repository
+import io.reactivex.Flowable
 import retrofit2.http.*
 
 
@@ -11,36 +10,33 @@ import retrofit2.http.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@Repository
 interface UserAuthRepository {
-
-    companion object {
-        fun baseUrl() = BuildConfig.BASE_URL
-    }
 
     //Login/Register apis
     @POST("login")
-    fun login(@Body loginRequest: LoginRequest): Observable<Response<LoginResponseData>>
+    fun login(@Body loginRequest: LoginRequest): Flowable<LoginResponseData>
 
     @POST("registerDevice")
-    fun registerDevice(@Body request: DeviceRegisterRequest): Observable<Response<DeviceRegisterData>>
+    fun registerDevice(@Body request: DeviceRegisterRequest): Flowable<DeviceRegisterData>
 
     @POST("signUp")
-    fun signUp(@Body signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>>
+    fun signUp(@Body signUpRequest: SignUpRequest): Flowable<SignUpResponseData>
 
     @POST("forgotPassword")
-    fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest): Observable<Response<ForgotPasswordResponseData>>
+    fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest): Flowable<ForgotPasswordResponseData>
 
     @POST("socialLogin")
-    fun socialSignUp(@Body signUpRequest: SignUpRequest): Observable<Response<SignUpResponseData>>
+    fun socialSignUp(@Body signUpRequest: SignUpRequest): Flowable<SignUpResponseData>
 
     @Headers("Add-Auth: true")
     @POST("resendVerifyMail")
-    fun resendVerifyEmail(@Body request: ResendVerificationRequest): Observable<Response<ResendVerificationResponseData>>
+    fun resendVerifyEmail(@Body request: ResendVerificationRequest): Flowable<ResendVerificationResponseData>
 
     @GET
-    fun verifyEmailLink(@Url url: String): Observable<String>
+    fun verifyEmailLink(@Url url: String): Flowable<String>
 
     @Headers("Add-Auth: true")
     @POST("logout")
-    fun logout(@Body logoutRequest: LogoutRequest): Observable<Response<LoginResponseData>>
+    fun logout(@Body logoutRequest: LogoutRequest): Flowable<LogoutResponseData>
 }

@@ -18,14 +18,14 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.network.BaseData
+import com.kevalpatel2106.base.annotations.Model
 
 /**
  * Created by Keval on 02-Jan-17.
  *
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
-
+@Model
 data class DeviceRegisterData(
         @SerializedName("token")
         @Expose
@@ -34,4 +34,4 @@ data class DeviceRegisterData(
         @SerializedName("uid")
         @Expose
         val userId: Long = 0
-) : BaseData()
+)

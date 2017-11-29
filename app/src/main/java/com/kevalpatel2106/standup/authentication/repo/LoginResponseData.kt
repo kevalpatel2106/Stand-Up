@@ -18,14 +18,14 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.network.BaseData
+import com.kevalpatel2106.base.annotations.Model
 
 /**
  * Created by Keval on 27-Dec-16.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-
+@Model
 data class LoginResponseData(
         @SerializedName("uid")
         @Expose
@@ -46,4 +46,4 @@ data class LoginResponseData(
         @SerializedName("photo")
         @Expose
         val photoUrl: String? = null
-) : BaseData()
+)

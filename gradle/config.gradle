@@ -118,7 +118,7 @@ ext {
         unitTests.all {
             // set heap size for the test JVM(s)
             minHeapSize = "1024m"
-            maxHeapSize = "3096m"
+            maxHeapSize = "1596m"
             // listen to events in the test execution lifecycle
             beforeTest { descriptor ->
                 logger.lifecycle("Running test: " + descriptor)

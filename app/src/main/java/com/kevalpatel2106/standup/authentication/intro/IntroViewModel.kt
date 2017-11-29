@@ -6,10 +6,7 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
-import com.kevalpatel2106.network.consumer.NWErrorConsumer
-import com.kevalpatel2106.network.consumer.NWSuccessConsumer
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
-import com.kevalpatel2106.standup.authentication.repo.SignUpResponseData
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.utils.UserSessionManager
@@ -91,56 +88,28 @@ internal class IntroViewModel : android.arch.lifecycle.ViewModel {
         mIsAuthenticationRunning.value = true
 
         mUserAuthRepo.socialSignUp(requestData)
-                .subscribe(object : NWSuccessConsumer<SignUpResponseData>() {
+                .subscribe({ data ->
+                    if (data != null) {
+                        //Save into the user session
+                        UserSessionManager.setNewSession(userId = data.uid,
+                                displayName = requestData.displayName,
+                                token = null,
+                                email = requestData.email,
+                                photoUrl = data.photoUrl,
+                                isVerified = data.isVerified)
 
-                    /**
-                     * Success api response.
-                     *
-                     * @param data [SignUpResponseData]
-                     */
-                    override fun onSuccess(data: SignUpResponseData?) {
-                        if (data != null) {
-                            //Save into the user session
-                            UserSessionManager.setNewSession(userId = data.uid,
-                                    displayName = requestData.displayName,
-                                    token = null,
-                                    email = requestData.email,
-                                    photoUrl = data.photoUrl,
-                                    isVerified = data.isVerified)
-
-                            val introUiModel = IntroUiModel(true)
-                            introUiModel.isNewUser = data.isNewUser
-                            mIntroUiModel.value = introUiModel
-                        }
-
-                        mIsAuthenticationRunning.value = false
+                        val introUiModel = IntroUiModel(true)
+                        introUiModel.isNewUser = data.isNewUser
+                        mIntroUiModel.value = introUiModel
                     }
 
-                }, object : NWErrorConsumer() {
+                    mIsAuthenticationRunning.value = false
+                }, { t ->
+                    val apiResponse = IntroUiModel(false)
+                    apiResponse.errorMsg = t.message
+                    mIntroUiModel.value = apiResponse
 
-                    /**
-                     * Implement this method the get the error when application cannot connect to the server or the
-                     * internet is down.
-                     */
-                    override fun onInternetUnavailable(message: String) {
-                        val apiResponse = IntroUiModel(false)
-                        apiResponse.errorMsg = message
-                        mIntroUiModel.value = apiResponse
-
-                        mIsAuthenticationRunning.value = false
-                    }
-
-                    /**
-                     * Implement this method the get the error code for the request and get the message to show to
-                     * to the user.
-                     */
-                    override fun onError(code: Int, message: String) {
-                        val apiResponse = IntroUiModel(false)
-                        apiResponse.errorMsg = message
-                        mIntroUiModel.value = apiResponse
-
-                        mIsAuthenticationRunning.value = false
-                    }
+                    mIsAuthenticationRunning.value = false
                 })
     }
 

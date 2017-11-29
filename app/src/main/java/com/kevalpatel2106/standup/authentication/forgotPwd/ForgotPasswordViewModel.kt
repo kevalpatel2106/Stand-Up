@@ -3,10 +3,12 @@ package com.kevalpatel2106.standup.authentication.forgotPwd
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.annotations.ViewModel
-import com.kevalpatel2106.network.consumer.NWErrorConsumer
-import com.kevalpatel2106.network.consumer.NWSuccessConsumer
-import com.kevalpatel2106.standup.authentication.repo.*
+import com.kevalpatel2106.standup.authentication.repo.ForgotPasswordRequest
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Kevalpatel2106 on 23-Nov-17.
@@ -76,44 +78,19 @@ class ForgotPasswordViewModel : android.arch.lifecycle.ViewModel {
     fun forgotPasswordRequest(email: String) {
         mIsAuthenticationRunning.value = true
         mUserAuthRepo.forgotPassword(ForgotPasswordRequest(email))
-                .subscribe(object : NWSuccessConsumer<ForgotPasswordResponseData>() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    mIsAuthenticationRunning.value = false
 
-                    /**
-                     * Success api response.
-                     *
-                     * @param data [ResendVerificationResponseData]
-                     */
-                    override fun onSuccess(data: ForgotPasswordResponseData?) {
-                        mIsAuthenticationRunning.value = false
+                    val model = ForgotPasswordUiModel(true)
+                    mUiModel.value = model
+                }, { t ->
+                    mIsAuthenticationRunning.value = false
 
-                        val model = ForgotPasswordUiModel(true)
-                        mUiModel.value = model
-                    }
-
-                }, object : NWErrorConsumer() {
-                    /**
-                     * Implement this method the get the error when application cannot connect to the server or the
-                     * internet is down.
-                     */
-                    override fun onInternetUnavailable(message: String) {
-                        mIsAuthenticationRunning.value = false
-
-                        val model = ForgotPasswordUiModel(false)
-                        model.errorMsg = message
-                        mUiModel.value = model
-                    }
-
-                    /**
-                     * Implement this method the get the error code for the request and get the message to show to
-                     * to the user.
-                     */
-                    override fun onError(code: Int, message: String) {
-                        mIsAuthenticationRunning.value = false
-
-                        val model = ForgotPasswordUiModel(false)
-                        model.errorMsg = message
-                        mUiModel.value = model
-                    }
+                    val model = ForgotPasswordUiModel(false)
+                    model.errorMsg = t.message
+                    mUiModel.value = model
                 })
     }
 }

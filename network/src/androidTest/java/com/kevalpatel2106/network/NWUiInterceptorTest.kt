@@ -2,11 +2,9 @@ package com.kevalpatel2106.network
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
-import com.kevalpatel2106.network.consumer.NWErrorConsumer
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
-import io.reactivex.functions.Consumer
 import okhttp3.Request
 import okhttp3.mockwebserver.MockResponse
 import org.apache.commons.codec.binary.Base64
@@ -14,6 +12,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import retrofit2.Call
+import retrofit2.Response
 import java.io.IOException
 import java.net.HttpURLConnection
 
@@ -73,21 +73,19 @@ class NWUiInterceptorTest {
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(UiTestApiService::class.java)
                 .callBaseWithAuthHeader()
-                .subscribe(Consumer<retrofit2.Response<TestData>> {
-
-                    Assert.assertNotNull(it.raw().request().headers().get("Authorization"))
-                    Assert.assertEquals(it.raw().request().headers().get("Authorization"),
-                            "Basic " + String(
-                                    Base64.encodeBase64((UserSessionManager.userId.toString()
-                                            + ":" + UserSessionManager.token).toByteArray())))
-                }, object : NWErrorConsumer() {
-                    override fun onError(code: Int, message: String) {
-                        Assert.fail("There shouldn't be error. Error code: " + code)
+                .enqueue(object : retrofit2.Callback<TestData> {
+                    override fun onFailure(call: Call<TestData>?, t: Throwable?) {
+                        Assert.fail("There shouldn't be error. Message : " + t?.message)
                     }
 
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
+                    override fun onResponse(call: Call<TestData>?, response: Response<TestData>) {
+                        Assert.assertNotNull(response.raw().request().headers().get("Authorization"))
+                        Assert.assertEquals(response.raw().request().headers().get("Authorization"),
+                                "Basic " + String(
+                                        Base64.encodeBase64((UserSessionManager.userId.toString()
+                                                + ":" + UserSessionManager.token).toByteArray())))
                     }
+
                 })
 
     }

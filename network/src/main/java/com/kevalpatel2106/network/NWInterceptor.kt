@@ -19,9 +19,7 @@ package com.kevalpatel2106.network
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
-import com.google.gson.Gson
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import com.google.gson.GsonBuilder
 import com.kevalpatel2106.utils.UserSessionManager
 import okhttp3.*
 import okhttp3.Response
@@ -37,6 +35,10 @@ import java.net.HttpURLConnection
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
 internal class NWInterceptor(private val context: Context?) : Interceptor {
+
+    val gson = GsonBuilder()
+            .registerTypeAdapter(BaseResponse::class.java, BaseResponseJsonDeserializer())
+            .create()
 
     companion object {
         internal val CACHE_SIZE = 5242880L          //5 MB //Cache size.
@@ -73,40 +75,61 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
 
     @Suppress("DEPRECATION")
     private fun preprocessedResponse(response: Response): Response {
-        return if (response.code() == HttpURLConnection.HTTP_OK) {   //HTTP OK
 
-            if (response.header("Content-type").equals("application/json")) {   //Check if the json resposne.
-                //Check for the error code other than the success.
-                val responseStr = response.body()?.string()
-                val statusObj = Gson().fromJson(responseStr, Resp::class.java)
+        //HTTP OK
+        //Code 200 and there is some data in the response
+        return if (response.code() == HttpURLConnection.HTTP_OK && response.body() != null) {
+
+            //Check if the json response.
+            if (response.header("Content-type").equals("application/json")) {
+
+                //Read the response.
+                val responseStr = response.body()!!.string()
+                val baseResponse = gson.fromJson(responseStr, BaseResponse::class.java)
+
                 when {
-                    statusObj.status.statusCode == APIStatusCodes.SUCCESS_CODE && responseStr != null -> {
+                    baseResponse.status.statusCode == APIStatusCodes.SUCCESS_CODE -> {
                         //Success
                         //Nothing to do. Go ahead.
                         //We consumed the response body once so we need to build it again.
                         response.newBuilder()
-                                .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
+                                .body(ResponseBody.create(MediaType.parse("application/json"), baseResponse.d))
                                 .build()
                     }
-                    statusObj.status.statusCode == APIStatusCodes.ERROR_CODE_UNAUTHORIZED -> {     //You are unauthorized.
-
+                    baseResponse.status.statusCode == APIStatusCodes.ERROR_CODE_UNAUTHORIZED -> {
+                        //You are unauthorized.
                         //Broadcast to the app module that user is not authorized.
                         //Log out.
-                        context?.let {
-                            LocalBroadcastManager.getInstance(context)
-                                    .sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
+                        if (context != null) {
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
                         }
-                        response
+                        return response.newBuilder()
+                                .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
+                                .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                                .code(baseResponse.status.statusCode)
+                                .build()
                     }
-                    statusObj.status.statusCode < APIStatusCodes.SUCCESS_CODE -> {       //Exception occurred on the server
-                        throw NWException(statusObj.status.statusCode, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                    baseResponse.status.statusCode < APIStatusCodes.SUCCESS_CODE -> {
+
+                        //Exception occurred on the server
+                        return response.newBuilder()
+                                .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
+                                .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                                .code(APIStatusCodes.ERROR_CODE_EXCEPTION)
+                                .build()
                     }
-                    else -> {   //Some recoverable error occurred on the server
-                        throw NWException(statusObj.status.statusCode,
-                                statusObj.status.message ?: NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                    else -> {
+
+                        //Some recoverable error occurred on the server
+                        return response.newBuilder()
+                                .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
+                                .message(baseResponse.status.message ?: NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                                .code(baseResponse.status.statusCode)
+                                .build()
                     }
                 }
             } else {
+
                 //String response. Cannot do anything.
                 response
             }
@@ -115,27 +138,45 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
 
             //Broadcast to the app module that user is not authorized.
             //Log out.
-            context?.let {
-                LocalBroadcastManager.getInstance(context)
-                        .sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
+            if (context != null) {
+                LocalBroadcastManager.getInstance(context).sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
             }
 
-            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+            return response.newBuilder()
+                    .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                    .code(response.code())
+                    .build()
         } else if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST
-                || response.code() == HttpURLConnection.HTTP_BAD_METHOD) {  //Bad request
+                || response.code() == HttpURLConnection.HTTP_BAD_METHOD) {
 
-            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_BAD_REQUEST)
+            //Bad request
+            return response.newBuilder()
+                    .message(NetworkConfig.ERROR_MESSAGE_BAD_REQUEST)
+                    .code(response.code())
+                    .build()
         } else if (response.code() == HttpURLConnection.HTTP_NOT_FOUND
-                || response.code() == HttpURLConnection.HTTP_NOT_IMPLEMENTED) {  //404. Not found
+                || response.code() == HttpURLConnection.HTTP_NOT_IMPLEMENTED) {
 
-            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_NOT_FOUND)
+            //404. Not found
+            return response.newBuilder()
+                    .message(NetworkConfig.ERROR_MESSAGE_NOT_FOUND)
+                    .code(response.code())
+                    .build()
         } else if (response.code() == HttpURLConnection.HTTP_SERVER_ERROR
-                || response.code() == HttpURLConnection.HTTP_UNAVAILABLE) {  //500. Server is busy.
+                || response.code() == HttpURLConnection.HTTP_UNAVAILABLE) {
 
-            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_SERVER_BUSY)
+            //500. Server is busy.
+            return response.newBuilder()
+                    .message(NetworkConfig.ERROR_MESSAGE_SERVER_BUSY)
+                    .code(response.code())
+                    .build()
         } else {
+
             //No specific error
-            throw NWException(response.code(), NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+            return response.newBuilder()
+                    .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                    .code(response.code())
+                    .build()
         }
     }
 
@@ -169,18 +210,5 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
                     .build()
         }
         return request1
-    }
-
-    class Resp {
-        @SerializedName("s")
-        @Expose
-        lateinit var status: Status
-
-        data class Status(
-                @SerializedName("c")
-                val statusCode: Int,
-                @SerializedName("m")
-                val message: String? = null
-        )
     }
 }

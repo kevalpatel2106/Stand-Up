@@ -1,6 +1,6 @@
 package com.kevalpatel2106.network
 
-import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
 
@@ -12,15 +12,15 @@ import retrofit2.http.Headers
 internal interface TestApiService {
 
     @GET("test")
-    fun callBase(): Observable<Response<UnitTestData>>
+    fun callBase(): Call<UnitTestData>
 
     @GET("test")
-    fun callBaseWithoutAuthHeader(): Observable<retrofit2.Response<UnitTestData>>
+    fun callBaseWithoutAuthHeader(): Call<UnitTestData>
 
     @GET("test")
-    fun callBaseWithoutCache(): Observable<retrofit2.Response<UnitTestData>>
+    fun callBaseWithoutCache(): Call<UnitTestData>
 
     @Headers("Cache-Time: 5000")
     @GET("test")
-    fun callBaseWithCache(): Observable<retrofit2.Response<UnitTestData>>
+    fun callBaseWithCache(): Call<UnitTestData>
 }

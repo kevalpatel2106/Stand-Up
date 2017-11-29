@@ -26,10 +26,7 @@ import android.os.Build
 import android.os.IBinder
 import android.support.annotation.VisibleForTesting
 import com.google.firebase.iid.FirebaseInstanceId
-import com.kevalpatel2106.network.consumer.NWErrorConsumer
-import com.kevalpatel2106.network.consumer.NWSuccessConsumer
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterData
 import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
@@ -147,26 +144,16 @@ class RegisterDeviceService : Service() {
         //Register to the server
         mDisposable = mUserAuthRepository
                 .registerDevice(requestData)
-                .subscribe(object : NWSuccessConsumer<DeviceRegisterData>() {
-                    override fun onSuccess(data: DeviceRegisterData?) {
-                        data?.let {
-                            SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
-                            UserSessionManager.token = data.token
-                        }
-
-                        stopSelf()
-                    }
-                }, object : NWErrorConsumer() {
-
-                    override fun onInternetUnavailable(message: String) {
-                        SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
-                        stopSelf()
+                .subscribe({ data ->
+                    data?.let {
+                        SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
+                        UserSessionManager.token = data.token
                     }
 
-                    override fun onError(code: Int, message: String) {
-                        SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
-                        stopSelf()
-                    }
+                    stopSelf()
+                }, {
+                    SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+                    stopSelf()
                 })
     }
 

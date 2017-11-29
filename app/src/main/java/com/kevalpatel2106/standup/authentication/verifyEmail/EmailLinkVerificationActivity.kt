@@ -11,6 +11,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import com.kevalpatel2106.base.BaseActivity
+import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_email_link_verification.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@UIController
 class EmailLinkVerificationActivity : BaseActivity() {
     companion object {
         @VisibleForTesting

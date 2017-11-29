@@ -21,13 +21,9 @@ import android.support.annotation.VisibleForTesting
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.util.concurrent.TimeUnit
 
 /**
@@ -101,6 +97,5 @@ object ApiProvider {
             .baseUrl(baseUrl)
             .client(sOkHttpClient)
             .addConverterFactory(NWResponseConverter.create(sGson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 }

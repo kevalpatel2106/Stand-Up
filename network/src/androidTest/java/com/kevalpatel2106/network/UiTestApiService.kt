@@ -1,6 +1,6 @@
 package com.kevalpatel2106.network
 
-import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Headers
 
@@ -13,5 +13,5 @@ internal interface UiTestApiService {
 
     @Headers("Add-Auth: true")
     @GET("test")
-    fun callBaseWithAuthHeader(): Observable<retrofit2.Response<TestData>>
+    fun callBaseWithAuthHeader(): Call<TestData>
 }

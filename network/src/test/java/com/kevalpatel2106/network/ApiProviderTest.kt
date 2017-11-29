@@ -2,8 +2,6 @@ package com.kevalpatel2106.network
 
 import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
-import com.kevalpatel2106.network.consumer.NWErrorConsumer
-import com.kevalpatel2106.network.consumer.NWSuccessConsumer
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.mockwebserver.MockResponse
@@ -77,25 +75,14 @@ class ApiProviderTest {
         //404 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
-
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
-                        Assert.fail("This cannot give success.")
-                    }
-                }, object : NWErrorConsumer() {
-
-                    override fun onError(code: Int, message: String) {
-                        Assert.assertEquals(code, HttpURLConnection.HTTP_NOT_FOUND)
-                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_NOT_FOUND)
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
+                .execute()
+        Assert.assertFalse(response.isSuccessful)
+        Assert.assertEquals(response.code(), HttpURLConnection.HTTP_NOT_FOUND)
+        Assert.assertEquals(response.message(), NetworkConfig.ERROR_MESSAGE_NOT_FOUND)
+        mockWebServer.shutdown()
     }
 
     @Test
@@ -105,24 +92,14 @@ class ApiProviderTest {
         //404 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
-                        Assert.fail("This cannot give success.")
-                    }
-                }, object : NWErrorConsumer() {
-
-                    override fun onError(code: Int, message: String) {
-                        Assert.assertEquals(code, HttpURLConnection.HTTP_UNAUTHORIZED)
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
+        Assert.assertFalse(response.isSuccessful)
+        Assert.assertEquals(response.code(), HttpURLConnection.HTTP_UNAUTHORIZED)
     }
 
     @Test
@@ -132,26 +109,15 @@ class ApiProviderTest {
         //400 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
-                        Assert.fail("This cannot give success.")
-                    }
-                }, object : NWErrorConsumer() {
-
-                    override fun onError(code: Int, message: String) {
-                        Assert.assertEquals(code, HttpURLConnection.HTTP_BAD_REQUEST)
-                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_BAD_REQUEST)
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
-
+        Assert.assertFalse(response.isSuccessful)
+        Assert.assertEquals(response.code(), HttpURLConnection.HTTP_BAD_REQUEST)
+        Assert.assertEquals(response.message(), NetworkConfig.ERROR_MESSAGE_BAD_REQUEST)
     }
 
     @Suppress("DEPRECATION")
@@ -162,26 +128,15 @@ class ApiProviderTest {
         //500 response
         mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_SERVER_ERROR))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
-                        Assert.fail("This cannot give success.")
-                    }
-                }, object : NWErrorConsumer() {
-
-                    override fun onError(code: Int, message: String) {
-                        Assert.assertEquals(code, HttpURLConnection.HTTP_SERVER_ERROR)
-                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_SERVER_BUSY)
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
-
+        Assert.assertFalse(response.isSuccessful)
+        Assert.assertEquals(response.code(), HttpURLConnection.HTTP_SERVER_ERROR)
+        Assert.assertEquals(response.message(), NetworkConfig.ERROR_MESSAGE_SERVER_BUSY)
     }
 
     @Test
@@ -190,25 +145,15 @@ class ApiProviderTest {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse().setResponseCode(103))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
-                        Assert.fail("This cannot give success.")
-                    }
-                }, object : NWErrorConsumer() {
-
-                    override fun onError(code: Int, message: String) {
-                        Assert.assertEquals(code, 103)
-                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
+        Assert.assertFalse(response.isSuccessful)
+        Assert.assertEquals(response.code(), 103)
+        Assert.assertEquals(response.message(), NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
     }
 
     @Test
@@ -220,25 +165,15 @@ class ApiProviderTest {
                 .setHeader("Content-Type", "application/json")
                 .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
-                        Assert.assertNotNull(dataUnit)
-                    }
-                }, object : NWErrorConsumer() {
-
-                    override fun onError(code: Int, message: String) {
-                        Assert.fail("There shouldn't be error.")
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
-
+        Assert.assertTrue(response.isSuccessful)
+        Assert.assertEquals(response.code(), HttpURLConnection.HTTP_OK)
+        Assert.assertNull(response.message())
     }
 
     @Test
@@ -250,25 +185,15 @@ class ApiProviderTest {
                 .setHeader("Content-Type", "application/json")
                 .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/required_field_missing_sample.json"))))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
-                        Assert.fail("This cannot give success.")
-                    }
-                }, object : NWErrorConsumer() {
-
-                    override fun onError(code: Int, message: String) {
-                        Assert.assertEquals(code, APIStatusCodes.ERROR_CODE_REQUIRED_FIELD_MISSING)
-                        Assert.assertEquals(message, "Username is missing.")
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
+        Assert.assertFalse(response.isSuccessful)
+        Assert.assertEquals(response.code(), APIStatusCodes.ERROR_CODE_REQUIRED_FIELD_MISSING)
+        Assert.assertEquals(response.message(), "Username is missing.")
     }
 
     @Test
@@ -280,24 +205,14 @@ class ApiProviderTest {
                 .setHeader("Content-Type", "application/json")
                 .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/exception_sample.json"))))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
                 .create(TestApiService::class.java)
                 .callBase()
-                .subscribe(object : NWSuccessConsumer<UnitTestData>() {
+                .execute()
+        mockWebServer.shutdown()
 
-                    override fun onSuccess(@Suppress("UNUSED_PARAMETER") dataUnit: UnitTestData?) {
-                        Assert.fail("This cannot give success.")
-                    }
-                }, object : NWErrorConsumer() {
-
-                    override fun onError(code: Int, message: String) {
-                        Assert.assertEquals(code, APIStatusCodes.ERROR_CODE_EXCEPTION)
-                        Assert.assertEquals(message, NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
-                    }
-
-                    override fun onInternetUnavailable(message: String) {
-                        Assert.fail("Internet is there")
-                    }
-                })
+        Assert.assertFalse(response.isSuccessful)
+        Assert.assertEquals(response.code(), APIStatusCodes.ERROR_CODE_EXCEPTION)
+        Assert.assertEquals(response.message(), NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
     }
 }

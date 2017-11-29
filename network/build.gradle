@@ -53,6 +53,7 @@ android {
 dependencies {
     implementation project(':base')
     implementation project(':utils')
+    implementation project(':data-vault')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -64,12 +65,11 @@ dependencies {
     implementation otherLib.commonsCodec
 
     //GSON
-    api otherLib.gson
+    implementation otherLib.gson
 
     //Retrofit
     api retrofitLib.retrofit
     implementation retrofitLib.gsonPlugin
-    implementation retrofitLib.rxPlugin
     implementation retrofitLib.logger
 
     //Rx

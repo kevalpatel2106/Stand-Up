@@ -18,7 +18,7 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.network.BaseData
+import com.kevalpatel2106.base.annotations.Model
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
 
@@ -27,7 +27,7 @@ import com.kevalpatel2106.utils.Utils
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-
+@Model
 data class DeviceRegisterRequest(
         @SerializedName("deviceId")
         @Expose
@@ -35,8 +35,7 @@ data class DeviceRegisterRequest(
 
         @SerializedName("gcmKey")
         @Expose
-        var gcmKey: String?)
-    : BaseData() {
+        var gcmKey: String?) {
 
     @SerializedName("deviceName")
     @Expose

@@ -7,5 +7,5 @@ package com.kevalpatel2106.network
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  * @see [NWException]
  */
-
+@Deprecated("Not use")
 internal class NWException(val errorCode: Int, message: String) : Exception(message)

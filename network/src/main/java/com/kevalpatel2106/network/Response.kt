@@ -31,6 +31,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@Deprecated("Not use")
 class Response<T : BaseData> {
 
     @SerializedName("d")

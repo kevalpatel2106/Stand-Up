@@ -12,7 +12,7 @@ import io.reactivex.functions.Consumer;
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-
+@Deprecated()
 public abstract class NWSuccessConsumer<T extends BaseData> implements Consumer<Response<T>> {
     /**
      * Consume the given value.

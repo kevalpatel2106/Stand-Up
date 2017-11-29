@@ -15,7 +15,7 @@ import java.net.UnknownHostException
  *
  * @author 'https://github.com/kevalpatel2106'
  */
-
+@Deprecated("Not use")
 abstract class NWErrorConsumer : Consumer<Throwable> {
     /**
      * Consume the given value.

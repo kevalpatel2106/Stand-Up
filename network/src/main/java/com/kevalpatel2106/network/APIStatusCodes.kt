@@ -29,7 +29,7 @@ object APIStatusCodes {
     const val SUCCESS_CODE = 0                              //Status code for success
     const val ERROR_CODE_REQUIRED_FIELD_MISSING = 1         //Status code for the error
     const val ERROR_CODE_GENERAL = 2                        //Status code for the error
-    const val ERROR_CODE_EXCEPTION = -1                     //Status code for exception
+    const val ERROR_CODE_EXCEPTION = 1002                    //Status code for exception
     const val ERROR_CODE_UNAUTHORIZED = HttpURLConnection.HTTP_UNAUTHORIZED                 //Status code for unauthorized
-    const val ERROR_CODE_UNKNOWN_ERROR = -1001              //Status code for the error code that is not
+    const val ERROR_CODE_UNKNOWN_ERROR = 1001              //Status code for the error code that is not
 }
