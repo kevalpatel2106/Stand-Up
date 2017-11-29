@@ -9,7 +9,7 @@ import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
-import com.kevalpatel2106.standup.dashboard.Dashboard
+import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 
@@ -50,7 +50,7 @@ class SplashActivity : BaseActivity() {
                 RegisterDeviceService.start(this@SplashActivity)
 
             //Launch the dashboard.
-            Dashboard.launch(this@SplashActivity)
+            EditProfileActivity.launch(this@SplashActivity)
         }
     }
 }

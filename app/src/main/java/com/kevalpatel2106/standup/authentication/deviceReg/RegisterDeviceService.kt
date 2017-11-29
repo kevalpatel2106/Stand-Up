@@ -125,7 +125,7 @@ class RegisterDeviceService : Service() {
         val notification = Notification.Builder(this)
                 .setContentTitle(getString(R.string.app_name))
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-                .setContentText(getString(R.string.register_device_service_notificsation_message))
+                .setContentText(getString(R.string.register_device_service_notification_message))
                 .setSmallIcon(R.mipmap.ic_launcher) //TODO Add small notification icon.
                 .setPriority(Notification.PRIORITY_LOW)
                 .build()

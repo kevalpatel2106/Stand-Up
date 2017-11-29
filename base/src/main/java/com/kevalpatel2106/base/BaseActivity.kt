@@ -27,7 +27,6 @@ import butterknife.ButterKnife
 import com.kevalpatel2106.utils.ViewUtils
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import timber.log.Timber
 
 /**
  * Created by Keval on 17-Dec-16.
@@ -53,6 +52,10 @@ abstract class BaseActivity : AppCompatActivity() {
         if (savedInstanceState == null) runItForFirstCreation()
     }
 
+    /**
+     * This method will be called whenever activity is created for the first time and view is still
+     * not inflated.
+     */
     open fun runItForFirstCreation() {
         /* Do nothing */
     }
@@ -61,9 +64,7 @@ abstract class BaseActivity : AppCompatActivity() {
      * Set the toolbar of the activity.
 
      * @param toolbarId    resource id of the toolbar
-     * *
      * @param title        title of the activity
-     * *
      * @param showUpButton true if toolbar should display up indicator.
      */
     fun setToolbar(toolbarId: Int,
@@ -76,11 +77,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Set the toolbar of the activity.
-
      * @param toolbarId    resource id of the toolbar
-     * *
      * @param title        title of the activity
-     * *
      * @param showUpButton true if toolbar should display up indicator.
      */
     fun setToolbar(toolbarId: Int,
@@ -93,9 +91,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Set the toolbar.
-
+     *
      * @param title        Activity title string resource
-     * *
      * @param showUpButton true if toolbar should display up indicator.
      */
     protected fun setToolbar(@StringRes title: Int,
@@ -105,9 +102,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Set the toolbar.
-
+     *
      * @param title        Activity title string.
-     * *
      * @param showUpButton true if toolbar should display up indicator.
      */
     @SuppressLint("RestrictedApi")
@@ -135,7 +131,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     /**
      * Add the subscription to the [CompositeDisposable].
-
+     *
      * @param disposable [Disposable]
      */
     fun addSubscription(disposable: Disposable?) {

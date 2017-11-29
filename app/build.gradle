@@ -20,7 +20,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
-apply plugin: 'com.google.firebase.firebase-perf'
+//apply plugin: 'com.google.firebase.firebase-perf'
+//https://stackoverflow.com/a/47050632/4690731
 
 apply from: '../gradle/config.gradle'
 apply from: '../gradle/deps.gradle'
@@ -95,10 +96,11 @@ android {
 dependencies {
     implementation project(':base')
     implementation project(':utils')
-    implementation project(':network')//TODO Remove this dependency
+    implementation project(':network')
     implementation project(':facebook-auth')
     implementation project(':google-auth')
     implementation project(':activity-engine')
+    implementation project(':ruler-view')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 

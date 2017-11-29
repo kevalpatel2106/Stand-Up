@@ -50,7 +50,7 @@ class ForgotPasswordActivity : BaseActivity() {
                 showSnack(it.errorMsg!!)
             }
         })
-        setToolbar(R.id.include, getString(R.string.title_activity_forggot_password), true)
+        setToolbar(R.id.include, getString(R.string.title_activity_forgot_password), true)
     }
 
     @OnClick(R.id.forgot_password_submit_btn)
