@@ -45,10 +45,9 @@ class VerifyEmailModelTest {
     @Test
     @Throws(IOException::class)
     fun checkInitialization() {
-        Assert.assertFalse(verifyEmailUiModel.mIsAuthenticationRunning.value!!)
+        Assert.assertFalse(verifyEmailUiModel.blockUi.value!!)
     }
 
-    ///////////////// Social Sign Up ////////////////////
     @Test
     @Throws(IOException::class)
     fun checkResendVerificationEmailSuccess() {
@@ -58,9 +57,9 @@ class VerifyEmailModelTest {
         verifyEmailUiModel.resendEmail(123)
 
         //There should be success.
-        Assert.assertFalse(verifyEmailUiModel.mIsAuthenticationRunning.value!!)
+        Assert.assertFalse(verifyEmailUiModel.blockUi.value!!)
         Assert.assertTrue(verifyEmailUiModel.mUiModel.value!!.isSuccess)
-        Assert.assertNull(verifyEmailUiModel.mUiModel.value!!.errorMsg)
+        Assert.assertNull(verifyEmailUiModel.errorMessage.value)
     }
 
     @Test
@@ -72,9 +71,9 @@ class VerifyEmailModelTest {
         verifyEmailUiModel.resendEmail(123)
 
         //There should be success.
-        Assert.assertFalse(verifyEmailUiModel.mIsAuthenticationRunning.value!!)
+        Assert.assertFalse(verifyEmailUiModel.blockUi.value!!)
         Assert.assertFalse(verifyEmailUiModel.mUiModel.value!!.isSuccess)
-        Assert.assertNotNull(verifyEmailUiModel.mUiModel.value!!.errorMsg)
+        Assert.assertEquals(verifyEmailUiModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 
 

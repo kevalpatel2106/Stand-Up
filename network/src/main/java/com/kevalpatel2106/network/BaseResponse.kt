@@ -15,7 +15,7 @@ internal class BaseResponse {
 
     @SerializedName("d")
     @Expose
-    lateinit var d: String
+    var d: String? = null
 
     data class Status(
             @SerializedName("c")

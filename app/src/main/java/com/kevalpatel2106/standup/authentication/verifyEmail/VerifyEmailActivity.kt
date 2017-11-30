@@ -40,18 +40,26 @@ class VerifyEmailActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mModel = ViewModelProviders.of(this).get(VerifyEmailViewModel::class.java)
-        mModel.mIsAuthenticationRunning.observe(this@VerifyEmailActivity, Observer<Boolean> {
+
+        mModel.blockUi.observe(this@VerifyEmailActivity, Observer<Boolean> {
             verify_btn_skip.isEnabled = !it!!
             verify_btn_resend.isEnabled = !it
             verify_btn_open_mail_btn.isEnabled = !it
         })
+
+        //Observe error messages
+        mModel.errorMessage.observe(this@VerifyEmailActivity, Observer {
+            it!!.getMessage(this@VerifyEmailActivity)?.let {
+                showSnack(message = it, actionName = R.string.error_retry_try_again,
+                        duration = Snackbar.LENGTH_LONG,
+                        actionListener = View.OnClickListener { onResendEmail() })
+            }
+        })
+
         mModel.mUiModel.observe(this@VerifyEmailActivity, Observer<VerifyEmailUiModel> {
             it?.let {
                 if (it.isSuccess) {
                     showSnack(message = getString(R.string.message_verification_email_sent), duration = Snackbar.LENGTH_LONG)
-                } else it.errorMsg?.let {
-                    showSnack(message = it, actionName = R.string.error_retry_try_again, duration = Snackbar.LENGTH_LONG,
-                            actionListener = View.OnClickListener { onResendEmail() })
                 }
             }
         })

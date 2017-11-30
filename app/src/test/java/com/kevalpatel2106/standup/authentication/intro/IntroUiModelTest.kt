@@ -1,6 +1,7 @@
 package com.kevalpatel2106.standup.authentication.intro
 
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -22,19 +23,6 @@ class IntroUiModelTest {
 
         introUiModel.isSuccess = false
         assertFalse(introUiModel.isSuccess)
-    }
-
-    @Test
-    @Throws(IOException::class)
-    fun checkErrorMsg() {
-        val introUiModel = IntroUiModel(true)
-        assertNull(introUiModel.errorMsg)
-
-        introUiModel.errorMsg = "This is the test."
-        assertNull(introUiModel.errorMsg)
-
-        introUiModel.isSuccess = false
-        assertEquals(introUiModel.errorMsg, "This is the test.")
     }
 
     @Test

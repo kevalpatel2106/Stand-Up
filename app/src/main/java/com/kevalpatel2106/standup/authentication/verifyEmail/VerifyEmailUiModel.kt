@@ -10,11 +10,4 @@ import com.kevalpatel2106.base.annotations.Model
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Model
-internal data class VerifyEmailUiModel(var isSuccess: Boolean) {
-
-    /**
-     * Error message received from the server if [isSuccess] is false else it will be null.
-     */
-    var errorMsg: String? = null
-        get() = if (isSuccess) null else field
-}
+internal data class VerifyEmailUiModel(var isSuccess: Boolean)

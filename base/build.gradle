@@ -73,6 +73,8 @@ dependencies {
     implementation(butterKnifeLib.butterKnife, excludeGrp)
     kapt(butterKnifeLib.annotationProcessor, excludeGrp)
 
+    implementation archComponent.lifecycle
+
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4

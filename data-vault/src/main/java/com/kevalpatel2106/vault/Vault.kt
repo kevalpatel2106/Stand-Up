@@ -58,9 +58,7 @@ class Vault<T> internal constructor() {
                     emitter.onNext(freshData)
 
                     //Write the data to all the cache
-                    mCaches.forEach {
-                        it.write(freshData.data)
-                    }
+                    mCaches.forEach { it.write(freshData.data) }
 
                     //No need the check the next refresher
                     break

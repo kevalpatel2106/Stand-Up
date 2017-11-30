@@ -24,10 +24,10 @@ import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthResponse
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.googleauth.GoogleSignInHelper
-import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.login.LoginActivity
+import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_intro.*
 
@@ -73,24 +73,29 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         mModel = ViewModelProviders.of(this).get(IntroViewModel::class.java)
 
         //Observer the api call changes
-        mModel.mIsAuthenticationRunning.observe(this@IntroActivity, Observer<Boolean> {
+        mModel.blockUi.observe(this@IntroActivity, Observer<Boolean> {
             manageButtons(!it!!)
+        })
+        manageButtons(!mModel.blockUi.value!!)
+
+        //Observe error messages
+        mModel.errorMessage.observe(this@IntroActivity, Observer {
+            it!!.getMessage(this@IntroActivity)?.let { showSnack(it) }
         })
 
         //Observer the api responses.
         mModel.mIntroUiModel.observe(this@IntroActivity, Observer<IntroUiModel> {
-            if (it!!.isSuccess) {
-                //Start syncing the token
-                RegisterDeviceService.start(this)
+            it?.let {
+                if (it.isSuccess) {
+                    //Start syncing the token
+                    RegisterDeviceService.start(this)
 
-                //User successfully logged in.
-                Dashboard.launch(this@IntroActivity)
-                finish()
-            } else {
-                showSnack(it.errorMsg!!)
+                    //User successfully logged in.
+                    Dashboard.launch(this@IntroActivity)
+                    finish()
+                }
             }
         })
-        manageButtons(!mModel.mIsAuthenticationRunning.value!!)
 
         intro_view_pager.adapter = IntroPagerAdapter(supportFragmentManager)
 
@@ -151,15 +156,10 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      * Launch [LoginActivity] to sign in using the email.
      */
     @OnClick(R.id.btn_login_using_email)
-    fun emailSignIn() {
-        LoginActivity.launch(this@IntroActivity, false)
-    }
-
+    fun emailSignIn() = LoginActivity.launch(this@IntroActivity, false)
 
     @OnClick(R.id.btn_create_account)
-    fun createAccount() {
-        LoginActivity.launch(this@IntroActivity, true)
-    }
+    fun createAccount() = LoginActivity.launch(this@IntroActivity, true)
 
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>,
@@ -191,32 +191,19 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onGoogleAuthSignIn(user: GoogleAuthUser) =
-            if (user.email.isEmpty() || user.name.isEmpty()) {
-                showSnack(getString(R.string.error_google_login_email_not_found))
-            } else {
-                //Perform the authentication
-                mModel.authenticateSocialUser(user)
-            }
+    override fun onGoogleAuthSignIn(user: GoogleAuthUser) = mModel.authenticateSocialUser(user)
 
-    override fun onGoogleAuthSignInFailed() {
-        showSnack(getString(R.string.error_google_signin_fail),
-                getString(R.string.error_retry_try_again),
-                View.OnClickListener { googleSignIn() })
-    }
+    override fun onGoogleAuthSignInFailed() = showSnack(getString(R.string.error_google_signin_fail),
+            getString(R.string.error_retry_try_again), View.OnClickListener { googleSignIn() })
 
-    override fun onGoogleAuthSignOut(isSuccess: Boolean) {
-        throw IllegalStateException("This method should never call.")
-    }
+    override fun onGoogleAuthSignOut(isSuccess: Boolean) =
+            throw IllegalStateException("This method should never call.")
 
     /**
      * This callback will be available when facebook sign in call fails.
      */
-    override fun onFbSignInFail() {
-        showSnack(getString(R.string.error_facebook_signin_fail),
-                getString(R.string.error_retry_try_again),
-                View.OnClickListener { facebookSignIn() })
-    }
+    override fun onFbSignInFail() = showSnack(getString(R.string.error_facebook_signin_fail),
+            getString(R.string.error_retry_try_again), View.OnClickListener { facebookSignIn() })
 
     /**
      * This method will be called whenever [FacebookHelper], authenticate and get the profile
@@ -224,19 +211,11 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      *
      * @param facebookUser [FacebookUser].
      */
-    override fun onFbProfileReceived(facebookUser: FacebookUser) =
-            if (facebookUser.email.isNullOrEmpty() || facebookUser.name.isNullOrEmpty()) {
-                showSnack(getString(R.string.error_fb_login_email_not_found))
-            } else {
-                //Perform the authentication
-                mModel.authenticateSocialUser(facebookUser)
-            }
+    override fun onFbProfileReceived(facebookUser: FacebookUser) = mModel.authenticateSocialUser(facebookUser)
 
     /**
      * This callback will be available whenever facebook sign out call completes. No matter success of
      * failure.
      */
-    override fun onFBSignOut() {
-        throw IllegalStateException("This method should never call.")
-    }
+    override fun onFBSignOut() = throw IllegalStateException("This method should never call.")
 }

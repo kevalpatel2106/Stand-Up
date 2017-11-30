@@ -6,6 +6,7 @@ import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions
 import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.rule.ActivityTestRule
+import com.kevalpatel2106.base.annotations.EndToEndTest
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
@@ -44,13 +45,14 @@ class ForgotPasswordActivityTest : BaseTestClass() {
     fun checkApiRunningStateChange() {
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(ViewMatchers.isEnabled()))
 
-        activity.runOnUiThread { activity.mModel.mIsAuthenticationRunning.value = true }
+        activity.runOnUiThread { activity.mModel.blockUi.value = true }
 
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(Matchers.not(ViewMatchers.isEnabled())))
 
         //switch to the landscape
         switchToLandscape()
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(Matchers.not(ViewMatchers.isEnabled())))
+        activity.runOnUiThread { activity.mModel.blockUi.value = false }
     }
 
     /**
@@ -108,6 +110,7 @@ class ForgotPasswordActivityTest : BaseTestClass() {
      * Test if in forgot password flow everything is working correctly?
      */
     @Test
+    @EndToEndTest
     @Throws(Exception::class)
     fun testForgotPasswordSuccess() {
         val mockRepo = MockUiUserAuthRepository()
@@ -117,13 +120,12 @@ class ForgotPasswordActivityTest : BaseTestClass() {
 
         //Check with valid email address
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et))
-                .perform(ViewActions.clearText(), ViewActions.typeText("text@example.com"))
+                .perform(ViewActions.clearText(), ViewActions.typeText("text@example.com"), ViewActions.closeSoftKeyboard())
 
         //Perform validation
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn))
-                .perform(ViewActions.closeSoftKeyboard())
-                .perform(ViewActions.click())
+        activity.submit()
 
+        Thread.sleep(5000)
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et))
                 .check(ViewAssertions.matches(Matchers.not(CustomMatchers.hasError())))
     }
@@ -132,6 +134,7 @@ class ForgotPasswordActivityTest : BaseTestClass() {
      * Test if in forgot password flow everything is working correctly?
      */
     @Test
+    @EndToEndTest
     @Throws(Exception::class)
     fun testForgotPasswordError() {
         val mockRepo = MockUiUserAuthRepository()
@@ -141,13 +144,11 @@ class ForgotPasswordActivityTest : BaseTestClass() {
 
         //Check with valid email address
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et))
-                .perform(ViewActions.clearText(), ViewActions.typeText("text@example.com"))
+                .perform(ViewActions.clearText(), ViewActions.typeText("text@example.com"), ViewActions.closeSoftKeyboard())
 
-        //Perform validation
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn))
-                .perform(ViewActions.closeSoftKeyboard())
-                .perform(ViewActions.click())
+        activity.submit()
 
+        Thread.sleep(5000)
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et))
                 .check(ViewAssertions.matches(Matchers.not(CustomMatchers.hasError())))
         Assert.assertFalse(activity.isFinishing)

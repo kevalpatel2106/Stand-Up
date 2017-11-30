@@ -1,19 +1,24 @@
 package com.kevalpatel2106.network
 
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import android.content.Context
+import android.content.SharedPreferences
 import com.kevalpatel2106.testutils.MockWebserverUtils
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import okhttp3.Request
 import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
 import org.apache.commons.codec.binary.Base64
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.anyLong
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.Mockito
 import retrofit2.Call
 import retrofit2.Response
+import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 
@@ -24,20 +29,48 @@ import java.net.HttpURLConnection
  *
  * @author []https://github.com/kevalpatel2106]
  */
-@RunWith(AndroidJUnit4::class)
-class NWUiInterceptorTest {
+@RunWith(JUnit4::class)
+class NWInterceptorAuthTest {
+    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", File(File("").absolutePath))
+
+    private val TEST_PREF_STRING = "TestValue"
+    private val TEST_PREF_LONG = 100L
+
+    private lateinit var mockWebServer: MockWebServer
+
+    companion object {
+
+        @JvmStatic
+        @BeforeClass
+        fun setUpClass() {
+            ApiProvider.init()
+        }
+
+        @JvmStatic
+        @AfterClass
+        fun tearUpClass() {
+            ApiProvider.close()
+        }
+    }
+
     @Before
     fun setUp() {
-        ApiProvider.init(InstrumentationRegistry.getContext())
+        val context = Mockito.mock(Context::class.java)
+        val sharedPrefs = Mockito.mock(SharedPreferences::class.java)
+        val sharedPrefsEditor = Mockito.mock(SharedPreferences.Editor::class.java)
+        Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
+        Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
+        Mockito.`when`(sharedPrefs.getString(anyString(), anyString())).thenReturn(TEST_PREF_STRING)
+        Mockito.`when`(sharedPrefs.getString(anyString(), ArgumentMatchers.isNull())).thenReturn(TEST_PREF_STRING)
+        Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(TEST_PREF_LONG)
+        SharedPrefsProvider.init(context)
 
-        SharedPrefsProvider.init(InstrumentationRegistry.getContext().applicationContext)
-        UserSessionManager.clearUserSession()
-        UserSessionManager.setNewSession(124,
-                "TestUser",
-                "test@example.com",
-                "TestToken",
-                null,
-                true)
+        mockWebServer = MockWebserverUtils.startMockWebServer()
+    }
+
+    @After
+    fun tearUp() {
+        mockWebServer.shutdown()
     }
 
     @Test
@@ -54,24 +87,21 @@ class NWUiInterceptorTest {
 
         Assert.assertNotNull(modifiedRequest.headers().get("Authorization"))
         Assert.assertEquals(modifiedRequest.headers().get("Authorization"),
-                "Basic " + String(
-                        Base64.encodeBase64((UserSessionManager.userId.toString()
+                "Basic " + String(Base64.encodeBase64((UserSessionManager.userId.toString()
                                 + ":" + UserSessionManager.token).toByteArray())))
     }
 
-
     @Test
     @Throws(IOException::class)
-    fun checkAuthHeader() {
+    fun checkApiRequestWithAuthHeader() {
         val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
-                        com.kevalpatel2106.network.test.R.raw.sucess_sample)))
+                .setHeader("Content-Type", "text/html")
+                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
         ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
-                .create(UiTestApiService::class.java)
+                .create(TestApiService::class.java)
                 .callBaseWithAuthHeader()
                 .enqueue(object : retrofit2.Callback<TestData> {
                     override fun onFailure(call: Call<TestData>?, t: Throwable?) {

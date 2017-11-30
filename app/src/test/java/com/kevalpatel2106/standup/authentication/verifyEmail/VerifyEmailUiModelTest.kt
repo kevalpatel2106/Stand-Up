@@ -1,6 +1,7 @@
 package com.kevalpatel2106.standup.authentication.verifyEmail
 
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -22,18 +23,5 @@ class VerifyEmailUiModelTest {
 
         verifyEmailUiModel.isSuccess = false
         assertFalse(verifyEmailUiModel.isSuccess)
-    }
-
-    @Test
-    @Throws(IOException::class)
-    fun checkErrorMsg() {
-        val verifyEmailUiModel = VerifyEmailUiModel(true)
-        assertNull(verifyEmailUiModel.errorMsg)
-
-        verifyEmailUiModel.errorMsg = "This is the test."
-        assertNull(verifyEmailUiModel.errorMsg)
-
-        verifyEmailUiModel.isSuccess = false
-        assertEquals(verifyEmailUiModel.errorMsg, "This is the test.")
     }
 }

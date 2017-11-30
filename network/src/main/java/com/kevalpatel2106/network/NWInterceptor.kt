@@ -36,7 +36,7 @@ import java.net.HttpURLConnection
  */
 internal class NWInterceptor(private val context: Context?) : Interceptor {
 
-    val gson = GsonBuilder()
+    private val gson = GsonBuilder()
             .registerTypeAdapter(BaseResponse::class.java, BaseResponseJsonDeserializer())
             .create()
 
@@ -92,9 +92,14 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
                         //Success
                         //Nothing to do. Go ahead.
                         //We consumed the response body once so we need to build it again.
-                        response.newBuilder()
-                                .body(ResponseBody.create(MediaType.parse("application/json"), baseResponse.d))
-                                .build()
+                        return if (baseResponse.d == null)
+                            response.newBuilder()
+                                    .body(ResponseBody.create(MediaType.parse("application/json"), "{}"))
+                                    .build()
+                        else
+                            response.newBuilder()
+                                    .body(ResponseBody.create(MediaType.parse("application/json"), baseResponse.d))
+                                    .build()
                     }
                     baseResponse.status.statusCode == APIStatusCodes.ERROR_CODE_UNAUTHORIZED -> {
                         //You are unauthorized.

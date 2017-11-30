@@ -53,7 +53,7 @@ class IntroActivityTest : BaseTestClass() {
     @Throws(Exception::class)
     fun checkApiRunningStateChange() {
         checkAllButtonsEnable()
-        activity.runOnUiThread { activity.mModel.mIsAuthenticationRunning.value = true }
+        activity.runOnUiThread { activity.mModel.blockUi.value = true }
         checkAllButtonsDisable()
 
         //switch to the landscape

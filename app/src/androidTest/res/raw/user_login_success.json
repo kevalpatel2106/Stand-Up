@@ -3,6 +3,7 @@
     "uid": 5629499534213120,
     "name": "Test user",
     "email": "test@example.com",
+    "isVerified": true,
     "photo": "https://lh4.googleusercontent.com/-q8RGEpH6lEk/AAAAAAAAAAI/AAAAAAAAdXo/3Ddnk6Ck2bA/s96-c/photo.jpg"
   },
   "s": {

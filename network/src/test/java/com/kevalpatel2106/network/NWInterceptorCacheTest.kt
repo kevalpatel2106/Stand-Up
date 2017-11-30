@@ -5,9 +5,8 @@ import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.mockwebserver.MockResponse
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import okhttp3.mockwebserver.MockWebServer
+import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
@@ -22,12 +21,34 @@ import java.net.HttpURLConnection
  * @author []https://github.com/kevalpatel2106]
  */
 @RunWith(JUnit4::class)
-class NWInterceptorTest {
+class NWInterceptorCacheTest {
     private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", File(File("").absolutePath))
+
+    private lateinit var mockWebServer: MockWebServer
+
+    companion object {
+
+        @JvmStatic
+        @BeforeClass
+        fun setUpClass() {
+            ApiProvider.init()
+        }
+
+        @JvmStatic
+        @AfterClass
+        fun tearUpClass() {
+            ApiProvider.close()
+        }
+    }
 
     @Before
     fun setUp() {
-        ApiProvider.init()
+        mockWebServer = MockWebserverUtils.startMockWebServer()
+    }
+
+    @After
+    fun tearUp() {
+        mockWebServer.shutdown()
     }
 
     @Test
@@ -54,7 +75,6 @@ class NWInterceptorTest {
     @Test
     @Throws(IOException::class)
     fun checkNoCacheHeader() {
-        val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
                 .setHeader("Content-Type", "application/json")
@@ -64,7 +84,6 @@ class NWInterceptorTest {
                 .create(TestApiService::class.java)
                 .callBaseWithoutCache()
                 .execute()
-        mockWebServer.shutdown()
 
         Assert.assertTrue(response.isSuccessful)
         Assert.assertNull(response.headers().get("Cache-Control"))
@@ -73,7 +92,6 @@ class NWInterceptorTest {
     @Test
     @Throws(IOException::class)
     fun checkCacheHeader() {
-        val mockWebServer = MockWebserverUtils.startMockWebServer()
         mockWebServer.enqueue(MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_OK)
                 .setHeader("Content-Type", "application/json")
@@ -83,29 +101,9 @@ class NWInterceptorTest {
                 .create(TestApiService::class.java)
                 .callBaseWithCache()
                 .execute()
-        mockWebServer.shutdown()
 
         Assert.assertTrue(response.isSuccessful)
         Assert.assertNotNull(response.headers().get("Cache-Control"))
         Assert.assertEquals(response.headers().get("Cache-Control"), "public, max-age=5000")
-    }
-
-    @Test
-    @Throws(IOException::class)
-    fun checkNoAuthHeader() {
-        val mockWebServer = MockWebserverUtils.startMockWebServer()
-        mockWebServer.enqueue(MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
-
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
-                .create(TestApiService::class.java)
-                .callBaseWithoutAuthHeader()
-                .execute()
-        mockWebServer.shutdown()
-
-        Assert.assertTrue(response.isSuccessful)
-        Assert.assertNull(response.raw().request().headers().get("Authorization"))
     }
 }

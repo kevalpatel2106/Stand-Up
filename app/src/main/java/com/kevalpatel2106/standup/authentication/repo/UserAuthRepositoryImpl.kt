@@ -55,8 +55,6 @@ internal class UserAuthRepositoryImpl : UserAuthRepository {
                 .fetch()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 

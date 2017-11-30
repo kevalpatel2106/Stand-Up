@@ -20,7 +20,7 @@ class ForgotPasswordViewModelTest {
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
 
-    private lateinit var verifyEmailUiModel: ForgotPasswordViewModel
+    private lateinit var forgotPasswordViewModel: ForgotPasswordViewModel
     private var mTestRepoMock = MockUserAuthRepository()
 
     companion object {
@@ -35,42 +35,50 @@ class ForgotPasswordViewModelTest {
         UnitTestUtils.initApp()
 
         //Swap the repo
-        verifyEmailUiModel = ForgotPasswordViewModel(mTestRepoMock)
+        forgotPasswordViewModel = ForgotPasswordViewModel(mTestRepoMock)
     }
 
     @Test
     @Throws(IOException::class)
     fun checkInitialization() {
-        Assert.assertFalse(verifyEmailUiModel.mIsAuthenticationRunning.value!!)
+        Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
     }
 
-    ///////////////// Social Sign Up ////////////////////
     @Test
     @Throws(IOException::class)
-    fun checkResendVerificationEmailSuccess() {
+    fun checkForgotPasswordInvalidEmail() {
+        forgotPasswordViewModel.forgotPasswordRequest("test@example")
+
+        Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
+        Assert.assertEquals(forgotPasswordViewModel.mEmailError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkForgotPasswordSuccess() {
         mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/forgot_password_success.json"))
 
         //Make the api call to the mock server
-        verifyEmailUiModel.forgotPasswordRequest("test@example.com")
+        forgotPasswordViewModel.forgotPasswordRequest("test@example.com")
 
         //There should be success.
-        Assert.assertFalse(verifyEmailUiModel.mIsAuthenticationRunning.value!!)
-        Assert.assertTrue(verifyEmailUiModel.mUiModel.value!!.isSuccess)
-        Assert.assertNull(verifyEmailUiModel.mUiModel.value!!.errorMsg)
+        Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
+        Assert.assertTrue(forgotPasswordViewModel.mUiModel.value!!.isSuccess)
+        Assert.assertNull(forgotPasswordViewModel.errorMessage.value)
     }
 
     @Test
     @Throws(IOException::class)
-    fun checkResendVerificationEmailFieldMissing() {
+    fun checkForgotPasswordFieldMissing() {
         mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         //Make the api call to the mock server
-        verifyEmailUiModel.forgotPasswordRequest("test@example.com")
+        forgotPasswordViewModel.forgotPasswordRequest("test@example.com")
 
         //There should be success.
-        Assert.assertFalse(verifyEmailUiModel.mIsAuthenticationRunning.value!!)
-        Assert.assertFalse(verifyEmailUiModel.mUiModel.value!!.isSuccess)
-        Assert.assertNotNull(verifyEmailUiModel.mUiModel.value!!.errorMsg)
+        Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
+        Assert.assertFalse(forgotPasswordViewModel.mUiModel.value!!.isSuccess)
+        Assert.assertEquals(forgotPasswordViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 
 

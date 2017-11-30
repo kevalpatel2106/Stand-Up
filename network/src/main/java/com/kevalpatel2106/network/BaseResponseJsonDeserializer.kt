@@ -31,7 +31,7 @@ internal class BaseResponseJsonDeserializer : JsonDeserializer<BaseResponse> {
                 baseResponse.status = BaseResponse.Status(APIStatusCodes.ERROR_CODE_UNKNOWN_ERROR)
             }
 
-            if (obj.has("d")) {
+            if (obj.has("d") && !obj.get("d").isJsonNull) {
                 baseResponse.d = obj.get("d").asJsonObject.toString()
             }
             return baseResponse

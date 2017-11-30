@@ -16,6 +16,7 @@
 
 package com.kevalpatel2106.network
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import com.facebook.stetho.okhttp3.StethoInterceptor
@@ -26,6 +27,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 /**
  * Created by Keval Patel on 10/09/17.
  * This class deals with the API and network calls using the RxJava and retrofit.
@@ -39,14 +41,16 @@ object ApiProvider {
      *
      * @see .getOkHttpClientBuilder
      */
+    @VisibleForTesting
     internal lateinit var sOkHttpClient: OkHttpClient
 
-    private val httpClientBuilder = OkHttpClient.Builder()
-            .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
-            .writeTimeout(NetworkConfig.WRITE_TIMEOUT, TimeUnit.MINUTES)
-            .connectTimeout(NetworkConfig.CONNECTION_TIMEOUT, TimeUnit.MINUTES)
+    @VisibleForTesting
+    internal fun getOkHttpClient(context: Context?): OkHttpClient {
+        val httpClientBuilder = OkHttpClient.Builder()
+                .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
+                .writeTimeout(NetworkConfig.WRITE_TIMEOUT, TimeUnit.MINUTES)
+                .connectTimeout(NetworkConfig.CONNECTION_TIMEOUT, TimeUnit.MINUTES)
 
-    init {
         //Add debug interceptors
         if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
@@ -54,6 +58,17 @@ object ApiProvider {
 
             httpClientBuilder.addInterceptor(StethoInterceptor())
                     .addInterceptor(loggingInterceptor)
+        }
+
+        return if (context == null) {
+            httpClientBuilder
+                    .addInterceptor(NWInterceptor(null))  /* Add the interceptor. */
+                    .build()
+        } else {
+            httpClientBuilder
+                    .cache(NWInterceptor.getCache(context)) /* Add caching */
+                    .addInterceptor(NWInterceptor(context))  /* Add the interceptor. */
+                    .build()
         }
     }
 
@@ -69,12 +84,10 @@ object ApiProvider {
      *
      * @param context Application Context.
      */
+    @SuppressLint("VisibleForTests")
     @JvmStatic
     fun init(context: Context) {
-        sOkHttpClient = httpClientBuilder
-                .cache(NWInterceptor.getCache(context)) /* Add caching */
-                .addInterceptor(NWInterceptor(context))  /* Add the interceptor. */
-                .build()
+        sOkHttpClient = getOkHttpClient(context)
     }
 
     /**
@@ -83,9 +96,12 @@ object ApiProvider {
     @VisibleForTesting
     @JvmStatic
     fun init() {
-        sOkHttpClient = httpClientBuilder
-                .addInterceptor(NWInterceptor(null))  /* Add the interceptor. */
-                .build()
+        sOkHttpClient = getOkHttpClient(null)
+    }
+
+    @VisibleForTesting
+    internal fun close() {
+        init()
     }
 
     /**

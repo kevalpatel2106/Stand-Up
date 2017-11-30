@@ -86,8 +86,7 @@ class FacebookHelper(private val listener: FacebookResponse,
      */
     @Throws(JSONException::class)
     internal fun parseResponse(`object`: JSONObject): FacebookUser {
-        val user = FacebookUser(facebookID = `object`.getString("id"), response = `object`)
-
+        val user = FacebookUser(facebookID = `object`.getString("id"))
         if (`object`.has("email")) user.email = `object`.getString("email")
         if (`object`.has("name")) user.name = `object`.getString("name")
         if (`object`.has("gender"))

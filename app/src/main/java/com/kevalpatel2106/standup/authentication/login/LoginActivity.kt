@@ -24,12 +24,11 @@ import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthResponse
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.googleauth.GoogleSignInHelper
-import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
-import com.kevalpatel2106.utils.Validator
+import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_login.*
@@ -72,18 +71,38 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
 
     @VisibleForTesting
     internal lateinit var mModel: LoginViewModel
+
     private lateinit var mGoogleSignInHelper: GoogleSignInHelper
     private lateinit var mFacebookSignInHelper: FacebookHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+
         mModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        mModel.mIsAuthenticationRunning.observe(this@LoginActivity, Observer<Boolean> {
+
+        //Observer the api call changes
+        mModel.blockUi.observe(this@LoginActivity, Observer<Boolean> {
             btn_login_fb_signin.isEnabled = !it!!
             btn_login_google_signin.isEnabled = !it
             btn_login.isEnabled = !it
         })
 
+        //Observe error messages
+        mModel.errorMessage.observe(this@LoginActivity, Observer {
+            it!!.getMessage(this@LoginActivity)?.let { showSnack(it) }
+        })
+        mModel.mEmailError.observe(this@LoginActivity, Observer {
+            login_email_et.error = it!!.getMessage(this@LoginActivity)
+        })
+        mModel.mPasswordError.observe(this@LoginActivity, Observer {
+            login_password_et.error = it!!.getMessage(this@LoginActivity)
+        })
+        mModel.mNameError.observe(this@LoginActivity, Observer {
+            login_name_et.error = it!!.getMessage(this@LoginActivity)
+        })
+
+        //Observer the api responses.
         mModel.mLoginUiModel.observe(this@LoginActivity, Observer<LoginUiModel> {
             it?.let {
                 if (it.isSuccess) {
@@ -98,13 +117,9 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                         Dashboard.launch(this@LoginActivity)
                     }
                     finish()
-                } else it.errorMsg?.let {
-                    showSnack(it)
                 }
             }
         })
-
-        setContentView(R.layout.activity_login)
 
         //Initialize helpers
         mGoogleSignInHelper = GoogleSignInHelper(this, getString(R.string.server_client_id), this)
@@ -260,39 +275,15 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
     fun submitData() {
         ViewUtils.hideKeyboard(login_email_et)
 
-        //validate the email
-        if (Validator.isValidEmail(login_email_et.getTrimmedText())) {
-
-            //validate password
-            if (Validator.isValidPassword(login_password_et.getTrimmedText())) {
-
-                if (isSignUp) {
-                    //Validate confirm password.
-                    if (login_password_et.getTrimmedText() == login_confirm_password_et.getTrimmedText()) {
-
-                        //Validate the user name
-                        if (Validator.isValidName(login_name_et.getTrimmedText())) {
-
-                            //Perform user sign up.
-                            mModel.performSignUp(login_email_et.getTrimmedText(),
-                                    login_password_et.getTrimmedText(),
-                                    login_name_et.getTrimmedText())
-                        } else {
-                            login_name_et.error = getString(R.string.error_login_invalid_name)
-                        }
-                    } else {
-                        login_confirm_password_et.error = getString(R.string.login_error_password_did_not_match)
-                    }
-                } else {
-                    //Perform the sign in  action.
-                    mModel.performSignIn(login_email_et.getTrimmedText(), login_password_et.getTrimmedText())
-                }
-            } else {
-                login_password_et.error = getString(R.string.error_login_invalid_password)
-            }
-
+        if (isSignUp) {
+            //Perform user sign up.
+            mModel.performSignUp(login_email_et.getTrimmedText(),
+                    login_password_et.getTrimmedText(),
+                    login_name_et.getTrimmedText(),
+                    login_confirm_password_et.getTrimmedText())
         } else {
-            login_email_et.error = getString(R.string.error_login_invalid_email)
+            //Perform the sign in  action.
+            mModel.performSignIn(login_email_et.getTrimmedText(), login_password_et.getTrimmedText())
         }
     }
 
@@ -527,32 +518,18 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 .start()
     }
 
-    override fun onGoogleAuthSignIn(user: GoogleAuthUser) =
-            if (user.email.isEmpty() || user.name.isEmpty()) {
-                showSnack(getString(R.string.error_google_login_email_not_found))
-            } else {
-                //Perform the authentication
-                mModel.authenticateSocialUser(user)
-            }
+    override fun onGoogleAuthSignIn(user: GoogleAuthUser) = mModel.authenticateSocialUser(user)
 
-    override fun onGoogleAuthSignInFailed() {
-        showSnack(getString(R.string.error_google_signin_fail),
-                getString(R.string.error_retry_try_again),
-                View.OnClickListener { googleSignIn() })
-    }
+    override fun onGoogleAuthSignInFailed() = showSnack(getString(R.string.error_google_signin_fail),
+            getString(R.string.error_retry_try_again), View.OnClickListener { googleSignIn() })
 
-    override fun onGoogleAuthSignOut(isSuccess: Boolean) {
-        throw IllegalStateException("This method should never call.")
-    }
+    override fun onGoogleAuthSignOut(isSuccess: Boolean) = throw IllegalStateException("This method should never call.")
 
     /**
      * This callback will be available when facebook sign in call fails.
      */
-    override fun onFbSignInFail() {
-        showSnack(getString(R.string.error_facebook_signin_fail),
-                getString(R.string.error_retry_try_again),
-                View.OnClickListener { facebookSignIn() })
-    }
+    override fun onFbSignInFail() = showSnack(getString(R.string.error_facebook_signin_fail),
+            getString(R.string.error_retry_try_again), View.OnClickListener { facebookSignIn() })
 
     /**
      * This method will be called whenever [FacebookHelper], authenticate and get the profile
@@ -560,19 +537,11 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      *
      * @param facebookUser [FacebookUser].
      */
-    override fun onFbProfileReceived(facebookUser: FacebookUser) =
-            if (facebookUser.email.isNullOrEmpty() || facebookUser.name.isNullOrEmpty()) {
-                showSnack(getString(R.string.error_fb_login_email_not_found))
-            } else {
-                //Perform the authentication
-                mModel.authenticateSocialUser(facebookUser)
-            }
+    override fun onFbProfileReceived(facebookUser: FacebookUser) = mModel.authenticateSocialUser(facebookUser)
 
     /**
      * This callback will be available whenever facebook sign out call completes. No matter success of
      * failure.
      */
-    override fun onFBSignOut() {
-        throw IllegalStateException("This method should never call.")
-    }
+    override fun onFBSignOut() = throw IllegalStateException("This method should never call.")
 }

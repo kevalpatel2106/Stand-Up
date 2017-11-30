@@ -1,18 +1,12 @@
 package com.kevalpatel2106.facebookauth
 
-import org.json.JSONObject
-
 /**
  * Created by multidots on 6/16/2016.
  * This class represents facebook user profile.
  *
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
-data class FacebookUser(val facebookID: String,
-                        /**
-                         * JSON response received. If you want to parse more fields.
-                         */
-                        val response: JSONObject) {
+data class FacebookUser(val facebookID: String) {
 
     var name: String? = null
     var email: String? = null

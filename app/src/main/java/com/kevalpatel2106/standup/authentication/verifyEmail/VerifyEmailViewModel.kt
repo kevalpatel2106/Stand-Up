@@ -1,19 +1,15 @@
 package com.kevalpatel2106.standup.authentication.verifyEmail
 
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.support.annotation.VisibleForTesting
+import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.authentication.repo.ResendVerificationRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
-import io.reactivex.disposables.CompositeDisposable
 
 @com.kevalpatel2106.base.annotations.ViewModel(VerifyEmailActivity::class)
-internal class VerifyEmailViewModel : ViewModel {
-    /**
-     * [CompositeDisposable] to hold all the disposables from Rx and repository.
-     */
-    private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
+internal class VerifyEmailViewModel : BaseViewModel {
 
     /**
      * Repository to provide user authentications.
@@ -29,13 +25,6 @@ internal class VerifyEmailViewModel : ViewModel {
     internal val mUiModel = MutableLiveData<VerifyEmailUiModel>()
 
     /**
-     * Boolean to change the value when authentication API call starts/ends. So that UI can change
-     * or enable/disable views.
-     */
-    @VisibleForTesting
-    internal val mIsAuthenticationRunning: MutableLiveData<Boolean> = MutableLiveData()
-
-    /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
      *
      * @param userAuthRepo Add your own [UserAuthRepository].
@@ -44,10 +33,6 @@ internal class VerifyEmailViewModel : ViewModel {
     @VisibleForTesting
     constructor(userAuthRepo: UserAuthRepository) : super() {
         mUserAuthRepo = userAuthRepo
-    }
-
-    init {
-        mIsAuthenticationRunning.value = false
     }
 
     /**
@@ -59,28 +44,19 @@ internal class VerifyEmailViewModel : ViewModel {
         mUserAuthRepo = UserAuthRepositoryImpl()
     }
 
-
-    override fun onCleared() {
-        super.onCleared()
-
-        //Delete all the API connections.
-        mCompositeDisposable.dispose()
-    }
-
     fun resendEmail(userId: Long) {
-        mIsAuthenticationRunning.value = true
         mUserAuthRepo.resendVerifyEmail(ResendVerificationRequest(userId))
+                .doOnSubscribe({
+                    blockUi.postValue(true)
+                })
+                .doAfterTerminate({
+                    blockUi.value = false
+                })
                 .subscribe({
-                    mIsAuthenticationRunning.value = false
-
-                    val model = VerifyEmailUiModel(true)
-                    mUiModel.value = model
-                }, { t ->
-                    mIsAuthenticationRunning.value = false
-
-                    val model = VerifyEmailUiModel(false)
-                    model.errorMsg = t.message
-                    mUiModel.value = model
+                    mUiModel.value = VerifyEmailUiModel(true)
+                }, {
+                    mUiModel.value = VerifyEmailUiModel(false)
+                    errorMessage.value = ErrorMessage(it.message)
                 })
     }
 }

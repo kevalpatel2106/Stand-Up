@@ -3,12 +3,14 @@ package com.kevalpatel2106.standup.authentication.forgotPwd
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.annotations.ViewModel
+import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.base.arch.SingleLiveEvent
+import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.ForgotPasswordRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import com.kevalpatel2106.utils.Validator
 
 /**
  * Created by Kevalpatel2106 on 23-Nov-17.
@@ -16,13 +18,7 @@ import io.reactivex.schedulers.Schedulers
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(ForgotPasswordActivity::class)
-class ForgotPasswordViewModel : android.arch.lifecycle.ViewModel {
-
-    /**
-     * [CompositeDisposable] to hold all the disposables from Rx and repository.
-     */
-    private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
-
+class ForgotPasswordViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */
@@ -37,13 +33,6 @@ class ForgotPasswordViewModel : android.arch.lifecycle.ViewModel {
     internal val mUiModel = MutableLiveData<ForgotPasswordUiModel>()
 
     /**
-     * Boolean to change the value when authentication API call starts/ends. So that UI can change
-     * or enable/disable views.
-     */
-    @VisibleForTesting
-    internal val mIsAuthenticationRunning: MutableLiveData<Boolean> = MutableLiveData()
-
-    /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
      *
      * @param userAuthRepo Add your own [UserAuthRepository].
@@ -52,10 +41,6 @@ class ForgotPasswordViewModel : android.arch.lifecycle.ViewModel {
     @VisibleForTesting
     constructor(userAuthRepo: UserAuthRepository) : super() {
         mUserAuthRepo = userAuthRepo
-    }
-
-    init {
-        mIsAuthenticationRunning.value = false
     }
 
     /**
@@ -67,30 +52,25 @@ class ForgotPasswordViewModel : android.arch.lifecycle.ViewModel {
         mUserAuthRepo = UserAuthRepositoryImpl()
     }
 
-
-    override fun onCleared() {
-        super.onCleared()
-
-        //Delete all the API connections.
-        mCompositeDisposable.dispose()
-    }
+    internal val mEmailError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
 
     fun forgotPasswordRequest(email: String) {
-        mIsAuthenticationRunning.value = true
-        mUserAuthRepo.forgotPassword(ForgotPasswordRequest(email))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    mIsAuthenticationRunning.value = false
-
-                    val model = ForgotPasswordUiModel(true)
-                    mUiModel.value = model
-                }, { t ->
-                    mIsAuthenticationRunning.value = false
-
-                    val model = ForgotPasswordUiModel(false)
-                    model.errorMsg = t.message
-                    mUiModel.value = model
-                })
+        if (Validator.isValidEmail(email)) {
+            addDisposable(mUserAuthRepo.forgotPassword(ForgotPasswordRequest(email))
+                    .doOnSubscribe({
+                        blockUi.postValue(true)
+                    })
+                    .doAfterTerminate({
+                        blockUi.value = false
+                    })
+                    .subscribe({
+                        mUiModel.value = ForgotPasswordUiModel(true)
+                    }, { t ->
+                        mUiModel.value = ForgotPasswordUiModel(false)
+                        errorMessage.value = ErrorMessage(t.message)
+                    }))
+        } else {
+            mEmailError.value = ErrorMessage(R.string.error_login_invalid_email)
+        }
     }
 }

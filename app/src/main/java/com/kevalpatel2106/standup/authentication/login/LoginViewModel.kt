@@ -4,14 +4,18 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.annotations.ViewModel
+import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.base.arch.SingleLiveEvent
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
+import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.LoginRequest
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.utils.UserSessionManager
-import io.reactivex.disposables.CompositeDisposable
+import com.kevalpatel2106.utils.Validator
 
 /**
  * Created by Keval on 19/11/17.
@@ -21,7 +25,7 @@ import io.reactivex.disposables.CompositeDisposable
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(LoginActivity::class)
-internal class LoginViewModel : android.arch.lifecycle.ViewModel {
+internal class LoginViewModel : BaseViewModel {
 
     /**
      * Repository to provide user authentications.
@@ -50,32 +54,16 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
     }
 
     /**
-     * [CompositeDisposable] to hold all the disposables from Rx and repository.
-     */
-    private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
-
-    /**
-     * Boolean to change the value when authentication API call starts/ends. So that UI can change
-     * or enable/disable views.
-     */
-    internal val mIsAuthenticationRunning: MutableLiveData<Boolean> = MutableLiveData()
-
-    /**
      * [LoginUiModel] to hold the response form the user authentication. UI element can
      * observe this [MutableLiveData] to change the state when user authentication succeed or fails.
      */
     internal val mLoginUiModel: MutableLiveData<LoginUiModel> = MutableLiveData()
 
-    init {
-        mIsAuthenticationRunning.value = false
-    }
+    internal val mEmailError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
 
-    override fun onCleared() {
-        super.onCleared()
+    internal val mPasswordError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
 
-        //Delete all the API connections.
-        mCompositeDisposable.dispose()
-    }
+    internal val mNameError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
 
     /**
      * Authenticate new user while sign up.
@@ -84,33 +72,55 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
      * @param password Password fo the user to send.
      * @param name Name of the user.
      */
-    fun performSignUp(email: String, password: String, name: String) {
-        mIsAuthenticationRunning.value = true
-        mUserAuthRepo.signUp(SignUpRequest(email, name, password, null))
-                .subscribe({ data ->
-                    data?.let {
-                        //Save into the user session
-                        UserSessionManager.setNewSession(userId = data.uid,
-                                displayName = name,
-                                token = null,
-                                email = email,
-                                photoUrl = data.photoUrl,
-                                isVerified = it.isVerified)
+    fun performSignUp(email: String, password: String, name: String, confirmPassword: String) {
+        //validate the email
+        if (Validator.isValidEmail(email)) {
 
-                        val loginUiModel = LoginUiModel(true)
-                        loginUiModel.isNewUser = data.isNewUser
-                        loginUiModel.isVerify = data.isVerified
-                        mLoginUiModel.value = loginUiModel
+            //validate password
+            if (Validator.isValidPassword(password)) {
+
+                //Validate the user name
+                if (Validator.isValidName(name)) {
+
+                    //Validate confirm password.
+                    if (password == confirmPassword) {
+
+                        mUserAuthRepo.signUp(SignUpRequest(email, name, password, null))
+                                .doOnSubscribe({
+                                    blockUi.postValue(true)
+                                })
+                                .doAfterTerminate({
+                                    blockUi.value = false
+                                })
+                                .subscribe({
+                                    //Save into the user session
+                                    UserSessionManager.setNewSession(userId = it.uid,
+                                            displayName = name,
+                                            token = null,
+                                            email = email,
+                                            photoUrl = it.photoUrl,
+                                            isVerified = it.isVerified)
+
+                                    val loginUiModel = LoginUiModel(true)
+                                    loginUiModel.isNewUser = it.isNewUser
+                                    loginUiModel.isVerify = it.isVerified
+                                    mLoginUiModel.value = loginUiModel
+                                }, {
+                                    mLoginUiModel.value = LoginUiModel(false)
+                                    errorMessage.value = ErrorMessage(it.message)
+                                })
+                    } else {
+                        mPasswordError.value = ErrorMessage(R.string.login_error_password_did_not_match)
                     }
-
-                    mIsAuthenticationRunning.value = false
-                }, { t ->
-                    val loginUiModel = LoginUiModel(false)
-                    loginUiModel.errorMsg = t.message
-                    mLoginUiModel.value = loginUiModel
-
-                    mIsAuthenticationRunning.value = false
-                })
+                } else {
+                    mNameError.value = ErrorMessage(R.string.error_login_invalid_name)
+                }
+            } else {
+                mPasswordError.value = ErrorMessage(R.string.error_login_invalid_password)
+            }
+        } else {
+            mEmailError.value = ErrorMessage(R.string.error_login_invalid_email)
+        }
     }
 
     /**
@@ -120,44 +130,67 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
      * @param password Password fo the user to send.
      */
     fun performSignIn(email: String, password: String) {
-        mIsAuthenticationRunning.value = true
-        mUserAuthRepo.login(LoginRequest(email, password))
-                .subscribe({ data ->
-                    data?.let {
-                        //Save into the user session
-                        UserSessionManager.setNewSession(userId = data.uid,
-                                displayName = data.name,
-                                token = null,
-                                email = data.email,
-                                photoUrl = data.photoUrl,
-                                isVerified = it.isVerified)
+        //validate the email
+        if (Validator.isValidEmail(email)) {
 
-                        val loginUiModel = LoginUiModel(true)
-                        mLoginUiModel.value = loginUiModel
-                    }
+            //validate password
+            if (Validator.isValidPassword(password)) {
 
-                    mIsAuthenticationRunning.value = false
-                }, {
-                    val loginUiModel = LoginUiModel(false)
-                    loginUiModel.errorMsg = it.message
-                    mLoginUiModel.value = loginUiModel
+                mUserAuthRepo.login(LoginRequest(email, password))
+                        .doOnSubscribe({
+                            blockUi.postValue(true)
+                        })
+                        .doAfterTerminate({
+                            blockUi.value = false
+                        })
+                        .subscribe({
+                            //Save into the user session
+                            UserSessionManager.setNewSession(userId = it.uid,
+                                    displayName = it.name,
+                                    token = null,
+                                    email = it.email,
+                                    photoUrl = it.photoUrl,
+                                    isVerified = it.isVerified)
 
-                    mIsAuthenticationRunning.value = false
-                })
+                            val loginUiModel = LoginUiModel(true)
+                            loginUiModel.isNewUser = false
+                            loginUiModel.isVerify = it.isVerified
+                            mLoginUiModel.value = loginUiModel
+                        }, {
+                            mLoginUiModel.value = LoginUiModel(false)
+                            errorMessage.value = ErrorMessage(it.message)
+                        })
+            } else {
+                mPasswordError.value = ErrorMessage(R.string.error_login_invalid_password)
+            }
+        } else {
+            mEmailError.value = ErrorMessage(R.string.error_login_invalid_email)
+        }
     }
-
 
     /**
      * Start the authentication flow for the user signed in using facebook.
      */
     @SuppressLint("VisibleForTests")
-    fun authenticateSocialUser(fbUser: FacebookUser) = authenticateSocialUser(SignUpRequest(fbUser = fbUser))
+    fun authenticateSocialUser(fbUser: FacebookUser) {
+        if (fbUser.email.isNullOrEmpty() || fbUser.name.isNullOrEmpty()) {
+            errorMessage.value = ErrorMessage(R.string.error_fb_login_email_not_found)
+        } else {
+            authenticateSocialUser(SignUpRequest(fbUser = fbUser))
+        }
+    }
 
     /**
      * Start the authentication flow for the user signed in using google.
      */
     @SuppressLint("VisibleForTests")
-    fun authenticateSocialUser(googleUser: GoogleAuthUser) = authenticateSocialUser(SignUpRequest(googleUser = googleUser))
+    fun authenticateSocialUser(googleUser: GoogleAuthUser) {
+        if (googleUser.email.isEmpty() || googleUser.name.isEmpty()) {
+            errorMessage.value = ErrorMessage(R.string.error_google_login_email_not_found)
+        } else {
+            authenticateSocialUser(SignUpRequest(googleUser = googleUser))
+        }
+    }
 
     /**
      * Authenticate user with google or facebook login.
@@ -166,31 +199,28 @@ internal class LoginViewModel : android.arch.lifecycle.ViewModel {
      */
     @VisibleForTesting
     fun authenticateSocialUser(requestData: SignUpRequest) {
-        mIsAuthenticationRunning.value = true
-
         mUserAuthRepo.socialSignUp(requestData)
-                .subscribe({ data ->
-                    data?.let {
-                        //Save into the user session
-                        UserSessionManager.setNewSession(userId = data.uid,
-                                displayName = requestData.displayName,
-                                token = null,
-                                email = requestData.email,
-                                photoUrl = data.photoUrl,
-                                isVerified = it.isVerified)
+                .doOnSubscribe({
+                    blockUi.postValue(true)
+                })
+                .doAfterTerminate({
+                    blockUi.value = false
+                })
+                .subscribe({
+                    //Save into the user session
+                    UserSessionManager.setNewSession(userId = it.uid,
+                            displayName = requestData.displayName,
+                            token = null,
+                            email = requestData.email,
+                            photoUrl = it.photoUrl,
+                            isVerified = it.isVerified)
 
-                        val loginUiModel = LoginUiModel(true)
-                        loginUiModel.isNewUser = data.isNewUser
-                        mLoginUiModel.value = loginUiModel
-                    }
-
-                    mIsAuthenticationRunning.value = false
-                }, { t ->
-                    val loginUiModel = LoginUiModel(false)
-                    loginUiModel.errorMsg = t.message
+                    val loginUiModel = LoginUiModel(true)
+                    loginUiModel.isNewUser = it.isNewUser
                     mLoginUiModel.value = loginUiModel
-
-                    mIsAuthenticationRunning.value = false
+                }, {
+                    mLoginUiModel.value = LoginUiModel(false)
+                    errorMessage.value = ErrorMessage(it.message)
                 })
     }
 }

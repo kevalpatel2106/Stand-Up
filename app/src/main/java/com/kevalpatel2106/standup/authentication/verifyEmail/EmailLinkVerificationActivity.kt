@@ -26,8 +26,9 @@ import kotlinx.android.synthetic.main.activity_email_link_verification.*
 @UIController
 class EmailLinkVerificationActivity : BaseActivity() {
     companion object {
+
         @VisibleForTesting
-        const val ARG_URL = "arg_url"
+        private const val ARG_URL = "arg_url"
 
         /**
          * Launch the [EmailLinkVerificationActivity].
@@ -86,6 +87,7 @@ class EmailLinkVerificationActivity : BaseActivity() {
                             .scaleY(1.2f)
                             .start()
 
+                    //Go to the email link activity
                     Handler().postDelayed({
                         IntroActivity.launch(this@EmailLinkVerificationActivity, true)
                     }, 3000)
@@ -104,6 +106,8 @@ class EmailLinkVerificationActivity : BaseActivity() {
                             .scaleX(1.2f)
                             .scaleY(1.2f)
                             .start()
+
+                    //Go to the email link activity
                     Handler().postDelayed({
                         IntroActivity.launch(this@EmailLinkVerificationActivity, true)
                     }, 3000)

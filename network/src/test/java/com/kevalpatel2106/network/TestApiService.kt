@@ -12,15 +12,22 @@ import retrofit2.http.Headers
 internal interface TestApiService {
 
     @GET("test")
-    fun callBase(): Call<UnitTestData>
+    fun callBase(): Call<TestData>
 
     @GET("test")
-    fun callBaseWithoutAuthHeader(): Call<UnitTestData>
+    fun callBaseString(): Call<String>
+
+    @Headers("Add-Auth: true")
+    @GET("test")
+    fun callBaseWithAuthHeader(): Call<TestData>
 
     @GET("test")
-    fun callBaseWithoutCache(): Call<UnitTestData>
+    fun callBaseWithoutAuthHeader(): Call<TestData>
+
+    @GET("test")
+    fun callBaseWithoutCache(): Call<TestData>
 
     @Headers("Cache-Time: 5000")
     @GET("test")
-    fun callBaseWithCache(): Call<UnitTestData>
+    fun callBaseWithCache(): Call<TestData>
 }

@@ -13,12 +13,6 @@ import com.kevalpatel2106.base.annotations.Model
 internal data class LoginUiModel(var isSuccess: Boolean) {
 
     /**
-     * Error message received from the server if [isSuccess] is false else it will be null.
-     */
-    var errorMsg: String? = null
-        get() = if (isSuccess) null else field
-
-    /**
      * Boolean to indicate weather the user is new user/signed up.
      */
     var isNewUser: Boolean = false

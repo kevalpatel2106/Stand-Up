@@ -1,6 +1,7 @@
 package com.kevalpatel2106.standup.authentication.login
 
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -22,19 +23,6 @@ class LoginUiModelTest {
 
         loginUiModel.isSuccess = false
         assertFalse(loginUiModel.isSuccess)
-    }
-
-    @Test
-    @Throws(IOException::class)
-    fun checkErrorMsg() {
-        val loginUiModel = LoginUiModel(true)
-        assertNull(loginUiModel.errorMsg)
-
-        loginUiModel.errorMsg = "This is the test."
-        assertNull(loginUiModel.errorMsg)
-
-        loginUiModel.isSuccess = false
-        assertEquals(loginUiModel.errorMsg, "This is the test.")
     }
 
     @Test

@@ -9,7 +9,6 @@ import android.support.annotation.VisibleForTesting
 import butterknife.OnClick
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.utils.Validator
 import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_forgot_password.*
@@ -37,17 +36,27 @@ class ForgotPasswordActivity : BaseActivity() {
         setContentView(R.layout.activity_forgot_password)
 
         //Observer the api call changes
-        mModel.mIsAuthenticationRunning.observe(this@ForgotPasswordActivity, Observer<Boolean> {
+        mModel.blockUi.observe(this@ForgotPasswordActivity, Observer<Boolean> {
             forgot_password_submit_btn.isEnabled = !it!!
         })
-        forgot_password_submit_btn.isEnabled = !mModel.mIsAuthenticationRunning.value!!
+        forgot_password_submit_btn.isEnabled = !mModel.blockUi.value!!
+
+        //Observe error messages
+        mModel.errorMessage.observe(this@ForgotPasswordActivity, Observer {
+            it!!.getMessage(this@ForgotPasswordActivity)?.let { showSnack(it) }
+        })
+
+        //Set email error
+        mModel.mEmailError.observe(this@ForgotPasswordActivity, Observer {
+            forgot_password_email_et.error = it!!.getMessage(this@ForgotPasswordActivity)
+        })
 
         //Observer the api responses.
         mModel.mUiModel.observe(this@ForgotPasswordActivity, Observer<ForgotPasswordUiModel> {
-            if (it!!.isSuccess) {
-                finish()
-            } else {
-                showSnack(it.errorMsg!!)
+            it?.let {
+                if (it.isSuccess) {
+                    finish()
+                }
             }
         })
         setToolbar(R.id.include, getString(R.string.title_activity_forgot_password), true)
@@ -56,12 +65,6 @@ class ForgotPasswordActivity : BaseActivity() {
     @OnClick(R.id.forgot_password_submit_btn)
     fun submit() {
         ViewUtils.hideKeyboard(forgot_password_email_et)
-
-        val email = forgot_password_email_et.getTrimmedText()
-        if (Validator.isValidEmail(email)) {
-            mModel.forgotPasswordRequest(email)
-        } else {
-            forgot_password_email_et.error = getString(R.string.error_login_invalid_email)
-        }
+        mModel.forgotPasswordRequest(forgot_password_email_et.getTrimmedText())
     }
 }
