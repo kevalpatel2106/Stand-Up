@@ -7,10 +7,10 @@ import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.base.arch.SingleLiveEvent
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.Validator
 import com.kevalpatel2106.standup.authentication.repo.ForgotPasswordRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
-import com.kevalpatel2106.utils.Validator
 
 /**
  * Created by Kevalpatel2106 on 23-Nov-17.

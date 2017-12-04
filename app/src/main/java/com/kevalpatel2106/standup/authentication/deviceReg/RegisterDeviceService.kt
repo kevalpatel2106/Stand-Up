@@ -31,6 +31,7 @@ import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
+import com.kevalpatel2106.standup.notification.NotificationChannel
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
@@ -46,6 +47,8 @@ import timber.log.Timber
  */
 
 class RegisterDeviceService : Service() {
+    private val FOREGROUND_NOTIFICATION_ID = 7823
+
     companion object {
         private val ARG_STOP_SERVICE = "arg_stop_service"
 
@@ -120,13 +123,23 @@ class RegisterDeviceService : Service() {
     @Suppress("DEPRECATION")
     private fun makeForeground() {
         val notification = Notification.Builder(this)
-                .setContentTitle(getString(R.string.app_name))
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
+                .setContentTitle(getString(R.string.application_name))
+                .setSmallIcon(R.drawable.ic_stat_test) //TODO Add small notification icon.
                 .setContentText(getString(R.string.register_device_service_notification_message))
-                .setSmallIcon(R.mipmap.ic_launcher) //TODO Add small notification icon.
+                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher))
+                .setAutoCancel(false)
+                .setTicker(getString(R.string.register_device_service_notification_message))
                 .setPriority(Notification.PRIORITY_LOW)
-                .build()
-        startForeground(234, notification)
+                .setStyle(Notification.BigTextStyle()
+                        .setBigContentTitle(getString(R.string.application_name))
+                        .bigText(getString(R.string.register_device_service_notification_message)))
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notification.setChannelId(NotificationChannel.SYNC_NOTIFICATION_CHANNEL)
+        }
+
+        startForeground(FOREGROUND_NOTIFICATION_ID, notification.build())
     }
 
     /**

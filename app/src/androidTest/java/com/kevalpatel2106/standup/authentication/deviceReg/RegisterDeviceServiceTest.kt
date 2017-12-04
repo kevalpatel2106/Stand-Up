@@ -36,7 +36,6 @@ class RegisterDeviceServiceTest : BaseTestClass() {
         mRegisterDeviceService.mUserAuthRepository = mMockUserAuthRepository
     }
 
-
     @After
     fun tearUp() {
         mMockUserAuthRepository.close()

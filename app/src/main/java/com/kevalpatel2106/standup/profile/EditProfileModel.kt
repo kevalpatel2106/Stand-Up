@@ -1,13 +1,17 @@
 package com.kevalpatel2106.standup.profile
 
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import android.support.annotation.VisibleForTesting
+import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.Validator
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
+import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepo
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepoImpl
-import io.reactivex.disposables.CompositeDisposable
+import com.kevalpatel2106.utils.UserSessionManager
 
 /**
  * Created by Keval on 29/11/17.
@@ -15,23 +19,22 @@ import io.reactivex.disposables.CompositeDisposable
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @com.kevalpatel2106.base.annotations.ViewModel(EditProfileActivity::class)
-class EditProfileModel : ViewModel {
-
+class EditProfileModel : BaseViewModel {
 
     /**
      * Repository to provide user authentications.
      */
-    private val mUserAuthRepo: UserProfileRepo
+    private val mUserProfileRepo: UserProfileRepo
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
      *
-     * @param userAuthRepo Add your own [UserAuthRepository].
+     * @param userProfileRepo Add your own [UserAuthRepository].
      */
     @Suppress("unused")
     @VisibleForTesting
-    constructor(userAuthRepo: UserProfileRepo) : super() {
-        mUserAuthRepo = userAuthRepo
+    constructor(userProfileRepo: UserProfileRepo) : super() {
+        mUserProfileRepo = userProfileRepo
     }
 
     /**
@@ -40,18 +43,8 @@ class EditProfileModel : ViewModel {
     @Suppress("unused")
     constructor() : super() {
         //This is the original user authentication repo.
-        mUserAuthRepo = UserProfileRepoImpl()
+        mUserProfileRepo = UserProfileRepoImpl()
     }
-
-    /**
-     * [CompositeDisposable] to hold all the disposables from Rx and repository.
-     */
-    private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
-
-    /**
-     * Boolean to change the value when API call starts/ends. So that UI can change or enable/disable views.
-     */
-    internal val mIsApiRunning: MutableLiveData<Boolean> = MutableLiveData()
 
     /**
      * Current user profile information.
@@ -61,20 +54,58 @@ class EditProfileModel : ViewModel {
     /**
      * Status of the save profile request.
      */
-    internal val mProfileUpdateStatus: MutableLiveData<GetProfileResponse> = MutableLiveData()
+    internal val mProfileUpdateStatus: MutableLiveData<SaveProfileResponse> = MutableLiveData()
 
-    init {
-        mIsApiRunning.value = false
-    }
+    internal val isLoadingProfile: MutableLiveData<Boolean> = MutableLiveData()
+
+    internal val isSavingProfile: MutableLiveData<Boolean> = MutableLiveData()
 
     internal fun loadMyProfile() {
-        //TODO Call the repo and load the current user profile.
+        mUserProfileRepo.getUserProfile(UserSessionManager.userId)
+                .doOnSubscribe({
+                    isLoadingProfile.postValue(true)
+                })
+                .doAfterTerminate({
+                    isLoadingProfile.value = false
+                })
+                .subscribe({
+                    mUserProfile.value = it
+                }, {
+                    errorMessage.value = ErrorMessage(it.message)
+                })
     }
 
-    override fun onCleared() {
-        super.onCleared()
+    internal fun saveMyProfile(name: String,
+                               photo: String?,
+                               height: Float,
+                               weight: Float,
+                               isMale: Boolean) {
+        if (Validator.isValidName(name)) {
+            errorMessage.value = ErrorMessage(R.string.error_login_invalid_email)
+            return
+        }
 
-        //Delete all the API connections.
-        mCompositeDisposable.dispose()
+        if (Validator.isValidHeight(height)) {
+            errorMessage.value = ErrorMessage(R.string.error_invalid_height)
+            return
+        }
+
+        if (Validator.isValidWeight(weight)) {
+            errorMessage.value = ErrorMessage(R.string.error_invalid_weight)
+            return
+        }
+
+        mUserProfileRepo.saveUserProfile(name, photo, height, weight, isMale)
+                .doOnSubscribe({
+                    isSavingProfile.postValue(true)
+                })
+                .doAfterTerminate({
+                    isSavingProfile.value = false
+                })
+                .subscribe({
+                    mProfileUpdateStatus.value = it
+                }, {
+                    errorMessage.value = ErrorMessage(it.message)
+                })
     }
 }

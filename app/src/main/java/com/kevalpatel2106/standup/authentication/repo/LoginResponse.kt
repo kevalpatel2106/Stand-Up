@@ -26,28 +26,24 @@ import com.kevalpatel2106.base.annotations.Model
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Model
-data class SignUpResponseData(
+data class LoginResponse(
         @SerializedName("uid")
         @Expose
         val uid: Long,
 
-        @SerializedName("isNewUser")
-        @Expose
-        val isNewUser: Boolean = false,
-
-        @SerializedName("isVerified")
-        @Expose
-        val isVerified: Boolean = false,
-
-        @SerializedName("photo")
-        @Expose
-        val photoUrl: String? = null,
-
         @SerializedName("name")
         @Expose
-        val name: String,
+        var name: String,
 
         @SerializedName("email")
         @Expose
-        val email: String
+        var email: String,
+
+        @SerializedName("isVerified")
+        @Expose
+        var isVerified: Boolean = false,
+
+        @SerializedName("photo")
+        @Expose
+        val photoUrl: String? = null
 )

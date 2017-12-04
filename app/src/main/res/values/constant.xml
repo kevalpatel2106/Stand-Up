@@ -15,6 +15,5 @@
   -->
 
 <resources>
-    <string name="app_name">Stand Up</string>
     <string name="fb_login_field_string">id,name,email,gender,birthday,picture,cover</string>
 </resources>

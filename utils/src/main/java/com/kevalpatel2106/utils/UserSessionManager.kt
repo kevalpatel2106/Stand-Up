@@ -30,6 +30,9 @@ object UserSessionManager {
     private val USER_DISPLAY_NAME = "USER_DISPLAY_NAME"    //First name of the user
     private val USER_EMAIL = "USER_EMAIL"                  //Email address of the user
     private val USER_TOKEN = "USER_TOKEN"                  //Authentication token
+    private val USER_IS_MALE = "USER_IS_MALE"                  //Is user male
+    private val USER_HEIGHT = "USER_HEIGHT"                  //User height in cms
+    private val USER_WEIGHT = "USER_WEIGHT"                  //User weight in kg
     private val USER_PHOTO = "USER_PHOTO"                  //User photo
     private val USER_IS_VERIFIED = "USER_IS_VERIFIED"        //Is the user verified.
 
@@ -63,8 +66,9 @@ object UserSessionManager {
     /**
      * Email of the user logged in.
      */
-    val email: String?
+    var email: String?
         get() = SharedPrefsProvider.getStringFromPreferences(USER_EMAIL)
+        set(email) = SharedPrefsProvider.savePreferences(USER_EMAIL, email)
 
     /**
      * Check if the user is currently logged in?
@@ -73,6 +77,23 @@ object UserSessionManager {
      */
     val isUserLoggedIn: Boolean
         get() = userId > 0 && token != null
+
+    val isMale: Boolean
+        get() = SharedPrefsProvider.getBoolFromPreferences(USER_IS_MALE)
+
+    val height: Float
+        get() = if (SharedPrefsProvider.getStringFromPreferences(USER_HEIGHT) != null) {
+            SharedPrefsProvider.getStringFromPreferences(USER_HEIGHT)!!.toFloat()
+        } else {
+            0F
+        }
+
+    val weight: Float
+        get() = if (SharedPrefsProvider.getStringFromPreferences(USER_WEIGHT) != null) {
+            SharedPrefsProvider.getStringFromPreferences(USER_WEIGHT)!!.toFloat()
+        } else {
+            0F
+        }
 
     /**
      * Check if the user is currently logged in?
@@ -108,9 +129,9 @@ object UserSessionManager {
 
             //Save to the share prefs.
             SharedPrefsProvider.savePreferences(USER_ID, userId)
-            updateSession(displayName = displayName,
-                    email = email,
-                    photoUrl = photoUrl)
+            updateSession(displayName = displayName, photoUrl = photoUrl)
+
+            this.email = email
             this.token = token
             this.isUserVerified = isVerified
         }
@@ -121,19 +142,22 @@ object UserSessionManager {
      * Update the user session detail.
      *
      * @param displayName Display name of the user.
-     * @param email Email id of the user.
      * @param photoUrl User profile picture url.
      */
     @JvmStatic
     @Synchronized
     fun updateSession(displayName: String,
-                      email: String,
-                      photoUrl: String?) {
+                      photoUrl: String?,
+                      height: Float = 0F,
+                      weight: Float = 0F,
+                      isMale: Boolean = true) {
         synchronized(this) {
 
             //Save to the share prefs.
+            SharedPrefsProvider.savePreferences(USER_IS_MALE, isMale)
+            SharedPrefsProvider.savePreferences(USER_HEIGHT, height.toString())
+            SharedPrefsProvider.savePreferences(USER_WEIGHT, weight.toString())
             SharedPrefsProvider.savePreferences(USER_DISPLAY_NAME, displayName)
-            SharedPrefsProvider.savePreferences(USER_EMAIL, email)
             SharedPrefsProvider.savePreferences(USER_PHOTO, photoUrl)
         }
     }

@@ -5,13 +5,19 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.support.annotation.VisibleForTesting
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.ProgressBar
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.rulerview.ObservableHorizontalScrollView
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
+import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
+import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 
 /**
@@ -44,18 +50,43 @@ class EditProfileActivity : BaseActivity() {
 
     @VisibleForTesting
     lateinit var mModel: EditProfileModel
+    private var btnMenuSave: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mModel = ViewModelProviders.of(this).get(EditProfileModel::class.java)
         mModel.mUserProfile.observe(this@EditProfileActivity, Observer<GetProfileResponse> {
-            //TODO Update the UI
+            it?.let {
+                edit_profile_height_picker.scrollToValue(it.heightInt())
+                edit_profile_weight_picker.scrollToValue(it.weightInt())
+                profile_name_et.setText(it.name)
+            }
         })
-        mModel.mProfileUpdateStatus.observe(this@EditProfileActivity, Observer<GetProfileResponse> {
-            //TODO Update the UI
+        mModel.mProfileUpdateStatus.observe(this@EditProfileActivity, Observer<SaveProfileResponse> {
+            showSnack(R.string.message_profile_updated)
+            Handler().postDelayed({ finish() }, 3500L)
         })
-        mModel.mIsApiRunning.observe(this@EditProfileActivity, Observer<Boolean> {
-            //TODO Update the UI
+        mModel.errorMessage.observe(this@EditProfileActivity, Observer {
+            it!!.getMessage(this@EditProfileActivity)?.let { showSnack(it) }
+        })
+        mModel.isLoadingProfile.observe(this@EditProfileActivity, Observer<Boolean> {
+            if (it!!) {
+                edit_profile_view_flipper.displayedChild = 0
+            } else {
+                edit_profile_view_flipper.displayedChild = 1
+            }
+        })
+        mModel.isSavingProfile.observe(this@EditProfileActivity, Observer<Boolean> {
+            if (!it!!) {
+                //Display the progressbar in toolbar
+                val progressBar = ProgressBar(this)
+                progressBar.setPadding(25, 25, 25, 25)
+                btnMenuSave?.actionView = progressBar
+                btnMenuSave?.isEnabled = false
+            } else {
+                btnMenuSave?.isEnabled = true          // Enable click
+                btnMenuSave?.actionView = null       // Remove action view.
+            }
         })
 
         setContentView(R.layout.activity_edit_profile)
@@ -71,6 +102,31 @@ class EditProfileActivity : BaseActivity() {
         if (savedInstanceState == null) {
             //Load current user profile from the repo.
             mModel.loadMyProfile()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_save, menu)
+
+        val btnMenuSave = menu.findItem(R.id.action_save)
+        btnMenuSave.isEnabled = true
+        btnMenuSave.actionView = null
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_save -> {
+                mModel.saveMyProfile(name = profile_name_et.getTrimmedText(),
+                        photo = null,
+                        height = selectedHeight,
+                        weight = selectedWeight,
+                        isMale = profile_gender_radio_male.isChecked)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 
@@ -103,6 +159,7 @@ class EditProfileActivity : BaseActivity() {
             //Restore the state of pickers.
             selectedHeight = savedInstanceState.getFloat(KEY_SELECTED_HEIGHT)
             edit_profile_height_picker.setInitValue(selectedHeight)
+
             selectedWeight = savedInstanceState.getFloat(KEY_SELECTED_WEIGHT)
             edit_profile_weight_picker.setInitValue(selectedWeight)
         }

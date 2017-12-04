@@ -20,28 +20,28 @@ interface UserApiService {
 
     //Login/Register apis
     @POST("login")
-    fun login(@Body loginRequest: LoginRequest): Call<LoginResponseData>
+    fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
 
     @POST("registerDevice")
-    fun registerDevice(@Body request: DeviceRegisterRequest): Call<DeviceRegisterData>
+    fun registerDevice(@Body request: DeviceRegisterRequest): Call<DeviceRegisterResponse>
 
     @POST("signUp")
-    fun signUp(@Body signUpRequest: SignUpRequest): Call<SignUpResponseData>
+    fun signUp(@Body signUpRequest: SignUpRequest): Call<SignUpResponse>
 
     @POST("forgotPassword")
-    fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest): Call<ForgotPasswordResponseData>
+    fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest): Call<ForgotPasswordResponse>
 
     @POST("socialLogin")
-    fun socialSignUp(@Body signUpRequest: SignUpRequest): Call<SignUpResponseData>
+    fun socialSignUp(@Body signUpRequest: SignUpRequest): Call<SignUpResponse>
 
     @Headers("Add-Auth: true")
     @POST("resendVerifyMail")
-    fun resendVerifyEmail(@Body request: ResendVerificationRequest): Call<ResendVerificationResponseData>
+    fun resendVerifyEmail(@Body request: ResendVerificationRequest): Call<ResendVerificationResponse>
 
     @GET
     fun verifyEmailLink(@Url url: String): Call<String>
 
     @Headers("Add-Auth: true")
     @POST("logout")
-    fun logout(@Body logoutRequest: LogoutRequest): Call<LogoutResponseData>
+    fun logout(@Body logoutRequest: LogoutRequest): Call<LogoutResponse>
 }

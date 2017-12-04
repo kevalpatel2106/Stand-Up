@@ -2,7 +2,9 @@ package com.kevalpatel2106.standup.profile.repo
 
 import com.kevalpatel2106.base.annotations.Repository
 import com.kevalpatel2106.standup.BuildConfig
-import io.reactivex.Observable
+import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 /**
@@ -16,6 +18,11 @@ interface ProfileApiService {
         fun baseUrl() = BuildConfig.BASE_URL
     }
 
+    @Headers("Add-Auth: true")
     @POST("getProfile")
-    fun getUserProfile(request: GetProfileRequest): Observable<GetProfileResponse>
+    fun getUserProfile(@Body request: GetProfileRequest): Call<GetProfileResponse>
+
+    @Headers("Add-Auth: true")
+    @POST("saveProfile")
+    fun saveUserProfile(@Body request: SaveProfileRequest): Call<SaveProfileResponse>
 }

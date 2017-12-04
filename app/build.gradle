@@ -61,6 +61,7 @@ android {
             zipAlignEnabled true
 
             buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
+            resValue "string", "application_name", "Stand Up"
             resValue "string", "api_host", "\"" + SERVER_BASE_URL.replace("https://", "") + "\""
             resValue "string", "server_client_id", SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID
@@ -77,6 +78,7 @@ android {
             zipAlignEnabled true
 
             buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
+            resValue "string", "application_name", "Stand Up"
             resValue "string", "api_host", "\"" + SERVER_BASE_URL.replace("https://", "") + "\""
             resValue "string", "server_client_id", SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID

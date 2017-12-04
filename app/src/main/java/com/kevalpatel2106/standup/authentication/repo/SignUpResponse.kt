@@ -21,17 +21,43 @@ import com.google.gson.annotations.SerializedName
 import com.kevalpatel2106.base.annotations.Model
 
 /**
- * Created by Keval on 02-Jan-17.
+ * Created by Keval on 27-Dec-16.
  *
- * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Model
-data class DeviceRegisterData(
-        @SerializedName("token")
-        @Expose
-        val token: String? = null,
-
+data class SignUpResponse(
         @SerializedName("uid")
         @Expose
-        val userId: Long = 0
-)
+        val uid: Long,
+
+        @SerializedName("isNewUser")
+        @Expose
+        val isNewUser: Boolean = false,
+
+        @SerializedName("isVerified")
+        @Expose
+        val isVerified: Boolean = false,
+
+        @SerializedName("photo")
+        @Expose
+        val photoUrl: String? = null,
+
+        @SerializedName("name")
+        @Expose
+        val name: String,
+
+        @SerializedName("email")
+        @Expose
+        val email: String
+) {
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null) return false
+        return other is SignUpResponse && other.uid == uid
+    }
+
+    override fun hashCode(): Int {
+        return uid.hashCode()
+    }
+}

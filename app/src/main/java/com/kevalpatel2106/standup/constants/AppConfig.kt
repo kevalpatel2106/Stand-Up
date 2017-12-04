@@ -12,4 +12,12 @@ internal object AppConfig {
 
     const val MIN_HEIGHT = 116f
     const val MAX_HEIGHT = 264f
+
+    //Password min/max length.
+    val MAX_PASSWORD = 16
+    val MIN_PASSWORD = 6
+
+    //Display name min/max length.
+    val MIN_NAME = 6
+    val MAX_NAME = 30
 }

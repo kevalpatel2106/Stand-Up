@@ -1,6 +1,6 @@
-package com.kevalpatel2106.utils
+package com.kevalpatel2106.standup
 
-import android.text.TextUtils
+import com.kevalpatel2106.standup.constants.AppConfig
 import java.util.regex.Pattern
 
 /**
@@ -17,14 +17,6 @@ object Validator {
             + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
             + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
             + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$")
-
-    //Password min/max length.
-    private val MAX_PASSWORD = 16
-    private val MIN_PASSWORD = 6
-
-    //Display name min/max length.
-    private val MIN_NAME = 6
-    private val MAX_NAME = 30
 
     /**
      * Validate email address.
@@ -49,8 +41,8 @@ object Validator {
     fun isValidPassword(password: String?): Boolean {
         return (password != null
                 && !password.trim { it <= ' ' }.isEmpty()
-                && password.length > MIN_PASSWORD
-                && password.length <= MAX_PASSWORD)
+                && password.length > AppConfig.MIN_PASSWORD
+                && password.length <= AppConfig.MAX_PASSWORD)
     }
 
     /**
@@ -63,7 +55,11 @@ object Validator {
     fun isValidName(name: String?): Boolean {
         return (name != null
                 && !name.trim { it <= ' ' }.isEmpty()
-                && name.length > MIN_NAME
-                && name.length <= MAX_NAME)
+                && name.length > AppConfig.MIN_NAME
+                && name.length <= AppConfig.MAX_NAME)
     }
+
+    fun isValidHeight(height: Float) = height >= AppConfig.MIN_HEIGHT && height <= AppConfig.MAX_HEIGHT
+
+    fun isValidWeight(weight: Float) = weight >= AppConfig.MIN_WEIGHT && weight <= AppConfig.MAX_WEIGHT
 }

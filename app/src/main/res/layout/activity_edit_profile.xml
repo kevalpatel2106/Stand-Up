@@ -1,191 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.kevalpatel2106.standup.profile.EditProfileActivity">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.kevalpatel2106.standup.profile.EditProfileActivity">
 
     <!--Toolbar-->
     <include
         layout="@layout/layout_simple_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
-    <ScrollView
+    <ViewFlipper
+        android:id="@+id/edit_profile_view_flipper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="wrap_content">
 
-        <!--Scrollview container-->
-        <android.support.v7.widget.CardView
+        <!--0. Loader -->
+        <include layout="@layout/layout_loader"/>
+
+        <!--1. Main scrollview-->
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/edit_profile_card_horizontal_margin"
-            android:layout_marginStart="@dimen/edit_profile_card_horizontal_margin"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardElevation="4dp"
-            app:cardPreventCornerOverlap="true"
-            app:cardUseCompatPadding="true">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <!--Cardview container-->
-            <android.support.constraint.ConstraintLayout
+            <!--Scrollview container-->
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/spacing_small">
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/edit_profile_card_horizontal_margin"
+                android:layout_marginStart="@dimen/edit_profile_card_horizontal_margin"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardElevation="4dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true">
 
-                <!--User name input box-->
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/profile_name_tiv"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:textColorHint="?android:attr/textColorSecondary"
-                    app:counterMaxLength="40"
-                    app:counterTextAppearance="@style/NanoText.Secondary"
-                    app:errorEnabled="true"
-                    app:hintAnimationEnabled="true"
-                    app:hintTextAppearance="@style/SmallText.Secondary"
-                    app:layout_constraintLeft_toRightOf="@+id/guideline"
-                    app:layout_constraintRight_toLeftOf="@+id/guideline1"
-                    app:layout_constraintTop_toTopOf="parent">
+                <!--Card view container-->
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="@dimen/spacing_small">
 
-                    <com.kevalpatel2106.base.BaseEditText
+                    <!--User name input box-->
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/profile_name_tiv"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:textColorHint="?android:attr/textColorSecondary"
+                        app:counterMaxLength="40"
+                        app:counterTextAppearance="@style/NanoText.Secondary"
+                        app:errorEnabled="true"
+                        app:hintAnimationEnabled="true"
+                        app:hintTextAppearance="@style/SmallText.Secondary"
+                        app:layout_constraintLeft_toRightOf="@+id/guideline"
+                        app:layout_constraintRight_toLeftOf="@+id/guideline1"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.kevalpatel2106.base.BaseEditText
+                            android:id="@+id/profile_name_et"
+                            style="@style/MediumText.Primary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/profile_name_hint"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPersonName"
+                            android:maxLength="40"
+                            tools:text="@tools:sample/lorem"/>
+                    </android.support.design.widget.TextInputLayout>
+
+                    <!-- Height -->
+                    <com.kevalpatel2106.base.BaseTextView
+                        android:id="@+id/profile_height_title_tv"
                         style="@style/MediumText.Primary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/profile_height_picker_title"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_name_tiv"/>
+
+                    <com.kevalpatel2106.base.BaseTextView
+                        android:id="@+id/edit_profile_selected_height_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_micro"
+                        android:textAppearance="@style/NanoText.Primary"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_height_title_tv"
+                        tools:text="192 cms"/>
+
+                    <com.kevalpatel2106.rulerview.ScrollingValuePicker
+                        android:id="@+id/edit_profile_height_picker"
                         android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="@dimen/spacing_nano"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/edit_profile_selected_height_tv"/>
+
+                    <!-- Weight -->
+                    <com.kevalpatel2106.base.BaseTextView
+                        android:id="@+id/profile_weight_title_tv"
+                        style="@style/MediumText.Primary"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/profile_name_hint"
-                        android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
-                        android:maxLength="40"
-                        tools:text="@tools:sample/lorem" />
-                </android.support.design.widget.TextInputLayout>
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/profile_weight_picker_title"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toBottomOf="@+id/edit_profile_height_picker"/>
 
-                <!-- Height -->
-                <com.kevalpatel2106.base.BaseTextView
-                    android:id="@+id/profile_height_title_tv"
-                    style="@style/MediumText.Primary"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:text="@string/profile_height_picker_title"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_name_tiv" />
-
-                <com.kevalpatel2106.base.BaseTextView
-                    android:id="@+id/edit_profile_selected_height_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_micro"
-                    android:textAppearance="@style/NanoText.Primary"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_height_title_tv"
-                    tools:text="192 cms" />
-
-                <com.kevalpatel2106.rulerview.ScrollingValuePicker
-                    android:id="@+id/edit_profile_height_picker"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="@dimen/spacing_nano"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_selected_height_tv" />
-
-                <!-- Weight -->
-                <com.kevalpatel2106.base.BaseTextView
-                    android:id="@+id/profile_weight_title_tv"
-                    style="@style/MediumText.Primary"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:text="@string/profile_weight_picker_title"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_height_picker" />
-
-                <com.kevalpatel2106.base.BaseTextView
-                    android:id="@+id/edit_profile_selected_weight_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_micro"
-                    android:textAppearance="@style/NanoText.Primary"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_weight_title_tv"
-                    tools:text="64 Kgs" />
-
-                <com.kevalpatel2106.rulerview.ScrollingValuePicker
-                    android:id="@+id/edit_profile_weight_picker"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="@dimen/spacing_micro"
-                    android:background="#ec6464"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/edit_profile_selected_weight_tv"
-                    tools:layout_editor_absoluteY="384dp" />
-
-                <com.kevalpatel2106.base.BaseTextView
-                    android:id="@+id/profile_gender_title_tv"
-                    style="@style/MediumText.Primary"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:text="@string/gender_heading"
-                    app:layout_constraintEnd_toStartOf="@+id/guideline1"
-                    app:layout_constraintStart_toStartOf="@+id/guideline"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_profile_weight_picker" />
-
-                <RadioGroup
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_micro"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="@id/guideline1"
-                    app:layout_constraintStart_toStartOf="@id/guideline"
-                    app:layout_constraintTop_toBottomOf="@id/profile_gender_title_tv">
-
-                    <RadioButton
-                        android:id="@+id/profile_gender_radio_male"
+                    <com.kevalpatel2106.base.BaseTextView
+                        android:id="@+id/edit_profile_selected_weight_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="@string/gender_male"
-                        android:textAppearance="@style/MediumText.Primary"
-                        android:textColor="?android:attr/textColorPrimary" />
+                        android:layout_marginTop="@dimen/spacing_micro"
+                        android:textAppearance="@style/NanoText.Primary"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_weight_title_tv"
+                        tools:text="64 Kgs"/>
 
-                    <RadioButton
-                        android:id="@+id/profile_gender_radio_female"
+                    <com.kevalpatel2106.rulerview.ScrollingValuePicker
+                        android:id="@+id/edit_profile_weight_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="@dimen/spacing_micro"
+                        android:background="#ec6464"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/edit_profile_selected_weight_tv"
+                        tools:layout_editor_absoluteY="384dp"/>
+
+                    <com.kevalpatel2106.base.BaseTextView
+                        android:id="@+id/profile_gender_title_tv"
+                        style="@style/MediumText.Primary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:text="@string/gender_heading"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline1"
+                        app:layout_constraintStart_toStartOf="@+id/guideline"
+                        app:layout_constraintTop_toBottomOf="@+id/edit_profile_weight_picker"/>
+
+                    <RadioGroup
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_micro"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="@id/guideline1"
+                        app:layout_constraintStart_toStartOf="@id/guideline"
+                        app:layout_constraintTop_toBottomOf="@id/profile_gender_title_tv">
+
+                        <RadioButton
+                            android:id="@+id/profile_gender_radio_male"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="@string/gender_male"
+                            android:textAppearance="@style/MediumText.Primary"
+                            android:textColor="?android:attr/textColorPrimary"/>
+
+                        <RadioButton
+                            android:id="@+id/profile_gender_radio_female"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_large"
+                            android:text="@string/gender_female"
+                            android:textAppearance="@style/MediumText.Primary"
+                            android:textColor="?android:attr/textColorPrimary"/>
+                    </RadioGroup>
+
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_large"
-                        android:text="@string/gender_female"
-                        android:textAppearance="@style/MediumText.Primary"
-                        android:textColor="?android:attr/textColorPrimary" />
-                </RadioGroup>
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_begin="@dimen/md_activity_vertical_margin"/>
 
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_end="@dimen/md_activity_vertical_margin"/>
 
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_begin="@dimen/md_activity_vertical_margin" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guideline1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_end="@dimen/md_activity_vertical_margin" />
-
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v7.widget.CardView>
-    </ScrollView>
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+        </ScrollView>
+    </ViewFlipper>
 </LinearLayout>

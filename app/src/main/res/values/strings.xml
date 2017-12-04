@@ -38,6 +38,8 @@
     <string name="login_already_account">Already have account?</string>
     <string name="login_with_email_sign_in">Login</string>
     <string name="error_login_invalid_email">Enter valid email address.</string>
+    <string name="error_invalid_height">Invalid height.</string>
+    <string name="error_invalid_weight">Invalid weight.</string>
     <string name="login_error_password_did_not_match">Password did not match.</string>
     <string name="login_with_email_create_account">Create account</string>
     <string name="error_login_invalid_name">Enter valid name.</string>
@@ -69,4 +71,6 @@
     <string name="test_notification_placeholder_text_template">You said %1$s</string>
     <string name="profile_name_hint">Name</string>
     <string name="title_activity_user_profile">Profile</string>
+    <string name="message_profile_updated">Profile updated successfully.</string>
+    <string name="menu_save">Save</string>
 </resources>

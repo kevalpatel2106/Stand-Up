@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class GetProfileResponse(
+data class SaveProfileResponse(
 
         @SerializedName("uid")
         val userId: Long,
@@ -32,10 +32,4 @@ data class GetProfileResponse(
 
         @SerializedName("isVerified")
         val isVerified: String
-) {
-
-    fun heightInt() = height.toFloat()
-
-    fun weightInt() = weight.toFloat()
-
-}
+)

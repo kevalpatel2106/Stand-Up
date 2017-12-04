@@ -15,28 +15,28 @@ interface UserAuthRepository {
 
     //Login/Register apis
     @POST("login")
-    fun login(@Body loginRequest: LoginRequest): Flowable<LoginResponseData>
+    fun login(@Body loginRequest: LoginRequest): Flowable<LoginResponse>
 
     @POST("registerDevice")
-    fun registerDevice(@Body request: DeviceRegisterRequest): Flowable<DeviceRegisterData>
+    fun registerDevice(@Body request: DeviceRegisterRequest): Flowable<DeviceRegisterResponse>
 
     @POST("signUp")
-    fun signUp(@Body signUpRequest: SignUpRequest): Flowable<SignUpResponseData>
+    fun signUp(@Body signUpRequest: SignUpRequest): Flowable<SignUpResponse>
 
     @POST("forgotPassword")
-    fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest): Flowable<ForgotPasswordResponseData>
+    fun forgotPassword(@Body forgotPasswordRequest: ForgotPasswordRequest): Flowable<ForgotPasswordResponse>
 
     @POST("socialLogin")
-    fun socialSignUp(@Body signUpRequest: SignUpRequest): Flowable<SignUpResponseData>
+    fun socialSignUp(@Body signUpRequest: SignUpRequest): Flowable<SignUpResponse>
 
     @Headers("Add-Auth: true")
     @POST("resendVerifyMail")
-    fun resendVerifyEmail(@Body request: ResendVerificationRequest): Flowable<ResendVerificationResponseData>
+    fun resendVerifyEmail(@Body request: ResendVerificationRequest): Flowable<ResendVerificationResponse>
 
     @GET
     fun verifyEmailLink(@Url url: String): Flowable<String>
 
     @Headers("Add-Auth: true")
     @POST("logout")
-    fun logout(@Body logoutRequest: LogoutRequest): Flowable<LogoutResponseData>
+    fun logout(@Body logoutRequest: LogoutRequest): Flowable<LogoutResponse>
 }
