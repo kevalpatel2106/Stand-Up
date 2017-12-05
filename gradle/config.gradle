@@ -61,6 +61,23 @@ ext {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    dokkaConfig =  {
+        outputFormat = 'javadoc'
+        outputDirectory = "$buildDir/javadoc"
+        jdkVersion = 8 // Used for linking to JDK
+
+        // Use to include or exclude non public members.
+        includeNonPublic = false
+
+        // Do not output deprecated members. Applies globally, can be overridden by packageOptions
+        skipDeprecated = false
+
+        // Emit warnings about not documented members. Applies globally, also can be overridden by packageOptions
+        reportNotDocumented = true
+
+        skipEmptyPackages = true // Do not create index pages for empty packages
+    }
+
     libDefaultConfig = {
         //sdks
         minSdkVersion buidlConfig.min
