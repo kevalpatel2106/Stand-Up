@@ -20,6 +20,7 @@ import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 
+
 /**
  * This activity will take the user information like weight, height and sleep hours while user
  * opens app for the first time.
@@ -28,6 +29,7 @@ import kotlinx.android.synthetic.main.activity_edit_profile.*
  */
 @UIController
 class EditProfileActivity : BaseActivity() {
+
     companion object {
 
         /**
@@ -42,82 +44,94 @@ class EditProfileActivity : BaseActivity() {
         }
     }
 
-    private val KEY_SELECTED_HEIGHT = "key_selected_height"
-    private val KEY_SELECTED_WEIGHT = "key_selected_weight"
-
     private var selectedWeight: Float = 0.0f
     private var selectedHeight: Float = 0.0f
 
     @VisibleForTesting
-    lateinit var mModel: EditProfileModel
+    internal lateinit var mModel: EditProfileModel
     private var btnMenuSave: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_edit_profile)
+
+        setToolbar(R.id.toolbar, getString(R.string.title_activity_user_profile), true)
+
+        setHeightPicker()
+        setWeightPicker()
+
+        setViewModel()
+    }
+
+    /**
+     * Set the [EditProfileModel] and the observers.
+     */
+    private fun setViewModel() {
         mModel = ViewModelProviders.of(this).get(EditProfileModel::class.java)
+
+        //Observe user profile
         mModel.mUserProfile.observe(this@EditProfileActivity, Observer<GetProfileResponse> {
             it?.let {
-                edit_profile_height_picker.scrollToValue(it.heightInt())
-                edit_profile_weight_picker.scrollToValue(it.weightInt())
-                profile_name_et.setText(it.name)
+                edit_profile_height_picker.scrollToValue(it.heightFloat())
+                edit_profile_weight_picker.scrollToValue(it.weightFloat())
+                edit_profile_name_et.setText(it.name)
+                profile_gender_radio_male.isChecked = it.gender == AppConfig.GENDER_MALE
+                profile_gender_radio_female.isChecked = it.gender == AppConfig.GENDER_FEMALE
             }
         })
+
+        //Monitor save profile api call.
         mModel.mProfileUpdateStatus.observe(this@EditProfileActivity, Observer<SaveProfileResponse> {
             showSnack(R.string.message_profile_updated)
             Handler().postDelayed({ finish() }, 3500L)
         })
+
+        //Monitor all error messages.
         mModel.errorMessage.observe(this@EditProfileActivity, Observer {
             it!!.getMessage(this@EditProfileActivity)?.let { showSnack(it) }
         })
+
+        //Monitor if the current user profile loaded or not.
         mModel.isLoadingProfile.observe(this@EditProfileActivity, Observer<Boolean> {
+            invalidateOptionsMenu()
+
             if (it!!) {
                 edit_profile_view_flipper.displayedChild = 0
             } else {
                 edit_profile_view_flipper.displayedChild = 1
             }
         })
+
+        //Monitor if the saving profile completed or not?
         mModel.isSavingProfile.observe(this@EditProfileActivity, Observer<Boolean> {
-            if (!it!!) {
-                //Display the progressbar in toolbar
-                val progressBar = ProgressBar(this)
-                progressBar.setPadding(25, 25, 25, 25)
-                btnMenuSave?.actionView = progressBar
-                btnMenuSave?.isEnabled = false
-            } else {
-                btnMenuSave?.isEnabled = true          // Enable click
-                btnMenuSave?.actionView = null       // Remove action view.
-            }
+            invalidateOptionsMenu()
         })
-
-        setContentView(R.layout.activity_edit_profile)
-
-        setToolbar(R.id.toolbar, getString(R.string.title_activity_user_profile), true)
-
-        //Initialize the height seek bar
-        setHeightPicker()
-
-        //Initialize the weight picker
-        setWeightPicker()
-
-        if (savedInstanceState == null) {
-            //Load current user profile from the repo.
-            mModel.loadMyProfile()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_save, menu)
 
-        val btnMenuSave = menu.findItem(R.id.action_save)
-        btnMenuSave.isEnabled = true
-        btnMenuSave.actionView = null
+        //Remove any action overlay
+        btnMenuSave = menu.findItem(R.id.action_save)
+        btnMenuSave!!.isVisible = !mModel.isLoadingProfile.value!!
+        if (mModel.isSavingProfile.value!!) {
+            //Display the progressbar in toolbar
+            val progressBar = ProgressBar(this)
+            progressBar.setPadding(25, 25, 25, 25)
+            btnMenuSave?.actionView = progressBar
+            btnMenuSave?.isEnabled = false
+        } else {
+            btnMenuSave?.isEnabled = true          // Enable click
+            btnMenuSave?.actionView = null       // Remove action view.
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save -> {
-                mModel.saveMyProfile(name = profile_name_et.getTrimmedText(),
+                //Save the profile.
+                mModel.saveMyProfile(name = edit_profile_name_et.getTrimmedText(),
                         photo = null,
                         height = selectedHeight,
                         weight = selectedWeight,
@@ -167,12 +181,12 @@ class EditProfileActivity : BaseActivity() {
 
     /**
      * Set up the weight picker.
+     *
+     * @see edit_profile_weight_picker
      */
     private fun setWeightPicker() {
         edit_profile_weight_picker.setMinMaxValue(AppConfig.MIN_WEIGHT, AppConfig.MAX_WEIGHT)
-        edit_profile_weight_picker.viewMultipleSize = 3f
         edit_profile_weight_picker.setValueTypeMultiple(10)
-        edit_profile_weight_picker.setInitValue(selectedWeight)
         edit_profile_weight_picker.setOnScrollChangedListener(object : ObservableHorizontalScrollView.OnScrollChangedListener {
 
             override fun onScrollChanged(p0: ObservableHorizontalScrollView?, p1: Int, p2: Int) {
@@ -182,18 +196,17 @@ class EditProfileActivity : BaseActivity() {
             override fun onScrollStopped(p0: Int, p1: Int) {
                 selectedWeight = edit_profile_weight_picker.getValueAndScrollItemToCenter(p0).toFloat()
             }
-
         })
     }
 
     /**
      * Set up the height picker.
+     *
+     * @see edit_profile_height_picker
      */
     private fun setHeightPicker() {
         edit_profile_height_picker.setMinMaxValue(AppConfig.MIN_HEIGHT, AppConfig.MAX_HEIGHT)
-        edit_profile_height_picker.viewMultipleSize = 3f
         edit_profile_height_picker.setValueTypeMultiple(10)
-        edit_profile_height_picker.setInitValue(selectedHeight)
         edit_profile_height_picker.setOnScrollChangedListener(object : ObservableHorizontalScrollView.OnScrollChangedListener {
             override fun onScrollChanged(p0: ObservableHorizontalScrollView?, p1: Int, p2: Int) {
                 edit_profile_selected_height_tv.text = String.format("%d cms", edit_profile_height_picker.getCurrentValue(p1))
@@ -202,7 +215,9 @@ class EditProfileActivity : BaseActivity() {
             override fun onScrollStopped(p0: Int, p1: Int) {
                 selectedHeight = edit_profile_height_picker.getValueAndScrollItemToCenter(p0).toFloat()
             }
-
         })
     }
+
+    private val KEY_SELECTED_HEIGHT = "key_selected_height"
+    private val KEY_SELECTED_WEIGHT = "key_selected_weight"
 }

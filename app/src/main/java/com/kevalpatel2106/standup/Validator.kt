@@ -26,40 +26,50 @@ object Validator {
      * @return true if the email is valid.
      */
     fun isValidEmail(email: String?): Boolean {
-        return (email != null
-                && !email.trim { it <= ' ' }.isEmpty()
-                && Pattern.compile(EMAIL_PATTERN).matcher(email).matches())
+        return email != null && !email.isEmpty() && Pattern.compile(EMAIL_PATTERN).matcher(email).matches()
     }
 
     /**
      * Validate the password. The password should not contain all the spaces. Length should be
-     * grater than [.MIN_PASSWORD] and less than or equal to [.MAX_PASSWORD].
+     * grater than [AppConfig.MIN_PASSWORD] and less than or equal to [AppConfig.MAX_PASSWORD].
      *
      * @param password password to check
      * @return true if the password is valid.
      */
     fun isValidPassword(password: String?): Boolean {
-        return (password != null
-                && !password.trim { it <= ' ' }.isEmpty()
+        return password != null
+                && !password.isEmpty()
                 && password.length > AppConfig.MIN_PASSWORD
-                && password.length <= AppConfig.MAX_PASSWORD)
+                && password.length <= AppConfig.MAX_PASSWORD
     }
 
     /**
      * Validate the user display name. Length should be
-     * grater than [.MIN_NAME] and less than or equal to [.MAX_NAME].
+     * grater than [AppConfig.MIN_NAME] and less than or equal to [AppConfig.MAX_NAME].
      *
      * @param name name of the user to validate.
      * @return true if the name is valid.
      */
     fun isValidName(name: String?): Boolean {
-        return (name != null
-                && !name.trim { it <= ' ' }.isEmpty()
+        return name != null
+                && !name.isEmpty()
                 && name.length > AppConfig.MIN_NAME
-                && name.length <= AppConfig.MAX_NAME)
+                && name.length <= AppConfig.MAX_NAME
     }
 
+    /**
+     * Check weather [height] is valid or not. Valid [height] must be [AppConfig.MIN_HEIGHT] and
+     * [AppConfig.MAX_HEIGHT].
+     *
+     * @return True if the [height] is valid.
+     */
     fun isValidHeight(height: Float) = height >= AppConfig.MIN_HEIGHT && height <= AppConfig.MAX_HEIGHT
 
+    /**
+     * Check weather [weight] is valid or not. Valid [weight] must be [AppConfig.MIN_WEIGHT] and
+     * [AppConfig.MAX_WEIGHT].
+     *
+     * @return True if the [weight] is valid.
+     */
     fun isValidWeight(weight: Float) = weight >= AppConfig.MIN_WEIGHT && weight <= AppConfig.MAX_WEIGHT
 }

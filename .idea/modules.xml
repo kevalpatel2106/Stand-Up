@@ -13,7 +13,6 @@
       <module fileurl="file://$PROJECT_DIR$/ruler-view/ruler-view.iml" filepath="$PROJECT_DIR$/ruler-view/ruler-view.iml" />
       <module fileurl="file://$PROJECT_DIR$/test-utils/test-utils.iml" filepath="$PROJECT_DIR$/test-utils/test-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils/utils.iml" filepath="$PROJECT_DIR$/utils/utils.iml" />
-      <module fileurl="file://F:\git-clone\Stand-Up\data-vault\vault.iml" filepath="F:\git-clone\Stand-Up\data-vault\vault.iml" />
     </modules>
   </component>
 </project>

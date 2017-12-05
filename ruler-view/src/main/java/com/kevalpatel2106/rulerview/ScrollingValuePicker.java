@@ -234,9 +234,13 @@ public class ScrollingValuePicker extends FrameLayout {
      * Scroll the ruler to the given value.
      */
     public void scrollToValue(float value) {
-        float oneValue = (float) mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
-        float valueWidth = oneValue * (value - minValue);
+        mHorizontalScrollView.postDelayed(() ->{
+           synchronized (ScrollingValuePicker.class) {
+               float oneValue = (float) mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
+               float valueWidth = oneValue * (value - minValue);
 
-        mHorizontalScrollView.smoothScrollBy((int) valueWidth, 0);
+               mHorizontalScrollView.smoothScrollBy((int) valueWidth, 0);
+           }
+        }, 200);
     }
 }

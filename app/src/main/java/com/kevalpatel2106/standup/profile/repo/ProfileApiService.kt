@@ -23,6 +23,6 @@ interface ProfileApiService {
     fun getUserProfile(@Body request: GetProfileRequest): Call<GetProfileResponse>
 
     @Headers("Add-Auth: true")
-    @POST("saveProfile")
+    @POST("updateProfile")
     fun saveUserProfile(@Body request: SaveProfileRequest): Call<SaveProfileResponse>
 }

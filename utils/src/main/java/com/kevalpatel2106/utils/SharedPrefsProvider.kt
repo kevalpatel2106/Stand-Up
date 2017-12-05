@@ -35,7 +35,7 @@ object SharedPrefsProvider {
     /**
      * Shared preference object.
      */
-    private lateinit var sSharedPreference: SharedPreferences
+    lateinit var sSharedPreference: SharedPreferences
 
     /**
      * Get the singleton instance of the shared preference provider.

@@ -70,11 +70,11 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
         response = addCachingHeaders(request, response)
 
         //Prepossess the response to find out errors based on the server response/status code.
-        return preprocessedResponse(response)
+        return progressResponse(response)
     }
 
     @Suppress("DEPRECATION")
-    private fun preprocessedResponse(response: Response): Response {
+    private fun progressResponse(response: Response): Response {
 
         //HTTP OK
         //Code 200 and there is some data in the response
@@ -83,56 +83,7 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
             //Check if the json response.
             if (response.header("Content-type").equals("application/json")) {
 
-                //Read the response.
-                val responseStr = response.body()!!.string()
-                val baseResponse = gson.fromJson(responseStr, BaseResponse::class.java)
-
-                when {
-                    baseResponse.status.statusCode == APIStatusCodes.SUCCESS_CODE -> {
-                        //Success
-                        //Nothing to do. Go ahead.
-                        //We consumed the response body once so we need to build it again.
-                        return if (baseResponse.d == null)
-                            response.newBuilder()
-                                    .body(ResponseBody.create(MediaType.parse("application/json"), "{}"))
-                                    .build()
-                        else
-                            response.newBuilder()
-                                    .body(ResponseBody.create(MediaType.parse("application/json"), baseResponse.d))
-                                    .build()
-                    }
-                    baseResponse.status.statusCode == APIStatusCodes.ERROR_CODE_UNAUTHORIZED -> {
-                        //You are unauthorized.
-                        //Broadcast to the app module that user is not authorized.
-                        //Log out.
-                        if (context != null) {
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
-                        }
-                        return response.newBuilder()
-                                .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
-                                .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
-                                .code(baseResponse.status.statusCode)
-                                .build()
-                    }
-                    baseResponse.status.statusCode < APIStatusCodes.SUCCESS_CODE -> {
-
-                        //Exception occurred on the server
-                        return response.newBuilder()
-                                .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
-                                .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
-                                .code(APIStatusCodes.ERROR_CODE_EXCEPTION)
-                                .build()
-                    }
-                    else -> {
-
-                        //Some recoverable error occurred on the server
-                        return response.newBuilder()
-                                .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
-                                .message(baseResponse.status.message ?: NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
-                                .code(baseResponse.status.statusCode)
-                                .build()
-                    }
-                }
+                return processJsonResponse(response, context)
             } else {
 
                 //String response. Cannot do anything.
@@ -182,6 +133,59 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
                     .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
                     .code(response.code())
                     .build()
+        }
+    }
+
+    private fun processJsonResponse(response: Response, context: Context?): Response {
+        //Read the response.
+        val responseStr = response.body()!!.string()
+        val baseResponse = gson.fromJson(responseStr, BaseResponse::class.java)
+
+        when {
+            baseResponse.status.statusCode == APIStatusCodes.SUCCESS_CODE -> {
+                //Success
+                //Nothing to do. Go ahead.
+                //We consumed the response body once so we need to build it again.
+                return if (baseResponse.d.isNullOrEmpty())
+                    response.newBuilder()
+                            .body(ResponseBody.create(MediaType.parse("application/json"), "{}"))
+                            .build()
+                else
+                    response.newBuilder()
+                            .body(ResponseBody.create(MediaType.parse("application/json"), baseResponse.d))
+                            .build()
+            }
+            baseResponse.status.statusCode == APIStatusCodes.ERROR_CODE_UNAUTHORIZED -> {
+                //You are unauthorized.
+                //Broadcast to the app module that user is not authorized.
+                //Log out.
+                if (context != null) {
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
+                }
+                return response.newBuilder()
+                        .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
+                        .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                        .code(baseResponse.status.statusCode)
+                        .build()
+            }
+            baseResponse.status.statusCode < APIStatusCodes.SUCCESS_CODE -> {
+
+                //Exception occurred on the server
+                return response.newBuilder()
+                        .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
+                        .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                        .code(APIStatusCodes.ERROR_CODE_EXCEPTION)
+                        .build()
+            }
+            else -> {
+
+                //Some recoverable error occurred on the server
+                return response.newBuilder()
+                        .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
+                        .message(baseResponse.status.message ?: NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                        .code(baseResponse.status.statusCode)
+                        .build()
+            }
         }
     }
 

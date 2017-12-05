@@ -7,17 +7,21 @@ package com.kevalpatel2106.standup.constants
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 internal object AppConfig {
+    //---- Start of Validation ----//
     const val MIN_WEIGHT = 29.9f
     const val MAX_WEIGHT = 204f
 
     const val MIN_HEIGHT = 116f
     const val MAX_HEIGHT = 264f
 
-    //Password min/max length.
-    val MAX_PASSWORD = 16
-    val MIN_PASSWORD = 6
+    const val MAX_PASSWORD = 16
+    const val MIN_PASSWORD = 6
 
-    //Display name min/max length.
-    val MIN_NAME = 6
-    val MAX_NAME = 30
+    const val MIN_NAME = 6
+    const val MAX_NAME = 30
+    //---- End of Validation ----//
+
+    const val GENDER_MALE = "male"
+    const val GENDER_FEMALE = "female"
+
 }

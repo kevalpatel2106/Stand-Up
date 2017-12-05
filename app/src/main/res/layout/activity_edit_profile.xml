@@ -61,7 +61,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <com.kevalpatel2106.base.BaseEditText
-                            android:id="@+id/profile_name_et"
+                            android:id="@+id/edit_profile_name_et"
                             style="@style/MediumText.Primary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

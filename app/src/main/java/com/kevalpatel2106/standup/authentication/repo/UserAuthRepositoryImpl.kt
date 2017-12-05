@@ -3,6 +3,7 @@ package com.kevalpatel2106.standup.authentication.repo
 import com.kevalpatel2106.base.annotations.Repository
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.network.RetrofitNetworkRefresherImpl
+import com.kevalpatel2106.standup.profile.repo.ProfileApiService
 import com.kevalpatel2106.vault.VaultBuilder
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,9 +16,12 @@ import io.reactivex.schedulers.Schedulers
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-internal class UserAuthRepositoryImpl : UserAuthRepository {
+internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRepository {
+
+    constructor() : this(UserApiService.baseUrl())
+
     override fun logout(logoutRequest: LogoutRequest): Flowable<LogoutResponse> {
-        val call = ApiProvider.getRetrofitClient(UserApiService.baseUrl())
+        val call = ApiProvider.getRetrofitClient(baseUrl)
                 .create(UserApiService::class.java)
                 .logout(logoutRequest)
 
@@ -31,7 +35,7 @@ internal class UserAuthRepositoryImpl : UserAuthRepository {
     }
 
     override fun verifyEmailLink(url: String): Flowable<String> {
-        val call = ApiProvider.getRetrofitClient(UserApiService.baseUrl())
+        val call = ApiProvider.getRetrofitClient(baseUrl)
                 .create(UserApiService::class.java)
                 .verifyEmailLink(url)
 
@@ -45,7 +49,7 @@ internal class UserAuthRepositoryImpl : UserAuthRepository {
     }
 
     override fun forgotPassword(forgotPasswordRequest: ForgotPasswordRequest): Flowable<ForgotPasswordResponse> {
-        val call = ApiProvider.getRetrofitClient(UserApiService.baseUrl())
+        val call = ApiProvider.getRetrofitClient(baseUrl)
                 .create(UserApiService::class.java)
                 .forgotPassword(forgotPasswordRequest)
 
@@ -59,7 +63,7 @@ internal class UserAuthRepositoryImpl : UserAuthRepository {
     }
 
     override fun resendVerifyEmail(request: ResendVerificationRequest): Flowable<ResendVerificationResponse> {
-        val call = ApiProvider.getRetrofitClient(UserApiService.baseUrl())
+        val call = ApiProvider.getRetrofitClient(baseUrl)
                 .create(UserApiService::class.java)
                 .resendVerifyEmail(request)
 
@@ -73,7 +77,7 @@ internal class UserAuthRepositoryImpl : UserAuthRepository {
     }
 
     override fun registerDevice(request: DeviceRegisterRequest): Flowable<DeviceRegisterResponse> {
-        val call = ApiProvider.getRetrofitClient(UserApiService.baseUrl())
+        val call = ApiProvider.getRetrofitClient(baseUrl)
                 .create(UserApiService::class.java)
                 .registerDevice(request)
 
@@ -87,7 +91,7 @@ internal class UserAuthRepositoryImpl : UserAuthRepository {
     }
 
     override fun login(loginRequest: LoginRequest): Flowable<LoginResponse> {
-        val call = ApiProvider.getRetrofitClient(UserApiService.baseUrl())
+        val call = ApiProvider.getRetrofitClient(baseUrl)
                 .create(UserApiService::class.java)
                 .login(loginRequest)
 
@@ -101,7 +105,7 @@ internal class UserAuthRepositoryImpl : UserAuthRepository {
     }
 
     override fun signUp(signUpRequest: SignUpRequest): Flowable<SignUpResponse> {
-        val call = ApiProvider.getRetrofitClient(UserApiService.baseUrl())
+        val call = ApiProvider.getRetrofitClient(baseUrl)
                 .create(UserApiService::class.java)
                 .signUp(signUpRequest)
 
@@ -115,7 +119,7 @@ internal class UserAuthRepositoryImpl : UserAuthRepository {
     }
 
     override fun socialSignUp(signUpRequest: SignUpRequest): Flowable<SignUpResponse> {
-        val call = ApiProvider.getRetrofitClient(UserApiService.baseUrl())
+        val call = ApiProvider.getRetrofitClient(baseUrl)
                 .create(UserApiService::class.java)
                 .socialSignUp(signUpRequest)
 
