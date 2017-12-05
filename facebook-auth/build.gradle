@@ -41,6 +41,7 @@ dependencies {
 
     //Loggers
     implementation(debugLibs.timber, excludeGrp)
+    debugImplementation(debugLibs.leakcanary, excludeGrp)
 
     //Facebook Lib
     api(otherLib.facebook, excludeGrp)

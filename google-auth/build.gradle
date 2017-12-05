@@ -36,9 +36,13 @@ dependencies {
     implementation ide.kotlin
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
-    implementation(debugLibs.timber, excludeGrp)
 
     implementation supportLib.appCompat
     implementation supportLib.supportv4
+
     api(playServiceLib.auth, excludeGrp)
+
+    //Loggers
+    implementation(debugLibs.timber, excludeGrp)
+    debugImplementation(debugLibs.leakcanary, excludeGrp)
 }

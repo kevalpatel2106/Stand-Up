@@ -119,6 +119,10 @@ dependencies {
 
     //Loggers
     debugImplementation(debugLibs.dbdebug, excludeGrp)
+    debugImplementation(debugLibs.leakcanary, excludeGrp)
+    releaseImplementation(debugLibs.crashalytics) {
+        transitive = true
+    }
     implementation(debugLibs.timber, excludeGrp)
 
     //Support
@@ -145,8 +149,5 @@ dependencies {
 
     //Other libs
     implementation(otherLib.bottomsheet, excludeGrp)
-    implementation(otherLib.crashalytics) {
-        transitive = true
-    }
 }
 apply plugin: 'com.google.gms.google-services'

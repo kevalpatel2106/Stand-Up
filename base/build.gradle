@@ -74,6 +74,7 @@ dependencies {
     kapt(butterKnifeLib.annotationProcessor, excludeGrp)
 
     implementation archComponent.lifecycle
+    debugImplementation(debugLibs.leakcanary, excludeGrp)
 
     //Support
     implementation supportLib.appCompat
@@ -84,7 +85,6 @@ dependencies {
     //Rx
     implementation rxLib.rxJava
     implementation (rxLib.rxAndroid, excludeGrp)
-
 
     //Other
     implementation(debugLibs.timber, excludeGrp)

@@ -63,4 +63,5 @@ dependencies {
 
     //Loggers
     implementation(debugLibs.timber, excludeGrp)
+    debugImplementation(debugLibs.leakcanary, excludeGrp)
 }

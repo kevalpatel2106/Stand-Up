@@ -77,7 +77,8 @@ dependencies {
     implementation (rxLib.rxAndroid, excludeGrp)
 
     //Loggers
+    debugImplementation(debugLibs.leakcanary, excludeGrp)
+    implementation(debugLibs.shethoOkhttp, excludeGrp)
     debugApi(debugLibs.shetho, excludeGrp)
-    api(debugLibs.shethoOkhttp, excludeGrp)
     implementation(debugLibs.timber, excludeGrp)
 }

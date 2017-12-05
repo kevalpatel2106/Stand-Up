@@ -39,4 +39,5 @@ dependencies {
     implementation ide.kotlin
     implementation retrofitLib.retrofit
     implementation rxLib.rxJava
+    debugImplementation(debugLibs.leakcanary, excludeGrp)
 }

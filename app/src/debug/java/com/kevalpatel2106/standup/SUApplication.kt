@@ -2,15 +2,13 @@ package com.kevalpatel2106.standup
 
 import android.app.Application
 import android.os.StrictMode
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
 import com.facebook.FacebookSdk
 import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
 import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import io.fabric.sdk.android.Fabric
+import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
 
 
@@ -63,9 +61,8 @@ class SUApplication : Application() {
         @Suppress("DEPRECATION")
         FacebookSdk.sdkInitialize(this@SUApplication)
 
-        // Initializes Fabric for builds that don't use the debug build type.
-        Fabric.with(this, Crashlytics.Builder()
-                .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-                .build())
+        //Initialize the leak canary
+        if (LeakCanary.isInAnalyzerProcess(this)) return
+        LeakCanary.install(this)
     }
 }
