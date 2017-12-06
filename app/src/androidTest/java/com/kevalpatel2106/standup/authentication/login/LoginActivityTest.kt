@@ -17,20 +17,17 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.rule.GrantPermissionRule
 import android.support.test.runner.AndroidJUnit4
 import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
-import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.UserSessionManager
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.not
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 
 
@@ -48,16 +45,30 @@ class LoginActivityTest : BaseTestClass() {
 
     @JvmField
     @Rule
-    var mGetAccountPermissionRule: GrantPermissionRule = GrantPermissionRule
-            .grant(Manifest.permission.GET_ACCOUNTS)
+    var mGetAccountPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS)
 
     override fun getActivity(): LoginActivity = mLoginActivityRule.activity
+
+    private val mockServerManager = MockServerManager()
+    private lateinit var mMockUserAuthRepository: UserAuthRepositoryImpl
 
     @Before
     fun setUp() {
         UserSessionManager.clearUserSession()
         ApiProvider.init(InstrumentationRegistry.getContext())
+
+        //Set the repo
+        mockServerManager.startMockWebServer()
+        mMockUserAuthRepository = UserAuthRepositoryImpl(mockServerManager.getBaseUrl())
+        activity.mModel.mUserAuthRepo = mMockUserAuthRepository
     }
+
+    @After
+    fun tearUp() {
+        mockServerManager.close()
+        ApiProvider.init()
+    }
+
 
     @Test
     @Throws(Exception::class)
@@ -68,7 +79,7 @@ class LoginActivityTest : BaseTestClass() {
         onView(withId(R.id.btn_login_google_signin)).check(matches(isEnabled()))
         onView(withId(R.id.btn_login)).check(matches(isEnabled()))
 
-        activity.runOnUiThread { activity.mModel.mIsAuthenticationRunning.value = true }
+        activity.runOnUiThread { activity.mModel.blockUi.value = true }
 
         onView(withId(R.id.btn_login_fb_signin)).check(matches(not(isEnabled())))
         onView(withId(R.id.btn_login_google_signin)).check(matches(not(isEnabled())))
@@ -347,18 +358,15 @@ class LoginActivityTest : BaseTestClass() {
     @Throws(Exception::class)
     fun testFullLogin() {
         Intents.init()
-
-        val mockRepo = MockUiUserAuthRepository()
-        mockRepo.enqueueResponse(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+        mockServerManager.enqueueResponse(mockServerManager.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.standup.test.R.raw.user_login_success))
-        activity.mModel.mUserAuthRepo = mockRepo
 
         onView(withId(R.id.login_email_et)).perform(clearText(), typeText("test@example.com"))
         onView(withId(R.id.login_password_et)).perform(clearText(), typeText("123456789"))
         onView(withId(R.id.login_scroll)).perform(swipeUp())
         onView(withId(R.id.btn_login)).perform(closeSoftKeyboard(), click())
 
-        Thread.sleep(1000)
+        Thread.sleep(5000)
         intended(hasComponent(ComponentName(getTargetContext(), Dashboard::class.java.name)))
 
         Assert.assertEquals(UserSessionManager.displayName, "Test user")
@@ -388,11 +396,8 @@ class LoginActivityTest : BaseTestClass() {
     @Throws(Exception::class)
     fun testFullSignUp() {
         Intents.init()
-
-        val mockRepo = MockUiUserAuthRepository()
-        mockRepo.enqueueResponse(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+        mockServerManager.enqueueResponse(mockServerManager.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.standup.test.R.raw.user_sign_up_success))
-        activity.mModel.mUserAuthRepo = mockRepo
 
         //Switch form login to sign up by clicking go to button
         onView(withId(R.id.btn_login_toggle)).perform(click()).perform(ViewActions.closeSoftKeyboard())
@@ -404,7 +409,7 @@ class LoginActivityTest : BaseTestClass() {
         onView(withId(R.id.login_confirm_password_et)).perform(clearText(), typeText("123456789"))
         onView(withId(R.id.btn_login)).perform(closeSoftKeyboard(), click())
 
-        Thread.sleep(1000)
+        Thread.sleep(5000)
         intended(hasComponent(ComponentName(getTargetContext(), Dashboard::class.java.name)))
 
         Assert.assertEquals(UserSessionManager.displayName, "test user")

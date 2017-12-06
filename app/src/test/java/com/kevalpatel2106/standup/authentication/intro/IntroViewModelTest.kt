@@ -5,8 +5,10 @@ import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.UnitTestUtils
-import com.kevalpatel2106.standup.authentication.repo.MockUserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.testutils.MockServerManager
+import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
@@ -28,8 +30,12 @@ class IntroViewModelTest {
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
 
+    @Rule
+    @JvmField
+    val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
+
     private lateinit var introViewModel: IntroViewModel
-    private var mTestRepoMock = MockUserAuthRepository()
+    private val mockServerManager = MockServerManager()
 
     companion object {
 
@@ -40,8 +46,16 @@ class IntroViewModelTest {
 
     @Before
     fun setUp() {
-        introViewModel = IntroViewModel(mTestRepoMock)
+        //Set the repo
+        mockServerManager.startMockWebServer()
+        introViewModel = IntroViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
     }
+
+    @After
+    fun tearUp() {
+        mockServerManager.close()
+    }
+
 
     @Test
     @Throws(IOException::class)
@@ -52,7 +66,7 @@ class IntroViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateSocialUserSignUpSuccess() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_sign_up_success.json"))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_sign_up_success.json"))
 
         //Make the api call to the mock server
         val signInRequest = SignUpRequest("test@example.com", "Test User", null, null)
@@ -68,7 +82,7 @@ class IntroViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateSocialUserLoginSuccess() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_login_success.json"))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_login_success.json"))
 
         //Make the api call to the mock server
         val signInRequest = SignUpRequest("test@example.com", "Test User", null, null)
@@ -84,7 +98,7 @@ class IntroViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateSocialUserFieldMissing() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         //Make the api call to the mock server
         introViewModel.authenticateSocialUser(SignUpRequest("test@example.com", "Test User", null, null))
@@ -118,10 +132,5 @@ class IntroViewModelTest {
         //There should be success.
         Assert.assertEquals(introViewModel.errorMessage.value!!.errorRes, R.string.error_fb_login_email_not_found)
         Assert.assertFalse(introViewModel.blockUi.value!!)
-    }
-
-    @After
-    fun tearUp() {
-        mTestRepoMock.close()
     }
 }

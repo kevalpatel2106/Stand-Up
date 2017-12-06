@@ -1,8 +1,6 @@
 package com.kevalpatel2106.network
 
-import com.kevalpatel2106.testutils.MockWebserverUtils
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
+import com.kevalpatel2106.testutils.MockServerManager
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -37,27 +35,25 @@ class JsonResponsesTest {
         }
     }
 
-    private lateinit var mockWebServer: MockWebServer
+    private val mockWebServer = MockServerManager()
 
     @Before
     fun setUp() {
-        mockWebServer = MockWebserverUtils.startMockWebServer()
+        mockWebServer.startMockWebServer()
     }
 
     @After
     fun tearUp() {
-        mockWebServer.shutdown()
+        mockWebServer.close()
     }
 
     @Test
     @Throws(IOException::class)
     fun checkFieldMissingResponse() {
-        mockWebServer.enqueue(MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/required_field_missing_sample.json"))))
+        mockWebServer.enqueueResponse(mockWebServer
+                .getStringFromFile(File(RESPONSE_DIR_PATH + "/required_field_missing_sample.json")))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -70,12 +66,10 @@ class JsonResponsesTest {
     @Test
     @Throws(IOException::class)
     fun checkServerExceptionResponse() {
-        mockWebServer.enqueue(MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/exception_sample.json"))))
+        mockWebServer.enqueueResponse(mockWebServer
+                .getStringFromFile(File(RESPONSE_DIR_PATH + "/exception_sample.json")))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -89,12 +83,10 @@ class JsonResponsesTest {
     @Test
     @Throws(IOException::class)
     fun checkSuccessResponse() {
-        mockWebServer.enqueue(MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
+        mockWebServer.enqueueResponse(mockWebServer
+                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()

@@ -7,6 +7,8 @@ import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.authentication.repo.ResendVerificationRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 @com.kevalpatel2106.base.annotations.ViewModel(VerifyEmailActivity::class)
 internal class VerifyEmailViewModel : BaseViewModel {
@@ -44,8 +46,13 @@ internal class VerifyEmailViewModel : BaseViewModel {
         mUserAuthRepo = UserAuthRepositoryImpl()
     }
 
+    /**
+     * Resend the verification email to the given [userId].
+     */
     fun resendEmail(userId: Long) {
         mUserAuthRepo.resendVerifyEmail(ResendVerificationRequest(userId))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     blockUi.postValue(true)
                 })

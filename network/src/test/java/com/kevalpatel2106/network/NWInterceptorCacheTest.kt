@@ -1,17 +1,14 @@
 package com.kevalpatel2106.network
 
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection
 
 /**
  * Created by Keval on 12/11/17.
@@ -24,7 +21,7 @@ import java.net.HttpURLConnection
 class NWInterceptorCacheTest {
     private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", File(File("").absolutePath))
 
-    private lateinit var mockWebServer: MockWebServer
+    private val mockWebServer = MockServerManager()
 
     companion object {
 
@@ -43,12 +40,12 @@ class NWInterceptorCacheTest {
 
     @Before
     fun setUp() {
-        mockWebServer = MockWebserverUtils.startMockWebServer()
+        mockWebServer.startMockWebServer()
     }
 
     @After
     fun tearUp() {
-        mockWebServer.shutdown()
+        mockWebServer.close()
     }
 
     @Test
@@ -75,12 +72,10 @@ class NWInterceptorCacheTest {
     @Test
     @Throws(IOException::class)
     fun checkNoCacheHeader() {
-        mockWebServer.enqueue(MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
+        mockWebServer.enqueueResponse(mockWebServer
+                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithoutCache()
                 .execute()
@@ -92,12 +87,10 @@ class NWInterceptorCacheTest {
     @Test
     @Throws(IOException::class)
     fun checkCacheHeader() {
-        mockWebServer.enqueue(MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setHeader("Content-Type", "application/json")
-                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
+        mockWebServer.enqueueResponse(mockWebServer
+                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithCache()
                 .execute()

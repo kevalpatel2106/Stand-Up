@@ -3,10 +3,10 @@ package com.kevalpatel2106.standup.authentication.deviceReg
 import android.app.Activity
 import android.support.test.InstrumentationRegistry
 import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.testutils.BaseTestClass
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.After
@@ -27,29 +27,34 @@ class RegisterDeviceServiceTest : BaseTestClass() {
     override fun getActivity(): Activity? = null
 
     private val mRegisterDeviceService = RegisterDeviceService()
-    private val mMockUserAuthRepository = MockUiUserAuthRepository()
+    private val mockServerManager = MockServerManager()
+    private lateinit var mMockUserAuthRepository: UserAuthRepositoryImpl
 
     @Before
     fun setUp() {
         UserSessionManager.clearUserSession()
         ApiProvider.init(InstrumentationRegistry.getContext())
+
+        //Set the repo
+        mockServerManager.startMockWebServer()
+        mMockUserAuthRepository = UserAuthRepositoryImpl(mockServerManager.getBaseUrl())
         mRegisterDeviceService.mUserAuthRepository = mMockUserAuthRepository
     }
 
     @After
     fun tearUp() {
-        mMockUserAuthRepository.close()
+        mockServerManager.close()
+        ApiProvider.init()
     }
 
     @Test
     @Throws(IOException::class)
     fun checkRegisterDeviceIdSuccess() {
-        mMockUserAuthRepository.enqueueResponse(MockWebserverUtils
-                .getStringFromFile(InstrumentationRegistry.getContext(),
-                        com.kevalpatel2106.standup.test.R.raw.device_reg_success))
+        mockServerManager.enqueueResponse(mockServerManager.getStringFromFile(InstrumentationRegistry.getContext(),
+                com.kevalpatel2106.standup.test.R.raw.device_reg_success))
         mRegisterDeviceService.sendDeviceDataToServer("test.reg.id", "test.device.id")
 
-        Thread.sleep(2000)
+        Thread.sleep(5000)
         assertTrue(SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
         assertNotNull(UserSessionManager.token)
     }
@@ -57,14 +62,11 @@ class RegisterDeviceServiceTest : BaseTestClass() {
     @Test
     @Throws(IOException::class)
     fun checkRegisterDeviceIdFail() {
-        mMockUserAuthRepository.enqueueResponse(MockWebserverUtils
-                .getStringFromFile(InstrumentationRegistry.getContext(),
-                        com.kevalpatel2106.standup.test.R.raw.authentication_field_missing))
+        mockServerManager.enqueueResponse(mockServerManager.getStringFromFile(InstrumentationRegistry.getContext(),
+                com.kevalpatel2106.standup.test.R.raw.authentication_field_missing))
         mRegisterDeviceService.sendDeviceDataToServer("test.reg.id", "test.device.id")
 
-        Thread.sleep(2000)
+        Thread.sleep(5000)
         assertFalse(SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
     }
-
-
 }

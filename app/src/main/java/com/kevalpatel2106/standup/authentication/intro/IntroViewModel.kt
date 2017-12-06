@@ -13,6 +13,8 @@ import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.utils.UserSessionManager
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Keval on 19/11/17.
@@ -85,6 +87,8 @@ internal class IntroViewModel : BaseViewModel {
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun authenticateSocialUser(requestData: SignUpRequest) {
         addDisposable(mUserAuthRepo.socialSignUp(requestData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     blockUi.postValue(true)
                 })

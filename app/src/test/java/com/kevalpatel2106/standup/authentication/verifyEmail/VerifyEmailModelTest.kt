@@ -2,7 +2,9 @@ package com.kevalpatel2106.standup.authentication.verifyEmail
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.standup.UnitTestUtils
-import com.kevalpatel2106.standup.authentication.repo.MockUserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.testutils.MockServerManager
+import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
@@ -24,8 +26,12 @@ class VerifyEmailModelTest {
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
 
-    private lateinit var verifyEmailUiModel: VerifyEmailViewModel
-    private var mTestRepoMock = MockUserAuthRepository()
+    @Rule
+    @JvmField
+    val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
+
+    private lateinit var verifyEmailViewModel: VerifyEmailViewModel
+    private val mockServerManager = MockServerManager()
 
     companion object {
 
@@ -36,49 +42,48 @@ class VerifyEmailModelTest {
 
     @Before
     fun setUp() {
-        UnitTestUtils.initApp()
-
-        //Swap the repo
-        verifyEmailUiModel = VerifyEmailViewModel(mTestRepoMock)
+        //Set the repo
+        mockServerManager.startMockWebServer()
+        verifyEmailViewModel = VerifyEmailViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
     }
+
+    @After
+    fun tearUp() {
+        mockServerManager.close()
+    }
+
 
     @Test
     @Throws(IOException::class)
     fun checkInitialization() {
-        Assert.assertFalse(verifyEmailUiModel.blockUi.value!!)
+        Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
     }
 
     @Test
     @Throws(IOException::class)
     fun checkResendVerificationEmailSuccess() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/resend_verification_email_success.json"))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/resend_verification_email_success.json"))
 
         //Make the api call to the mock server
-        verifyEmailUiModel.resendEmail(123)
+        verifyEmailViewModel.resendEmail(123)
 
         //There should be success.
-        Assert.assertFalse(verifyEmailUiModel.blockUi.value!!)
-        Assert.assertTrue(verifyEmailUiModel.mUiModel.value!!.isSuccess)
-        Assert.assertNull(verifyEmailUiModel.errorMessage.value)
+        Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
+        Assert.assertTrue(verifyEmailViewModel.mUiModel.value!!.isSuccess)
+        Assert.assertNull(verifyEmailViewModel.errorMessage.value)
     }
 
     @Test
     @Throws(IOException::class)
     fun checkResendVerificationEmailFieldMissing() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         //Make the api call to the mock server
-        verifyEmailUiModel.resendEmail(123)
+        verifyEmailViewModel.resendEmail(123)
 
         //There should be success.
-        Assert.assertFalse(verifyEmailUiModel.blockUi.value!!)
-        Assert.assertFalse(verifyEmailUiModel.mUiModel.value!!.isSuccess)
-        Assert.assertEquals(verifyEmailUiModel.errorMessage.value!!.getMessage(null), "Required field missing.")
-    }
-
-
-    @After
-    fun tearUp() {
-        mTestRepoMock.close()
+        Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
+        Assert.assertFalse(verifyEmailViewModel.mUiModel.value!!.isSuccess)
+        Assert.assertEquals(verifyEmailViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 }

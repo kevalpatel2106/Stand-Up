@@ -21,6 +21,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
+apply plugin: 'com.jakewharton.hugo'
 //apply plugin: 'com.google.firebase.firebase-perf'
 //https://stackoverflow.com/a/47050632/4690731
 

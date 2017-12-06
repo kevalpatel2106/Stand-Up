@@ -26,8 +26,7 @@ object Utils {
      * @return Device unique id.
      */
     @SuppressLint("HardwareIds")
-    fun getDeviceId(context: Context): String =
-            Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+    fun getDeviceId(context: Context): String = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
 
     /**
      * Get the device model name.

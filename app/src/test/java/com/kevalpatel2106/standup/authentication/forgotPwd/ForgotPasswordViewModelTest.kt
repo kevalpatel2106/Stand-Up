@@ -2,7 +2,9 @@ package com.kevalpatel2106.standup.authentication.forgotPwd
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.standup.UnitTestUtils
-import com.kevalpatel2106.standup.authentication.repo.MockUserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.testutils.MockServerManager
+import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import org.junit.*
 import org.junit.rules.TestRule
 import java.io.File
@@ -20,8 +22,12 @@ class ForgotPasswordViewModelTest {
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
 
+    @Rule
+    @JvmField
+    val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
+
     private lateinit var forgotPasswordViewModel: ForgotPasswordViewModel
-    private var mTestRepoMock = MockUserAuthRepository()
+    private val mockServerManager = MockServerManager()
 
     companion object {
 
@@ -32,10 +38,14 @@ class ForgotPasswordViewModelTest {
 
     @Before
     fun setUp() {
-        UnitTestUtils.initApp()
+        //Set the repo
+        mockServerManager.startMockWebServer()
+        forgotPasswordViewModel = ForgotPasswordViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
+    }
 
-        //Swap the repo
-        forgotPasswordViewModel = ForgotPasswordViewModel(mTestRepoMock)
+    @After
+    fun tearUp() {
+        mockServerManager.close()
     }
 
     @Test
@@ -56,7 +66,7 @@ class ForgotPasswordViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkForgotPasswordSuccess() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/forgot_password_success.json"))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/forgot_password_success.json"))
 
         //Make the api call to the mock server
         forgotPasswordViewModel.forgotPasswordRequest("test@example.com")
@@ -70,7 +80,7 @@ class ForgotPasswordViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkForgotPasswordFieldMissing() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         //Make the api call to the mock server
         forgotPasswordViewModel.forgotPasswordRequest("test@example.com")
@@ -79,11 +89,5 @@ class ForgotPasswordViewModelTest {
         Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
         Assert.assertFalse(forgotPasswordViewModel.mUiModel.value!!.isSuccess)
         Assert.assertEquals(forgotPasswordViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
-    }
-
-
-    @After
-    fun tearUp() {
-        mTestRepoMock.close()
     }
 }

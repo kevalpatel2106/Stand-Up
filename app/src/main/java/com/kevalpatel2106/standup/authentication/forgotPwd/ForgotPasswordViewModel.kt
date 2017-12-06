@@ -11,6 +11,9 @@ import com.kevalpatel2106.standup.Validator
 import com.kevalpatel2106.standup.authentication.repo.ForgotPasswordRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import hugo.weaving.DebugLog
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Kevalpatel2106 on 23-Nov-17.
@@ -54,9 +57,13 @@ class ForgotPasswordViewModel : BaseViewModel {
 
     internal val mEmailError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
 
+    @DebugLog
     fun forgotPasswordRequest(email: String) {
         if (Validator.isValidEmail(email)) {
-            addDisposable(mUserAuthRepo.forgotPassword(ForgotPasswordRequest(email))
+            addDisposable(mUserAuthRepo
+                    .forgotPassword(ForgotPasswordRequest(email))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe({
                         blockUi.postValue(true)
                     })

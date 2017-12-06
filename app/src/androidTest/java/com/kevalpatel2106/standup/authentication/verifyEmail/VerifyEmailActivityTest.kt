@@ -10,14 +10,15 @@ import android.support.test.espresso.intent.matcher.IntentMatchers
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
 import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.standup.dashboard.Dashboard
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.UserSessionManager
 import org.hamcrest.Matchers.not
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -36,11 +37,25 @@ class VerifyEmailActivityTest : BaseTestClass() {
 
     override fun getActivity(): VerifyEmailActivity = rule.activity
 
+    private val mockServerManager = MockServerManager()
+    private lateinit var mMockUserAuthRepository: UserAuthRepositoryImpl
+
     @Before
     fun setUp() {
         UserSessionManager.clearUserSession()
         ApiProvider.init(InstrumentationRegistry.getContext())
+
+        mockServerManager.startMockWebServer()
+        mMockUserAuthRepository = UserAuthRepositoryImpl(mockServerManager.getBaseUrl())
+        activity.mModel.mUserAuthRepo = mMockUserAuthRepository
     }
+
+    @After
+    fun tearUp() {
+        mockServerManager.close()
+        ApiProvider.init()
+    }
+
 
     @Test
     @Throws(IOException::class)
@@ -59,7 +74,7 @@ class VerifyEmailActivityTest : BaseTestClass() {
         onView(withId(R.id.verify_btn_skip)).check(matches(isEnabled()))
         onView(withId(R.id.verify_btn_resend)).check(matches(isEnabled()))
 
-        activity.runOnUiThread { activity.mModel.mIsAuthenticationRunning.value = true }
+        activity.runOnUiThread { activity.mModel.blockUi.value = true }
 
         onView(withId(R.id.verify_btn_open_mail_btn)).check(matches(not(isEnabled())))
         onView(withId(R.id.verify_btn_skip)).check(matches(not(isEnabled())))
@@ -75,10 +90,8 @@ class VerifyEmailActivityTest : BaseTestClass() {
     @Test
     @Throws(IOException::class)
     fun checkResend() {
-        val mockRepo = MockUiUserAuthRepository()
-        mockRepo.enqueueResponse(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+        mockServerManager.enqueueResponse(mockServerManager.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.standup.test.R.raw.resend_verification_email_success))
-        activity.mModel.mUserAuthRepo = mockRepo
 
         onView(withId(R.id.verify_btn_resend)).perform(click())
 

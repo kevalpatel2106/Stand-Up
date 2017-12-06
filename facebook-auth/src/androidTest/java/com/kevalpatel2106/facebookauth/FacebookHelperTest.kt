@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry
 import android.support.test.rule.ActivityTestRule
 import com.facebook.FacebookSdk
 import com.kevalpatel2106.testutils.BaseTestClass
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.TestActivity
 import org.json.JSONObject
 import org.junit.Assert
@@ -69,7 +69,7 @@ class FacebookHelperTest : BaseTestClass() {
             }
         }, "")
 
-        val response = JSONObject(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+        val response = JSONObject(MockServerManager().getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.facebookauth.test.R.raw.fb_response))
         val fbUser = fbHelper.parseResponse(response)
 

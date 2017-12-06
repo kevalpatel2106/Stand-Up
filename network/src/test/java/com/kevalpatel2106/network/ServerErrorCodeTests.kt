@@ -1,12 +1,10 @@
 package com.kevalpatel2106.network
 
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
 import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
 
@@ -19,7 +17,6 @@ import java.net.HttpURLConnection
 
 @RunWith(JUnit4::class)
 class ServerErrorCodeTests {
-    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", File(File("").absolutePath))
 
     companion object {
 
@@ -37,25 +34,25 @@ class ServerErrorCodeTests {
         }
     }
 
-    private lateinit var mockWebServer: MockWebServer
+    private val mockServerManager = MockServerManager()
 
     @Before
     fun setUp() {
-        mockWebServer = MockWebserverUtils.startMockWebServer()
+        mockServerManager.startMockWebServer()
     }
 
     @After
     fun tearUp() {
-        mockWebServer.shutdown()
+        mockServerManager.close()
     }
 
     @Test
     @Throws(IOException::class)
     fun checkPageNotFound() {
         //404 response
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND))
+        mockServerManager.mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_NOT_FOUND))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -68,9 +65,9 @@ class ServerErrorCodeTests {
     @Throws(IOException::class)
     fun checkUnAuthorise() {
         //404 response
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED))
+        mockServerManager.mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -83,9 +80,9 @@ class ServerErrorCodeTests {
     @Throws(IOException::class)
     fun checkBadRequest() {
         //400 response
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST))
+        mockServerManager.mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -100,9 +97,9 @@ class ServerErrorCodeTests {
     @Throws(IOException::class)
     fun checkServerBusy() {
         //500 response
-        mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_SERVER_ERROR))
+        mockServerManager.mockWebServer.enqueue(MockResponse().setResponseCode(HttpURLConnection.HTTP_SERVER_ERROR))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -115,9 +112,9 @@ class ServerErrorCodeTests {
     @Test
     @Throws(IOException::class)
     fun checkUnknownResponseCode() {
-        mockWebServer.enqueue(MockResponse().setResponseCode(103))
+        mockServerManager.mockWebServer.enqueue(MockResponse().setResponseCode(103))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()

@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.notification
 
 import android.annotation.TargetApi
 import android.app.Notification
@@ -10,8 +10,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.support.v4.app.NotificationCompat
+import com.kevalpatel2106.standup.R
 
-@Suppress("DEPRECATION")
 /**
  * Helper class for showing and canceling test
  * notifications.
@@ -20,7 +20,9 @@ import android.support.v4.app.NotificationCompat
  * This class makes heavy use of the [NotificationCompat.Builder] helper
  * class to create notifications in a backward-compatible way.
  */
-object TestNotification {
+@Deprecated("This will be removed in future.")
+@Suppress("DEPRECATION")
+internal object TestNotification {
     /**
      * The unique identifier for this type of notification.
      */
@@ -39,7 +41,7 @@ object TestNotification {
      * presentation of test notifications. Make
      * sure to follow the
      * [
- * Notification design guidelines](https://developer.android.com/design/patterns/notifications.html) when doing so.
+     * Notification design guidelines](https://developer.android.com/design/patterns/notifications.html) when doing so.
      *
      * @see .cancel
      */
@@ -49,7 +51,7 @@ object TestNotification {
 
         // This image is used as the notification's large icon (thumbnail).
         // TODO: Remove this if your notification has no relevant thumbnail.
-        val picture = BitmapFactory.decodeResource(res, R.drawable.example_picture)
+        val picture = BitmapFactory.decodeResource(res, R.drawable.ic_notification_verified)
 
 
         val title = res.getString(
@@ -65,7 +67,7 @@ object TestNotification {
 
                 // Set required fields, including the small icon, the
                 // notification title, and text.
-                .setSmallIcon(R.drawable.ic_stat_test)
+                .setSmallIcon(R.drawable.ic_notififcation_launcher)
                 .setContentTitle(title)
                 .setContentText(text)
 

@@ -39,6 +39,14 @@ class VerifyEmailActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_verify_email)
+        setViewModel()
+
+        verify_description_text.text = String.format(getString(R.string.verify_email_screen_message),
+                UserSessionManager.email)
+    }
+
+    private fun setViewModel() {
         mModel = ViewModelProviders.of(this).get(VerifyEmailViewModel::class.java)
 
         mModel.blockUi.observe(this@VerifyEmailActivity, Observer<Boolean> {
@@ -63,11 +71,6 @@ class VerifyEmailActivity : BaseActivity() {
                 }
             }
         })
-
-        setContentView(R.layout.activity_verify_email)
-
-        verify_description_text.text = String.format(getString(R.string.verify_email_screen_message),
-                UserSessionManager.email)
     }
 
     @OnClick(R.id.verify_btn_skip)

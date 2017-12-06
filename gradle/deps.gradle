@@ -15,7 +15,7 @@
  */
 
 ext {
-    def playServiceVersion = "11.6.0"
+    def playServiceVersion = "11.6.2"
     def supportLibVersion = "27.0.1"
     def kotlinVersion = '1.2.0'
 

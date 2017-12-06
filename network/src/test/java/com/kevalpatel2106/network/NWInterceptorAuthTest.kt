@@ -2,12 +2,10 @@ package com.kevalpatel2106.network
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import okhttp3.Request
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import org.apache.commons.codec.binary.Base64
 import org.junit.*
 import org.junit.runner.RunWith
@@ -20,7 +18,6 @@ import retrofit2.Call
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection
 
 /**
  * Created by Keval on 12/11/17.
@@ -36,7 +33,7 @@ class NWInterceptorAuthTest {
     private val TEST_PREF_STRING = "TestValue"
     private val TEST_PREF_LONG = 100L
 
-    private lateinit var mockWebServer: MockWebServer
+    private val mockWebServer = MockServerManager()
 
     companion object {
 
@@ -65,12 +62,12 @@ class NWInterceptorAuthTest {
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(TEST_PREF_LONG)
         SharedPrefsProvider.init(context)
 
-        mockWebServer = MockWebserverUtils.startMockWebServer()
+        mockWebServer.startMockWebServer()
     }
 
     @After
     fun tearUp() {
-        mockWebServer.shutdown()
+        mockWebServer.close()
     }
 
     @Test
@@ -88,19 +85,16 @@ class NWInterceptorAuthTest {
         Assert.assertNotNull(modifiedRequest.headers().get("Authorization"))
         Assert.assertEquals(modifiedRequest.headers().get("Authorization"),
                 "Basic " + String(Base64.encodeBase64((UserSessionManager.userId.toString()
-                                + ":" + UserSessionManager.token).toByteArray())))
+                        + ":" + UserSessionManager.token).toByteArray())))
     }
 
     @Test
     @Throws(IOException::class)
     fun checkApiRequestWithAuthHeader() {
-        val mockWebServer = MockWebserverUtils.startMockWebServer()
-        mockWebServer.enqueue(MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setHeader("Content-Type", "text/html")
-                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
+        mockWebServer.enqueueResponse(mockWebServer
+                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
 
-        ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithAuthHeader()
                 .enqueue(object : retrofit2.Callback<TestData> {

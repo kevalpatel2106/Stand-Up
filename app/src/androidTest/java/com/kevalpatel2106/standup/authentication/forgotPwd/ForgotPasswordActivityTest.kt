@@ -9,16 +9,13 @@ import android.support.test.rule.ActivityTestRule
 import com.kevalpatel2106.base.annotations.EndToEndTest
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.UserSessionManager
 import org.hamcrest.Matchers
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import java.io.IOException
 
 /**
@@ -32,26 +29,43 @@ class ForgotPasswordActivityTest : BaseTestClass() {
     @Rule
     val rule = ActivityTestRule<ForgotPasswordActivity>(ForgotPasswordActivity::class.java)
 
+    private val mockServerManager = MockServerManager()
+    private lateinit var mMockUserAuthRepository: UserAuthRepositoryImpl
+
     override fun getActivity(): ForgotPasswordActivity = rule.activity
 
     @Before
     fun setUp() {
         UserSessionManager.clearUserSession()
         ApiProvider.init(InstrumentationRegistry.getContext())
+
+        mockServerManager.startMockWebServer()
+        mMockUserAuthRepository = UserAuthRepositoryImpl(mockServerManager.getBaseUrl())
+        activity.mModel.mUserAuthRepo = mMockUserAuthRepository
     }
+
+    @After
+    fun tearUp() {
+        mockServerManager.close()
+        ApiProvider.init()
+    }
+
 
     @Test
     @Throws(Exception::class)
     fun checkApiRunningStateChange() {
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(ViewMatchers.isEnabled()))
+        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn))
+                .check(ViewAssertions.matches(ViewMatchers.isEnabled()))
 
         activity.runOnUiThread { activity.mModel.blockUi.value = true }
 
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(Matchers.not(ViewMatchers.isEnabled())))
+        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn))
+                .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isEnabled())))
 
         //switch to the landscape
         switchToLandscape()
-        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn)).check(ViewAssertions.matches(Matchers.not(ViewMatchers.isEnabled())))
+        Espresso.onView(ViewMatchers.withId(R.id.forgot_password_submit_btn))
+                .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isEnabled())))
         activity.runOnUiThread { activity.mModel.blockUi.value = false }
     }
 
@@ -113,14 +127,14 @@ class ForgotPasswordActivityTest : BaseTestClass() {
     @EndToEndTest
     @Throws(Exception::class)
     fun testForgotPasswordSuccess() {
-        val mockRepo = MockUiUserAuthRepository()
-        mockRepo.enqueueResponse(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+        mockServerManager.enqueueResponse(mockServerManager.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.standup.test.R.raw.forgot_password_success))
-        activity.mModel.mUserAuthRepo = mockRepo
 
         //Check with valid email address
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et))
-                .perform(ViewActions.clearText(), ViewActions.typeText("text@example.com"), ViewActions.closeSoftKeyboard())
+                .perform(ViewActions.clearText(),
+                        ViewActions.typeText("text@example.com"),
+                        ViewActions.closeSoftKeyboard())
 
         //Perform validation
         activity.submit()
@@ -137,10 +151,8 @@ class ForgotPasswordActivityTest : BaseTestClass() {
     @EndToEndTest
     @Throws(Exception::class)
     fun testForgotPasswordError() {
-        val mockRepo = MockUiUserAuthRepository()
-        mockRepo.enqueueResponse(MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+        mockServerManager.enqueueResponse(mockServerManager.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.standup.test.R.raw.authentication_field_missing))
-        activity.mModel.mUserAuthRepo = mockRepo
 
         //Check with valid email address
         Espresso.onView(ViewMatchers.withId(R.id.forgot_password_email_et))

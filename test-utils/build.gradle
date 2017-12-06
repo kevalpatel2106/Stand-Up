@@ -18,6 +18,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'jacoco-android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.jakewharton.hugo'
 
 apply from: '../gradle/config.gradle'
 apply from: '../gradle/deps.gradle'
@@ -73,6 +74,10 @@ dependencies {
     implementation supportLib.appCompat
     implementation supportLib.supportv4
     implementation supportLib.design
+
+    //Rx
+    implementation rxLib.rxJava
+    implementation (rxLib.rxAndroid, excludeGrp)
 
     //Loggers
     implementation(debugLibs.timber, excludeGrp)

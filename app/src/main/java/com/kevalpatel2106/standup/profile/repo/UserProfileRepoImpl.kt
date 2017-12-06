@@ -11,8 +11,6 @@ import com.kevalpatel2106.vault.VaultBuilder
 import com.kevalpatel2106.vault.VaultData
 import com.kevalpatel2106.vault.cache.SharedPrefranceCache
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -21,7 +19,7 @@ import javax.net.ssl.HttpsURLConnection
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRepo {
+internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRepo {
 
     constructor() : this(ProfileApiService.baseUrl())
 

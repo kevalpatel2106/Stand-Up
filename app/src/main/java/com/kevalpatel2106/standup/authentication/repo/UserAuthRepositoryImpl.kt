@@ -3,11 +3,8 @@ package com.kevalpatel2106.standup.authentication.repo
 import com.kevalpatel2106.base.annotations.Repository
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.network.RetrofitNetworkRefresherImpl
-import com.kevalpatel2106.standup.profile.repo.ProfileApiService
 import com.kevalpatel2106.vault.VaultBuilder
 import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Kevalpatel2106 on 20-Nov-17.
@@ -29,8 +26,6 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .addRefresher(RetrofitNetworkRefresherImpl(call))
                 .build()
                 .fetch()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 
@@ -43,8 +38,6 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .addRefresher(RetrofitNetworkRefresherImpl(call))
                 .build()
                 .fetch()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 
@@ -57,8 +50,6 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .addRefresher(RetrofitNetworkRefresherImpl(call))
                 .build()
                 .fetch()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 
@@ -71,8 +62,6 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .addRefresher(RetrofitNetworkRefresherImpl(call))
                 .build()
                 .fetch()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 
@@ -85,8 +74,6 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .addRefresher(RetrofitNetworkRefresherImpl(call))
                 .build()
                 .fetch()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 
@@ -99,8 +86,6 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .addRefresher(RetrofitNetworkRefresherImpl(call))
                 .build()
                 .fetch()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 
@@ -113,8 +98,6 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .addRefresher(RetrofitNetworkRefresherImpl(call))
                 .build()
                 .fetch()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 
@@ -127,8 +110,6 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .addRefresher(RetrofitNetworkRefresherImpl(call))
                 .build()
                 .fetch()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 }

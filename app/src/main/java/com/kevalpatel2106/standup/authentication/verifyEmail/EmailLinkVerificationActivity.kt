@@ -16,6 +16,8 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_email_link_verification.*
 
 /**
@@ -28,7 +30,7 @@ class EmailLinkVerificationActivity : BaseActivity() {
     companion object {
 
         @VisibleForTesting
-        private const val ARG_URL = "arg_url"
+        const val ARG_URL = "arg_url"
 
         /**
          * Launch the [EmailLinkVerificationActivity].
@@ -71,6 +73,8 @@ class EmailLinkVerificationActivity : BaseActivity() {
     internal fun verifyEmail(url: String) {
         verify_email_link_progressbar.visibility = View.VISIBLE
         addSubscription(mAuthRepo.verifyEmailLink(url)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     //Success
                     verify_email_link_description_tv.text = getString(R.string.verify_email_link_success)

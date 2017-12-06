@@ -9,6 +9,8 @@ import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Kevalpatel2106 on 27-Nov-17.
@@ -42,6 +44,8 @@ internal object Logout {
      */
     internal fun logout(context: Context, userAuthRepository: UserAuthRepository) = userAuthRepository
             .logout(LogoutRequest(UserSessionManager.userId, Utils.getDeviceId(context)))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 //Clear all the data.
                 clearSession(context)

@@ -1,8 +1,7 @@
 package com.kevalpatel2106.network
 
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
 import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -37,46 +36,45 @@ class StringResponsesTests {
         }
     }
 
-    private lateinit var mockWebServer: MockWebServer
+    private val mockServerManager = MockServerManager()
 
     @Before
     fun setUp() {
-        mockWebServer = MockWebserverUtils.startMockWebServer()
+        mockServerManager.startMockWebServer()
     }
 
     @After
     fun tearUp() {
-        mockWebServer.shutdown()
+        mockServerManager.close()
     }
 
     @Test
     @Throws(IOException::class)
     fun checkForTheStringSuccessResponse() {
-        mockWebServer.enqueue(MockResponse()
-                .setResponseCode(HttpURLConnection.HTTP_OK)
-                .setHeader("Content-Type", "text/html")
-                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
+        mockServerManager.enqueueResponse(mockServerManager
+                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")), "text/plain")
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseString()
                 .execute()
 
         Assert.assertTrue(response.isSuccessful)
         Assert.assertEquals(response.code(), HttpURLConnection.HTTP_OK)
-        Assert.assertEquals(response.body(), MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
+        Assert.assertEquals(response.body(),
+                mockServerManager.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
         Assert.assertEquals(response.message(), "OK")
     }
 
     @Test
     @Throws(IOException::class)
     fun checkForTheStringFailResponse() {
-        mockWebServer.enqueue(MockResponse()
+        mockServerManager.mockWebServer.enqueue(MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_FORBIDDEN)
                 .setHeader("Content-Type", "text/html")
-                .setBody(MockWebserverUtils.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
+                .setBody(mockServerManager.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
-        val response = ApiProvider.getRetrofitClient(MockWebserverUtils.getBaseUrl(mockWebServer))
+        val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseString()
                 .execute()

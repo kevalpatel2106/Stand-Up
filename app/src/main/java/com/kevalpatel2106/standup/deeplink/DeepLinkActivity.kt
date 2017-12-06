@@ -3,7 +3,6 @@ package com.kevalpatel2106.standup.deeplink
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.EmailLinkVerificationActivity
@@ -53,8 +52,7 @@ class DeepLinkActivity : BaseActivity() {
         finish()
     }
 
-    @VisibleForTesting
-    fun openLink(linkToOpen: String) {
+    private fun openLink(linkToOpen: String) {
         WebViewActivity.launch(this@DeepLinkActivity, linkToOpen, false)
     }
 

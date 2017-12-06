@@ -8,7 +8,7 @@ import java.util.regex.Pattern
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object Validator {
+internal object Validator {
 
     //Email pattern regex.
     private val EMAIL_PATTERN = ("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"

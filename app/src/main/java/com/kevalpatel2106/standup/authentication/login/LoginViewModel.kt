@@ -16,6 +16,8 @@ import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.utils.UserSessionManager
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Keval on 19/11/17.
@@ -86,6 +88,8 @@ internal class LoginViewModel : BaseViewModel {
                     if (password == confirmPassword) {
 
                         mUserAuthRepo.signUp(SignUpRequest(email, name, password, null))
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
                                 .doOnSubscribe({
                                     blockUi.postValue(true)
                                 })
@@ -137,6 +141,8 @@ internal class LoginViewModel : BaseViewModel {
             if (Validator.isValidPassword(password)) {
 
                 mUserAuthRepo.login(LoginRequest(email, password))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe({
                             blockUi.postValue(true)
                         })
@@ -200,6 +206,8 @@ internal class LoginViewModel : BaseViewModel {
     @VisibleForTesting
     fun authenticateSocialUser(requestData: SignUpRequest) {
         mUserAuthRepo.socialSignUp(requestData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
                     blockUi.postValue(true)
                 })

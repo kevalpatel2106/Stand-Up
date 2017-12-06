@@ -11,13 +11,16 @@ import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
-import com.kevalpatel2106.standup.authentication.repo.MockUiUserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
-import com.kevalpatel2106.testutils.MockWebserverUtils
+import com.kevalpatel2106.testutils.MockServerManager
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,19 +41,36 @@ class EmailLinkVerificationUiActivityTest : BaseTestClass() {
 
     override fun getActivity(): EmailLinkVerificationActivity? = rule.activity
 
-    private var mTestRepoMock = MockUiUserAuthRepository()
+    private val mockServerManager = MockServerManager()
+    private lateinit var mMockUserAuthRepository: UserAuthRepositoryImpl
+
+    @Before
+    fun setUp() {
+        UserSessionManager.clearUserSession()
+        ApiProvider.init(InstrumentationRegistry.getContext())
+
+        mockServerManager.startMockWebServer()
+        mMockUserAuthRepository = UserAuthRepositoryImpl(mockServerManager.getBaseUrl())
+    }
+
+    @After
+    fun tearUp() {
+        mockServerManager.close()
+        ApiProvider.init()
+    }
 
     @Test
     @Throws(IOException::class)
     fun checkVerifyEmailSuccess() {
-        mTestRepoMock.enqueueResponse(response = MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+        mockServerManager.enqueueResponse(mockServerManager.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.standup.test.R.raw.email_verify_success), type = "text/html")
 
         //Prepare the intent
         val intent = Intent()
-        intent.putExtra(EmailLinkVerificationActivity.ARG_URL, mTestRepoMock.getBase() + "/verifyEmailLink/32894723874/dskfhj-sdf-vcx-cx-vczx")
+        intent.putExtra(EmailLinkVerificationActivity.ARG_URL,
+                mockServerManager.getBaseUrl() + "/verifyEmailLink/32894723874/dskfhj-sdf-vcx-cx-vczx")
         rule.launchActivity(intent)
-        activity!!.mAuthRepo = mTestRepoMock
+        activity!!.mAuthRepo = mMockUserAuthRepository
 
         Intents.init()
         onView(withId(R.id.verify_email_link_description_tv)).check(ViewAssertions.matches(withText(R.string.verify_email_link_success)))
@@ -64,14 +84,15 @@ class EmailLinkVerificationUiActivityTest : BaseTestClass() {
     @Test
     @Throws(IOException::class)
     fun checkVerifyEmailFail() {
-        mTestRepoMock.enqueueResponse(response = MockWebserverUtils.getStringFromFile(InstrumentationRegistry.getContext(),
+        mockServerManager.enqueueResponse(mockServerManager.getStringFromFile(InstrumentationRegistry.getContext(),
                 com.kevalpatel2106.standup.test.R.raw.authentication_field_missing))
 
         //Prepare the intent
         val intent = Intent()
-        intent.putExtra(EmailLinkVerificationActivity.ARG_URL, mTestRepoMock.getBase() + "/verifyEmailLink/32894723874/dskfhj-sdf-vcx-cx-vczx")
+        intent.putExtra(EmailLinkVerificationActivity.ARG_URL,
+                mockServerManager.getBaseUrl() + "/verifyEmailLink/32894723874/dskfhj-sdf-vcx-cx-vczx")
         rule.launchActivity(intent)
-        activity!!.mAuthRepo = mTestRepoMock
+        activity!!.mAuthRepo = mMockUserAuthRepository
 
         Intents.init()
         onView(withId(R.id.verify_email_link_logo)).check(ViewAssertions.matches(CustomMatchers.hasImage()))
@@ -79,11 +100,5 @@ class EmailLinkVerificationUiActivityTest : BaseTestClass() {
         Thread.sleep(3000)
         Intents.intended(IntentMatchers.hasComponent(ComponentName(InstrumentationRegistry.getTargetContext(), IntroActivity::class.java.name)))
         Intents.release()
-    }
-
-
-    @After
-    fun tearUp() {
-        mTestRepoMock.close()
     }
 }

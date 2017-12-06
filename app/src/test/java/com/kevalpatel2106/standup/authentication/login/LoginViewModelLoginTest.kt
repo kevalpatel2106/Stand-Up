@@ -2,7 +2,9 @@ package com.kevalpatel2106.standup.authentication.login
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.standup.UnitTestUtils
-import com.kevalpatel2106.standup.authentication.repo.MockUserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.testutils.MockServerManager
+import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
@@ -24,8 +26,12 @@ class LoginViewModelLoginTest {
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
 
+    @Rule
+    @JvmField
+    val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
+
     private lateinit var loginViewModel: LoginViewModel
-    private var mTestRepoMock = MockUserAuthRepository()
+    private val mockServerManager = MockServerManager()
 
     companion object {
 
@@ -36,13 +42,14 @@ class LoginViewModelLoginTest {
 
     @Before
     fun setUp() {
-        //Swap the repo
-        loginViewModel = LoginViewModel(mTestRepoMock)
+        //Set the repo
+        mockServerManager.startMockWebServer()
+        loginViewModel = LoginViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
     }
 
     @After
     fun tearUp() {
-        mTestRepoMock.close()
+        mockServerManager.close()
     }
 
     @Test
@@ -87,7 +94,7 @@ class LoginViewModelLoginTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateLoginSuccess() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/user_login_success.json"))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/user_login_success.json"))
 
         //Make the api call to the mock server
         loginViewModel.performSignIn("test@example.com", "1234567989")
@@ -102,7 +109,7 @@ class LoginViewModelLoginTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateLoginFieldMissing() {
-        mTestRepoMock.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         //Make the api call to the mock server
         loginViewModel.performSignIn("test@example.com", "1234567989")

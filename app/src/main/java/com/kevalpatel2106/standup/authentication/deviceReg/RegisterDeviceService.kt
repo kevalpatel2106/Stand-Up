@@ -35,7 +35,10 @@ import com.kevalpatel2106.standup.notification.NotificationChannel
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
+import hugo.weaving.DebugLog
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 
@@ -124,7 +127,7 @@ class RegisterDeviceService : Service() {
     private fun makeForeground() {
         val notification = Notification.Builder(this)
                 .setContentTitle(getString(R.string.application_name))
-                .setSmallIcon(R.drawable.ic_stat_test) //TODO Add small notification icon.
+                .setSmallIcon(R.drawable.ic_notififcation_launcher)
                 .setContentText(getString(R.string.register_device_service_notification_message))
                 .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher))
                 .setAutoCancel(false)
@@ -150,6 +153,7 @@ class RegisterDeviceService : Service() {
      */
     @SuppressLint("HardwareIds")
     @VisibleForTesting
+    @DebugLog
     fun sendDeviceDataToServer(regId: String, deviceId: String) {
         //Prepare the request object
         val requestData = DeviceRegisterRequest(gcmKey = regId, deviceId = deviceId)
@@ -157,6 +161,8 @@ class RegisterDeviceService : Service() {
         //Register to the server
         mDisposable = mUserAuthRepository
                 .registerDevice(requestData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ data ->
                     data?.let {
                         SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
