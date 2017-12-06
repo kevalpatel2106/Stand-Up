@@ -115,12 +115,14 @@ class EditProfileActivity : BaseActivity() {
         btnMenuSave = menu.findItem(R.id.action_save)
         btnMenuSave!!.isVisible = !mModel.isLoadingProfile.value!!
         if (mModel.isSavingProfile.value!!) {
+
             //Display the progressbar in toolbar
             val progressBar = ProgressBar(this)
             progressBar.setPadding(25, 25, 25, 25)
             btnMenuSave?.actionView = progressBar
             btnMenuSave?.isEnabled = false
         } else {
+
             btnMenuSave?.isEnabled = true          // Enable click
             btnMenuSave?.actionView = null       // Remove action view.
         }

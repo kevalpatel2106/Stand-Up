@@ -27,7 +27,8 @@ import com.kevalpatel2106.googleauth.GoogleSignInHelper
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.login.LoginActivity
-import com.kevalpatel2106.standup.dashboard.Dashboard
+import com.kevalpatel2106.standup.dashboard.DashboardActivity
+import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_intro.*
 
@@ -91,7 +92,11 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                     RegisterDeviceService.start(this)
 
                     //User successfully logged in.
-                    Dashboard.launch(this@IntroActivity)
+                    if (it.isNewUser) {
+                        EditProfileActivity.launch(this@IntroActivity)
+                    } else {
+                        DashboardActivity.launch(this@IntroActivity)
+                    }
                     finish()
                 }
             }

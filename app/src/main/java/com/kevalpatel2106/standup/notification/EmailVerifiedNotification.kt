@@ -1,11 +1,13 @@
 package com.kevalpatel2106.standup.notification
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.standup.R
 
@@ -13,7 +15,15 @@ import com.kevalpatel2106.standup.R
 internal object EmailVerifiedNotification {
     private val NOTIFICATION_ID = 2345
 
+    @SuppressLint("VisibleForTests")
     internal fun notify(context: Context, message: String?) {
+        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.addAccountNotificationChannel(context.applicationContext)
+        nm.notify(NOTIFICATION_ID, buildNotification(context, message))
+    }
+
+    @VisibleForTesting
+    internal fun buildNotification(context: Context, message: String?): Notification {
         val builder = NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.ic_notififcation_launcher)
@@ -30,21 +40,16 @@ internal object EmailVerifiedNotification {
                         .setBigContentTitle(context.getString(R.string.app_name)))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(NotificationChannel.ACCOUNT_NOTIFICATION_CHANNEL)
+            builder.setChannelId(NotificationChannelType.ACCOUNT_NOTIFICATION_CHANNEL)
         }
 
-        notify(context, builder.build())
+        return builder.build()
     }
 
-    @TargetApi(Build.VERSION_CODES.ECLAIR)
-    private fun notify(context: Context, notification: Notification) {
-        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.notify(NOTIFICATION_ID, notification)
-    }
 
     /**
      * Cancels any notifications of this type previously shown using
-     * [.notify].
+     * [.buildNotification].
      */
     @TargetApi(Build.VERSION_CODES.ECLAIR)
     internal fun cancel(context: Context) {

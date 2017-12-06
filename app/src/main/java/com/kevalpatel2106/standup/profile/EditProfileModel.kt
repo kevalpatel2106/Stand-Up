@@ -62,7 +62,7 @@ class EditProfileModel : BaseViewModel {
 
     /**
      * The response from received from the [saveMyProfile] call. Activity can monitor this to get
-     * notify when the profile saved on the server.
+     * buildNotification when the profile saved on the server.
      */
     internal val mProfileUpdateStatus: MutableLiveData<SaveProfileResponse> = MutableLiveData()
 

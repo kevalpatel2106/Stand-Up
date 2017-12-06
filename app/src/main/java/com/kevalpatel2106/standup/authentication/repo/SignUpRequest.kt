@@ -56,5 +56,5 @@ data class SignUpRequest(
     constructor(googleUser: GoogleAuthUser) : this(email = googleUser.email,
             displayName = googleUser.name,
             password = null,
-            photo = googleUser.photoUrl.toString())
+            photo = googleUser.photoUrl?.toString())
 }

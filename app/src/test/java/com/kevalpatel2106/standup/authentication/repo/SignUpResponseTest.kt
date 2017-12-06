@@ -1,9 +1,11 @@
 package com.kevalpatel2106.standup.authentication.repo
 
+import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.io.IOException
 
 /**
  * Created by Kevalpatel2106 on 04-Dec-17.
@@ -14,6 +16,7 @@ import org.junit.runners.JUnit4
 class SignUpResponseTest {
 
     @Test
+    @Throws(IOException::class)
     fun checkInitWithDefaultParams() {
         val signUpResponseData = SignUpResponse(uid = 0, name = "Test User", email = "test@example.com")
 
@@ -26,6 +29,7 @@ class SignUpResponseTest {
     }
 
     @Test
+    @Throws(IOException::class)
     fun checkInitWithParams() {
         val signUpResponseData = SignUpResponse(uid = 0,
                 isVerified = true,
@@ -41,4 +45,35 @@ class SignUpResponseTest {
         assertTrue(signUpResponseData.isNewUser)
         assertTrue(signUpResponseData.isVerified)
     }
+
+
+    @Test
+    @Throws(IOException::class)
+    fun checkEquals() {
+        val signUpResponse = SignUpResponse(uid = 0,
+                isVerified = true,
+                isNewUser = true,
+                photoUrl = "http://google.com",
+                name = "Test User",
+                email = "test@example.com")
+        val signUpResponse1 = SignUpResponse(uid = 0,
+                isVerified = true,
+                isNewUser = true,
+                photoUrl = "http://google.com",
+                name = "Test User",
+                email = "test@example.com")
+        val signUpResponse2 = SignUpResponse(uid = 1234,
+                isVerified = true,
+                isNewUser = true,
+                photoUrl = "http://google.com",
+                name = "Test User",
+                email = "test@example.com")
+
+        assertEquals(signUpResponse, signUpResponse1)
+        Assert.assertNotEquals(signUpResponse, signUpResponse2)
+        Assert.assertNotEquals(signUpResponse1, signUpResponse2)
+        Assert.assertEquals(signUpResponse, signUpResponse)
+        Assert.assertNotEquals(signUpResponse, null)
+    }
+
 }

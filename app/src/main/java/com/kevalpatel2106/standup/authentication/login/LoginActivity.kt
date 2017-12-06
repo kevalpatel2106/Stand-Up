@@ -28,7 +28,8 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
-import com.kevalpatel2106.standup.dashboard.Dashboard
+import com.kevalpatel2106.standup.dashboard.DashboardActivity
+import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_login.*
@@ -79,6 +80,34 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        setModel()
+
+        //Initialize helpers
+        mGoogleSignInHelper = GoogleSignInHelper(this, getString(R.string.server_client_id), this)
+        mFacebookSignInHelper = FacebookHelper(this, getString(R.string.fb_login_field_string))
+
+        //Play the loading animations
+        if (savedInstanceState == null) {
+            playLoadAnimations()
+
+            //Switch between login/sign up based on the argument
+            isSignUp = intent.getBooleanExtra(ARG_IS_SIGN_UP, false)
+            if (isSignUp) {
+                switchToSignUp()
+            } else {
+                tiv_name.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        tiv_name.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        switchToLogin()
+                    }
+                })
+            }
+        } else {
+            login_logo_iv.alpha = 1f
+        }
+    }
+
+    private fun setModel() {
         mModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
         //Observer the api call changes
@@ -112,38 +141,17 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                     if (!it.isVerify) {
                         //Open the email verify.
                         VerifyEmailActivity.launch(this@LoginActivity)
+                    } else if (it.isNewUser) {
+                        //Redirect the edit
+                        EditProfileActivity.launch(this@LoginActivity)
                     } else {
                         //Open the dashboard.
-                        Dashboard.launch(this@LoginActivity)
+                        DashboardActivity.launch(this@LoginActivity)
                     }
                     finish()
                 }
             }
         })
-
-        //Initialize helpers
-        mGoogleSignInHelper = GoogleSignInHelper(this, getString(R.string.server_client_id), this)
-        mFacebookSignInHelper = FacebookHelper(this, getString(R.string.fb_login_field_string))
-
-        //Play the loading animations
-        if (savedInstanceState == null) {
-            playLoadAnimations()
-
-            //Switch between login/sign up based on the argument
-            isSignUp = intent.getBooleanExtra(ARG_IS_SIGN_UP, false)
-            if (isSignUp) {
-                switchToSignUp()
-            } else {
-                tiv_name.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        tiv_name.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        switchToLogin()
-                    }
-                })
-            }
-        } else {
-            login_logo_iv.alpha = 1f
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

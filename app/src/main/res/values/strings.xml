@@ -73,4 +73,9 @@
     <string name="title_activity_user_profile">Profile</string>
     <string name="message_profile_updated">Profile updated successfully.</string>
     <string name="menu_save">Save</string>
+    <string name="forgot_password_successful">Password reset link sent to you on email. Please check your email</string>
+    <string name="btn_title_open_mail">Open Mail</string>
+    <string name="noti_channel_syncing">Syncing Notifications</string>
+    <string name="noti_channel_accounts">Account Notifications</string>
+    <string name="nav_header_home">Home</string>
 </resources>

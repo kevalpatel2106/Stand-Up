@@ -16,6 +16,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito
 import java.io.File
+import java.io.IOException
 
 /**
  * Created by Kevalpatel2106 on 05-Dec-17.
@@ -59,6 +60,7 @@ class UserProfileRepoImplTest {
     }
 
     @Test
+    @Throws(IOException::class)
     fun testGetUserProfileSuccess() {
         //Mock the shared prefrance
         Mockito.`when`(sharedPrefs.getString(anyString(), isNull())).thenReturn("149.3")
@@ -82,6 +84,7 @@ class UserProfileRepoImplTest {
     }
 
     @Test
+    @Throws(IOException::class)
     fun testGetUserProfileUserNotLogin() {
         //Mock the shared preference
         Mockito.`when`(sharedPrefs.getString(anyString(), isNull())).thenReturn(null)
@@ -103,6 +106,7 @@ class UserProfileRepoImplTest {
     }
 
     @Test
+    @Throws(IOException::class)
     fun testGetUserProfileUserNoCachedResult() {
         //Mock the shared prefrance
         Mockito.`when`(sharedPrefs.getString(anyString(), isNull())).thenReturn(null)
@@ -121,6 +125,7 @@ class UserProfileRepoImplTest {
     }
 
     @Test
+    @Throws(IOException::class)
     fun testSaveUserProfile() {
         //Mock the shared prefrance
         Mockito.`when`(sharedPrefs.getString(anyString(), isNull())).thenReturn("149.3")

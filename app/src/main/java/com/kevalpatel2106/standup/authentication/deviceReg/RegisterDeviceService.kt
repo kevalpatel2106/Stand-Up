@@ -17,21 +17,18 @@
 package com.kevalpatel2106.standup.authentication.deviceReg
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.IBinder
 import android.support.annotation.VisibleForTesting
 import com.google.firebase.iid.FirebaseInstanceId
-import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
-import com.kevalpatel2106.standup.notification.NotificationChannel
+import com.kevalpatel2106.standup.notification.DeviceRegisterNotification
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
@@ -50,7 +47,6 @@ import timber.log.Timber
  */
 
 class RegisterDeviceService : Service() {
-    private val FOREGROUND_NOTIFICATION_ID = 7823
 
     companion object {
         private val ARG_STOP_SERVICE = "arg_stop_service"
@@ -96,7 +92,8 @@ class RegisterDeviceService : Service() {
         super.onCreate()
 
         //Make the service foreground by assigning notification
-        makeForeground()
+        startForeground(DeviceRegisterNotification.FOREGROUND_NOTIFICATION_ID,
+                DeviceRegisterNotification.buildNotification(this@RegisterDeviceService.applicationContext))
     }
 
     @SuppressLint("VisibleForTests")
@@ -118,31 +115,6 @@ class RegisterDeviceService : Service() {
             }
         }
         return START_NOT_STICKY
-    }
-
-    /**
-     * Make the current service as foreground
-     */
-    @Suppress("DEPRECATION")
-    private fun makeForeground() {
-        val notification = Notification.Builder(this)
-                .setContentTitle(getString(R.string.application_name))
-                .setSmallIcon(R.drawable.ic_notififcation_launcher)
-                .setContentText(getString(R.string.register_device_service_notification_message))
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.ic_launcher))
-                .setAutoCancel(false)
-                .setTicker(getString(R.string.register_device_service_notification_message))
-                .setPriority(Notification.PRIORITY_LOW)
-                .setStyle(Notification.BigTextStyle()
-                        .setBigContentTitle(getString(R.string.application_name))
-                        .bigText(getString(R.string.register_device_service_notification_message)))
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notification.setChannelId(NotificationChannel.SYNC_NOTIFICATION_CHANNEL)
-        }
-
-        startForeground(FOREGROUND_NOTIFICATION_ID, notification.build())
     }
 
     /**

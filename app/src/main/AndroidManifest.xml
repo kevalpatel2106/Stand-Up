@@ -104,9 +104,9 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
 
-        <!--The Dashboard-->
+        <!--DashboardActivityoard-->
         <activity
-            android:name=".dashboard.Dashboard"
+            android:name=".dashboard.DashboardActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"

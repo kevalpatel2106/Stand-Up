@@ -13,7 +13,7 @@ import com.cocosw.bottomsheet.BottomSheet
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.dashboard.Dashboard
+import com.kevalpatel2106.standup.dashboard.DashboardActivity
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.showSnack
@@ -75,7 +75,7 @@ class VerifyEmailActivity : BaseActivity() {
 
     @OnClick(R.id.verify_btn_skip)
     fun onSkip() {
-        Dashboard.launch(this@VerifyEmailActivity)
+        DashboardActivity.launch(this@VerifyEmailActivity)
     }
 
 

@@ -9,7 +9,7 @@ import com.kevalpatel2106.base.annotations.Model
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Model
-class ForgotPasswordRequest(
+data class ForgotPasswordRequest(
 
         @SerializedName("email")
         val email: String

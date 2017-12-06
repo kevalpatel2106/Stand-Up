@@ -1,6 +1,7 @@
 package com.kevalpatel2106.standup.notification
 
 import android.annotation.SuppressLint
+import android.support.annotation.VisibleForTesting
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -19,30 +20,14 @@ import timber.log.Timber
 
 class FcmMessagingService : FirebaseMessagingService() {
 
-    @SuppressLint("BinaryOperationInTimber")
+    @SuppressLint("BinaryOperationInTimber", "VisibleForTests")
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         super.onMessageReceived(remoteMessage)
 
-        if (remoteMessage == null) {
-            Timber.w("UNo message received in the FCM payload.")
-            return
-        }
-
-
-        Timber.d("onMessageReceived: " + remoteMessage.data.toString())
-
-        //Check for the user logged in
         SharedPrefsProvider.init(this@FcmMessagingService)
-        if (!UserSessionManager.isUserLoggedIn) {
-            Timber.w("User is not registered. Skipping the message.")
-            return
-        }
+        if (!shouldProcessNotification(remoteMessage)) return
 
-        //Handle for the type.
-        if (!remoteMessage.data.containsKey("type")) {
-            Timber.w("Notification doesn't contain the type.")
-            return
-        }
+        Timber.d("onMessageReceived: " + remoteMessage!!.data.toString())
 
         //Handle based on type
         when (remoteMessage.data["type"]) {
@@ -52,8 +37,30 @@ class FcmMessagingService : FirebaseMessagingService() {
                 UserSessionManager.isUserVerified = true
 
                 //Fire the notification
-                EmailVerifiedNotification.notify(this@FcmMessagingService, remoteMessage.data["message"])
+                EmailVerifiedNotification.notify(this.applicationContext, remoteMessage.data["message"])
             }
         }
+    }
+
+    @VisibleForTesting
+    internal fun shouldProcessNotification(remoteMessage: RemoteMessage?): Boolean {
+        if (remoteMessage == null) {
+            Timber.w("No message received in the FCM payload.")
+            return false
+        }
+
+        //Check for the user logged in
+        if (!UserSessionManager.isUserLoggedIn) {
+            Timber.w("User is not registered. Skipping the message.")
+            return false
+        }
+
+        //Handle for the type.
+        if (!remoteMessage.data.containsKey("type")) {
+            Timber.w("Notification doesn't contain the type.")
+            return false
+        }
+
+        return true
     }
 }

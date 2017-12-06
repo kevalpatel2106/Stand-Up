@@ -12,7 +12,7 @@ import android.support.test.rule.ActivityTestRule
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
-import com.kevalpatel2106.standup.dashboard.Dashboard
+import com.kevalpatel2106.standup.dashboard.DashboardActivity
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
 import com.kevalpatel2106.testutils.MockServerManager
@@ -63,7 +63,7 @@ class VerifyEmailActivityTest : BaseTestClass() {
         Intents.init()
         onView(withId(R.id.verify_btn_skip)).perform(click())
         Intents.intended(IntentMatchers.hasComponent(ComponentName(InstrumentationRegistry.getTargetContext(),
-                Dashboard::class.java.name)))
+                DashboardActivity::class.java.name)))
         Intents.release()
     }
 

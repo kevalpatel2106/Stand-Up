@@ -16,4 +16,6 @@
 
 <resources>
     <string name="fb_login_field_string">id,name,email,gender,birthday,picture,cover</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>
