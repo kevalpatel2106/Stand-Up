@@ -5,6 +5,7 @@ import android.os.StrictMode
 import com.facebook.FacebookSdk
 import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -64,5 +65,8 @@ class SUApplication : Application() {
         //Initialize the leak canary
         if (LeakCanary.isInAnalyzerProcess(this)) return
         LeakCanary.install(this)
+
+        //Disable firebase analytics
+        FirebaseAnalytics.getInstance(this@SUApplication).setAnalyticsCollectionEnabled(false)
     }
 }

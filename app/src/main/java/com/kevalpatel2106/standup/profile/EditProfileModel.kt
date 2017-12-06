@@ -36,11 +36,11 @@ class EditProfileModel : BaseViewModel {
      */
     @Suppress("unused")
     @VisibleForTesting
-    constructor(userProfileRepo: UserProfileRepo) : super() {
+    constructor(userProfileRepo: UserProfileRepo, loadProfile: Boolean) : super() {
         mUserProfileRepo = userProfileRepo
 
         //Start loading user profile.
-        loadMyProfile()
+        if (loadProfile) loadMyProfile()
     }
 
     /**
@@ -89,7 +89,8 @@ class EditProfileModel : BaseViewModel {
      * Load the user profile of the current user from the shared prefrance cache and refresh the cache
      * from te network.
      */
-    private fun loadMyProfile() {
+    @VisibleForTesting
+    internal fun loadMyProfile() {
         addDisposable(mUserProfileRepo.getUserProfile(UserSessionManager.userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -123,7 +124,7 @@ class EditProfileModel : BaseViewModel {
                                height: Float,
                                weight: Float,
                                isMale: Boolean) {
-        if (isSavingProfile.value!!)return
+        if (isSavingProfile.value!!) return
 
         //Validate the user name
         if (!Validator.isValidName(name)) {
@@ -160,6 +161,7 @@ class EditProfileModel : BaseViewModel {
                     mProfileUpdateStatus.value = it
                 }, {
                     //Error occurred.
+                    mProfileUpdateStatus.value = null
                     errorMessage.value = ErrorMessage(it.message)
                 })
     }

@@ -11,6 +11,7 @@ import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
+import com.google.firebase.analytics.FirebaseAnalytics
 
 /**
  * Created by Keval on 07-11-17.
@@ -49,5 +50,8 @@ class SUApplication : Application() {
         Fabric.with(this, Crashlytics.Builder()
                 .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
                 .build())
+
+        //Enable firebase analytics
+        FirebaseAnalytics.getInstance(this@SUApplication).setAnalyticsCollectionEnabled(true)
     }
 }
