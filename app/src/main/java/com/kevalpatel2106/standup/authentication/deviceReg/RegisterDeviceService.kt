@@ -24,6 +24,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.support.annotation.VisibleForTesting
+import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.notification.DeviceRegisterNotification
@@ -96,7 +97,8 @@ class RegisterDeviceService : Service() {
         if (intent.getBooleanExtra(ARG_STOP_SERVICE, false)) {   //Stop the service
             stopSelf()
         } else {
-            mModel.register(Utils.getDeviceId(this@RegisterDeviceService))
+            mModel.register(Utils.getDeviceId(this@RegisterDeviceService),
+                    FirebaseInstanceId.getInstance().token)
         }
         return START_NOT_STICKY
     }

@@ -3,9 +3,10 @@ package com.kevalpatel2106.standup.authentication.deviceReg
 import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.Validator
 import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
@@ -15,7 +16,6 @@ import com.kevalpatel2106.utils.UserSessionManager
 import hugo.weaving.DebugLog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 
 /**
  * Created by Keval on 07/12/17.
@@ -27,8 +27,7 @@ internal class DeviceRegViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */
-    @VisibleForTesting
-    var mUserAuthRepo: UserAuthRepository
+    internal var mUserAuthRepo: UserAuthRepository
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
@@ -53,19 +52,24 @@ internal class DeviceRegViewModel : BaseViewModel {
     internal val token = MutableLiveData<String>()
 
     @SuppressLint("VisibleForTests")
-    internal fun register(deviceId: String) {
-        //Get the GCM Id.
-        val regId = FirebaseInstanceId.getInstance().token
-        if (regId == null) {
-            Timber.i("Firebase id is not available.")
+    internal fun register(deviceId: String, fcmId: String?) {
 
-            //Error occurred. Mark device as not registered.
+        //Validate device id.
+        if (!Validator.isValidDeviceId(deviceId)) {
             SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
-        } else {
-
-            //Register device on the server
-            sendDeviceDataToServer(regId, deviceId)
+            errorMessage.value = ErrorMessage(R.string.device_reg_error_invalid_device_id)
+            return
         }
+
+        //Validate the FCM Id.
+        if (!Validator.isValidFcmId(fcmId)) {
+            SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+            errorMessage.value = ErrorMessage(R.string.device_reg_error_invalid_fcm_id)
+            return
+        }
+
+        //Register device on the server
+        sendDeviceDataToServer(fcmId!!, deviceId)
     }
 
     /**

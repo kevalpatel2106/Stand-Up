@@ -16,17 +16,18 @@
 
 ext {
     def playServiceVersion = "11.6.2"
-    def supportLibVersion = "27.0.1"
+    def supportLibVersion = "27.0.2"
     def kotlinVersion = '1.2.0'
 
     def okHttpVersion = "3.9.1"
     def retrofitVersion = "2.3.0"
 
-    def espressoVersion = "3.0.0"
+    def espressoVersion = "3.0.1"
     def butterKnifeVersion = "8.8.1"
     def archComponentVersion = '1.0.0'
     def stethoVersion = "1.5.0"
     def mockitoVersion = "2.12.0"
+    def powerMockVersion = "1.7.3"
 
     //Exclude group for the test dependency
     excludeGrp = {
@@ -50,7 +51,7 @@ ext {
             junit           : 'junit:junit:4.12',
             rules           : 'com.android.support.test:rules:1.0',
             arch            : 'android.arch.core:core-testing:' + archComponentVersion,
-            runner          : 'com.android.support.test:runner:1.0',
+            runner          : 'com.android.support.test:runner:1.0.1',
             esspresso       : 'com.android.support.test.espresso:espresso-core:' + espressoVersion,
             esspressoIntents: 'com.android.support.test.espresso:espresso-intents:' + espressoVersion,
             contrib         : 'com.android.support.test.espresso:espresso-contrib:' + espressoVersion,
@@ -58,6 +59,8 @@ ext {
             uiAutomator     : 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2',
             mockwebserver   : 'com.squareup.okhttp3:mockwebserver:' + okHttpVersion,
             mockito         : 'org.mockito:mockito-core:' + mockitoVersion,
+            powermock       : 'org.powermock:powermock-module-junit4:' + powerMockVersion,
+            powermockMokito : 'org.powermock:powermock-api-mockito2:' + powerMockVersion,
     ]
 
     //Support library dependency
@@ -97,8 +100,8 @@ ext {
 
     //Play services dependency
     playServiceLib = [
-            auth     : 'com.google.android.gms:play-services-auth:' + playServiceVersion,
-            location : 'com.google.android.gms:play-services-location:' + playServiceVersion,
+            auth    : 'com.google.android.gms:play-services-auth:' + playServiceVersion,
+            location: 'com.google.android.gms:play-services-location:' + playServiceVersion,
     ]
 
     //retrofit dependency

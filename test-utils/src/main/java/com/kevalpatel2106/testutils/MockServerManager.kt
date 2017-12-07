@@ -87,8 +87,8 @@ class MockServerManager : Closeable {
 
 
     fun getStringFromFile(file: File): String = getStringFromInputStream(FileInputStream(file))
+
     override fun close() {
         mockWebServer.shutdown()
     }
-
 }

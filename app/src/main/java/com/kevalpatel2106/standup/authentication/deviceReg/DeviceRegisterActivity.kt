@@ -9,6 +9,7 @@ import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AppCompatActivity
+import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
 import com.kevalpatel2106.standup.dashboard.DashboardActivity
@@ -21,8 +22,12 @@ import kotlinx.android.synthetic.main.activity_device_register.*
 class DeviceRegisterActivity : AppCompatActivity() {
 
     companion object {
-        private val ARG_IS_NEW_USER = "arg_is_new_user"
-        private val ARG_IS_VERIFIED = "arg_is_verified"
+
+        @VisibleForTesting
+        const val ARG_IS_NEW_USER = "arg_is_new_user"
+
+        @VisibleForTesting
+        const val ARG_IS_VERIFIED = "arg_is_verified"
 
         /**
          * Launch the [DeviceRegisterActivity].
@@ -44,9 +49,10 @@ class DeviceRegisterActivity : AppCompatActivity() {
     @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mModel = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
+
         setContentView(R.layout.activity_device_register)
 
-        mModel = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
 
         mModel.token.observe(this@DeviceRegisterActivity, Observer {
             it?.let { navigateToNextScreen() }
@@ -60,10 +66,11 @@ class DeviceRegisterActivity : AppCompatActivity() {
             (device_reg_iv.drawable as Animatable).start()
         }
 
-        mModel.register(Utils.getDeviceId(this@DeviceRegisterActivity))
+        mModel.register(Utils.getDeviceId(this@DeviceRegisterActivity), FirebaseInstanceId.getInstance().token)
     }
 
-    private fun navigateToNextScreen() {
+    @VisibleForTesting
+    internal fun navigateToNextScreen() {
         when {
             !intent.getBooleanExtra(ARG_IS_VERIFIED, false) -> {
                 VerifyEmailActivity.launch(this@DeviceRegisterActivity)
