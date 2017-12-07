@@ -32,8 +32,8 @@ abstract class BaseViewModel : ViewModel() {
     val errorMessage: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
 
     init {
-        blockUi.postValue(false)
-        errorMessage.postValue(null)
+        blockUi.value = false
+        errorMessage.value = null
     }
 
     @CallSuper

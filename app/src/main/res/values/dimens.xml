@@ -23,7 +23,7 @@
     <dimen name="md_divider_height">1px</dimen>
     <dimen name="md_row_horizontal_padding">@dimen/spacing_micro</dimen>
     <dimen name="md_row_vertical_padding">@dimen/spacing_nano</dimen>
-    <dimen name="md_navigation_drawer_width">280dp</dimen>
+    <dimen name="md_navigation_drawer_width">320dp</dimen>
 
     <!--Design dimen-->
     <dimen name="list_loading_progressbar_dimen">60dp</dimen>

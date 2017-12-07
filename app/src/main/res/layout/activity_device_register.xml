@@ -19,11 +19,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/nine_to_five" />
+        app:srcCompat="@drawable/avd_nine_to_five" />
 
     <TextView
         android:id="@+id/textView"
-        style="@style/MediumText.White"
+        style="@style/MediumText.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

@@ -38,12 +38,15 @@
     <com.kevalpatel2106.base.BaseButton
         android:id="@+id/btn_login_using_email"
         style="@style/LoginBtn"
-        android:layout_above="@id/btn_login_google_signin" />
+        android:layout_above="@id/btn_login_google_signin"
+        android:text="@string/login_using_email" />
 
     <com.kevalpatel2106.base.BaseButton
         android:id="@+id/btn_create_account"
-        style="@style/CreateAccountBtn"
-        android:layout_marginTop="@dimen/spacing_small" />
+        style="@style/LoginBtn"
+        android:layout_above="@id/btn_login_using_email"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:text="@string/create_account" />
 
     <!--Divider-->
     <View

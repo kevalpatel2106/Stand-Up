@@ -186,7 +186,8 @@
                 <com.kevalpatel2106.base.BaseButton
                     android:id="@+id/btn_login_google_signin"
                     style="@style/GoogleSignInBtn"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="10dp"
+                    android:text="@string/sign_in_with_google" />
 
                 <!--Sign in with Fb button-->
                 <com.kevalpatel2106.base.BaseButton

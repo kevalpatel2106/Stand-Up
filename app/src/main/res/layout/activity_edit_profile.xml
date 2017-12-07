@@ -19,7 +19,7 @@
         android:layout_height="wrap_content">
 
         <!--0. Loader -->
-        <include layout="@layout/layout_loader"/>
+        <!--<include layout="@layout/layout_loader"/>-->
 
         <!--1. Main scrollview-->
         <ScrollView
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/edit_profile_card_horizontal_margin"
                 android:layout_marginStart="@dimen/edit_profile_card_horizontal_margin"
-                app:cardBackgroundColor="@android:color/white"
+                app:cardBackgroundColor="@color/colorWindowBackgroundDark"
                 app:cardElevation="4dp"
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true">
@@ -100,7 +100,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_marginTop="@dimen/spacing_nano"
-                        android:background="@android:color/darker_gray"
+                        android:background="@android:color/holo_blue_dark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +134,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_marginTop="@dimen/spacing_micro"
-                        android:background="#ec6464"
+                        android:background="@android:color/holo_orange_dark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"

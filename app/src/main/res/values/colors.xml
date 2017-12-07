@@ -15,20 +15,21 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="colorPrimaryLight" tools:ignore="UnusedResources">#C8E6C9</color>
-    <color name="colorPrimary">#4CAF50</color>
-    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorPrimaryLight40" tools:ignore="UnusedResources">#99FFCDD2</color>
+    <color name="colorPrimaryLight" tools:ignore="UnusedResources">#FFCDD2</color>
+    <color name="colorPrimary">#B63730</color>
+    <color name="colorPrimaryDark">#A82D26</color>
 
-    <color name="colorAccent">#FFC107</color>
-    <color name="colorAccentLight">#FFECB3</color>
-    <color name="colorAccentDark">#FFA000</color>
+    <color name="colorAccent">#FFFFFF</color>
 
     <!--text colors-->
-    <color name="colorPrimaryText">#212121</color>
-    <color name="colorSecondaryText">#757575</color>
+    <color name="colorPrimaryText">#FFFFFF</color>
+    <color name="colorSecondaryText">#AAAAAA</color>
+    <color name="colorBlackText">#111111</color>
     <color name="colorToolbarText">#FFFFFF</color>
 
-    <color name="colorWindowBackground">#EEEEEE</color>
+    <color name="colorWindowBackground">#303030</color>
+    <color name="colorWindowBackgroundDark">#292929</color>
 
     <color name="divider">#BDBDBD</color>
 

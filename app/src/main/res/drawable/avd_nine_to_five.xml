@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/clock">
+    android:drawable="@drawable/ic_animated_clock">
     <target
         android:name="hours"
         android:animation="@animator/hours_rotation" />

@@ -198,7 +198,8 @@
                         style="@style/GoogleSignInBtn"
                         android:layout_marginEnd="@dimen/spacing_large"
                         android:layout_marginStart="@dimen/spacing_large"
-                        android:layout_marginTop="10dp" />
+                        android:layout_marginTop="10dp"
+                        android:text="@string/sign_in_with_google" />
 
                     <!--Sign in with Fb button-->
                     <com.kevalpatel2106.base.BaseButton

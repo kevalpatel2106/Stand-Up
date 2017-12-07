@@ -9,6 +9,20 @@
             android:title="@string/nav_header_home" />
 
         <item
+            android:id="@+id/nav_diary"
+            android:checkable="true"
+            android:icon="@drawable/ic_diary_black"
+            android:title="@string/nav_header_dairy" />
+
+        <item
+            android:id="@+id/nav_stats"
+            android:checkable="true"
+            android:icon="@drawable/ic_stats_black"
+            android:title="@string/nav_header_stats" />
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
             android:id="@+id/nav_settings"
             android:checkable="true"
             android:icon="@drawable/ic_settings_black"
