@@ -78,4 +78,7 @@
     <string name="noti_channel_syncing">Syncing Notifications</string>
     <string name="noti_channel_accounts">Account Notifications</string>
     <string name="nav_header_home">Home</string>
+    <string name="nav_header_settings">Setting</string>
+    <string name="nav_header_about">About</string>
+    <string name="setting_up_your_device">Setting up your device...</string>
 </resources>

@@ -41,7 +41,7 @@ class LogoutTest : BaseTestClass() {
         //Set the repo
         mockServerManager.startMockWebServer()
         mMockUserAuthRepository = UserAuthRepositoryImpl(mockServerManager.getBaseUrl())
-        mRegisterDeviceService.mUserAuthRepository = mMockUserAuthRepository
+        mRegisterDeviceService.mModel.mUserAuthRepo = mMockUserAuthRepository
     }
 
     @After
@@ -103,5 +103,6 @@ class LogoutTest : BaseTestClass() {
         Assert.assertNull(UserSessionManager.photo)
         Assert.assertFalse(UserSessionManager.isUserVerified)
         Assert.assertFalse(SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
+        Assert.assertFalse(SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED))
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@drawable/bg_splash"
+    tools:context="com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity">
+
+    <com.kevalpatel2106.base.BaseImageView
+        android:id="@+id/device_reg_iv"
+        android:layout_width="@dimen/device_reg_screen_clock_iv_dimen"
+        android:layout_height="@dimen/device_reg_screen_clock_iv_dimen"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_small"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:srcCompat="@drawable/nine_to_five" />
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/MediumText.White"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_xlarge"
+        android:gravity="center_horizontal"
+        android:text="@string/setting_up_your_device"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/device_reg_iv"
+        app:layout_constraintVertical_bias="0.35" />
+</android.support.constraint.ConstraintLayout>

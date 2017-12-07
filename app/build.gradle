@@ -108,6 +108,7 @@ dependencies {
     implementation project(':activity-engine')
     implementation project(':data-vault')
     implementation project(':ruler-view')
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -150,5 +151,7 @@ dependencies {
 
     //Other libs
     implementation(otherLib.bottomsheet, excludeGrp)
+    implementation(otherLib.circleImagView, excludeGrp)
+    implementation(otherLib.glide, excludeGrp)
 }
 apply plugin: 'com.google.gms.google-services'

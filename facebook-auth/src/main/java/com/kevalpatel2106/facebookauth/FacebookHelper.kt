@@ -96,7 +96,7 @@ class FacebookHelper(private val listener: FacebookResponse,
         if (`object`.has("cover"))
             user.coverPicUrl = `object`.getJSONObject("cover").getString("source")
         if (`object`.has("picture"))
-            user.profilePic = `object`.getJSONObject("picture").getJSONObject("data").getString("url")
+            user.profilePic = "http://graph.facebook.com/" + user.facebookID + "/picture?type=normal"
         return user
     }
 

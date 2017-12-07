@@ -34,4 +34,5 @@
 
     <color name="fb">#3B5998</color>
     <color name="white_60">#99FFFFFF</color>
+    <color name="black_20">#22000000</color>
 </resources>

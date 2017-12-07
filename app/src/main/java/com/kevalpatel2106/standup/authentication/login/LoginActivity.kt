@@ -25,11 +25,8 @@ import com.kevalpatel2106.googleauth.GoogleAuthResponse
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.googleauth.GoogleSignInHelper
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
+import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
-import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
-import com.kevalpatel2106.standup.dashboard.DashboardActivity
-import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_login.*
@@ -136,18 +133,7 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
             it?.let {
                 if (it.isSuccess) {
                     //Start syncing the token
-                    RegisterDeviceService.start(this)
-
-                    if (!it.isVerify) {
-                        //Open the email verify.
-                        VerifyEmailActivity.launch(this@LoginActivity)
-                    } else if (it.isNewUser) {
-                        //Redirect the edit
-                        EditProfileActivity.launch(this@LoginActivity)
-                    } else {
-                        //Open the dashboard.
-                        DashboardActivity.launch(this@LoginActivity)
-                    }
+                    DeviceRegisterActivity.launch(this, it.isNewUser, it.isVerify)
                     finish()
                 }
             }

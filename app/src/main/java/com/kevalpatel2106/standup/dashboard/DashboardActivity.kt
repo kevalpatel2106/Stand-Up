@@ -5,10 +5,17 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.app.ActionBarDrawerToggle
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
+import com.bumptech.glide.Glide
 import com.kevalpatel2106.base.BaseActivity
+import com.kevalpatel2106.base.BaseTextView
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
 /**
@@ -43,13 +50,28 @@ class DashboardActivity : BaseActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
 
-        setUpDrawer()
+        setUpDrawer(savedInstanceState == null)
     }
 
     /**
      * Set he [drawer_layout] and sync the state of the [drawerToggle] with the drawer.
      */
-    private fun setUpDrawer() {
+    private fun setUpDrawer(isFirstRun: Boolean) {
+        //Set up the header
+        val header = dashboard_navigation_view.getHeaderView(0)
+        header.findViewById<BaseTextView>(R.id.nav_email_tv).text = UserSessionManager.email ?: ""
+        header.findViewById<BaseTextView>(R.id.nav_name_tv).text = UserSessionManager.displayName ?: "Hi there!"
+
+        val headerProfileIv = header.findViewById<CircleImageView>(R.id.nav_profile_iv)
+        if (UserSessionManager.photo.isNullOrEmpty()) {
+            headerProfileIv.setImageResource(R.drawable.ic_user_profile_default)
+        } else {
+            Glide.with(this@DashboardActivity)
+                    .load(UserSessionManager.photo)
+                    .thumbnail(0.1f)
+                    .into(headerProfileIv)
+        }
+
         // Set the drawer toggle as the DrawerListener
         drawerToggle = object : ActionBarDrawerToggle(this, drawer_layout,
                 R.string.drawer_open, R.string.drawer_close) {
@@ -68,15 +90,50 @@ class DashboardActivity : BaseActivity() {
         }
         drawer_layout.addDrawerListener(drawerToggle)
 
+        //Set the click listener
         dashboard_navigation_view.setNavigationItemSelectedListener {
+            it.isChecked = true
             return@setNavigationItemSelectedListener when (it.itemId) {
                 R.id.nav_home -> {
                     //TODO Home fragment
                     false
                 }
+                R.id.nav_settings -> {
+                    //TODO Settings fragment
+                    false
+                }
+                R.id.nav_about -> {
+                    //TODO About fragment
+                    false
+                }
                 else -> {
                     throw IllegalStateException("No navigation item with id:" + it)
                 }
+            }
+        }
+
+        if (isFirstRun) {
+            //Set the home as selected
+            dashboard_navigation_view.setCheckedItem(R.id.nav_home)
+
+            //Check if the drawer tutorial completed?
+            if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED)) {
+                //Mark tutorial completed
+                SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED, true)
+
+                headerProfileIv.scaleX = 0.7f
+                headerProfileIv.scaleY = 0.7f
+
+                //Open the drawer automatically
+                drawer_layout.openDrawer(Gravity.START)
+
+                //Animate the icon
+                headerProfileIv.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(300L)
+                        .setStartDelay(600L)
+                        .start()
             }
         }
     }
@@ -99,6 +156,14 @@ class DashboardActivity : BaseActivity() {
             true
         } else {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (drawer_layout.isDrawerOpen(Gravity.START)) {
+            drawer_layout.closeDrawer(Gravity.START)
+        } else {
+            super.onBackPressed()
         }
     }
 

@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home_black"
-        android:title="@string/nav_header_home"/>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:checkable="true"
+            android:icon="@drawable/ic_home_black"
+            android:title="@string/nav_header_home" />
+
+        <item
+            android:id="@+id/nav_settings"
+            android:checkable="true"
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/nav_header_settings" />
+
+        <item
+            android:id="@+id/nav_about"
+            android:checkable="true"
+            android:icon="@drawable/ic_info_black"
+            android:title="@string/nav_header_about" />
+    </group>
 </menu>

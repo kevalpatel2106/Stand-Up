@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_account_holder_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_drawer_header_height"
+    android:background="@drawable/nav_header_bg_image"
+    android:elevation="6dp"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <com.kevalpatel2106.base.BaseImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@color/black_20" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/spacing_small"
+        android:paddingEnd="@dimen/spacing_small"
+        android:paddingStart="@dimen/spacing_small"
+        android:paddingTop="@dimen/spacing_small">
+
+        <!--Profile image layout-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/nav_profile_iv"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="top|start"
+            android:layout_marginBottom="@dimen/spacing_micro"
+            app:civ_border_color="@android:color/white"
+            app:civ_border_width="1dp"
+            app:civ_fill_color="?attr/colorPrimaryDark"
+            tools:src="@tools:sample/avatars" />
+
+        <!--User name of the user-->
+        <com.kevalpatel2106.base.BaseTextView
+            android:id="@+id/nav_name_tv"
+            style="@style/MediumText.White"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            tools:text="@tools:sample/full_names" />
+
+        <!--Domain of the account-->
+        <com.kevalpatel2106.base.BaseTextView
+            android:id="@+id/nav_email_tv"
+            style="@style/SmallText.White"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            tools:text="@tools:sample/cities" />
+    </LinearLayout>
+</RelativeLayout>

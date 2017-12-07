@@ -18,4 +18,10 @@
     <string name="fb_login_field_string">id,name,email,gender,birthday,picture,cover</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="path_circle">
+    M 50,50
+    m -48,0
+    a 48,48 0 1,0 96,0
+    a 48,48 0 1,0 -96,0
+  </string>
 </resources>

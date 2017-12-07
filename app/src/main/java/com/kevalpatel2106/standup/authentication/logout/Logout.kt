@@ -27,6 +27,7 @@ internal object Logout {
         //Stop the device registration service.
         RegisterDeviceService.stop(context)
         SharedPrefsProvider.removePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED)
+        SharedPrefsProvider.removePreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED)
 
         //Clear user session
         UserSessionManager.clearUserSession()

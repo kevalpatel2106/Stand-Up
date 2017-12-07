@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.base.BaseActivity
-import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
+import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
@@ -39,18 +39,23 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         if (!UserSessionManager.isUserLoggedIn) {
+
             IntroActivity.launch(this@SplashActivity)
+        } else if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED)) {
+
+            DeviceRegisterActivity.launch(this@SplashActivity,
+                    false,
+                    UserSessionManager.isUserVerified)
         } else if (!UserSessionManager.isUserVerified) {
+
             VerifyEmailActivity.launch(this@SplashActivity)
         } else if (UserSessionManager.displayName.isNullOrEmpty()) {
+
             EditProfileActivity.launch(this@SplashActivity)
         } else {
+
             //Start activity detection.
             ActivityDetector.startDetection()
-
-            //Sync the device token
-            if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED))
-                RegisterDeviceService.start(this@SplashActivity)
 
             //Launch the dashboard.
             DashboardActivity.launch(this@SplashActivity)

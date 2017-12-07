@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer name="stroke_width">4</integer>
     <integer name="password_max_length">16</integer>
     <integer name="name_max_length">30</integer>
 </resources>
