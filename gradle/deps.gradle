@@ -91,17 +91,14 @@ ext {
             core        : 'com.google.firebase:firebase-core:' + playServiceVersion,
             fcm         : 'com.google.firebase:firebase-messaging:' + playServiceVersion,
             auth        : 'com.google.firebase:firebase-auth:' + playServiceVersion,
-            ads         : 'com.google.firebase:firebase-ads:' + playServiceVersion,
             preformance : 'com.google.firebase:firebase-perf:' + playServiceVersion,
             remoteConfig: 'com.google.firebase:firebase-config:' + playServiceVersion,
-            dispacher   : 'com.firebase:firebase-jobdispatcher:0.8.5',
     ]
 
     //Play services dependency
     playServiceLib = [
             auth     : 'com.google.android.gms:play-services-auth:' + playServiceVersion,
             location : 'com.google.android.gms:play-services-location:' + playServiceVersion,
-            awareness: 'com.google.android.gms:play-services-awareness:' + playServiceVersion,
     ]
 
     //retrofit dependency

@@ -22,8 +22,8 @@ apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.jakewharton.hugo'
-//apply plugin: 'com.google.firebase.firebase-perf'
 //https://stackoverflow.com/a/47050632/4690731
+//apply plugin: 'com.google.firebase.firebase-perf'
 
 apply from: '../gradle/config.gradle'
 apply from: '../gradle/deps.gradle'
@@ -53,12 +53,13 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), proguardConfig.proguardPath, proguardConfig.removeLogs
             debuggable false
             jniDebuggable false
             renderscriptDebuggable false
             signingConfig signingConfigs.playStore
+            shrinkResources true
             pseudoLocalesEnabled false
             zipAlignEnabled true
 
@@ -71,7 +72,7 @@ android {
         }
         debug {
             crunchPngs false
-            testCoverageEnabled true
+            testCoverageEnabled false   //https://stackoverflow.com/a/47050632/4690731
             debuggable true
             jniDebuggable true
             renderscriptDebuggable false
@@ -108,7 +109,6 @@ dependencies {
     implementation project(':activity-engine')
     implementation project(':data-vault')
     implementation project(':ruler-view')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -125,6 +125,7 @@ dependencies {
     releaseImplementation(debugLibs.crashalytics) {
         transitive = true
     }
+    implementation(firebaseLib.preformance, excludeGrp)
     implementation(debugLibs.timber, excludeGrp)
 
     //Support
@@ -142,7 +143,6 @@ dependencies {
     //Firebase
     implementation(firebaseLib.core, excludeGrp)
     implementation(firebaseLib.fcm, excludeGrp)
-    implementation(firebaseLib.preformance, excludeGrp)
     implementation(firebaseLib.remoteConfig, excludeGrp)
 
     //Rx
@@ -153,5 +153,6 @@ dependencies {
     implementation(otherLib.bottomsheet, excludeGrp)
     implementation(otherLib.circleImagView, excludeGrp)
     implementation(otherLib.glide, excludeGrp)
+    kapt(otherLib.glideAnnotation, excludeGrp)
 }
 apply plugin: 'com.google.gms.google-services'

@@ -17,6 +17,11 @@
             android:name="firebase_analytics_collection_deactivated"
             android:value="true" />
 
+        <!--Disable pref monitoring-->
+        <meta-data
+            android:name="firebase_performance_collection_deactivated"
+            android:value="true" />
+
         <!--suppress AndroidDomInspection -->
         <activity
             android:name="com.kevalpatel2106.testutils.FragmentRuleActivity"

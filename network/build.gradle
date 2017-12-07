@@ -71,7 +71,7 @@ dependencies {
     //Retrofit
     api retrofitLib.retrofit
     implementation retrofitLib.gsonPlugin
-    implementation retrofitLib.logger
+    implementation retrofitLib.logger       //TODO Make it debug only
 
     //Rx
     implementation rxLib.rxJava
@@ -79,7 +79,7 @@ dependencies {
 
     //Loggers
     debugImplementation(debugLibs.leakcanary, excludeGrp)
-    implementation(debugLibs.shethoOkhttp, excludeGrp)
+    implementation(debugLibs.shethoOkhttp, excludeGrp)  //TODO Make it debug only
     debugApi(debugLibs.shetho, excludeGrp)
     implementation(debugLibs.timber, excludeGrp)
 }
