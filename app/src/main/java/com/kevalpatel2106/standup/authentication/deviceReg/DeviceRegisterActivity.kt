@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity
 import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
+import com.kevalpatel2106.standup.constants.AnalyticsEvents
+import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.dashboard.DashboardActivity
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.Utils
@@ -55,7 +57,13 @@ class DeviceRegisterActivity : AppCompatActivity() {
 
 
         mModel.token.observe(this@DeviceRegisterActivity, Observer {
-            it?.let { navigateToNextScreen() }
+            it?.let {
+
+                //Log the analytics event
+                this.logEvent(AnalyticsEvents.EVENT_DEVICE_REGISTERED)
+
+                navigateToNextScreen()
+            }
         })
 
         mModel.errorMessage.observe(this@DeviceRegisterActivity, Observer {

@@ -13,6 +13,7 @@ import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.BaseTextView
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
+import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import de.hdodenhof.circleimageview.CircleImageView
@@ -92,10 +93,28 @@ class DashboardActivity : BaseActivity() {
 
         //Set the click listener
         dashboard_navigation_view.setNavigationItemSelectedListener {
-            it.isChecked = true
+
+            //Close the drawer
+            drawer_layout.closeDrawer(Gravity.START)
+
             return@setNavigationItemSelectedListener when (it.itemId) {
                 R.id.nav_home -> {
+                    it.isChecked = true
                     //TODO Home fragment
+                    false
+                }
+                R.id.nav_diary -> {
+                    it.isChecked = true
+                    //TODO Diary fragment
+                    false
+                }
+                R.id.nav_stats -> {
+                    it.isChecked = true
+                    //TODO Stats fragment
+                    false
+                }
+                R.id.nav_profile -> {
+                    EditProfileActivity.launch(this@DashboardActivity)
                     false
                 }
                 R.id.nav_settings -> {

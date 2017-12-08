@@ -106,7 +106,6 @@
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
-
         <activity
             android:name=".authentication.deviceReg.DeviceRegisterActivity"
             android:resizeableActivity="true"
@@ -184,6 +183,8 @@
         <service
             android:name=".authentication.deviceReg.RegisterDeviceService"
             tools:ignore="ExportedService" />
+
+        <activity android:name=".about.AboutActivity"></activity>
     </application>
 
 </manifest>

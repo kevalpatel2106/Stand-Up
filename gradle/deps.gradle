@@ -87,6 +87,7 @@ ext {
     ide = [
             constrainlayout: 'com.android.support.constraint:constraint-layout:1.1.0-beta3',
             kotlin         : 'org.jetbrains.kotlin:kotlin-stdlib:' + kotlinVersion,
+            coroutine      : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.2',
     ]
 
     //Firebase dependency

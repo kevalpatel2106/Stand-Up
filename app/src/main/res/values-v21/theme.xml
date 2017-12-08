@@ -12,6 +12,7 @@
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
 
+        <item name="android:listDivider">@color/divider</item>
         <item name="android:windowBackground">@color/colorWindowBackground</item>
 
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>

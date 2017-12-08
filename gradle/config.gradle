@@ -149,4 +149,10 @@ ext {
             }
         }
     }
+
+    kotlinOption = {
+        experimental {
+            coroutines 'enable'
+        }
+    }
 }

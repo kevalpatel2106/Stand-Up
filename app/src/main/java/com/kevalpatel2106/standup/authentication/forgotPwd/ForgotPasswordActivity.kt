@@ -12,6 +12,8 @@ import butterknife.OnClick
 import com.cocosw.bottomsheet.BottomSheet
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.constants.AnalyticsEvents
+import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.showSnack
@@ -57,6 +59,12 @@ class ForgotPasswordActivity : BaseActivity() {
 
         //Observer the api responses.
         mModel.mUiModel.observe(this@ForgotPasswordActivity, Observer<ForgotPasswordUiModel> {
+
+            //Log analytics
+            val bundle = Bundle()
+            bundle.putString(AnalyticsEvents.KEY_EMAIL, forgot_password_email_et.getTrimmedText())
+            logEvent(AnalyticsEvents.EVENT_FORGOT_PASSWORD, bundle)
+
             it?.let {
                 if (it.isSuccess) {
                     showSnack(getString(R.string.forgot_password_successful),

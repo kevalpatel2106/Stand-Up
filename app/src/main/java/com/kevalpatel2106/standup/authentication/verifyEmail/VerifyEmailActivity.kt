@@ -13,6 +13,8 @@ import com.cocosw.bottomsheet.BottomSheet
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.constants.AnalyticsEvents
+import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.dashboard.DashboardActivity
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
@@ -65,6 +67,8 @@ class VerifyEmailActivity : BaseActivity() {
         })
 
         mModel.mUiModel.observe(this@VerifyEmailActivity, Observer<VerifyEmailUiModel> {
+            logEvent(AnalyticsEvents.EVENT_RESEND_VERIFICATION_MAIL)
+
             it?.let {
                 if (it.isSuccess) {
                     showSnack(message = getString(R.string.message_verification_email_sent), duration = Snackbar.LENGTH_LONG)
@@ -105,5 +109,7 @@ class VerifyEmailActivity : BaseActivity() {
         }
         bottomSheet.build()
         bottomSheet.show()
+
+        logEvent(AnalyticsEvents.EVENT_OPEN_MAIL_BUTTON_FEATURE)
     }
 }

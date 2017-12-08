@@ -26,6 +26,7 @@
         android:layout_width="@dimen/md_navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/colorWindowBackgroundDark"
         app:elevation="16dp"
         app:headerLayout="@layout/layout_drawer_header"
         app:itemBackground="@drawable/nav_drawer_item_bg"

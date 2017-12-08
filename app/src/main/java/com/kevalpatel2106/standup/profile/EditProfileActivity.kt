@@ -14,7 +14,9 @@ import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.rulerview.ObservableHorizontalScrollView
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.AppConfig
+import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
 import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
 import com.kevalpatel2106.utils.showSnack
@@ -84,6 +86,9 @@ class EditProfileActivity : BaseActivity() {
         mModel.mProfileUpdateStatus.observe(this@EditProfileActivity, Observer<SaveProfileResponse> {
             showSnack(R.string.message_profile_updated)
             Handler().postDelayed({ finish() }, 3500L)
+
+            //Log the event
+            logEvent(AnalyticsEvents.EVENT_PROFILE_UPDATED)
         })
 
         //Monitor all error messages.

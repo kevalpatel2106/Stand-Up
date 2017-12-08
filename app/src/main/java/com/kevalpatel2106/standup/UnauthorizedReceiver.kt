@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import com.kevalpatel2106.standup.authentication.logout.Logout
+import com.kevalpatel2106.standup.constants.AnalyticsEvents
+import com.kevalpatel2106.standup.constants.logEvent
 
 /**
  * This receiver will listen for the action "com.kevalpatel2106.network.unauthorized" action broadcast
@@ -16,6 +18,7 @@ import com.kevalpatel2106.standup.authentication.logout.Logout
 class UnauthorizedReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        context.logEvent(AnalyticsEvents.EVENT_UNAUTHORIZED_FORCE_LOGOUT)
 
         //Toast the user.
         Toast.makeText(context,
