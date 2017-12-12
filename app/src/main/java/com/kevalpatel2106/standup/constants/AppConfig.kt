@@ -7,6 +7,8 @@ package com.kevalpatel2106.standup.constants
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 internal object AppConfig {
+    const val SNACKBAR_TIME = 3300L
+
     //---- Start of Validation ----//
     const val MIN_WEIGHT = 29.9f
     const val MAX_WEIGHT = 204f

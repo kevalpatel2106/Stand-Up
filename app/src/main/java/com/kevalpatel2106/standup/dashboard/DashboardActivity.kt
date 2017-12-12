@@ -1,9 +1,13 @@
 package com.kevalpatel2106.standup.dashboard
 
+import android.annotation.SuppressLint
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.support.annotation.IdRes
+import android.support.annotation.VisibleForTesting
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Gravity
 import android.view.MenuItem
@@ -12,8 +16,10 @@ import com.bumptech.glide.Glide
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.BaseTextView
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.about.AboutActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.profile.EditProfileActivity
+import com.kevalpatel2106.standup.settings.SettingsActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import de.hdodenhof.circleimageview.CircleImageView
@@ -43,10 +49,15 @@ class DashboardActivity : BaseActivity() {
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
 
+    private lateinit var model: DashboardViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        model = ViewModelProviders.of(this@DashboardActivity).get(DashboardViewModel::class.java)
+
         setContentView(R.layout.activity_dashboard)
 
+        //Set the toolbar
         setToolbar(R.id.toolbar, "Dashboard", true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
@@ -57,6 +68,7 @@ class DashboardActivity : BaseActivity() {
     /**
      * Set he [drawer_layout] and sync the state of the [drawerToggle] with the drawer.
      */
+    @SuppressLint("VisibleForTests")
     private fun setUpDrawer(isFirstRun: Boolean) {
         //Set up the header
         val header = dashboard_navigation_view.getHeaderView(0)
@@ -93,47 +105,12 @@ class DashboardActivity : BaseActivity() {
 
         //Set the click listener
         dashboard_navigation_view.setNavigationItemSelectedListener {
-
-            //Close the drawer
-            drawer_layout.closeDrawer(Gravity.START)
-
-            return@setNavigationItemSelectedListener when (it.itemId) {
-                R.id.nav_home -> {
-                    it.isChecked = true
-                    //TODO Home fragment
-                    false
-                }
-                R.id.nav_diary -> {
-                    it.isChecked = true
-                    //TODO Diary fragment
-                    false
-                }
-                R.id.nav_stats -> {
-                    it.isChecked = true
-                    //TODO Stats fragment
-                    false
-                }
-                R.id.nav_profile -> {
-                    EditProfileActivity.launch(this@DashboardActivity)
-                    false
-                }
-                R.id.nav_settings -> {
-                    //TODO Settings fragment
-                    false
-                }
-                R.id.nav_about -> {
-                    //TODO About fragment
-                    false
-                }
-                else -> {
-                    throw IllegalStateException("No navigation item with id:" + it)
-                }
-            }
+            return@setNavigationItemSelectedListener handleDrawerNavigation(getDrawerItem(it.itemId))
         }
 
         if (isFirstRun) {
             //Set the home as selected
-            dashboard_navigation_view.setCheckedItem(R.id.nav_home)
+            handleDrawerNavigation(DrawerItem.HOME)
 
             //Check if the drawer tutorial completed?
             if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED)) {
@@ -153,6 +130,54 @@ class DashboardActivity : BaseActivity() {
                         .setDuration(300L)
                         .setStartDelay(600L)
                         .start()
+            }
+        }
+    }
+
+    /**
+     * Navigate the user to next screen/fragment from the navigation drawer options based on the
+     * selected [item]. This will close the navigation drawer and handle the item selection in
+     * navigation drawer.
+     */
+    private fun handleDrawerNavigation(item: DrawerItem): Boolean {
+        drawer_layout.closeDrawer(Gravity.START)
+
+        return when (item) {
+            DrawerItem.HOME -> {
+                dashboard_navigation_view.menu.findItem(R.id.nav_home).isChecked = true
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.dashboard_container, model.homeFragment)
+                        .commit()
+                false
+            }
+            DrawerItem.DIARY -> {
+                dashboard_navigation_view.menu.findItem(R.id.nav_diary).isChecked = true
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.dashboard_container, model.diaryFragment)
+                        .commit()
+                false
+            }
+            DrawerItem.STATS -> {
+                dashboard_navigation_view.menu.findItem(R.id.nav_stats).isChecked = true
+                supportFragmentManager.beginTransaction()
+                        .replace(R.id.dashboard_container, model.statsFragment)
+                        .commit()
+                false
+            }
+            DrawerItem.PROFILE -> {
+                //Open the edit profile
+                EditProfileActivity.launch(this@DashboardActivity)
+                false
+            }
+            DrawerItem.SETTING -> {
+                //Open the edit profile
+                SettingsActivity.launch(this@DashboardActivity)
+                false
+            }
+            DrawerItem.ABOUT -> {
+                //Launch the about screen
+                AboutActivity.launch(this@DashboardActivity)
+                false
             }
         }
     }
@@ -180,10 +205,26 @@ class DashboardActivity : BaseActivity() {
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(Gravity.START)) {
+            //Close the drawer if the drawer is open.
             drawer_layout.closeDrawer(Gravity.START)
         } else {
+            //Handle back press
             super.onBackPressed()
         }
     }
 
+    @VisibleForTesting
+    internal fun getDrawerItem(@IdRes item: Int): DrawerItem {
+        return when (item) {
+            R.id.nav_home -> DrawerItem.HOME
+            R.id.nav_diary -> DrawerItem.DIARY
+            R.id.nav_stats -> DrawerItem.STATS
+
+            R.id.nav_profile -> DrawerItem.PROFILE
+            R.id.nav_settings -> DrawerItem.SETTING
+
+            R.id.nav_about -> DrawerItem.ABOUT
+            else -> throw IllegalStateException("Invalid menu resource id.")
+        }
+    }
 }

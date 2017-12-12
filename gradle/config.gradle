@@ -19,7 +19,7 @@ ext {
             min             : 21,
             target          : 27,
             compile         : 27,
-            buildToolVersion: '26.0.2',
+            buildToolVersion: '27.0.0',
             applicationId   : 'com.kevalpatel2106.standup'
     ]
 

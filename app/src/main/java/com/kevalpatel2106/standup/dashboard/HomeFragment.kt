@@ -16,6 +16,16 @@ import com.kevalpatel2106.standup.R
 class HomeFragment : Fragment() {
 
 
+    companion object {
+
+        /**
+         * Get the new instance of [HomeFragment].
+         */
+        fun getNewInstance(): HomeFragment {
+            return HomeFragment()
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {

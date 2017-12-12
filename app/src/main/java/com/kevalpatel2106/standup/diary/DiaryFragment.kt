@@ -6,15 +6,23 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.kevalpatel2106.standup.R
 
 
 /**
  * A simple [Fragment] subclass.
  */
-class SitingDiaryFragment : Fragment() {
+class DiaryFragment : Fragment() {
 
+    companion object {
+
+        /**
+         * Get the new instance of [DiaryFragment].
+         */
+        fun getNewInstance(): DiaryFragment {
+            return DiaryFragment()
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,

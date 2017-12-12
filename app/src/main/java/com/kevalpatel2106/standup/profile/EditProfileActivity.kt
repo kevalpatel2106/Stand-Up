@@ -17,6 +17,7 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.constants.logEvent
+import com.kevalpatel2106.standup.dashboard.DashboardActivity
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
 import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
 import com.kevalpatel2106.utils.showSnack
@@ -85,7 +86,13 @@ class EditProfileActivity : BaseActivity() {
         //Monitor save profile api call.
         mModel.mProfileUpdateStatus.observe(this@EditProfileActivity, Observer<SaveProfileResponse> {
             showSnack(R.string.message_profile_updated)
-            Handler().postDelayed({ finish() }, 3500L)
+            Handler().postDelayed({
+
+                //Open the dashboard if nothing in the back stack
+                if (isTaskRoot) DashboardActivity.launch(this@EditProfileActivity)
+
+                finish()
+            }, AppConfig.SNACKBAR_TIME)
 
             //Log the event
             logEvent(AnalyticsEvents.EVENT_PROFILE_UPDATED)
