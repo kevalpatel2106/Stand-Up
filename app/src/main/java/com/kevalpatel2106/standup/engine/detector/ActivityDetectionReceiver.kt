@@ -1,4 +1,4 @@
-package com.kevalpatel2106.activityengine
+package com.kevalpatel2106.standup.engine.detector
 
 import android.content.BroadcastReceiver
 import android.content.Context

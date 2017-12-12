@@ -3,13 +3,13 @@ package com.kevalpatel2106.standup
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.dashboard.DashboardActivity
+import com.kevalpatel2106.standup.engine.detector.ActivityDetector
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager

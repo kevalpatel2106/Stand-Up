@@ -17,7 +17,7 @@ internal object DeviceRegisterNotification {
                 .setContentTitle(context.getString(R.string.application_name))
                 .setSmallIcon(R.drawable.ic_notififcation_launcher)
                 .setContentText(context.getString(R.string.register_device_service_notification_message))
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_launcher))
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
                 .setAutoCancel(false)
                 .setTicker(context.getString(R.string.register_device_service_notification_message))
                 .setPriority(Notification.PRIORITY_LOW)

@@ -2,7 +2,6 @@ package com.kevalpatel2106.standup.authentication.logout
 
 import android.app.NotificationManager
 import android.content.Context
-import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.repo.LogoutRequest
@@ -11,6 +10,7 @@ import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.constants.logEvent
+import com.kevalpatel2106.standup.engine.detector.ActivityDetector
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils

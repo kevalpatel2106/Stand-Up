@@ -1,4 +1,4 @@
-package com.kevalpatel2106.activityengine
+package com.kevalpatel2106.standup.engine.detector
 
 /**
  * Created by Keval on 24/11/17.

@@ -6,8 +6,8 @@ import com.facebook.FacebookSdk
 import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.kevalpatel2106.activityengine.ActivityDetector
 import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.standup.engine.detector.ActivityDetector
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber

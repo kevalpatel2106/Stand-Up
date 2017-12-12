@@ -1,8 +1,9 @@
 include ':app',
-        ':activity-engine',
         ':base',
         ':utils',
         ':test-utils',
         ':network',
         ':facebook-auth',
-        ':google-auth', ':ruler-view', ':data-vault'
+        ':google-auth',
+        ':ruler-view',
+        ':data-vault'

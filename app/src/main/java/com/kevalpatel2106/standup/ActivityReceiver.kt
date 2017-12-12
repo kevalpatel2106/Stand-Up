@@ -1,6 +1,6 @@
 package com.kevalpatel2106.standup
 
-import com.kevalpatel2106.activityengine.ActivityDetectionReceiver
+import com.kevalpatel2106.standup.engine.detector.ActivityDetectionReceiver
 
 class ActivityReceiver : ActivityDetectionReceiver() {
     override fun onUserSitting() {
