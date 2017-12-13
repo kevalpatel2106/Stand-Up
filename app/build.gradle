@@ -109,7 +109,6 @@ dependencies {
     implementation project(':google-auth')
     implementation project(':data-vault')
     implementation project(':ruler-view')
-    implementation project(':engine')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -141,11 +140,16 @@ dependencies {
     //Arch component
     implementation archComponent.lifecycle
     kapt archComponent.lifecycleAnotations
+    implementation archComponent.room
+    implementation archComponent.roomRx
+    kapt archComponent.roomAnnotation
 
     //Firebase
     implementation(firebaseLib.core, excludeGrp)
     implementation(firebaseLib.fcm, excludeGrp)
     implementation(firebaseLib.remoteConfig, excludeGrp)
+    implementation(playServiceLib.location, excludeGrp)
+    implementation(firebaseLib.jobDispacher, excludeGrp)
 
     //Rx
     implementation rxLib.rxJava

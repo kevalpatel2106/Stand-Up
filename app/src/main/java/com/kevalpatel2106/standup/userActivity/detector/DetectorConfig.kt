@@ -1,11 +1,11 @@
-package com.kevalpatel2106.standup.engine
+package com.kevalpatel2106.standup.userActivity.detector
 
 /**
  * Created by Keval on 24/11/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal object EngineConfig {
+internal object DetectorConfig {
 
     /**
      * Interval between two "Stand up now" notifications in seconds.
@@ -30,5 +30,5 @@ internal object EngineConfig {
     /**
      * Broadcast action when the activity update available.
      */
-    internal const val DETECTION_BROADCAST_ACTION = "com.kevalpatel2106.standup.engine.activityUpdate"
+    internal const val DETECTION_BROADCAST_ACTION = "com.kevalpatel2106.standup.userActivity.engine.activityUpdate"
 }

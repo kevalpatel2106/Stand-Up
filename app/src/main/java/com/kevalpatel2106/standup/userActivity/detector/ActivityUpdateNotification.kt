@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.engine
+package com.kevalpatel2106.standup.userActivity.detector
 
 import android.app.Notification
 import android.app.NotificationManager

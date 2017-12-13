@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.engine
+package com.kevalpatel2106.standup.userActivity.detector
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.firebase.jobdispatcher.*
 import com.google.android.gms.location.ActivityRecognitionClient
+import com.kevalpatel2106.standup.userActivity.StandUpNotifyService
 import timber.log.Timber
 
 /**
@@ -13,7 +14,7 @@ import timber.log.Timber
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object Engine {
+object ActivityDetector {
     /**
      * [FirebaseJobDispatcher] instance to schedule the [JobService] that will display notification
      * to stretch legs.
@@ -27,24 +28,24 @@ object Engine {
     private var activityRecognitionClient: ActivityRecognitionClient? = null
 
     /**
-     * Schedule the stand up notification [JobService] after [EngineConfig.DETECTION_INTERVAL].
+     * Schedule the stand up notification [JobService] after [DetectorConfig.DETECTION_INTERVAL].
      *
-     * @see [StandUpNotifier]
+     * @see [StandUpNotifyService]
      */
     internal fun scheduleNextNotification() {
-        scheduleNotification(EngineConfig.STAND_UP_DURATION)
+        scheduleNotification(DetectorConfig.STAND_UP_DURATION)
     }
 
     /**
      * Schedule the stand up notification [JobService] after [afterTimeSecs].
      *
-     * @see [StandUpNotifier]
+     * @see [StandUpNotifyService]
      */
     private fun scheduleNotification(afterTimeSecs: Int) {
         dispatcher?.let {
             val myJob = it.newJobBuilder()
-                    .setService(StandUpNotifier::class.java)       // the JobService that will be called
-                    .setTag(EngineConfig.SCHEDULER_JOB_TAG)         // uniquely identifies the job
+                    .setService(StandUpNotifyService::class.java)       // the JobService that will be called
+                    .setTag(DetectorConfig.SCHEDULER_JOB_TAG)         // uniquely identifies the job
                     .setRecurring(false)
                     .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
                     .setTrigger(Trigger.executionWindow(afterTimeSecs, afterTimeSecs + 60))
@@ -71,7 +72,7 @@ object Engine {
         if (activityRecognitionClient == null) {
 
             activityRecognitionClient = ActivityRecognitionClient(context)
-            val task = activityRecognitionClient!!.requestActivityUpdates(EngineConfig.DETECTION_INTERVAL,
+            val task = activityRecognitionClient!!.requestActivityUpdates(DetectorConfig.DETECTION_INTERVAL,
                     getActivityDetectionPendingIntent(context))
             task.addOnSuccessListener({
                 Timber.i("Activity detector connected successfully.")
@@ -113,7 +114,7 @@ object Engine {
      * Gets a PendingIntent to be sent for each context detection.
      */
     private fun getActivityDetectionPendingIntent(context: Context): PendingIntent {
-        val intent = Intent(EngineConfig.DETECTION_BROADCAST_ACTION)
+        val intent = Intent(DetectorConfig.DETECTION_BROADCAST_ACTION)
 
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // requestActivityUpdates() and removeActivityUpdates().

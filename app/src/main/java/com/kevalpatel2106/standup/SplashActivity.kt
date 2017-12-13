@@ -9,8 +9,8 @@ import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.dashboard.DashboardActivity
-import com.kevalpatel2106.standup.engine.Engine
 import com.kevalpatel2106.standup.profile.EditProfileActivity
+import com.kevalpatel2106.standup.userActivity.detector.ActivityDetector
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 
@@ -54,7 +54,7 @@ class SplashActivity : BaseActivity() {
             EditProfileActivity.launch(this@SplashActivity)
         } else {
             //Start the detection engine
-            Engine.startEngineIfNotRunning(this.applicationContext)
+            ActivityDetector.startEngineIfNotRunning(this.applicationContext)
 
             //Launch the dashboard.
             DashboardActivity.launch(this@SplashActivity)

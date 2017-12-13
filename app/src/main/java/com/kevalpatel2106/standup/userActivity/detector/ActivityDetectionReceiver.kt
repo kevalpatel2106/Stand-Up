@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.engine
+package com.kevalpatel2106.standup.userActivity.detector
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,6 +6,7 @@ import android.content.Intent
 import android.widget.Toast
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
+import com.kevalpatel2106.standup.BuildConfig
 import timber.log.Timber
 import java.util.*
 
@@ -50,7 +51,7 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         Timber.d("User is moving.")
         Toast.makeText(context, "User is moving.", Toast.LENGTH_SHORT).show()
         //Schedule the next job after 1 hour
-        Engine.scheduleNextNotification()
+        ActivityDetector.scheduleNextNotification()
     }
 
     private fun onUserSitting() {

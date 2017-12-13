@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
 
     <application
         android:name=".SUApplication"
@@ -14,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning"
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"
         tools:replace="android:allowBackup">
 
         <!-- =============================== META-DATA ================================ -->
@@ -152,6 +153,17 @@
             </intent-filter>
         </receiver>
 
+        <!-- Receiver to get callbacks when user's activity changes. -->
+        <receiver
+            android:name="com.kevalpatel2106.standup.userActivity.detector.ActivityDetectionReceiver"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.kevalpatel2106.standup.engine.activityUpdate"/>
+            </intent-filter>
+        </receiver>
+
         <!-- =============================== SERVICE ================================ -->
         <!-- Begin: Firebase service -->
         <service
@@ -176,7 +188,7 @@
             tools:ignore="ExportedService"/>
 
         <service
-            android:name=".StandUpNotifyService"
+            android:name=".userActivity.StandUpNotifyService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>

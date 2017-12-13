@@ -45,6 +45,9 @@ class SUApplication : Application() {
         //Initialize shared preference
         SharedPrefsProvider.init(this)
 
+        //Initialize db
+//        StandUpDb.init(this@SUApplication)
+
         //Init shetho
         Stetho.initializeWithDefaults(this)
 

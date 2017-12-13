@@ -1,4 +1,4 @@
-include ':app', ':engine',
+include ':app',
         ':base',
         ':utils',
         ':test-utils',
