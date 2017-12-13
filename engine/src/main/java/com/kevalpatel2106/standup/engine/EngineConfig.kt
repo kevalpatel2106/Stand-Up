@@ -6,9 +6,15 @@ package com.kevalpatel2106.standup.engine
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 internal object EngineConfig {
+
+    /**
+     * Interval between two "Stand up now" notifications in seconds.
+     */
     internal const val STAND_UP_DURATION = 10 * 60 /*1 hour*/
 
-
+    /**
+     * Tag for the [StandUpNotifier] job.
+     */
     internal const val SCHEDULER_JOB_TAG = "tag"
 
     /**

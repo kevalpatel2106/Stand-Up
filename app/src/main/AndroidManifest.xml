@@ -138,6 +138,9 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
 
+        <activity android:name=".about.AboutActivity"/>
+        <activity android:name=".settings.SettingsActivity"/>
+
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->
         <receiver
@@ -167,15 +170,18 @@
         </service>
         <!-- End: Firebase service -->
 
-
         <!-- Service to register the device firebase token and other detail -->
         <service
             android:name=".authentication.deviceReg.RegisterDeviceService"
             tools:ignore="ExportedService"/>
 
-        <activity android:name=".about.AboutActivity"/>
-        <activity android:name=".settings.SettingsActivity">
-        </activity>
+        <service
+            android:name=".StandUpNotifyService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

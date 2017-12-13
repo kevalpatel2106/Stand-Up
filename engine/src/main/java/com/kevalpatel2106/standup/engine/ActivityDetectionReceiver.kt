@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.engine.detector
+package com.kevalpatel2106.standup.engine
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,9 +6,6 @@ import android.content.Intent
 import android.widget.Toast
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.standup.engine.Engine
-import com.kevalpatel2106.standup.engine.TestNotification2
-import com.kevalpatel2106.standup.engine.TestNotification3
 import timber.log.Timber
 import java.util.*
 
@@ -31,7 +28,11 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         val detectedActivities = result.probableActivities as ArrayList
 
         //Sort the activity list by confidante level
-        Collections.sort(detectedActivities) { p0, p1 -> p0.confidence - p1.confidence }
+        Collections.sort(detectedActivities) { p0, p1 -> p1.confidence - p0.confidence }
+
+        if (BuildConfig.DEBUG) {
+            ActivityUpdateNotification.notify(context, detectedActivities)
+        }
 
         //Activity detected.
         when (detectedActivities[0].type) {
@@ -50,14 +51,11 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         Toast.makeText(context, "User is moving.", Toast.LENGTH_SHORT).show()
         //Schedule the next job after 1 hour
         Engine.scheduleNextNotification()
-
-        TestNotification2.notify(context)
     }
 
     private fun onUserSitting() {
         Timber.d("User is sitting.")
         Toast.makeText(context, "User is sitting.", Toast.LENGTH_SHORT).show()
-        TestNotification3.notify(context)
         //Do nothing
     }
 }

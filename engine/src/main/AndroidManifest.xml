@@ -5,17 +5,9 @@
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 
     <application>
-        <service
-            android:name=".SchedulerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-
         <!-- Receiver to get callbacks when user's activity changes. -->
         <receiver
-            android:name=".detector.ActivityDetectionReceiver"
+            android:name=".ActivityDetectionReceiver"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedReceiver">

@@ -54,7 +54,7 @@ class SplashActivity : BaseActivity() {
             EditProfileActivity.launch(this@SplashActivity)
         } else {
             //Start the detection engine
-            Engine.startEngine(this.applicationContext)
+            Engine.startEngineIfNotRunning(this.applicationContext)
 
             //Launch the dashboard.
             DashboardActivity.launch(this@SplashActivity)

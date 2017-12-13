@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(AndroidJUnit4::class)
-class TestNotificationTest : BaseTestClass() {
+class TestNotificationTestStandUpNow : BaseTestClass() {
     override fun getActivity(): Activity? = null
 
     private lateinit var mDevice: UiDevice
