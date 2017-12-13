@@ -1,11 +1,15 @@
-package com.kevalpatel2106.standup.engine.detector
+package com.kevalpatel2106.standup.engine
 
 /**
  * Created by Keval on 24/11/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object DetectorConfig {
+internal object EngineConfig {
+    internal const val STAND_UP_DURATION = 10 * 60 /*1 hour*/
+
+
+    internal const val SCHEDULER_JOB_TAG = "tag"
 
     /**
      * Shared prefrance key to maintain the state of the activity detection.
@@ -15,10 +19,10 @@ object DetectorConfig {
     /**
      * Activity detection update interval in milliseconds.
      */
-    internal const val DETECTION_INTERVAL = 10000L
+    internal const val DETECTION_INTERVAL = 30000L /*30 secs*/
 
     /**
      * Broadcast action when the activity update available.
      */
-    const val DETECTION_BROADCAST_ACTION = "com.kevalpatel2106.activityengine.update"
+    internal const val DETECTION_BROADCAST_ACTION = "com.kevalpatel2106.standup.engine.activityUpdate"
 }

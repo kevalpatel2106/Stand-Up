@@ -3,8 +3,13 @@ package com.kevalpatel2106.standup.engine.detector
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
+import com.kevalpatel2106.standup.engine.Engine
+import com.kevalpatel2106.standup.engine.TestNotification2
+import com.kevalpatel2106.standup.engine.TestNotification3
+import timber.log.Timber
 import java.util.*
 
 
@@ -13,10 +18,9 @@ import java.util.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-abstract class ActivityDetectionReceiver : BroadcastReceiver() {
+class ActivityDetectionReceiver : BroadcastReceiver() {
 
-    protected lateinit var context: Context
-
+    private lateinit var context: Context
     override fun onReceive(context: Context, intent: Intent) {
         this.context = context
         val result = ActivityRecognitionResult.extractResult(intent)
@@ -36,11 +40,24 @@ abstract class ActivityDetectionReceiver : BroadcastReceiver() {
             DetectedActivity.ON_BICYCLE or DetectedActivity.ON_FOOT or DetectedActivity.WALKING -> onUserMoving()
             DetectedActivity.UNKNOWN or DetectedActivity.TILTING -> {
                 /* Do nothing */
+                Timber.e("Unknown activity detected.")
             }
         }
     }
 
-    abstract fun onUserMoving()
+    private fun onUserMoving() {
+        Timber.d("User is moving.")
+        Toast.makeText(context, "User is moving.", Toast.LENGTH_SHORT).show()
+        //Schedule the next job after 1 hour
+        Engine.scheduleNextNotification()
 
-    abstract fun onUserSitting()
+        TestNotification2.notify(context)
+    }
+
+    private fun onUserSitting() {
+        Timber.d("User is sitting.")
+        Toast.makeText(context, "User is sitting.", Toast.LENGTH_SHORT).show()
+        TestNotification3.notify(context)
+        //Do nothing
+    }
 }

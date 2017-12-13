@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/data-vault" />
+            <option value="$PROJECT_DIR$/engine" />
             <option value="$PROJECT_DIR$/facebook-auth" />
             <option value="$PROJECT_DIR$/google-auth" />
             <option value="$PROJECT_DIR$/network" />

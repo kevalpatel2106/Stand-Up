@@ -109,6 +109,7 @@ dependencies {
     implementation project(':google-auth')
     implementation project(':data-vault')
     implementation project(':ruler-view')
+    implementation project(':engine')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -145,7 +146,6 @@ dependencies {
     implementation(firebaseLib.core, excludeGrp)
     implementation(firebaseLib.fcm, excludeGrp)
     implementation(firebaseLib.remoteConfig, excludeGrp)
-    implementation(playServiceLib.location, excludeGrp)
 
     //Rx
     implementation rxLib.rxJava

@@ -5,7 +5,6 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 
     <application
         android:name=".SUApplication"
@@ -147,17 +146,6 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.kevalpatel2106.network.unauthorized"/>
-            </intent-filter>
-        </receiver>
-
-        <!-- Receiver to get callbacks when user's activity changes. -->
-        <receiver
-            android:name=".ActivityReceiver"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
-            <intent-filter>
-                <action android:name="com.kevalpatel2106.activityengine.update"/>
             </intent-filter>
         </receiver>
 

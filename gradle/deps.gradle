@@ -97,6 +97,7 @@ ext {
             auth        : 'com.google.firebase:firebase-auth:' + playServiceVersion,
             preformance : 'com.google.firebase:firebase-perf:' + playServiceVersion,
             remoteConfig: 'com.google.firebase:firebase-config:' + playServiceVersion,
+            jobDispacher: 'com.firebase:firebase-jobdispatcher:0.8.5',
     ]
 
     //Play services dependency
