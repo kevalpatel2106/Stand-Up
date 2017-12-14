@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.kevalpatel2106.base
+package com.kevalpatel2106.base.uiController
 
 import android.content.Context
 import android.os.Bundle

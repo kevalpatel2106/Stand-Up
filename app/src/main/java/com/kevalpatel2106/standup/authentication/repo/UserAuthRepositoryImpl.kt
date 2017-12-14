@@ -1,9 +1,9 @@
 package com.kevalpatel2106.standup.authentication.repo
 
 import com.kevalpatel2106.base.annotations.Repository
+import com.kevalpatel2106.base.repository.RepoBuilder
 import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.network.RetrofitNetworkRefresherImpl
-import com.kevalpatel2106.vault.VaultBuilder
+import com.kevalpatel2106.network.RetrofitNetworkRefresher
 import io.reactivex.Flowable
 
 /**
@@ -22,8 +22,8 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .create(UserApiService::class.java)
                 .logout(logoutRequest)
 
-        return VaultBuilder<LogoutResponse>()
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+        return RepoBuilder<LogoutResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
@@ -34,8 +34,8 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .create(UserApiService::class.java)
                 .verifyEmailLink(url)
 
-        return VaultBuilder<String>()
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+        return RepoBuilder<String>()
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
@@ -46,8 +46,8 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .create(UserApiService::class.java)
                 .forgotPassword(forgotPasswordRequest)
 
-        return VaultBuilder<ForgotPasswordResponse>()
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+        return RepoBuilder<ForgotPasswordResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
@@ -58,8 +58,8 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .create(UserApiService::class.java)
                 .resendVerifyEmail(request)
 
-        return VaultBuilder<ResendVerificationResponse>()
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+        return RepoBuilder<ResendVerificationResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
@@ -70,8 +70,8 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .create(UserApiService::class.java)
                 .registerDevice(request)
 
-        return VaultBuilder<DeviceRegisterResponse>()
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+        return RepoBuilder<DeviceRegisterResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
@@ -82,8 +82,8 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .create(UserApiService::class.java)
                 .login(loginRequest)
 
-        return VaultBuilder<LoginResponse>()
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+        return RepoBuilder<LoginResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
@@ -94,8 +94,8 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .create(UserApiService::class.java)
                 .signUp(signUpRequest)
 
-        return VaultBuilder<SignUpResponse>()
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+        return RepoBuilder<SignUpResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
@@ -106,8 +106,8 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
                 .create(UserApiService::class.java)
                 .socialSignUp(signUpRequest)
 
-        return VaultBuilder<SignUpResponse>()
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+        return RepoBuilder<SignUpResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.

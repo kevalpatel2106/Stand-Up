@@ -60,22 +60,11 @@ dependencies {
 
     implementation ide.kotlin
 
-    //Testing
-    testImplementation testLib.junit
-    androidTestImplementation(testLib.rules, excludeGrp)
-    androidTestImplementation testLib.esspresso
-    androidTestImplementation(testLib.runner, excludeGrp)
-    androidTestImplementation(testLib.esspressoIntents, excludeGrp)
-    androidTestImplementation(testLib.contrib, excludeGrp)
-    androidTestImplementation testLib.idling
-    androidTestImplementation testLib.uiAutomator
-
     //Butter knife
     implementation(butterKnifeLib.butterKnife, excludeGrp)
     kapt(butterKnifeLib.annotationProcessor, excludeGrp)
 
     implementation archComponent.lifecycle
-    debugImplementation(debugLibs.leakcanary, excludeGrp)
 
     //Support
     implementation supportLib.appCompat
@@ -87,6 +76,7 @@ dependencies {
     implementation rxLib.rxJava
     implementation (rxLib.rxAndroid, excludeGrp)
 
-    //Other
+    //Logger
+    debugImplementation(debugLibs.leakcanary, excludeGrp)
     implementation(debugLibs.timber, excludeGrp)
 }

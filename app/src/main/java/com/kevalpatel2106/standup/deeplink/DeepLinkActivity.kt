@@ -3,7 +3,7 @@ package com.kevalpatel2106.standup.deeplink
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.base.BaseActivity
+import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.EmailLinkVerificationActivity
 import com.kevalpatel2106.utils.UserSessionManager

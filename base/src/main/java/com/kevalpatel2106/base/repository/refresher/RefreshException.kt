@@ -1,4 +1,4 @@
-package com.kevalpatel2106.vault.refresher
+package com.kevalpatel2106.base.repository.refresher
 
 /**
  * Created by Kevalpatel2106 on 29-Nov-17.

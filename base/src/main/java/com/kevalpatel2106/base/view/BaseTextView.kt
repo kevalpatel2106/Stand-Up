@@ -14,21 +14,21 @@
  *  limitations under the License.
  */
 
-package com.kevalpatel2106.base
+package com.kevalpatel2106.base.view
 
 import android.content.Context
-import android.support.v7.widget.AppCompatEditText
+import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 
 /**
  * Created by Keval Patel on 04/03/17.
- * This base class is to extend the functionality of [AppCompatEditText]. Use this class instead
- * of [android.widget.EditText] through out the application.
+ * This base class is to extend the functionality of [AppCompatTextView]. Use this class instead
+ * of [android.widget.TextView] through out the application.
 
  * @author 'https://github.com/kevalpatel2106'
  */
 
-class BaseEditText : AppCompatEditText {
+class BaseTextView : AppCompatTextView {
     constructor(context: Context) : super(context) {
         init(context)
     }
@@ -44,27 +44,12 @@ class BaseEditText : AppCompatEditText {
 
     private fun init(@Suppress("UNUSED_PARAMETER") context: Context) {
         //set type face
-        //        AssetManager am = context.getApplicationContext().getAssets();
-        //        setTypeface(Typeface.createFromAsset(am, getFont(getTypeface())));
-    }
+        //setTypeface(ResourcesCompat.getFont(context, R.font.open_sans));
 
-
-    /**
-     * Check if the edit text is empty.
-
-     * @return True uf there is no text entered in edit text.
-     */
-    fun isEmpty() = getTrimmedText().isEmpty()
-
-    override fun setError(error: CharSequence) {
-        requestFocus()
-        super.setError(error)
     }
 
     /**
      * @return Trimmed text.
      */
     fun getTrimmedText() = text.toString().trim { it <= ' ' }
-
-    fun clear() = setText("")
 }

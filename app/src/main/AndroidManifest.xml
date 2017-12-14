@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.kevalpatel2106.standup">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.kevalpatel2106.standup">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 
     <application
         android:name=".SUApplication"
@@ -21,11 +21,10 @@
         <!-- =============================== META-DATA ================================ -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+            android:value="@string/facebook_app_id" />
         <meta-data
-            android:name="com.google.android.awareness.API_KEY"
-            android:value="@string/android_api_key"/>
-
+            android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
+            android:value="false" />
         <!-- =============================== ACTIVITIES ================================ -->
 
 
@@ -39,14 +38,14 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="@string/api_host"
-                    android:scheme="https"/>
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 
@@ -61,9 +60,9 @@
             android:theme="@style/AppTheme.Splash"
             tools:ignore="UnusedAttribute">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
@@ -73,7 +72,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+            tools:ignore="UnusedAttribute" />
 
         <!-- Login/Sign Up the user screen -->
         <activity
@@ -81,7 +80,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+            tools:ignore="UnusedAttribute" />
 
         <!-- Forgot password request screen -->
         <activity
@@ -89,7 +88,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+            tools:ignore="UnusedAttribute" />
 
         <!-- Verify your email reminder screen. -->
         <activity
@@ -97,7 +96,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+            tools:ignore="UnusedAttribute" />
 
         <!-- Verify the user email with the deep link. -->
         <activity
@@ -106,13 +105,13 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+            tools:ignore="UnusedAttribute" />
         <activity
             android:name=".authentication.deviceReg.DeviceRegisterActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+            tools:ignore="UnusedAttribute" />
 
         <!-- Dashboard Activity -->
         <activity
@@ -120,7 +119,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+            tools:ignore="UnusedAttribute" />
 
         <!-- Web view activity -->
         <activity
@@ -129,7 +128,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+            tools:ignore="UnusedAttribute" />
 
         <!-- User profile edit screen -->
         <activity
@@ -137,10 +136,10 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+            tools:ignore="UnusedAttribute" />
 
-        <activity android:name=".about.AboutActivity"/>
-        <activity android:name=".settings.SettingsActivity"/>
+        <activity android:name=".about.AboutActivity" />
+        <activity android:name=".settings.SettingsActivity" />
 
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->
@@ -149,7 +148,7 @@
             android:enabled="false"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.kevalpatel2106.network.unauthorized"/>
+                <action android:name="com.kevalpatel2106.network.unauthorized" />
             </intent-filter>
         </receiver>
 
@@ -160,7 +159,7 @@
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="com.kevalpatel2106.standup.engine.activityUpdate"/>
+                <action android:name="com.kevalpatel2106.standup.engine.activityUpdate" />
             </intent-filter>
         </receiver>
 
@@ -170,14 +169,14 @@
             android:name=".notification.FcmMessagingService"
             tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
             android:name=".notification.InstanceIdService"
             tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- End: Firebase service -->
@@ -185,13 +184,13 @@
         <!-- Service to register the device firebase token and other detail -->
         <service
             android:name=".authentication.deviceReg.RegisterDeviceService"
-            tools:ignore="ExportedService"/>
+            tools:ignore="ExportedService" />
 
         <service
             android:name=".userActivity.StandUpNotifyService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
     </application>

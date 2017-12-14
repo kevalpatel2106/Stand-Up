@@ -10,8 +10,8 @@ import android.support.annotation.VisibleForTesting
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
-import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
+import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository

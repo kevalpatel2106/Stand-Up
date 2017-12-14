@@ -1,6 +1,6 @@
-package com.kevalpatel2106.vault.cache
+package com.kevalpatel2106.base.repository.cache
 
-import com.kevalpatel2106.vault.VaultData
+import com.kevalpatel2106.base.repository.RepoData
 
 /**
  * Created by Keval on 28/11/17.
@@ -17,5 +17,5 @@ interface Cache<T> {
     /**
      * Read from the cache.
      */
-    fun read(): VaultData<T>
+    fun read(): RepoData<T>
 }

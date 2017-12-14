@@ -1,4 +1,4 @@
-package com.kevalpatel2106.vault.cache
+package com.kevalpatel2106.base.repository.cache
 
 /**
  * Created by Keval on 28/11/17.

@@ -54,7 +54,7 @@ android {
 dependencies {
     implementation project(':base')
     implementation project(':utils')
-    implementation project(':data-vault')
+    implementation project(':base')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 

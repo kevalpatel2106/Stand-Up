@@ -3,7 +3,7 @@ package com.kevalpatel2106.standup.settings
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.base.BaseActivity
+import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 
 class SettingsActivity : BaseActivity() {

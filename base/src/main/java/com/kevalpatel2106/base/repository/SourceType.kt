@@ -1,4 +1,4 @@
-package com.kevalpatel2106.vault
+package com.kevalpatel2106.base.repository
 
 /**
  * Created by Kevalpatel2106 on 29-Nov-17.

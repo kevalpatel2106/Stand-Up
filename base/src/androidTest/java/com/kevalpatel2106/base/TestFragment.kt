@@ -16,6 +16,8 @@
 
 package com.kevalpatel2106.base
 
+import com.kevalpatel2106.base.uiController.BaseFragment
+
 /**
  * Created by Keval on 21-Jul-17.
  * This is the concrete implementation for the [BaseFragment] for the instrumentation tests.

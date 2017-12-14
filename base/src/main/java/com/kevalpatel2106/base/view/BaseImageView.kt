@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.kevalpatel2106.base
+package com.kevalpatel2106.base.view
 
 import android.content.Context
 import android.support.v7.widget.AppCompatImageView

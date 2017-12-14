@@ -19,6 +19,7 @@ package com.kevalpatel2106.base
 import android.app.Activity
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import com.kevalpatel2106.base.view.BaseViewPager
 import com.kevalpatel2106.testutils.BaseTestClass
 import org.junit.Assert.assertTrue
 import org.junit.Test

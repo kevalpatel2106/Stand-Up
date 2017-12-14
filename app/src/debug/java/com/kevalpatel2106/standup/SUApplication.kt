@@ -24,6 +24,41 @@ class SUApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        initDebugTools()
+
+        initNetworkModule()
+
+        //Initialize shared preference
+        SharedPrefsProvider.init(this)
+
+        setUpFirebase()
+
+        //Initialize db
+        StandUpDb.init(this@SUApplication)
+
+        //Initialize facebook
+        @Suppress("DEPRECATION")
+        FacebookSdk.sdkInitialize(this@SUApplication)
+    }
+
+    private fun setUpFirebase() {
+        //Initialize firebase.
+        FirebaseApp.initializeApp(this@SUApplication)
+
+        //Disable firebase analytics
+        FirebaseAnalytics.getInstance(this@SUApplication).setAnalyticsCollectionEnabled(false)
+    }
+
+    private fun initNetworkModule() {
+        //Init shetho
+        Stetho.initializeWithDefaults(this)
+
+        //Initialize the api module
+        ApiProvider.init(this@SUApplication)
+    }
+
+    private fun initDebugTools() {
         //Enable strict mode
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
                 .detectAll()
@@ -42,30 +77,8 @@ class SUApplication : Application() {
             }
         })
 
-        //Initialize shared preference
-        SharedPrefsProvider.init(this)
-
-        //Initialize db
-//        StandUpDb.init(this@SUApplication)
-
-        //Init shetho
-        Stetho.initializeWithDefaults(this)
-
-        //Initialize the api module
-        ApiProvider.init(this@SUApplication)
-
-        //Initialize firebase.
-        FirebaseApp.initializeApp(this@SUApplication)
-
-        //Initialize facebook
-        @Suppress("DEPRECATION")
-        FacebookSdk.sdkInitialize(this@SUApplication)
-
         //Initialize the leak canary
         if (LeakCanary.isInAnalyzerProcess(this)) return
         LeakCanary.install(this)
-
-        //Disable firebase analytics
-        FirebaseAnalytics.getInstance(this@SUApplication).setAnalyticsCollectionEnabled(false)
     }
 }

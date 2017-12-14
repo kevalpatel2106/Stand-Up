@@ -60,7 +60,6 @@ dependencies {
     //Support
     implementation supportLib.supportv4
     implementation supportLib.appCompat
-    implementation supportLib.design
 
     //Loggers
     implementation(debugLibs.timber, excludeGrp)

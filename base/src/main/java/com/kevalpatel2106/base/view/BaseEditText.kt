@@ -14,24 +14,21 @@
  *  limitations under the License.
  */
 
-package com.kevalpatel2106.base
+package com.kevalpatel2106.base.view
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
-import android.support.v7.widget.AppCompatButton
+import android.support.v7.widget.AppCompatEditText
 import android.util.AttributeSet
-import android.view.MotionEvent
-
 
 /**
  * Created by Keval Patel on 04/03/17.
- * This base class is to extend the functionality of [AppCompatButton]. Use this class instead
- * of [android.widget.Button] through out the application.
+ * This base class is to extend the functionality of [AppCompatEditText]. Use this class instead
+ * of [android.widget.EditText] through out the application.
 
  * @author 'https://github.com/kevalpatel2106'
  */
-class BaseButton : AppCompatButton {
+
+class BaseEditText : AppCompatEditText {
     constructor(context: Context) : super(context) {
         init(context)
     }
@@ -47,23 +44,27 @@ class BaseButton : AppCompatButton {
 
     private fun init(@Suppress("UNUSED_PARAMETER") context: Context) {
         //set type face
-        //setTypeface(ResourcesCompat.getFont(context, R.font.open_sans));
+        //        AssetManager am = context.getApplicationContext().getAssets();
+        //        setTypeface(Typeface.createFromAsset(am, getFont(getTypeface())));
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            //Action down
-            if (event?.action == MotionEvent.ACTION_DOWN) {
-                translationZ -= 20  //Fall
-            }
+    /**
+     * Check if the edit text is empty.
 
-            //Action up
-            if (event?.action == MotionEvent.ACTION_UP) {
-                translationZ += 20  //Rise
-            }
-        }
-        return super.onTouchEvent(event)
+     * @return True uf there is no text entered in edit text.
+     */
+    fun isEmpty() = getTrimmedText().isEmpty()
+
+    override fun setError(error: CharSequence) {
+        requestFocus()
+        super.setError(error)
     }
+
+    /**
+     * @return Trimmed text.
+     */
+    fun getTrimmedText() = text.toString().trim { it <= ' ' }
+
+    fun clear() = setText("")
 }

@@ -23,6 +23,7 @@ import android.os.Handler
 import android.os.Looper
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
+import com.kevalpatel2106.base.view.BaseEditText
 import com.kevalpatel2106.testutils.BaseTestClass
 import org.junit.Assert.*
 import org.junit.Before

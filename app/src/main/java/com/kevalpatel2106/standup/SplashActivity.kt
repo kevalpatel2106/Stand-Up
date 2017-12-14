@@ -3,7 +3,7 @@ package com.kevalpatel2106.standup
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.base.BaseActivity
+import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity

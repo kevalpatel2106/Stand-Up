@@ -3,6 +3,7 @@ package com.kevalpatel2106.standup.userActivity
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import timber.log.Timber
 
 /**
  * Created by Kevalpatel2106 on 13-Dec-17.
@@ -11,25 +12,48 @@ import android.arch.persistence.room.PrimaryKey
  */
 @Entity(tableName = UserActivity.USER_ACTIVITY_TABLE)
 data class UserActivity(
-
-        @PrimaryKey(autoGenerate = false)
-        @ColumnInfo(name = UserActivity.ID)
-        val id: Long,
+        @ColumnInfo(name = UserActivity.REMOTE_ID)
+        var remoteId: Long = 0,
 
         @ColumnInfo(name = UserActivity.EVENT_START_TIME)
-        val eventTimeMills: Long,
+        val eventStartTimeMills: Long,
 
         @ColumnInfo(name = UserActivity.EVENT_END_TIME)
-        val eventEndTimeMills: Long,
+        var eventEndTimeMills: Long,
 
-        @ColumnInfo(name = UserActivity.IS_SITTING)
-        val isSitting: Boolean,
+        @ColumnInfo(name = UserActivity.ACTIVITY_TYPE)
+        val type: String,
 
         @ColumnInfo(name = UserActivity.IS_SYNCED)
         val isSynced: Boolean
 ) {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = UserActivity.ID)
+    var localId: Long = 0
+
     companion object {
+        @JvmStatic
+        fun createLocalUserActivity(type: UserActivityType) = UserActivity(
+                eventStartTimeMills = System.currentTimeMillis(),
+                eventEndTimeMills = 0, /*We don't know when the event will end*/
+                type = type.name.toLowerCase(),
+                isSynced = false)
+
+
+        @JvmStatic
+        fun getActivityType(type: String): UserActivityType {
+
+            return when (type) {
+                UserActivityType.SITTING.name.toLowerCase() -> UserActivityType.SITTING
+                UserActivityType.MOVING.name.toLowerCase() -> UserActivityType.MOVING
+                UserActivityType.SLEEPING.name.toLowerCase() -> UserActivityType.SLEEPING
+                else -> {/*This should never happen*/
+                    Timber.e("Invalid user activity type ->".plus(type))
+                    UserActivityType.SLEEPING
+                }
+            }
+        }
 
         /**
          * Name of the table. This is the primary key.
@@ -38,9 +62,10 @@ data class UserActivity(
 
         //---- [Start] Column names
         const val ID = "_id"
+        const val REMOTE_ID = "remote_id"
         const val EVENT_START_TIME = "event_end_time"
         const val EVENT_END_TIME = "event_start_time"
-        const val IS_SITTING = "is_sitting"
+        const val ACTIVITY_TYPE = "type"
         const val IS_SYNCED = "is_synced"
         //---- [End] Column names
     }

@@ -1,15 +1,15 @@
 package com.kevalpatel2106.standup.profile.repo
 
 import com.kevalpatel2106.base.annotations.Repository
+import com.kevalpatel2106.base.repository.RepoBuilder
+import com.kevalpatel2106.base.repository.RepoData
+import com.kevalpatel2106.base.repository.cache.SharedPrefranceCache
 import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.network.RetrofitNetworkRefresherImpl
+import com.kevalpatel2106.network.RetrofitNetworkRefresher
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.toFloatSafe
-import com.kevalpatel2106.vault.VaultBuilder
-import com.kevalpatel2106.vault.VaultData
-import com.kevalpatel2106.vault.cache.SharedPrefranceCache
 import io.reactivex.Flowable
 import javax.net.ssl.HttpsURLConnection
 
@@ -40,11 +40,11 @@ internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRep
                 }
             }
 
-            override fun read(): VaultData<GetProfileResponse> {
+            override fun read(): RepoData<GetProfileResponse> {
                 if (!UserSessionManager.isUserLoggedIn) {
                     //User is not logged in.
                     //Cannot do any thing
-                    val errorData = VaultData<GetProfileResponse>(true)
+                    val errorData = RepoData<GetProfileResponse>(true)
                     errorData.errorMessage = "User is not logged in."
                     errorData.errorCode = HttpsURLConnection.HTTP_UNAUTHORIZED
                     return errorData
@@ -61,9 +61,9 @@ internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRep
                             photo = UserSessionManager.photo,
                             gender = if (UserSessionManager.isMale) AppConfig.GENDER_MALE else AppConfig.GENDER_FEMALE
                     )
-                    return VaultData(false, userProfile)
+                    return RepoData(false, userProfile)
                 } catch (e: Exception) {
-                    val errorData = VaultData<GetProfileResponse>(true)
+                    val errorData = RepoData<GetProfileResponse>(true)
                     errorData.errorMessage = "Cannot get user profile."
                     errorData.errorCode = HttpsURLConnection.HTTP_UNAUTHORIZED
                     return errorData
@@ -71,9 +71,9 @@ internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRep
             }
         }
 
-        return VaultBuilder<GetProfileResponse>()
+        return RepoBuilder<GetProfileResponse>()
                 .addCache(cache)
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { it.data }    //We don't use vault data information on the UI level. Map it to simple.
@@ -94,8 +94,8 @@ internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRep
                         weight = weight.toString(),
                         gender = if (isMale) AppConfig.GENDER_MALE else AppConfig.GENDER_FEMALE))
 
-        return VaultBuilder<SaveProfileResponse>()
-                .addRefresher(RetrofitNetworkRefresherImpl(call))
+        return RepoBuilder<SaveProfileResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
                 .map { t ->

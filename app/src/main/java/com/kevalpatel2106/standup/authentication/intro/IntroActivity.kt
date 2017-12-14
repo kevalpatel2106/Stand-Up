@@ -16,8 +16,8 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import butterknife.OnClick
 import butterknife.Optional
-import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
+import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.facebookauth.FacebookHelper
 import com.kevalpatel2106.facebookauth.FacebookResponse
 import com.kevalpatel2106.facebookauth.FacebookUser

@@ -28,20 +28,20 @@
     tools:background="?attr/colorPrimaryDark">
 
     <!--Sign in with Google button-->
-    <com.kevalpatel2106.base.BaseButton
+    <com.kevalpatel2106.base.view.BaseButton
         android:id="@+id/btn_login_google_signin"
         style="@style/GoogleSignInBtn"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:text="@string/sign_in_with_google" />
 
-    <com.kevalpatel2106.base.BaseButton
+    <com.kevalpatel2106.base.view.BaseButton
         android:id="@+id/btn_login_using_email"
         style="@style/LoginBtn"
         android:layout_above="@id/btn_login_google_signin"
         android:text="@string/login_using_email" />
 
-    <com.kevalpatel2106.base.BaseButton
+    <com.kevalpatel2106.base.view.BaseButton
         android:id="@+id/btn_create_account"
         style="@style/LoginBtn"
         android:layout_above="@id/btn_login_using_email"

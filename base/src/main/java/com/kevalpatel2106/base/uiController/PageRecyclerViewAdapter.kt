@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.kevalpatel2106.base
+package com.kevalpatel2106.base.uiController
 
 import android.content.Context
 import android.support.annotation.CallSuper
@@ -23,7 +23,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kevalpatel2106.base.PageRecyclerViewAdapter.RecyclerViewListener
+import com.kevalpatel2106.base.R
+import com.kevalpatel2106.base.uiController.PageRecyclerViewAdapter.RecyclerViewListener
 
 /**
  * Created by Keval on 31-May-17.

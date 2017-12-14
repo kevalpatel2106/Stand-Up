@@ -10,7 +10,7 @@ import android.support.annotation.VisibleForTesting
 import android.view.View
 import butterknife.OnClick
 import com.cocosw.bottomsheet.BottomSheet
-import com.kevalpatel2106.base.BaseActivity
+import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent

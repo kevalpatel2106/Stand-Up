@@ -17,6 +17,7 @@
 package com.kevalpatel2106.base
 
 import android.os.Bundle
+import com.kevalpatel2106.base.uiController.BaseActivity
 
 /**
  * Created by Keval on 21-Jul-17.

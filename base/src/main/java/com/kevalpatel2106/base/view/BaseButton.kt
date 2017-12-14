@@ -14,21 +14,24 @@
  *  limitations under the License.
  */
 
-package com.kevalpatel2106.base
+package com.kevalpatel2106.base.view
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v7.widget.AppCompatTextView
+import android.os.Build
+import android.support.v7.widget.AppCompatButton
 import android.util.AttributeSet
+import android.view.MotionEvent
+
 
 /**
  * Created by Keval Patel on 04/03/17.
- * This base class is to extend the functionality of [AppCompatTextView]. Use this class instead
- * of [android.widget.TextView] through out the application.
+ * This base class is to extend the functionality of [AppCompatButton]. Use this class instead
+ * of [android.widget.Button] through out the application.
 
  * @author 'https://github.com/kevalpatel2106'
  */
-
-class BaseTextView : AppCompatTextView {
+class BaseButton : AppCompatButton {
     constructor(context: Context) : super(context) {
         init(context)
     }
@@ -45,11 +48,22 @@ class BaseTextView : AppCompatTextView {
     private fun init(@Suppress("UNUSED_PARAMETER") context: Context) {
         //set type face
         //setTypeface(ResourcesCompat.getFont(context, R.font.open_sans));
-
     }
 
-    /**
-     * @return Trimmed text.
-     */
-    fun getTrimmedText() = text.toString().trim { it <= ' ' }
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            //Action down
+            if (event?.action == MotionEvent.ACTION_DOWN) {
+                translationZ -= 20  //Fall
+            }
+
+            //Action up
+            if (event?.action == MotionEvent.ACTION_UP) {
+                translationZ += 20  //Rise
+            }
+        }
+        return super.onTouchEvent(event)
+    }
 }

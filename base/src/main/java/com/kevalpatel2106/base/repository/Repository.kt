@@ -1,8 +1,8 @@
-package com.kevalpatel2106.vault
+package com.kevalpatel2106.base.repository
 
-import com.kevalpatel2106.vault.cache.Cache
-import com.kevalpatel2106.vault.refresher.RefreshException
-import com.kevalpatel2106.vault.refresher.Refresher
+import com.kevalpatel2106.base.repository.cache.Cache
+import com.kevalpatel2106.base.repository.refresher.RefreshException
+import com.kevalpatel2106.base.repository.refresher.Refresher
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableEmitter
@@ -13,14 +13,14 @@ import io.reactivex.FlowableEmitter
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class Vault<T> internal constructor() {
+class Repository<T> internal constructor() {
     internal val mCaches: ArrayList<Cache<T>> = ArrayList()
     internal val mRefresher: ArrayList<Refresher<T>> = ArrayList()
 
-    fun fetch(): Flowable<VaultData<T>> {
+    fun fetch(): Flowable<RepoData<T>> {
 
         @Suppress("LoopToCallChain", "UnnecessaryVariable")
-        val flowable = Flowable.create<VaultData<T>>({ emitter: FlowableEmitter<VaultData<T>> ->
+        val flowable = Flowable.create<RepoData<T>>({ emitter: FlowableEmitter<RepoData<T>> ->
 
             //Check for the caches.
             for (it in mCaches) {

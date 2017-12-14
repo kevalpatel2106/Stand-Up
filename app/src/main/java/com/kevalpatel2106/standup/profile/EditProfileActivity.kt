@@ -10,8 +10,8 @@ import android.support.annotation.VisibleForTesting
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ProgressBar
-import com.kevalpatel2106.base.BaseActivity
 import com.kevalpatel2106.base.annotations.UIController
+import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.rulerview.ObservableHorizontalScrollView
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AnalyticsEvents

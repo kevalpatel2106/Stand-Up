@@ -18,6 +18,7 @@ ext {
     def playServiceVersion = "11.6.2"
     def supportLibVersion = "27.0.2"
     def kotlinVersion = '1.2.0'
+    def ankoVersion = '0.10.3'
 
     def okHttpVersion = "3.9.1"
     def retrofitVersion = "2.3.0"
@@ -88,6 +89,11 @@ ext {
             constrainlayout: 'com.android.support.constraint:constraint-layout:1.1.0-beta3',
             kotlin         : 'org.jetbrains.kotlin:kotlin-stdlib:' + kotlinVersion,
             coroutine      : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.2',
+            reflection     : 'org.jetbrains.kotlin:kotlin-reflect:' + kotlin_version,
+    ]
+
+    anko = [
+            coroutines: "org.jetbrains.anko:anko-coroutines:" + ankoVersion,
     ]
 
     //Firebase dependency

@@ -78,7 +78,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
-    <com.kevalpatel2106.base.BaseButton
+    <com.kevalpatel2106.base.view.BaseButton
         android:id="@+id/btn_create_account"
         style="@style/LoginBtn"
         android:layout_width="0dp"
@@ -93,7 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/guideline5"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <com.kevalpatel2106.base.BaseButton
+    <com.kevalpatel2106.base.view.BaseButton
         android:id="@+id/btn_login_using_email"
         style="@style/LoginBtn"
         android:layout_width="0dp"
@@ -108,7 +108,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/btn_create_account" />
 
-    <com.kevalpatel2106.base.BaseButton
+    <com.kevalpatel2106.base.view.BaseButton
         android:id="@+id/btn_login_google_signin"
         style="@style/GoogleSignInBtn"
         android:layout_width="0dp"
@@ -124,7 +124,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toBottomOf="@+id/btn_login_using_email" />
 
-    <com.kevalpatel2106.base.BaseButton
+    <com.kevalpatel2106.base.view.BaseButton
         android:id="@+id/btn_login_fb_signin"
         style="@style/FbSignInBtn"
         android:layout_width="0dp"

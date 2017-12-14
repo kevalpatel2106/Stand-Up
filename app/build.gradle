@@ -49,6 +49,12 @@ android {
         resConfigs "en"
 
         testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -107,14 +113,16 @@ dependencies {
     implementation project(':network')
     implementation project(':facebook-auth')
     implementation project(':google-auth')
-    implementation project(':data-vault')
     implementation project(':ruler-view')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
     implementation ide.kotlin
     implementation ide.coroutine
+    implementation ide.reflection
     implementation ide.constrainlayout
+
+    implementation anko.coroutines
 
     //Butter knife
     implementation(butterKnifeLib.butterKnife, excludeGrp)
