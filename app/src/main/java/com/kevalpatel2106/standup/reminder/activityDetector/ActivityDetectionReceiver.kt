@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.userActivity.detector
+package com.kevalpatel2106.standup.reminder.activityDetector
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,9 +6,10 @@ import android.content.Intent
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
 import com.kevalpatel2106.standup.BuildConfig
-import com.kevalpatel2106.standup.StandUpDb
-import com.kevalpatel2106.standup.userActivity.UserActivity
-import com.kevalpatel2106.standup.userActivity.UserActivityType
+import com.kevalpatel2106.standup.reminder.UserActivity
+import com.kevalpatel2106.standup.reminder.UserActivityType
+import com.kevalpatel2106.standup.reminder.repo.UserActivityRepoImpl
+import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.util.*
@@ -16,7 +17,7 @@ import java.util.*
 
 /**
  * Created by Keval on 25/11/17.
- * This is receiver will receive the updates when the [UserActivity] is changed. [ActivityDetector]
+ * This is receiver will receive the updates when the [UserActivity] is changed. [ReminderScheduler]
  * will broadcast intent with action [DetectorConfig.DETECTION_BROADCAST_ACTION] to invoke this
  * receiver.
  *
@@ -29,7 +30,7 @@ import java.util.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  * @see DetectedActivity
- * @see ActivityDetector
+ * @see ReminderScheduler
  */
 class ActivityDetectionReceiver : BroadcastReceiver() {
 
@@ -68,11 +69,10 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         Timber.d("User is MOVING.")
 
         //Schedule the next job after 1 hour
-        ActivityDetector.scheduleNextNotification()
+        ReminderScheduler.scheduleNextReminder()
 
         launch {
-            StandUpDb.getDb().userActivityDao()
-                    .insertNewAndTerminatePreviousAcivity(UserActivity
+            UserActivityRepoImpl().insertNewAndTerminatePreviousActivity(UserActivity
                             .createLocalUserActivity(UserActivityType.MOVING))
         }
     }
@@ -82,8 +82,7 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
 
         //Add the new value to database.
         launch {
-            StandUpDb.getDb().userActivityDao()
-                    .insertNewAndTerminatePreviousAcivity(UserActivity
+            UserActivityRepoImpl().insertNewAndTerminatePreviousActivity(UserActivity
                             .createLocalUserActivity(UserActivityType.SITTING))
         }
     }

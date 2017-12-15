@@ -154,12 +154,12 @@
 
         <!-- Receiver to get callbacks when user's activity changes. -->
         <receiver
-            android:name="com.kevalpatel2106.standup.userActivity.detector.ActivityDetectionReceiver"
+            android:name="com.kevalpatel2106.standup.reminder.activityDetector.ActivityDetectionReceiver"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="com.kevalpatel2106.standup.engine.activityUpdate" />
+                <action android:name="com.kevalpatel2106.standup.reminder.activityUpdate" />
             </intent-filter>
         </receiver>
 
@@ -187,7 +187,7 @@
             tools:ignore="ExportedService" />
 
         <service
-            android:name=".userActivity.StandUpNotifyService"
+            android:name=".reminder.scheduler.ReminderNotifyService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />

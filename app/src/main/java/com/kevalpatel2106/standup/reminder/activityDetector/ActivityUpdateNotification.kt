@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.userActivity.detector
+package com.kevalpatel2106.standup.reminder.activityDetector
 
 import android.app.Notification
 import android.app.NotificationManager
@@ -43,7 +43,7 @@ internal object ActivityUpdateNotification {
     /**
      * Returns a human readable String corresponding to a detected activity type.
      */
-    fun getActivityString(detectedActivityType: Int): String {
+    private fun getActivityString(detectedActivityType: Int): String {
         return when (detectedActivityType) {
             DetectedActivity.IN_VEHICLE -> "In vehicle"
             DetectedActivity.ON_BICYCLE -> "On bicycle"

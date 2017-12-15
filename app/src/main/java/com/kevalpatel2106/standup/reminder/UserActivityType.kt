@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.userActivity
+package com.kevalpatel2106.standup.reminder
 
 /**
  * Created by Keval on 14/12/17.

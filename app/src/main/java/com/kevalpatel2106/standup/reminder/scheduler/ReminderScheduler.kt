@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.userActivity.detector
+package com.kevalpatel2106.standup.reminder.scheduler
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.firebase.jobdispatcher.*
 import com.google.android.gms.location.ActivityRecognitionClient
-import com.kevalpatel2106.standup.userActivity.StandUpNotifyService
+import com.kevalpatel2106.standup.reminder.ReminderConfig
 import timber.log.Timber
 
 /**
@@ -14,7 +14,7 @@ import timber.log.Timber
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object ActivityDetector {
+object ReminderScheduler {
     /**
      * [FirebaseJobDispatcher] instance to schedule the [JobService] that will display notification
      * to stretch legs.
@@ -28,24 +28,24 @@ object ActivityDetector {
     private var activityRecognitionClient: ActivityRecognitionClient? = null
 
     /**
-     * Schedule the stand up notification [JobService] after [DetectorConfig.DETECTION_INTERVAL].
+     * Schedule the stand up notification [JobService] after [ReminderConfig.DETECTION_INTERVAL].
      *
-     * @see [StandUpNotifyService]
+     * @see [ReminderNotifyService]
      */
-    internal fun scheduleNextNotification() {
-        scheduleNotification(DetectorConfig.STAND_UP_DURATION)
+    internal fun scheduleNextReminder() {
+        scheduleReminder(ReminderConfig.STAND_UP_DURATION)
     }
 
     /**
      * Schedule the stand up notification [JobService] after [afterTimeSecs].
      *
-     * @see [StandUpNotifyService]
+     * @see [ReminderNotifyService]
      */
-    private fun scheduleNotification(afterTimeSecs: Int) {
+    private fun scheduleReminder(afterTimeSecs: Int) {
         dispatcher?.let {
             val myJob = it.newJobBuilder()
-                    .setService(StandUpNotifyService::class.java)       // the JobService that will be called
-                    .setTag(DetectorConfig.SCHEDULER_JOB_TAG)         // uniquely identifies the job
+                    .setService(ReminderNotifyService::class.java)       // the JobService that will be called
+                    .setTag(ReminderConfig.SCHEDULER_JOB_TAG)         // uniquely identifies the job
                     .setRecurring(false)
                     .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
                     .setTrigger(Trigger.executionWindow(afterTimeSecs, afterTimeSecs + 60))
@@ -59,20 +59,20 @@ object ActivityDetector {
     /**
      * Start the activity detection and schedule the service to display notification at specific interval.
      */
-    fun startEngineIfNotRunning(context: Context) {
+    fun startSchedulerIfNotRunning(context: Context) {
 
         //Check if the dispatcher already running.
         if (dispatcher == null) {
             //Schedule the notification.
             dispatcher = FirebaseJobDispatcher(GooglePlayDriver(context))
-            scheduleNextNotification()
+            scheduleNextReminder()
         }
 
         //Start activity detection if it is not.
-        if (activityRecognitionClient == null) {
+        if (ReminderConfig.ENABLE_ACTIVITY_DETECTION && activityRecognitionClient == null) {
 
             activityRecognitionClient = ActivityRecognitionClient(context)
-            val task = activityRecognitionClient!!.requestActivityUpdates(DetectorConfig.DETECTION_INTERVAL,
+            val task = activityRecognitionClient!!.requestActivityUpdates(ReminderConfig.DETECTION_INTERVAL,
                     getActivityDetectionPendingIntent(context))
             task.addOnSuccessListener({
                 Timber.i("Activity detector connected successfully.")
@@ -114,7 +114,7 @@ object ActivityDetector {
      * Gets a PendingIntent to be sent for each context detection.
      */
     private fun getActivityDetectionPendingIntent(context: Context): PendingIntent {
-        val intent = Intent(DetectorConfig.DETECTION_BROADCAST_ACTION)
+        val intent = Intent(ReminderConfig.DETECTION_BROADCAST_ACTION)
 
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // requestActivityUpdates() and removeActivityUpdates().

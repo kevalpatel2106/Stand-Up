@@ -10,7 +10,7 @@ import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.constants.logEvent
-import com.kevalpatel2106.standup.userActivity.detector.ActivityDetector
+import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
@@ -44,7 +44,7 @@ internal object Logout {
         UserSessionManager.clearToken()
 
         //Stop the activity detection
-        ActivityDetector.shutDown(context.applicationContext)
+        ReminderScheduler.shutDown(context.applicationContext)
 
         //Clear all the notifications
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

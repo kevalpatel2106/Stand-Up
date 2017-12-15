@@ -8,9 +8,8 @@ import android.content.Context
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 
-@Deprecated("For debug purpose only.")
 @Suppress("DEPRECATION")
-internal object TestStandUpNowNotification {
+internal object ReminderNotification {
     private val NOTIFICATION_ID = 3455
 
     @SuppressLint("VisibleForTests")

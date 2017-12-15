@@ -1,8 +1,9 @@
-package com.kevalpatel2106.standup.userActivity
+package com.kevalpatel2106.standup.reminder
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import com.kevalpatel2106.base.annotations.Model
 import timber.log.Timber
 
 /**
@@ -10,6 +11,7 @@ import timber.log.Timber
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@Model
 @Entity(tableName = UserActivity.USER_ACTIVITY_TABLE)
 data class UserActivity(
         @ColumnInfo(name = UserActivity.REMOTE_ID)
