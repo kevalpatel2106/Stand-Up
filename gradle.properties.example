@@ -13,6 +13,9 @@ org.gradle.configureondemand=true
 # Use D8
 android.enableD8=true
 
+# Disable AAPT2
+android.enableAapt2=false
+
 # Key store config
 keystore_file=path/to/keystore.jks
 keystore_alias=your_alias

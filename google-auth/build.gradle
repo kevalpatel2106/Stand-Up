@@ -2,11 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'jacoco-android'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'com.jakewharton.hugo'
 
-apply from: '../gradle/config.gradle'
-apply from: '../gradle/deps.gradle'
 android {
     signingConfigs signingConfig
     compileSdkVersion buidlConfig.compile
@@ -34,16 +31,14 @@ android {
 }
 
 dependencies {
-    implementation ide.kotlin
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
+
+    ide.each { add("implementation", it) }
+    debugLibs.each { add(it.configuration, it.dependency) }
 
     implementation supportLib.appCompat
     implementation supportLib.supportv4
 
     api(playServiceLib.auth, excludeGrp)
-
-    //Loggers
-    implementation(debugLibs.timber, excludeGrp)
-    debugImplementation(debugLibs.leakcanary, excludeGrp)
 }

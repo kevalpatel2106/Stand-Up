@@ -15,14 +15,7 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco-android'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.jakewharton.hugo'
-
-apply from: '../gradle/config.gradle'
-apply from: '../gradle/deps.gradle'
+modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -51,6 +44,9 @@ android {
     adbOptions adbOption
 }
 
+dokka dokkaConfig
+kotlin kotlinOption
+
 dependencies {
     implementation project(':base')
     implementation project(':utils')
@@ -58,7 +54,9 @@ dependencies {
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
-    implementation ide.kotlin
+    ide.each { add("implementation", it) }
+    rxLib.each { add("implementation", it) }
+    debugLibs.each { add(it.configuration, it.dependency) }
 
     //Support
     implementation supportLib.appCompat
@@ -66,20 +64,10 @@ dependencies {
     implementation otherLib.commonsCodec
 
     //GSON
-    implementation otherLib.gson
+    api otherLib.gson
 
     //Retrofit
     api retrofitLib.retrofit
     implementation retrofitLib.gsonPlugin
     implementation retrofitLib.logger       //TODO Make it debug only
-
-    //Rx
-    implementation rxLib.rxJava
-    implementation (rxLib.rxAndroid, excludeGrp)
-
-    //Loggers
-    debugImplementation(debugLibs.leakcanary, excludeGrp)
-    implementation(debugLibs.shethoOkhttp, excludeGrp)  //TODO Make it debug only
-    debugApi(debugLibs.shetho, excludeGrp)
-    implementation(debugLibs.timber, excludeGrp)
 }

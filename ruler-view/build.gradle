@@ -1,12 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco-android'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.jakewharton.hugo'
+modulePlugins.each { plugins.apply(it) }
 
-apply from: '../gradle/config.gradle'
-apply from: '../gradle/deps.gradle'
 android {
     signingConfigs signingConfig
     compileSdkVersion buidlConfig.compile
@@ -33,17 +27,17 @@ android {
     adbOptions adbOption
 }
 
-dependencies {
-    implementation ide.kotlin
+dokka dokkaConfig
+kotlin kotlinOption
 
+dependencies {
     //Modules
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
+    ide.each { add("implementation", it) }
+    debugLibs.each { add(it.configuration, it.dependency) }
+
     //Support lib
     implementation supportLib.appCompat
-
-    //Loggers
-    implementation(debugLibs.timber, excludeGrp)
-    debugImplementation(debugLibs.leakcanary, excludeGrp)
 }

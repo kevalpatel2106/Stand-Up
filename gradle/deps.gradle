@@ -17,16 +17,17 @@
 ext {
     def playServiceVersion = "11.6.2"
     def supportLibVersion = "27.0.2"
-    def kotlinVersion = '1.2.0'
+    def archComponentVersion = '1.0.0'
+    def butterKnifeVersion = "8.8.1"
+
+    def kotlinVersion = '1.2.10'
     def ankoVersion = '0.10.3'
 
     def okHttpVersion = "3.9.1"
     def retrofitVersion = "2.3.0"
+    def stethoVersion = "1.5.0"
 
     def espressoVersion = "3.0.1"
-    def butterKnifeVersion = "8.8.1"
-    def archComponentVersion = '1.0.0'
-    def stethoVersion = "1.5.0"
     def mockitoVersion = "2.12.0"
     def powerMockVersion = "1.7.3"
 
@@ -47,21 +48,45 @@ ext {
         exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
     }
 
+    modulePlugins = [
+            'jacoco-android',
+            'kotlin-android',
+            'kotlin-android-extensions',
+            'com.jakewharton.hugo',
+            'com.getkeepsafe.dexcount',
+            'org.jetbrains.dokka',
+            'kotlin-kapt',
+    ]
+
+    gradlePlugins = [
+            android       : "com.android.tools.build:gradle:3.0.1",
+            jacoco        : "com.dicedmelon.gradle:jacoco-android:0.1.2",
+            dexcount      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2",
+            kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:" + kotlinVersion,
+            dokka         : "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.15",
+            versionScan   : "com.github.ben-manes:gradle-versions-plugin:0.17.0",
+            buildScan     : "com.gradle:build-scan-plugin:1.11",
+            googleServices: "com.google.gms:google-services:3.1.1",
+            firbase       : "com.google.firebase:firebase-plugins:1.1.5",
+            hugo          : "com.jakewharton.hugo:hugo-plugin:1.2.1",
+            fabric        : "io.fabric.tools:gradle:1.25.1"
+    ]
+
     //Testing dependency
     testLib = [
-            junit           : 'junit:junit:4.12',
-            rules           : 'com.android.support.test:rules:1.0',
-            arch            : 'android.arch.core:core-testing:' + archComponentVersion,
-            runner          : 'com.android.support.test:runner:1.0.1',
-            esspresso       : 'com.android.support.test.espresso:espresso-core:' + espressoVersion,
-            esspressoIntents: 'com.android.support.test.espresso:espresso-intents:' + espressoVersion,
-            contrib         : 'com.android.support.test.espresso:espresso-contrib:' + espressoVersion,
-            idling          : 'com.android.support.test.espresso:espresso-idling-resource:' + espressoVersion,
-            uiAutomator     : 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2',
-            mockwebserver   : 'com.squareup.okhttp3:mockwebserver:' + okHttpVersion,
-            mockito         : 'org.mockito:mockito-core:' + mockitoVersion,
-            powermock       : 'org.powermock:powermock-module-junit4:' + powerMockVersion,
-            powermockMokito : 'org.powermock:powermock-api-mockito2:' + powerMockVersion,
+            'junit:junit:4.12',
+            'com.android.support.test:rules:1.0',
+            'android.arch.core:core-testing:' + archComponentVersion,
+            'com.android.support.test:runner:1.0.1',
+            'com.android.support.test.espresso:espresso-core:' + espressoVersion,
+            'com.android.support.test.espresso:espresso-intents:' + espressoVersion,
+            'com.android.support.test.espresso:espresso-contrib:' + espressoVersion,
+            'com.android.support.test.espresso:espresso-idling-resource:' + espressoVersion,
+            'com.android.support.test.uiautomator:uiautomator-v18:2.1.2',
+            'com.squareup.okhttp3:mockwebserver:' + okHttpVersion,
+            'org.mockito:mockito-core:' + mockitoVersion,
+            'org.powermock:powermock-module-junit4:' + powerMockVersion,
+            'org.powermock:powermock-api-mockito2:' + powerMockVersion,
     ]
 
     //Support library dependency
@@ -86,14 +111,16 @@ ext {
 
     //IDE dependency
     ide = [
-            constrainlayout: 'com.android.support.constraint:constraint-layout:1.1.0-beta3',
-            kotlin         : 'org.jetbrains.kotlin:kotlin-stdlib:' + kotlinVersion,
-            coroutine      : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.2',
-            reflection     : 'org.jetbrains.kotlin:kotlin-reflect:' + kotlin_version,
+            'com.android.support.constraint:constraint-layout:1.1.0-beta3',
+            'org.jetbrains.kotlin:kotlin-stdlib:' + kotlinVersion,
+            'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.2',
+            'org.jetbrains.kotlin:kotlin-reflect:' + kotlinVersion,
     ]
 
     anko = [
-            coroutines: "org.jetbrains.anko:anko-coroutines:" + ankoVersion,
+            "org.jetbrains.anko:anko-coroutines:" + ankoVersion,
+            "org.jetbrains.anko:anko-commons:" + ankoVersion,
+            "org.jetbrains.anko:anko-design:" + ankoVersion,
     ]
 
     //Firebase dependency
@@ -128,8 +155,8 @@ ext {
 
     //reactive extension
     rxLib = [
-            rxJava   : 'io.reactivex.rxjava2:rxjava:2.1.7',
-            rxAndroid: 'io.reactivex.rxjava2:rxandroid:2.0.1',
+            'io.reactivex.rxjava2:rxjava:2.1.7',
+            'io.reactivex.rxjava2:rxandroid:2.0.1',
     ]
 
     //Other libs
@@ -141,14 +168,14 @@ ext {
             facebook       : 'com.facebook.android:facebook-android-sdk:4.28.0',
             bottomsheet    : 'com.cocosw:bottomsheet:1.3.1',
             commonsCodec   : 'commons-codec:commons-codec:1.11',
+            crashalytics   : "com.crashlytics.sdk.android:crashlytics:2.7.1@aar",
     ]
 
     debugLibs = [
-            crashalytics: 'com.crashlytics.sdk.android:crashlytics:2.7.1@aar',
-            timber      : 'com.jakewharton.timber:timber:4.6.0',
-            shetho      : 'com.facebook.stetho:stetho:' + stethoVersion,
-            shethoOkhttp: 'com.facebook.stetho:stetho-okhttp3:' + stethoVersion,
-            dbdebug     : 'com.amitshekhar.android:debug-db:1.0.1',
-            leakcanary  : 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+            [configuration: "implementation", dependency: "com.jakewharton.timber:timber:4.6.0"],
+            [configuration: "debugImplementation", dependency: 'com.facebook.stetho:stetho:' + stethoVersion],
+            [configuration: "implementation", dependency: 'com.facebook.stetho:stetho-okhttp3:' + stethoVersion],
+            [configuration: "debugImplementation", dependency: 'com.amitshekhar.android:debug-db:1.0.1'],
+            [configuration: "debugImplementation", dependency: 'com.squareup.leakcanary:leakcanary-android:1.5.4']
     ]
 }

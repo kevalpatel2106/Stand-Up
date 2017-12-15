@@ -1,12 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco-android'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.jakewharton.hugo'
+modulePlugins.each { plugins.apply(it) }
 
-apply from: '../gradle/config.gradle'
-apply from: '../gradle/deps.gradle'
 android {
     compileSdkVersion buidlConfig.compile
     buildToolsVersion buidlConfig.buildToolVersion
@@ -25,24 +19,17 @@ android {
             resValue "string", "fb_login_protocol_scheme", FB_LOGIN_PROTOCOL_SCHEME
         }
     }
-
-    compileOptions compileOption
-    packagingOptions packageExcludes
-    lintOptions lintOption
-    aaptOptions aaptOption
-    dexOptions dexOption
-    testOptions testOption
-    adbOptions adbOption
 }
 
+dokka dokkaConfig
+kotlin kotlinOption
+
 dependencies {
-    implementation ide.kotlin
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
-    //Loggers
-    implementation(debugLibs.timber, excludeGrp)
-    debugImplementation(debugLibs.leakcanary, excludeGrp)
+    ide.each { add("implementation", it) }
+    debugLibs.each { add(it.configuration, it.dependency) }
 
     //Facebook Lib
     api(otherLib.facebook, excludeGrp)

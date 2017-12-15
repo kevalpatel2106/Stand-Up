@@ -15,15 +15,7 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco-android'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'com.jakewharton.hugo'
-
-apply from: '../gradle/config.gradle'
-apply from: '../gradle/deps.gradle'
-
+modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -53,12 +45,18 @@ android {
     adbOptions adbOption
 }
 
+dokka dokkaConfig
+kotlin kotlinOption
+
 dependencies {
     implementation project(':utils')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
-    implementation ide.kotlin
+    ide.each { add("implementation", it) }
+    anko.each { add("implementation", it) }
+    rxLib.each { add("implementation", it) }
+    debugLibs.each { add(it.configuration, it.dependency) }
 
     //Butter knife
     implementation(butterKnifeLib.butterKnife, excludeGrp)
@@ -71,12 +69,4 @@ dependencies {
     implementation supportLib.supportv4
     implementation supportLib.recyclerView
     implementation supportLib.design
-
-    //Rx
-    implementation rxLib.rxJava
-    implementation (rxLib.rxAndroid, excludeGrp)
-
-    //Logger
-    debugImplementation(debugLibs.leakcanary, excludeGrp)
-    implementation(debugLibs.timber, excludeGrp)
 }

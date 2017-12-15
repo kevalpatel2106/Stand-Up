@@ -15,14 +15,7 @@
  */
 
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco-android'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.jakewharton.hugo'
-
-apply from: '../gradle/config.gradle'
-apply from: '../gradle/deps.gradle'
-
+modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -48,6 +41,9 @@ android {
     adbOptions adbOption
 }
 
+dokka dokkaConfig
+kotlin kotlinOption
+
 // Test Logging
 tasks.withType(Test) {
     testLogging {
@@ -57,28 +53,12 @@ tasks.withType(Test) {
 }
 
 dependencies {
-    //Testing
-    api testLib.junit
-    api testLib.rules
-    api testLib.arch
-    api testLib.esspresso
-    api testLib.runner
-    api testLib.esspressoIntents
-    api testLib.contrib
-    api testLib.idling
-    api testLib.uiAutomator
-    api testLib.mockwebserver
-    api testLib.mockito
+    testLib.each { add("api", it) }
+    ide.each { add("implementation", it) }
+    rxLib.each { add("implementation", it) }
+    debugLibs.each { add(it.configuration, it.dependency) }
 
-    implementation ide.kotlin
     implementation supportLib.appCompat
     implementation supportLib.supportv4
     implementation supportLib.design
-
-    //Rx
-    implementation rxLib.rxJava
-    implementation (rxLib.rxAndroid, excludeGrp)
-
-    //Loggers
-    implementation(debugLibs.timber, excludeGrp)
 }

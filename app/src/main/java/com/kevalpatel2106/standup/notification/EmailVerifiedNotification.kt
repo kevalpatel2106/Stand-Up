@@ -37,7 +37,7 @@ internal object EmailVerifiedNotification {
                 .setWhen(System.currentTimeMillis())
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(message)
-                        .setBigContentTitle(context.getString(R.string.app_name)))
+                        .setBigContentTitle(context.getString(R.string.application_name)))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             builder.setChannelId(NotificationChannelType.ACCOUNT_NOTIFICATION_CHANNEL)

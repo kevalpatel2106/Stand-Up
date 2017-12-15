@@ -15,18 +15,10 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco-android'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
-apply plugin: 'com.jakewharton.hugo'
+modulePlugins.each { plugins.apply(it) }
 //https://stackoverflow.com/a/47050632/4690731
 //apply plugin: 'com.google.firebase.firebase-perf'
-
-apply from: '../gradle/config.gradle'
-apply from: '../gradle/deps.gradle'
 
 android {
     signingConfigs signingConfig
@@ -102,10 +94,14 @@ android {
     dexOptions dexOption
     testOptions testOption
     adbOptions adbOption
+    dexcount dexcountOptions
 }
 
 dokka dokkaConfig
 kotlin kotlinOption
+kapt {
+    generateStubs = false
+}
 
 dependencies {
     implementation project(':base')
@@ -117,25 +113,14 @@ dependencies {
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
-    implementation ide.kotlin
-    implementation ide.coroutine
-    implementation ide.reflection
-    implementation ide.constrainlayout
-
-    implementation anko.coroutines
+    ide.each { add("implementation", it) }
+    anko.each { add("implementation", it) }
+    rxLib.each { add("implementation", it) }
+    debugLibs.each { add(it.configuration, it.dependency) }
 
     //Butter knife
     implementation(butterKnifeLib.butterKnife, excludeGrp)
     kapt(butterKnifeLib.annotationProcessor, excludeGrp)
-
-    //Loggers
-    debugImplementation(debugLibs.dbdebug, excludeGrp)
-    debugImplementation(debugLibs.leakcanary, excludeGrp)
-    releaseImplementation(debugLibs.crashalytics) {
-        transitive = true
-    }
-    implementation(firebaseLib.preformance, excludeGrp)
-    implementation(debugLibs.timber, excludeGrp)
 
     //Support
     implementation supportLib.appCompat
@@ -153,17 +138,17 @@ dependencies {
     kapt archComponent.roomAnnotation
 
     //Firebase
+    implementation(firebaseLib.preformance, excludeGrp)
     implementation(firebaseLib.core, excludeGrp)
     implementation(firebaseLib.fcm, excludeGrp)
     implementation(firebaseLib.remoteConfig, excludeGrp)
     implementation(playServiceLib.location, excludeGrp)
     implementation(firebaseLib.jobDispacher, excludeGrp)
 
-    //Rx
-    implementation rxLib.rxJava
-    implementation(rxLib.rxAndroid, excludeGrp)
-
     //Other libs
+    releaseImplementation (otherLib.crashalytics ) {
+        transitive = true
+    }
     implementation(otherLib.bottomsheet, excludeGrp)
     implementation(otherLib.circleImagView, excludeGrp)
     implementation(otherLib.glide, excludeGrp)

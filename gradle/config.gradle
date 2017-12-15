@@ -61,7 +61,7 @@ ext {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    dokkaConfig =  {
+    dokkaConfig = {
         outputFormat = 'javadoc'
         outputDirectory = "$buildDir/javadoc"
         jdkVersion = 8 // Used for linking to JDK
@@ -78,6 +78,21 @@ ext {
         skipEmptyPackages = true // Do not create index pages for empty packages
     }
 
+    dexcountOptions = {
+        format = "list"
+        includeClasses = false
+        includeClassCount = false
+        includeFieldCount = true
+        includeTotalMethodCount = false
+        orderByMethodCount = false
+        verbose = false
+        maxTreeDepth = Integer.MAX_VALUE
+        teamCityIntegration = false
+        teamCitySlug = null
+        runOnEachPackage = true
+        maxMethodCount = 90000
+    }
+
     libDefaultConfig = {
         //sdks
         minSdkVersion buidlConfig.min
@@ -89,17 +104,6 @@ ext {
         consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
 
         testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
-    }
-
-    libBuildTypes = {
-        release {
-            signingConfig signingConfigs.playStore
-        }
-        debug {
-            crunchPngs false
-            testCoverageEnabled true
-            signingConfig signingConfigs.playStore
-        }
     }
 
     adbOption = {

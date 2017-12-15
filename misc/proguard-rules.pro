@@ -83,25 +83,6 @@
 }
 ##---------------End: proguard configuration for Glide  ----------
 
-##---------------Begin: proguard configuration for Gson  ----------
-# Gson uses generic type information stored in a class file when working with fields. Proguard
-# removes such information by default, so configure it to keep all of it.
--keepattributes Signature
-
-# Gson specific classes
--keep class sun.misc.Unsafe { *; }
-#-keep class com.google.gson.stream.** { *; }
-
-# Application classes that will be serialized/deserialized over Gson
--keep class com.google.gson.examples.android.model.** { *; }
-
-# Prevent proguard from stripping interface information from TypeAdapterFactory,
-# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
--keep class * implements com.google.gson.TypeAdapterFactory
--keep class * implements com.google.gson.JsonSerializer
--keep class * implements com.google.gson.JsonDeserializer
-##---------------End: proguard configuration for Gson  ----------
-
 ##---------------Begin: proguard configuration for Crashalytics 2.x  ----------
 -keep class com.crashlytics.** { *; }
 -keep class com.crashlytics.android.**
@@ -111,6 +92,6 @@
 -keep public class * extends java.lang.Exception
 ##---------------End: proguard configuration for Crashalytics 2.x ----------
 
--keepclassmembers class com.tistory.dwfox.dwrulerviewlibrary.view.LineRulerView {
+-keepclassmembers class com.kevalpatel2106.rulerview.LineRulerView {
     public *;
 }
