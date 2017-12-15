@@ -1,4 +1,4 @@
-include ':app',
+include ':app', ':timeline-view',
         ':base',
         ':utils',
         ':test-utils',
