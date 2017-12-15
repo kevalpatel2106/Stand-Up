@@ -49,6 +49,7 @@ dokka dokkaConfig
 kotlin kotlinOption
 
 dependencies {
+    implementation project(':utils')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -56,6 +57,8 @@ dependencies {
     debugLibs.each { add(it.configuration, it.dependency) }
 
     //Support
-    implementation supportLib.supportv4
-    implementation supportLib.appCompat
+    debugImplementation supportLib.supportv4
+    debugImplementation supportLib.appCompat
 }
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'

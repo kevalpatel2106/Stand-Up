@@ -110,6 +110,7 @@ dependencies {
     implementation project(':facebook-auth')
     implementation project(':google-auth')
     implementation project(':ruler-view')
+    implementation project(':timeline-view')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 

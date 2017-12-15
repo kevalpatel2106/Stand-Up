@@ -1,5 +1,7 @@
 package com.kevalpatel2106.standup.timelineview
 
+import android.graphics.Color
+
 /**
  * Created by Kevalpatel2106 on 15-Dec-17.
  *
@@ -8,4 +10,7 @@ package com.kevalpatel2106.standup.timelineview
 internal object TimeLineConfig {
 
     const val DEFAULT_DURATION = 3600L
+    const val DEFAULT_LABEL_COLOR = Color.BLACK
+    const val DEFAULT_LABEL_TEXT_COLOR = 12
+    const val DEFAULT_AXIS_COLOR = Color.BLACK
 }
