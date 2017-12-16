@@ -111,9 +111,9 @@ ext {
 
     //IDE dependency
     ide = [
-            'com.android.support.constraint:constraint-layout:1.1.0-beta3',
+            'com.android.support.constraint:constraint-layout:1.1.0-beta4',
             'org.jetbrains.kotlin:kotlin-stdlib:' + kotlinVersion,
-            'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.2',
+            'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20',
             'org.jetbrains.kotlin:kotlin-reflect:' + kotlinVersion,
     ]
 

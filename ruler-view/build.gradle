@@ -39,5 +39,5 @@ dependencies {
     debugLibs.each { add(it.configuration, it.dependency) }
 
     //Support lib
-    implementation supportLib.appCompat
+    debugImplementation supportLib.appCompat
 }

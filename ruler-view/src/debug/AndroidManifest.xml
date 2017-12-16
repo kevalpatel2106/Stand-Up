@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kevalpatel2106.standup.timelineview">
+<manifest package="com.kevalpatel2106.rulerview"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
         <activity
-            android:name=".DemoActivity"
-            android:icon="@mipmap/ic_timeline_launcher"
-            android:label="Timeline View Demo"
+            android:name=".RulerDemoActivity"
+            android:icon="@mipmap/ic_ruler_launcher"
+            android:label="Ruler View Demo"
             android:taskAffinity="com.kevalpatel2106.standup.${applicationId}"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
             <intent-filter>
@@ -18,5 +16,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
