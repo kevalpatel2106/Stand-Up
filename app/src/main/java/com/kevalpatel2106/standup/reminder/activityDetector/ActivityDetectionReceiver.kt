@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.reminder.UserActivity
 import com.kevalpatel2106.standup.reminder.UserActivityType
 import com.kevalpatel2106.standup.reminder.repo.UserActivityRepoImpl
@@ -45,13 +44,6 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         // 0 and 100.
         val detectedActivities = result.probableActivities as ArrayList
         Timber.d("Detected Activities: ".plus(detectedActivities.toString()))
-
-        //Sort the activity list by confidante level
-        Collections.sort(detectedActivities) { p0, p1 -> p1.confidence - p0.confidence }
-
-        if (BuildConfig.DEBUG) {
-            ActivityUpdateNotification.notify(context, detectedActivities)
-        }
 
         //Activity detected.
         when (detectedActivities[0].type) {

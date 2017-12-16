@@ -27,6 +27,8 @@ object ReminderScheduler {
     @SuppressLint("StaticFieldLeak")
     private var activityRecognitionClient: ActivityRecognitionClient? = null
 
+    internal fun isActivityDetectionEnabled() = activityRecognitionClient != null
+
     /**
      * Schedule the stand up notification [JobService] after [ReminderConfig.DETECTION_INTERVAL].
      *

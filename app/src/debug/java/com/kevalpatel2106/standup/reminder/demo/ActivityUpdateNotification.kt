@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.reminder.activityDetector
+package com.kevalpatel2106.standup.reminder.demo
 
 import android.app.Notification
 import android.app.NotificationManager
@@ -7,7 +7,6 @@ import android.support.v4.app.NotificationCompat
 import com.google.android.gms.location.DetectedActivity
 import timber.log.Timber
 
-@Deprecated("For debug purpose only.")
 @Suppress("DEPRECATION")
 internal object ActivityUpdateNotification {
     private val NOTIFICATION_ID = 7852
@@ -21,7 +20,8 @@ internal object ActivityUpdateNotification {
 
         var message = ""
         detectedActivity.forEach {
-            message = message.plus(String.format("%s : %d, ", getActivityString(it.type), it.confidence))
+            message = message.plus(String.format("%s : %d, ",
+                    DemoRecognitionActivity.getActivityString(it.type), it.confidence))
         }
         Timber.d(message)
 
@@ -38,22 +38,5 @@ internal object ActivityUpdateNotification {
                 .setStyle(NotificationCompat.BigTextStyle().bigText(message).setBigContentTitle("Activity Update"))
 
         return builder.build()
-    }
-
-    /**
-     * Returns a human readable String corresponding to a detected activity type.
-     */
-    private fun getActivityString(detectedActivityType: Int): String {
-        return when (detectedActivityType) {
-            DetectedActivity.IN_VEHICLE -> "In vehicle"
-            DetectedActivity.ON_BICYCLE -> "On bicycle"
-            DetectedActivity.ON_FOOT -> "On foot"
-            DetectedActivity.RUNNING -> "Running"
-            DetectedActivity.STILL -> "Still"
-            DetectedActivity.TILTING -> "Tilting"
-            DetectedActivity.UNKNOWN -> "Unknown"
-            DetectedActivity.WALKING -> "Walking"
-            else -> "Other"
-        }
     }
 }

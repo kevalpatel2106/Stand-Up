@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.kevalpatel2106.standup.reminder.demo.DemoRecognitionActivity">
+
+    <TextView
+        android:id="@+id/activity_detector_status_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:padding="16dp"
+        tools:text="Activity detection enabled." />
+
+    <ListView
+        android:id="@+id/detected_activities_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/row_detected_activity" />
+</LinearLayout>

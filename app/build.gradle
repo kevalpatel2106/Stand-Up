@@ -147,7 +147,7 @@ dependencies {
     implementation(firebaseLib.jobDispacher, excludeGrp)
 
     //Other libs
-    releaseImplementation (otherLib.crashalytics ) {
+    releaseImplementation(otherLib.crashalytics) {
         transitive = true
     }
     implementation(otherLib.bottomsheet, excludeGrp)
@@ -156,3 +156,5 @@ dependencies {
     kapt(otherLib.glideAnnotation, excludeGrp)
 }
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'

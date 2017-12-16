@@ -46,6 +46,13 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="timeline-view" />
+      </set>
+    </option>
+  </component>
   <component name="masterDetails">
     <states>
       <state key="Copyright.UI">
