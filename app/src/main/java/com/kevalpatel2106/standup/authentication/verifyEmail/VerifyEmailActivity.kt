@@ -9,15 +9,14 @@ import android.support.annotation.VisibleForTesting
 import android.support.design.widget.Snackbar
 import android.view.View
 import butterknife.OnClick
-import com.cocosw.bottomsheet.BottomSheet
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.dashboard.DashboardActivity
 import com.kevalpatel2106.utils.UserSessionManager
-import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_verify_email.*
 
@@ -90,26 +89,6 @@ class VerifyEmailActivity : BaseActivity() {
 
     @OnClick(R.id.verify_btn_open_mail_btn)
     fun onOpenEmail() {
-        val bottomSheet = BottomSheet.Builder(this@VerifyEmailActivity).title("Open mail")
-
-        //Get the list of email clients.
-        val emailAppsList = Utils.getEmailApplications(packageManager)
-
-        //Add each items to the bottom sheet
-        for (i in 0 until emailAppsList.size) {
-            val s = emailAppsList[i]
-            Utils.getApplicationName(s.activityInfo.packageName, packageManager)?.let {
-                bottomSheet.sheet(i, s.loadIcon(packageManager), it)
-            }
-        }
-
-        //On clicking any item, open the email application
-        bottomSheet.listener { _, pos ->
-            startActivity(packageManager.getLaunchIntentForPackage(emailAppsList[pos].activityInfo.packageName))
-        }
-        bottomSheet.build()
-        bottomSheet.show()
-
-        logEvent(AnalyticsEvents.EVENT_OPEN_MAIL_BUTTON_FEATURE)
+        SUUtils.onOpenEmail(this@VerifyEmailActivity)
     }
 }

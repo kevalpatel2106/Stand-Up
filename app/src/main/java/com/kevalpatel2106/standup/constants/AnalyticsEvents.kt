@@ -22,6 +22,8 @@ internal object AnalyticsEvents {
     const val EVENT_PROFILE_UPDATED = "profile_updated"
     const val EVENT_OPEN_MAIL_BUTTON_FEATURE = "open_mail_button_feature"
     const val EVENT_UNAUTHORIZED_FORCE_LOGOUT = "unauthorized_force_logout"
+    const val EVENT_APP_INVITE_SUCCESS = "app_invite_success"
+    const val EVENT_APP_INVITE_CANCEL = "app_invite_cancel"
 
 
     //Bundle keys

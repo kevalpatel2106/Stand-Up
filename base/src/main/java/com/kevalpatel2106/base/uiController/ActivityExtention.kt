@@ -20,7 +20,7 @@ import android.widget.Toast
 fun AppCompatActivity.showSnack(message: String,
                                 actionName: String? = null,
                                 actionListener: View.OnClickListener? = null,
-                                duration: Int = Snackbar.LENGTH_SHORT) {
+                                duration: Int = Snackbar.LENGTH_SHORT): Snackbar {
 
     val snackbar = Snackbar.make((findViewById<ViewGroup>(android.R.id.content)).getChildAt(0),
             message, duration)
@@ -31,13 +31,15 @@ fun AppCompatActivity.showSnack(message: String,
     }
 
     snackbar.show()
+
+    return snackbar
 }
 
 fun AppCompatActivity.showSnack(message: String,
                                 actionName: Int,
                                 actionListener: View.OnClickListener? = null,
-                                duration: Int = Snackbar.LENGTH_SHORT) {
-    showSnack(message, getString(actionName), actionListener, duration)
+                                duration: Int = Snackbar.LENGTH_SHORT): Snackbar {
+    return showSnack(message, getString(actionName), actionListener, duration)
 }
 
 /**
@@ -46,7 +48,7 @@ fun AppCompatActivity.showSnack(message: String,
 fun AppCompatActivity.showSnack(@StringRes message: Int,
                                 @StringRes actionName: Int = 0,
                                 actionListener: View.OnClickListener? = null,
-                                duration: Int = Snackbar.LENGTH_SHORT) {
+                                duration: Int = Snackbar.LENGTH_SHORT): Snackbar {
     val snackbar = Snackbar.make((findViewById<ViewGroup>(android.R.id.content)).getChildAt(0),
             message, duration)
     if (actionName > 0) {
@@ -55,6 +57,7 @@ fun AppCompatActivity.showSnack(@StringRes message: Int,
     }
 
     snackbar.show()
+    return snackbar
 }
 
 /**

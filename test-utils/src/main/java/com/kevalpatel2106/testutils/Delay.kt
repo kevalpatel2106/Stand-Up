@@ -22,6 +22,7 @@ import android.support.test.espresso.IdlingResource
 
 import java.util.concurrent.TimeUnit
 
+@Suppress("DEPRECATION")
 /**
  * Created by Keval Patel on 05/04/17.
 

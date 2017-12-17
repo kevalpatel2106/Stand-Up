@@ -189,8 +189,10 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
 
     override fun onGoogleAuthSignIn(user: GoogleAuthUser) = mModel.authenticateSocialUser(user)
 
-    override fun onGoogleAuthSignInFailed() = showSnack(getString(R.string.error_google_signin_fail),
-            getString(R.string.error_retry_try_again), View.OnClickListener { googleSignIn() })
+    override fun onGoogleAuthSignInFailed() {
+        showSnack(getString(R.string.error_google_signin_fail),
+                getString(R.string.error_retry_try_again), View.OnClickListener { googleSignIn() })
+    }
 
     override fun onGoogleAuthSignOut(isSuccess: Boolean) =
             throw IllegalStateException("This method should never call.")
@@ -198,8 +200,10 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
     /**
      * This callback will be available when facebook sign in call fails.
      */
-    override fun onFbSignInFail() = showSnack(getString(R.string.error_facebook_signin_fail),
-            getString(R.string.error_retry_try_again), View.OnClickListener { facebookSignIn() })
+    override fun onFbSignInFail() {
+        showSnack(getString(R.string.error_facebook_signin_fail),
+                getString(R.string.error_retry_try_again), View.OnClickListener { facebookSignIn() })
+    }
 
     /**
      * This method will be called whenever [FacebookHelper], authenticate and get the profile

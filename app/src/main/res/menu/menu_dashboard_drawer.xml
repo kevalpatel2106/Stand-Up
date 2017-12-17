@@ -35,7 +35,7 @@
         <item
             android:id="@+id/nav_profile"
             android:checkable="true"
-            android:icon="@drawable/ic_person_black"
+            android:icon="@drawable/ic_person_white"
             android:title="@string/nav_header_profile" />
     </group>
     <group

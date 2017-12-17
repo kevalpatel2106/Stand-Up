@@ -99,9 +99,6 @@ android {
 
 dokka dokkaConfig
 kotlin kotlinOption
-kapt {
-    generateStubs = false
-}
 
 dependencies {
     implementation project(':base')
@@ -130,6 +127,7 @@ dependencies {
     implementation(supportLib.cardView, excludeGrp)
     implementation supportLib.multidex
     implementation supportLib.design
+    implementation(supportLib.customtabs, excludeGrp)
 
     //Arch component
     implementation archComponent.lifecycle
@@ -142,19 +140,19 @@ dependencies {
     implementation(firebaseLib.preformance, excludeGrp)
     implementation(firebaseLib.core, excludeGrp)
     implementation(firebaseLib.fcm, excludeGrp)
-    implementation(firebaseLib.remoteConfig, excludeGrp)
-    implementation(playServiceLib.location, excludeGrp)
+    implementation(firebaseLib.invites, excludeGrp)
     implementation(firebaseLib.jobDispacher, excludeGrp)
+    implementation(playServiceLib.location, excludeGrp)
 
-    //Other libs
-    releaseImplementation(otherLib.crashalytics) {
-        transitive = true
-    }
-    implementation(otherLib.bottomsheet, excludeGrp)
-    implementation(otherLib.circleImagView, excludeGrp)
+    //Glide
     implementation(otherLib.glide, excludeGrp)
     kapt(otherLib.glideAnnotation, excludeGrp)
+
+    //Other libs
+    implementation(otherLib.bottomsheet, excludeGrp)
+    implementation(otherLib.circleImagView, excludeGrp)
+    implementation(otherLib.aboutlibraries, excludeGrp)
+    implementation(otherLib.openSourceLibraries) { transitive = true }
+    releaseImplementation(otherLib.crashalytics) { transitive = true }
 }
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'

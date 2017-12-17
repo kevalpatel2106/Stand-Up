@@ -24,4 +24,12 @@
     a 48,48 0 1,0 96,0
     a 48,48 0 1,0 -96,0
   </string>
+    <string name="rate_app_url">https://r3pqj.app.goo.gl/jdF1</string>
+    <string name="author_profile_link">https://r3pqj.app.goo.gl/GZGa</string>
+    <string name="author_github">https://r3pqj.app.goo.gl/TYCN</string>
+    <string name="join_slack_url">https://r3pqj.app.goo.gl/EawQ</string>
+    <string name="join_stand_up_twitter">https://r3pqj.app.goo.gl/GZGa</string>
+    <string name="fork_repo_url">https://r3pqj.app.goo.gl/gs5e</string>
+    <string name="chrome_stable_package_name">com.android.chrome</string>
+    <string name="invitation_deep_link">https://r3pqj.app.goo.gl/KPoa</string>
 </resources>

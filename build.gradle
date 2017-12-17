@@ -21,7 +21,11 @@ buildscript {
         classpath gradlePlugins.fabric
         classpath gradlePlugins.kotlin
         classpath gradlePlugins.dokka
-        if (System.getenv('CI') == "true") classpath gradlePlugins.buildScan
+
+        if (System.getenv('CI') == "true"){
+            classpath gradlePlugins.buildScan
+            classpath gradlePlugins.slackUpload
+        }
     }
 }
 
@@ -30,6 +34,7 @@ apply from: './gradle/deps.gradle'
 
 apply plugin: 'com.github.ben-manes.versions'
 if (System.getenv('CI') == "true") {
+    apply plugin: 'com.mindera.gradle.slack'
     apply plugin: "com.gradle.build-scan"
 
     buildScan {
@@ -38,7 +43,15 @@ if (System.getenv('CI') == "true") {
 
         publishAlways()
     }
+
+    slack {
+        url SKACK_WEBHOOK
+        dependsOnTasks 'app:testDebug', 'app:assembleRelease', 'app:connectedAndroidTest'
+        title 'Stand Up Build Report'
+        enabled = true
+    }
 }
+
 
 allprojects {
     repositories {

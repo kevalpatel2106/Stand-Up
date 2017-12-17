@@ -81,6 +81,11 @@
     <string name="setting_up_your_device">Setting up your device…</string>
     <string name="device_reg_error_invalid_device_id">Invalid device id.</string>
     <string name="device_reg_error_invalid_fcm_id">Invalid id.</string>
+    <string name="invitation_title">Checkout this awsome \"Stand Up\" app</string>
+    <string name="invitation_message">I am using this Stand Up app. <!--TODO Add some marketing stuff!!!-->
+        Check this out.</string>
+    <string name="invitation_cta">Invite</string>
+    <string name="about_check_for_update">Checking for the update...</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

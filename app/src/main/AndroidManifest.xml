@@ -63,6 +63,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -138,8 +139,18 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
 
-        <activity android:name=".about.AboutActivity" />
-        <activity android:name=".settings.SettingsActivity" />
+        <activity
+            android:name=".about.AboutActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.MaterialAboutActivity"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionbar"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute" />
 
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->
