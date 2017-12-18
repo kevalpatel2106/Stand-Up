@@ -1,6 +1,7 @@
 package com.kevalpatel2106.standup.timelineview
 
 import android.content.Context
+import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Build
 import android.support.annotation.ColorInt
@@ -17,6 +18,7 @@ import com.kevalpatel2106.utils.ViewUtils
  */
 
 class TimeLineView : View {
+
     constructor(context: Context) : super(context) {
         this.ctx = context
         init()
@@ -35,22 +37,37 @@ class TimeLineView : View {
         init(attrs)
     }
 
+    @Suppress("unused")
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    constructor(context: Context,
+                attrs: AttributeSet?,
+                defStyleAttr: Int,
+                defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
+        this.ctx = context
+        init(attrs)
+    }
+
+    private val PADDING_VERTICAL = 50
+    private val PADDING_HORIZONTAL = 20
+
     private val ctx: Context
 
     /**
-     * Total duration of the time line in seconds.
+     * Time line items to display.
      */
-    var durationSec: Long = TimeLineConfig.DEFAULT_DURATION
+    private var timelineItems = ArrayList<TimeLineItem>()
 
     /**
      * [TextPaint] to display the axis labels.
      */
     private lateinit var labelTextPaint: TextPaint
 
-    /**
-     * [Paint] for the base axis.
-     */
-    private lateinit var baseAxisPaint: Paint
+    private lateinit var timeLineBlockPaint: Paint
+
+    lateinit var timelineLength: TimeLineLength
+
+    private var viewHeight: Int = 0
+    private var viewWidth: Int = 0
 
     /**
      * Color to display the axis labels.
@@ -63,44 +80,25 @@ class TimeLineView : View {
             invalidate()
         }
 
-    /**
-     * Color for the base axis.
-     */
-    @ColorInt
-    var baseAxisColor: Int = TimeLineConfig.DEFAULT_AXIS_COLOR
-        set(value) {
-            field = value
-            refreshBaseAxisPaint()
-            invalidate()
-        }
-
-    @Suppress("unused")
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context,
-                attrs: AttributeSet?,
-                defStyleAttr: Int,
-                defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        this.ctx = context
-        init(attrs)
-    }
-
     private fun init(attrs: AttributeSet? = null) {
         attrs?.let {
             //TODO Parse the attribute
         }
 
+        timelineLength = TimeLineConfig.DEFAULT_DURATION
+
         //Prepare the label text
         labelTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
         refreshLabelTextPaint()
 
-        //Draw the base axis
-        baseAxisPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        refreshBaseAxisPaint()
-
+        //Prepare block color
+        timeLineBlockPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     }
 
-    private fun refreshBaseAxisPaint() {
-        baseAxisPaint.color = baseAxisColor
+    fun setTimeLineItems(items: ArrayList<TimeLineItem>) {
+        timelineItems = items
+        calculateTimeLineSlots(viewWidth)
+        invalidate()
     }
 
     private fun refreshLabelTextPaint() {
@@ -110,10 +108,31 @@ class TimeLineView : View {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         //Get measured height of the view.
-        val viewHeight = View.MeasureSpec.getSize(widthMeasureSpec)
-        val viewWidth = View.MeasureSpec.getSize(heightMeasureSpec)
+        viewHeight = View.MeasureSpec.getSize(heightMeasureSpec)
+        viewWidth = View.MeasureSpec.getSize(widthMeasureSpec)
 
         this.setMeasuredDimension(viewWidth, viewHeight)
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        calculateTimeLineSlots(viewWidth)
+    }
+
+    private fun calculateTimeLineSlots(width: Int) {
+        val timeLineLengthSec = Utils.convertTimeLineLengthToSeconds(timelineLength)
+        val eachSecondWidth = width.toFloat() / timeLineLengthSec
+
+        timelineItems.forEach {
+            it.startX = it.startTime * eachSecondWidth
+            it.endX = it.endTime * eachSecondWidth
+        }
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        timelineItems.forEach {
+            timeLineBlockPaint.color = it.color
+            canvas.drawRect(it.startX, y, it.endX, y + viewHeight, timeLineBlockPaint)
+        }
     }
 }

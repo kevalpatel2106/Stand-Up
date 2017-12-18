@@ -9,8 +9,9 @@ import android.graphics.Color
  */
 internal object TimeLineConfig {
 
-    const val DEFAULT_DURATION = 3600L
+    val DEFAULT_DURATION = TimeLineLength.A_DAY
+
     const val DEFAULT_LABEL_COLOR = Color.BLACK
     const val DEFAULT_LABEL_TEXT_COLOR = 12
-    const val DEFAULT_AXIS_COLOR = Color.BLACK
+    const val DEFAULT_BLOCK_BG_COLOR = Color.BLACK
 }

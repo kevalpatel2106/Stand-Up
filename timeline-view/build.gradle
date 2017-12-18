@@ -57,6 +57,7 @@ dependencies {
     debugLibs.each { add(it.configuration, it.dependency) }
 
     //Support
+    implementation supportLib.annotations
     debugImplementation supportLib.supportv4
     debugImplementation supportLib.appCompat
 }
