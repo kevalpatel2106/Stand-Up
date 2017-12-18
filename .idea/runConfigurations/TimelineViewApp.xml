@@ -45,7 +45,7 @@
     <option name="ACTIVITY_CLASS" value="com.kevalpatel2106.standup.timelineview.DemoActivity" />
     <method>
       <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513603675998" />
+      <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513615118861" />
     </method>
   </configuration>
 </component>
