@@ -108,6 +108,7 @@ dependencies {
     implementation project(':google-auth')
     implementation project(':ruler-view')
     implementation project(':timeline-view')
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -152,6 +153,7 @@ dependencies {
     implementation(otherLib.bottomsheet, excludeGrp)
     implementation(otherLib.circleImagView, excludeGrp)
     implementation(otherLib.aboutlibraries, excludeGrp)
+    implementation(otherLib.appUpdator, excludeGrp)
     implementation(otherLib.openSourceLibraries) { transitive = true }
     releaseImplementation(otherLib.crashalytics) { transitive = true }
 }

@@ -1,13 +1,14 @@
 package com.kevalpatel2106.standup.about
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.Snackbar
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import com.danielstone.materialaboutlibrary.MaterialAboutActivity
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
@@ -19,12 +20,11 @@ import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.utils.showSnack
-import com.mikepenz.aboutlibraries.Libs
-import com.mikepenz.aboutlibraries.LibsBuilder
 
 
 class AboutActivity : MaterialAboutActivity() {
-    private val REQUEST_INVITE = 6123
+
+    private lateinit var model: AboutViewModel
 
     companion object {
 
@@ -38,6 +38,37 @@ class AboutActivity : MaterialAboutActivity() {
             val launchIntent = Intent(context, AboutActivity::class.java)
             context.startActivity(launchIntent)
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        model = ViewModelProviders.of(this@AboutActivity).get(AboutViewModel::class.java)
+
+        var snackbar: Snackbar? = null
+        model.isCheckingUpdate.observe(this@AboutActivity, Observer {
+            if (it!!) {
+                snackbar = showSnack(R.string.about_check_for_update, Snackbar.LENGTH_INDEFINITE)
+            } else {
+                snackbar?.dismiss()
+            }
+        })
+
+        model.errorMessage.observe(this@AboutActivity, Observer {
+            it!!.getMessage(this@AboutActivity)?.let { showSnack(it) }
+        })
+
+        model.versionUpdateResult.observe(this@AboutActivity, Observer {
+            showSnack(R.string.check_update_new_update_available,
+                    R.string.btn_title_update,
+                    View.OnClickListener {
+                        //Open the play store.
+                        SUUtils.openLink(this@AboutActivity, getString(R.string.rate_app_url))
+                    },
+                    Snackbar.LENGTH_INDEFINITE)
+        })
+
+        //Check for the update automatically
+        model.checkForUpdate(this@AboutActivity)
     }
 
     override fun getActivityTitle(): CharSequence = getString(R.string.application_name)
@@ -56,9 +87,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .icon(R.drawable.ic_star_orange)
                 .setIconGravity(Gravity.START)
                 .text("Rate this app")
-                .setOnClickAction({
-                    SUUtils.openLink(this@AboutActivity, getString(R.string.rate_app_url))
-                })
+                .setOnClickAction({ model.handleRateUs(this@AboutActivity) })
                 .build()
 
         //Issue
@@ -67,9 +96,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .setIconGravity(Gravity.START)
                 .text("Report an issue")
                 .subText("Are you facing any issue? Report it here.")
-                .setOnClickAction({
-                    //TODO Open report issue page
-                })
+                .setOnClickAction({ model.handleRateUs(this@AboutActivity) })
                 .build()
 
         //Donate
@@ -77,9 +104,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .icon(R.drawable.ic_heart_fill_red)
                 .setIconGravity(Gravity.START)
                 .text("Support Development")
-                .setOnClickAction({
-                    //TODO open support PayPal
-                })
+                .setOnClickAction({ model.handleSupportDevelopment(this@AboutActivity) })
                 .build()
 
         //Share
@@ -87,14 +112,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .icon(R.drawable.ic_share_blue)
                 .setIconGravity(Gravity.START)
                 .text("Share with friends")
-                .setOnClickAction({
-                    val intent = AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
-                            .setMessage(getString(R.string.invitation_message))
-                            .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
-                            .setCallToActionText(getString(R.string.invitation_cta))
-                            .build()
-                    startActivityForResult(intent, REQUEST_INVITE)
-                })
+                .setOnClickAction({ model.handleShareWithFriends(this@AboutActivity) })
                 .build()
 
         return MaterialAboutCard.Builder()
@@ -113,29 +131,23 @@ class AboutActivity : MaterialAboutActivity() {
                 .setIconGravity(Gravity.START)
                 .text("Version")
                 .subText(BuildConfig.VERSION_NAME)
-                .setOnClickAction({
-                    val snackbar = showSnack(getString(R.string.about_check_for_update), Snackbar.LENGTH_INDEFINITE)
-
-                    //TODO Check for the version upgrade
-                    Handler().postDelayed({ snackbar.dismiss() }, 6000L)
-                })
+                .setOnClickAction({ model.checkForUpdate(this@AboutActivity) })
                 .build()
 
         //open source libs
         val openSourceLibsItem = MaterialAboutActionItem.Builder()
-                .icon(R.drawable.ic_github_white)
+                .icon(R.drawable.ic_logo_opensource)
                 .setIconGravity(Gravity.START)
                 .text("Open source libraries")
-                .setOnClickAction({
-                    LibsBuilder().withActivityStyle(Libs.ActivityStyle.DARK)
-                            .withActivityTitle("We  ♡  Open source")
-                            .withAutoDetect(true)
-                            .withAboutIconShown(true)
-                            .withAboutVersionShownName(true)
-                            .withAboutVersionShownCode(false)
-                            .withLicenseShown(true)
-                            .start(this@AboutActivity)
-                })
+                .setOnClickAction({ model.handleOpenSourceLibs(this@AboutActivity) })
+                .build()
+
+        //open source libs
+        val visitOnGithubItem = MaterialAboutActionItem.Builder()
+                .icon(R.drawable.ic_github_white)
+                .setIconGravity(Gravity.START)
+                .text("View on GitHub")
+                .setOnClickAction({ model.handleOpenGitHubProject(this@AboutActivity) })
                 .build()
 
         //change log
@@ -152,6 +164,7 @@ class AboutActivity : MaterialAboutActivity() {
         return MaterialAboutCard.Builder()
                 .title("About")
                 .addItem(versionItem)
+                .addItem(visitOnGithubItem)
                 .addItem(openSourceLibsItem)
 //                .addItem(changelogItem)
                 .build()
@@ -165,9 +178,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .setIconGravity(Gravity.START)
                 .text("Keval Patel")
                 .subText("kevalpatel2106")
-                .setOnClickAction({
-                    SUUtils.openLink(this@AboutActivity, getString(R.string.author_profile_link))
-                })
+                .setOnClickAction({ model.handleAuthorProfile(this@AboutActivity) })
                 .build()
 
         //Github
@@ -176,9 +187,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .setIconGravity(Gravity.START)
                 .text("Follow on GitHub")
                 .subText("github.com/kevalpatel2106")
-                .setOnClickAction({
-                    SUUtils.openLink(this@AboutActivity, getString(R.string.author_github))
-                })
+                .setOnClickAction({ model.handelFollowAuthorOnGitHub(this@AboutActivity) })
                 .build()
 
 
@@ -188,9 +197,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .setIconGravity(Gravity.START)
                 .text("Send an Email")
                 .subText("kevalpatel2106@gmail.com")
-                .setOnClickAction({
-                    SUUtils.onOpenEmail(this@AboutActivity)
-                })
+                .setOnClickAction({ model.handleAuthorEmail(this@AboutActivity) })
                 .build()
 
 
@@ -209,9 +216,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .setIconGravity(Gravity.START)
                 .text("Join Slack")
                 .subText("https://stand-up-opensource.slack.com")
-                .setOnClickAction({
-                    SUUtils.openLink(this@AboutActivity, getString(R.string.join_slack_url))
-                })
+                .setOnClickAction({ model.handleJoinSlack(this@AboutActivity) })
                 .build()
 
         //Twitter
@@ -220,9 +225,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .setIconGravity(Gravity.START)
                 .text("Follow on Twitter")
                 .subText("@kevalpatel2106")
-                .setOnClickAction({
-                    SUUtils.openLink(this@AboutActivity, getString(R.string.join_stand_up_twitter))
-                })
+                .setOnClickAction({ model.handleFollowProjectTwitter(this@AboutActivity) })
                 .build()
 
         //Fork on GitHub
@@ -230,9 +233,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .icon(R.drawable.ic_fork)
                 .setIconGravity(Gravity.START)
                 .text("Fork on GitHub")
-                .setOnClickAction({
-                    SUUtils.openLink(this@AboutActivity, getString(R.string.fork_repo_url))
-                })
+                .setOnClickAction({ model.handleForkOnGitHub(this@AboutActivity) })
                 .build()
 
         return MaterialAboutCard.Builder()
@@ -247,12 +248,12 @@ class AboutActivity : MaterialAboutActivity() {
         if (item.itemId == android.R.id.home) {
             finish()
         }
-        return false//override
+        return false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
 
-        if (requestCode == REQUEST_INVITE) {
+        if (requestCode == model.REQUEST_CODE_INVITE) {
             if (resultCode == RESULT_OK) {
                 // Get the invitation IDs of all sent messages
                 val ids = AppInviteInvitation.getInvitationIds(resultCode, data)

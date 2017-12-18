@@ -173,6 +173,7 @@ ext {
             crashalytics       : "com.crashlytics.sdk.android:crashlytics:2.7.1@aar",
             openSourceLibraries: 'com.mikepenz:aboutlibraries:6.0.1@aar',
             aboutlibraries     : 'com.github.daniel-stoneuk:material-about-library:2.2.3-support26.1.0',
+            appUpdator         : 'com.github.javiersantos:AppUpdater:2.6.4',
     ]
 
     debugLibs = [

@@ -138,13 +138,11 @@
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
-
         <activity
             android:name=".about.AboutActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.MaterialAboutActivity"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".settings.SettingsActivity"
             android:resizeableActivity="true"
@@ -165,7 +163,7 @@
 
         <!-- Receiver to get callbacks when user's activity changes. -->
         <receiver
-            android:name="com.kevalpatel2106.standup.reminder.activityDetector.ActivityDetectionReceiver"
+            android:name=".reminder.activityDetector.ActivityDetectionReceiver"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedReceiver">
@@ -192,11 +190,11 @@
         </service>
         <!-- End: Firebase service -->
 
+
         <!-- Service to register the device firebase token and other detail -->
         <service
             android:name=".authentication.deviceReg.RegisterDeviceService"
             tools:ignore="ExportedService" />
-
         <service
             android:name=".reminder.scheduler.ReminderNotifyService"
             android:exported="false">
@@ -204,6 +202,8 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+
+        <activity android:name=".about.report.ReportIssueActivity"></activity>
     </application>
 
 </manifest>

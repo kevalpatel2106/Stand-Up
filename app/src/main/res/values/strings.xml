@@ -81,11 +81,15 @@
     <string name="setting_up_your_device">Setting up your device…</string>
     <string name="device_reg_error_invalid_device_id">Invalid device id.</string>
     <string name="device_reg_error_invalid_fcm_id">Invalid id.</string>
-    <string name="invitation_title">Checkout this awsome \"Stand Up\" app</string>
+    <string name="invitation_title">Checkout this awesome \"Stand Up\" app</string>
     <string name="invitation_message">I am using this Stand Up app. <!--TODO Add some marketing stuff!!!-->
         Check this out.</string>
     <string name="invitation_cta">Invite</string>
-    <string name="about_check_for_update">Checking for the update...</string>
+    <string name="about_check_for_update">Checking for the update…</string>
+    <string name="check_update_error_message">Cannot check for updates.</string>
+    <string name="check_update_no_updates_available">No updates available. You have the latest value.</string>
+    <string name="check_update_new_update_available">New update is available.</string>
+    <string name="btn_title_update">Update</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>
