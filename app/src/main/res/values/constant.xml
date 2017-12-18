@@ -33,4 +33,5 @@
     <string name="fork_repo_url">https://r3pqj.app.goo.gl/gs5e</string>
     <string name="chrome_stable_package_name">com.android.chrome</string>
     <string name="invitation_deep_link">https://r3pqj.app.goo.gl/KPoa</string>
+    <string name="slack_channel_url">https://stand-up-opensource.slack.com</string>
 </resources>

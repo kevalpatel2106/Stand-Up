@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="?android:toolbarStyle">
+
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            app:expandedTitleGravity="bottom|center"
+            app:expandedTitleMarginBottom="100dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="@string/title_activity_support_development">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:theme="?android:toolbarStyle"
+                app:layout_collapseMode="pin"/>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_large"
+        android:layout_marginStart="@dimen/spacing_large"
+        app:behavior_overlapTop="64dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/spacing_large"
+            android:paddingTop="@dimen/spacing_large">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/donate_two_dollar_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_small"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:foreground="?selectableItemBackground"
+                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:contentPadding="@dimen/spacing_large">
+
+                <com.kevalpatel2106.base.view.BaseTextView
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableEnd="@drawable/ic_heart_fill_red"
+                    android:drawablePadding="@dimen/spacing_nano"
+                    android:paddingBottom="@dimen/spacing_nano"
+                    android:paddingTop="@dimen/spacing_nano"
+                    android:text="@string/support_with_2_00"/>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/donate_five_dollar_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_small"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:foreground="?selectableItemBackground"
+                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:contentPadding="@dimen/spacing_large">
+
+                <com.kevalpatel2106.base.view.BaseTextView
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableEnd="@drawable/ic_heart_fill_red"
+                    android:drawablePadding="@dimen/spacing_nano"
+                    android:paddingBottom="@dimen/spacing_nano"
+                    android:paddingTop="@dimen/spacing_nano"
+                    android:text="@string/support_with_5_00"/>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/donate_ten_dollar_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_small"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:foreground="?selectableItemBackground"
+                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:contentPadding="@dimen/spacing_large">
+
+                <com.kevalpatel2106.base.view.BaseTextView
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableEnd="@drawable/ic_heart_fill_red"
+                    android:drawablePadding="@dimen/spacing_nano"
+                    android:paddingBottom="@dimen/spacing_nano"
+                    android:paddingTop="@dimen/spacing_nano"
+                    android:text="@string/support_with_10_00"/>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/donate_twenty_dollar_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_small"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:foreground="?selectableItemBackground"
+                app:cardBackgroundColor="@color/cardview_dark_background"
+                app:contentPadding="@dimen/spacing_large">
+
+                <com.kevalpatel2106.base.view.BaseTextView
+                    style="@style/Base.TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableEnd="@drawable/ic_heart_fill_red"
+                    android:drawablePadding="@dimen/spacing_nano"
+                    android:paddingBottom="@dimen/spacing_nano"
+                    android:paddingTop="@dimen/spacing_nano"
+                    android:text="@string/support_with_20_00"/>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

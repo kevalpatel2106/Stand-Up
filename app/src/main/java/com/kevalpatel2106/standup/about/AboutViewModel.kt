@@ -15,6 +15,8 @@ import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.SUUtils
+import com.kevalpatel2106.standup.about.donate.SupportDevelopmentActivity
+import com.kevalpatel2106.standup.about.report.ReportIssueActivity
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 
@@ -36,18 +38,16 @@ internal class AboutViewModel : BaseViewModel() {
     }
 
     fun handleRateUs(context: Context) {
-        val uri = Uri.parse("market://details?id=" + context.packageName)
-
-        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
-        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
-                Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-                Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-
         try {
+            val uri = Uri.parse("market://details?id=" + context.packageName)
+
+            val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
             context.startActivity(goToMarket)
         } catch (e: ActivityNotFoundException) {
             SUUtils.openLink(context, context.getString(R.string.rate_app_url))
-
         }
     }
 
@@ -58,21 +58,23 @@ internal class AboutViewModel : BaseViewModel() {
         AppUpdaterUtils(context.applicationContext)
                 .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
                 .withListener(object : AppUpdaterUtils.UpdateListener {
-                    override fun onSuccess(update: Update?, b: Boolean) {
+                    override fun onSuccess(update: Update?, isUpdateAvailable: Boolean) {
                         isCheckingUpdate.value = false
 
-                        if (b) {
+                        if (isUpdateAvailable) {
                             //Update available
                             update?.let { versionUpdateResult.value = update }
                         } else {
-                            //Cannot check for available
-                            errorMessage.value = ErrorMessage(R.string.check_update_no_updates_available)
+                            //No update available
+                            //Do nothing
+                            versionUpdateResult.value = null
                         }
                     }
 
                     override fun onFailed(error: AppUpdaterError?) {
                         isCheckingUpdate.value = false
                         errorMessage.value = ErrorMessage(R.string.check_update_error_message)
+                        versionUpdateResult.value = null
                     }
 
                 })
@@ -80,12 +82,12 @@ internal class AboutViewModel : BaseViewModel() {
     }
 
     fun handleReportIssue(context: Context) {
-        //TODO Open report issue page
+        ReportIssueActivity.launch(context)
     }
 
 
     fun handleSupportDevelopment(context: Context) {
-        //TODO open support PayPal
+        SupportDevelopmentActivity.launch(context)
     }
 
     fun handleShareWithFriends(activity: Activity) {

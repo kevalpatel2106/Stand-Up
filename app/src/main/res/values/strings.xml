@@ -87,9 +87,22 @@
     <string name="invitation_cta">Invite</string>
     <string name="about_check_for_update">Checking for the update…</string>
     <string name="check_update_error_message">Cannot check for updates.</string>
-    <string name="check_update_no_updates_available">No updates available. You have the latest value.</string>
-    <string name="check_update_new_update_available">New update is available.</string>
-    <string name="btn_title_update">Update</string>
+    <string name="check_update_new_update_available">New version is available.</string>
+    <string name="alert_title_whats_new">What\'s new?</string>
+    <string name="support_with_2_00">Support with $2.00</string>
+    <string name="support_with_5_00">Support with $5.00</string>
+    <string name="support_with_10_00">Support with $10.00</string>
+    <string name="support_with_20_00">Support with $20.00</string>
+    <string name="title_activity_support_development">Support Development</string>
+    <string name="title_activity_report_issue">Report Issue</string>
+    <string name="report_issue_description_hint">Description</string>
+    <string name="report_issue_title_hint">Title</string>
+    <string name="report_issue_update_message">New version of the application is available on the play store with improvements and bug fixes. Please update the application.</string>
+    <string name="report_issue_update_title">Update Available</string>
+    <string name="report_issue_update_later_btn_title">Later</string>
+    <string name="report_issue_update_btn_title">Update</string>
+    <string name="error_invalid_issue_title">Provide title to your issue.</string>
+    <string name="error_invalid_issue_description">Please describe the issue.</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.base.uiController.BaseActivity
+import com.kevalpatel2106.standup.BuildConfig
+import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.verifyEmail.EmailLinkVerificationActivity
 import com.kevalpatel2106.utils.UserSessionManager
@@ -30,24 +32,35 @@ class DeepLinkActivity : BaseActivity() {
             return
         }
 
-        val action = intent.action
+        val uri = intent.data
 
-        if (action == Intent.ACTION_VIEW) {
-            val data = intent.data
-            when (data.pathSegments[0]) {
-                "verifyEmailLink" -> {  //Verify the email link
-                    val isOpened = EmailLinkVerificationActivity.launch(context = this@DeepLinkActivity, url = data)
-                    if (!isOpened) openLink(data.toString())
-                }
-                "forgotPasswordLink" -> { //The password reset link
-                    openLink(data.toString())
-                }
-                else -> {
-                    openLink(data.toString())
+        when {
+            uri.toString() == getString(R.string.invitation_deep_link) -> {
+
+                //Firebase app invite link
+                //Open the splash
+                startActivity(SplashActivity.getLaunchIntent(this@DeepLinkActivity))
+                finish()
+            }
+            uri.toString().startsWith(prefix = BuildConfig.BASE_URL, ignoreCase = false) -> {
+                //This link is from our servers only
+                when (uri.pathSegments[0]) {
+                    "verifyEmailLink" -> {  //Verify the email link
+                        val isOpened = EmailLinkVerificationActivity.launch(context = this@DeepLinkActivity, url = uri)
+                        if (!isOpened) openLink(uri.toString())
+                    }
+                    "forgotPasswordLink" -> { //The password reset link
+                        openLink(uri.toString())
+                    }
+                    else -> {
+                        openLink(uri.toString())
+                    }
                 }
             }
-        } else {
-            openLink(intent.data.toString())
+            else -> {
+                //Don't know what's the link for
+                openLink(intent.data.toString())
+            }
         }
         finish()
     }

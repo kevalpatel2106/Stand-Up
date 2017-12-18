@@ -76,4 +76,8 @@ internal object Validator {
      * @return True if the [weight] is valid.
      */
     fun isValidWeight(weight: Float) = weight >= AppConfig.MIN_WEIGHT && weight <= AppConfig.MAX_WEIGHT
+
+    fun isValidTitle(title: String?) = !title.isNullOrEmpty()
+
+    fun isValidDescription(description: String?) = !description.isNullOrEmpty()
 }

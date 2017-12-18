@@ -1,13 +1,73 @@
 package com.kevalpatel2106.standup.about.report
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import butterknife.OnClick
+import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
+import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.SUUtils
+import com.kevalpatel2106.utils.showSnack
+import kotlinx.android.synthetic.main.activity_report_issue.*
+import org.jetbrains.anko.alert
 
-class ReportIssueActivity : AppCompatActivity() {
+class ReportIssueActivity : BaseActivity() {
+
+    private lateinit var model: ReportIssueViewModel
+    private var versionItem: MaterialAboutActionItem? = null
+
+    companion object {
+
+        /**
+         * Launch the [ReportIssueActivity] activity.
+         *
+         * @param context Instance of the caller.
+         */
+        @JvmStatic
+        fun launch(context: Context) {
+            val launchIntent = Intent(context, ReportIssueActivity::class.java)
+            context.startActivity(launchIntent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        model = ViewModelProviders.of(this@ReportIssueActivity).get(ReportIssueViewModel::class.java)
+
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_report_issue)
+        setToolbar(R.id.toolbar, "", true)
+
+        model.errorMessage.observe(this@ReportIssueActivity, Observer {
+            it!!.getMessage(this@ReportIssueActivity)?.let { showSnack(it) }
+        })
+        model.versionUpdateResult.observe(this@ReportIssueActivity, Observer {
+            it?.let {
+                //Display the dialog
+                val alertBuilder = alert(message = getString(R.string.report_issue_update_message),
+                        title = getString(R.string.report_issue_update_title))
+                alertBuilder.negativeButton(getString(R.string.report_issue_update_later_btn_title), {
+                    //Do nothing
+                })
+                alertBuilder.positiveButton(getString(R.string.report_issue_update_btn_title), {
+                    //Open the play store.
+                    SUUtils.openLink(this@ReportIssueActivity, getString(R.string.rate_app_url))
+                })
+                alertBuilder.show()
+            }
+        })
+
+        if (savedInstanceState == null) {
+            //Check for the update automatically
+            model.checkForUpdate(this@ReportIssueActivity)
+        }
+    }
+
+    @OnClick(R.id.submit_issue_btn)
+    fun reportIssue() {
+        model.reportIssue(report_issue_title_et.getTrimmedText(), report_issue_description_et.getTrimmedText())
     }
 }

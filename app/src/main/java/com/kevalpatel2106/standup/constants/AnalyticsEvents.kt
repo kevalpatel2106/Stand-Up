@@ -22,6 +22,13 @@ internal object AnalyticsEvents {
     const val EVENT_PROFILE_UPDATED = "profile_updated"
     const val EVENT_OPEN_MAIL_BUTTON_FEATURE = "open_mail_button_feature"
     const val EVENT_UNAUTHORIZED_FORCE_LOGOUT = "unauthorized_force_logout"
+
+    //About page actions
+    const val EVENT_APP_FORK_ON_GITHUB = "app_fork_on_github"
+    const val EVENT_JOIN_SLACK_CHANNEL = "join_slack_channel"
+    const val EVENT_OPEN_GITHUB_PAGE = "open_github_page"
+    const val EVENT_CHECK_UPDATE_MANUALLY = "check_update_manually"
+    const val EVENT_RATE_APP_ON_PLAY_STORE = "rate_app_on_play_store"
     const val EVENT_APP_INVITE_SUCCESS = "app_invite_success"
     const val EVENT_APP_INVITE_CANCEL = "app_invite_cancel"
 
