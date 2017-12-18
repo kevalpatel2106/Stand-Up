@@ -11,7 +11,7 @@
         android:rotation="0">
         <path
             android:pathData="M 50,50 L 50,12"
-            android:strokeColor="@android:color/holo_green_dark"
+            android:strokeColor="@android:color/white"
             android:strokeLineCap="round"
             android:strokeWidth="@integer/stroke_width" />
     </group>
@@ -22,12 +22,12 @@
         android:rotation="0">
         <path
             android:pathData="M 50,50 L 24,50"
-            android:strokeColor="@android:color/holo_green_dark"
+            android:strokeColor="@android:color/white"
             android:strokeLineCap="round"
             android:strokeWidth="@integer/stroke_width" />
     </group>
     <path
         android:pathData="@string/path_circle"
-        android:strokeColor="@android:color/holo_blue_dark"
+        android:strokeColor="@android:color/white"
         android:strokeWidth="@integer/stroke_width" />
 </vector>

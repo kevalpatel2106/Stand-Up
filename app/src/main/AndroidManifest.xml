@@ -49,7 +49,8 @@
 
                 <data
                     android:host="@string/invitation_deep_link"
-                    android:scheme="https"/>
+                    android:scheme="https"
+                    tools:ignore="AppLinkUrlError" />
             </intent-filter>
         </activity>
 
@@ -99,7 +100,7 @@
         <activity
             android:name=".authentication.verifyEmail.VerifyEmailActivity"
             android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.GreenBg"
+            android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
 
@@ -115,7 +116,7 @@
         <activity
             android:name=".authentication.deviceReg.DeviceRegisterActivity"
             android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.GreenBg"
+            android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
 
