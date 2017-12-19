@@ -21,6 +21,7 @@ import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.standup.settings.SettingsActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.SwipeDetector
 import com.kevalpatel2106.utils.UserSessionManager
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_dashboard.*
@@ -42,7 +43,6 @@ class DashboardActivity : BaseActivity() {
         @JvmStatic
         fun launch(context: Context) {
             val launchIntent = Intent(context, DashboardActivity::class.java)
-            launchIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(launchIntent)
         }
     }
@@ -107,6 +107,24 @@ class DashboardActivity : BaseActivity() {
         dashboard_navigation_view.setNavigationItemSelectedListener {
             return@setNavigationItemSelectedListener handleDrawerNavigation(getDrawerItem(it.itemId))
         }
+
+        //Set the swipe gesture to open the drawer
+        dashboard_container.setOnTouchListener(object : SwipeDetector() {
+            override fun onLeftToRightSwipe() {
+                super.onLeftToRightSwipe()
+
+                //Open the drawer
+                drawer_layout.openDrawer(Gravity.START)
+            }
+
+            override fun onRightToLeftSwipe() {
+                super.onRightToLeftSwipe()
+
+                //Close the drawer
+                drawer_layout.closeDrawer(Gravity.START)
+            }
+        })
+
 
         if (isFirstRun) {
             //Set the home as selected
