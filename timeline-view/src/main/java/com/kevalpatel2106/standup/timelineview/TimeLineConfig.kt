@@ -14,4 +14,8 @@ internal object TimeLineConfig {
     const val DEFAULT_LABEL_COLOR = Color.BLACK
     const val DEFAULT_LABEL_TEXT_COLOR = 12
     const val DEFAULT_BLOCK_BG_COLOR = Color.BLACK
+
+
+    const val INDICATOR_DARK_COLOR = "#AACCCCCC"
+    const val INDICATOR_LIGHT_COLOR = "#99CCCCCC"
 }

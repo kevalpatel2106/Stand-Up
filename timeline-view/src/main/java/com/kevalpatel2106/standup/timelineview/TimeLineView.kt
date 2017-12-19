@@ -47,27 +47,33 @@ class TimeLineView : View {
         init(attrs)
     }
 
-    private val PADDING_VERTICAL = 50
-    private val PADDING_HORIZONTAL = 20
-
     private val ctx: Context
 
     /**
-     * Time line items to display.
+     * Height of the view.
      */
-    private var timelineItems = ArrayList<TimeLineItem>()
+    private var viewHeight: Int = 0
 
     /**
-     * [TextPaint] to display the axis labels.
+     * Width of the view.
      */
-    private lateinit var labelTextPaint: TextPaint
-
-    private lateinit var timeLineBlockPaint: Paint
-
-    lateinit var timelineLength: TimeLineLength
-
-    private var viewHeight: Int = 0
     private var viewWidth: Int = 0
+
+    /**
+     * Duration of the timeline.
+     *
+     * @see TimeLineLength
+     */
+    var timelineDuration: TimeLineLength = TimeLineConfig.DEFAULT_DURATION
+        set(value) {
+            field = value
+
+            //Update the timeline indicators blocks coordinates.
+            timelineIndicatorBlock = Utils.getIndicatorBlockList(value)
+            Utils.calculateBlockCoordinates(viewWidth, timelineIndicatorBlock, value)
+
+            invalidate()
+        }
 
     /**
      * Color to display the axis labels.
@@ -76,34 +82,50 @@ class TimeLineView : View {
     var labelColor: Int = TimeLineConfig.DEFAULT_LABEL_COLOR
         set(value) {
             field = value
-            refreshLabelTextPaint()
+
+            //Refresh the paint object
+            labelTextPaint.color = value
+
             invalidate()
         }
+
+    /**
+     * Time line items to display.
+     */
+    var timelineItems = ArrayList<TimeLineItem>()
+        set(value) {
+            field = Utils.calculateBlockCoordinates(viewWidth, value, timelineDuration)
+
+            //Refresh the list
+            invalidate()
+        }
+
+    /**
+     * List of the blocks on the timeline to display as background. The size and values of this list
+     * depends on [timelineDuration].
+     *
+     * @see timelineDuration
+     */
+    private var timelineIndicatorBlock = ArrayList<TimeLineItem>()
+
+    /**
+     * [TextPaint] to display the axis labels.
+     */
+    private lateinit var labelTextPaint: TextPaint
+
+    private lateinit var timeLineBlockPaint: Paint
 
     private fun init(attrs: AttributeSet? = null) {
         attrs?.let {
             //TODO Parse the attribute
         }
 
-        timelineLength = TimeLineConfig.DEFAULT_DURATION
-
         //Prepare the label text
         labelTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        refreshLabelTextPaint()
+        labelTextPaint.textSize = ViewUtils.toPx(ctx, TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR).toFloat()
 
         //Prepare block color
         timeLineBlockPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    }
-
-    fun setTimeLineItems(items: ArrayList<TimeLineItem>) {
-        timelineItems = items
-        calculateTimeLineSlots(viewWidth)
-        invalidate()
-    }
-
-    private fun refreshLabelTextPaint() {
-        labelTextPaint.textSize = ViewUtils.toPx(ctx, TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR).toFloat()
-        labelTextPaint.color = labelColor
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -114,25 +136,24 @@ class TimeLineView : View {
         this.setMeasuredDimension(viewWidth, viewHeight)
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        calculateTimeLineSlots(viewWidth)
-    }
-
-    private fun calculateTimeLineSlots(width: Int) {
-        val timeLineLengthSec = Utils.convertTimeLineLengthToSeconds(timelineLength)
-        val eachSecondWidth = width.toFloat() / timeLineLengthSec
-
-        timelineItems.forEach {
-            it.startX = it.startTime * eachSecondWidth
-            it.endX = it.endTime * eachSecondWidth
-        }
+        //Update the list coordinates
+        Utils.calculateBlockCoordinates(viewWidth, timelineItems, timelineDuration)
+        Utils.calculateBlockCoordinates(viewWidth, timelineIndicatorBlock, timelineDuration)
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        timelineItems.forEach {
+        //Change the hour colors
+        timelineIndicatorBlock.forEach {
             timeLineBlockPaint.color = it.color
             canvas.drawRect(it.startX, y, it.endX, y + viewHeight, timeLineBlockPaint)
+        }
+
+        //Display the blocks
+        timelineItems.forEach {
+            timeLineBlockPaint.color = it.color
+            canvas.drawRect(it.startX, y + 70, it.endX, y + +viewHeight, timeLineBlockPaint)
         }
     }
 }

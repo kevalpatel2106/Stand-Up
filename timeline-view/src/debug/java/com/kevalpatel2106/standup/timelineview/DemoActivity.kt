@@ -12,18 +12,18 @@ class DemoActivity : AppCompatActivity() {
 
         //Timeline view
         val timeline = findViewById<TimeLineView>(R.id.timeline_view_demo)
-        timeline.timelineLength = TimeLineLength.A_DAY
+        timeline.timelineDuration = TimeLineLength.A_DAY
 
         val timelineItems = ArrayList<TimeLineItem>()
         timelineItems.add(TimeLineItem(
                 startTime = 3600,
                 endTime = 2 * 3600,
-                color = Color.BLACK
+                color = Color.GREEN
         ))
         timelineItems.add(TimeLineItem(
                 startTime = (2.5 * 3600).toLong(),
                 endTime = 3 * 3600,
-                color = Color.CYAN
+                color = Color.YELLOW
         ))
         timelineItems.add(TimeLineItem(
                 startTime = 3 * 3600,
@@ -38,13 +38,13 @@ class DemoActivity : AppCompatActivity() {
         timelineItems.add(TimeLineItem(
                 startTime = 5 * 3600,
                 endTime = (5.90 * 3600).toLong(),
-                color = Color.RED
+                color = Color.YELLOW
         ))
         timelineItems.add(TimeLineItem(
                 startTime = 12 * 3600,
                 endTime = 23 * 3600,
-                color = Color.MAGENTA
+                color = Color.GREEN
         ))
-        timeline.setTimeLineItems(timelineItems)
+        timeline.timelineItems = timelineItems
     }
 }
