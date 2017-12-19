@@ -38,26 +38,31 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!UserSessionManager.isUserLoggedIn) {
-
+        if (!UserSessionManager.isUserLoggedIn) {   //User is not logged in. Complete the authentication flow.
             IntroActivity.launch(this@SplashActivity)
-        } else if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED)) {
+        } else {    //User is logged in.
 
-            DeviceRegisterActivity.launch(this@SplashActivity,
-                    false,
-                    UserSessionManager.isUserVerified)
-        } else if (!UserSessionManager.isUserVerified) {
+            //If the device is not registered, register the device with the server.
+            if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED)) {
+                DeviceRegisterActivity.launch(this@SplashActivity,
+                        false,
+                        UserSessionManager.isUserVerified)
+            }
 
-            VerifyEmailActivity.launch(this@SplashActivity)
-        } else if (UserSessionManager.displayName.isNullOrEmpty()) {
+            //Contrinue with the app launch flow.
+            if (!UserSessionManager.isUserVerified) {   //If user is not verified, open verify screen.
+                VerifyEmailActivity.launch(this@SplashActivity)
 
-            EditProfileActivity.launch(this@SplashActivity)
-        } else {
-            //Start the detection engine
-            ReminderScheduler.startSchedulerIfNotRunning(this.applicationContext)
+            } else if (UserSessionManager.displayName.isNullOrEmpty()) {   //User profile is not complete.
+                EditProfileActivity.launch(this@SplashActivity)
 
-            //Launch the dashboard.
-            DashboardActivity.launch(this@SplashActivity)
+            } else {    //All looks good.
+                //Start the detection engine
+                ReminderScheduler.startSchedulerIfNotRunning(this.applicationContext)
+
+                //Launch the dashboard.
+                DashboardActivity.launch(this@SplashActivity)
+            }
         }
     }
 }

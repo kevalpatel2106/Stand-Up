@@ -12,7 +12,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_simple_toolbar" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            app:layout_collapseMode="pin"
+            app:subtitleTextColor="?android:attr/textColorSecondary"
+            app:titleTextColor="@color/colorToolbarText" />
 
         <!-- The main content view -->
         <FrameLayout

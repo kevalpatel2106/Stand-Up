@@ -2,6 +2,7 @@ package com.kevalpatel2106.standup.notification
 
 import com.google.firebase.iid.FirebaseInstanceIdService
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
+import com.kevalpatel2106.utils.UserSessionManager
 
 /**
  * Created by Keval on 01-Jun-17.
@@ -17,7 +18,7 @@ class InstanceIdService : FirebaseInstanceIdService() {
         super.onTokenRefresh()
 
         //Start syncing the new token
-        RegisterDeviceService.start(this)
+        if (UserSessionManager.isUserLoggedIn) RegisterDeviceService.start(this)
     }
 
 }

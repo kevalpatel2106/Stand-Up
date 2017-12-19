@@ -20,7 +20,6 @@
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="list_loading_progressbar_dimen">50dp</dimen>
-    <dimen name="edit_profile_card_horizontal_margin">16dp</dimen>
     <dimen name="nav_drawer_header_height">160dp</dimen>
     <dimen name="device_reg_screen_clock_iv_dimen">150dp</dimen>
 </resources>

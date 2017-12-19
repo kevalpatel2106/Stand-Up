@@ -20,6 +20,5 @@
     <dimen name="md_navigation_drawer_width">340dp</dimen>
     <dimen name="md_button_height">60dp</dimen>
     <dimen name="intro_screen_logo_dimen">200dp</dimen>
-    <dimen name="edit_profile_card_horizontal_margin">36dp</dimen>
     <dimen name="device_reg_screen_clock_iv_dimen">200dp</dimen>
 </resources>

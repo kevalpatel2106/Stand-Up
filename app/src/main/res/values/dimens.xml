@@ -26,10 +26,10 @@
     <dimen name="md_navigation_drawer_width">320dp</dimen>
 
     <!--Design dimen-->
+    <dimen name="card_horizontal_margin">@dimen/spacing_small</dimen>
     <dimen name="list_loading_progressbar_dimen">60dp</dimen>
     <dimen name="intro_screen_logo_dimen">100dp</dimen>
     <dimen name="forgot_password_logo_size">160dp</dimen>
-    <dimen name="edit_profile_card_horizontal_margin">8dp</dimen>
     <dimen name="nav_drawer_header_height">180dp</dimen>
     <dimen name="device_reg_screen_clock_iv_dimen">200dp</dimen>
 </resources>

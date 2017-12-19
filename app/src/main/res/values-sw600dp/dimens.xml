@@ -20,5 +20,4 @@
     <dimen name="md_navigation_drawer_width">280dp</dimen>
     <dimen name="md_button_height">60dp</dimen>
     <dimen name="intro_screen_logo_dimen">150dp</dimen>
-    <dimen name="edit_profile_card_horizontal_margin">12dp</dimen>
 </resources>

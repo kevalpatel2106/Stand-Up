@@ -21,5 +21,4 @@
     <dimen name="list_loading_progressbar_dimen">70dp</dimen>
     <dimen name="md_button_height">60dp</dimen>
     <dimen name="verify_email_icon_padding">@dimen/spacing_xlarge</dimen>
-    <dimen name="edit_profile_card_horizontal_margin">16dp</dimen>
 </resources>
