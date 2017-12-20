@@ -8,6 +8,7 @@ package com.kevalpatel2106.standup.constants
  */
 internal object AppConfig {
     const val SNACKBAR_TIME = 3300L
+    const val PIE_CHART_TIME = 1400
 
     //---- Start of Validation ----//
     const val MIN_WEIGHT = 29.9f

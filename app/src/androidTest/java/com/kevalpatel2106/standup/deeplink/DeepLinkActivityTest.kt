@@ -9,7 +9,7 @@ import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.matcher.IntentMatchers
 import android.support.test.rule.ActivityTestRule
 import com.kevalpatel2106.standup.SplashActivity
-import com.kevalpatel2106.standup.authentication.verifyEmail.EmailLinkVerificationActivity
+import com.kevalpatel2106.standup.authentication.verification.EmailLinkVerificationActivity
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.After

@@ -20,7 +20,7 @@ import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
-import com.kevalpatel2106.standup.dashboard.DashboardActivity
+import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
 import com.kevalpatel2106.testutils.MockServerManager
@@ -367,7 +367,7 @@ class LoginActivityTest : BaseTestClass() {
         onView(withId(R.id.btn_login)).perform(closeSoftKeyboard(), click())
 
         Thread.sleep(5000)
-        intended(hasComponent(ComponentName(getTargetContext(), DashboardActivity::class.java.name)))
+        intended(hasComponent(ComponentName(getTargetContext(), MainActivity::class.java.name)))
 
         Assert.assertEquals(UserSessionManager.displayName, "Test user")
         Assert.assertEquals(UserSessionManager.email, "test@example.com")
@@ -410,7 +410,7 @@ class LoginActivityTest : BaseTestClass() {
         onView(withId(R.id.btn_login)).perform(closeSoftKeyboard(), click())
 
         Thread.sleep(5000)
-        intended(hasComponent(ComponentName(getTargetContext(), DashboardActivity::class.java.name)))
+        intended(hasComponent(ComponentName(getTargetContext(), MainActivity::class.java.name)))
 
         Assert.assertEquals(UserSessionManager.displayName, "test user")
         Assert.assertEquals(UserSessionManager.email, "test@example.com")

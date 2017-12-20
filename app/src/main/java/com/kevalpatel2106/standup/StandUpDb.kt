@@ -5,8 +5,8 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.kevalpatel2106.standup.reminder.UserActivity
-import com.kevalpatel2106.standup.reminder.repo.UserActivityDao
+import com.kevalpatel2106.standup.userActivity.UserActivity
+import com.kevalpatel2106.standup.userActivity.repo.UserActivityDao
 import timber.log.Timber
 
 /**

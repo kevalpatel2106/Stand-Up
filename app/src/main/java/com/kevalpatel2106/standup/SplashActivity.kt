@@ -6,9 +6,9 @@ import android.os.Bundle
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
-import com.kevalpatel2106.standup.authentication.verifyEmail.VerifyEmailActivity
+import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
-import com.kevalpatel2106.standup.dashboard.DashboardActivity
+import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -61,7 +61,7 @@ class SplashActivity : BaseActivity() {
                 ReminderScheduler.startSchedulerIfNotRunning(this.applicationContext)
 
                 //Launch the dashboard.
-                DashboardActivity.launch(this@SplashActivity)
+                MainActivity.launch(this@SplashActivity)
             }
         }
     }

@@ -3,7 +3,7 @@ package com.kevalpatel2106.standup.reminder.scheduler
 import android.support.annotation.CallSuper
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService
-import com.kevalpatel2106.standup.notification.ReminderNotification
+import com.kevalpatel2106.standup.reminder.ReminderNotification
 
 /**
  * Created by Kevalpatel2106 on 13-Dec-17.

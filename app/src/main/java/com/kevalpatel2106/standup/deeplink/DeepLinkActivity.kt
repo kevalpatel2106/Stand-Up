@@ -7,7 +7,7 @@ import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.SplashActivity
-import com.kevalpatel2106.standup.authentication.verifyEmail.EmailLinkVerificationActivity
+import com.kevalpatel2106.standup.authentication.verification.EmailLinkVerificationActivity
 import com.kevalpatel2106.utils.UserSessionManager
 
 /**

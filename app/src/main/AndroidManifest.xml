@@ -100,7 +100,7 @@
 
         <!-- Verify your email reminder screen. -->
         <activity
-            android:name=".authentication.verifyEmail.VerifyEmailActivity"
+            android:name=".authentication.verification.VerifyEmailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
@@ -108,7 +108,7 @@
 
         <!-- Verify the user email with the deep link. -->
         <activity
-            android:name=".authentication.verifyEmail.EmailLinkVerificationActivity"
+            android:name=".authentication.verification.EmailLinkVerificationActivity"
             android:configChanges="orientation|screenSize|keyboard"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
@@ -124,7 +124,7 @@
 
         <!-- Dashboard Activity -->
         <activity
-            android:name=".dashboard.DashboardActivity"
+            android:name=".main.MainActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
@@ -202,14 +202,14 @@
         <!-- =============================== SERVICE ================================ -->
         <!-- Begin: Firebase service -->
         <service
-            android:name=".notification.FcmMessagingService"
+            android:name=".fcm.FcmMessagingService"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".notification.InstanceIdService"
+            android:name=".fcm.InstanceIdService"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

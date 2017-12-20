@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.Intent
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.standup.reminder.UserActivity
-import com.kevalpatel2106.standup.reminder.UserActivityType
-import com.kevalpatel2106.standup.reminder.repo.UserActivityRepoImpl
 import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
+import com.kevalpatel2106.standup.userActivity.UserActivity
+import com.kevalpatel2106.standup.userActivity.UserActivityType
+import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepoImpl
 import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.util.*
