@@ -57,13 +57,12 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - cd scripts
 
-  - chmod +x dependency_check.sh
-  - bash dependency_check.sh
+  - chmod +x ./scripts/dependency_check.sh
+  - bash ./scripts/dependency_check.sh
 
-  - chmod +x upload-artifacts.sh
-  - bash upload-artifacts.sh
+  - chmod +x ./scripts/upload-artifacts.sh
+  - bash ./scripts/upload-artifacts.sh
 
 after_failure:
   - cd scripts
