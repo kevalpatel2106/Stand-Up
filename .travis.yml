@@ -9,7 +9,7 @@ env:
 
 before_install:
   # Set encrypted files
-  - openssl aes-256-cbc -K $encrypted_6642769f17bf_key -iv $encrypted_6642769f17bf_iv -in misc/secrets.tar.enc -out secrets.tar -d
+  - openssl aes-256-cbc -K $encrypted_3d7fa878c23a_key -iv $encrypted_3d7fa878c23a_iv -in misc/secrets.tar.enc -out secrets.tar -d
   - tar xvf secrets.tar
   - mv google-services.json ./app
   - mv .dropbox_uploader_config ./scripts
