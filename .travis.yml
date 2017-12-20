@@ -33,8 +33,10 @@ cache:
     - "$HOME/.gradle/wrapper/"
     - "$HOME/.android/build-cache"
 
+install:
+    - echo y | android update sdk -u -a -t android-27
+
 android:
-  update_sdk: true
   components:
     - platform-tools
     - tools
