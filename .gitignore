@@ -15,5 +15,6 @@
 /gradle.properties
 /responses/
 /projectFilesBackup/
+/projectFilesBackup1/
 /ajcore.*.txt
-/scripts/.dropbox_uploader_config
+/output/

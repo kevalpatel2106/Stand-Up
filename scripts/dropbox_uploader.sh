@@ -20,7 +20,7 @@
 #
 
 #Default configuration file
-CONFIG_FILE=./.dropbox_uploader_config
+CONFIG_FILE=$PWD/scripts/.dropbox_uploader_config
 
 #Default chunk size in Mb for the upload process
 #It is recommended to increase this value only if you have enough free space on your /tmp partition
@@ -1020,7 +1020,7 @@ function db_mkdir
 {
     local DIR_DST=$(normalize_path "$1")
 
-    print " > Creating Directory \"$DIR_DST\"... "
+    print " > Creating Directory \"$DIR_DST\"..."
     $CURL_BIN $CURL_ACCEPT_CERTIFICATES -X POST -L -s --show-error --globoff -i -o "$RESPONSE_FILE" --header "Authorization: Bearer $OAUTH_ACCESS_TOKEN" --header "Content-Type: application/json" --data "{\"path\": \"$DIR_DST\"}" "$API_MKDIR_URL" 2> /dev/null
     check_http_response
 
