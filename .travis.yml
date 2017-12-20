@@ -22,9 +22,6 @@ before_install:
   # Install npm
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.3/install.sh | bash
 
-  #https://github.com/travis-ci/travis-ci/issues/8874
-  - yes | sdkmanager "platforms;android-27"
-
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -f  $HOME/.gradle/caches/transforms-1/transforms-1.lock
@@ -41,7 +38,7 @@ android:
     - platform-tools
     - tools
     - build-tools-27.0.2
-    - android-27
+    - android-26
     - extra-google-m2repository
     - extra-android-m2repository
   licenses:
