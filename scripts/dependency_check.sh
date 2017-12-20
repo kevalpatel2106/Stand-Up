@@ -3,3 +3,4 @@ mkdir ../build
 mkdir ../build/reports
 cd ..
 ./gradlew dependencyUpdates -Drevision=release -DoutputFormatter=json,xml -DoutputDir=../build/reports/
+cd scripts
