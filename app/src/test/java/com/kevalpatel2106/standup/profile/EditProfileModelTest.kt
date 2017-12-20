@@ -19,6 +19,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
 import java.io.IOException
+import java.nio.file.Paths
 
 /**
  * Created by Kevalpatel2106 on 05-Dec-17.
@@ -27,7 +28,7 @@ import java.io.IOException
  */
 @RunWith(JUnit4::class)
 class EditProfileModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/profile/repo", File(File("").absolutePath))
+    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/profile/repo", Paths.get(".").toAbsolutePath().toString())
 
     @Rule
     @JvmField

@@ -8,6 +8,7 @@ import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.nio.file.Paths
 
 
 /**
@@ -18,7 +19,7 @@ import java.net.HttpURLConnection
 
 @RunWith(JUnit4::class)
 class StringResponsesTests {
-    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", File(File("").absolutePath))
+    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", Paths.get(".").toAbsolutePath().toString())
 
     companion object {
 

@@ -1,4 +1,5 @@
 *.iml
+*.exec
 .gradle
 /local.properties
 /.idea/workspace.xml

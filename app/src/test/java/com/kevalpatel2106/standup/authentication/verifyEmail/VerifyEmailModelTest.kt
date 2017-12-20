@@ -12,6 +12,7 @@ import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
 
+import java.nio.file.Paths
 
 /**
  * Created by Keval on 20/11/17.
@@ -20,7 +21,7 @@ import java.io.IOException
  */
 @RunWith(JUnit4::class)
 class VerifyEmailModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", File(File("").absolutePath))
+    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get(".").toAbsolutePath().toString())
 
     @Rule
     @JvmField

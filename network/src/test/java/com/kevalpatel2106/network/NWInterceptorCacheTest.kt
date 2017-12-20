@@ -9,6 +9,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
+import java.nio.file.Paths
 
 /**
  * Created by Keval on 12/11/17.
@@ -19,7 +20,7 @@ import java.io.IOException
  */
 @RunWith(JUnit4::class)
 class NWInterceptorCacheTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", File(File("").absolutePath))
+    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", Paths.get(".").toAbsolutePath().toString())
 
     private val mockWebServer = MockServerManager()
 

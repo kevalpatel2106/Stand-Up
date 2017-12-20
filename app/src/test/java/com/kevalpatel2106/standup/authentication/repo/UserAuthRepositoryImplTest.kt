@@ -16,6 +16,7 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
 import java.io.IOException
+import java.nio.file.Paths
 
 /**
  * Created by Kevalpatel2106 on 06-Dec-17.
@@ -24,7 +25,7 @@ import java.io.IOException
  */
 @RunWith(JUnit4::class)
 class UserAuthRepositoryImplTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", File(File("").absolutePath))
+    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get(".").toAbsolutePath().toString())
 
     private val mockServerManager = MockServerManager()
     private lateinit var userAuthRepositoryImpl: UserAuthRepositoryImpl

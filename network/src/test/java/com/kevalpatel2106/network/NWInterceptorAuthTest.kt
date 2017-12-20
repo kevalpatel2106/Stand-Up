@@ -18,6 +18,7 @@ import retrofit2.Call
 import retrofit2.Response
 import java.io.File
 import java.io.IOException
+import java.nio.file.Paths
 
 /**
  * Created by Keval on 12/11/17.
@@ -28,7 +29,7 @@ import java.io.IOException
  */
 @RunWith(JUnit4::class)
 class NWInterceptorAuthTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", File(File("").absolutePath))
+    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", Paths.get(".").toAbsolutePath().toString())
 
     private val TEST_PREF_STRING = "TestValue"
     private val TEST_PREF_LONG = 100L

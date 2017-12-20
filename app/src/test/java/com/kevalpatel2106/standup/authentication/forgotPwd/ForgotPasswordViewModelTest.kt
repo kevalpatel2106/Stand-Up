@@ -9,6 +9,7 @@ import org.junit.*
 import org.junit.rules.TestRule
 import java.io.File
 import java.io.IOException
+import java.nio.file.Paths
 
 /**
  * Created by Keval on 26/11/17.
@@ -16,7 +17,7 @@ import java.io.IOException
  * @author 'https://github.com/kevalpatel2106'
  */
 class ForgotPasswordViewModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", File(File("").absolutePath))
+    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get(".").toAbsolutePath().toString())
 
     @Rule
     @JvmField
