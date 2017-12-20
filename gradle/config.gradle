@@ -113,19 +113,16 @@ ext {
     signingConfig = {
         //This are th play store signing config.
         playStore {
-            if (System.getenv("IS_CI_BUILD") == "true") {
-                //It is CI build, load it from the environment variables.
-                //See circle.yml file.
-                storeFile file("../misc/keystore.jks")
-                storePassword System.getenv("KEY_PASSWORD")
-                keyAlias System.getenv("KEY_ALIAS")
-                keyPassword System.getenv("ALIAS_PASSWORD")
-            } else {
-                keyAlias keystore_alias
-                keyPassword keystore_password
-                storeFile file(keystore_file)
-                storePassword keystore_aliaspassword
-            }
+            keyAlias RELEASE_KEYSTORE_ALIAS
+            keyPassword RELEASE_KEYSTORE_PASSWORD
+            storeFile file(RELEASE_KEYSTORE_FILE)
+            storePassword RELEASE_KEYSTORE_ALIASPASSWORD
+        }
+        debugKey {
+            keyAlias KEYSTORE_ALIAS
+            keyPassword KEYSTORE_PASSWORD
+            storeFile file(KEYSTORE_FILE)
+            storePassword KEYSTORE_ALIASPASSWORD
         }
     }
 

@@ -24,7 +24,6 @@ buildscript {
 
         if (System.getenv('CI') == "true"){
             classpath gradlePlugins.buildScan
-            classpath gradlePlugins.slackUpload
         }
     }
 }
@@ -43,15 +42,7 @@ if (System.getenv('CI') == "true") {
 
         publishAlways()
     }
-
-    slack {
-        url SKACK_WEBHOOK
-        dependsOnTasks 'app:testDebug', 'app:assembleRelease', 'app:connectedAndroidTest'
-        title 'Stand Up Build Report'
-        enabled = true
-    }
 }
-
 
 allprojects {
     repositories {

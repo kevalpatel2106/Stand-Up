@@ -61,12 +61,12 @@ android {
             pseudoLocalesEnabled false
             zipAlignEnabled true
 
-            buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
+            buildConfigField "String", "BASE_URL", "\"" + RELEASE_SERVER_BASE_URL + "\""
             resValue "string", "application_name", "Stand Up"
-            resValue "string", "api_host", "\"" + SERVER_BASE_URL.replace("https://", "") + "\""
-            resValue "string", "server_client_id", SERVER_CLIENT_ID
-            resValue "string", "facebook_app_id", FACEBOOK_APP_ID
-            resValue "string", "android_api_key", ANDROID_API_KEY
+            resValue "string", "api_host", "\"" + RELEASE_SERVER_BASE_URL.replace("https://", "") + "\""
+            resValue "string", "server_client_id", RELEASE_SERVER_CLIENT_ID
+            resValue "string", "facebook_app_id", RELEASE_FACEBOOK_APP_ID
+            resValue "string", "android_api_key", RELEASE_ANDROID_API_KEY
         }
         debug {
             crunchPngs false
@@ -74,7 +74,7 @@ android {
             debuggable true
             jniDebuggable true
             renderscriptDebuggable false
-            signingConfig signingConfigs.playStore
+            signingConfig signingConfigs.debugKey
             minifyEnabled false
             zipAlignEnabled true
 
@@ -108,7 +108,6 @@ dependencies {
     implementation project(':google-auth')
     implementation project(':ruler-view')
     implementation project(':timeline-view')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 

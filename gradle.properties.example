@@ -1,3 +1,7 @@
+####################################################################################################
+####################                  Project Gradle Config                   ######################
+####################################################################################################
+
 #Enable daemon
 org.gradle.daemon=true
 
@@ -16,19 +20,53 @@ android.enableD8=true
 # Disable AAPT2
 android.enableAapt2=false
 
+####################################################################################################
+####################                 Genral Build Prperties                   ######################
+####################################################################################################
+
+
+####################################################################################################
+####################                  Debug Build Prperties                   ######################
+####################################################################################################
 # Key store config
-keystore_file=path/to/keystore.jks
-keystore_alias=your_alias
-keystore_aliaspassword=your_password
-keystore_password=your_password
-
-# Google keys
-SERVER_CLIENT_ID=your_client_id_from_google_console
-ANDROID_API_KEY=your_android_api_key
-
-# Facebook credentials
-FACEBOOK_APP_ID=facebook_app_id
-FB_LOGIN_PROTOCOL_SCHEME=schecme_from_facebook_app
+KEYSTORE_FILE=./misc/debugkey.jks
+KEYSTORE_ALIAS=stand_up_android
+KEYSTORE_ALIASPASSWORD=2ea8249e-8ffa-4b77-adde-c70ad4d99edc
+KEYSTORE_PASSWORD=2ea8249e-8ffa-4b77-adde-c70ad4d99edc
 
 # Server config
-SERVER_BASE_URL=api.server.url
+SERVER_BASE_URL=https://api-6133514716425088564-68419.appspot.com
+
+//TODO Update following fields.
+# Google keys
+# See: https://console.developers.google.com/apis/credentials
+SERVER_CLIENT_ID=debug.server.client.id
+ANDROID_API_KEY=debug.android.api.key
+
+# Facebook credentials (For facebook login)
+# See: https://developers.facebook.com/docs/facebook-login/android/
+FACEBOOK_APP_ID=debug.fb.project.id
+FB_LOGIN_PROTOCOL_SCHEME=debug.fb.protocol.scheme
+
+
+####################################################################################################
+###################                  Release Build Prperties                   #####################
+####################################################################################################
+# Key store config
+RELEASE_KEYSTORE_FILE=your.release.key.file
+RELEASE_KEYSTORE_ALIAS=your.release.key.alias
+RELEASE_KEYSTORE_ALIASPASSWORD=your.release.key.alias.password
+RELEASE_KEYSTORE_PASSWORD=your.release.key.password
+
+# Google keys
+# See: https://console.developers.google.com/apis/credentials
+RELEASE_SERVER_CLIENT_ID=release.server.client.id
+RELEASE_ANDROID_API_KEY=release.android.api.key
+
+# Facebook credentials (For facebook login)
+# See: https://developers.facebook.com/docs/facebook-login/android/
+RELEASE_FACEBOOK_APP_ID=release.fb.project.id
+RELEASE_FB_LOGIN_PROTOCOL_SCHEME=release.fb.protocol.scheme
+
+# Server config
+RELEASE_SERVER_BASE_URL=release.server.url

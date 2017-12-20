@@ -14,7 +14,7 @@ android {
         debug {
             crunchPngs false
             testCoverageEnabled true
-            signingConfig signingConfigs.playStore
+            signingConfig signingConfigs.debugKey
         }
     }
 

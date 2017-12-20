@@ -70,7 +70,6 @@ ext {
             firbase       : "com.google.firebase:firebase-plugins:1.1.5",
             hugo          : "com.jakewharton.hugo:hugo-plugin:1.2.1",
             fabric        : "io.fabric.tools:gradle:1.25.1",
-            slackUpload   : "com.github.Mindera:gradle-slack-plugin:1.0.7",
     ]
 
     //Testing dependency

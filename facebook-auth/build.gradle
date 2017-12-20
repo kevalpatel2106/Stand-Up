@@ -10,12 +10,12 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.playStore
-            resValue "string", "fb_login_protocol_scheme", FB_LOGIN_PROTOCOL_SCHEME
+            resValue "string", "fb_login_protocol_scheme", RELEASE_FB_LOGIN_PROTOCOL_SCHEME
         }
         debug {
             crunchPngs false
             testCoverageEnabled true
-            signingConfig signingConfigs.playStore
+            signingConfig signingConfigs.debugKey
             resValue "string", "fb_login_protocol_scheme", FB_LOGIN_PROTOCOL_SCHEME
         }
     }
