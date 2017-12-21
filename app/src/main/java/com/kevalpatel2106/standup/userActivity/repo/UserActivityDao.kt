@@ -6,6 +6,7 @@ import android.arch.persistence.room.Query
 import android.arch.persistence.room.Update
 import com.kevalpatel2106.base.annotations.Repository
 import com.kevalpatel2106.standup.userActivity.UserActivity
+import io.reactivex.Flowable
 import io.reactivex.Maybe
 
 /**
@@ -27,4 +28,9 @@ interface UserActivityDao {
             + " ORDER BY " + UserActivity.EVENT_START_TIME + " DESC"
             + " LIMIT 1")
     fun getLatestActivity(): Maybe<UserActivity>
+
+    @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE
+            + " WHERE " + UserActivity.EVENT_START_TIME + " >= :afterTimeMills AND "
+            + UserActivity.EVENT_START_TIME + " <= :beforeTimeMills")
+    fun getActivityBetweenDuration(afterTimeMills: Long, beforeTimeMills: Long): Flowable<List<UserActivity>>
 }

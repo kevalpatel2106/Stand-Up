@@ -18,9 +18,14 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
 import com.kevalpatel2106.standup.timelineview.TimeLineLength
+import com.kevalpatel2106.standup.userActivity.UserActivity
+import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepoImpl
 import com.kevalpatel2106.utils.ViewUtils
+import io.reactivex.FlowableSubscriber
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
 import kotlinx.android.synthetic.main.layout_home_timeline_card.*
+import org.reactivestreams.Subscription
+import timber.log.Timber
 
 
 /**
@@ -47,6 +52,25 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //TODO Remove this
+        UserActivityRepoImpl().getTodayEvents().subscribe(object : FlowableSubscriber<List<UserActivity>> {
+            override fun onError(t: Throwable?) {
+                Timber.d("Error occurred.")
+            }
+
+            override fun onNext(t: List<UserActivity>?) {
+                Timber.d("onNext")
+                Timber.d(t?.size.toString())
+            }
+
+            override fun onSubscribe(s: Subscription) {
+            }
+
+            override fun onComplete() {
+            }
+
+        })
 
         setEfficiencyCard()
         setTimelineCard()

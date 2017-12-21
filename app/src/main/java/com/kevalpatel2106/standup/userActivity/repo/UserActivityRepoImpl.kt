@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.util.*
 
 /**
  * Created by Keval on 14/12/17.
@@ -14,6 +15,20 @@ import timber.log.Timber
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 class UserActivityRepoImpl : UserActivityRepo {
+
+    override fun getTodayEvents(): Flowable<List<UserActivity>> {
+        val today12am = Calendar.getInstance()
+        today12am.set(Calendar.MINUTE, 0)
+        today12am.set(Calendar.HOUR, 0)
+        today12am.set(Calendar.SECOND, 0)
+        today12am.set(Calendar.MILLISECOND, 0)
+
+        return StandUpDb.getDb()
+                .userActivityDao()
+                .getActivityBetweenDuration(today12am.timeInMillis, System.currentTimeMillis())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
 
     override fun insertNewAndTerminatePreviousActivity(newActivity: UserActivity) {
 
@@ -28,6 +43,12 @@ class UserActivityRepoImpl : UserActivityRepo {
                     //Update the end time of the last user event.
                     lastActivity.eventEndTimeMills = newActivity.eventStartTimeMills
                     update(lastActivity).subscribe()
+
+                    //Add the event to the database
+                    insert(newActivity).subscribe()
+                } else {
+                    //Activity type did not changed/
+                    //Do noting
                 }
             }
 

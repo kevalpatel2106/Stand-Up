@@ -3,13 +3,15 @@ package com.kevalpatel2106.standup.reminder.activityDetector
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.support.annotation.VisibleForTesting
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
+import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
 import com.kevalpatel2106.standup.userActivity.UserActivity
 import com.kevalpatel2106.standup.userActivity.UserActivityType
+import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepoImpl
-import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.util.*
 
@@ -17,7 +19,7 @@ import java.util.*
 /**
  * Created by Keval on 25/11/17.
  * This is receiver will receive the updates when the [UserActivity] is changed. [ReminderScheduler]
- * will broadcast intent with action [DetectorConfig.DETECTION_BROADCAST_ACTION] to invoke this
+ * will broadcast intent with action [ReminderConfig.DETECTION_BROADCAST_ACTION] to invoke this
  * receiver.
  *
  * The [Intent] contains list of all the detected activities and their confidence level.
@@ -35,6 +37,9 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
 
     private lateinit var context: Context
 
+    @VisibleForTesting
+    internal var mUserActivityRepo: UserActivityRepo = UserActivityRepoImpl()
+
     override fun onReceive(context: Context, intent: Intent) {
         this.context = context
         val result = ActivityRecognitionResult.extractResult(intent)
@@ -45,37 +50,72 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         val detectedActivities = result.probableActivities as ArrayList
         Timber.d("Detected Activities: ".plus(detectedActivities.toString()))
 
-        //Activity detected.
-        when (detectedActivities[0].type) {
-            DetectedActivity.STILL -> onUserSitting()
-            DetectedActivity.IN_VEHICLE -> onUserSitting()
-            DetectedActivity.ON_BICYCLE or DetectedActivity.ON_FOOT or DetectedActivity.WALKING -> onUserMoving()
-            DetectedActivity.UNKNOWN or DetectedActivity.TILTING -> {
-                /* Do nothing */
-                Timber.e("Unknown activity detected.")
-            }
+        //Sort the array by confidence level
+        //Descending
+        Collections.sort(detectedActivities) { p0, p1 -> p1.confidence - p0.confidence }
+
+        if (shouldIgnoreThisEvent(detectedActivities)) {
+            //Not enough confidence
+            //Let's ignore this event.
+            return
+        }
+
+        if (isUserSitting(detectedActivities)) {
+            //User is sitting
+            onUserSitting(mUserActivityRepo)
+        } else {
+            //User is moving
+            onUserMoving(mUserActivityRepo)
         }
     }
 
-    private fun onUserMoving() {
+    private fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
+        if (detectedActivities.size <= 0)
+            throw IllegalStateException("Detected activity list must have at least one item.")
+
+        //Activity detected.
+        return when (detectedActivities[0].type) {
+            DetectedActivity.STILL -> true
+            DetectedActivity.IN_VEHICLE -> true
+            DetectedActivity.ON_BICYCLE or DetectedActivity.ON_FOOT or DetectedActivity.WALKING -> false
+            DetectedActivity.UNKNOWN or DetectedActivity.TILTING -> {
+                throw IllegalStateException("Tilting or unknown activity should not come this far.")
+            }
+            else -> false
+        }
+    }
+
+    private fun shouldIgnoreThisEvent(detectedActivities: ArrayList<DetectedActivity>): Boolean {
+        if (detectedActivities.size <= 0)
+            throw IllegalStateException("Detected activity list must have at least one item.")
+        if (detectedActivities[0].confidence < ReminderConfig.CONFIDENCE_THRESHOLD) return true
+
+        return when (detectedActivities[0].type) {
+            DetectedActivity.STILL -> false
+            DetectedActivity.ON_FOOT -> false
+            DetectedActivity.WALKING -> false
+            DetectedActivity.ON_BICYCLE -> false
+            DetectedActivity.IN_VEHICLE -> false
+            else -> true
+        }
+    }
+
+    private fun onUserMoving(repo: UserActivityRepo) {
         Timber.d("User is MOVING.")
 
-        //Schedule the next job after 1 hour
+        //Push the notification back to 1 hour
         ReminderScheduler.scheduleNextReminder()
 
-        launch {
-            UserActivityRepoImpl().insertNewAndTerminatePreviousActivity(UserActivity
-                            .createLocalUserActivity(UserActivityType.MOVING))
-        }
+        //Add the new value to database.
+        repo.insertNewAndTerminatePreviousActivity(UserActivity
+                .createLocalUserActivity(UserActivityType.MOVING))
     }
 
-    private fun onUserSitting() {
+    private fun onUserSitting(repo: UserActivityRepo) {
         Timber.d("User is SITTING.")
 
         //Add the new value to database.
-        launch {
-            UserActivityRepoImpl().insertNewAndTerminatePreviousActivity(UserActivity
-                            .createLocalUserActivity(UserActivityType.SITTING))
-        }
+        repo.insertNewAndTerminatePreviousActivity(UserActivity
+                .createLocalUserActivity(UserActivityType.SITTING))
     }
 }

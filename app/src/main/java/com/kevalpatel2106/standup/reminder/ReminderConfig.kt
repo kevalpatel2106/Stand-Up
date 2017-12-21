@@ -36,4 +36,6 @@ internal object ReminderConfig {
      * Broadcast action when the activity update available.
      */
     internal const val DETECTION_BROADCAST_ACTION = "com.kevalpatel2106.standup.reminder.activityUpdate"
+
+    internal const val CONFIDENCE_THRESHOLD = 30
 }

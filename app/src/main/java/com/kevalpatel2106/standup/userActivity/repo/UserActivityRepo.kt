@@ -19,4 +19,5 @@ interface UserActivityRepo {
 
     fun insert(userActivity: UserActivity): Flowable<Long>
 
+    fun getTodayEvents(): Flowable<List<UserActivity>>
 }
