@@ -56,12 +56,12 @@
             android:drawableStart="@drawable/ic_sand_clock"
             android:drawableTint="@android:color/darker_gray"
             android:gravity="center_vertical"
-            android:text="10:12am - 7:30pm"
             app:layout_constraintEnd_toStartOf="@+id/guideline9"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_efficiency_card_pie_chart"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"
+            tools:text="10:12am - 7:30pm" />
 
         <com.kevalpatel2106.base.view.BaseTextView
             android:id="@+id/total_time_tv"
@@ -73,14 +73,14 @@
             android:drawableStart="@drawable/ic_clock_white"
             android:drawableTint="@android:color/darker_gray"
             android:gravity="center_vertical"
-            android:text="7h 12m"
             app:layout_constraintBottom_toBottomOf="@+id/start_end_time_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline9"
             app:layout_constraintTop_toTopOf="@+id/start_end_time_tv"
             app:layout_constraintVertical_bias="1.0"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"
+            tools:text="7h 12m" />
 
         <com.kevalpatel2106.base.view.BaseTextView
             android:id="@+id/total_standing_time_tv"
@@ -93,12 +93,12 @@
             android:drawableStart="@drawable/ic_man_standing"
             android:drawableTint="@android:color/darker_gray"
             android:gravity="center_vertical"
-            android:text="7h 12m"
             app:layout_constraintBottom_toBottomOf="@+id/total_sitting_time_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline9"
             app:layout_constraintTop_toTopOf="@+id/total_sitting_time_tv"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"
+            tools:text="7h 12m" />
 
         <com.kevalpatel2106.base.view.BaseTextView
             android:id="@+id/total_sitting_time_tv"
@@ -113,11 +113,11 @@
             android:drawableStart="@drawable/ic_sitting"
             android:drawableTint="@android:color/darker_gray"
             android:gravity="center_vertical"
-            android:text="7h 12m"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/start_end_time_tv"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"
+            tools:text="7h 12m" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

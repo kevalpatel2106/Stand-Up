@@ -1,6 +1,8 @@
 package com.kevalpatel2106.standup.dashboard
 
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -53,27 +55,34 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO Remove this
-        UserActivityRepoImpl().getTodayEvents().subscribe(object : FlowableSubscriber<List<UserActivity>> {
-            override fun onError(t: Throwable?) {
-                Timber.d("Error occurred.")
-            }
-
-            override fun onNext(t: List<UserActivity>?) {
-                Timber.d("onNext")
-                Timber.d(t?.size.toString())
-            }
-
-            override fun onSubscribe(s: Subscription) {
-            }
-
-            override fun onComplete() {
-            }
-
-        })
-
         setEfficiencyCard()
         setTimelineCard()
+
+        val model = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        model.sittingPercent.observe(this, Observer<Float> {
+            it?.let {
+                setPieChartData(sittingDurationPercent = it,
+                        standingDurationPercent = model.standingPercent.value ?: 0F)
+            }
+        })
+        model.standingPercent.observe(this, Observer<Float> {
+            it?.let {
+                setPieChartData(sittingDurationPercent = model.sittingPercent.value ?: 0F,
+                        standingDurationPercent = it)
+            }
+        })
+        model.trackedDuration.observe(this, Observer<String> {
+            it?.let { total_time_tv.text = it }
+        })
+        model.trackedTime.observe(this, Observer<String> {
+            it?.let { start_end_time_tv.text = it }
+        })
+        model.standingTime.observe(this, Observer<String> {
+            it?.let { total_standing_time_tv.text = it }
+        })
+        model.sittingTime.observe(this, Observer<String> {
+            it?.let { total_sitting_time_tv.text = it }
+        })
     }
 
     /**
@@ -110,11 +119,13 @@ class DashboardFragment : Fragment() {
         l.setDrawInside(false)
         l.textColor = Color.WHITE
         l.textSize = ViewUtils.toPx(context!!, 5).toFloat()
+    }
 
+    private fun setPieChartData(sittingDurationPercent: Float, standingDurationPercent: Float) {
         //Prepare the values in the pie chart.
         val entries = ArrayList<PieEntry>(2)
-        entries.add(PieEntry(69F /*TODO Set real value*/, "Sitting"))   //Sitting time percentage
-        entries.add(PieEntry(31F /*TODO Set real value*/, "Standing"))  //Standing time percentage
+        entries.add(PieEntry(sittingDurationPercent, "Sitting"))   //Sitting time percentage
+        entries.add(PieEntry(standingDurationPercent, "Standing"))  //Standing time percentage
 
         //Prepare the colors for each segment in the pie chart.
         val colors = ArrayList<Int>(2)

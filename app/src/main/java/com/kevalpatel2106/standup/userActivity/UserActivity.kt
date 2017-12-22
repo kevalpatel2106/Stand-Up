@@ -1,8 +1,10 @@
 package com.kevalpatel2106.standup.userActivity
 
+import android.annotation.SuppressLint
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.annotations.Model
 import timber.log.Timber
 
@@ -34,6 +36,26 @@ data class UserActivity(
     @ColumnInfo(name = ID)
     var localId: Long = 0
 
+    val userActivityType: UserActivityType
+        @SuppressLint("VisibleForTests")
+        get() = getActivityType(type)
+
+
+    @VisibleForTesting
+    internal fun getActivityType(type: String): UserActivityType {
+
+        return when (type) {
+            UserActivityType.SITTING.name.toLowerCase() -> UserActivityType.SITTING
+            UserActivityType.MOVING.name.toLowerCase() -> UserActivityType.MOVING
+            UserActivityType.SLEEPING.name.toLowerCase() -> UserActivityType.SLEEPING
+            else -> {/*This should never happen*/
+                Timber.e("Invalid user activity type ->".plus(type))
+                UserActivityType.SLEEPING
+            }
+        }
+    }
+
+
     companion object {
         @JvmStatic
         fun createLocalUserActivity(type: UserActivityType) = UserActivity(
@@ -42,20 +64,6 @@ data class UserActivity(
                 type = type.name.toLowerCase(),
                 isSynced = false)
 
-
-        @JvmStatic
-        fun getActivityType(type: String): UserActivityType {
-
-            return when (type) {
-                UserActivityType.SITTING.name.toLowerCase() -> UserActivityType.SITTING
-                UserActivityType.MOVING.name.toLowerCase() -> UserActivityType.MOVING
-                UserActivityType.SLEEPING.name.toLowerCase() -> UserActivityType.SLEEPING
-                else -> {/*This should never happen*/
-                    Timber.e("Invalid user activity type ->".plus(type))
-                    UserActivityType.SLEEPING
-                }
-            }
-        }
 
         /**
          * Name of the table. This is the primary key.

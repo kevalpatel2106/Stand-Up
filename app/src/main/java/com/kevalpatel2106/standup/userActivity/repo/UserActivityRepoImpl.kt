@@ -19,9 +19,9 @@ class UserActivityRepoImpl : UserActivityRepo {
     override fun getTodayEvents(): Flowable<List<UserActivity>> {
         val today12am = Calendar.getInstance()
         today12am.set(Calendar.MINUTE, 0)
-        today12am.set(Calendar.HOUR, 0)
         today12am.set(Calendar.SECOND, 0)
         today12am.set(Calendar.MILLISECOND, 0)
+        today12am.set(Calendar.HOUR_OF_DAY, 0)
 
         return StandUpDb.getDb()
                 .userActivityDao()
