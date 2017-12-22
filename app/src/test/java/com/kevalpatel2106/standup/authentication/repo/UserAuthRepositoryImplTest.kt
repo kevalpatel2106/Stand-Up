@@ -25,7 +25,7 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class UserAuthRepositoryImplTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get(".").toAbsolutePath().toString())
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
 
     private val mockServerManager = MockServerManager()
     private lateinit var userAuthRepositoryImpl: UserAuthRepositoryImpl

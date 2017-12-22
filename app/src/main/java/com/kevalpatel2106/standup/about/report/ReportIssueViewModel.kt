@@ -45,13 +45,13 @@ internal class ReportIssueViewModel : BaseViewModel() {
 
     fun reportIssue(title: String, message: String) {
         //Check title
-        if (!Validator.isValidTitle(title)) {
+        if (!Validator.isValidIssueTitle(title)) {
             errorMessage.value = ErrorMessage(R.string.error_invalid_issue_title)
             return
         }
 
         //Check description
-        if (!Validator.isValidDescription(message)) {
+        if (!Validator.isValidIssueDescription(message)) {
             errorMessage.value = ErrorMessage(R.string.error_invalid_issue_description)
             return
         }

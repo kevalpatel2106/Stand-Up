@@ -1,6 +1,7 @@
-package com.kevalpatel2106.utils
+package com.kevalpatel2106.utils.utilsTest
 
 import android.os.Build
+import com.kevalpatel2106.utils.Utils
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,20 +14,6 @@ import org.junit.runners.JUnit4
  */
 @RunWith(JUnit4::class)
 class UtilsTest {
-
-    @Test
-    @Throws(Exception::class)
-    fun convertToNano() {
-        val timeMills = System.currentTimeMillis()
-        assertTrue(Utils.convertToNano(timeMills) == timeMills * 1000000)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun convertToMilli() {
-        val timeNano = System.currentTimeMillis() * 1000000
-        assertTrue(Utils.convertToMilli(timeNano) == timeNano / 1000000)
-    }
 
     /**
      * Test for [Utils.getDeviceName].

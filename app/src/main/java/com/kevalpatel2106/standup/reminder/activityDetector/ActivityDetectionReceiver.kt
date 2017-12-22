@@ -1,5 +1,6 @@
 package com.kevalpatel2106.standup.reminder.activityDetector
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,6 +10,7 @@ import com.google.android.gms.location.DetectedActivity
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
 import com.kevalpatel2106.standup.userActivity.UserActivity
+import com.kevalpatel2106.standup.userActivity.UserActivityHelper
 import com.kevalpatel2106.standup.userActivity.UserActivityType
 import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepoImpl
@@ -40,6 +42,7 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
     @VisibleForTesting
     internal var mUserActivityRepo: UserActivityRepo = UserActivityRepoImpl()
 
+    @SuppressLint("VisibleForTests")
     override fun onReceive(context: Context, intent: Intent) {
         this.context = context
         val result = ActivityRecognitionResult.extractResult(intent)
@@ -49,10 +52,6 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         // 0 and 100.
         val detectedActivities = result.probableActivities as ArrayList
         Timber.d("Detected Activities: ".plus(detectedActivities.toString()))
-
-        //Sort the array by confidence level
-        //Descending
-        Collections.sort(detectedActivities) { p0, p1 -> p1.confidence - p0.confidence }
 
         if (shouldIgnoreThisEvent(detectedActivities)) {
             //Not enough confidence
@@ -69,37 +68,6 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
-        if (detectedActivities.size <= 0)
-            throw IllegalStateException("Detected activity list must have at least one item.")
-
-        //Activity detected.
-        return when (detectedActivities[0].type) {
-            DetectedActivity.STILL -> true
-            DetectedActivity.IN_VEHICLE -> true
-            DetectedActivity.ON_BICYCLE or DetectedActivity.ON_FOOT or DetectedActivity.WALKING -> false
-            DetectedActivity.UNKNOWN or DetectedActivity.TILTING -> {
-                throw IllegalStateException("Tilting or unknown activity should not come this far.")
-            }
-            else -> false
-        }
-    }
-
-    private fun shouldIgnoreThisEvent(detectedActivities: ArrayList<DetectedActivity>): Boolean {
-        if (detectedActivities.size <= 0)
-            throw IllegalStateException("Detected activity list must have at least one item.")
-        if (detectedActivities[0].confidence < ReminderConfig.CONFIDENCE_THRESHOLD) return true
-
-        return when (detectedActivities[0].type) {
-            DetectedActivity.STILL -> false
-            DetectedActivity.ON_FOOT -> false
-            DetectedActivity.WALKING -> false
-            DetectedActivity.ON_BICYCLE -> false
-            DetectedActivity.IN_VEHICLE -> false
-            else -> true
-        }
-    }
-
     private fun onUserMoving(repo: UserActivityRepo) {
         Timber.d("User is MOVING.")
 
@@ -107,7 +75,7 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         ReminderScheduler.scheduleNextReminder()
 
         //Add the new value to database.
-        repo.insertNewAndTerminatePreviousActivity(UserActivity
+        repo.insertNewAndTerminatePreviousActivity(UserActivityHelper
                 .createLocalUserActivity(UserActivityType.MOVING))
     }
 
@@ -115,7 +83,72 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         Timber.d("User is SITTING.")
 
         //Add the new value to database.
-        repo.insertNewAndTerminatePreviousActivity(UserActivity
+        repo.insertNewAndTerminatePreviousActivity(UserActivityHelper
                 .createLocalUserActivity(UserActivityType.SITTING))
+    }
+
+    companion object {
+
+        @JvmStatic
+        @VisibleForTesting
+        internal fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
+            if (detectedActivities.size <= 0)
+                throw IllegalStateException("Detected activity list must have at least one item.")
+
+            sortDescendingByConfidence(detectedActivities)
+
+            //Activity detected.
+            return when (detectedActivities[0].type) {
+                DetectedActivity.STILL -> true
+                DetectedActivity.IN_VEHICLE -> true
+                DetectedActivity.ON_BICYCLE or DetectedActivity.ON_FOOT or DetectedActivity.WALKING -> false
+                DetectedActivity.UNKNOWN or DetectedActivity.TILTING -> {
+                    throw IllegalStateException("Tilting or unknown activity should not come this far.")
+                }
+                else -> false
+            }
+        }
+
+        @JvmStatic
+        @VisibleForTesting
+        internal fun shouldIgnoreThisEvent(detectedActivities: ArrayList<DetectedActivity>): Boolean {
+            if (detectedActivities.size <= 0)
+                throw IllegalStateException("Detected activity list must have at least one item.")
+
+            sortDescendingByConfidence(detectedActivities)
+
+            if (detectedActivities[0].confidence < ReminderConfig.CONFIDENCE_THRESHOLD) return true
+
+            return when (detectedActivities[0].type) {
+                DetectedActivity.STILL -> false
+                DetectedActivity.ON_FOOT -> false
+                DetectedActivity.WALKING -> false
+                DetectedActivity.ON_BICYCLE -> false
+                DetectedActivity.IN_VEHICLE -> false
+                else -> true
+            }
+        }
+
+        @VisibleForTesting
+        @JvmStatic
+        internal fun sortDescendingByConfidence(detectedActivities: ArrayList<DetectedActivity>): ArrayList<DetectedActivity> {
+            //Sort the array by confidence level
+            //Descending
+            Collections.sort(detectedActivities) { p0, p1 ->
+                val diff = p1.confidence - p0.confidence
+
+                if (diff == 0) {
+                    if (p1.type == DetectedActivity.STILL || p1.type == DetectedActivity.IN_VEHICLE) {
+                        return@sort 1
+                    } else {
+                        return@sort -1
+                    }
+                } else {
+                    return@sort diff
+                }
+            }
+
+            return detectedActivities
+        }
     }
 }

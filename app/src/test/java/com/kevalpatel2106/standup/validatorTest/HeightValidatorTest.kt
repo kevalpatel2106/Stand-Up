@@ -1,5 +1,6 @@
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.validatorTest
 
+import com.kevalpatel2106.standup.Validator
 import com.kevalpatel2106.standup.constants.AppConfig
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -12,7 +13,7 @@ import org.junit.runners.Parameterized
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @RunWith(Parameterized::class)
-class WeightValidatorTest(private val input: Float, private val expected: Boolean) {
+class HeightValidatorTest(private val input: Float, private val expected: Boolean) {
 
     companion object {
 
@@ -22,17 +23,17 @@ class WeightValidatorTest(private val input: Float, private val expected: Boolea
             return arrayListOf(
                     arrayOf(0F, false),
                     arrayOf(0.1F, false),
-                    arrayOf(AppConfig.MIN_WEIGHT, true),
-                    arrayOf(AppConfig.MAX_WEIGHT, true),
-                    arrayOf((AppConfig.MAX_WEIGHT + AppConfig.MIN_WEIGHT) / 2, true),
-                    arrayOf(AppConfig.MIN_WEIGHT - 2F, false),
-                    arrayOf(AppConfig.MAX_WEIGHT + 2F, false)
+                    arrayOf(AppConfig.MIN_HEIGHT, true),
+                    arrayOf(AppConfig.MAX_HEIGHT, true),
+                    arrayOf((AppConfig.MAX_HEIGHT + AppConfig.MIN_HEIGHT) / 2, true),
+                    arrayOf(AppConfig.MIN_HEIGHT - 2F, false),
+                    arrayOf(AppConfig.MAX_HEIGHT + 2F, false)
             )
         }
     }
 
     @Test
     fun testEmail() {
-        assertEquals(expected, Validator.isValidWeight(input))
+        assertEquals(expected, Validator.isValidHeight(input))
     }
 }

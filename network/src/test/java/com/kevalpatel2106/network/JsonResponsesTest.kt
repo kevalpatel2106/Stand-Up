@@ -18,7 +18,7 @@ import java.nio.file.Paths
 
 @RunWith(JUnit4::class)
 class JsonResponsesTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", Paths.get(".").toAbsolutePath().toString())
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", Paths.get("").toAbsolutePath().toString())
 
     companion object {
 

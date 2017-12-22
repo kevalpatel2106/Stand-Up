@@ -9,7 +9,7 @@ import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import java.util.concurrent.TimeUnit
+import java.math.BigDecimal
 
 
 /**
@@ -35,11 +35,6 @@ object Utils {
      */
     fun getDeviceName(): String = String.format("%s-%s", Build.MANUFACTURER, Build.MODEL)
 
-
-    fun convertToNano(timeInMills: Long): Long = TimeUnit.MILLISECONDS.toNanos(timeInMills)
-
-    fun convertToMilli(timeInNano: Long): Long = TimeUnit.NANOSECONDS.toMillis(timeInNano)
-
     fun getApplicationName(packageName: String, packageManager: PackageManager): String? {
         val ai: ApplicationInfo? = try {
             packageManager.getApplicationInfo(packageName, 0)
@@ -53,5 +48,21 @@ object Utils {
         val emailIntent = Intent(Intent.ACTION_SENDTO)
         emailIntent.data = Uri.parse("mailto:")
         return packageManager.queryIntentActivities(emailIntent, 0)
+    }
+
+    /**
+     * Calculates the percentage from the [value] and the [total] value. Both [value] must
+     * be non negative numbers. [total] must be > 0.
+     */
+    fun calculatePercent(value: Long, total: Long): Double {
+        if (value < 0) throw IllegalArgumentException("Values cannot be negative.")
+        if (total <= 0) throw IllegalArgumentException("Total cannot be negative or zero.")
+
+        val result = (value.toDouble() / total.toDouble()) * 100
+        return convertToTwoDecimal(result)
+    }
+
+    fun convertToTwoDecimal(value: Double): Double {
+        return BigDecimal.valueOf(value).setScale(2, BigDecimal.ROUND_HALF_UP).toDouble()
     }
 }

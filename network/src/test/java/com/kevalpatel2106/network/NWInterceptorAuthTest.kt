@@ -29,7 +29,7 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class NWInterceptorAuthTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/network/src/test/java/com/kevalpatel2106/network/responses", Paths.get(".").toAbsolutePath().toString())
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", Paths.get("").toAbsolutePath().toString())
 
     private val TEST_PREF_STRING = "TestValue"
     private val TEST_PREF_LONG = 100L

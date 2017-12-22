@@ -36,6 +36,7 @@ import org.junit.runner.RunWith
 class SharedPrefsProviderTest : BaseTestClass() {
 
     private var mSharedPreferences: SharedPreferences? = null
+    private val TEST_KEY = "test_key"
 
     @Before
     @Throws(Exception::class)
@@ -142,11 +143,5 @@ class SharedPrefsProviderTest : BaseTestClass() {
         assertTrue(SharedPrefsProvider.getIntFromPreference(TEST_KEY) == testVal)
     }
 
-    override fun getActivity(): Activity? {
-        return null
-    }
-
-    companion object {
-        private val TEST_KEY = "test_key"
-    }
+    override fun getActivity(): Activity? = null
 }

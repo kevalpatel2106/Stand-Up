@@ -1,8 +1,6 @@
 package com.kevalpatel2106.network
 
 import android.content.Context
-import com.facebook.stetho.okhttp3.StethoInterceptor
-import okhttp3.logging.HttpLoggingInterceptor
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,25 +20,6 @@ class OkHttpClientTest {
     @Throws(IOException::class)
     fun checkOkHttpClient() {
         val okHttpClient = ApiProvider.getOkHttpClient(Mockito.mock(Context::class.java))
-
-        if (BuildConfig.DEBUG) {
-            /**
-             * For Debug there will be three interceptors.
-             *
-             * 1. [HttpLoggingInterceptor]
-             * 2. [StethoInterceptor]
-             * 3. [NWInterceptor]
-             */
-            Assert.assertEquals(okHttpClient.interceptors().size, 3)
-        } else {
-            /**
-             * For Release there will be three interceptors.
-             *
-             * 1. [NWInterceptor]
-             */
-            Assert.assertEquals(okHttpClient.interceptors().size, 2)
-        }
-
         Assert.assertEquals(okHttpClient.readTimeoutMillis().toLong(), NetworkConfig.READ_TIMEOUT * 60 * 1000)
         Assert.assertEquals(okHttpClient.writeTimeoutMillis().toLong(), NetworkConfig.WRITE_TIMEOUT * 60 * 1000)
         Assert.assertEquals(okHttpClient.connectTimeoutMillis().toLong(), NetworkConfig.CONNECTION_TIMEOUT * 60 * 1000)

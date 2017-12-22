@@ -24,7 +24,7 @@ object SUUtils {
                 .launchUrl(context, Uri.parse(url))
     }
 
-    fun onOpenEmail(context: Activity) {
+    fun openEmailDialog(context: Activity) {
         val bottomSheet = BottomSheet.Builder(context).title("Open mail")
 
         //Get the list of email clients.

@@ -57,10 +57,6 @@ internal object Validator {
                 && name.length <= AppConfig.MAX_NAME
     }
 
-    fun isValidDeviceId(deviceId: String?) = !deviceId.isNullOrEmpty()
-
-    fun isValidFcmId(fcmId: String?) = !fcmId.isNullOrEmpty()
-
     /**
      * Check weather [height] is valid or not. Valid [height] must be [AppConfig.MIN_HEIGHT] and
      * [AppConfig.MAX_HEIGHT].
@@ -77,7 +73,11 @@ internal object Validator {
      */
     fun isValidWeight(weight: Float) = weight >= AppConfig.MIN_WEIGHT && weight <= AppConfig.MAX_WEIGHT
 
-    fun isValidTitle(title: String?) = !title.isNullOrEmpty()
+    fun isValidDeviceId(deviceId: String?) = !deviceId.isNullOrEmpty()
 
-    fun isValidDescription(description: String?) = !description.isNullOrEmpty()
+    fun isValidFcmId(fcmId: String?) = !fcmId.isNullOrEmpty()
+
+    fun isValidIssueTitle(title: String?) = !title.isNullOrEmpty()
+
+    fun isValidIssueDescription(description: String?) = !description.isNullOrEmpty()
 }

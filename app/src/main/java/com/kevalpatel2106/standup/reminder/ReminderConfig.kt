@@ -18,11 +18,6 @@ internal object ReminderConfig {
     internal const val SCHEDULER_JOB_TAG = "tag"
 
     /**
-     * Shared preference key to maintain the state of the activity detection.
-     */
-    internal const val KEY_IS_DETECTION_ENABLE = "key_is_detection_enable"
-
-    /**
      * For internal use only.
      */
     internal const val ENABLE_ACTIVITY_DETECTION = true

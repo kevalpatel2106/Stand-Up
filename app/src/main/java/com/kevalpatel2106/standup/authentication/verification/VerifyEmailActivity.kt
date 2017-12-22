@@ -89,6 +89,6 @@ class VerifyEmailActivity : BaseActivity() {
 
     @OnClick(R.id.verify_btn_open_mail_btn)
     fun onOpenEmail() {
-        SUUtils.onOpenEmail(this@VerifyEmailActivity)
+        SUUtils.openEmailDialog(this@VerifyEmailActivity)
     }
 }

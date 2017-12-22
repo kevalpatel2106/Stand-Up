@@ -1,10 +1,11 @@
 package com.kevalpatel2106.utils
 
-import com.kevalpatel2106.testutils.BaseTestClass
-import org.junit.Assert.*
 import android.app.Activity
 import android.provider.Settings
 import android.support.test.InstrumentationRegistry
+import com.kevalpatel2106.testutils.BaseTestClass
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 
@@ -18,7 +19,7 @@ class UtilsUiTest : BaseTestClass() {
 
     @Test
     @Throws(Exception::class)
-    fun getDeviceId() {
+    fun testDeviceId() {
         assertNotNull(Utils.getDeviceId(InstrumentationRegistry.getTargetContext()))
         assertEquals(Utils.getDeviceId(InstrumentationRegistry.getTargetContext()),
                 Settings.Secure.getString(InstrumentationRegistry.getContext().contentResolver,

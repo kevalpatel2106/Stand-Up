@@ -6,8 +6,7 @@ package com.kevalpatel2106.standup.userActivity
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 enum class UserActivityType {
-
     SITTING,
     MOVING,
-    SLEEPING
+    NOT_TRACKED
 }

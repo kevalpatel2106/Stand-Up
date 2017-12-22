@@ -8,8 +8,11 @@ import com.kevalpatel2106.standup.userActivity.UserActivity
 import com.kevalpatel2106.standup.userActivity.UserActivityType
 import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepoImpl
+import com.kevalpatel2106.utils.TimeUtils
+import com.kevalpatel2106.utils.Utils
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Keval on 21/12/17.
@@ -74,19 +77,26 @@ class DashboardViewModel : BaseViewModel {
             }
             todayActivities.value!!.addAll(it)
 
+            //Remove the last incomplete event
+            val list: List<UserActivity> = if (it.last().eventEndTimeMills == 0L) {
+                it.subList(0, it.lastIndex - 1)
+            } else {
+                it
+            }
+
             //Calculate total time
-            val startTime = simpleDateFormatter.format(it.first().eventStartTimeMills)
-            val endTime = simpleDateFormatter.format(it.last().eventEndTimeMills)
+            val startTime = simpleDateFormatter.format(list.first().eventStartTimeMills)
+            val endTime = simpleDateFormatter.format(list.last().eventEndTimeMills)
             trackedTime.value = startTime.plus("-").plus(endTime)
 
             //Calculate duration
-            val durationMills = it.last().eventEndTimeMills - it.first().eventStartTimeMills
-            trackedDuration.value = convertToHourMinutes(durationMills)
+            val durationMills = list.last().eventEndTimeMills - list.first().eventStartTimeMills
+            trackedDuration.value = TimeUtils.convertToHourMinutes(durationMills)
 
             // Calculate standing and sitting time.
             var standingMills = 0L
             var sittingMills = 0L
-            it.forEach({
+            list.forEach({
                 when (it.userActivityType) {
                     UserActivityType.SITTING -> {
                         sittingMills += (it.eventEndTimeMills - it.eventStartTimeMills)
@@ -94,38 +104,19 @@ class DashboardViewModel : BaseViewModel {
                     UserActivityType.MOVING -> {
                         standingMills += (it.eventEndTimeMills - it.eventStartTimeMills)
                     }
-                    UserActivityType.SLEEPING -> {
+                    UserActivityType.NOT_TRACKED -> {
                         //NO OP
                     }
                 }
             })
 
-            sittingTime.value = convertToHourMinutes(sittingMills)
-            sittingPercent.value = calculatePercent(sittingMills, durationMills)
-            standingTime.value = convertToHourMinutes(standingMills)
-            standingPercent.value = calculatePercent(standingMills, durationMills)
+            sittingTime.value = TimeUtils.convertToHourMinutes(sittingMills)
+            sittingPercent.value = Utils.calculatePercent(sittingMills, durationMills).toFloat()
+            standingTime.value = TimeUtils.convertToHourMinutes(standingMills)
+            standingPercent.value = Utils.calculatePercent(standingMills, durationMills).toFloat()
         }, {
             //Error message
             errorMessage.value = ErrorMessage(it.message)
         })
-    }
-
-
-    /**
-     * Converts [timeMills] into (hour)h (minutes)m format. Here hour will be in 24 hours format.
-     */
-    @VisibleForTesting
-    internal fun convertToHourMinutes(timeMills: Long): String {
-        val hours = timeMills % 3600000
-        val mins = (timeMills - (hours * 3600000)) / 60000
-        return "${hours}h ${mins}m"
-    }
-
-    /**
-     * Converts [timeMills] into (hour)h (minutes)m format. Here hour will be in 24 hours format.
-     */
-    @VisibleForTesting
-    internal fun calculatePercent(value: Long, total: Long): Float {
-        return ((value / total) * 100).toFloat()
     }
 }

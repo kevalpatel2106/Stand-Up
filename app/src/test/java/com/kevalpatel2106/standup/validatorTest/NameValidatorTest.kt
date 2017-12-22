@@ -1,5 +1,6 @@
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.validatorTest
 
+import com.kevalpatel2106.standup.Validator
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,7 +12,7 @@ import org.junit.runners.Parameterized
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @RunWith(Parameterized::class)
-class EmailValidatorTest(private val input: String?, private val expected: Boolean) {
+class NameValidatorTest(private val input: String?, private val expected: Boolean) {
 
     companion object {
 
@@ -20,19 +21,18 @@ class EmailValidatorTest(private val input: String?, private val expected: Boole
         fun data(): ArrayList<Array<out Any?>> {
             return arrayListOf(
                     arrayOf(null, false),
-                    arrayOf("examplegmail.com", false),
-                    arrayOf("example@g.com", false),
-                    arrayOf("example@gmail.co.m", false),
-                    arrayOf("example@gmail.c", false),
-                    arrayOf("example@gmail.com", true),
+                    arrayOf("123456", false),
+                    arrayOf("123456789", true),
+                    arrayOf("123456789012345678901234567890", true),
+                    arrayOf("1234567890123456789012345678901", false),
+                    arrayOf("Test user", true),
                     arrayOf("", false)
             )
         }
     }
 
-
     @Test
     fun testEmail() {
-        assertEquals(expected, Validator.isValidEmail(input))
+        assertEquals(expected, Validator.isValidName(input))
     }
 }

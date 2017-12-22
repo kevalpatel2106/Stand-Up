@@ -135,6 +135,6 @@ internal class AboutViewModel : BaseViewModel() {
     }
 
     fun handleAuthorEmail(activity: Activity) {
-        SUUtils.onOpenEmail(activity)
+        SUUtils.openEmailDialog(activity)
     }
 }

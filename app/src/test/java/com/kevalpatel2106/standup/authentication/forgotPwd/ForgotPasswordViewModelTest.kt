@@ -17,7 +17,7 @@ import java.nio.file.Paths
  * @author 'https://github.com/kevalpatel2106'
  */
 class ForgotPasswordViewModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get(".").toAbsolutePath().toString())
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
 
     @Rule
     @JvmField

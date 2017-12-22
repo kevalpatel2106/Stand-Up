@@ -20,14 +20,9 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
 import com.kevalpatel2106.standup.timelineview.TimeLineLength
-import com.kevalpatel2106.standup.userActivity.UserActivity
-import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepoImpl
 import com.kevalpatel2106.utils.ViewUtils
-import io.reactivex.FlowableSubscriber
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
 import kotlinx.android.synthetic.main.layout_home_timeline_card.*
-import org.reactivestreams.Subscription
-import timber.log.Timber
 
 
 /**
