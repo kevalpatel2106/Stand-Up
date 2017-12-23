@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/spacing_small" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/spacing_small" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/spacing_nano" />
+
+    <com.kevalpatel2106.base.view.BaseTextView
+        android:id="@+id/dairy_row_date_tv"
+        style="@style/LargeText.Primary"
+        android:layout_width="@dimen/spacing_xxlarge"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintStart_toEndOf="@id/guideline11"
+        app:layout_constraintTop_toTopOf="@id/guideline13"
+        tools:text="23" />
+
+    <com.kevalpatel2106.base.view.BaseTextView
+        android:id="@+id/dairy_row_month_tv"
+        style="@style/SmallText.Primary"
+        android:layout_width="@dimen/spacing_xxlarge"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="@dimen/spacing_nano"
+        android:textAllCaps="true"
+        app:layout_constraintStart_toStartOf="@+id/dairy_row_date_tv"
+        app:layout_constraintTop_toBottomOf="@+id/dairy_row_date_tv"
+        tools:text="OCT" />
+
+    <com.kevalpatel2106.base.view.BaseTextView
+        android:id="@+id/dairy_row_day_of_week_tv"
+        style="@style/NanoText.Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_micro"
+        app:layout_constraintBottom_toTopOf="@+id/dairy_row_sitting_time_tv"
+        app:layout_constraintStart_toEndOf="@+id/dairy_row_date_tv"
+        app:layout_constraintTop_toTopOf="@+id/dairy_row_date_tv"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        tools:text="Tuesday" />
+
+    <com.kevalpatel2106.base.view.BaseTextView
+        android:id="@+id/dairy_row_sitting_time_tv"
+        style="@style/MediumText.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_pico"
+        android:drawableStart="@drawable/ic_sitting"
+        app:layout_constraintBottom_toBottomOf="@+id/dairy_row_month_tv"
+        app:layout_constraintStart_toStartOf="@+id/dairy_row_day_of_week_tv"
+        app:layout_constraintTop_toBottomOf="@+id/dairy_row_day_of_week_tv"
+        tools:text="7 h 20 m" />
+
+    <com.kevalpatel2106.base.view.BaseTextView
+        android:id="@+id/dairy_row_standing_time_tv"
+        style="@style/MediumText.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_micro"
+        android:layout_marginStart="@dimen/spacing_micro"
+        android:drawableStart="@drawable/ic_man_standing"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dairy_row_sitting_time_tv"
+        app:layout_constraintEnd_toStartOf="@+id/dairy_row_sitting_percent_tv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/dairy_row_sitting_time_tv"
+        tools:text="5 h 10 m" />
+
+    <com.kevalpatel2106.base.view.BaseTextView
+        android:id="@+id/dairy_row_sitting_percent_tv"
+        style="@style/MediumText.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/dairy_row_month_tv"
+        app:layout_constraintEnd_toStartOf="@+id/guideline12"
+        app:layout_constraintTop_toTopOf="@+id/guideline13"
+        tools:text="93%" />
+
+    <View
+        android:id="@+id/dairy_row_divider"
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:layout_marginTop="@dimen/spacing_nano"
+        android:background="@color/divider"
+        app:layout_constraintEnd_toStartOf="@id/guideline12"
+        app:layout_constraintStart_toStartOf="@id/dairy_row_sitting_time_tv"
+        app:layout_constraintTop_toBottomOf="@id/dairy_row_month_tv" />
+
+</android.support.constraint.ConstraintLayout>

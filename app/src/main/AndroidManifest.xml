@@ -47,7 +47,6 @@
                 <data
                     android:host="@string/api_host"
                     android:scheme="https" />
-
                 <data
                     android:host="@string/invitation_deep_link"
                     android:scheme="https"
@@ -114,7 +113,6 @@
             android:theme="@style/AppTheme.NoActionbar.GreenBg"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
-
         <activity
             android:name=".authentication.deviceReg.DeviceRegisterActivity"
             android:resizeableActivity="true"
@@ -147,7 +145,7 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
 
-        <!--Support development screen.-->
+        <!-- Support development screen. -->
         <activity
             android:name=".about.donate.SupportDevelopmentActivity"
             android:configChanges="orientation|screenSize|keyboard"
@@ -155,21 +153,18 @@
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
-
         <activity
             android:name=".about.AboutActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.MaterialAboutActivity"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
-
         <activity
             android:name=".about.report.ReportIssueActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
-
         <activity
             android:name=".settings.SettingsActivity"
             android:resizeableActivity="true"
@@ -223,7 +218,7 @@
             android:name=".authentication.deviceReg.RegisterDeviceService"
             tools:ignore="ExportedService" />
 
-        <!--Job service to fire the remonder notiffications-->
+        <!-- Job service to fire the remonder notiffications -->
         <service
             android:name=".reminder.scheduler.ReminderNotifyService"
             android:exported="false">
@@ -232,6 +227,7 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".diary.detail.DetailActivity"></activity>
     </application>
 
 </manifest>

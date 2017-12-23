@@ -1,13 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.kevalpatel2106.standup.diary.DiaryFragment">
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sleep_diary_view_flipper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kevalpatel2106.standup.diary.DiaryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--0. List-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/sleep_diary_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:listitem="@layout/row_dairy_list_item" />
 
-</FrameLayout>
+    <!--1. Loading-->
+    <include layout="@layout/layout_loader" />
+
+</ViewFlipper>

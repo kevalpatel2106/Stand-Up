@@ -42,7 +42,7 @@ class DashboardViewModel : BaseViewModel {
     /**
      * Private constructor to add the custom [UserActivityRepo] for testing.
      *
-     * @param userActivityRepo Add your own [UserActivityRepo].
+     * @param userActivityRepoImpl Add your own [UserActivityRepo].
      */
     @Suppress("unused")
     @VisibleForTesting

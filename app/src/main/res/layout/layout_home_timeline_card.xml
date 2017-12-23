@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/CardViewStyle"
@@ -18,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5"/>
+            app:layout_constraintGuide_percent="0.5" />
 
         <com.kevalpatel2106.standup.timelineview.TimeLineView
             android:id="@+id/today_time_line"
@@ -26,7 +25,7 @@
             android:layout_height="130dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.kevalpatel2106.base.view.BaseImageView
             android:id="@+id/timeline_stand_label_iv"
@@ -40,7 +39,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/today_time_line"/>
+            app:layout_constraintTop_toBottomOf="@id/today_time_line" />
 
         <com.kevalpatel2106.base.view.BaseImageView
             android:id="@+id/timeline_sit_label_iv"
@@ -54,7 +53,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="@+id/guideline10"
-            app:layout_constraintTop_toBottomOf="@id/today_time_line"/>
+            app:layout_constraintTop_toBottomOf="@id/today_time_line" />
 
         <com.kevalpatel2106.base.view.BaseTextView
             android:id="@+id/timeline_stand_label_tv"
@@ -68,7 +67,7 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline10"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/timeline_stand_label_iv"
-            app:layout_constraintTop_toBottomOf="@+id/today_time_line"/>
+            app:layout_constraintTop_toBottomOf="@+id/today_time_line" />
 
         <com.kevalpatel2106.base.view.BaseTextView
             android:id="@+id/baseTextView2"
@@ -82,7 +81,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/timeline_sit_label_iv"
-            app:layout_constraintTop_toBottomOf="@+id/today_time_line"/>
+            app:layout_constraintTop_toBottomOf="@+id/today_time_line" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
