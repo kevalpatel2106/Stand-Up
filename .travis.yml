@@ -53,7 +53,8 @@ before_script:
   - android list device
 
 script:
-  - ./gradlew test app:assembleDebug --continue --stacktrace --profile --parallel
+  - chmod +x ./scripts/ci-script.sh
+  - bash ./scripts/ci-script.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -65,6 +66,5 @@ after_success:
   - bash ./scripts/upload-artifacts.sh
 
 after_failure:
-  - cd scripts
-  - chmod +x upload-artifacts.sh
-  - bash upload-artifacts.sh
+  - chmod +x ./scripts/upload-artifacts.sh
+  - bash ./scripts/upload-artifacts.sh
