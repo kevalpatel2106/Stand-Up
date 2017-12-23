@@ -49,7 +49,7 @@ ext {
     }
 
     modulePlugins = [
-            'jacoco-android',
+            'com.vanniktech.android.junit.jacoco',
             'kotlin-android',
             'kotlin-android-extensions',
             'com.jakewharton.hugo',
@@ -60,7 +60,7 @@ ext {
 
     gradlePlugins = [
             android       : "com.android.tools.build:gradle:3.0.1",
-            jacoco        : "com.dicedmelon.gradle:jacoco-android:0.1.2",
+            jacoco        : "com.vanniktech:gradle-android-junit-jacoco-plugin:0.11.0",
             dexcount      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2",
             kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:" + kotlinVersion,
             dokka         : "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.15",

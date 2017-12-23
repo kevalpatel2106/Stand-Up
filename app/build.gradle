@@ -95,7 +95,6 @@ android {
     testOptions testOption
     adbOptions adbOption
     dexcount dexcountOptions
-    jacocoAndroidUnitTestReport jacocoAndroidUnitTestReportOptions
 }
 
 dokka dokkaConfig

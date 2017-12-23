@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco-android'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.jakewharton.hugo'
+modulePlugins.each { plugins.apply(it) }
+
 
 android {
     signingConfigs signingConfig
@@ -28,7 +26,6 @@ android {
     dexOptions dexOption
     testOptions testOption
     adbOptions adbOption
-    jacocoAndroidUnitTestReport jacocoAndroidUnitTestReportOptions
 }
 
 dependencies {

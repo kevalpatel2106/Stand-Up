@@ -3,15 +3,36 @@
 #Prepare output folder
 mkdir ./output
 
-mv ./app/build/outputs/apk ./output/
+#project level artifacts
+mv ./reports/profile ./output/profile/
+mv ./build/reports/dependencyCheck ./output/dependencyCheck/
 
-mv ./app/build/outputs/reports ./output/
+#app module data
+mv ./app/build/outputs/apk ./output/app/
+mv ./app/build/outputs/dexcount ./output/app/
+mv ./app/build/reports ./output/app/
 
-mv ./app/build/reports/logs ./output/
+#base module
+mv ./base/build/reports ./output/base/
 
-mv ./build/reports ./output/
+#facebook-auth module
+mv ./base/build/reports ./output/base/
 
-chmod +x ./scripts/dropbox_uploader.sh
+#google-auth module
+mv ./facebook-auth/build/reports ./output/facebook-auth/
+
+#network module
+mv ./network/build/reports ./output/network/
+
+#ruler-view module
+mv ./ruler-view/build/reports ./output/ruler-view/
+
+#timeline-view module
+mv ./timeline-view/build/reports ./output/timeline-view/
+
+#utils module
+mv ./utils/build/reports ./output/utils/
 
 #Upload to artifacts to drop box
+chmod +x ./scripts/dropbox_uploader.sh
 bash ./scripts/dropbox_uploader.sh -p -h upload ./output /Stand-Up/Artifacts/$TRAVIS_BUILD_NUMBER/output
