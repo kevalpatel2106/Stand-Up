@@ -59,9 +59,6 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
-  - chmod +x ./scripts/dependency_check.sh
-  - bash ./scripts/dependency_check.sh
-
   - chmod +x ./scripts/upload-artifacts.sh
   - bash ./scripts/upload-artifacts.sh
 
