@@ -8,7 +8,7 @@ mv ./reports/profile ./output/profile/
 mv ./build/reports/dependencyCheck ./output/dependencyCheck/
 
 #app module data
-mv ./app/build/outputs/apk ./output/app/
+mv ./app/build/outputs/apk ./output/
 mv ./app/build/outputs/dexcount ./output/app/
 mv ./app/build/reports ./output/app/
 
@@ -34,5 +34,6 @@ mv ./timeline-view/build/reports ./output/timeline-view/
 mv ./utils/build/reports ./output/utils/
 
 #Upload to artifacts to drop box
+tar cvf artifacts-$TRAVIS_BUILD_NUMBER-$TRAVIS_EVENT_TYPE.tar output
 chmod +x ./scripts/dropbox_uploader.sh
-bash ./scripts/dropbox_uploader.sh -p -h upload ./output /Stand-Up/Artifacts/$TRAVIS_BUILD_NUMBER/output
+bash ./scripts/dropbox_uploader.sh -p -h upload artifacts-$TRAVIS_BUILD_NUMBER-$TRAVIS_EVENT_TYPE.tar /Stand-Up/Artifacts/
