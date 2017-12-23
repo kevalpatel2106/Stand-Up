@@ -3,8 +3,10 @@ modulePlugins.each { plugins.apply(it) }
 
 android {
     compileSdkVersion buidlConfig.compile
+
     buildToolsVersion buidlConfig.buildToolVersion
     signingConfigs signingConfig
+
     defaultConfig libDefaultConfig
 
     buildTypes {
@@ -19,6 +21,15 @@ android {
             resValue "string", "fb_login_protocol_scheme", FB_LOGIN_PROTOCOL_SCHEME
         }
     }
+
+    compileOptions compileOption
+    packagingOptions packageExcludes
+    lintOptions lintOption
+    aaptOptions aaptOption
+    dexOptions dexOption
+    testOptions testOption
+    adbOptions adbOption
+    jacocoAndroidUnitTestReport jacocoAndroidUnitTestReportOptions
 }
 
 dokka dokkaConfig

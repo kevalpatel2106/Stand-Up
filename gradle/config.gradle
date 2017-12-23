@@ -132,21 +132,15 @@ ext {
     }
 
     testOption = {
-        animationsDisabled true
         unitTests.all {
             // set heap size for the test JVM(s)
             minHeapSize = "1024m"
             maxHeapSize = "1596m"
-            // listen to events in the test execution lifecycle
-            beforeTest { descriptor ->
-                logger.lifecycle("Running test: " + descriptor)
-            }
-            // listen to standard out and standard error of the test JVM(s)
-            onOutput { descriptor, event ->
-                logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message)
-            }
             testLogging {
-                events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+                events 'passed', 'skipped', 'failed'
+            }
+             jacoco {
+                    includeNoLocationClasses = true
             }
         }
     }
@@ -155,5 +149,11 @@ ext {
         experimental {
             coroutines 'enable'
         }
+    }
+
+    jacocoAndroidUnitTestReportOptions = {
+        csv.enabled false
+        html.enabled true
+        xml.enabled true
     }
 }

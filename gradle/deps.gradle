@@ -85,8 +85,6 @@ ext {
             'com.android.support.test.uiautomator:uiautomator-v18:2.1.2',
             'com.squareup.okhttp3:mockwebserver:' + okHttpVersion,
             'org.mockito:mockito-core:' + mockitoVersion,
-            'org.powermock:powermock-module-junit4:' + powerMockVersion,
-            'org.powermock:powermock-api-mockito2:' + powerMockVersion,
     ]
 
     //Support library dependency

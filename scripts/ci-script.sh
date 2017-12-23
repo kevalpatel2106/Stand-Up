@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-./gradlew test app:assembleDebug jacocoTestReport --continue --profile --parallel --daemon
+./gradlew app:assembleDebug jacocoTestReport --continue --profile --daemon --parallel
 
 if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
 

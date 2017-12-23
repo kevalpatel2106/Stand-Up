@@ -43,6 +43,7 @@ android {
     dexOptions dexOption
     testOptions testOption
     adbOptions adbOption
+    jacocoAndroidUnitTestReport jacocoAndroidUnitTestReportOptions
 }
 
 dokka dokkaConfig

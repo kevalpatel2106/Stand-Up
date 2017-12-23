@@ -1,12 +1,12 @@
 # Stand Up
 
-[![Build Status](https://travis-ci.org/kevalpatel2106/Stand-Up.svg?branch=master)](https://travis-ci.org/kevalpatel2106/Stand-Up) [![codecov](https://codecov.io/gh/kevalpatel2106/Stand-Up/branch/master/graph/badge.svg)](https://codecov.io/gh/kevalpatel2106/Stand-Up) [![API](https://img.shields.io/badge/API-21%2B-orange.svg?style=flat)](https://android-arsenal.com/api?level=21) [![GitHub issues](https://img.shields.io/github/issues/badges/shields.svg?style=social)](https://github.com/kevalpatel2106/Stand-Up/issues) [![Slack](https://img.shields.io/badge/Join-Slack-red.svg?style=flat)](https://stand-up-slack-invite-automati.herokuapp.com) <a href="https://www.paypal.me/kevalpatel2106"> <img src="https://img.shields.io/badge/paypal-donate-yellow.svg" /></a>
+[![Build Status](https://travis-ci.org/kevalpatel2106/Stand-Up.svg?branch=master&maxAge=600)](https://travis-ci.org/kevalpatel2106/Stand-Up) [![codecov](https://codecov.io/gh/kevalpatel2106/Stand-Up/branch/master/graph/badge.svg?maxAge=600)](https://codecov.io/gh/kevalpatel2106/Stand-Up) [![API](https://img.shields.io/badge/API-21%2B-yellowgreen.svg?style=flat)](https://android-arsenal.com/api?level=21) [![Slack](https://img.shields.io/badge/Join-Slack-red.svg?style=flat)](https://stand-up-slack-invite-automati.herokuapp.com) <a href="https://www.paypal.me/kevalpatel2106"> <img src="https://img.shields.io/badge/paypal-donate-yellow.svg" /></a>
  
 
 Sitting is next cancer.
 
 ## Questions
-Hit me on twitter [![Twitter](https://img.shields.io/badge/Twitter-@kevalpatel2106-blue.svg?style=social)](https://twitter.com/kevalpatel2106) or join us on slack [![Slack](https://img.shields.io/badge/Join-Slack-yellow.svg?style=social)].
+Hit me on twitter [![Twitter](https://img.shields.io/badge/Twitter-@kevalpatel2106-blue.svg?style=flat)](https://twitter.com/kevalpatel2106) or join us on slack [![Slack](https://img.shields.io/badge/Join-Slack-red.svg?style=flat)](https://stand-up-slack-invite-automati.herokuapp.com).
 
 ## License
 Copyright 2017 Keval Patel

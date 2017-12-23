@@ -37,7 +37,6 @@ android {
     lintOptions lintOption
     aaptOptions aaptOption
     dexOptions dexOption
-    testOptions testOption
     adbOptions adbOption
 }
 
