@@ -44,7 +44,7 @@
     <option name="DEEP_LINK" value="" />
     <option name="ACTIVITY_CLASS" value="com.kevalpatel2106.standup.timelineview.DemoActivity" />
     <method>
-      <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514046374179" />
+      <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514046485716" />
     </method>
   </configuration>
 </component>
