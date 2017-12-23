@@ -15,6 +15,8 @@ import com.kevalpatel2106.standup.SUUtils
  */
 class SupportDevelopmentActivity : BaseActivity() {
 
+    private lateinit var mModel: SupportDevelopmentViewModel
+
     companion object {
 
         /**
@@ -31,27 +33,34 @@ class SupportDevelopmentActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mModel = SupportDevelopmentViewModel()
+
         setContentView(R.layout.activity_support_developement)
         setToolbar(R.id.toolbar, "", true)
     }
 
     @OnClick(R.id.donate_two_dollar_card)
     fun donate2Dollar() {
-        SUUtils.openLink(this@SupportDevelopmentActivity, getString(R.string.donate_2_dollar_link))
+        SUUtils.openLink(this@SupportDevelopmentActivity,
+                getString(mModel.getDonationLink(2)))
     }
 
     @OnClick(R.id.donate_five_dollar_card)
     fun donate5Dollar() {
-        SUUtils.openLink(this@SupportDevelopmentActivity, getString(R.string.donate_5_dollar_link))
+        SUUtils.openLink(this@SupportDevelopmentActivity,
+                getString(mModel.getDonationLink(5)))
     }
 
     @OnClick(R.id.donate_ten_dollar_card)
     fun donate10Dollar() {
-        SUUtils.openLink(this@SupportDevelopmentActivity, getString(R.string.donate_10_dollar_link))
+        SUUtils.openLink(this@SupportDevelopmentActivity,
+                getString(mModel.getDonationLink(10)))
     }
 
     @OnClick(R.id.donate_twenty_dollar_card)
     fun donate20Dollar() {
-        SUUtils.openLink(this@SupportDevelopmentActivity, getString(R.string.donate_20_dollar_link))
+        SUUtils.openLink(this@SupportDevelopmentActivity,
+                getString(mModel.getDonationLink(20)))
     }
 }

@@ -19,6 +19,7 @@ before_install:
   - tar xvf secrets.tar
   - mv google-services.json ./app
   - mv .dropbox_uploader_config ./scripts
+  - mv keystore.jks ./misc
 
   # Install npm
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.3/install.sh | bash
