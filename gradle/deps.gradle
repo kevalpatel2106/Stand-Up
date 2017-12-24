@@ -15,7 +15,7 @@
  */
 
 ext {
-    def playServiceVersion = "11.6.2"
+    def playServiceVersion = "11.8.0"
     def supportLibVersion = "27.0.2"
     def archComponentVersion = '1.0.0'
     def butterKnifeVersion = "8.8.1"
@@ -28,7 +28,7 @@ ext {
     def stethoVersion = "1.5.0"
 
     def espressoVersion = "3.0.1"
-    def mockitoVersion = "2.12.0"
+    def mockitoVersion = "2.13.0"
     def powerMockVersion = "1.7.3"
 
     //Exclude group for the test dependency
@@ -66,7 +66,7 @@ ext {
             dokka         : "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.15",
             versionScan   : "com.github.ben-manes:gradle-versions-plugin:0.17.0",
             buildScan     : "com.gradle:build-scan-plugin:1.11",
-            googleServices: "com.google.gms:google-services:3.1.1",
+            googleServices: "com.google.gms:google-services:3.1.2,
             firbase       : "com.google.firebase:firebase-plugins:1.1.5",
             hugo          : "com.jakewharton.hugo:hugo-plugin:1.2.1",
             fabric        : "io.fabric.tools:gradle:1.25.1",
@@ -82,7 +82,7 @@ ext {
             'com.android.support.test.espresso:espresso-intents:' + espressoVersion,
             'com.android.support.test.espresso:espresso-contrib:' + espressoVersion,
             'com.android.support.test.espresso:espresso-idling-resource:' + espressoVersion,
-            'com.android.support.test.uiautomator:uiautomator-v18:2.1.2',
+            'com.android.support.test.uiautomator:uiautomator-v18:2.1.3',
             'com.squareup.okhttp3:mockwebserver:' + okHttpVersion,
             'org.mockito:mockito-core:' + mockitoVersion,
     ]
@@ -161,13 +161,13 @@ ext {
     //Other libs
     otherLib = [
             gson                  : 'com.google.code.gson:gson:2.8.2',
-            glide                 : 'com.github.bumptech.glide:glide:4.3.1',
-            glideAnnotation       : 'com.github.bumptech.glide:compiler:4.3.1',
+            glide                 : 'com.github.bumptech.glide:glide:4.4.0',
+            glideAnnotation       : 'com.github.bumptech.glide:compiler:4.4.0',
             circleImagView        : 'de.hdodenhof:circleimageview:2.2.0',
-            facebook              : 'com.facebook.android:facebook-android-sdk:4.28.0',
+            facebook              : 'com.facebook.android:facebook-android-sdk:4.29.0',
             bottomsheet           : 'com.cocosw:bottomsheet:1.3.1',
             commonsCodec          : 'commons-codec:commons-codec:1.11',
-            crashalytics          : "com.crashlytics.sdk.android:crashlytics:2.7.1@aar",
+            crashalytics          : "com.crashlytics.sdk.android:crashlytics:2.8.0@aar",
             openSourceLibraries   : 'com.mikepenz:aboutlibraries:6.0.1@aar',
             aboutlibraries        : 'com.github.daniel-stoneuk:material-about-library:2.2.3-support26.1.0',
             appUpdator            : 'com.github.javiersantos:AppUpdater:2.6.4',
