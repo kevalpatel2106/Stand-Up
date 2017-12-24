@@ -2,7 +2,7 @@ package com.kevalpatel2106.standup.diary
 
 import android.content.Context
 import android.view.ViewGroup
-import com.kevalpatel2106.base.uiController.PageRecyclerViewAdapter
+import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
 import com.kevalpatel2106.standup.userActivity.UserActivity
 
 /**

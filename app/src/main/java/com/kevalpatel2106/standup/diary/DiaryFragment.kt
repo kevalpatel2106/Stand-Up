@@ -10,10 +10,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
 import com.kevalpatel2106.base.uiController.BaseFragment
-import com.kevalpatel2106.base.uiController.PageRecyclerViewAdapter
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.userActivity.UserActivity
+import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.fragment_siting_diary.*
 
 
@@ -48,20 +49,68 @@ class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListen
         model = ViewModelProviders.of(this@DiaryFragment).get(DiaryViewModel::class.java)
 
         //Set the recycler view
+        val adapter = DiaryListAdapter(mContext, model.activities.value!!, this@DiaryFragment)
         sleep_diary_rv.layoutManager = LinearLayoutManager(mContext)
         sleep_diary_rv.itemAnimator = DefaultItemAnimator()
-        sleep_diary_rv.adapter = DiaryListAdapter(mContext, model.activities.value!!, this@DiaryFragment)
+        sleep_diary_rv.adapter = adapter
+
+        //Observe error messages
+        model.errorMessage.observe(this@DiaryFragment, Observer {
+            it?.let {
+                if (adapter.itemCount == 0) {
+                    //Display the error view
+                    sleep_diary_view_flipper.displayedChild = 2
+                    dairy_error_view.setError(it)
+                } else {
+                    @Suppress("UnnecessaryVariable")
+                    val errorMessage = it
+
+                    //Display snackbar
+                    showSnack(errorMessage.getMessage(context)!!,
+                            getString(errorMessage.getErrorBtnText()),
+                            View.OnClickListener { errorMessage.getOnErrorClick()?.invoke() })
+                }
+            }
+        })
+
+        model.blockUi.observe(this@DiaryFragment, Observer {
+            it?.let {
+                if (it) {
+                    //Display the loader
+                    sleep_diary_view_flipper.displayedChild = 1
+                } else {
+                    //Display the list
+                    sleep_diary_view_flipper.displayedChild = 0
+                }
+            }
+        })
+
         model.activities.observe(this@DiaryFragment, Observer {
-            //Refresh the list
-            sleep_diary_rv.adapter.notifyDataSetChanged()
+
+            it?.let {
+                if (it.isEmpty()) {
+                    dairy_error_view.setError("No data available!!")
+                    sleep_diary_view_flipper.displayedChild = 2
+                } else {
+                    sleep_diary_view_flipper.displayedChild = 0
+
+                    //Refresh the list
+                    adapter.notifyDataSetChanged()
+                    adapter.onPageLoadComplete(true)
+                }
+            }
+        })
+
+        model.noMoreData.observe(this@DiaryFragment, Observer {
+            it?.let { adapter.hasNextPage = !it }
         })
     }
 
-    override fun onPageComplete(nextPageCount: Int) {
-        model.loadNext()
+    override fun onPageComplete(lastItem: UserActivity) {
+        model.loadNext(lastItem.eventStartTimeMills)
     }
 
     override fun onItemSelected(pos: Int, item: UserActivity) {
-
+        //TODO Open the detail page
     }
 }

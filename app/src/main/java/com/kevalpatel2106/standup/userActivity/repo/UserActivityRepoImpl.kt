@@ -1,6 +1,7 @@
 package com.kevalpatel2106.standup.userActivity.repo
 
 import com.kevalpatel2106.standup.StandUpDb
+import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.userActivity.UserActivity
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,18 +17,58 @@ import java.util.*
  */
 class UserActivityRepoImpl : UserActivityRepo {
 
-    override fun getTodayEvents(): Flowable<List<UserActivity>> {
-        val today12am = Calendar.getInstance()
-        today12am.set(Calendar.MINUTE, 0)
-        today12am.set(Calendar.SECOND, 0)
-        today12am.set(Calendar.MILLISECOND, 0)
-        today12am.set(Calendar.HOUR_OF_DAY, 0)
+    override fun loadUserActivities(afterMills: Long): Flowable<List<UserActivity>> {
+        return Flowable.create(FlowableOnSubscribe<List<UserActivity>> { e ->
+            //Query the database.
+            val dbList = StandUpDb.getDb().userActivityDao().getActivityAfter(afterMills)
 
-        return StandUpDb.getDb()
-                .userActivityDao()
-                .getActivityBetweenDuration(today12am.timeInMillis, System.currentTimeMillis())
+            //Check if the enough results are received?
+            when {
+                dbList.isEmpty() -> {
+                    //No more items into the database.
+                    //Oldest event time we have is the onw we received in arguments.
+
+                    //TODO make network call
+                    e.onNext(dbList)
+                }
+                dbList.size < AppConfig.PAGE_LIMIT -> {
+                    //Not enough items in the database so that we can fill the page.
+                    //May be it's time to hit the server for more items.
+                    val oldestItemTime = dbList.last().eventStartTimeMills
+
+                    //TODO make network call
+                    //Emmit data into the stream
+                    e.onNext(dbList)
+                }
+                else -> {
+                    //We have enough data into the database.
+                    //Emmit data into the stream
+                    e.onNext(dbList)
+                    e.onComplete()
+                }
+            }
+        }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun loadUserActivityByDay(calendar: Calendar): Flowable<List<UserActivity>> {
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startTimeMills = calendar.timeInMillis
+
+        calendar.set(Calendar.HOUR_OF_DAY, 24)
+        val endTimeMills = calendar.timeInMillis
+        return StandUpDb.getDb().userActivityDao()
+                .getActivityBetweenDuration(startTimeMills, endTimeMills)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun getTodayEvents(): Flowable<List<UserActivity>> {
+        return loadUserActivityByDay(Calendar.getInstance())
     }
 
     override fun insertNewAndTerminatePreviousActivity(newActivity: UserActivity) {
@@ -42,10 +83,10 @@ class UserActivityRepoImpl : UserActivityRepo {
                     //This is new user activity.
                     //Update the end time of the last user event.
                     lastActivity.eventEndTimeMills = newActivity.eventStartTimeMills
-                    update(lastActivity).subscribe()
+                    StandUpDb.getDb().userActivityDao().update(lastActivity)
 
                     //Add the event to the database
-                    insert(newActivity).subscribe()
+                    StandUpDb.getDb().userActivityDao().insert(newActivity)
                 } else {
                     //Activity type did not changed/
                     //Do noting
@@ -58,7 +99,7 @@ class UserActivityRepoImpl : UserActivityRepo {
 
             override fun onComplete() {
                 //Add the event to the database
-                insert(newActivity).subscribe()
+                StandUpDb.getDb().userActivityDao().insert(newActivity)
             }
 
             override fun onSubscribe(d: Disposable) {
@@ -67,31 +108,9 @@ class UserActivityRepoImpl : UserActivityRepo {
         })
     }
 
-    override fun insert(userActivity: UserActivity): Flowable<Long> {
-        return Flowable.create(FlowableOnSubscribe<Long> {
-
-            it.onNext(StandUpDb.getDb().userActivityDao().insert(userActivity))
-            it.onComplete()
-        }, BackpressureStrategy.LATEST)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    override fun update(userActivity: UserActivity): Flowable<Int> {
-        return Flowable.create(FlowableOnSubscribe<Int> {
-
-            it.onNext(StandUpDb.getDb().userActivityDao().update(userActivity))
-            it.onComplete()
-        }, BackpressureStrategy.LATEST)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-    }
-
     override fun getLatestActivity(): Maybe<UserActivity> = StandUpDb.getDb()
             .userActivityDao()
             .getLatestActivity()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-
-
 }

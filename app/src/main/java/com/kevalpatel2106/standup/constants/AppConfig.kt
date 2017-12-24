@@ -7,6 +7,9 @@ package com.kevalpatel2106.standup.constants
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 internal object AppConfig {
+
+    const val PAGE_LIMIT = 20
+
     const val SNACKBAR_TIME = 3300L
     const val PIE_CHART_TIME = 1400
 

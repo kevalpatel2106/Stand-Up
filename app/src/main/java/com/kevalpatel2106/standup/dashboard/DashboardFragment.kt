@@ -21,6 +21,7 @@ import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
 import com.kevalpatel2106.standup.timelineview.TimeLineLength
 import com.kevalpatel2106.utils.ViewUtils
+import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
 import kotlinx.android.synthetic.main.layout_home_timeline_card.*
 
@@ -54,6 +55,11 @@ class DashboardFragment : Fragment() {
         setTimelineCard()
 
         val model = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        //Observe error messages
+        model.errorMessage.observe(this@DashboardFragment, Observer {
+            it!!.getMessage(context)?.let { showSnack(it) }
+        })
+
         model.sittingPercent.observe(this, Observer<Float> {
             it?.let {
                 setPieChartData(sittingDurationPercent = it,

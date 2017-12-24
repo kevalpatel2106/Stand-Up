@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.kevalpatel2106.base.uiController
+package com.kevalpatel2106.base.paging
 
 import android.content.Context
 import android.support.annotation.CallSuper
@@ -24,7 +24,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kevalpatel2106.base.R
-import com.kevalpatel2106.base.uiController.PageRecyclerViewAdapter.RecyclerViewListener
+import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter.RecyclerViewListener
 
 /**
  * Created by Keval on 31-May-17.
@@ -51,49 +51,6 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
     private val INITIAL_PAGE_NUMBER = 0 /* Considering first page is 0 */
 
     /**
-     * Add new item at the given position of the array list.
-     *
-     * @param item Item to add into the list
-     * @param position Position where the item should be added. Default value is the last item of the list.
-     */
-    @JvmOverloads
-    @CallSuper
-    open fun add(item: T, position: Int = collection.size) {
-        collection.add(position, item)
-        notifyItemInserted(position)
-    }
-
-    @CallSuper
-    open fun add(item: Collection<T>) {
-        collection.addAll(item)
-        notifyDataSetChanged()
-    }
-
-    @CallSuper
-    open fun remove(item: T) {
-        collection.remove(item)
-        notifyDataSetChanged()
-    }
-
-    @CallSuper
-    open fun remove(position: Int) {
-        collection.removeAt(position)
-        notifyItemRemoved(position)
-    }
-
-    @CallSuper
-    open fun remove(item: Collection<T>) {
-        collection.removeAll(item)
-        notifyDataSetChanged()
-    }
-
-    @CallSuper
-    open fun replace(item: T, position: Int) {
-        collection[position] = item
-        notifyItemChanged(position)
-    }
-
-    /**
      * Clear the items list/collection and reset the adapter to it's initial state.
      */
     fun reset() {
@@ -105,15 +62,7 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
 
         //Consider next page
         hasNextPage = true
-
-        //Reset page count
-        pageCount = INITIAL_PAGE_NUMBER
     }
-
-    /**
-     * Current page count.
-     */
-    private var pageCount = INITIAL_PAGE_NUMBER
 
     /**
      * Boolean to indicate if there are any more pages?
@@ -154,7 +103,7 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
                 && hasNextPage
                 && !lockPagination
                 && position == collection.size - 1 /* Last item in the list */) {
-            listener.onPageComplete(pageCount + 1)
+            listener.onPageComplete(collection.last())
             lockPagination = true
         }
 
@@ -207,9 +156,6 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
     fun onPageLoadComplete(isLoadSuccessful: Boolean) {
         //Release the pagination lock
         lockPagination = false
-
-        //Increase the page count.
-        if (isLoadSuccessful) pageCount++
     }
 
     /**
@@ -258,10 +204,10 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
         /**
          * Callback to call when whole list is displayed.
          *
-         * @param nextPageCount Next page count.
+         * @param lastItem Lat item of the list
          */
         @MainThread
-        fun onPageComplete(nextPageCount: Int)
+        fun onPageComplete(lastItem: T)
 
         /**
          * Callback  to get notify when any item from the list gets selected.

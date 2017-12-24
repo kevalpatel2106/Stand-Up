@@ -104,6 +104,7 @@
     <string name="error_invalid_issue_title">Provide title to your issue.</string>
     <string name="error_invalid_issue_description">Please describe the issue.</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="btn_title_retry">Retry</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

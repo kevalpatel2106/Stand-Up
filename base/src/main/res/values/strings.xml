@@ -16,4 +16,5 @@
 
 <resources>
     <string name="test">Test</string>
+    <string name="btn_title_retry">Retry</string>
 </resources>

@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class DashboardViewModel : BaseViewModel {
+internal class DashboardViewModel : BaseViewModel {
 
     private val simpleDateFormatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
 

@@ -1,7 +1,7 @@
 package com.kevalpatel2106.standup.diary
 
 import android.view.View
-import com.kevalpatel2106.base.uiController.PageRecyclerViewAdapter
+import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
 
 /**
  * Created by Keval on 23/12/17.

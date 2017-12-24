@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical">
+
+    <com.kevalpatel2106.base.view.BaseImageView
+        android:id="@+id/error_iv"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        tools:src="@drawable/leak_canary_icon" />
+
+    <com.kevalpatel2106.base.view.BaseTextView
+        android:id="@+id/error_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/error_iv"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:lines="3"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:scrollbars="vertical"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp"
+        tools:text="@tools:sample/lorem/random" />
+
+    <com.kevalpatel2106.base.view.BaseButton
+        android:id="@+id/error_btn"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/error_tv"
+        android:layout_centerHorizontal="true"
+        android:text="@string/btn_title_retry"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textStyle="bold" />
+</RelativeLayout>
