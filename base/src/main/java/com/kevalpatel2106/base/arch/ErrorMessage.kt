@@ -19,7 +19,7 @@ class ErrorMessage {
     val errorRes: Int
 
     @DrawableRes
-    var errorImage: Int = -1
+    var errorImage: Int = 0
 
     @StringRes
     private var errorBtnText: Int = 0

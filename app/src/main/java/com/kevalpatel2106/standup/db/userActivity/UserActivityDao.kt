@@ -5,8 +5,6 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 import android.arch.persistence.room.Update
 import com.kevalpatel2106.base.annotations.Repository
-import com.kevalpatel2106.standup.constants.AppConfig
-import io.reactivex.Flowable
 import io.reactivex.Maybe
 
 /**
@@ -32,10 +30,15 @@ interface UserActivityDao {
     @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE
             + " WHERE " + UserActivity.EVENT_START_TIME + " > :afterTimeMills AND "
             + UserActivity.EVENT_START_TIME + " < :beforeTimeMills")
-    fun getActivityBetweenDuration(afterTimeMills: Long, beforeTimeMills: Long): Flowable<List<UserActivity>>
+    fun getActivityBetweenDuration(afterTimeMills: Long, beforeTimeMills: Long): List<UserActivity>
 
     @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE
             + " WHERE " + UserActivity.EVENT_START_TIME + " > :afterTimeMills ORDER BY "
-            + UserActivity.EVENT_START_TIME + " DESC LIMIT " + AppConfig.PAGE_LIMIT)
+            + UserActivity.EVENT_START_TIME + " DESC")
     fun getActivityAfter(afterTimeMills: Long): List<UserActivity>
+
+
+    @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE
+            + " ORDER BY " + UserActivity.EVENT_START_TIME + " ASC LIMIT 1")
+    fun getOldestActivity(): UserActivity?
 }

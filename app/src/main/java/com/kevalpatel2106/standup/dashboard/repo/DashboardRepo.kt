@@ -10,5 +10,5 @@ import io.reactivex.Flowable
  */
 interface DashboardRepo {
 
-    fun getTodayEvents(): Flowable<List<UserActivity>>
+    fun getTodayEvents(): Flowable<ArrayList<UserActivity>>
 }

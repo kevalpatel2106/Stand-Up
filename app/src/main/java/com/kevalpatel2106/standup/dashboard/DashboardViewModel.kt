@@ -10,6 +10,8 @@ import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -67,56 +69,59 @@ internal class DashboardViewModel : BaseViewModel {
 
     @VisibleForTesting
     internal fun startObservingTodayEvents() {
-        userActivityRepo.getTodayEvents().subscribe({
+        userActivityRepo.getTodayEvents()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
 
-            // Refresh the list
-            if (todayActivities.value != null) {
-                todayActivities.value!!.clear()
-            } else {
-                todayActivities.value = ArrayList()
-            }
-            todayActivities.value!!.addAll(it)
-
-            //Remove the last incomplete event
-            val list: List<UserActivity> = if (it.last().eventEndTimeMills == 0L) {
-                it.subList(0, it.lastIndex - 1)
-            } else {
-                it
-            }
-
-            //Calculate total time
-            val startTime = simpleDateFormatter.format(list.first().eventStartTimeMills)
-            val endTime = simpleDateFormatter.format(list.last().eventEndTimeMills)
-            trackedTime.value = startTime.plus("-").plus(endTime)
-
-            //Calculate duration
-            val durationMills = list.last().eventEndTimeMills - list.first().eventStartTimeMills
-            trackedDuration.value = TimeUtils.convertToHourMinutes(durationMills)
-
-            // Calculate standing and sitting time.
-            var standingMills = 0L
-            var sittingMills = 0L
-            list.forEach({
-                when (it.userActivityType) {
-                    UserActivityType.SITTING -> {
-                        sittingMills += (it.eventEndTimeMills - it.eventStartTimeMills)
+                    // Refresh the list
+                    if (todayActivities.value != null) {
+                        todayActivities.value!!.clear()
+                    } else {
+                        todayActivities.value = ArrayList()
                     }
-                    UserActivityType.MOVING -> {
-                        standingMills += (it.eventEndTimeMills - it.eventStartTimeMills)
-                    }
-                    UserActivityType.NOT_TRACKED -> {
-                        //NO OP
-                    }
-                }
-            })
+                    todayActivities.value!!.addAll(it)
 
-            sittingTime.value = TimeUtils.convertToHourMinutes(sittingMills)
-            sittingPercent.value = Utils.calculatePercent(sittingMills, durationMills).toFloat()
-            standingTime.value = TimeUtils.convertToHourMinutes(standingMills)
-            standingPercent.value = Utils.calculatePercent(standingMills, durationMills).toFloat()
-        }, {
-            //Error message
-            errorMessage.value = ErrorMessage(it.message)
-        })
+                    //Remove the last incomplete event
+                    val list: List<UserActivity> = if (it.last().eventEndTimeMills == 0L) {
+                        it.subList(0, it.lastIndex - 1)
+                    } else {
+                        it
+                    }
+
+                    //Calculate total time
+                    val startTime = simpleDateFormatter.format(list.first().eventStartTimeMills)
+                    val endTime = simpleDateFormatter.format(list.last().eventEndTimeMills)
+                    trackedTime.value = startTime.plus("-").plus(endTime)
+
+                    //Calculate duration
+                    val durationMills = list.last().eventEndTimeMills - list.first().eventStartTimeMills
+                    trackedDuration.value = TimeUtils.convertToHourMinutes(durationMills)
+
+                    // Calculate standing and sitting time.
+                    var standingMills = 0L
+                    var sittingMills = 0L
+                    list.forEach({
+                        when (it.userActivityType) {
+                            UserActivityType.SITTING -> {
+                                sittingMills += (it.eventEndTimeMills - it.eventStartTimeMills)
+                            }
+                            UserActivityType.MOVING -> {
+                                standingMills += (it.eventEndTimeMills - it.eventStartTimeMills)
+                            }
+                            UserActivityType.NOT_TRACKED -> {
+                                //NO OP
+                            }
+                        }
+                    })
+
+                    sittingTime.value = TimeUtils.convertToHourMinutes(sittingMills)
+                    sittingPercent.value = Utils.calculatePercent(sittingMills, durationMills).toFloat()
+                    standingTime.value = TimeUtils.convertToHourMinutes(standingMills)
+                    standingPercent.value = Utils.calculatePercent(standingMills, durationMills).toFloat()
+                }, {
+                    //Error message
+                    errorMessage.value = ErrorMessage(it.message)
+                })
     }
 }

@@ -3,22 +3,22 @@ package com.kevalpatel2106.standup.diary.list
 import android.content.Context
 import android.view.ViewGroup
 import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.DailyActivitySummary
 
 /**
  * Created by Keval on 23/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class DiaryListAdapter(context: Context, data: ArrayList<UserActivity>,
-                                listener: RecyclerViewListener<UserActivity>?)
-    : PageRecyclerViewAdapter<DiaryBaseViewHolder, UserActivity>(context, data, listener) {
+internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivitySummary>,
+                                listener: RecyclerViewListener<DailyActivitySummary>?)
+    : PageRecyclerViewAdapter<DiaryBaseViewHolder, DailyActivitySummary>(context, data, listener) {
 
     private val TYPE_DAY_VIEW = 1
     private val TYPE_MONTH_VIEW = 2
 
 
-    override fun bindView(holder: DiaryBaseViewHolder, item: UserActivity) {
+    override fun bindView(holder: DiaryBaseViewHolder, item: DailyActivitySummary) {
         when (holder) {
             is DairyMonthViewHolder -> {
 

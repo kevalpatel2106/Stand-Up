@@ -6,7 +6,7 @@ import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.diary.repo.DairyRepo
 import com.kevalpatel2106.standup.diary.repo.DairyRepoImpl
 
@@ -22,7 +22,7 @@ internal class DiaryViewModel : BaseViewModel {
     /**
      * List of user activities.
      */
-    val activities = MutableLiveData<ArrayList<UserActivity>>()
+    val activities = MutableLiveData<ArrayList<DailyActivitySummary>>()
 
     val noMoreData = MutableLiveData<Boolean>()
 
@@ -63,23 +63,20 @@ internal class DiaryViewModel : BaseViewModel {
     internal fun loadNext(oldestEventTimeMills: Long,
                           isFirstPage: Boolean = false) {
         addDisposable(userActivityRepo
-                .loadUserActivities(oldestEventTimeMills)
+                .loadDaysList(oldestEventTimeMills)
                 .doOnSubscribe({
                     noMoreData.value = false
                     if (isFirstPage) blockUi.value = true
                 })
-                .doOnNext({
-                    if (!it.isEmpty()) blockUi.value = false
-                })
+                .doOnNext {
+                    //Do not block UI.
+                    blockUi.value = false
+                }
                 .subscribe({
                     //Update data
-                    if (it.isEmpty()) {
-                        noMoreData.value = true
-                    } else {
-                        val fullList = activities.value
-                        fullList?.addAll(it)
-                        activities.value = fullList
-                    }
+                    val fullList = activities.value
+                    fullList?.add(it)
+                    activities.value = fullList
                 }, {
                     blockUi.value = false
 

@@ -1,5 +1,6 @@
 package com.kevalpatel2106.standup.diary.repo
 
+import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import io.reactivex.Flowable
 import java.util.*
@@ -11,10 +12,10 @@ import java.util.*
  */
 interface DairyRepo {
 
-    fun loadUserActivityByDay(calendar: Calendar): Flowable<List<UserActivity>>
+    fun loadUserActivityByDay(calendar: Calendar): List<UserActivity>
 
     /**
-     * Load the 20 [UserActivity] data.
+     * Load the 20 days size of [UserActivity] data.
      */
-    fun loadUserActivities(afterMills: Long): Flowable<List<UserActivity>>
+    fun loadDaysList(oldestActivityMills: Long): Flowable<DailyActivitySummary>
 }

@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
 import com.kevalpatel2106.base.uiController.BaseFragment
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.fragment_siting_diary.*
 
@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_siting_diary.*
 /**
  * A simple [Fragment] subclass.
  */
-class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListener<UserActivity> {
+class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListener<DailyActivitySummary> {
 
     private lateinit var model: DiaryViewModel
 
@@ -106,11 +106,11 @@ class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListen
         })
     }
 
-    override fun onPageComplete(lastItem: UserActivity) {
-        model.loadNext(lastItem.eventStartTimeMills)
+    override fun onPageComplete(lastItem: DailyActivitySummary) {
+        model.loadNext(lastItem.standingTimeMills)
     }
 
-    override fun onItemSelected(pos: Int, item: UserActivity) {
+    override fun onItemSelected(pos: Int, item: DailyActivitySummary) {
         //TODO Open the detail page
     }
 }

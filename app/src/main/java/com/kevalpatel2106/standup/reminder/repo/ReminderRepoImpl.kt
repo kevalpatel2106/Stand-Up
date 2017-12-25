@@ -16,7 +16,11 @@ import timber.log.Timber
  */
 class ReminderRepoImpl : ReminderRepo {
 
-
+    /**
+     * This will store [newActivity] into the database and terminate the previous event with the
+     * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
+     * inert [newActivity].
+     */
     override fun insertNewAndTerminatePreviousActivity(newActivity: UserActivity) {
 
         getLatestActivity().subscribe(object : MaybeObserver<UserActivity> {
