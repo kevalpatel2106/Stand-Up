@@ -1,12 +1,12 @@
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.db
 
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.kevalpatel2106.standup.userActivity.UserActivity
-import com.kevalpatel2106.standup.userActivity.repo.UserActivityDao
+import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import timber.log.Timber
 
 /**

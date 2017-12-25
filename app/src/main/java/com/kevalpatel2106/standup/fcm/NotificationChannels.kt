@@ -27,6 +27,11 @@ internal object NotificationChannelType {
      * Notifications for account activities.
      */
     const val ACCOUNT_NOTIFICATION_CHANNEL = "account_notification_channel"
+
+    /**
+     * Notifications for reminder activities.
+     */
+    const val REMINDER_NOTIFICATION_CHANNEL = "reminder_notification_channel"
 }
 
 //============== Extension functions for the notification channel management. ==================//

@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.diary
+package com.kevalpatel2106.standup.diary.list
 
 
 import android.arch.lifecycle.Observer
@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
 import com.kevalpatel2106.base.uiController.BaseFragment
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.fragment_siting_diary.*
 

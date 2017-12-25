@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.userActivity
+package com.kevalpatel2106.standup.db.userActivity
 
 import android.annotation.SuppressLint
 import android.arch.persistence.room.ColumnInfo

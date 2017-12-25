@@ -7,13 +7,13 @@ import android.content.Intent
 import android.support.annotation.VisibleForTesting
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivityHelper
+import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.standup.reminder.ReminderConfig
+import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
+import com.kevalpatel2106.standup.reminder.repo.ReminderRepoImpl
 import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
-import com.kevalpatel2106.standup.userActivity.UserActivity
-import com.kevalpatel2106.standup.userActivity.UserActivityHelper
-import com.kevalpatel2106.standup.userActivity.UserActivityType
-import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepo
-import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepoImpl
 import timber.log.Timber
 import java.util.*
 
@@ -40,7 +40,7 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
     private lateinit var context: Context
 
     @VisibleForTesting
-    internal var mUserActivityRepo: UserActivityRepo = UserActivityRepoImpl()
+    internal var mReminderRepo: ReminderRepo = ReminderRepoImpl()
 
     @SuppressLint("VisibleForTests")
     override fun onReceive(context: Context, intent: Intent) {
@@ -61,14 +61,14 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
 
         if (isUserSitting(detectedActivities)) {
             //User is sitting
-            onUserSitting(mUserActivityRepo)
+            onUserSitting(mReminderRepo)
         } else {
             //User is moving
-            onUserMoving(mUserActivityRepo)
+            onUserMoving(mReminderRepo)
         }
     }
 
-    private fun onUserMoving(repo: UserActivityRepo) {
+    private fun onUserMoving(repo: ReminderRepo) {
         Timber.d("User is MOVING.")
 
         //Push the notification back to 1 hour
@@ -79,7 +79,7 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
                 .createLocalUserActivity(UserActivityType.MOVING))
     }
 
-    private fun onUserSitting(repo: UserActivityRepo) {
+    private fun onUserSitting(repo: ReminderRepo) {
         Timber.d("User is SITTING.")
 
         //Add the new value to database.

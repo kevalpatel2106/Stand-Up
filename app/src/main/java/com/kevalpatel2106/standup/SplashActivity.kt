@@ -49,7 +49,7 @@ class SplashActivity : BaseActivity() {
                         UserSessionManager.isUserVerified)
             }
 
-            //Contrinue with the app launch flow.
+            //Continue with the app launch flow.
             if (!UserSessionManager.isUserVerified) {   //If user is not verified, open verify screen.
                 VerifyEmailActivity.launch(this@SplashActivity)
 

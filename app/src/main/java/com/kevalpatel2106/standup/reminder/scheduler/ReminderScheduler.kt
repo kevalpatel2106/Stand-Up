@@ -11,6 +11,8 @@ import timber.log.Timber
 
 /**
  * Created by Keval on 13/12/17.
+ * This class handles stand up reminder notification based on the user activity bu monitoring
+ * [com.kevalpatel2106.standup.userActivity.UserActivity] and
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */

@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.diary
+package com.kevalpatel2106.standup.diary.list
 
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
@@ -6,34 +6,38 @@ import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.userActivity.UserActivity
-import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepo
-import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepoImpl
+import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.diary.repo.DairyRepo
+import com.kevalpatel2106.standup.diary.repo.DairyRepoImpl
 
 /**
  * Created by Keval on 23/12/17.
+ * View model for [com.kevalpatel2106.standup.diary.DiaryFragment].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(DiaryFragment::class)
 internal class DiaryViewModel : BaseViewModel {
 
+    /**
+     * List of user activities.
+     */
     val activities = MutableLiveData<ArrayList<UserActivity>>()
 
     val noMoreData = MutableLiveData<Boolean>()
 
     @VisibleForTesting
-    internal val userActivityRepo: UserActivityRepo
+    internal val userActivityRepo: DairyRepo
 
     /**
-     * Private constructor to add the custom [UserActivityRepo] for testing.
+     * Private constructor to add the custom [DairyRepo] for testing.
      *
-     * @param userActivityRepoImpl Add your own [UserActivityRepo].
+     * @param dairyRepo Add your own [DairyRepo].
      */
     @Suppress("unused")
     @VisibleForTesting
-    constructor(userActivityRepoImpl: UserActivityRepo) : super() {
-        this.userActivityRepo = userActivityRepoImpl
+    constructor(dairyRepo: DairyRepo) : super() {
+        this.userActivityRepo = dairyRepo
 
         //Load the first page
         loadNext(System.currentTimeMillis())
@@ -45,7 +49,7 @@ internal class DiaryViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() : super() {
         //This is the original user authentication repo.
-        userActivityRepo = UserActivityRepoImpl()
+        userActivityRepo = DairyRepoImpl()
 
         //Load the first page
         loadNext(System.currentTimeMillis(), true)

@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.diary
+package com.kevalpatel2106.standup.diary.list
 
 import android.view.View
 import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
@@ -8,4 +8,4 @@ import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class DiaryViewHolder(itemView: View) : PageRecyclerViewAdapter.PageViewHolder(itemView)
+internal open class DiaryBaseViewHolder(itemView: View) : PageRecyclerViewAdapter.PageViewHolder(itemView)

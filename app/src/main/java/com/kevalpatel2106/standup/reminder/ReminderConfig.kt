@@ -32,5 +32,8 @@ internal object ReminderConfig {
      */
     internal const val DETECTION_BROADCAST_ACTION = "com.kevalpatel2106.standup.reminder.activityUpdate"
 
+    /**
+     * Minimum threshold required for the user activity for processing the data.
+     */
     internal const val CONFIDENCE_THRESHOLD = 30
 }

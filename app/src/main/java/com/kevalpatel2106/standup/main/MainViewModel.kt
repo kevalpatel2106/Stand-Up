@@ -2,7 +2,7 @@ package com.kevalpatel2106.standup.main
 
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.dashboard.DashboardFragment
-import com.kevalpatel2106.standup.diary.DiaryFragment
+import com.kevalpatel2106.standup.diary.list.DiaryFragment
 import com.kevalpatel2106.standup.stats.StatsFragment
 
 /**

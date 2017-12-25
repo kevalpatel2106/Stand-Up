@@ -4,10 +4,10 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.standup.userActivity.UserActivity
-import com.kevalpatel2106.standup.userActivity.UserActivityType
-import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepo
-import com.kevalpatel2106.standup.userActivity.repo.UserActivityRepoImpl
+import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
+import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
+import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
 import java.text.SimpleDateFormat
@@ -23,7 +23,7 @@ internal class DashboardViewModel : BaseViewModel {
 
     private val simpleDateFormatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
 
-    val userActivityRepo: UserActivityRepo
+    val userActivityRepo: DashboardRepo
 
     val standingPercent = MutableLiveData<Float>()
 
@@ -40,14 +40,14 @@ internal class DashboardViewModel : BaseViewModel {
     val todayActivities = MutableLiveData<ArrayList<UserActivity>>()
 
     /**
-     * Private constructor to add the custom [UserActivityRepo] for testing.
+     * Private constructor to add the custom [DashboardRepo] for testing.
      *
-     * @param userActivityRepoImpl Add your own [UserActivityRepo].
+     * @param dashboardRepo Add your own [DashboardRepo].
      */
     @Suppress("unused")
     @VisibleForTesting
-    constructor(userActivityRepoImpl: UserActivityRepo) : super() {
-        this.userActivityRepo = userActivityRepoImpl
+    constructor(dashboardRepo: DashboardRepo) : super() {
+        this.userActivityRepo = dashboardRepo
 
         //Start observing the database
         startObservingTodayEvents()
@@ -59,7 +59,7 @@ internal class DashboardViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() : super() {
         //This is the original user authentication repo.
-        userActivityRepo = UserActivityRepoImpl()
+        userActivityRepo = DashboardRepoImpl()
 
         //Start observing the database
         startObservingTodayEvents()

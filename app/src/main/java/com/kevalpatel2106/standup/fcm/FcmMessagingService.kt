@@ -26,26 +26,31 @@ class FcmMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
 
         SharedPrefsProvider.init(this@FcmMessagingService)
-        if (!shouldProcessNotification(remoteMessage)) return
+        if (!shouldProcessNotification(remoteMessage?.data)) return
 
         Timber.d("onMessageReceived: " + remoteMessage!!.data.toString())
 
         //Handle based on type
-        when (remoteMessage.data["type"]) {
+        handleMessage(remoteMessage.data)
+    }
+
+    @VisibleForTesting
+    internal fun handleMessage(data: Map<String, String>) {
+        when (data["type"]) {
             NotificationType.TYPE_EMAIL_VERIFIED -> {
 
                 //Change the flag to true.
                 UserSessionManager.isUserVerified = true
 
                 //Fire the notification
-                EmailVerifiedNotification.notify(this.applicationContext, remoteMessage.data["message"])
+                EmailVerifiedNotification.notify(this.applicationContext, data["message"])
             }
         }
     }
 
     @VisibleForTesting
-    internal fun shouldProcessNotification(remoteMessage: RemoteMessage?): Boolean {
-        if (remoteMessage == null) {
+    internal fun shouldProcessNotification(data: Map<String, String>?): Boolean {
+        if (data == null) {
             Timber.w("No message received in the FCM payload.")
             return false
         }
@@ -57,7 +62,7 @@ class FcmMessagingService : FirebaseMessagingService() {
         }
 
         //Handle for the type.
-        if (!remoteMessage.data.containsKey("type")) {
+        if (!data.containsKey("type")) {
             Timber.w("Notification doesn't contain the type.")
             return false
         }

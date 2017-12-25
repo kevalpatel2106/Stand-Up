@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.userActivity
+package com.kevalpatel2106.standup.db.userActivity
 
 import com.kevalpatel2106.base.annotations.Helper
 import timber.log.Timber

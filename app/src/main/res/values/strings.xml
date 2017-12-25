@@ -105,6 +105,8 @@
     <string name="error_invalid_issue_description">Please describe the issue.</string>
     <string name="title_activity_settings">Settings</string>
     <string name="btn_title_retry">Retry</string>
+    <string name="reminder_notification_title">Stand up now</string>
+    <string name="reminder_notification_message">Stand up now</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

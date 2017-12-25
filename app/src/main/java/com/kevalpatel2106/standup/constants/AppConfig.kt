@@ -8,10 +8,20 @@ package com.kevalpatel2106.standup.constants
  */
 internal object AppConfig {
 
+    /**
+     * Pagination item limit in whole list.
+     */
     const val PAGE_LIMIT = 20
 
-    const val SNACKBAR_TIME = 3300L
-    const val PIE_CHART_TIME = 1400
+    /**
+     * Snackbar display duration.
+     */
+    const val SNACKBAR_TIME = 3300L //ms
+
+    /**
+     * Animation time for the Pie chart.
+     */
+    const val PIE_CHART_TIME = 1400 //ms
 
     //---- Start of Validation ----//
     const val MIN_WEIGHT = 29.9f
@@ -29,5 +39,4 @@ internal object AppConfig {
 
     const val GENDER_MALE = "male"
     const val GENDER_FEMALE = "female"
-
 }

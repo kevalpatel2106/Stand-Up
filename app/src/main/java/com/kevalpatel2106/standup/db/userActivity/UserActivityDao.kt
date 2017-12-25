@@ -1,4 +1,4 @@
-package com.kevalpatel2106.standup.userActivity.repo
+package com.kevalpatel2106.standup.db.userActivity
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
@@ -6,7 +6,6 @@ import android.arch.persistence.room.Query
 import android.arch.persistence.room.Update
 import com.kevalpatel2106.base.annotations.Repository
 import com.kevalpatel2106.standup.constants.AppConfig
-import com.kevalpatel2106.standup.userActivity.UserActivity
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
