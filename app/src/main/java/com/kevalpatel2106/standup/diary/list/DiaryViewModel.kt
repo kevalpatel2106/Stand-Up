@@ -14,7 +14,7 @@ import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Keval on 23/12/17.
- * View model for [com.kevalpatel2106.standup.diary.DiaryFragment].
+ * View model for [com.kevalpatel2106.standup.diary.list.DiaryFragment].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
@@ -72,15 +72,17 @@ internal class DiaryViewModel : BaseViewModel {
                     noMoreData.value = false
                     if (isFirstPage) blockUi.value = true
                 })
+                .doOnTerminate {
+
+                }
                 .doOnNext {
                     //Do not block UI.
                     blockUi.value = false
                 }
                 .subscribe({
                     //Update data
-                    val fullList = activities.value
-                    fullList?.add(it)
-                    activities.value = fullList
+                    activities.value?.add(it)
+                    activities.value = activities.value
                 }, {
                     blockUi.value = false
 

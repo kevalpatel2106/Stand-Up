@@ -37,22 +37,25 @@ class DairyRepoImpl : DairyRepo {
                 calender.add(Calendar.DAY_OF_MONTH, -1)
 
                 //Query the database.
-                val dbList = loadUserActivityByDay(calender.clone() as Calendar)
+                val dbList = ArrayList(loadUserActivityByDay(calender.clone() as Calendar))
 
                 //Emit the list if data is available
-                if (dbList.isNotEmpty()) e.onNext(dbList)
+                DailyActivitySummary.convertToValidUserActivityList(dbList)
+                if (dbList.isNotEmpty()) {
+                    e.onNext(dbList)
+                }
             }
 
             //TODO call the server for more events.
 
             //Nothing from the network
         }, BackpressureStrategy.BUFFER)
-                .map(Function<List<UserActivity>, DailyActivitySummary?> {
+                .map(Function<List<UserActivity>, DailyActivitySummary> {
                     return@Function DailyActivitySummary.fromDayActivityList(ArrayList(it))
                 })
 
         return flowable.zipWith(Flowable.range(1, 10)  /*Flowable that emits 1 to 10*/,
-                BiFunction<DailyActivitySummary?, Int, DailyActivitySummary> { t1, _ ->
+                BiFunction<DailyActivitySummary, Int, DailyActivitySummary> { t1, _ ->
                     t1 /* Emit the DailyActivitySummary list */
                 })
     }
@@ -64,8 +67,12 @@ class DairyRepoImpl : DairyRepo {
         calendar.set(Calendar.MILLISECOND, 0)
         val startTimeMills = calendar.timeInMillis
 
-        calendar.set(Calendar.HOUR_OF_DAY, 24)
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        calendar.set(Calendar.SECOND, 59)
+        calendar.set(Calendar.MILLISECOND, 999)
         val endTimeMills = calendar.timeInMillis
+
         return StandUpDb.getDb()
                 .userActivityDao()
                 .getActivityBetweenDuration(startTimeMills, endTimeMills)

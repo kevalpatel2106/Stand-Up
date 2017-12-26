@@ -162,23 +162,6 @@ class DailyActivitySummaryTest {
     }
 
     @Test
-    fun checkForDurationMoreThanADay() {
-        try {
-            DailyActivitySummary(dayOfMonth = 1,
-                    monthOfYear = 11,
-                    year = 2017,
-                    startTimeMills = System.currentTimeMillis() - DailyActivitySummary.MAX_DURATION - 3600000,
-                    endTimeMills = System.currentTimeMillis(),
-                    sittingTimeMills = 1800000,
-                    standingTimeMills = 1800000)
-            Assert.fail()
-        } catch (e: IllegalStateException) {
-            //Test passed.
-            //NO OP
-        }
-    }
-
-    @Test
     fun checkForDurationLessThanTotalOfSittingAndStandingTime() {
         try {
             DailyActivitySummary(dayOfMonth = 1,
@@ -360,8 +343,12 @@ class DailyActivitySummaryTest {
 
     @Test
     fun checkConversionFromDayActivityListWithEmptyList() {
-        val summary = DailyActivitySummary.fromDayActivityList(ArrayList())
-        Assert.assertNull(summary)
+        try {
+            DailyActivitySummary.fromDayActivityList(ArrayList())
+            Assert.fail()
+        } catch (e: IllegalStateException) {
+            //Test passed
+        }
     }
 
     @Test
@@ -374,8 +361,12 @@ class DailyActivitySummaryTest {
                     isSynced = true)
         }
 
-        val summary = DailyActivitySummary.fromDayActivityList(ArrayList())
-        Assert.assertNull(summary)
+        try {
+            DailyActivitySummary.fromDayActivityList(ArrayList())
+            Assert.fail()
+        } catch (e: IllegalStateException) {
+            //Test passed
+        }
     }
 
     @Test
@@ -386,12 +377,13 @@ class DailyActivitySummaryTest {
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
         val originalSize = dayActivity.size
+        DailyActivitySummary.convertToValidUserActivityList(dayActivity)
         val summary = DailyActivitySummary.fromDayActivityList(dayActivity)
 
         Assert.assertNotNull(summary)
 
         //Check the user activity list
-        Assert.assertEquals(summary!!.userActivities!!.size, originalSize - 1)
+        Assert.assertEquals(summary.userActivities!!.size, originalSize - 1)
         for (i in 0 until summary.userActivities!!.size - 1) {
             Assert.assertTrue(summary.userActivities!![i].eventStartTimeMills < summary.userActivities!![i + 1].eventStartTimeMills)
         }

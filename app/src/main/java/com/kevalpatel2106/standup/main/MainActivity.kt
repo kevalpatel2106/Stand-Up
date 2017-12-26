@@ -15,6 +15,7 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.base.view.BaseTextView
+import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.about.AboutActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.profile.EditProfileActivity

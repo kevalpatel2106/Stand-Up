@@ -24,7 +24,7 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
 
             }
             is DairyDayViewHolder -> {
-
+                holder.setData(item)
             }
             else -> throw IllegalStateException("Invalid view holder type.")
         }
@@ -39,7 +39,7 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
     }
 
     override fun prepareViewType(position: Int): Int {
-        return TYPE_MONTH_VIEW
+        return TYPE_DAY_VIEW        //TODO Add month header
     }
 
 }

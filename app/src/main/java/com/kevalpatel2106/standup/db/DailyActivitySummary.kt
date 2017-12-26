@@ -128,9 +128,6 @@ data class DailyActivitySummary(
         if (standingTimeMills + sittingTimeMills > durationMills) {
             throw IllegalStateException("Total of standing and sitting time is more than tracking duration.")
         }
-        if (durationMills > MAX_DURATION /* Milliseconds in one day */) {
-            throw IllegalStateException("The list of activities must be for the same day.")
-        }
         durationTimeHours = TimeUtils.convertToHourMinutes(durationMills)
 
         notTrackedTime = durationMills - (sittingTimeMills + standingTimeMills)
@@ -181,8 +178,6 @@ data class DailyActivitySummary(
 
     companion object CREATOR : Parcelable.Creator<DailyActivitySummary> {
 
-        const val MAX_DURATION = 86400000L
-
         override fun createFromParcel(parcel: Parcel): DailyActivitySummary {
             return DailyActivitySummary(parcel)
         }
@@ -201,9 +196,8 @@ data class DailyActivitySummary(
          */
         @SuppressLint("VisibleForTests")
         @JvmStatic
-        fun fromDayActivityList(dayActivity: ArrayList<UserActivity>): DailyActivitySummary? {
-            convertToValidUserActivityList(dayActivity)
-            if (dayActivity.isEmpty()) return null
+        fun fromDayActivityList(dayActivity: ArrayList<UserActivity>): DailyActivitySummary {
+            if (dayActivity.isEmpty()) throw IllegalStateException("Activity list cannot be null. Check first.")
 
             //Get calender
             val dayCal = Calendar.getInstance()
@@ -237,7 +231,6 @@ data class DailyActivitySummary(
             return dayActivitySummary
         }
 
-        @VisibleForTesting
         internal fun convertToValidUserActivityList(dayActivity: ArrayList<UserActivity>) {
             //Sort by the event start time in descending order
             Collections.sort(dayActivity) { o1, o2 -> (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt() }
