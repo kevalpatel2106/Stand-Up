@@ -3,6 +3,9 @@
 #Prepare output folder
 mkdir ./output
 
+# Move cloc file for code language stats
+mv ./cloc.txt ./output
+
 #project level artifacts
 mv ./reports/profile ./output/profile/
 mv ./build/reports/dependencyCheck ./output/dependencyCheck/

@@ -22,6 +22,7 @@ before_install:
 
   # Install npm
   - curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.3/install.sh | bash
+  - npm install -g cloc
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -48,6 +49,7 @@ android:
     - google-gdk-license-.+
 
 before_script:
+  - cloc . 2> ./cloc.txt
   - chmod +x gradlew
   - android list targets
   - android list device
