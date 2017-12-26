@@ -3,6 +3,7 @@ package com.kevalpatel2106.base.arch
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.CallSuper
+import android.support.annotation.VisibleForTesting
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -16,7 +17,8 @@ abstract class BaseViewModel : ViewModel() {
     /**
      * [CompositeDisposable] to hold all the disposables from Rx and repository.
      */
-    private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
+    @VisibleForTesting
+    internal val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
 
     protected fun addDisposable(disposable: Disposable) = mCompositeDisposable.add(disposable)
 
@@ -44,4 +46,9 @@ abstract class BaseViewModel : ViewModel() {
         mCompositeDisposable.dispose()
     }
 
+    @VisibleForTesting
+    internal fun clear() = onCleared()
+
+    @VisibleForTesting
+    internal fun addDisp(disposable: Disposable) = addDisposable(disposable)
 }

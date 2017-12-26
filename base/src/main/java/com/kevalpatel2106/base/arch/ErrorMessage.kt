@@ -12,7 +12,8 @@ import android.support.annotation.VisibleForTesting
  */
 class ErrorMessage {
 
-    private val errorMessage: String?
+    @VisibleForTesting
+    internal val errorMessage: String?
 
     @VisibleForTesting
     @StringRes

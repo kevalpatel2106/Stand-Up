@@ -39,6 +39,7 @@ import org.junit.runner.RunWith
 class BaseActivityTest : BaseTestClass() {
     private val ACTIVITY_TITLE = "Test Activity"
 
+    @JvmField
     @Rule
     var mActivityTestRule = ActivityTestRule(TestActivity::class.java)
 

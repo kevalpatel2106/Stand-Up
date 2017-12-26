@@ -27,6 +27,7 @@ class BaseFragmentTest : BaseTestClass() {
     @Throws(Exception::class)
     fun checkAddDisposable() {
         Assert.assertNotNull(fragmentRule.fragment.mCompositeDisposable)
+        fragmentRule.fragment.mCompositeDisposable.dispose()
 
         fragmentRule.fragment.addSubscription(Observable.timer(10, TimeUnit.SECONDS).subscribe())
         Assert.assertEquals(fragmentRule.fragment.mCompositeDisposable.size(), 1)

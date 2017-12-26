@@ -14,8 +14,6 @@ import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
-import retrofit2.Call
-import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import java.nio.file.Paths
@@ -95,23 +93,15 @@ class NWInterceptorAuthTest {
         mockWebServer.enqueueResponse(mockWebServer
                 .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
 
-        ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithAuthHeader()
-                .enqueue(object : retrofit2.Callback<TestData> {
-                    override fun onFailure(call: Call<TestData>?, t: Throwable?) {
-                        Assert.fail("There shouldn't be error. Message : " + t?.message)
-                    }
+                .execute()
 
-                    override fun onResponse(call: Call<TestData>?, response: Response<TestData>) {
-                        Assert.assertNotNull(response.raw().request().headers().get("Authorization"))
-                        Assert.assertEquals(response.raw().request().headers().get("Authorization"),
-                                "Basic " + String(
-                                        Base64.encodeBase64((UserSessionManager.userId.toString()
-                                                + ":" + UserSessionManager.token).toByteArray())))
-                    }
-
-                })
-
+        Assert.assertNotNull(response.raw().request().headers().get("Authorization"))
+        Assert.assertEquals(response.raw().request().headers().get("Authorization"),
+                "Basic " + String(
+                        Base64.encodeBase64((UserSessionManager.userId.toString()
+                                + ":" + UserSessionManager.token).toByteArray())))
     }
 }

@@ -80,12 +80,44 @@ class JsonResponsesTest {
         Assert.assertEquals(response.message(), NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
     }
 
+    @Test
+    @Throws(IOException::class)
+    fun checkServerUnAuthorisedResponse() {
+        mockWebServer.enqueueResponse(mockWebServer
+                .getStringFromFile(File(RESPONSE_DIR_PATH + "/unauthorised_sample.json")))
+
+        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+                .create(TestApiService::class.java)
+                .callBase()
+                .execute()
+
+        Assert.assertFalse(response.isSuccessful)
+        Assert.assertEquals(response.code(), APIStatusCodes.ERROR_CODE_UNAUTHORIZED)
+        Assert.assertEquals(response.message(), "Something went wrong.")
+    }
+
 
     @Test
     @Throws(IOException::class)
     fun checkSuccessResponse() {
         mockWebServer.enqueueResponse(mockWebServer
                 .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
+
+        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+                .create(TestApiService::class.java)
+                .callBase()
+                .execute()
+
+        Assert.assertTrue(response.isSuccessful)
+        Assert.assertEquals(response.code(), HttpURLConnection.HTTP_OK)
+        Assert.assertEquals(response.message(), "OK")
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkSuccessResponseWithoutData() {
+        mockWebServer.enqueueResponse(mockWebServer
+                .getStringFromFile(File(RESPONSE_DIR_PATH + "/success_sample_without_data.json")))
 
         val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
