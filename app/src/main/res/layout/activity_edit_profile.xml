@@ -19,7 +19,7 @@
         android:layout_height="match_parent">
 
         <!--0. Loader -->
-        <!--<include layout="@layout/layout_loader" />-->
+        <include layout="@layout/layout_loader"/>
 
         <!--1. Main scrollview-->
         <ScrollView

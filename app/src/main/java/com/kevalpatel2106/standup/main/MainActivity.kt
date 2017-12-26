@@ -15,7 +15,6 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.base.view.BaseTextView
-import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.about.AboutActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.profile.EditProfileActivity
@@ -24,7 +23,7 @@ import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector
 import com.kevalpatel2106.utils.UserSessionManager
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.activity_dashboard.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * Main activity which user will see after opening the application.
@@ -55,7 +54,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         mModel = ViewModelProviders.of(this@MainActivity).get(MainViewModel::class.java)
 
-        setContentView(R.layout.activity_dashboard)
+        setContentView(R.layout.activity_main)
 
         //Set the toolbar
         setToolbar(R.id.toolbar, "Dashboard", true)
