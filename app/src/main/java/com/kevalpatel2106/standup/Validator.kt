@@ -80,4 +80,10 @@ internal object Validator {
     fun isValidIssueTitle(title: String?) = !title.isNullOrEmpty()
 
     fun isValidIssueDescription(description: String?) = !description.isNullOrEmpty()
+
+    fun isValidDate(dayOfMonth: Int) = dayOfMonth in 1..31
+
+    fun isValidMonth(monthOfYear: Int) = monthOfYear in 0..11
+
+    fun isValidYear(year: Int) = year in 1900..2100
 }

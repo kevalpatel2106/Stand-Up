@@ -9,6 +9,8 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.diary.repo.DairyRepo
 import com.kevalpatel2106.standup.diary.repo.DairyRepoImpl
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Keval on 23/12/17.
@@ -64,6 +66,8 @@ internal class DiaryViewModel : BaseViewModel {
                           isFirstPage: Boolean = false) {
         addDisposable(userActivityRepo
                 .loadDaysList(oldestEventTimeMills)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .doOnSubscribe({
                     noMoreData.value = false
                     if (isFirstPage) blockUi.value = true

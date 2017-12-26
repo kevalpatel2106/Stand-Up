@@ -37,7 +37,7 @@ class DairyRepoImpl : DairyRepo {
                 calender.add(Calendar.DAY_OF_MONTH, -1)
 
                 //Query the database.
-                val dbList = loadUserActivityByDay(calender)
+                val dbList = loadUserActivityByDay(calender.clone() as Calendar)
 
                 //Emit the list if data is available
                 if (dbList.isNotEmpty()) e.onNext(dbList)
@@ -46,15 +46,13 @@ class DairyRepoImpl : DairyRepo {
             //TODO call the server for more events.
 
             //Nothing from the network
-            e.onComplete()
         }, BackpressureStrategy.BUFFER)
                 .map(Function<List<UserActivity>, DailyActivitySummary?> {
                     return@Function DailyActivitySummary.fromDayActivityList(ArrayList(it))
                 })
-                .filter { t -> t != null /*Eliminate null items*/ }
 
-        return flowable.zipWith(Flowable.fromArray(1..10)  /*Flowable that emits 1 to 10*/,
-                BiFunction<DailyActivitySummary?, IntRange, DailyActivitySummary> { t1, _ ->
+        return flowable.zipWith(Flowable.range(1, 10)  /*Flowable that emits 1 to 10*/,
+                BiFunction<DailyActivitySummary?, Int, DailyActivitySummary> { t1, _ ->
                     t1 /* Emit the DailyActivitySummary list */
                 })
     }
