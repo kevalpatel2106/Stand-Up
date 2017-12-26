@@ -62,7 +62,7 @@ class FacebookHelper(private val listener: FacebookResponse,
         val parameters = Bundle()
         parameters.putString("fields", fieldString)
 
-        val request = GraphRequest.newMeRequest(loginResult.accessToken) { `object`, response ->
+        val request = GraphRequest.newMeRequest(loginResult.accessToken) { `object`, _ ->
 
             try {
                 listener.onFbProfileReceived(parseResponse(`object`))

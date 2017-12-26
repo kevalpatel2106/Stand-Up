@@ -1,7 +1,9 @@
 package com.kevalpatel2106.standup.db
 
+import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.standup.Validator
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
@@ -54,6 +56,12 @@ data class DailyActivitySummary(
 ) : Parcelable {
 
     var userActivities: ArrayList<UserActivity>? = null
+        @SuppressLint("VisibleForTests")
+        set(value) {
+            value?.let { convertToValidUserActivityList(value) }
+
+            field = value
+        }
 
     /**
      * 3 days initials of the month from [monthOfYear].
@@ -76,9 +84,12 @@ data class DailyActivitySummary(
 
     val standingTimeHours: String
 
+    val notTrackedTime: Long
+
     init {
         if (!Validator.isValidDate(dayOfMonth)) {
-            throw IllegalArgumentException("Day of month must be between 1 to 31. Current: ".plus(dayOfMonth))
+            throw IllegalArgumentException("Day of month must be between 1 to 31. Current: "
+                    .plus(dayOfMonth))
         }
 
         if (!Validator.isValidMonth(monthOfYear)) {
@@ -90,19 +101,23 @@ data class DailyActivitySummary(
         }
 
         if (startTimeMills <= 0L) {
-            throw IllegalArgumentException("Start time must be positive number. Current: ".plus(standingTimeMills))
+            throw IllegalArgumentException("Start time must be positive number. Current: "
+                    .plus(startTimeMills))
         }
 
-        if (endTimeMills <= 0L || endTimeMills > standingTimeMills) {
-            throw IllegalArgumentException("End time must be positive number and >= start time. Current: ".plus(endTimeMills))
+        if (endTimeMills <= 0L || endTimeMills < startTimeMills) {
+            throw IllegalArgumentException("End time must be positive number and >= start time. Current: "
+                    .plus(endTimeMills).plus(" Start time:").plus(startTimeMills))
         }
 
         if (standingTimeMills < 0) {
-            throw IllegalArgumentException("Standing time must be positive number or 0. Current: ".plus(standingTimeMills))
+            throw IllegalArgumentException("Standing time must be positive number or 0. Current: "
+                    .plus(standingTimeMills))
         }
 
         if (sittingTimeMills < 0) {
-            throw IllegalArgumentException("Sitting time must be positive number or 0. Current: ".plus(sittingTimeMills))
+            throw IllegalArgumentException("Sitting time must be positive number or 0. Current: "
+                    .plus(sittingTimeMills))
         }
 
         val simpleDateFormatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
@@ -113,10 +128,12 @@ data class DailyActivitySummary(
         if (standingTimeMills + sittingTimeMills > durationMills) {
             throw IllegalStateException("Total of standing and sitting time is more than tracking duration.")
         }
-        if (durationMills > 86400000 /* Milliseconds in one day */) {
+        if (durationMills > MAX_DURATION /* Milliseconds in one day */) {
             throw IllegalStateException("The list of activities must be for the same day.")
         }
         durationTimeHours = TimeUtils.convertToHourMinutes(durationMills)
+
+        notTrackedTime = durationMills - (sittingTimeMills + standingTimeMills)
 
         startTimeHours = simpleDateFormatter.format(startTimeMills)
         endTimeHours = simpleDateFormatter.format(endTimeMills)
@@ -163,6 +180,9 @@ data class DailyActivitySummary(
     }
 
     companion object CREATOR : Parcelable.Creator<DailyActivitySummary> {
+
+        const val MAX_DURATION = 86400000L
+
         override fun createFromParcel(parcel: Parcel): DailyActivitySummary {
             return DailyActivitySummary(parcel)
         }
@@ -179,18 +199,10 @@ data class DailyActivitySummary(
          * @throws IllegalArgumentException if the [dayActivity] doesn't contain [UserActivity] for
          * the same day.
          */
+        @SuppressLint("VisibleForTests")
         @JvmStatic
         fun fromDayActivityList(dayActivity: ArrayList<UserActivity>): DailyActivitySummary? {
-            //Sort by the event start time in descending order
-            Collections.sort(dayActivity) { o1, o2 -> (o2.eventStartTimeMills - o1.eventStartTimeMills).toInt() }
-
-            //Remove the last incomplete event
-            val iter = dayActivity.iterator()
-            while (iter.hasNext()) {
-                if (iter.next().eventEndTimeMills <= 0L || iter.next().eventStartTimeMills <= 0L) {
-                    iter.remove()
-                }
-            }
+            convertToValidUserActivityList(dayActivity)
             if (dayActivity.isEmpty()) return null
 
             //Get calender
@@ -221,16 +233,23 @@ data class DailyActivitySummary(
                     endTimeMills = dayActivity.last().eventEndTimeMills,
                     standingTimeMills = standingMills,
                     sittingTimeMills = sittingMills)
-
-            //Check if the tracking duration is more than one day?
-            //If yes, the list of activity are not for the same day.
-            //Throw exception.
-            if (dayActivitySummary.durationMills > 86400000 /* Milliseconds in one day */) {
-                throw IllegalArgumentException("The list of activities must be for the same day.")
-            }
-
             dayActivitySummary.userActivities = dayActivity
             return dayActivitySummary
+        }
+
+        @VisibleForTesting
+        internal fun convertToValidUserActivityList(dayActivity: ArrayList<UserActivity>) {
+            //Sort by the event start time in descending order
+            Collections.sort(dayActivity) { o1, o2 -> (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt() }
+
+            //Remove the last incomplete event
+            val iter = dayActivity.iterator()
+            while (iter.hasNext()) {
+                val value = iter.next()
+                if (value.eventEndTimeMills <= 0L || value.eventStartTimeMills <= 0L) {
+                    iter.remove()
+                }
+            }
         }
     }
 }
