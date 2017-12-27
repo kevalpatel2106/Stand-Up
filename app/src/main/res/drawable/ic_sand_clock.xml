@@ -1,9 +1,26 @@
+<!--
+  ~  Copyright 2017 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportHeight="473.068"
-        android:viewportWidth="473.068">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportHeight="473.068"
+    android:viewportWidth="473.068">
     <path
         android:fillColor="#FFF"
         android:pathData="M355.5,182c8.8,-6.1 29.4,-20.5 29.4,-55.4v-71.8h9.8c4.5,0 8.2,-3.7 8.2,-8.2v-38.5c0,-4.5 -3.7,-8.2 -8.2,-8.2H78.3c-4.5,0 -8.2,3.7 -8.2,8.2v38.5c0,4.5 3.7,8.2 8.2,8.2h9.8v73.1c0,34.5 10.5,42.6 29.1,53.9l80.8,49.2v21c-20.3,12.2 -73.5,44.2 -80.4,49.1c-8.8,6.1 -29.4,20.5 -29.4,55.4v61.8h-9.8c-4.5,0 -8.2,3.7 -8.2,8.2v38.5c0,4.5 3.7,8.2 8.2,8.2h316.4c4.5,0 8.2,-3.7 8.2,-8.2V426.4c0,-4.5 -3.7,-8.2 -8.2,-8.2h-9.8v-63.1c0,-34.5 -10.5,-42.6 -29.1,-53.9l-80.7,-49.2v-21C295.4,218.8 348.5,186.8 355.5,182zM252.7,272.9l87.8,53.5c6.7,4.1 10.3,6.4 12,9c2,3.2 3,9.6 3,19.8v63.1H117.6v-61.8c0,-19.5 9.7,-26.3 16.8,-31.2c5.5,-3.9 54.4,-33.4 85.9,-52.3c4.4,-2.7 7.1,-7.4 7.1,-12.6v-37.6c0,-5.1 -2.7,-9.9 -7.1,-12.6l-87.8,-53.5c-6.7,-4.1 -10.3,-6.4 -12,-9c-2,-3.2 -3,-9.6 -3,-19.8V54.8h237.9v71.8c0,19.5 -9.7,26.3 -16.8,31.2c-5.5,3.9 -54.4,33.4 -85.9,52.3c-4.4,2.7 -7.1,7.4 -7.1,12.6v37.6C245.7,265.4 248.3,270.2 252.7,272.9z"
