@@ -15,17 +15,18 @@
  *
  */
 
-package com.kevalpatel2106.standup.dashboard.repo
+package com.kevalpatel2106.base.arch
 
-import com.kevalpatel2106.standup.db.DailyActivitySummary
-import io.reactivex.Flowable
+import android.arch.lifecycle.LiveData
 
 /**
- * Created by Kevalpatel2106 on 25-Dec-17.
+ * Created by Keval on 27/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-interface DashboardRepo {
+class CallbackEvent : LiveData<Unit>() {
 
-    fun getTodaySummary(): Flowable<DailyActivitySummary>
+    fun call() {
+        value = Unit
+    }
 }

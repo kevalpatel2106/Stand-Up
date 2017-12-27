@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.dashboard
 
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
@@ -65,6 +66,7 @@ class DashboardFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -77,29 +79,31 @@ class DashboardFragment : Fragment() {
             it!!.getMessage(context)?.let { showSnack(it) }
         })
 
-        model.sittingPercent.observe(this, Observer<Float> {
+        //Observe events for efficiency card
+        model.todaySummaryStartLoading.observe(this@DashboardFragment, Observer {
+            efficiency_card_view_flipper.displayedChild = 1
+        })
+        model.todaySummaryErrorCallback.observe(this@DashboardFragment, Observer {
             it?.let {
-                setPieChartData(sittingDurationPercent = it,
-                        standingDurationPercent = model.standingPercent.value ?: 0F)
+                efficiency_card_view_flipper.displayedChild = 2
+
+                //Display error view
+                efficiency_card_error_view.setError(it)
             }
         })
-        model.standingPercent.observe(this, Observer<Float> {
+        model.todaySummary.observe(this@DashboardFragment, Observer {
             it?.let {
-                setPieChartData(sittingDurationPercent = model.sittingPercent.value ?: 0F,
-                        standingDurationPercent = it)
+                //Display summary
+                efficiency_card_view_flipper.displayedChild = 0
+
+                setPieChartData(sittingDurationPercent = it.sittingPercent,
+                        standingDurationPercent = it.standingPercent)
+
+                total_time_tv.text = it.durationTimeHours
+                start_end_time_tv.text = "${it.startTimeHours} - ${it.endTimeHours}"
+                total_standing_time_tv.text = it.standingTimeHours
+                total_sitting_time_tv.text = it.sittingTimeHours
             }
-        })
-        model.trackedDuration.observe(this, Observer<String> {
-            it?.let { total_time_tv.text = it }
-        })
-        model.trackedTime.observe(this, Observer<String> {
-            it?.let { start_end_time_tv.text = it }
-        })
-        model.standingTime.observe(this, Observer<String> {
-            it?.let { total_standing_time_tv.text = it }
-        })
-        model.sittingTime.observe(this, Observer<String> {
-            it?.let { total_sitting_time_tv.text = it }
         })
     }
 

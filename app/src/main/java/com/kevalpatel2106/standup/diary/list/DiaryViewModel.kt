@@ -21,6 +21,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.base.arch.CallbackEvent
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.db.DailyActivitySummary
@@ -45,7 +46,7 @@ internal class DiaryViewModel : BaseViewModel {
 
     val noMoreData = MutableLiveData<Boolean>()
 
-    val pageLoadingCompleteCallback = MutableLiveData<Unit>()
+    val pageLoadingCompleteCallback = CallbackEvent()
 
     @VisibleForTesting
     internal val userActivityRepo: DairyRepo
@@ -111,7 +112,7 @@ internal class DiaryViewModel : BaseViewModel {
                     }
                 }
                 .doOnTerminate {
-                    pageLoadingCompleteCallback.value = Unit
+                    pageLoadingCompleteCallback.call()
                 }
                 .subscribe({
                     //Update data

@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.dashboard.repo
 
+import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import io.reactivex.BackpressureStrategy
@@ -32,7 +33,7 @@ import kotlin.collections.ArrayList
  */
 class DashboardRepoImpl : DashboardRepo {
 
-    override fun getTodayEvents(): Flowable<ArrayList<UserActivity>> {
+    override fun getTodaySummary(): Flowable<DailyActivitySummary> {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
@@ -48,9 +49,25 @@ class DashboardRepoImpl : DashboardRepo {
             val item = StandUpDb.getDb().userActivityDao()
                     .getActivityBetweenDuration(startTimeMills, endTimeMills)
 
-            if (item.isNotEmpty()) it.onNext(item)
+            it.onNext(item)
             it.onComplete()
-        }, BackpressureStrategy.DROP).map { t -> ArrayList(t) }
+        }, BackpressureStrategy.DROP)
+                .filter { t -> t.isNotEmpty() }
+                .map { t -> ArrayList(t) }
+                .map { arrayList ->
+                    //Sort by the event start time in descending order
+                    Collections.sort(arrayList) { o1, o2 ->
+                        (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt()
+                    }
+
+                    //If the latest event is not completed yet...
+                    if (arrayList.first().eventEndTimeMills == 0L)
+                        arrayList.first().eventEndTimeMills = System.currentTimeMillis()
+
+                    //Generate the summary
+                    DailyActivitySummary.convertToValidUserActivityList(arrayList)
+                    DailyActivitySummary.fromDayActivityList(arrayList)
+                }
     }
 
 }

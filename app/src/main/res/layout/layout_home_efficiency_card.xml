@@ -23,117 +23,133 @@
     android:layout_height="wrap_content"
     tools:showIn="@layout/fragment_home">
 
-    <android.support.constraint.ConstraintLayout
+    <ViewFlipper
+        android:id="@+id/efficiency_card_view_flipper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
+        <!--0. Summary view-->
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <!--Efficiency percentage-->
-        <com.github.mikephil.charting.charts.PieChart
-            android:id="@+id/home_efficiency_card_pie_chart"
-            style="@style/LargeText.Primary"
-            android:layout_width="0dp"
-            android:layout_height="160dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_card_title_tv"
-            tools:ignore="RtlSymmetry" />
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
-        <!--Title of the card-->
-        <com.kevalpatel2106.base.view.BaseTextView
-            android:id="@+id/home_card_title_tv"
-            style="@style/MediumText.Primary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/home_efficiency_card_pie_chart"
-            android:text="Effectively"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <!--Efficiency percentage-->
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/home_efficiency_card_pie_chart"
+                style="@style/LargeText.Primary"
+                android:layout_width="0dp"
+                android:layout_height="160dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_card_title_tv"
+                tools:ignore="RtlSymmetry" />
 
-        <com.kevalpatel2106.base.view.BaseTextView
-            android:id="@+id/start_end_time_tv"
-            style="@style/SmallText.Primary"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="8dp"
-            android:drawablePadding="@dimen/spacing_nano"
-            android:drawableStart="@drawable/ic_sand_clock"
-            android:drawableTint="@android:color/darker_gray"
-            android:gravity="center_vertical"
-            app:layout_constraintEnd_toStartOf="@+id/guideline9"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_efficiency_card_pie_chart"
-            tools:ignore="UnusedAttribute"
-            tools:text="10:12am - 7:30pm" />
+            <!--Title of the card-->
+            <com.kevalpatel2106.base.view.BaseTextView
+                android:id="@+id/home_card_title_tv"
+                style="@style/MediumText.Primary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/home_efficiency_card_pie_chart"
+                android:text="Effectively"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.kevalpatel2106.base.view.BaseTextView
-            android:id="@+id/total_time_tv"
-            style="@style/SmallText.Primary"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_toEndOf="@id/start_end_time_tv"
-            android:drawablePadding="@dimen/spacing_nano"
-            android:drawableStart="@drawable/ic_clock_white"
-            android:drawableTint="@android:color/darker_gray"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/start_end_time_tv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline9"
-            app:layout_constraintTop_toTopOf="@+id/start_end_time_tv"
-            app:layout_constraintVertical_bias="1.0"
-            tools:ignore="UnusedAttribute"
-            tools:text="7h 12m" />
+            <com.kevalpatel2106.base.view.BaseTextView
+                android:id="@+id/start_end_time_tv"
+                style="@style/SmallText.Primary"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="8dp"
+                android:drawablePadding="@dimen/spacing_nano"
+                android:drawableStart="@drawable/ic_sand_clock"
+                android:drawableTint="@android:color/darker_gray"
+                android:gravity="center_vertical"
+                app:layout_constraintEnd_toStartOf="@+id/guideline9"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_efficiency_card_pie_chart"
+                tools:ignore="UnusedAttribute"
+                tools:text="10:12am - 7:30pm" />
 
-        <com.kevalpatel2106.base.view.BaseTextView
-            android:id="@+id/total_standing_time_tv"
-            style="@style/SmallText.Primary"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/start_end_time_tv"
-            android:drawablePadding="@dimen/spacing_nano"
-            android:drawableStart="@drawable/ic_man_standing"
-            android:drawableTint="@android:color/darker_gray"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/total_sitting_time_tv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline9"
-            app:layout_constraintTop_toTopOf="@+id/total_sitting_time_tv"
-            tools:ignore="UnusedAttribute"
-            tools:text="7h 12m" />
+            <com.kevalpatel2106.base.view.BaseTextView
+                android:id="@+id/total_time_tv"
+                style="@style/SmallText.Primary"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@id/start_end_time_tv"
+                android:drawablePadding="@dimen/spacing_nano"
+                android:drawableStart="@drawable/ic_clock_white"
+                android:drawableTint="@android:color/darker_gray"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/start_end_time_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/start_end_time_tv"
+                app:layout_constraintVertical_bias="1.0"
+                tools:ignore="UnusedAttribute"
+                tools:text="7h 12m" />
 
-        <com.kevalpatel2106.base.view.BaseTextView
-            android:id="@+id/total_sitting_time_tv"
-            style="@style/SmallText.Primary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/start_end_time_tv"
-            android:layout_marginBottom="@dimen/spacing_micro"
-            android:layout_marginTop="@dimen/spacing_micro"
-            android:layout_toEndOf="@id/total_standing_time_tv"
-            android:drawablePadding="@dimen/spacing_nano"
-            android:drawableStart="@drawable/ic_sitting"
-            android:drawableTint="@android:color/darker_gray"
-            android:gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline9"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/start_end_time_tv"
-            tools:ignore="UnusedAttribute"
-            tools:text="7h 12m" />
-    </android.support.constraint.ConstraintLayout>
+            <com.kevalpatel2106.base.view.BaseTextView
+                android:id="@+id/total_standing_time_tv"
+                style="@style/SmallText.Primary"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/start_end_time_tv"
+                android:drawablePadding="@dimen/spacing_nano"
+                android:drawableStart="@drawable/ic_man_standing"
+                android:drawableTint="@android:color/darker_gray"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/total_sitting_time_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/total_sitting_time_tv"
+                tools:ignore="UnusedAttribute"
+                tools:text="7h 12m" />
+
+            <com.kevalpatel2106.base.view.BaseTextView
+                android:id="@+id/total_sitting_time_tv"
+                style="@style/SmallText.Primary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/start_end_time_tv"
+                android:layout_marginBottom="@dimen/spacing_micro"
+                android:layout_marginTop="@dimen/spacing_micro"
+                android:layout_toEndOf="@id/total_standing_time_tv"
+                android:drawablePadding="@dimen/spacing_nano"
+                android:drawableStart="@drawable/ic_sitting"
+                android:drawableTint="@android:color/darker_gray"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/start_end_time_tv"
+                tools:ignore="UnusedAttribute"
+                tools:text="7h 12m" />
+        </android.support.constraint.ConstraintLayout>
+
+        <!--1. loader-->
+        <include layout="@layout/layout_loader" />
+
+        <!--2. Error view-->
+        <com.kevalpatel2106.base.view.ErrorView
+            android:id="@+id/efficiency_card_error_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ViewFlipper>
 </android.support.v7.widget.CardView>
