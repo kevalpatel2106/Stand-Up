@@ -28,6 +28,8 @@ internal class DiaryViewModel : BaseViewModel {
 
     val noMoreData = MutableLiveData<Boolean>()
 
+    val pageLoadingCompleteCallback = MutableLiveData<Unit>()
+
     @VisibleForTesting
     internal val userActivityRepo: DairyRepo
 
@@ -72,12 +74,27 @@ internal class DiaryViewModel : BaseViewModel {
                     noMoreData.value = false
                     if (isFirstPage) blockUi.value = true
                 })
-                .doOnTerminate {
-
-                }
                 .doOnNext {
                     //Do not block UI.
                     blockUi.value = false
+                }
+                .doOnComplete {
+                    activities.value?.let {
+
+                        //If there are no items on the list...
+                        //Display no data found view
+                        if (it.isEmpty()) {
+                            val message = ErrorMessage("No data available!!")
+                            errorMessage.value = message
+                        } else if (it.size.rem(DairyRepo.PAGE_SIZE) != 0) {
+                            //If after terminate there not enough item that can fill the page...
+                            //Indicates there is no more data to show.
+                            noMoreData.value = true
+                        }
+                    }
+                }
+                .doOnTerminate {
+                    pageLoadingCompleteCallback.value = Unit
                 }
                 .subscribe({
                     //Update data

@@ -53,7 +53,7 @@ class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListen
         sleep_diary_rv.itemAnimator = DefaultItemAnimator()
         sleep_diary_rv.adapter = adapter
 
-        //Observe error messages
+        //Observe when to display error view.
         model.errorMessage.observe(this@DiaryFragment, Observer {
             it?.let {
                 if (adapter.itemCount == 0) {
@@ -72,6 +72,7 @@ class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListen
             }
         })
 
+        //Observer when to display loader.
         model.blockUi.observe(this@DiaryFragment, Observer {
             it?.let {
                 if (it) {
@@ -84,20 +85,13 @@ class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListen
             }
         })
 
+        //Observer when to display list with the refreshed data
         model.activities.observe(this@DiaryFragment, Observer {
+            it?.let { adapter.notifyItemInserted(it.lastIndex) }
+        })
 
-            it?.let {
-                if (it.isEmpty()) {
-                    dairy_error_view.setError("No data available!!")
-                    sleep_diary_view_flipper.displayedChild = 2
-                } else {
-                    sleep_diary_view_flipper.displayedChild = 0
-
-                    //Refresh the list
-                    adapter.notifyDataSetChanged()
-                    adapter.onPageLoadComplete(true)
-                }
-            }
+        model.pageLoadingCompleteCallback.observe(this@DiaryFragment, Observer {
+            adapter.onPageLoadComplete()
         })
 
         model.noMoreData.observe(this@DiaryFragment, Observer {

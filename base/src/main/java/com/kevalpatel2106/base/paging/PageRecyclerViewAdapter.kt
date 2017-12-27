@@ -42,8 +42,6 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
         protected val listener: RecyclerViewListener<T>?
 ) : RecyclerView.Adapter<PageRecyclerViewAdapter.PageViewHolder>() {
 
-    constructor(context: Context, listener: RecyclerViewListener<T>?) : this(context, ArrayList<T>(), listener)
-
     @Suppress("PrivatePropertyName")
     private val TYPE_LOADER = 5364
 
@@ -91,7 +89,9 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
     }
 
     @CallSuper
-    override fun getItemCount(): Int = if (!collection.isEmpty() && hasNextPage && listener != null)
+    override fun getItemCount(): Int = if (collection.size >= getPageSize()
+            && hasNextPage
+            && listener != null)
         collection.size + 1 /* Number items + Loader */
     else
         collection.size /* Number items */
@@ -99,10 +99,11 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
     @CallSuper
     override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
         //Notify on page complete
-        if (listener != null
-                && hasNextPage
-                && !lockPagination
-                && position == collection.size - 1 /* Last item in the list */) {
+        if (listener != null        /* Listener is not provided indicates subscriber doesn't want pagination. */
+                && hasNextPage      /* If there is next page. */
+                && !lockPagination  /* If previous page complete call completed. */
+                && position == collection.lastIndex /* Last item in the list */
+                && collection.size >= getPageSize()  /* If number of items cannot fill the first page. */) {
             listener.onPageComplete(collection.last())
             lockPagination = true
         }
@@ -150,10 +151,8 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
 
     /**
      * Call this method to release pagination lock once you complete the loading of next page.
-     *
-     * @param isLoadSuccessful True if the page loading is successful else false..
      */
-    fun onPageLoadComplete(isLoadSuccessful: Boolean) {
+    fun onPageLoadComplete() {
         //Release the pagination lock
         lockPagination = false
     }
@@ -185,6 +184,8 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
      */
     @MainThread
     abstract fun prepareViewType(position: Int): Int
+
+    abstract fun getPageSize(): Int
 
     /**
      * Loading view holder

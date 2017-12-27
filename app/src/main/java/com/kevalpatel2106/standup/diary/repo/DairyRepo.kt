@@ -12,6 +12,10 @@ import java.util.*
  */
 interface DairyRepo {
 
+    companion object {
+        const val PAGE_SIZE = 10
+    }
+
     fun loadUserActivityByDay(calendar: Calendar): List<UserActivity>
 
     /**

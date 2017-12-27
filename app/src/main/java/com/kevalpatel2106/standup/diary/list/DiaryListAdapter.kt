@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.ViewGroup
 import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
 import com.kevalpatel2106.standup.db.DailyActivitySummary
+import com.kevalpatel2106.standup.diary.repo.DairyRepo
 
 /**
  * Created by Keval on 23/12/17.
@@ -42,4 +43,5 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
         return TYPE_DAY_VIEW        //TODO Add month header
     }
 
+    override fun getPageSize(): Int = DairyRepo.PAGE_SIZE
 }

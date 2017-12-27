@@ -49,12 +49,13 @@ class DairyRepoImpl : DairyRepo {
             //TODO call the server for more events.
 
             //Nothing from the network
+            e.onComplete()
         }, BackpressureStrategy.BUFFER)
                 .map(Function<List<UserActivity>, DailyActivitySummary> {
                     return@Function DailyActivitySummary.fromDayActivityList(ArrayList(it))
                 })
 
-        return flowable.zipWith(Flowable.range(1, 10)  /*Flowable that emits 1 to 10*/,
+        return flowable.zipWith(Flowable.range(1, DairyRepo.PAGE_SIZE)  /*Flowable that emits 1 to 10*/,
                 BiFunction<DailyActivitySummary, Int, DailyActivitySummary> { t1, _ ->
                     t1 /* Emit the DailyActivitySummary list */
                 })
