@@ -36,10 +36,10 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AppConfig
-import com.kevalpatel2106.standup.timelineview.TimeLineItem
 import com.kevalpatel2106.standup.timelineview.TimeLineLength
 import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.showSnack
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
 import kotlinx.android.synthetic.main.layout_home_timeline_card.*
 
@@ -63,7 +63,7 @@ class DashboardFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
     @SuppressLint("SetTextI18n")
@@ -71,7 +71,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setEfficiencyCard()
-        setTimelineCard()
+        today_time_line.timelineDuration = TimeLineLength.A_DAY
 
         val model = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         //Observe error messages
@@ -89,6 +89,7 @@ class DashboardFragment : Fragment() {
 
                 //Display error view
                 efficiency_card_error_view.setError(it)
+                time_line_card.visibility = View.GONE
             }
         })
         model.todaySummary.observe(this@DashboardFragment, Observer {
@@ -105,6 +106,14 @@ class DashboardFragment : Fragment() {
                 total_sitting_time_tv.text = it.sittingTimeHours
             }
         })
+
+        //Observe events for time line card
+        model.timelineEventsList.observe(this@DashboardFragment, Observer {
+            it?.let {
+                time_line_card.visibility = View.VISIBLE
+                today_time_line.timelineItems = it
+            }
+        })
     }
 
     /**
@@ -115,13 +124,12 @@ class DashboardFragment : Fragment() {
         home_efficiency_card_pie_chart.setDrawCenterText(false) //Don't want to draw text on center
         home_efficiency_card_pie_chart.description.isEnabled = false    //Don't want to display any description
         home_efficiency_card_pie_chart.setUsePercentValues(true)    //All the values in %.
-        home_efficiency_card_pie_chart.setDrawEntryLabels(false)
         home_efficiency_card_pie_chart.animateY(AppConfig.PIE_CHART_TIME, Easing.EasingOption.EaseInOutQuad)
         home_efficiency_card_pie_chart.setDrawEntryLabels(false)
 
         //The hole in the middle
         home_efficiency_card_pie_chart.isDrawHoleEnabled = true //Display the hole in the middle
-        home_efficiency_card_pie_chart.holeRadius = 40F //Keep the hole radius 40% of total chart radius
+        home_efficiency_card_pie_chart.holeRadius = 50F //Keep the hole radius 40% of total chart radius
         home_efficiency_card_pie_chart.transparentCircleRadius = home_efficiency_card_pie_chart.holeRadius  //Keep the transparent radius 40% of total chart radius
         home_efficiency_card_pie_chart.setHoleColor(Color.TRANSPARENT)  //Keep hole transparent.
 
@@ -141,25 +149,34 @@ class DashboardFragment : Fragment() {
         l.setDrawInside(false)
         l.textColor = Color.WHITE
         l.textSize = ViewUtils.toPx(context!!, 5).toFloat()
+
+        setPieChartData(0F, 0F)
     }
 
     private fun setPieChartData(sittingDurationPercent: Float, standingDurationPercent: Float) {
+        val isValueToDisplay = standingDurationPercent + sittingDurationPercent == 0F
         //Prepare the values in the pie chart.
-        val entries = ArrayList<PieEntry>(2)
+        val entries = ArrayList<PieEntry>()
         entries.add(PieEntry(sittingDurationPercent, "Sitting"))   //Sitting time percentage
         entries.add(PieEntry(standingDurationPercent, "Standing"))  //Standing time percentage
 
         //Prepare the colors for each segment in the pie chart.
-        val colors = ArrayList<Int>(2)
-        colors.add(ContextCompat.getColor(context!!, R.color.colorPrimaryDark))       //Chart color for sitting segment
+        val colors = ArrayList<Int>()
+        colors.add(ContextCompat.getColor(context!!, android.R.color.holo_green_dark))       //Chart color for sitting segment
         colors.add(ContextCompat.getColor(context!!, android.R.color.holo_orange_dark)) //Chart color for standing segment
+
+        if (isValueToDisplay) {
+            entries.add(PieEntry(100F, "Not tracked"))  //Standing time percentage
+            colors.add(ContextCompat.getColor(context!!, android.R.color.darker_gray)) //Chart color for standing segment
+        }
+        home_efficiency_card_pie_chart.isHighlightPerTapEnabled = !isValueToDisplay
 
         val dataSet = PieDataSet(entries, "")
         dataSet.setDrawIcons(false)
         dataSet.colors = colors
         dataSet.sliceSpace = 2F
         dataSet.setAutomaticallyDisableSliceSpacing(true)
-        dataSet.setDrawValues(true)
+        dataSet.setDrawValues(!isValueToDisplay)
 
         val data = PieData(dataSet)
         data.setValueFormatter(PercentFormatter())
@@ -169,46 +186,5 @@ class DashboardFragment : Fragment() {
         home_efficiency_card_pie_chart.data = data
         home_efficiency_card_pie_chart.highlightValue(null)
         home_efficiency_card_pie_chart.invalidate()
-    }
-
-    /**
-     * Set up the time line card.
-     */
-    private fun setTimelineCard() {
-        //Timeline view
-        today_time_line.timelineDuration = TimeLineLength.A_DAY
-
-        val timelineItems = ArrayList<TimeLineItem>()
-        timelineItems.add(TimeLineItem(
-                startTime = 3600,
-                endTime = 2 * 3600,
-                color = ContextCompat.getColor(this.context!!, android.R.color.holo_green_dark)
-        ))
-        timelineItems.add(TimeLineItem(
-                startTime = (2.5 * 3600).toLong(),
-                endTime = 3 * 3600,
-                color = ContextCompat.getColor(this.context!!, android.R.color.holo_orange_dark)
-        ))
-        timelineItems.add(TimeLineItem(
-                startTime = 3 * 3600,
-                endTime = (3.25 * 3600).toLong(),
-                color = ContextCompat.getColor(this.context!!, android.R.color.holo_green_dark)
-        ))
-        timelineItems.add(TimeLineItem(
-                startTime = 6 * 3600,
-                endTime = 8 * 3600,
-                color = ContextCompat.getColor(this.context!!, android.R.color.holo_orange_dark)
-        ))
-        timelineItems.add(TimeLineItem(
-                startTime = 5 * 3600,
-                endTime = (5.90 * 3600).toLong(),
-                color = ContextCompat.getColor(this.context!!, android.R.color.holo_green_dark)
-        ))
-        timelineItems.add(TimeLineItem(
-                startTime = 12 * 3600,
-                endTime = 23 * 3600,
-                color = ContextCompat.getColor(this.context!!, android.R.color.holo_orange_dark)
-        ))
-        today_time_line.timelineItems = timelineItems
     }
 }

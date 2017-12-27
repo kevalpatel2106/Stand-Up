@@ -15,9 +15,9 @@
  *
  */
 
-package com.kevalpatel2106.standup.validatorTest
+package com.kevalpatel2106.standup.misc.validatorTest
 
-import com.kevalpatel2106.standup.Validator
+import com.kevalpatel2106.standup.misc.Validator
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

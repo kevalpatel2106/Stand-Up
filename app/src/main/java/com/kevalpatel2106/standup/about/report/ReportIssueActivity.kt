@@ -26,7 +26,7 @@ import butterknife.OnClick
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.SUUtils
+import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_report_issue.*
 import org.jetbrains.anko.alert

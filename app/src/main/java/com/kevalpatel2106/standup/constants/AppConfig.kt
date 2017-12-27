@@ -17,6 +17,9 @@
 
 package com.kevalpatel2106.standup.constants
 
+import android.graphics.Color
+import android.support.annotation.ColorInt
+
 /**
  * Created by Keval on 17/11/17.
  * This class contains configuration variables for application.
@@ -53,6 +56,15 @@ internal object AppConfig {
     const val MIN_NAME = 6
     const val MAX_NAME = 30
     //---- End of Validation ----//
+
+    //---- Start of Timeline config ----//
+    @ColorInt
+    const val COLOR_SITTING = Color.RED
+    @ColorInt
+    const val COLOR_STANDING = Color.GREEN
+    @ColorInt
+    const val COLOR_NOT_TRACKED = Color.TRANSPARENT
+    //---- End of Timeline config ----//
 
     const val GENDER_MALE = "male"
     const val GENDER_FEMALE = "female"

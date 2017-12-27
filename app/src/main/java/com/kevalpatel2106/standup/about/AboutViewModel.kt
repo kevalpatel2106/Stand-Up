@@ -31,9 +31,9 @@ import com.google.android.gms.appinvite.AppInviteInvitation
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.about.donate.SupportDevelopmentActivity
 import com.kevalpatel2106.standup.about.report.ReportIssueActivity
+import com.kevalpatel2106.standup.misc.SUUtils
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 

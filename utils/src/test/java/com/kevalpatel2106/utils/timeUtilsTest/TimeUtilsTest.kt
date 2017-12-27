@@ -18,8 +18,11 @@
 package com.kevalpatel2106.utils.timeUtilsTest
 
 import com.kevalpatel2106.utils.TimeUtils
+import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.util.*
 
 /**
  * Created by Kevalpatel2106 on 22-Dec-17.
@@ -40,5 +43,29 @@ class TimeUtilsTest {
     fun convertToMilli() {
         val timeNano = System.currentTimeMillis() * 1000000
         assertTrue(TimeUtils.convertToMilli(timeNano) == timeNano / 1000000)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkGetMilliSecFrom12AM() {
+        val today12AmCal = Calendar.getInstance()
+        today12AmCal.set(Calendar.HOUR, 0)
+        today12AmCal.set(Calendar.MINUTE, 0)
+        today12AmCal.set(Calendar.SECOND, 0)
+        today12AmCal.set(Calendar.MILLISECOND, 0)
+        today12AmCal.add(Calendar.HOUR, 2)
+        assertEquals(TimeUtils.getMilliSecFrom12AM(today12AmCal.timeInMillis),
+                2L.times(3600L).times(1000L))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkGetMilliSecFrom12AMWithZeroTime() {
+        try {
+            TimeUtils.getMilliSecFrom12AM(0)
+            Assert.fail()
+        } catch (e: IllegalArgumentException) {
+            //Test Passed
+        }
     }
 }

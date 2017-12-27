@@ -20,9 +20,9 @@ package com.kevalpatel2106.standup.db
 import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
-import com.kevalpatel2106.standup.Validator
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
+import com.kevalpatel2106.standup.misc.Validator
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
 import java.text.SimpleDateFormat

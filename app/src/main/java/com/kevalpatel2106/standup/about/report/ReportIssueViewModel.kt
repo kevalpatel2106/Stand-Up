@@ -26,7 +26,7 @@ import com.github.javiersantos.appupdater.objects.Update
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.Validator
+import com.kevalpatel2106.standup.misc.Validator
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.

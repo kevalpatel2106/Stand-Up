@@ -15,10 +15,9 @@
  *
  */
 
-package com.kevalpatel2106.standup.validatorTest
+package com.kevalpatel2106.standup.misc.validatorTest
 
-import com.kevalpatel2106.standup.Validator
-import com.kevalpatel2106.standup.constants.AppConfig
+import com.kevalpatel2106.standup.misc.Validator
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +29,7 @@ import org.junit.runners.Parameterized
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @RunWith(Parameterized::class)
-class WeightValidatorTest(private val input: Float, private val expected: Boolean) {
+class IssueTitleDescriptionValidatorTest(private val input: String?, private val expected: Boolean) {
 
     companion object {
 
@@ -38,19 +37,20 @@ class WeightValidatorTest(private val input: Float, private val expected: Boolea
         @Parameterized.Parameters
         fun data(): ArrayList<Array<out Any?>> {
             return arrayListOf(
-                    arrayOf(0F, false),
-                    arrayOf(0.1F, false),
-                    arrayOf(AppConfig.MIN_WEIGHT, true),
-                    arrayOf(AppConfig.MAX_WEIGHT, true),
-                    arrayOf((AppConfig.MAX_WEIGHT + AppConfig.MIN_WEIGHT) / 2, true),
-                    arrayOf(AppConfig.MIN_WEIGHT - 2F, false),
-                    arrayOf(AppConfig.MAX_WEIGHT + 2F, false)
+                    arrayOf(null, false),
+                    arrayOf("", false),
+                    arrayOf("test issue title and description", true)
             )
         }
     }
 
     @Test
-    fun testEmail() {
-        assertEquals(expected, Validator.isValidWeight(input))
+    fun testIssueTitle() {
+        assertEquals(expected, Validator.isValidIssueTitle(input))
+    }
+
+    @Test
+    fun testIssueDescription() {
+        assertEquals(expected, Validator.isValidIssueDescription(input))
     }
 }

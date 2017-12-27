@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.utils
 
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -58,5 +59,34 @@ object TimeUtils {
         10 -> "NOV"
         11 -> "DEC"
         else -> throw IllegalArgumentException("Invalid month: ".plus(monthOfYear))
+    }
+
+    fun getMonthName(monthOfYear: Int): String = when (monthOfYear) {
+        0 -> "January"
+        1 -> "February"
+        2 -> "March"
+        3 -> "April"
+        4 -> "May"
+        5 -> "June"
+        6 -> "July"
+        7 -> "August"
+        8 -> "September"
+        9 -> "October"
+        10 -> "November"
+        11 -> "December"
+        else -> throw IllegalArgumentException("Invalid month: ".plus(monthOfYear))
+    }
+
+    fun getMilliSecFrom12AM(unixMills: Long): Long {
+        if (unixMills <= 0)
+            throw IllegalArgumentException("Invalid unix time: ".plus(unixMills))
+
+        val today12AmCal = Calendar.getInstance()
+        today12AmCal.timeInMillis = unixMills
+        today12AmCal.set(Calendar.HOUR, 0)
+        today12AmCal.set(Calendar.MINUTE, 0)
+        today12AmCal.set(Calendar.SECOND, 0)
+        today12AmCal.set(Calendar.MILLISECOND, 0)
+        return unixMills - today12AmCal.timeInMillis
     }
 }

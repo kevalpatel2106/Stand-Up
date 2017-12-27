@@ -27,11 +27,11 @@ import com.kevalpatel2106.base.arch.SingleLiveEvent
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.Validator
 import com.kevalpatel2106.standup.authentication.repo.LoginRequest
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.standup.misc.Validator
 import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

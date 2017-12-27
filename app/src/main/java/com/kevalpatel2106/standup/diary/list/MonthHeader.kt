@@ -24,7 +24,7 @@ import com.kevalpatel2106.standup.db.DailyActivitySummary
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class MonthHeader(monthOfYear: Int, year: Int) : DailyActivitySummary(
+internal class MonthHeader(monthOfYear: Int, year: Int) : DailyActivitySummary(
         dayOfMonth = 1,
         monthOfYear = monthOfYear,
         year = year,

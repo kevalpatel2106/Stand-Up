@@ -25,6 +25,8 @@ import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
 import com.kevalpatel2106.standup.db.DailyActivitySummary
+import com.kevalpatel2106.standup.misc.SUUtils
+import com.kevalpatel2106.standup.timelineview.TimeLineItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -39,6 +41,8 @@ internal class DashboardViewModel : BaseViewModel {
     val todaySummary = MutableLiveData<DailyActivitySummary>()
     val todaySummaryErrorCallback = MutableLiveData<ErrorMessage>()
     val todaySummaryStartLoading = CallbackEvent()
+
+    val timelineEventsList = MutableLiveData<ArrayList<TimeLineItem>>()
 
     /**
      * Private constructor to add the custom [DashboardRepo] for testing.
@@ -81,6 +85,13 @@ internal class DashboardViewModel : BaseViewModel {
                 }
                 .subscribe({
                     todaySummary.value = it
+
+                    //Prepare the timeline data
+                    it.userActivities?.let {
+                        val timelineItems = ArrayList<TimeLineItem>(it.size)
+                        it.forEach { timelineItems.add(SUUtils.createTimeLineItemFromUserActivity(it)) }
+                        timelineEventsList.value = timelineItems
+                    }
                 }, {
                     //Error message
                     todaySummaryErrorCallback.value = ErrorMessage(it.message)

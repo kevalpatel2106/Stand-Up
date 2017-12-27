@@ -29,10 +29,10 @@ import butterknife.OnClick
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.main.MainActivity
+import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_verify_email.*

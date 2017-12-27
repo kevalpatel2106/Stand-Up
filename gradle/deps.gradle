@@ -71,6 +71,7 @@ ext {
             firbase       : "com.google.firebase:firebase-plugins:1.1.5",
             hugo          : "com.jakewharton.hugo:hugo-plugin:1.2.1",
             fabric        : "io.fabric.tools:gradle:1.25.1",
+            ktlint        : 'gradle.plugin.org.jmailen.gradle:kotlinter-gradle:1.6.0'
     ]
 
     //Testing dependency
@@ -172,7 +173,8 @@ ext {
             openSourceLibraries   : 'com.mikepenz:aboutlibraries:6.0.1@aar',
             aboutlibraries        : 'com.github.daniel-stoneuk:material-about-library:2.2.3-support26.1.0',
             appUpdator            : 'com.github.javiersantos:AppUpdater:2.6.4',
-            roundCornerProgressBar: 'com.akexorcist:RoundCornerProgressBar:2.0.3',
+            diagonallayout        : 'com.github.florent37:diagonallayout:1.0.7',
+            chartLayout        : 'com.github.PhilJay:MPAndroidChart:v3.0.3',
     ]
 
     debugLibs = [

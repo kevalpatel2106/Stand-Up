@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.misc
 
 import com.kevalpatel2106.standup.constants.AppConfig
 import java.util.regex.Pattern

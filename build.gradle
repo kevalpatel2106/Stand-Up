@@ -26,7 +26,9 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://jitpack.io" }
         maven { url 'http://repo1.maven.org/maven2' }
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
+
     dependencies {
         classpath gradlePlugins.android
         classpath gradlePlugins.jacoco
@@ -38,6 +40,7 @@ buildscript {
         classpath gradlePlugins.fabric
         classpath gradlePlugins.kotlin
         classpath gradlePlugins.dokka
+        classpath gradlePlugins.ktlint
 
         if (System.getenv('CI') == "true"){
             classpath gradlePlugins.buildScan

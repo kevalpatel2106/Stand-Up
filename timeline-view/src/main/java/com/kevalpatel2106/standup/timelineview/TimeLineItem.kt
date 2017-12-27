@@ -31,7 +31,7 @@ data class TimeLineItem(
         val endTime: Long,
 
         @ColorInt
-        val color: Int = TimeLineConfig.DEFAULT_BLOCK_BG_COLOR
+        val color: Int
 ) {
 
     internal var startX: Float = 0F

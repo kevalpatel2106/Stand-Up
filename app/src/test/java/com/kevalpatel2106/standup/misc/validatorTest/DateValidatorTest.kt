@@ -15,9 +15,9 @@
  *
  */
 
-package com.kevalpatel2106.standup.validatorTest
+package com.kevalpatel2106.standup.misc.validatorTest
 
-import com.kevalpatel2106.standup.Validator
+import com.kevalpatel2106.standup.misc.Validator
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,23 +29,24 @@ import org.junit.runners.Parameterized
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @RunWith(Parameterized::class)
-class DeviceIdValidatorTest(private val input: String?, private val expected: Boolean) {
+class DateValidatorTest(private val input: Int, private val expected: Boolean) {
 
     companion object {
 
         @JvmStatic
         @Parameterized.Parameters
         fun data(): ArrayList<Array<out Any?>> {
-            return arrayListOf(
-                    arrayOf(null, false),
-                    arrayOf("", false),
-                    arrayOf("test-device-id", true)
-            )
+            val list = ArrayList<Array<out Any?>>()
+            (1..31).mapTo(list) { arrayOf(it, true) }
+            list.add(arrayOf(0, false))
+            list.add(arrayOf(32, false))
+            list.add(arrayOf(-1, false))
+            return list
         }
     }
 
     @Test
-    fun testDeviceId() {
-        assertEquals(expected, Validator.isValidDeviceId(input))
+    fun testIsValidDate() {
+        assertEquals(expected, Validator.isValidDate(input))
     }
 }

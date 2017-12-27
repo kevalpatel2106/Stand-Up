@@ -154,8 +154,8 @@ dependencies {
     implementation(otherLib.circleImagView, excludeGrp)
     implementation(otherLib.aboutlibraries, excludeGrp)
     implementation(otherLib.appUpdator, excludeGrp)
-    implementation(otherLib.roundCornerProgressBar, excludeGrp)
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation(otherLib.diagonallayout, excludeGrp)
+    implementation(otherLib.chartLayout, excludeGrp)
     implementation(otherLib.openSourceLibraries) { transitive = true }
     releaseImplementation(otherLib.crashalytics) { transitive = true }
 }

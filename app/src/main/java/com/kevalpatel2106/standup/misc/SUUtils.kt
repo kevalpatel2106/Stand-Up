@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.misc
 
 import android.app.Activity
 import android.content.Context
@@ -23,7 +23,14 @@ import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import com.cocosw.bottomsheet.BottomSheet
+import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.constants.AppConfig
+import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivityType
+import com.kevalpatel2106.standup.timelineview.TimeLineItem
+import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
+import java.util.*
 
 /**
  * Created by Keval on 17/12/17.
@@ -63,4 +70,22 @@ object SUUtils {
         bottomSheet.build()
         bottomSheet.show()
     }
+
+    fun createTimeLineItemFromUserActivity(userActivity: UserActivity): TimeLineItem {
+        val cal = Calendar.getInstance()
+
+        //Set the start time
+        cal.timeInMillis = userActivity.eventStartTimeMills
+
+        return TimeLineItem(
+                startTime = TimeUtils.getMilliSecFrom12AM(userActivity.eventStartTimeMills),
+                endTime = TimeUtils.getMilliSecFrom12AM(userActivity.eventEndTimeMills),
+                color = when (userActivity.userActivityType) {
+                    UserActivityType.MOVING -> AppConfig.COLOR_STANDING
+                    UserActivityType.SITTING -> AppConfig.COLOR_SITTING
+                    UserActivityType.NOT_TRACKED -> AppConfig.COLOR_NOT_TRACKED
+                }
+        )
+    }
+
 }

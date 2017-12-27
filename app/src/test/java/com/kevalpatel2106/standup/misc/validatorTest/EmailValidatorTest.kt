@@ -15,10 +15,9 @@
  *
  */
 
-package com.kevalpatel2106.standup.validatorTest
+package com.kevalpatel2106.standup.misc.validatorTest
 
-import com.kevalpatel2106.standup.Validator
-import com.kevalpatel2106.standup.constants.AppConfig
+import com.kevalpatel2106.standup.misc.Validator
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,7 +29,7 @@ import org.junit.runners.Parameterized
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @RunWith(Parameterized::class)
-class HeightValidatorTest(private val input: Float, private val expected: Boolean) {
+class EmailValidatorTest(private val input: String?, private val expected: Boolean) {
 
     companion object {
 
@@ -38,19 +37,20 @@ class HeightValidatorTest(private val input: Float, private val expected: Boolea
         @Parameterized.Parameters
         fun data(): ArrayList<Array<out Any?>> {
             return arrayListOf(
-                    arrayOf(0F, false),
-                    arrayOf(0.1F, false),
-                    arrayOf(AppConfig.MIN_HEIGHT, true),
-                    arrayOf(AppConfig.MAX_HEIGHT, true),
-                    arrayOf((AppConfig.MAX_HEIGHT + AppConfig.MIN_HEIGHT) / 2, true),
-                    arrayOf(AppConfig.MIN_HEIGHT - 2F, false),
-                    arrayOf(AppConfig.MAX_HEIGHT + 2F, false)
+                    arrayOf(null, false),
+                    arrayOf("examplegmail.com", false),
+                    arrayOf("example@g.com", false),
+                    arrayOf("example@gmail.co.m", false),
+                    arrayOf("example@gmail.c", false),
+                    arrayOf("example@gmail.com", true),
+                    arrayOf("", false)
             )
         }
     }
 
+
     @Test
     fun testEmail() {
-        assertEquals(expected, Validator.isValidHeight(input))
+        assertEquals(expected, Validator.isValidEmail(input))
     }
 }

@@ -15,9 +15,9 @@
  *
  */
 
-package com.kevalpatel2106.standup.validatorTest
+package com.kevalpatel2106.standup.misc.validatorTest
 
-import com.kevalpatel2106.standup.Validator
+import com.kevalpatel2106.standup.misc.Validator
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,28 +29,23 @@ import org.junit.runners.Parameterized
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @RunWith(Parameterized::class)
-class IssueTitleDescriptionValidatorTest(private val input: String?, private val expected: Boolean) {
+class MonthValidatorTest(private val input: Int, private val expected: Boolean) {
 
     companion object {
 
         @JvmStatic
         @Parameterized.Parameters
         fun data(): ArrayList<Array<out Any?>> {
-            return arrayListOf(
-                    arrayOf(null, false),
-                    arrayOf("", false),
-                    arrayOf("test issue title and description", true)
-            )
+            val list = ArrayList<Array<out Any?>>()
+            (0..11).mapTo(list) { arrayOf(it, true) }
+            list.add(arrayOf(12, false))
+            list.add(arrayOf(-1, false))
+            return list
         }
     }
 
     @Test
-    fun testIssueTitle() {
-        assertEquals(expected, Validator.isValidIssueTitle(input))
-    }
-
-    @Test
-    fun testIssueDescription() {
-        assertEquals(expected, Validator.isValidIssueDescription(input))
+    fun testIsValidMonth() {
+        assertEquals(expected, Validator.isValidMonth(input))
     }
 }
