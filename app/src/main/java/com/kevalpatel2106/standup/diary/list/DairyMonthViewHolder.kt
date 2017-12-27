@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kevalpatel2106.standup.R
+import kotlinx.android.synthetic.main.row_dairy_list_month.view.*
 
 /**
  * Created by Kevalpatel2106 on 25-Dec-17.
@@ -22,8 +23,8 @@ internal class DairyMonthViewHolder(itemView: View) : DiaryBaseViewHolder(itemVi
         }
     }
 
-    init {
-
+    fun setData(monthHeader: MonthHeader) {
+        itemView.dairy_row_month_name_header_tv.text = monthHeader.getMonthHeader()
     }
 
 }

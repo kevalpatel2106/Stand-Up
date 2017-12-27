@@ -3,6 +3,7 @@ package com.kevalpatel2106.standup.diary.repo
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.diary.repo.DairyRepo.Companion.PAGE_SIZE
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
@@ -19,14 +20,22 @@ import kotlin.collections.ArrayList
 class DairyRepoImpl : DairyRepo {
 
     /**
-     * Load the 20 days size of [UserActivity] data.
+     * Calling this function will load maximum [PAGE_SIZE] number of days summary which is [beforeMills]
+     * and emit the summary for each day one-by-one. The emitted days will order by the day of year
+     * in descending order.
+     *
+     * Internally this will load the [UserActivity] data from locally cached database using [loadUserActivityByDay]
+     * and or from the network if the database cache is missing. After that, it will process the
+     * [UserActivity] and create the summary of the day in [DailyActivitySummary] and emmit the data.
+     *
+     * @see loadUserActivityByDay
      */
-    override fun loadDaysList(oldestActivityMills: Long): Flowable<DailyActivitySummary> {
+    override fun loadDaysList(beforeMills: Long): Flowable<DailyActivitySummary> {
         @Suppress("SENSELESS_COMPARISON")
         val flowable = Flowable.create(FlowableOnSubscribe<List<UserActivity>> { e ->
             //Setup the calender object.
             val calender = Calendar.getInstance()
-            calender.timeInMillis = oldestActivityMills
+            calender.timeInMillis = beforeMills
 
             //Get the oldest day
             val oldestActivity = StandUpDb.getDb().userActivityDao().getOldestActivity()

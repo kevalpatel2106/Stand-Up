@@ -19,7 +19,15 @@ interface DairyRepo {
     fun loadUserActivityByDay(calendar: Calendar): List<UserActivity>
 
     /**
-     * Load the 20 days size of [UserActivity] data.
+     * Calling this function will load maximum [PAGE_SIZE] number of days summary which is [beforeMills]
+     * and emit the summary for each day one-by-one. The emitted days will order by the day of year
+     * in descending order.
+     *
+     * Internally this will load the [UserActivity] data from locally cached database using [loadUserActivityByDay]
+     * and or from the network if the database cache is missing. After that, it will process the
+     * [UserActivity] and create the summary of the day in [DailyActivitySummary] and emmit the data.
+     *
+     * @see loadUserActivityByDay
      */
-    fun loadDaysList(oldestActivityMills: Long): Flowable<DailyActivitySummary>
+    fun loadDaysList(beforeMills: Long): Flowable<DailyActivitySummary>
 }

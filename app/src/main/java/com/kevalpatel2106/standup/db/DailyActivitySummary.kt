@@ -3,7 +3,6 @@ package com.kevalpatel2106.standup.db
 import android.annotation.SuppressLint
 import android.os.Parcel
 import android.os.Parcelable
-import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.standup.Validator
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
@@ -17,7 +16,7 @@ import java.util.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class DailyActivitySummary(
+open class DailyActivitySummary(
 
         /**
          * Day of the month between 1 to 31.

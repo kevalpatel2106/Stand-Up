@@ -98,8 +98,20 @@ internal class DiaryViewModel : BaseViewModel {
                 }
                 .subscribe({
                     //Update data
-                    activities.value?.add(it)
+                    val newItem = it
+                    activities.value?.let {
+
+                        //Check if the month is changed?
+                        if (it.isEmpty() || newItem.monthOfYear != it.last().monthOfYear) {
+                            //Add the month header.
+                            it.add(MonthHeader(newItem.monthOfYear, newItem.year))
+                        }
+
+                        //Add the new item
+                        it.add(newItem)
+                    }
                     activities.value = activities.value
+
                 }, {
                     blockUi.value = false
 

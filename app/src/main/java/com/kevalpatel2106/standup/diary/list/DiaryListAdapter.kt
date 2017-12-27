@@ -22,7 +22,7 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
     override fun bindView(holder: DiaryBaseViewHolder, item: DailyActivitySummary) {
         when (holder) {
             is DairyMonthViewHolder -> {
-
+                holder.setData(item as MonthHeader)
             }
             is DairyDayViewHolder -> {
                 holder.setData(item)
@@ -40,7 +40,7 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
     }
 
     override fun prepareViewType(position: Int): Int {
-        return TYPE_DAY_VIEW        //TODO Add month header
+        return if (getItem(position) is MonthHeader) TYPE_MONTH_VIEW else TYPE_DAY_VIEW
     }
 
     override fun getPageSize(): Int = DairyRepo.PAGE_SIZE
