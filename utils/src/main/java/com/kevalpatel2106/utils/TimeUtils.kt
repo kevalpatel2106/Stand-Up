@@ -29,6 +29,8 @@ object TimeUtils {
     private val ONE_MIN_MILLS = 60000
     private val ONE_HOUR_MINS = 60
 
+    val ONE_DAY_MILLISECONDS = 86400000L
+
     /**
      * Converts [timeMills] into (hour)h (minutes)m format. Here hour will be in 24 hours format.
      */
@@ -88,5 +90,35 @@ object TimeUtils {
         today12AmCal.set(Calendar.SECOND, 0)
         today12AmCal.set(Calendar.MILLISECOND, 0)
         return unixMills - today12AmCal.timeInMillis
+    }
+
+    //TODO Write test
+    fun getCalender12AM(dayOfMonth: Int, monthOfYear: Int, year: Int): Calendar {
+        val calender12Am = getTodaysCalender12AM()
+        calender12Am.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        calender12Am.set(Calendar.MONTH, monthOfYear)
+        calender12Am.set(Calendar.YEAR, year)
+        return calender12Am
+    }
+
+    //TODO Write test
+    fun getCalender12AM(unixMills: Long): Calendar {
+        val calender12Am = Calendar.getInstance()
+        calender12Am.timeInMillis = unixMills
+        calender12Am.set(Calendar.HOUR, 0)
+        calender12Am.set(Calendar.MINUTE, 0)
+        calender12Am.set(Calendar.SECOND, 0)
+        calender12Am.set(Calendar.MILLISECOND, 0)
+        return calender12Am
+    }
+
+    //TODO Write test
+    fun getTodaysCalender12AM(): Calendar {
+        val calender12Am = Calendar.getInstance()
+        calender12Am.set(Calendar.HOUR, 0)
+        calender12Am.set(Calendar.MINUTE, 0)
+        calender12Am.set(Calendar.SECOND, 0)
+        calender12Am.set(Calendar.MILLISECOND, 0)
+        return calender12Am
     }
 }

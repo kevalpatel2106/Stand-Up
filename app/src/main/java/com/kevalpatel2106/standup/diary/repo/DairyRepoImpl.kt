@@ -50,6 +50,7 @@ class DairyRepoImpl : DairyRepo {
     override fun loadDaysList(beforeMills: Long): Flowable<DailyActivitySummary> {
         @Suppress("SENSELESS_COMPARISON")
         val flowable = Flowable.create(FlowableOnSubscribe<List<UserActivity>> { e ->
+
             //Setup the calender object.
             val calender = Calendar.getInstance()
             calender.timeInMillis = beforeMills

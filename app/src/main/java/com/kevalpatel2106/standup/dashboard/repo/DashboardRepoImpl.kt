@@ -55,15 +55,6 @@ class DashboardRepoImpl : DashboardRepo {
                 .filter { t -> t.isNotEmpty() }
                 .map { t -> ArrayList(t) }
                 .map { arrayList ->
-                    //Sort by the event start time in descending order
-                    Collections.sort(arrayList) { o1, o2 ->
-                        (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt()
-                    }
-
-                    //If the latest event is not completed yet...
-                    if (arrayList.first().eventEndTimeMills == 0L)
-                        arrayList.first().eventEndTimeMills = System.currentTimeMillis()
-
                     //Generate the summary
                     DailyActivitySummary.convertToValidUserActivityList(arrayList)
                     DailyActivitySummary.fromDayActivityList(arrayList)

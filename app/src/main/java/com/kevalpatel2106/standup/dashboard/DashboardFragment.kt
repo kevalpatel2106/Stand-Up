@@ -100,8 +100,7 @@ class DashboardFragment : Fragment() {
                 setPieChartData(sittingDurationPercent = it.sittingPercent,
                         standingDurationPercent = it.standingPercent)
 
-                total_time_tv.text = it.durationTimeHours
-                start_end_time_tv.text = "${it.startTimeHours} - ${it.endTimeHours}"
+                tracked_time_tv.text = it.durationTimeHours
                 total_standing_time_tv.text = it.standingTimeHours
                 total_sitting_time_tv.text = it.sittingTimeHours
             }

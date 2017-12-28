@@ -28,10 +28,7 @@ internal class MonthHeader(monthOfYear: Int, year: Int) : DailyActivitySummary(
         dayOfMonth = 1,
         monthOfYear = monthOfYear,
         year = year,
-        startTimeMills = System.currentTimeMillis(),
-        endTimeMills = System.currentTimeMillis() + 2,
-        sittingTimeMills = 1,
-        standingTimeMills = 1
+        dayActivity = ArrayList(0)
 ) {
 
     fun getMonthHeader() = "$monthInitials, $year"

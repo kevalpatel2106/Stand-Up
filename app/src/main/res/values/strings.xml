@@ -108,6 +108,7 @@
     <string name="btn_title_retry">Retry</string>
     <string name="reminder_notification_title">Stand up now</string>
     <string name="reminder_notification_message">Stand up now</string>
+    <string name="today_summary_heading_since_today_midnight">Since today midnight...</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

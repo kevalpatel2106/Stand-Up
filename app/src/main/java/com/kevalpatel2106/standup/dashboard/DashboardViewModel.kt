@@ -87,11 +87,9 @@ internal class DashboardViewModel : BaseViewModel {
                     todaySummary.value = it
 
                     //Prepare the timeline data
-                    it.userActivities?.let {
-                        val timelineItems = ArrayList<TimeLineItem>(it.size)
-                        it.forEach { timelineItems.add(SUUtils.createTimeLineItemFromUserActivity(it)) }
-                        timelineEventsList.value = timelineItems
-                    }
+                    val timelineItems = ArrayList<TimeLineItem>(it.dayActivity.size)
+                    it.dayActivity.forEach { timelineItems.add(SUUtils.createTimeLineItemFromUserActivity(it)) }
+                    timelineEventsList.value = timelineItems
                 }, {
                     //Error message
                     todaySummaryErrorCallback.value = ErrorMessage(it.message)
