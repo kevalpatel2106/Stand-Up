@@ -19,6 +19,7 @@ package com.kevalpatel2106.standup.db
 
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
+import com.kevalpatel2106.utils.TimeUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,9 +34,14 @@ import org.junit.runners.JUnit4
 class ConvertToValidUserActivityListTest {
 
     @Test
-    fun checkConvertToValidUserActivityListWithInValidStartTime() {
+    fun checkWithInValidStartTime() {
         val dayActivity = ArrayList<UserActivity>()
         dayActivity.add(UserActivity(eventStartTimeMills = 0,
+                eventEndTimeMills = System.currentTimeMillis(),
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        //Ending activity
+        dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 60000,
                 eventEndTimeMills = System.currentTimeMillis(),
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
@@ -44,16 +50,18 @@ class ConvertToValidUserActivityListTest {
         DailyActivitySummary.convertToValidUserActivityList(resultArray)
 
         //Check the user activity list
-        Assert.assertEquals(resultArray.size, 0)
+        Assert.assertEquals(resultArray.size, 1)
     }
 
     @Test
-    fun checkConvertToValidUserActivityListWithNotEndingMiddleEvent() {
+    fun checkWithNotEndingActivityInTheMiddle() {
         val dayActivity = ArrayList<UserActivity>()
+        //Not ending activity
         dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 120000,
                 eventEndTimeMills = 0,
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
+        //Ending activity
         dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 60000,
                 eventEndTimeMills = System.currentTimeMillis(),
                 type = UserActivityType.SITTING.name,
@@ -71,12 +79,13 @@ class ConvertToValidUserActivityListTest {
     }
 
     @Test
-    fun checkConvertToValidUserActivityListWithNotEndingLastEvent() {
+    fun checkWithNotEndingLastActivity() {
         val dayActivity = ArrayList<UserActivity>()
         dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 120000,
                 eventEndTimeMills = System.currentTimeMillis() - 60000,
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
+        //Not ending activity
         dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 60000,
                 eventEndTimeMills = 0,
                 type = UserActivityType.SITTING.name,
@@ -96,20 +105,32 @@ class ConvertToValidUserActivityListTest {
     }
 
     @Test
-    fun checkConversionFromDayActivityListWithAllNotEndingUserActivity() {
-        val activity = ArrayList<UserActivity>()
-        (1..10).mapTo(activity) {
-            UserActivity(eventStartTimeMills = System.currentTimeMillis() + it * 1000,
-                    eventEndTimeMills = 0,
-                    type = UserActivityType.SITTING.name,
-                    isSynced = true)
-        }
+    fun checkWithMiddleActivityEndingAnotherDay() {
+        val dayActivity = ArrayList<UserActivity>()
+        val yesterdayMills = System.currentTimeMillis() - TimeUtils.ONE_DAY_MILLISECONDS
 
-        try {
-            DailyActivitySummary.fromDayActivityList(ArrayList())
-            Assert.fail()
-        } catch (e: IllegalStateException) {
-            //Test passed
-        }
+        dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 120000,
+                eventEndTimeMills = (yesterdayMills + TimeUtils.ONE_DAY_MILLISECONDS),   //Ending today
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 60000,
+                eventEndTimeMills = yesterdayMills,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        val resultArray = ArrayList<UserActivity>(dayActivity)
+        DailyActivitySummary.convertToValidUserActivityList(resultArray)
+
+        //Check the user activity list
+        Assert.assertEquals(resultArray.size, dayActivity.size)
+
+        //Check the first item
+        Assert.assertEquals(resultArray[0].eventStartTimeMills, dayActivity[0].eventStartTimeMills)
+        Assert.assertEquals(TimeUtils.getCalender12AM(resultArray[0].eventStartTimeMills).timeInMillis
+                + TimeUtils.ONE_DAY_MILLISECONDS, resultArray[0].eventEndTimeMills)
+
+        //Check the second/last item
+        Assert.assertEquals(resultArray[1].eventStartTimeMills, yesterdayMills - 60000)
+        Assert.assertEquals(resultArray[1].eventEndTimeMills, yesterdayMills)
     }
 }

@@ -49,13 +49,52 @@ class TimeUtilsTest {
     @Throws(Exception::class)
     fun checkGetMilliSecFrom12AM() {
         val today12AmCal = Calendar.getInstance()
-        today12AmCal.set(Calendar.HOUR, 0)
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
         today12AmCal.set(Calendar.MINUTE, 0)
         today12AmCal.set(Calendar.SECOND, 0)
         today12AmCal.set(Calendar.MILLISECOND, 0)
         today12AmCal.add(Calendar.HOUR, 2)
         assertEquals(TimeUtils.getMilliSecFrom12AM(today12AmCal.timeInMillis),
                 2L.times(3600L).times(1000L))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkGetCalender12AMWithMills() {
+        val today12AmCal = Calendar.getInstance()
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
+        today12AmCal.set(Calendar.MINUTE, 0)
+        today12AmCal.set(Calendar.SECOND, 0)
+        today12AmCal.set(Calendar.MILLISECOND, 0)
+
+        assertEquals(TimeUtils.getCalender12AM(System.currentTimeMillis()).timeInMillis, today12AmCal.timeInMillis)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkGetTodays12AM() {
+        val today12AmCal = Calendar.getInstance()
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
+        today12AmCal.set(Calendar.MINUTE, 0)
+        today12AmCal.set(Calendar.SECOND, 0)
+        today12AmCal.set(Calendar.MILLISECOND, 0)
+
+        assertEquals(TimeUtils.getTodaysCalender12AM().timeInMillis, today12AmCal.timeInMillis)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkGetCalender12AMWithDate() {
+        val today12AmCal = Calendar.getInstance()
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
+        today12AmCal.set(Calendar.MINUTE, 0)
+        today12AmCal.set(Calendar.SECOND, 0)
+        today12AmCal.set(Calendar.MILLISECOND, 0)
+
+        assertEquals(TimeUtils.getCalender12AM(today12AmCal.get(Calendar.DAY_OF_MONTH),
+                today12AmCal.get(Calendar.MONTH),
+                today12AmCal.get(Calendar.YEAR)).timeInMillis,
+                today12AmCal.timeInMillis)
     }
 
     @Test

@@ -1,9 +1,29 @@
 # Stand Up
 
 [![Build Status](https://travis-ci.org/kevalpatel2106/Stand-Up.svg?branch=master&maxAge=600)](https://travis-ci.org/kevalpatel2106/Stand-Up) [![codecov](https://codecov.io/gh/kevalpatel2106/Stand-Up/branch/master/graph/badge.svg?maxAge=600)](https://codecov.io/gh/kevalpatel2106/Stand-Up) [![API](https://img.shields.io/badge/API-21%2B-yellowgreen.svg?style=flat)](https://android-arsenal.com/api?level=21) [![Slack](https://img.shields.io/badge/Join-Slack-red.svg?style=flat)](https://join.slack.com/t/stand-up-opensource/shared_invite/enQtMjkwODQ0MTQ1MTg4LTMwYjQyMmViYTc5ODkwODgxNzNlZmQzODAyNDNiMGEzZTM1YmUzZjZkNDAxOThjY2IyZmUxNWQ2ZTM2NDU1Yjg) <a href="https://www.paypal.me/kevalpatel2106"> <img src="https://img.shields.io/badge/paypal-donate-yellow.svg" /></a>
- 
+
 
 Sitting is next cancer.
+
+## How to contribute?
+> Make sure you check out 👉[CONTRIBUTING.md](https://github.com/kevalpatel2106/Stand-Up/blob/master/CONTRIBUTING.md)
+
+### How to setup the project?
+- Clone the repo to your local machine.
+```groovy
+git clone https://github.com/kevalpatel2106/Stand-Up.git && cd Stand-Up
+```
+
+### How to run all the unit tests?
+- Navigate to the root of the project directory.
+- Run all the unit tests.
+```
+./gradlew test
+```
+
+### Where can you find the CI build apks and all reports?
+- All the artifacts from the CI builds gets uploaded in `.tar` format on the [Dropbox folder](https://www.dropbox.com/sh/6awxaxsd6mkzm5m/AABfNXVzZRnd35AOUckqOgESa?dl=0).
+
 
 ## Questions
 Hit me on twitter [![Twitter](https://img.shields.io/badge/Twitter-@kevalpatel2106-blue.svg?style=flat)](https://twitter.com/kevalpatel2106) or join us on slack [![Slack](https://img.shields.io/badge/Join-Slack-red.svg?style=flat)](https://join.slack.com/t/stand-up-opensource/shared_invite/enQtMjkwODQ0MTQ1MTg4LTMwYjQyMmViYTc5ODkwODgxNzNlZmQzODAyNDNiMGEzZTM1YmUzZjZkNDAxOThjY2IyZmUxNWQ2ZTM2NDU1Yjg).

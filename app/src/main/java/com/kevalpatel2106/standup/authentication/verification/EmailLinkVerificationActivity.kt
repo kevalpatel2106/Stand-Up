@@ -18,6 +18,8 @@
 package com.kevalpatel2106.standup.authentication.verification
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -31,10 +33,6 @@ import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_email_link_verification.*
 
 /**
@@ -44,6 +42,7 @@ import kotlinx.android.synthetic.main.activity_email_link_verification.*
  */
 @UIController
 class EmailLinkVerificationActivity : BaseActivity() {
+
     companion object {
 
         @VisibleForTesting
@@ -71,68 +70,75 @@ class EmailLinkVerificationActivity : BaseActivity() {
         }
     }
 
-    @VisibleForTesting
-    internal lateinit var mAuthRepo: UserAuthRepository
+    internal lateinit var model: EmailLinkVerifyViewModel
 
     @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email_link_verification)
 
-        mAuthRepo = UserAuthRepositoryImpl()
+        model = ViewModelProviders.of(this@EmailLinkVerificationActivity)
+                .get(EmailLinkVerifyViewModel::class.java)
+
+        model.blockUi.observe(this@EmailLinkVerificationActivity, Observer {
+            it?.let {
+                if (it) {
+                    verify_email_link_description_tv.text = getString(R.string.verify_email_link_description_verifying)
+                    verify_email_link_progressbar.visibility = View.VISIBLE
+                } else {
+                    verify_email_link_progressbar.visibility = View.INVISIBLE
+                }
+            }
+        })
+
+        model.errorMessage.observe(this@EmailLinkVerificationActivity, Observer {
+            //Error
+            verify_email_link_description_tv.text = if (it == null) {
+                getString(R.string.verify_email_link_fail)
+            } else {
+                it.getMessage(this@EmailLinkVerificationActivity)
+            }
+
+            //Change the verify logo
+            verify_email_link_logo.setImageResource(it?.errorImage ?: R.drawable.ic_warning)
+            verify_email_link_logo.scaleX = 0.6f
+            verify_email_link_logo.scaleY = 0.6f
+            verify_email_link_logo.animate()
+                    .setDuration(500)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .scaleX(1.2f)
+                    .scaleY(1.2f)
+                    .start()
+
+            //Go to the email link activity
+            Handler().postDelayed({
+                IntroActivity.launch(this@EmailLinkVerificationActivity, true)
+            }, 3000)
+        })
+
+        model.emailVerified.observe(this@EmailLinkVerificationActivity, Observer {
+            //Success
+            verify_email_link_description_tv.text = getString(R.string.verify_email_link_success)
+
+            //Change the verify logo
+            verify_email_link_logo.setImageResource(R.drawable.ic_right_tick)
+            verify_email_link_logo.scaleX = 0.6f
+            verify_email_link_logo.scaleY = 0.6f
+            verify_email_link_logo.animate()
+                    .setDuration(500)
+                    .setInterpolator(AccelerateDecelerateInterpolator())
+                    .scaleX(1.2f)
+                    .scaleY(1.2f)
+                    .start()
+
+            //Go to the email link activity
+            Handler().postDelayed({
+                IntroActivity.launch(this@EmailLinkVerificationActivity, true)
+            }, 3000)
+        })
 
         //Make an GET api call
-        verify_email_link_description_tv.text = getString(R.string.verify_email_link_description_verifying)
-        verifyEmail(intent.getStringExtra(ARG_URL))
-    }
-
-    @VisibleForTesting
-    internal fun verifyEmail(url: String) {
-        verify_email_link_progressbar.visibility = View.VISIBLE
-        addSubscription(mAuthRepo.verifyEmailLink(url)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    //Success
-                    verify_email_link_description_tv.text = getString(R.string.verify_email_link_success)
-                    verify_email_link_progressbar.visibility = View.INVISIBLE
-
-                    //Change the verify logo
-                    verify_email_link_logo.setImageResource(R.drawable.ic_right_tick)
-                    verify_email_link_logo.scaleX = 0.6f
-                    verify_email_link_logo.scaleY = 0.6f
-                    verify_email_link_logo.animate()
-                            .setDuration(500)
-                            .setInterpolator(AccelerateDecelerateInterpolator())
-                            .scaleX(1.2f)
-                            .scaleY(1.2f)
-                            .start()
-
-                    //Go to the email link activity
-                    Handler().postDelayed({
-                        IntroActivity.launch(this@EmailLinkVerificationActivity, true)
-                    }, 3000)
-                }, {
-                    //Error
-                    verify_email_link_description_tv.text = getString(R.string.verify_email_link_fail)
-                    verify_email_link_progressbar.visibility = View.INVISIBLE
-
-                    //Change the verify logo
-                    verify_email_link_logo.setImageResource(R.drawable.ic_warning)
-                    verify_email_link_logo.scaleX = 0.6f
-                    verify_email_link_logo.scaleY = 0.6f
-                    verify_email_link_logo.animate()
-                            .setDuration(500)
-                            .setInterpolator(AccelerateDecelerateInterpolator())
-                            .scaleX(1.2f)
-                            .scaleY(1.2f)
-                            .start()
-
-                    //Go to the email link activity
-                    Handler().postDelayed({
-                        IntroActivity.launch(this@EmailLinkVerificationActivity, true)
-                    }, 3000)
-                }))
+        model.verifyEmail(intent.getStringExtra(ARG_URL))
     }
 
     override fun onBackPressed() {

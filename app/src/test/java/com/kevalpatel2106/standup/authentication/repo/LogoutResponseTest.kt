@@ -24,17 +24,18 @@ import org.junit.runners.JUnit4
 import java.io.IOException
 
 /**
- * Created by Kevalpatel2106 on 04-Dec-17.
+ * Created by Kevalpatel2106 on 06-Dec-17.
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(JUnit4::class)
-class ForgotPasswordRequestTest {
+class LogoutResponseTest {
 
     @Test
     @Throws(IOException::class)
     fun checkInit() {
-        val forgotPasswordRequest = ForgotPasswordRequest(email = "test@example.com")
-        assertEquals(forgotPasswordRequest.email, "test@example.com")
+        val logoutResponse = LogoutResponse(uid = 123456789, deviceId = "64df48e6-45de-4bb5-879d-4c1a722f23fd")
+        assertEquals(logoutResponse.uid, 123456789)
+        assertEquals(logoutResponse.deviceId, "64df48e6-45de-4bb5-879d-4c1a722f23fd")
     }
 }

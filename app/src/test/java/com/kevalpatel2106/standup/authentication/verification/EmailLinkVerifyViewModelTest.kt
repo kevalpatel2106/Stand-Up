@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.authentication.verification
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.UnitTestUtils
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
@@ -28,16 +29,16 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
-
 import java.nio.file.Paths
 
 /**
- * Created by Keval on 20/11/17.
+ * Created by Kevalpatel2106 on 28-Dec-17.
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(JUnit4::class)
-class VerifyEmailModelTest {
+class EmailLinkVerifyViewModelTest {
+
     private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
 
     @Rule
@@ -48,7 +49,7 @@ class VerifyEmailModelTest {
     @JvmField
     val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
 
-    private lateinit var verifyEmailViewModel: VerifyEmailViewModel
+    private lateinit var emailLinkVerifyViewModel: EmailLinkVerifyViewModel
     private val mockServerManager = MockServerManager()
 
     companion object {
@@ -62,7 +63,7 @@ class VerifyEmailModelTest {
     fun setUp() {
         //Set the repo
         mockServerManager.startMockWebServer()
-        verifyEmailViewModel = VerifyEmailViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
+        emailLinkVerifyViewModel = EmailLinkVerifyViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
     }
 
     @After
@@ -70,42 +71,39 @@ class VerifyEmailModelTest {
         mockServerManager.close()
     }
 
-
     @Test
     @Throws(IOException::class)
     fun checkInitialization() {
-        Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
+        Assert.assertFalse(emailLinkVerifyViewModel.blockUi.value!!)
 
         //Normal init
-        val model = VerifyEmailViewModel()
+        val model = EmailLinkVerifyViewModel()
         Assert.assertTrue(model.mUserAuthRepo is UserAuthRepositoryImpl)
     }
 
     @Test
     @Throws(IOException::class)
-    fun checkResendVerificationEmailSuccess() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/resend_verification_email_success.json"))
+    fun testVerifyEmailSuccess() {
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/email_verify_success.html"), "text/html")
 
-        //Make the api call to the mock server
-        verifyEmailViewModel.resendEmail(123)
+        emailLinkVerifyViewModel.verifyEmail(mockServerManager.getBaseUrl())
 
-        //There should be success.
-        Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
-        Assert.assertTrue(verifyEmailViewModel.mUiModel.value!!.isSuccess)
-        Assert.assertNull(verifyEmailViewModel.errorMessage.value)
+        Assert.assertFalse(emailLinkVerifyViewModel.blockUi.value!!)
+        Assert.assertNull(emailLinkVerifyViewModel.errorMessage.value)
     }
 
     @Test
     @Throws(IOException::class)
-    fun checkResendVerificationEmailFieldMissing() {
+    fun testVerifyEmailError() {
         mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
-        //Make the api call to the mock server
-        verifyEmailViewModel.resendEmail(123)
+        emailLinkVerifyViewModel.verifyEmail(mockServerManager.getBaseUrl())
 
-        //There should be success.
-        Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
-        Assert.assertFalse(verifyEmailViewModel.mUiModel.value!!.isSuccess)
-        Assert.assertEquals(verifyEmailViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
+        Thread.sleep(1000)
+        Assert.assertFalse(emailLinkVerifyViewModel.blockUi.value!!)
+        Assert.assertEquals(emailLinkVerifyViewModel.errorMessage.value!!.errorRes,
+                R.string.verify_email_link_fail)
+        Assert.assertEquals(emailLinkVerifyViewModel.errorMessage.value!!.errorImage,
+                R.drawable.ic_warning)
     }
 }

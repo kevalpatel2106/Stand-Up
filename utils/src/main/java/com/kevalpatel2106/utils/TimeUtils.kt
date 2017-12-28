@@ -85,7 +85,7 @@ object TimeUtils {
 
         val today12AmCal = Calendar.getInstance()
         today12AmCal.timeInMillis = unixMills
-        today12AmCal.set(Calendar.HOUR, 0)
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
         today12AmCal.set(Calendar.MINUTE, 0)
         today12AmCal.set(Calendar.SECOND, 0)
         today12AmCal.set(Calendar.MILLISECOND, 0)
@@ -105,7 +105,7 @@ object TimeUtils {
     fun getCalender12AM(unixMills: Long): Calendar {
         val calender12Am = Calendar.getInstance()
         calender12Am.timeInMillis = unixMills
-        calender12Am.set(Calendar.HOUR, 0)
+        calender12Am.set(Calendar.HOUR_OF_DAY, 0)
         calender12Am.set(Calendar.MINUTE, 0)
         calender12Am.set(Calendar.SECOND, 0)
         calender12Am.set(Calendar.MILLISECOND, 0)
@@ -115,7 +115,7 @@ object TimeUtils {
     //TODO Write test
     fun getTodaysCalender12AM(): Calendar {
         val calender12Am = Calendar.getInstance()
-        calender12Am.set(Calendar.HOUR, 0)
+        calender12Am.set(Calendar.HOUR_OF_DAY, 0)
         calender12Am.set(Calendar.MINUTE, 0)
         calender12Am.set(Calendar.SECOND, 0)
         calender12Am.set(Calendar.MILLISECOND, 0)

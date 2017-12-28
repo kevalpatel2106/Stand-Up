@@ -112,7 +112,7 @@ internal class DiaryViewModel : BaseViewModel {
                     }
                 }
                 .doOnTerminate {
-                    pageLoadingCompleteCallback.call()
+                    pageLoadingCompleteCallback.dispatch()
                 }
                 .subscribe({
                     //Update data

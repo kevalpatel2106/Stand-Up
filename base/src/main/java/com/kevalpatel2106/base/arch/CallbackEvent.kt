@@ -17,16 +17,14 @@
 
 package com.kevalpatel2106.base.arch
 
-import android.arch.lifecycle.LiveData
-
 /**
  * Created by Keval on 27/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class CallbackEvent : LiveData<Unit>() {
+class CallbackEvent : SingleLiveEvent<Unit>() {
 
-    fun call() {
+    fun dispatch() {
         value = Unit
     }
 }

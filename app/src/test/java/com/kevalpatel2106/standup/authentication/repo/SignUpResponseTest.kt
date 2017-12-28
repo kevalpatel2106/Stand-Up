@@ -91,6 +91,36 @@ class SignUpResponseTest {
         Assert.assertNotEquals(signUpResponse1, signUpResponse2)
         Assert.assertEquals(signUpResponse, signUpResponse)
         Assert.assertNotEquals(signUpResponse, null)
+        Assert.assertNotEquals(signUpResponse, Unit)
     }
 
+    @Test
+    @Throws(IOException::class)
+    fun checkHashCode() {
+        val signUpResponse2 = SignUpResponse(uid = 1234,
+                isVerified = true,
+                isNewUser = true,
+                photoUrl = "http://google.com",
+                name = "Test User",
+                email = "test@example.com")
+        Assert.assertEquals(1234, signUpResponse2.hashCode())
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkIfEqualsHasSameHashCode() {
+        val signUpResponse = SignUpResponse(uid = 0,
+                isVerified = true,
+                isNewUser = true,
+                photoUrl = "http://google.com",
+                name = "Test User",
+                email = "test@example.com")
+        val signUpResponse1 = SignUpResponse(uid = 0,
+                isVerified = true,
+                isNewUser = true,
+                photoUrl = "http://google.com",
+                name = "Test User",
+                email = "test@example.com")
+        Assert.assertEquals(signUpResponse.hashCode(), signUpResponse1.hashCode())
+    }
 }

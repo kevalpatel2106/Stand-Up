@@ -261,8 +261,7 @@ constructor(
             while (iter.hasNext()) {
                 val value = iter.next()
 
-                // Starting event time modifications //
-
+                //=============  Starting event time modifications ============= //
                 //Remove invalid event
                 //If the start time is 0, than it's invalid data. Remove it.
                 if (value.eventStartTimeMills <= 0L) {
@@ -272,15 +271,13 @@ constructor(
                 //TODO handle events started before the current day and ended in current day
 
 
-                // Ending event time modifications //
-
+                //=============  Ending event time modifications ============= //
                 //If the event end time is 0, means event is not ended yet.
                 //If it is not last event and this event is not ended yet...it's invalid event
                 if (value.eventEndTimeMills <= 0L && iter.hasNext()) {
                     iter.remove()
                     continue
                 }
-
 
                 //If the last event is not ended still...
                 //Consider this event is ending currently.
@@ -289,11 +286,12 @@ constructor(
                     continue
                 }
 
-                //If the event is ending another day...
-                val todaysEndingMills = TimeUtils.getTodaysCalender12AM().timeInMillis + TimeUtils.ONE_DAY_MILLISECONDS
-                if (value.eventStartTimeMills > todaysEndingMills) {
+                //If the event is ending next day...
+                val thisDayStartMills = TimeUtils.getCalender12AM(value.eventStartTimeMills).timeInMillis
+                val thisDayEndingMills = thisDayStartMills + TimeUtils.ONE_DAY_MILLISECONDS
+                if (value.eventEndTimeMills > thisDayEndingMills) {
                     //Consider it ending on this day 12 AM.
-                    value.eventEndTimeMills = todaysEndingMills
+                    value.eventEndTimeMills = thisDayEndingMills
                 }
             }
 

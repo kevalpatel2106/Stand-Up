@@ -76,7 +76,7 @@ internal class DashboardViewModel : BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    todaySummaryStartLoading.call()
+                    todaySummaryStartLoading.dispatch()
                     todaySummaryErrorCallback.value = null
                 }
                 .doOnComplete {

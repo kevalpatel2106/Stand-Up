@@ -18,10 +18,10 @@
 package com.kevalpatel2106.standup.authentication.verification
 
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.support.annotation.VisibleForTesting
@@ -38,19 +38,24 @@ internal object EmailVerifiedNotification {
     internal fun notify(context: Context, message: String?) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.addAccountNotificationChannel(context.applicationContext)
-        nm.notify(NOTIFICATION_ID, buildNotification(context, message))
+        nm.notify(NOTIFICATION_ID, buildNotification(context, message).build())
     }
 
     @VisibleForTesting
-    internal fun buildNotification(context: Context, message: String?): Notification {
+    internal fun buildNotification(context: Context,
+                                   message: String?,
+                                   @VisibleForTesting largeIcon: Bitmap? = null): NotificationCompat.Builder {
+
         val builder = NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.ic_notififcation_launcher)
                 .setContentTitle(context.getString(R.string.application_name))
                 .setContentText(message ?: context.getString(R.string.application_name))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_notification_verified))
+                .setLargeIcon(largeIcon ?: BitmapFactory
+                        .decodeResource(context.resources, R.drawable.ic_notification_verified))
                 .setTicker(message)
+                .setChannelId(NotificationChannelType.ACCOUNT_NOTIFICATION_CHANNEL)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
@@ -62,17 +67,6 @@ internal object EmailVerifiedNotification {
             builder.setChannelId(NotificationChannelType.ACCOUNT_NOTIFICATION_CHANNEL)
         }
 
-        return builder.build()
-    }
-
-
-    /**
-     * Cancels any notifications of this type previously shown using
-     * [.buildNotification].
-     */
-    @TargetApi(Build.VERSION_CODES.ECLAIR)
-    internal fun cancel(context: Context) {
-        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.cancel(NOTIFICATION_ID)
+        return builder
     }
 }

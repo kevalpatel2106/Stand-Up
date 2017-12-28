@@ -15,13 +15,13 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder
+package com.kevalpatel2106.standup.authentication.verification
 
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
-import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.fcm.NotificationChannelType
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -37,23 +37,24 @@ import java.io.IOException
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-class ReminderNotificationTest {
-    private val TEST_TITLE_STRING = "This is test notification title."
+class EmailVerifiedNotificationTest {
+    private val TEST_TITLE_STRING = "Stand Up"
     private val TEST_MESSAGE_STRING = "This is test notification message."
 
     private lateinit var notification: NotificationCompat.Builder
+    private lateinit var largeIcon: Bitmap
 
     @Before
     fun setUp() {
         val context = Mockito.mock(Context::class.java)
         val resources = Mockito.mock(Resources::class.java)
-        Mockito.`when`(context.getString(R.string.reminder_notification_title)).thenReturn(TEST_TITLE_STRING)
-        Mockito.`when`(context.getString(R.string.reminder_notification_message)).thenReturn(TEST_MESSAGE_STRING)
+        largeIcon = Mockito.mock(Bitmap::class.java)
+        Mockito.`when`(context.getString(anyInt())).thenReturn(TEST_TITLE_STRING)
         Mockito.`when`(context.getColor(anyInt())).thenReturn(Color.RED)
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(context.resources.getColor(anyInt())).thenReturn(Color.RED)
 
-        notification = ReminderNotification.buildNotification(context)
+        notification = EmailVerifiedNotification.buildNotification(context, TEST_MESSAGE_STRING, largeIcon)
     }
 
     @Test
@@ -65,7 +66,7 @@ class ReminderNotificationTest {
     @Test
     @Throws(IOException::class)
     fun testNotificationColor() {
-        assertEquals(notification.color, Color.RED)
+        assertEquals(notification.color, 0)
     }
 
     @Test
@@ -74,7 +75,7 @@ class ReminderNotificationTest {
         //Channel id
         val channelId = notification.javaClass.getDeclaredField("mChannelId")
         channelId.isAccessible = true
-        Assert.assertEquals(channelId.get(notification) as String, NotificationChannelType.REMINDER_NOTIFICATION_CHANNEL)
+        Assert.assertEquals(channelId.get(notification) as String, NotificationChannelType.ACCOUNT_NOTIFICATION_CHANNEL)
     }
 
     @Test

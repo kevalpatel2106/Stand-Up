@@ -22,7 +22,6 @@ import android.content.SharedPreferences
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -74,19 +73,5 @@ class DeviceRegisterResponseTest {
     fun checkUserId() {
         val deviceRegisterRequest = DeviceRegisterRequest(deviceId = "test-device-id", gcmKey = "test-firebase-fcm-key")
         assertEquals(deviceRegisterRequest.userId, TEST_USER_ID)
-    }
-
-    @Test
-    @Throws(IOException::class)
-    fun checkEquals() {
-        val deviceRegisterRequest = DeviceRegisterRequest(deviceId = "test-device-id", gcmKey = "test-firebase-fcm-key")
-        val deviceRegisterRequest1 = DeviceRegisterRequest(deviceId = "test-device-id", gcmKey = "test-firebase-fcm-key")
-        val deviceRegisterRequest2 = DeviceRegisterRequest(deviceId = "test-device-id-1", gcmKey = "test-firebase-fcm-key")
-
-        assertEquals(deviceRegisterRequest, deviceRegisterRequest1)
-        assertNotEquals(deviceRegisterRequest, deviceRegisterRequest2)
-        assertNotEquals(deviceRegisterRequest1, deviceRegisterRequest2)
-        assertEquals(deviceRegisterRequest1, deviceRegisterRequest1)
-        assertNotEquals(deviceRegisterRequest, null)
     }
 }

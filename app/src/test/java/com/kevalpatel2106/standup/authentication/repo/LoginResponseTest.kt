@@ -59,31 +59,4 @@ class LoginResponseTest {
         Assert.assertEquals(loginResponse.photoUrl, "http://google.com")
         Assert.assertTrue(loginResponse.isVerified)
     }
-
-    @Test
-    @Throws(IOException::class)
-    fun checkEquals() {
-        val loginResponse = LoginResponse(uid = 0,
-                isVerified = true,
-                photoUrl = "http://google.com",
-                name = "Test User",
-                email = "test@example.com")
-        val loginResponse1 = LoginResponse(uid = 0,
-                isVerified = true,
-                photoUrl = "http://google.com",
-                name = "Test User",
-                email = "test@example.com")
-        val loginResponse2 = LoginResponse(uid = 123456789,
-                isVerified = true,
-                photoUrl = "http://google.com",
-                name = "Test User",
-                email = "test@example.com")
-
-        Assert.assertEquals(loginResponse, loginResponse1)
-        Assert.assertNotEquals(loginResponse, loginResponse2)
-        Assert.assertNotEquals(loginResponse1, loginResponse2)
-        Assert.assertEquals(loginResponse, loginResponse)
-        Assert.assertNotEquals(loginResponse, null)
-    }
-
 }

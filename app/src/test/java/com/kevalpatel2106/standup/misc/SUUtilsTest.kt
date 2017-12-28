@@ -39,7 +39,7 @@ class SUUtilsTest {
     @Throws(IOException::class)
     fun checkCreateTimeLineItemFromSittingUserActivity() {
         val today12AmCal = Calendar.getInstance()
-        today12AmCal.set(Calendar.HOUR, 0)
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
         today12AmCal.set(Calendar.MINUTE, 0)
         today12AmCal.set(Calendar.SECOND, 0)
         today12AmCal.set(Calendar.MILLISECOND, 0)
@@ -60,7 +60,7 @@ class SUUtilsTest {
     @Throws(IOException::class)
     fun checkCreateTimeLineItemFromStandingUserActivity() {
         val today12AmCal = Calendar.getInstance()
-        today12AmCal.set(Calendar.HOUR, 0)
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
         today12AmCal.set(Calendar.MINUTE, 0)
         today12AmCal.set(Calendar.SECOND, 0)
         today12AmCal.set(Calendar.MILLISECOND, 0)
@@ -81,7 +81,7 @@ class SUUtilsTest {
     @Throws(IOException::class)
     fun checkCreateTimeLineItemFromNotTrackedUserActivity() {
         val today12AmCal = Calendar.getInstance()
-        today12AmCal.set(Calendar.HOUR, 0)
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
         today12AmCal.set(Calendar.MINUTE, 0)
         today12AmCal.set(Calendar.SECOND, 0)
         today12AmCal.set(Calendar.MILLISECOND, 0)

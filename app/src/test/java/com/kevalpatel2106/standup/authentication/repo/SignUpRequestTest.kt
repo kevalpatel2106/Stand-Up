@@ -20,7 +20,8 @@ package com.kevalpatel2106.standup.authentication.repo
 import android.net.Uri
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -61,11 +62,17 @@ class SignUpRequestTest {
         facebookUser.name = "Test User"
         facebookUser.email = "test@example.com"
 
-        val signUpRequest = SignUpRequest(fbUser = facebookUser)
+        var signUpRequest = SignUpRequest(fbUser = facebookUser)
         assertEquals(signUpRequest.email, "test@example.com")
         assertNull(signUpRequest.password)
         assertEquals(signUpRequest.displayName, "Test User")
         assertEquals(signUpRequest.photo, "http://profilepic.com")
+
+        //With null photo url
+        facebookUser.coverPicUrl = null
+        facebookUser.profilePic = null
+        signUpRequest = SignUpRequest(fbUser = facebookUser)
+        assertNull(signUpRequest.photo)
     }
 
     @Test
@@ -77,39 +84,15 @@ class SignUpRequestTest {
         googleUser.name = "Test User"
         googleUser.email = "test@example.com"
 
-        val signUpRequest = SignUpRequest(googleUser = googleUser)
+        var signUpRequest = SignUpRequest(googleUser = googleUser)
         assertEquals(signUpRequest.email, "test@example.com")
         assertNull(signUpRequest.password)
         assertEquals(signUpRequest.displayName, "Test User")
         assertNull(signUpRequest.photo)
+
+        //With null photo url
+        googleUser.photoUrl = null
+        signUpRequest = SignUpRequest(googleUser = googleUser)
+        assertNull(signUpRequest.photo)
     }
-
-    @Test
-    @Throws(IOException::class)
-    fun checkEquals() {
-        val signUpRequest = SignUpRequest(
-                email = "test@example.com",
-                password = "123456789",
-                displayName = "Test User",
-                photo = "http://google.com")
-
-        val signUpRequest1 = SignUpRequest(
-                email = "test@example.com",
-                password = "123456789",
-                displayName = "Test User",
-                photo = "http://google.com")
-
-        val signUpRequest2 = SignUpRequest(
-                email = "test1@example.com",
-                password = "123456789",
-                displayName = "Test User",
-                photo = "http://google.com")
-
-        assertEquals(signUpRequest, signUpRequest1)
-        assertNotEquals(signUpRequest, signUpRequest2)
-        assertNotEquals(signUpRequest1, signUpRequest2)
-        assertEquals(signUpRequest1, signUpRequest1)
-        assertNotEquals(signUpRequest, null)
-    }
-
 }

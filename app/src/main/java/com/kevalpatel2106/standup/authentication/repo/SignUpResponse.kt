@@ -59,6 +59,6 @@ data class SignUpResponse(
     }
 
     override fun hashCode(): Int {
-        return uid.hashCode()
+        return uid.toInt()
     }
 }
