@@ -109,6 +109,10 @@
     <string name="reminder_notification_title">Stand up now</string>
     <string name="reminder_notification_message">Stand up now</string>
     <string name="today_summary_heading_since_today_midnight">Since today midnight...</string>
+    <string name="error_message_report_issue">Cannot report the issue.</string>
+    <string name="issue_success_alert_title">Issue reported.</string>
+    <string name="issue_success_alert_message">Your issue id: %d</string>
+    <string name="report_issue_reporting_message">Reporting issue</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

@@ -30,4 +30,7 @@ data class CheckVersionRequest(
 
         @SerializedName("version")
         val versionCode: Int
-)
+) {
+    @SerializedName("platform")
+    val platform = "android"
+}

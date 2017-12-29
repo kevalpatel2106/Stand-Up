@@ -24,5 +24,4 @@
 
 - [material-about-library](https://github.com/daniel-stoneuk/material-about-library) : This is an awesome library to create about screen for the applications.
 - [AboutLibraries](https://github.com/mikepenz/AboutLibraries) : To display the list of open source libraries used in this project and their licence information.
-- [AppUpdater](https://github.com/javiersantos/AppUpdater) : A library that checks for your apps' updates on Google Play, GitHub, Amazon, F-Droid or your own server.
 - [Firebase Invites](https://firebase.google.com/docs/invites/) : Invite and share the application using firebase invites.

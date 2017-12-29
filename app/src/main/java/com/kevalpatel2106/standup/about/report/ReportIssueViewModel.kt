@@ -38,6 +38,8 @@ import io.reactivex.schedulers.Schedulers
 internal class ReportIssueViewModel : BaseViewModel {
     internal val versionUpdateResult = MutableLiveData<CheckVersionResponse>()
 
+    internal val issueId = MutableLiveData<Long>()
+
     /**
      * Repository to provide user authentications.
      */
@@ -65,16 +67,15 @@ internal class ReportIssueViewModel : BaseViewModel {
     }
 
     fun checkForUpdate() {
-        mAuthRepository.getLatestVersion()
+        addDisposable(mAuthRepository.getLatestVersion()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe { blockUi.value = true }
                 .subscribe({
                     it?.let { versionUpdateResult.value = it }
                 }, {
                     versionUpdateResult.value = null
                     errorMessage.value = ErrorMessage(R.string.check_update_error_message)
-                })
+                }))
     }
 
     fun reportIssue(title: String, message: String) {
@@ -95,6 +96,15 @@ internal class ReportIssueViewModel : BaseViewModel {
         }
 
         //Report the issue
-        //TODO Report to the server
+        addDisposable(mAuthRepository.reportIssue(title, message)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe { blockUi.value = true }
+                .doOnTerminate { blockUi.value = false }
+                .subscribe({
+                    it?.let { issueId.value = it.issueId }
+                }, {
+                    errorMessage.value = ErrorMessage(R.string.error_message_report_issue)
+                }))
     }
 }

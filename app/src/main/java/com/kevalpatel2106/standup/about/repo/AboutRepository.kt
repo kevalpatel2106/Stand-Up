@@ -27,4 +27,6 @@ import io.reactivex.Flowable
 interface AboutRepository {
 
     fun getLatestVersion(): Flowable<CheckVersionResponse>
+
+    fun reportIssue(title: String, message: String): Flowable<ReportIssueResponse>
 }

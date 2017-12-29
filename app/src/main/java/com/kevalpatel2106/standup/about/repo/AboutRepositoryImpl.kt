@@ -44,7 +44,20 @@ class AboutRepositoryImpl(private val baseUrl: String) : AboutRepository {
                 .addRefresher(RetrofitNetworkRefresher(call))
                 .build()
                 .fetch()
-                .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
+                .map { t -> t.data }
     }
 
+    override fun reportIssue(title: String, message: String): Flowable<ReportIssueResponse> {
+        val reportIssueRequest = ReportIssueRequest(title, message)
+
+        val call = ApiProvider.getRetrofitClient(baseUrl)
+                .create(AboutApiService::class.java)
+                .reportIssue(reportIssueRequest)
+
+        return RepoBuilder<ReportIssueResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
+                .build()
+                .fetch()
+                .map { t -> t.data }
+    }
 }

@@ -18,22 +18,14 @@
 package com.kevalpatel2106.standup.about.repo
 
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.base.annotations.Model
 
 /**
- * Created by Kevalpatel2106 on 29-Dec-17.
+ * Created by Keval on 29/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Model
-data class CheckVersionResponse(
+data class ReportIssueResponse(
 
-        @SerializedName("latest")
-        val latestVersion: String,
-
-        @SerializedName("isUpdate")
-        val isUpdate: Boolean,
-
-        @SerializedName("releaseNotes")
-        val releaseNotes: String?
+        @SerializedName("issue_id")
+        val issueId: Long
 )

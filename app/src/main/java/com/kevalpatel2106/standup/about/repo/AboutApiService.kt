@@ -30,4 +30,7 @@ interface AboutApiService {
 
     @POST("/checkVersion")
     fun getLatestVersion(@Body checkVersionRequest: CheckVersionRequest): Call<CheckVersionResponse>
+
+    @POST("/reportIssue")
+    fun reportIssue(@Body issue: ReportIssueRequest): Call<ReportIssueResponse>
 }

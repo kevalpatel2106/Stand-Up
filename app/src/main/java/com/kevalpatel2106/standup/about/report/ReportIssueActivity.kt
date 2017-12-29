@@ -22,6 +22,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import butterknife.OnClick
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
@@ -33,6 +34,7 @@ import org.jetbrains.anko.alert
 class ReportIssueActivity : BaseActivity() {
 
     private lateinit var model: ReportIssueViewModel
+    private var reportingSnackbar: Snackbar? = null
 
     companion object {
 
@@ -72,6 +74,30 @@ class ReportIssueActivity : BaseActivity() {
                     SUUtils.openLink(this@ReportIssueActivity, getString(R.string.rate_app_url))
                 })
                 alertBuilder.show()
+            }
+        })
+        model.issueId.observe(this@ReportIssueActivity, Observer {
+            it?.let {
+                val alertBuilder = alert(message = String.format(getString(R.string.issue_success_alert_message), it),
+                        title = getString(R.string.issue_success_alert_title))
+                alertBuilder.positiveButton(android.R.string.ok, {
+                    //Do nothing
+                })
+                alertBuilder.show()
+            }
+        })
+        model.blockUi.observe(this@ReportIssueActivity, Observer {
+            it?.let {
+                submit_issue_btn.isEnabled = !it
+
+                if (it) {
+                    //Display the snackbar
+                    reportingSnackbar = showSnack(message = R.string.report_issue_reporting_message,
+                            duration = Snackbar.LENGTH_INDEFINITE)
+                } else {
+                    //Dismiss snackbar
+                    reportingSnackbar?.dismiss()
+                }
             }
         })
 
