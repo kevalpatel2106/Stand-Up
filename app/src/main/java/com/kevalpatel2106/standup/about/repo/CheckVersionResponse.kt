@@ -29,5 +29,11 @@ import com.kevalpatel2106.base.annotations.Model
 data class CheckVersionResponse(
 
         @SerializedName("version")
-        val versionCode: String
+        val versionCode: String,
+
+        @SerializedName("version")
+        val latestVersion: String,
+
+        @SerializedName("releaseNotes")
+        val releaseNotes: String?
 )

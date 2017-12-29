@@ -17,17 +17,17 @@
 
 package com.kevalpatel2106.standup.about.repo
 
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.POST
+import com.google.gson.annotations.SerializedName
+import com.kevalpatel2106.base.annotations.Model
 
 /**
  * Created by Kevalpatel2106 on 29-Dec-17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-interface AboutApiService {
+@Model
+data class CheckVersionRequest(
 
-    @POST("/checkVersion")
-    fun getLatestVersion(@Body checkVersionRequest: CheckVersionRequest): Call<CheckVersionResponse>
-}
+        @SerializedName("version")
+        val versionCode: Int
+)

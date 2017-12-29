@@ -31,6 +31,7 @@ import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.google.android.gms.appinvite.AppInviteInvitation
 import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.misc.SUUtils
@@ -102,7 +103,7 @@ class AboutActivity : MaterialAboutActivity() {
     }
 
 
-    private fun getUpdateCard(update: Update): MaterialAboutCard {
+    private fun getUpdateCard(update: CheckVersionResponse): MaterialAboutCard {
         return MaterialAboutCard.Builder()
                 .addItem(MaterialAboutActionItem.Builder()
                         .icon(R.drawable.ic_update)
@@ -110,9 +111,10 @@ class AboutActivity : MaterialAboutActivity() {
                         .text(R.string.check_update_new_update_available)
                         .subText("New version is " + update.latestVersion + ". Click here to update.")
                         .setOnLongClickAction {
-                            //Show the release note
-                            alert(message = update.releaseNotes, title = getString(R.string.alert_title_whats_new))
-                                    .show()
+                            update.releaseNotes?.let {
+                                //Show the release note
+                                alert(message = update.releaseNotes, title = getString(R.string.alert_title_whats_new)).show()
+                            }
                         }
                         .setOnClickAction({
                             //Open the play store.

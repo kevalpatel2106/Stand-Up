@@ -17,25 +17,34 @@
 
 package com.kevalpatel2106.standup.about.repo
 
-import io.reactivex.BackpressureStrategy
+import com.kevalpatel2106.base.repository.RepoBuilder
+import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.network.RetrofitNetworkRefresher
+import com.kevalpatel2106.standup.BuildConfig
+import com.kevalpatel2106.standup.authentication.repo.UserApiService
 import io.reactivex.Flowable
-import io.reactivex.FlowableEmitter
-import io.reactivex.FlowableOnSubscribe
 
 /**
  * Created by Kevalpatel2106 on 29-Dec-17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class AboutRepositoryImpl : AboutRepository {
+class AboutRepositoryImpl(private val baseUrl: String) : AboutRepository {
+
+    constructor() : this(UserApiService.baseUrl())
 
     override fun getLatestVersion(): Flowable<CheckVersionResponse> {
-        return Flowable.create(object : FlowableOnSubscribe<CheckVersionResponse> {
-            override fun subscribe(e: FlowableEmitter<CheckVersionResponse>) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+        val checkVersionRequest = CheckVersionRequest(BuildConfig.VERSION_CODE)
 
-        }, BackpressureStrategy.LATEST)
+        val call = ApiProvider.getRetrofitClient(baseUrl)
+                .create(AboutApiService::class.java)
+                .getLatestVersion(checkVersionRequest)
+
+        return RepoBuilder<CheckVersionResponse>()
+                .addRefresher(RetrofitNetworkRefresher(call))
+                .build()
+                .fetch()
+                .map { t -> t.data }    //We don't use vault data information on the UI level. Map it to simple.
     }
 
 }
