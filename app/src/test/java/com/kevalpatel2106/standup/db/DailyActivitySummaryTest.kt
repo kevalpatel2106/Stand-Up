@@ -353,10 +353,9 @@ class DailyActivitySummaryTest {
     fun checkConversionFromDayActivityListWithEmptyList() {
         try {
             DailyActivitySummary.convertToValidUserActivityList(ArrayList())
-            Assert.fail()
-        } catch (e: IllegalArgumentException) {
             //Test passed
-            //NO OP
+        } catch (e: IllegalArgumentException) {
+            Assert.fail(e.message)
         }
     }
 

@@ -214,7 +214,6 @@ constructor(
     override fun equals(other: Any?): Boolean {
         if (other == null) return false
         if (other !is DailyActivitySummary) return false
-        if (other == this) return true
         if (other.dayOfMonth == dayOfMonth && other.monthOfYear == monthOfYear && other.year == year)
             return true
         return false
