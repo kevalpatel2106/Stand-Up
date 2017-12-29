@@ -18,46 +18,63 @@
 package com.kevalpatel2106.standup.about.report
 
 import android.arch.lifecycle.MutableLiveData
-import android.content.Context
-import com.github.javiersantos.appupdater.AppUpdaterUtils
-import com.github.javiersantos.appupdater.enums.AppUpdaterError
-import com.github.javiersantos.appupdater.enums.UpdateFrom
-import com.github.javiersantos.appupdater.objects.Update
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.about.repo.AboutRepository
+import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
+import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.misc.Validator
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class ReportIssueViewModel : BaseViewModel() {
-    internal val versionUpdateResult = MutableLiveData<Update>()
+internal class ReportIssueViewModel : BaseViewModel {
+    internal val versionUpdateResult = MutableLiveData<CheckVersionResponse>()
 
-    fun checkForUpdate(context: Context) {
-        //Check application updates.
-        AppUpdaterUtils(context.applicationContext)
-                .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                .withListener(object : AppUpdaterUtils.UpdateListener {
-                    override fun onSuccess(update: Update?, isUpdateAvailable: Boolean) {
-                        if (isUpdateAvailable) {
-                            //Update available
-                            update?.let { versionUpdateResult.value = update }
-                        } else {
-                            //No update available
-                            //Do nothing
-                            versionUpdateResult.value = null
-                        }
-                    }
+    /**
+     * Repository to provide user authentications.
+     */
+    @VisibleForTesting
+    internal var mAuthRepository: AboutRepository
 
-                    override fun onFailed(error: AppUpdaterError?) {
-                        errorMessage.value = ErrorMessage(R.string.check_update_error_message)
-                        versionUpdateResult.value = null
-                    }
+    /**
+     * Private constructor to add the custom [UserAuthRepository] for testing.
+     *
+     * @param authRepository Add your own [UserAuthRepository].
+     */
+    @Suppress("unused")
+    @VisibleForTesting
+    constructor(authRepository: AboutRepository) : super() {
+        this.mAuthRepository = authRepository
+    }
+
+    /**
+     * Zero parameter constructor.
+     */
+    @Suppress("unused")
+    constructor() : super() {
+        //This is the original user authentication repo.
+        mAuthRepository = AboutRepositoryImpl()
+    }
+
+    fun checkForUpdate() {
+        mAuthRepository.getLatestVersion()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe { blockUi.value = true }
+                .subscribe({
+                    it?.let { versionUpdateResult.value = it }
+                }, {
+                    versionUpdateResult.value = null
+                    errorMessage.value = ErrorMessage(R.string.check_update_error_message)
                 })
-                .start()
     }
 
     fun reportIssue(title: String, message: String) {

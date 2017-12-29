@@ -34,7 +34,7 @@ android {
         minSdkVersion buidlConfig.min
         targetSdkVersion buidlConfig.target
 
-        //Version config
+        //CheckVersionResponse config
         versionName String.format('%d.%d', versionConfig.versionMajor, versionConfig.versionMinor)
         versionCode versionConfig.versionCode
 
@@ -153,7 +153,6 @@ dependencies {
     implementation(otherLib.bottomsheet, excludeGrp)
     implementation(otherLib.circleImagView, excludeGrp)
     implementation(otherLib.aboutlibraries, excludeGrp)
-    implementation(otherLib.appUpdator, excludeGrp)
     implementation(otherLib.diagonallayout, excludeGrp)
     implementation(otherLib.chartLayout, excludeGrp)
     implementation(otherLib.openSourceLibraries) { transitive = true }

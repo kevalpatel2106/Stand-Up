@@ -23,7 +23,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import butterknife.OnClick
-import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.misc.SUUtils
@@ -34,7 +33,6 @@ import org.jetbrains.anko.alert
 class ReportIssueActivity : BaseActivity() {
 
     private lateinit var model: ReportIssueViewModel
-    private var versionItem: MaterialAboutActionItem? = null
 
     companion object {
 
@@ -79,7 +77,7 @@ class ReportIssueActivity : BaseActivity() {
 
         if (savedInstanceState == null) {
             //Check for the update automatically
-            model.checkForUpdate(this@ReportIssueActivity)
+            model.checkForUpdate()
         }
     }
 

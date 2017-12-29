@@ -28,7 +28,6 @@ import com.danielstone.materialaboutlibrary.MaterialAboutActivity
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
-import com.github.javiersantos.appupdater.objects.Update
 import com.google.android.gms.appinvite.AppInviteInvitation
 import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.R
@@ -83,7 +82,7 @@ class AboutActivity : MaterialAboutActivity() {
 
         if (savedInstanceState == null) {
             //Check for the update automatically
-            model.checkForUpdate(this@AboutActivity)
+            model.checkForUpdate()
         }
     }
 
@@ -171,15 +170,15 @@ class AboutActivity : MaterialAboutActivity() {
 
 
     private fun getAboutCard(): MaterialAboutCard {
-        //Version
+        //CheckVersionResponse
         versionItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_version_white)
                 .setIconGravity(Gravity.START)
-                .text("Version")
+                .text("CheckVersionResponse")
                 .subText(BuildConfig.VERSION_NAME)
                 .setOnClickAction({
                     logEvent(AnalyticsEvents.EVENT_CHECK_UPDATE_MANUALLY)
-                    model.checkForUpdate(this@AboutActivity)
+                    model.checkForUpdate()
                 })
                 .build()
 

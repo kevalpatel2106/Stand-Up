@@ -23,19 +23,22 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.github.javiersantos.appupdater.AppUpdaterUtils
-import com.github.javiersantos.appupdater.enums.AppUpdaterError
-import com.github.javiersantos.appupdater.enums.UpdateFrom
-import com.github.javiersantos.appupdater.objects.Update
+import android.support.annotation.VisibleForTesting
 import com.google.android.gms.appinvite.AppInviteInvitation
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.about.donate.SupportDevelopmentActivity
+import com.kevalpatel2106.standup.about.repo.AboutRepository
+import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
+import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
 import com.kevalpatel2106.standup.about.report.ReportIssueActivity
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.misc.SUUtils
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 
 /**
@@ -43,12 +46,38 @@ import com.mikepenz.aboutlibraries.LibsBuilder
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class AboutViewModel : BaseViewModel() {
+internal class AboutViewModel : BaseViewModel {
     val REQUEST_CODE_INVITE = 6123
+
+    /**
+     * Repository to provide user authentications.
+     */
+    @VisibleForTesting
+    internal var mAuthRepository: AboutRepository
+
+    /**
+     * Private constructor to add the custom [UserAuthRepository] for testing.
+     *
+     * @param authRepository Add your own [UserAuthRepository].
+     */
+    @Suppress("unused")
+    @VisibleForTesting
+    constructor(authRepository: AboutRepository) : super() {
+        this.mAuthRepository = authRepository
+    }
+
+    /**
+     * Zero parameter constructor.
+     */
+    @Suppress("unused")
+    constructor() : super() {
+        //This is the original user authentication repo.
+        mAuthRepository = AboutRepositoryImpl()
+    }
 
     internal val isCheckingUpdate = MutableLiveData<Boolean>()
 
-    internal val versionUpdateResult = MutableLiveData<Update>()
+    internal val versionUpdateResult = MutableLiveData<CheckVersionResponse>()
 
     init {
         isCheckingUpdate.value = false
@@ -68,34 +97,18 @@ internal class AboutViewModel : BaseViewModel() {
         }
     }
 
-    fun checkForUpdate(context: Context) {
-        isCheckingUpdate.value = true
-
-        //Check application updates.
-        AppUpdaterUtils(context.applicationContext)
-                .setUpdateFrom(UpdateFrom.GOOGLE_PLAY)
-                .withListener(object : AppUpdaterUtils.UpdateListener {
-                    override fun onSuccess(update: Update?, isUpdateAvailable: Boolean) {
-                        isCheckingUpdate.value = false
-
-                        if (isUpdateAvailable) {
-                            //Update available
-                            update?.let { versionUpdateResult.value = update }
-                        } else {
-                            //No update available
-                            //Do nothing
-                            versionUpdateResult.value = null
-                        }
-                    }
-
-                    override fun onFailed(error: AppUpdaterError?) {
-                        isCheckingUpdate.value = false
-                        errorMessage.value = ErrorMessage(R.string.check_update_error_message)
-                        versionUpdateResult.value = null
-                    }
-
+    fun checkForUpdate() {
+        mAuthRepository.getLatestVersion()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe { isCheckingUpdate.value = true }
+                .doOnTerminate { isCheckingUpdate.value = false }
+                .subscribe({
+                    it?.let { versionUpdateResult.value = it }
+                }, {
+                    versionUpdateResult.value = null
+                    errorMessage.value = ErrorMessage(R.string.check_update_error_message)
                 })
-                .start()
     }
 
     fun handleReportIssue(context: Context) {
