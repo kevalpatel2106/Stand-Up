@@ -115,7 +115,7 @@ class CheckIsUserSittingTest {
         @Test
         @Throws(IOException::class)
         fun checkIsUserSitting() {
-            Assert.assertEquals(expected, ActivityDetectionReceiver.isUserSitting(activities))
+            Assert.assertEquals(expected, ActivityDetectionService.isUserSitting(activities))
         }
     }
 
@@ -126,7 +126,7 @@ class CheckIsUserSittingTest {
         @Throws(IOException::class)
         fun checkForEmptyArray() {
             try {
-                ActivityDetectionReceiver.isUserSitting(ArrayList())
+                ActivityDetectionService.isUserSitting(ArrayList())
             } catch (e: IllegalStateException) {
                 //Test passed
             }

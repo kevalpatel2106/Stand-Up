@@ -41,7 +41,6 @@ class DailyActivitySummaryTest {
     private val NUMBER_OF_ITEM = 10
     private val STANDING_EVENT_POS = arrayOf(2, 6, 8)
     private val SITTING_EVENT_POS = arrayOf(1, 4, 7, 9)
-    private val NOT_TRACKED_EVENT_POS = arrayOf(3, 5, 10)
 
     private fun getMockUserActivityList(): ArrayList<UserActivity> {
         val userActivities = ArrayList<UserActivity>(NUMBER_OF_ITEM)
@@ -354,6 +353,7 @@ class DailyActivitySummaryTest {
     fun checkConversionFromDayActivityListWithEmptyList() {
         try {
             DailyActivitySummary.convertToValidUserActivityList(ArrayList())
+            Assert.fail()
         } catch (e: IllegalArgumentException) {
             //Test passed
             //NO OP
@@ -414,5 +414,32 @@ class DailyActivitySummaryTest {
         } catch (e: Exception) {
             Assert.fail(e.message)
         }
+    }
+
+    @Test
+    fun checkEquals() {
+        val summary1 = DailyActivitySummary(1, 2, 2017, ArrayList())
+        val summary2 = DailyActivitySummary(1, 2, 2017, ArrayList())
+        val summary3 = DailyActivitySummary(2, 2, 2017, ArrayList())
+
+        Assert.assertEquals(summary1, summary2)
+        Assert.assertNotEquals(summary1, summary3)
+        Assert.assertNotEquals(summary2, summary3)
+        Assert.assertNotEquals(summary1, null)
+        Assert.assertNotEquals(summary1, Unit)
+    }
+
+    @Test
+    fun checkHashCode() {
+        val summary1 = DailyActivitySummary(1, 2, 2017, ArrayList())
+        Assert.assertEquals(summary1.hashCode(), 1000 + 2 * 100 + 2017 * 10)
+    }
+
+    @Test
+    fun checkEqualsWithHashCode() {
+        val summary1 = DailyActivitySummary(1, 2, 2017, ArrayList())
+        val summary2 = DailyActivitySummary(1, 2, 2017, ArrayList())
+
+        Assert.assertEquals(summary1.hashCode(), summary2.hashCode())
     }
 }

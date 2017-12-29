@@ -220,7 +220,7 @@ constructor(
         return false
     }
 
-    override fun hashCode(): Int = dayOfMonth * 1000 + monthOfYear * 100 + dayOfMonth * 10
+    override fun hashCode(): Int = dayOfMonth * 1000 + monthOfYear * 100 + year * 10
 
     companion object {
 

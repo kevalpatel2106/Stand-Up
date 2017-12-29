@@ -22,7 +22,6 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 import android.arch.persistence.room.Update
 import com.kevalpatel2106.base.annotations.Repository
-import io.reactivex.Maybe
 
 /**
  * Created by Kevalpatel2106 on 13-Dec-17.
@@ -42,7 +41,7 @@ interface UserActivityDao {
     @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE
             + " ORDER BY " + UserActivity.EVENT_START_TIME + " DESC"
             + " LIMIT 1")
-    fun getLatestActivity(): Maybe<UserActivity>
+    fun getLatestActivity(): UserActivity?
 
     @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE
             + " WHERE " + UserActivity.EVENT_START_TIME + " > :afterTimeMills AND "

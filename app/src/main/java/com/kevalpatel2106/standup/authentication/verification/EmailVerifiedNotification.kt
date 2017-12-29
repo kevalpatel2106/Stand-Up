@@ -23,7 +23,6 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.standup.R
@@ -46,7 +45,7 @@ internal object EmailVerifiedNotification {
                                    message: String?,
                                    @VisibleForTesting largeIcon: Bitmap? = null): NotificationCompat.Builder {
 
-        val builder = NotificationCompat.Builder(context)
+        return NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.ic_notififcation_launcher)
                 .setContentTitle(context.getString(R.string.application_name))
@@ -62,11 +61,5 @@ internal object EmailVerifiedNotification {
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(message)
                         .setBigContentTitle(context.getString(R.string.application_name)))
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder.setChannelId(NotificationChannelType.ACCOUNT_NOTIFICATION_CHANNEL)
-        }
-
-        return builder
     }
 }

@@ -24,6 +24,7 @@ import android.content.Intent
 import com.firebase.jobdispatcher.*
 import com.google.android.gms.location.ActivityRecognitionClient
 import com.kevalpatel2106.standup.reminder.ReminderConfig
+import com.kevalpatel2106.standup.reminder.activityDetector.ActivityDetectionService
 import timber.log.Timber
 
 /**
@@ -135,10 +136,10 @@ object ReminderScheduler {
      * Gets a PendingIntent to be sent for each context detection.
      */
     private fun getActivityDetectionPendingIntent(context: Context): PendingIntent {
-        val intent = Intent(ReminderConfig.DETECTION_BROADCAST_ACTION)
+        val intent = Intent(context, ActivityDetectionService::class.java)
 
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // requestActivityUpdates() and removeActivityUpdates().
-        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 }

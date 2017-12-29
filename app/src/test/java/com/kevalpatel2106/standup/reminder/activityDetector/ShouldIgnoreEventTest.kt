@@ -96,7 +96,7 @@ class ShouldIgnoreEventTest {
         @Test
         @Throws(IOException::class)
         fun checkShouldIgnoreEvent() {
-            Assert.assertEquals(ActivityDetectionReceiver.shouldIgnoreThisEvent(activities), expected)
+            Assert.assertEquals(ActivityDetectionService.shouldIgnoreThisEvent(activities), expected)
         }
     }
 
@@ -107,7 +107,7 @@ class ShouldIgnoreEventTest {
         @Throws(IOException::class)
         fun checkForEmptyArray() {
             try {
-                ActivityDetectionReceiver.shouldIgnoreThisEvent(ArrayList())
+                ActivityDetectionService.shouldIgnoreThisEvent(ArrayList())
             } catch (e: IllegalStateException) {
                 //Test passed
             }

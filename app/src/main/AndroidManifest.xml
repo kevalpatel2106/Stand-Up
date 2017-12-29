@@ -187,6 +187,12 @@
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
+        <activity
+            android:name=".diary.detail.DetailActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionbar"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute" />
 
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->
@@ -196,17 +202,6 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.kevalpatel2106.network.unauthorized" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Receiver to get callbacks when user's activity changes. -->
-        <receiver
-            android:name=".reminder.activityDetector.ActivityDetectionReceiver"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
-            <intent-filter>
-                <action android:name="com.kevalpatel2106.standup.reminder.activityUpdate" />
             </intent-filter>
         </receiver>
 
@@ -228,13 +223,19 @@
         </service>
         <!-- End: Firebase service -->
 
+        <!-- Service to process user's activity changes and scheduling the reminder based on that. -->
+        <service
+            android:name=".reminder.activityDetector.ActivityDetectionService"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedService" />
 
         <!-- Service to register the device firebase token and other detail -->
         <service
             android:name=".authentication.deviceReg.RegisterDeviceService"
             tools:ignore="ExportedService" />
 
-        <!-- Job service to fire the remonder notiffications -->
+        <!-- Job service to fire the reminder notifications -->
         <service
             android:name=".reminder.scheduler.ReminderNotifyService"
             android:exported="false">
@@ -242,8 +243,6 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
-
-        <activity android:name=".diary.detail.DetailActivity"></activity>
     </application>
 
 </manifest>

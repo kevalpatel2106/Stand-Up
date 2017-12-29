@@ -18,12 +18,13 @@
 package com.kevalpatel2106.standup.reminder.activityDetector
 
 import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
-import android.content.Context
+import android.app.IntentService
 import android.content.Intent
 import android.support.annotation.VisibleForTesting
+import android.support.v4.content.LocalBroadcastManager
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
+import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
@@ -31,6 +32,8 @@ import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepoImpl
 import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.*
 
@@ -52,16 +55,13 @@ import java.util.*
  * @see DetectedActivity
  * @see ReminderScheduler
  */
-class ActivityDetectionReceiver : BroadcastReceiver() {
-
-    private lateinit var context: Context
+class ActivityDetectionService : IntentService(ActivityDetectionService::class.java.name) {
 
     @VisibleForTesting
     internal var mReminderRepo: ReminderRepo = ReminderRepoImpl()
 
     @SuppressLint("VisibleForTests")
-    override fun onReceive(context: Context, intent: Intent) {
-        this.context = context
+    override fun onHandleIntent(intent: Intent) {
         val result = ActivityRecognitionResult.extractResult(intent)
 
         // Get the list of the probable activities associated with the current state of the
@@ -83,6 +83,14 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
             //User is moving
             onUserMoving(mReminderRepo)
         }
+
+        @Suppress("DEPRECATION")
+        if (BuildConfig.DEBUG) {
+            val i = Intent(ReminderConfig.DETECTION_BROADCAST_ACTION)
+            i.putExtra("com.google.android.location.internal.EXTRA_ACTIVITY_RESULT",
+                    i.getByteArrayExtra("com.google.android.location.internal.EXTRA_ACTIVITY_RESULT"))
+            LocalBroadcastManager.getInstance(this@ActivityDetectionService).sendBroadcast(i)
+        }
     }
 
     private fun onUserMoving(repo: ReminderRepo) {
@@ -94,6 +102,9 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         //Add the new value to database.
         repo.insertNewAndTerminatePreviousActivity(UserActivityHelper
                 .createLocalUserActivity(UserActivityType.MOVING))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 
     private fun onUserSitting(repo: ReminderRepo) {
@@ -102,6 +113,9 @@ class ActivityDetectionReceiver : BroadcastReceiver() {
         //Add the new value to database.
         repo.insertNewAndTerminatePreviousActivity(UserActivityHelper
                 .createLocalUserActivity(UserActivityType.SITTING))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 
     companion object {

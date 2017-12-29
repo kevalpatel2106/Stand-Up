@@ -19,12 +19,7 @@ package com.kevalpatel2106.standup.reminder.repo
 
 import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
-import io.reactivex.Maybe
-import io.reactivex.MaybeObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
+import io.reactivex.Single
 
 /**
  * Created by Keval on 14/12/17.
@@ -38,14 +33,18 @@ class ReminderRepoImpl : ReminderRepo {
      * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
      * inert [newActivity].
      */
-    override fun insertNewAndTerminatePreviousActivity(newActivity: UserActivity) {
+    override fun insertNewAndTerminatePreviousActivity(newActivity: UserActivity): Single<Long> {
+        return Single.create({
+            val lastActivity = StandUpDb.getDb().userActivityDao().getLatestActivity()
 
-        getLatestActivity().subscribe(object : MaybeObserver<UserActivity> {
-
-            override fun onSuccess(lastActivity: UserActivity) {
-
-                //Check if the user activity is changed or not?
-                if (lastActivity.type != newActivity.type) {
+            when {
+                lastActivity == null -> {
+                    //Add the first event to the database
+                    val id = StandUpDb.getDb().userActivityDao().insert(newActivity)
+                    it.onSuccess(id)
+                }
+                lastActivity.type != newActivity.type -> {
+                    //Check if the user activity is changed or not?
 
                     //This is new user activity.
                     //Update the end time of the last user event.
@@ -53,31 +52,15 @@ class ReminderRepoImpl : ReminderRepo {
                     StandUpDb.getDb().userActivityDao().update(lastActivity)
 
                     //Add the event to the database
-                    StandUpDb.getDb().userActivityDao().insert(newActivity)
-                } else {
+                    val id = StandUpDb.getDb().userActivityDao().insert(newActivity)
+                    it.onSuccess(id)
+                }
+                else -> {
                     //Activity type did not changed/
                     //Do noting
+                    it.onSuccess(0)
                 }
-            }
-
-            override fun onError(e: Throwable) {
-                Timber.e(e)
-            }
-
-            override fun onComplete() {
-                //Add the event to the database
-                StandUpDb.getDb().userActivityDao().insert(newActivity)
-            }
-
-            override fun onSubscribe(d: Disposable) {
-                //Do nothing
             }
         })
     }
-
-    override fun getLatestActivity(): Maybe<UserActivity> = StandUpDb.getDb()
-            .userActivityDao()
-            .getLatestActivity()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
 }
