@@ -87,7 +87,7 @@ class EmailLinkVerificationUiActivityTest : BaseTestClass() {
         intent.putExtra(EmailLinkVerificationActivity.ARG_URL,
                 mockServerManager.getBaseUrl() + "/verifyEmailLink/32894723874/dskfhj-sdf-vcx-cx-vczx")
         rule.launchActivity(intent)
-        activity!!.mAuthRepo = mMockUserAuthRepository
+        activity!!.model.mUserAuthRepo = mMockUserAuthRepository
 
         Intents.init()
         onView(withId(R.id.verify_email_link_description_tv)).check(ViewAssertions.matches(withText(R.string.verify_email_link_success)))
@@ -109,7 +109,7 @@ class EmailLinkVerificationUiActivityTest : BaseTestClass() {
         intent.putExtra(EmailLinkVerificationActivity.ARG_URL,
                 mockServerManager.getBaseUrl() + "/verifyEmailLink/32894723874/dskfhj-sdf-vcx-cx-vczx")
         rule.launchActivity(intent)
-        activity!!.mAuthRepo = mMockUserAuthRepository
+        activity!!.model.mUserAuthRepo = mMockUserAuthRepository
 
         Intents.init()
         onView(withId(R.id.verify_email_link_logo)).check(ViewAssertions.matches(CustomMatchers.hasImage()))

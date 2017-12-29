@@ -22,7 +22,6 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
-import kotlinx.coroutines.experimental.launch
 
 /**
  * Created by Keval on 08/12/17.
@@ -59,14 +58,12 @@ internal object AnalyticsEvents {
 fun Context.logEvent(event: String,
                      bundle: Bundle? = null) {
 
-    launch {
-        val param = bundle ?: Bundle()
+    val param = bundle ?: Bundle()
 
-        if (UserSessionManager.isUserLoggedIn) {
-            param.putLong(AnalyticsEvents.KEY_USER_ID, UserSessionManager.userId)
-            param.putString(AnalyticsEvents.KEY_DEVICE_ID, Utils.getDeviceId(applicationContext))
-        }
-
-        FirebaseAnalytics.getInstance(applicationContext).logEvent(event, param)
+    if (UserSessionManager.isUserLoggedIn) {
+        param.putLong(AnalyticsEvents.KEY_USER_ID, UserSessionManager.userId)
+        param.putString(AnalyticsEvents.KEY_DEVICE_ID, Utils.getDeviceId(applicationContext))
     }
+
+    FirebaseAnalytics.getInstance(applicationContext).logEvent(event, param)
 }

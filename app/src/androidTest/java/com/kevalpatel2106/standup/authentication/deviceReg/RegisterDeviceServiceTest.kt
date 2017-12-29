@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.authentication.deviceReg
 
 import android.app.Activity
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.support.test.InstrumentationRegistry
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
@@ -29,7 +30,9 @@ import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.IOException
@@ -42,6 +45,10 @@ import java.io.IOException
 @RunWith(JUnit4::class)
 class RegisterDeviceServiceTest : BaseTestClass() {
     override fun getActivity(): Activity? = null
+
+    @Rule
+    @JvmField
+    val rule1: TestRule = InstantTaskExecutorRule()
 
     private val mRegisterDeviceService = RegisterDeviceService()
     private val mockServerManager = MockServerManager()

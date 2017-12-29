@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup.dashboard.repo
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
@@ -34,11 +35,7 @@ import kotlin.collections.ArrayList
 class DashboardRepoImpl : DashboardRepo {
 
     override fun getTodaySummary(): Flowable<DailyActivitySummary> {
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
+        val calendar = TimeUtils.getTodaysCalender12AM()
         val startTimeMills = calendar.timeInMillis
 
         calendar.set(Calendar.HOUR_OF_DAY, 24)

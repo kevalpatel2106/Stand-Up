@@ -80,7 +80,7 @@ internal class DashboardViewModel : BaseViewModel {
                     todaySummaryErrorCallback.value = null
                 }
                 .doOnComplete {
-                    if (todaySummaryErrorCallback.value == null)
+                    if (timelineEventsList.value == null)
                         todaySummaryErrorCallback.value = ErrorMessage("No activity found today.")
                 }
                 .subscribe({

@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.authentication.deviceReg
 
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Intent
 import android.support.test.InstrumentationRegistry
 import android.support.test.rule.ActivityTestRule
@@ -32,6 +33,7 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import java.io.IOException
 
@@ -42,6 +44,10 @@ import java.io.IOException
  */
 @RunWith(AndroidJUnit4::class)
 class DeviceRegisterActivityTest : BaseTestClass() {
+
+    @Rule
+    @JvmField
+    val rule1: TestRule = InstantTaskExecutorRule()
 
     @JvmField
     @Rule

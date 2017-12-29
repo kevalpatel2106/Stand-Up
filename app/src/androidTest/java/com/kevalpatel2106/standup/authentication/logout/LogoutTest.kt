@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.authentication.logout
 
 import android.app.Activity
+import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import com.kevalpatel2106.network.ApiProvider
@@ -31,7 +32,9 @@ import com.kevalpatel2106.utils.UserSessionManager
 import junit.framework.Assert
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import java.io.IOException
 
@@ -42,6 +45,10 @@ import java.io.IOException
  */
 @RunWith(AndroidJUnit4::class)
 class LogoutTest : BaseTestClass() {
+
+    @Rule
+    @JvmField
+    val rule: TestRule = InstantTaskExecutorRule()
 
     override fun getActivity(): Activity? = null
 

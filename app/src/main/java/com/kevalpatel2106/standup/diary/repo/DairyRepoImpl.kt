@@ -48,7 +48,7 @@ class DairyRepoImpl : DairyRepo {
      * @see loadUserActivityByDay
      */
     override fun loadDaysList(beforeMills: Long): Flowable<DailyActivitySummary> {
-        @Suppress("SENSELESS_COMPARISON")
+
         val flowable = Flowable.create(FlowableOnSubscribe<List<UserActivity>> { e ->
 
             //Setup the calender object.
@@ -60,9 +60,6 @@ class DairyRepoImpl : DairyRepo {
 
             //Loop until the oldest event received
             while (oldestActivity != null && calender.timeInMillis > oldestActivity.eventStartTimeMills) {
-                //Go one day before.
-                calender.add(Calendar.DAY_OF_MONTH, -1)
-
                 //Query the database.
                 val dbList = ArrayList(loadUserActivityByDay(calender.clone() as Calendar))
 
@@ -71,6 +68,9 @@ class DairyRepoImpl : DairyRepo {
                 if (dbList.isNotEmpty()) {
                     e.onNext(dbList)
                 }
+
+                //Go one day before.
+                calender.add(Calendar.DAY_OF_MONTH, -1)
             }
 
             //TODO call the server for more events.
