@@ -29,20 +29,12 @@ internal object ReminderConfig {
      */
     internal const val STAND_UP_DURATION = 10 * 60 /*1 hour*/
 
-    /**
-     * Tag for the [ReminderNotifyService] job.
-     */
-    internal const val SCHEDULER_JOB_TAG = "tag"
+    internal const val ACTIVITY_MONITOR_JOB_TAG = "activity_monitor_job"
 
     /**
      * For internal use only.
      */
     internal const val ENABLE_ACTIVITY_DETECTION = true
-
-    /**
-     * Activity detection update interval in milliseconds.
-     */
-    internal const val DETECTION_INTERVAL = 30000L /*30 secs*/
 
     /**
      * Broadcast action when the activity update available.
@@ -54,4 +46,8 @@ internal object ReminderConfig {
      * Minimum threshold required for the user activity for processing the data.
      */
     internal const val CONFIDENCE_THRESHOLD = 30
+
+    internal const val MONITOR_SERVICE_PERIOD = 30  //sec
+
+    internal const val MONITOR_SERVICE_PERIOD_TOLERANCE = 5  //sec
 }

@@ -15,23 +15,19 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder.activityDetector
+package com.kevalpatel2106.standup.reminder
 
 import android.annotation.SuppressLint
 import android.app.IntentService
 import android.content.Intent
 import android.support.annotation.VisibleForTesting
-import android.support.v4.content.LocalBroadcastManager
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
-import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepoImpl
-import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -53,7 +49,6 @@ import java.util.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  * @see DetectedActivity
- * @see ReminderScheduler
  */
 class ActivityDetectionService : IntentService(ActivityDetectionService::class.java.name) {
 
@@ -70,26 +65,18 @@ class ActivityDetectionService : IntentService(ActivityDetectionService::class.j
         val detectedActivities = result.probableActivities as ArrayList
         Timber.d("Detected Activities: ".plus(detectedActivities.toString()))
 
-        if (shouldIgnoreThisEvent(detectedActivities)) {
+        if (ActivityDetectionHelper.shouldIgnoreThisEvent(detectedActivities)) {
             //Not enough confidence
             //Let's ignore this event.
             return
         }
 
-        if (isUserSitting(detectedActivities)) {
+        if (ActivityDetectionHelper.isUserSitting(detectedActivities)) {
             //User is sitting
             onUserSitting(mReminderRepo)
         } else {
             //User is moving
             onUserMoving(mReminderRepo)
-        }
-
-        @Suppress("DEPRECATION")
-        if (BuildConfig.DEBUG) {
-            val i = Intent(ReminderConfig.DETECTION_BROADCAST_ACTION)
-            i.putExtra("com.google.android.location.internal.EXTRA_ACTIVITY_RESULT",
-                    i.getByteArrayExtra("com.google.android.location.internal.EXTRA_ACTIVITY_RESULT"))
-            LocalBroadcastManager.getInstance(this@ActivityDetectionService).sendBroadcast(i)
         }
     }
 
@@ -97,7 +84,7 @@ class ActivityDetectionService : IntentService(ActivityDetectionService::class.j
         Timber.d("User is MOVING.")
 
         //Push the notification back to 1 hour
-        ReminderScheduler.scheduleNextReminder()
+        //TODO Schedule next reminder
 
         //Add the new value to database.
         repo.insertNewAndTerminatePreviousActivity(UserActivityHelper
@@ -116,70 +103,5 @@ class ActivityDetectionService : IntentService(ActivityDetectionService::class.j
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe()
-    }
-
-    companion object {
-
-        @JvmStatic
-        @VisibleForTesting
-        internal fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
-            if (detectedActivities.size <= 0)
-                throw IllegalStateException("Detected activity list must have at least one item.")
-
-            sortDescendingByConfidence(detectedActivities)
-
-            //Activity detected.
-            return when (detectedActivities[0].type) {
-                DetectedActivity.STILL -> true
-                DetectedActivity.IN_VEHICLE -> true
-                DetectedActivity.ON_BICYCLE or DetectedActivity.ON_FOOT or DetectedActivity.WALKING -> false
-                DetectedActivity.UNKNOWN or DetectedActivity.TILTING -> {
-                    throw IllegalStateException("Tilting or unknown activity should not come this far.")
-                }
-                else -> false
-            }
-        }
-
-        @JvmStatic
-        @VisibleForTesting
-        internal fun shouldIgnoreThisEvent(detectedActivities: ArrayList<DetectedActivity>): Boolean {
-            if (detectedActivities.size <= 0)
-                throw IllegalStateException("Detected activity list must have at least one item.")
-
-            sortDescendingByConfidence(detectedActivities)
-
-            if (detectedActivities[0].confidence < ReminderConfig.CONFIDENCE_THRESHOLD) return true
-
-            return when (detectedActivities[0].type) {
-                DetectedActivity.STILL -> false
-                DetectedActivity.ON_FOOT -> false
-                DetectedActivity.WALKING -> false
-                DetectedActivity.ON_BICYCLE -> false
-                DetectedActivity.IN_VEHICLE -> false
-                else -> true
-            }
-        }
-
-        @VisibleForTesting
-        @JvmStatic
-        internal fun sortDescendingByConfidence(detectedActivities: ArrayList<DetectedActivity>): ArrayList<DetectedActivity> {
-            //Sort the array by confidence level
-            //Descending
-            Collections.sort(detectedActivities) { p0, p1 ->
-                val diff = p1.confidence - p0.confidence
-
-                if (diff == 0) {
-                    if (p1.type == DetectedActivity.STILL || p1.type == DetectedActivity.IN_VEHICLE) {
-                        return@sort 1
-                    } else {
-                        return@sort -1
-                    }
-                } else {
-                    return@sort diff
-                }
-            }
-
-            return detectedActivities
-        }
     }
 }

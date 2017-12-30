@@ -144,6 +144,7 @@ dependencies {
     implementation(firebaseLib.invites, excludeGrp)
     implementation(firebaseLib.jobDispacher, excludeGrp)
     implementation(playServiceLib.location, excludeGrp)
+    implementation(playServiceLib.awareness, excludeGrp)
 
     //Glide
     implementation(otherLib.glide, excludeGrp)

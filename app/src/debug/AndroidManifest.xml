@@ -44,30 +44,6 @@
         <activity
             android:name="com.kevalpatel2106.testutils.FragmentRuleActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-
-        <activity
-            android:name=".reminder.demo.DemoRecognitionActivity"
-            android:icon="@mipmap/ic_activity_recognition_launcher"
-            android:label="Activity Recognition Demo"
-            android:taskAffinity="com.kevalpatel2106.standup.Recognition"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <!-- Receiver to get callbacks when user's activity changes. -->
-        <receiver
-            android:name="com.kevalpatel2106.standup.reminder.demo.DemoActivityRecognitionReceiver"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
-            <intent-filter>
-                <action android:name="com.kevalpatel2106.standup.reminder.activityUpdate" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

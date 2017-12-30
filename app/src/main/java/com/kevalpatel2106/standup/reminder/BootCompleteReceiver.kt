@@ -15,24 +15,23 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.repo
+package com.kevalpatel2106.standup.reminder
 
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.POST
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 
 /**
- * Created by Kevalpatel2106 on 29-Dec-17.
+ * Created by Keval on 30/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-interface AboutApiService {
+class BootCompleteReceiver : BroadcastReceiver() {
 
-    //TODO Create api from the server side
-    @POST("/checkVersion")
-    fun getLatestVersion(@Body checkVersionRequest: CheckVersionRequest): Call<CheckVersionResponse>
+    override fun onReceive(context: Context, intent: Intent?) {
 
-    //TODO Create api from the server side
-    @POST("/reportIssue")
-    fun reportIssue(@Body issue: ReportIssueRequest): Call<ReportIssueResponse>
+        //Start monitoring activity.
+        ActivityMonitorService.scheduleMonitoringJob(context)
+    }
+
 }

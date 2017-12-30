@@ -41,6 +41,9 @@
         <meta-data
             android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
             android:value="false" />
+        <meta-data
+            android:name="com.google.android.awareness.API_KEY"
+            android:value="@string/android_api_key" />
         <!-- =============================== ACTIVITIES ================================ -->
 
 
@@ -225,7 +228,7 @@
 
         <!-- Service to process user's activity changes and scheduling the reminder based on that. -->
         <service
-            android:name=".reminder.activityDetector.ActivityDetectionService"
+            android:name=".reminder.ActivityDetectionService"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService" />
@@ -237,7 +240,16 @@
 
         <!-- Job service to fire the reminder notifications -->
         <service
-            android:name=".reminder.scheduler.ReminderNotifyService"
+            android:name=".reminder.ReminderNotifyService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <!-- Job service to fire the activity monitor notifications -->
+        <service
+            android:name=".reminder.ActivityMonitorService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />

@@ -27,7 +27,6 @@ import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivit
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.standup.profile.EditProfileActivity
-import com.kevalpatel2106.standup.reminder.scheduler.ReminderScheduler
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 
@@ -74,9 +73,6 @@ class SplashActivity : BaseActivity() {
                 EditProfileActivity.launch(this@SplashActivity)
 
             } else {    //All looks good.
-                //Start the detection engine
-                ReminderScheduler.startSchedulerIfNotRunning(this.applicationContext)
-
                 //Launch the dashboard.
                 MainActivity.launch(this@SplashActivity)
             }

@@ -15,12 +15,11 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder.scheduler
+package com.kevalpatel2106.standup.reminder
 
 import android.support.annotation.CallSuper
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService
-import com.kevalpatel2106.standup.reminder.ReminderNotification
 
 /**
  * Created by Kevalpatel2106 on 13-Dec-17.
@@ -37,7 +36,7 @@ class ReminderNotifyService : JobService() {
     @CallSuper
     override fun onStartJob(p0: JobParameters?): Boolean {
         //Schedule next event
-        ReminderScheduler.scheduleNextReminder()
+        //TODO Schedule next reminder
 
         ReminderNotification.notify(this@ReminderNotifyService)
         return true /* Wait for the background execution to complete */
