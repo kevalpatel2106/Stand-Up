@@ -208,6 +208,18 @@
             </intent-filter>
         </receiver>
 
+        <!-- Receive the broadcast if the user is unauthorised. -->
+        <receiver
+            android:name=".reminder.SystemEventReceiver"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
         <!-- =============================== SERVICE ================================ -->
         <!-- Begin: Firebase service -->
         <service
@@ -226,13 +238,6 @@
         </service>
         <!-- End: Firebase service -->
 
-        <!-- Service to process user's activity changes and scheduling the reminder based on that. -->
-        <service
-            android:name=".reminder.ActivityDetectionService"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedService" />
-
         <!-- Service to register the device firebase token and other detail -->
         <service
             android:name=".authentication.deviceReg.RegisterDeviceService"
@@ -240,16 +245,25 @@
 
         <!-- Job service to fire the reminder notifications -->
         <service
-            android:name=".reminder.ReminderNotifyService"
+            android:name=".reminder.notification.NotificationSchedulerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
 
-        <!-- Job service to fire the activity monitor notifications -->
+        <!-- Job service to monitor the user activity. -->
         <service
-            android:name=".reminder.ActivityMonitorService"
+            android:name=".reminder.activityMonitor.ActivityMonitorService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+
+        <!-- Job service to sync all the user activity data with the server -->
+        <service
+            android:name=".reminder.sync.SyncService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />

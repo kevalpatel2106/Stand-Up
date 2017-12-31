@@ -72,6 +72,7 @@
     <string name="btn_title_open_mail">Open Mail</string>
     <string name="notification_channel_title_syncing">Syncing Notifications</string>
     <string name="notification_channel_title_accounts">Account Notifications</string>
+    <string name="notification_channel_title_reminders">Reminder Notifications</string>
     <string name="nav_header_home">Home</string>
     <string name="nav_header_dairy">Dairy</string>
     <string name="nav_header_stats">Statistics</string>
@@ -108,7 +109,7 @@
     <string name="btn_title_retry">Retry</string>
     <string name="reminder_notification_title">Stand up now</string>
     <string name="reminder_notification_message">Stand up now</string>
-    <string name="today_summary_heading_since_today_midnight">Since today midnight...</string>
+    <string name="today_summary_heading_since_today_midnight">Since today midnight…</string>
     <string name="error_message_report_issue">Cannot report the issue.</string>
     <string name="issue_success_alert_title">Issue reported.</string>
     <string name="issue_success_alert_message">Your issue id: %d</string>

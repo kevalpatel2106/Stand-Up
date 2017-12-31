@@ -15,10 +15,10 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder.activityDetector
+package com.kevalpatel2106.standup.reminder.activityMonitor
 
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.standup.reminder.ActivityDetectionHelper
+import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,7 +31,7 @@ import java.io.IOException
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(JUnit4::class)
-class ActivityDetectionServiceTest {
+class ActivityMonitorHelperTest {
 
     @Test
     @Throws(IOException::class)
@@ -45,7 +45,7 @@ class ActivityDetectionServiceTest {
                 DetectedActivity(DetectedActivity.WALKING, 90)      /*Highest*/
         )
 
-        ActivityDetectionHelper.sortDescendingByConfidence(activities)
+        ActivityMonitorHelper.sortDescendingByConfidence(activities)
 
         //Assert
         Assert.assertEquals(activities[0].type, DetectedActivity.WALKING)
@@ -68,7 +68,7 @@ class ActivityDetectionServiceTest {
                 DetectedActivity(DetectedActivity.WALKING, 90)
         )
 
-        ActivityDetectionHelper.sortDescendingByConfidence(activities)
+        ActivityMonitorHelper.sortDescendingByConfidence(activities)
 
         //Assert
         Assert.assertEquals(activities[0].type, DetectedActivity.STILL)
@@ -91,7 +91,7 @@ class ActivityDetectionServiceTest {
                 DetectedActivity(DetectedActivity.WALKING, 90)
         )
 
-        ActivityDetectionHelper.sortDescendingByConfidence(activities)
+        ActivityMonitorHelper.sortDescendingByConfidence(activities)
 
         //Assert
         Assert.assertEquals(activities[0].type, DetectedActivity.IN_VEHICLE)
@@ -100,6 +100,72 @@ class ActivityDetectionServiceTest {
         Assert.assertEquals(activities[3].type, DetectedActivity.RUNNING)
         Assert.assertEquals(activities[4].type, DetectedActivity.ON_FOOT)
         Assert.assertEquals(activities[5].type, DetectedActivity.ON_BICYCLE)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkConvertToUserActivityWhenUserIsSitting() {
+        val activities = arrayListOf(
+                DetectedActivity(DetectedActivity.IN_VEHICLE, 90),
+                DetectedActivity(DetectedActivity.STILL, 90),
+                DetectedActivity(DetectedActivity.ON_FOOT, 85),
+                DetectedActivity(DetectedActivity.ON_BICYCLE, 70),
+                DetectedActivity(DetectedActivity.RUNNING, 88),
+                DetectedActivity(DetectedActivity.WALKING, 14)
+        )
+
+        val userActivity = ActivityMonitorHelper.convertToUserActivity(activities)
+
+        Assert.assertNotNull(userActivity)
+        Assert.assertEquals(userActivity!!.userActivityType, UserActivityType.SITTING)
+        Assert.assertEquals(userActivity.eventEndTimeMills, 0)
+        Assert.assertEquals(userActivity.isSynced, false)
+        Assert.assertEquals(userActivity.remoteId, 0)
+        Assert.assertEquals(userActivity.type, UserActivityType.SITTING.name.toLowerCase())
+        Assert.assertTrue(System.currentTimeMillis() - userActivity.eventStartTimeMills < 5000)
+
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkConvertToUserActivityWhenUserIsStanding() {
+        val activities = arrayListOf(
+                DetectedActivity(DetectedActivity.IN_VEHICLE, 10),
+                DetectedActivity(DetectedActivity.STILL, 56),
+                DetectedActivity(DetectedActivity.ON_FOOT, 85),
+                DetectedActivity(DetectedActivity.ON_BICYCLE, 70),
+                DetectedActivity(DetectedActivity.RUNNING, 88),
+                DetectedActivity(DetectedActivity.WALKING, 14)
+        )
+
+        val userActivity = ActivityMonitorHelper.convertToUserActivity(activities)
+
+        Assert.assertNotNull(userActivity)
+        Assert.assertEquals(userActivity!!.userActivityType, UserActivityType.MOVING)
+        Assert.assertEquals(userActivity.eventEndTimeMills, 0)
+        Assert.assertEquals(userActivity.isSynced, false)
+        Assert.assertEquals(userActivity.remoteId, 0)
+        Assert.assertEquals(userActivity.type, UserActivityType.MOVING.name.toLowerCase())
+        Assert.assertTrue(System.currentTimeMillis() - userActivity.eventStartTimeMills < 5000)
+
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkConvertToUserActivityWhenNotEnoughConfidence() {
+        val activities = arrayListOf(
+                DetectedActivity(DetectedActivity.IN_VEHICLE, 10),
+                DetectedActivity(DetectedActivity.STILL, 29),
+                DetectedActivity(DetectedActivity.ON_FOOT, 25),
+                DetectedActivity(DetectedActivity.ON_BICYCLE, 21),
+                DetectedActivity(DetectedActivity.RUNNING, 8),
+                DetectedActivity(DetectedActivity.WALKING, 14)
+        )
+
+        val userActivity = ActivityMonitorHelper.convertToUserActivity(activities)
+
+        Assert.assertNull(userActivity)
+
     }
 
 }

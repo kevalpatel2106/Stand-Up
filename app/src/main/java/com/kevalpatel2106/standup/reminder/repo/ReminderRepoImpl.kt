@@ -19,14 +19,22 @@ package com.kevalpatel2106.standup.reminder.repo
 
 import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import io.reactivex.Completable
 import io.reactivex.Single
+import timber.log.Timber
 
 /**
  * Created by Keval on 14/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class ReminderRepoImpl : ReminderRepo {
+internal class ReminderRepoImpl : ReminderRepo {
+    override fun sendPendingActivitiesToServer(): Completable {
+        return Completable.create {
+            Timber.d("Syncing pending events...")
+            it.onComplete()
+        }
+    }
 
     /**
      * This will store [newActivity] into the database and terminate the previous event with the
@@ -41,7 +49,7 @@ class ReminderRepoImpl : ReminderRepo {
                 lastActivity == null -> {
                     //Add the first event to the database
                     val id = StandUpDb.getDb().userActivityDao().insert(newActivity)
-                    it.onSuccess(id)
+                    if (!it.isDisposed) it.onSuccess(id)
                 }
                 lastActivity.type != newActivity.type -> {
                     //Check if the user activity is changed or not?
@@ -53,12 +61,12 @@ class ReminderRepoImpl : ReminderRepo {
 
                     //Add the event to the database
                     val id = StandUpDb.getDb().userActivityDao().insert(newActivity)
-                    it.onSuccess(id)
+                    if (!it.isDisposed) it.onSuccess(id)
                 }
                 else -> {
                     //Activity type did not changed/
                     //Do noting
-                    it.onSuccess(0)
+                    if (!it.isDisposed) it.onSuccess(0)
                 }
             }
         })

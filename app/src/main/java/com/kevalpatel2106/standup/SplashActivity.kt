@@ -27,6 +27,7 @@ import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivit
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.standup.profile.EditProfileActivity
+import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 
@@ -67,12 +68,16 @@ class SplashActivity : BaseActivity() {
 
             //Continue with the app launch flow.
             if (!UserSessionManager.isUserVerified) {   //If user is not verified, open verify screen.
+
                 VerifyEmailActivity.launch(this@SplashActivity)
-
             } else if (UserSessionManager.displayName.isNullOrEmpty()) {   //User profile is not complete.
-                EditProfileActivity.launch(this@SplashActivity)
 
+                EditProfileActivity.launch(this@SplashActivity)
             } else {    //All looks good.
+
+                //Start activity monitoring if not running
+                ActivityMonitorService.scheduleMonitoringJob(this@SplashActivity)
+
                 //Launch the dashboard.
                 MainActivity.launch(this@SplashActivity)
             }

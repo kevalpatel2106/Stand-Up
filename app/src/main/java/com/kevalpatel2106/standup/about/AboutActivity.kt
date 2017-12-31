@@ -38,7 +38,6 @@ import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.showSnack
 import org.jetbrains.anko.alert
 
-
 class AboutActivity : MaterialAboutActivity() {
 
     private lateinit var model: AboutViewModel

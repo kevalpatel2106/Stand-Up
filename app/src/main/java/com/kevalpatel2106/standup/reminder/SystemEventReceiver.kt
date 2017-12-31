@@ -20,18 +20,34 @@ package com.kevalpatel2106.standup.reminder
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.google.android.gms.common.GoogleApiAvailability
+import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
+import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
+import com.kevalpatel2106.standup.reminder.sync.SyncService
 
 /**
  * Created by Keval on 30/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class BootCompleteReceiver : BroadcastReceiver() {
+class SystemEventReceiver : BroadcastReceiver() {
 
-    override fun onReceive(context: Context, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent) {
+
+        // Check if the Google Play Services updated?
+        // Issue: https://github.com/firebase/firebase-jobdispatcher-android/issues/6
+        if (intent.action == Intent.ACTION_PACKAGE_CHANGED && intent.extras[Intent.EXTRA_PACKAGE_NAME]
+                != GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)
+            return
 
         //Start monitoring activity.
         ActivityMonitorService.scheduleMonitoringJob(context)
+
+        //Sync all the pending activities.
+        SyncService.syncNow(context)
+
+        //Schedule the next reminder
+        NotificationSchedulerService.scheduleNotification(context)
     }
 
 }

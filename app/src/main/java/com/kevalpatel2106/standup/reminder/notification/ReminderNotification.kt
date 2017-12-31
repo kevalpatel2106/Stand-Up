@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder
+package com.kevalpatel2106.standup.reminder.notification
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
@@ -28,6 +28,7 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.fcm.NotificationChannelType
+import com.kevalpatel2106.standup.fcm.addReminderNotificationChannel
 
 @Suppress("DEPRECATION")
 internal object ReminderNotification {
@@ -36,6 +37,7 @@ internal object ReminderNotification {
     @SuppressLint("VisibleForTests")
     internal fun notify(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.addReminderNotificationChannel(context)
         nm.notify(NOTIFICATION_ID, buildNotification(context).build())
     }
 

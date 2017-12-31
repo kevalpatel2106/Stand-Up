@@ -15,4 +15,8 @@
   ~
   -->
 
-<manifest package="com.kevalpatel2106.utils" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kevalpatel2106.utils">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+</manifest>

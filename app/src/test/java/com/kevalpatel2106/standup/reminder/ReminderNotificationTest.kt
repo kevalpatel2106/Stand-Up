@@ -23,6 +23,7 @@ import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.fcm.NotificationChannelType
+import com.kevalpatel2106.standup.reminder.notification.ReminderNotification
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before

@@ -15,10 +15,9 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder.activityDetector
+package com.kevalpatel2106.standup.reminder.activityMonitor
 
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.standup.reminder.ActivityDetectionHelper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.experimental.runners.Enclosed
@@ -116,7 +115,7 @@ class CheckIsUserSittingTest {
         @Test
         @Throws(IOException::class)
         fun checkIsUserSitting() {
-            Assert.assertEquals(expected, ActivityDetectionHelper.isUserSitting(activities))
+            Assert.assertEquals(expected, ActivityMonitorHelper.isUserSitting(activities))
         }
     }
 
@@ -127,7 +126,7 @@ class CheckIsUserSittingTest {
         @Throws(IOException::class)
         fun checkForEmptyArray() {
             try {
-                ActivityDetectionHelper.isUserSitting(ArrayList())
+                ActivityMonitorHelper.isUserSitting(ArrayList())
             } catch (e: IllegalStateException) {
                 //Test passed
             }

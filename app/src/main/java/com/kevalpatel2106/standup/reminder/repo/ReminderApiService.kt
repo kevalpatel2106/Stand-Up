@@ -15,30 +15,19 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder
+package com.kevalpatel2106.standup.reminder.repo
 
-import android.support.annotation.CallSuper
-import com.firebase.jobdispatcher.JobParameters
-import com.firebase.jobdispatcher.JobService
+import okhttp3.Response
+import retrofit2.Call
+import retrofit2.http.POST
 
 /**
- * Created by Kevalpatel2106 on 13-Dec-17.
+ * Created by Keval on 15/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class ReminderNotifyService : JobService() {
+internal interface ReminderApiService {
 
-    @CallSuper
-    override fun onStopJob(p0: JobParameters?): Boolean {
-        return true
-    }
-
-    @CallSuper
-    override fun onStartJob(p0: JobParameters?): Boolean {
-        //Schedule next event
-        //TODO Schedule next reminder
-
-        ReminderNotification.notify(this@ReminderNotifyService)
-        return true /* Wait for the background execution to complete */
-    }
+    @POST("/addActivity")
+    fun addNewActivity(): Call<Response>
 }

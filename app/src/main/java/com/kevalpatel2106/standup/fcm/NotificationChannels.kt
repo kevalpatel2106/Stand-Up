@@ -58,7 +58,7 @@ fun NotificationManager.addSyncNotificationChannel(context: Context) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val chan1 = NotificationChannel(NotificationChannelType.SYNC_NOTIFICATION_CHANNEL,
-                context.getString(R.string.notification_channel_title_syncing), NotificationManager.IMPORTANCE_DEFAULT)
+                context.getString(R.string.notification_channel_title_syncing), NotificationManager.IMPORTANCE_LOW)
         chan1.lightColor = Color.GREEN
         chan1.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
 
@@ -71,7 +71,20 @@ fun NotificationManager.addAccountNotificationChannel(context: Context) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val chan2 = NotificationChannel(NotificationChannelType.ACCOUNT_NOTIFICATION_CHANNEL,
-                context.getString(R.string.notification_channel_title_accounts), NotificationManager.IMPORTANCE_HIGH)
+                context.getString(R.string.notification_channel_title_accounts), NotificationManager.IMPORTANCE_LOW)
+        chan2.lightColor = Color.BLUE
+        chan2.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+
+        createNotificationChannel(chan2)
+    }
+}
+
+@TargetApi(Build.VERSION_CODES.O)
+fun NotificationManager.addReminderNotificationChannel(context: Context) {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val chan2 = NotificationChannel(NotificationChannelType.REMINDER_NOTIFICATION_CHANNEL,
+                context.getString(R.string.notification_channel_title_reminders), NotificationManager.IMPORTANCE_HIGH)
         chan2.lightColor = Color.BLUE
         chan2.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
 

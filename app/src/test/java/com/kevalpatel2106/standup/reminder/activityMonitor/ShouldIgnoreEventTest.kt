@@ -15,10 +15,9 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder.activityDetector
+package com.kevalpatel2106.standup.reminder.activityMonitor
 
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.standup.reminder.ActivityDetectionHelper
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import org.junit.Assert
 import org.junit.Test
@@ -97,7 +96,7 @@ class ShouldIgnoreEventTest {
         @Test
         @Throws(IOException::class)
         fun checkShouldIgnoreEvent() {
-            Assert.assertEquals(ActivityDetectionHelper.shouldIgnoreThisEvent(activities), expected)
+            Assert.assertEquals(ActivityMonitorHelper.shouldIgnoreThisEvent(activities), expected)
         }
     }
 
@@ -108,7 +107,7 @@ class ShouldIgnoreEventTest {
         @Throws(IOException::class)
         fun checkForEmptyArray() {
             try {
-                ActivityDetectionHelper.shouldIgnoreThisEvent(ArrayList())
+                ActivityMonitorHelper.shouldIgnoreThisEvent(ArrayList())
             } catch (e: IllegalStateException) {
                 //Test passed
             }

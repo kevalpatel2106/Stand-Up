@@ -27,20 +27,7 @@ internal object ReminderConfig {
     /**
      * Interval between two "Stand up now" notifications in seconds.
      */
-    internal const val STAND_UP_DURATION = 10 * 60 /*1 hour*/
-
-    internal const val ACTIVITY_MONITOR_JOB_TAG = "activity_monitor_job"
-
-    /**
-     * For internal use only.
-     */
-    internal const val ENABLE_ACTIVITY_DETECTION = true
-
-    /**
-     * Broadcast action when the activity update available.
-     */
-    @Deprecated("This broadcast is available for debug builds only.")
-    internal const val DETECTION_BROADCAST_ACTION = "com.kevalpatel2106.standup.reminder.activityUpdate"
+    internal const val STAND_UP_DURATION = 2 * 60 /* 10 min */
 
     /**
      * Minimum threshold required for the user activity for processing the data.
@@ -50,4 +37,6 @@ internal object ReminderConfig {
     internal const val MONITOR_SERVICE_PERIOD = 30  //sec
 
     internal const val MONITOR_SERVICE_PERIOD_TOLERANCE = 5  //sec
+
+    internal const val NOTIFICATION_SERVICE_PERIOD_TOLERANCE = 60  //sec
 }

@@ -15,9 +15,14 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder
+package com.kevalpatel2106.standup.reminder.activityMonitor
 
 import com.google.android.gms.location.DetectedActivity
+import com.kevalpatel2106.base.annotations.Helper
+import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivityHelper
+import com.kevalpatel2106.standup.db.userActivity.UserActivityType
+import com.kevalpatel2106.standup.reminder.ReminderConfig
 import java.util.*
 
 /**
@@ -25,7 +30,8 @@ import java.util.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object ActivityDetectionHelper {
+@Helper(ActivityMonitorService::class)
+internal object ActivityMonitorHelper {
 
     internal fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
         if (detectedActivities.size <= 0)
@@ -57,6 +63,7 @@ object ActivityDetectionHelper {
             DetectedActivity.STILL -> false
             DetectedActivity.ON_FOOT -> false
             DetectedActivity.WALKING -> false
+            DetectedActivity.RUNNING -> false
             DetectedActivity.ON_BICYCLE -> false
             DetectedActivity.IN_VEHICLE -> false
             else -> true
@@ -81,5 +88,21 @@ object ActivityDetectionHelper {
         }
 
         return detectedActivities
+    }
+
+    internal fun convertToUserActivity(detectedActivities: ArrayList<DetectedActivity>): UserActivity? {
+        if (shouldIgnoreThisEvent(detectedActivities)) {
+            //Not enough confidence
+            //Let's ignore this event.
+            return null
+        }
+
+        return if (isUserSitting(detectedActivities)) {
+            //User is sitting
+            UserActivityHelper.createLocalUserActivity(UserActivityType.SITTING)
+        } else {
+            //User is moving
+            UserActivityHelper.createLocalUserActivity(UserActivityType.MOVING)
+        }
     }
 }

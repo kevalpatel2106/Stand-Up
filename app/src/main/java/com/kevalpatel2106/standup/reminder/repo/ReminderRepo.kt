@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.reminder.repo
 
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import io.reactivex.Completable
 import io.reactivex.Single
 
 /**
@@ -25,7 +26,7 @@ import io.reactivex.Single
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-interface ReminderRepo {
+internal interface ReminderRepo {
 
     /**
      * This will store [newActivity] into the database and terminate the previous event with the
@@ -33,4 +34,6 @@ interface ReminderRepo {
      * inert [newActivity].
      */
     fun insertNewAndTerminatePreviousActivity(newActivity: UserActivity): Single<Long>
+
+    fun sendPendingActivitiesToServer(): Completable
 }
