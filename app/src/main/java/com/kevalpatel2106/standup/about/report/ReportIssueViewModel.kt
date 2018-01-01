@@ -27,6 +27,7 @@ import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
 import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.misc.Validator
+import com.kevalpatel2106.utils.Utils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -78,7 +79,7 @@ internal class ReportIssueViewModel : BaseViewModel {
                 }))
     }
 
-    fun reportIssue(title: String, message: String) {
+    fun reportIssue(title: String, message: String, deviceId : String) {
         blockUi.value = true
 
         //Check title
@@ -95,8 +96,13 @@ internal class ReportIssueViewModel : BaseViewModel {
             return
         }
 
+        //Check device id
+        if (!Validator.isValidDeviceId(deviceId)) {
+           throw IllegalArgumentException("Invalid device id.")
+        }
+
         //Report the issue
-        addDisposable(mAuthRepository.reportIssue(title, message)
+        addDisposable(mAuthRepository.reportIssue(title, message, deviceId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe { blockUi.value = true }

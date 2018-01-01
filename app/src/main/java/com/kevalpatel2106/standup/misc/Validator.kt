@@ -103,4 +103,6 @@ internal object Validator {
     fun isValidMonth(monthOfYear: Int) = monthOfYear in 0..11
 
     fun isValidYear(year: Int) = year in 1900..2100
+
+    fun isValidVersionCode(versionCode: Int) = versionCode > 0
 }

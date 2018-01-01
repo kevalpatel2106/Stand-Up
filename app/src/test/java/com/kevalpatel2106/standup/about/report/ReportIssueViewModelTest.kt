@@ -47,16 +47,32 @@ class ReportIssueViewModelTest {
 
     @Test
     fun checkReportIssueWithInvalidTitle() {
-        model.reportIssue("", "This is test issue description.")
+        model.reportIssue("", "This is test issue description.", "test_device_id")
         Assert.assertFalse(model.blockUi.value!!)
         Assert.assertEquals(model.errorMessage.value!!.errorRes, R.string.error_invalid_issue_title)
     }
 
     @Test
     fun checkReportIssueWithInvalidDescription() {
-        model.reportIssue("This is test issue title.", "")
+        model.reportIssue("This is test issue title.", "","test_device_id")
         Assert.assertFalse(model.blockUi.value!!)
         Assert.assertEquals(model.errorMessage.value!!.errorRes, R.string.error_invalid_issue_description)
+    }
+
+
+    @Test
+    fun checkReportIssueWithInvalidDeviceId() {
+        try {
+            model.reportIssue(
+                    "This is test issue title.",
+                    "This is test issue description.",
+                    ""
+            )
+            Assert.fail()
+        }catch (e :IllegalArgumentException){
+            //Test passed
+            //No OP
+        }
     }
 
 }

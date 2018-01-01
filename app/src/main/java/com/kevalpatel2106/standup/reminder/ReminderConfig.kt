@@ -27,14 +27,14 @@ internal object ReminderConfig {
     /**
      * Interval between two "Stand up now" notifications in seconds.
      */
-    internal const val STAND_UP_DURATION = 2 * 60 /* 10 min */
+    internal const val STAND_UP_DURATION = 60 * 60 /* 60 min */
 
     /**
      * Minimum threshold required for the user activity for processing the data.
      */
     internal const val CONFIDENCE_THRESHOLD = 30
 
-    internal const val MONITOR_SERVICE_PERIOD = 30  //sec
+    internal const val MONITOR_SERVICE_PERIOD = 45  //sec
 
     internal const val MONITOR_SERVICE_PERIOD_TOLERANCE = 5  //sec
 

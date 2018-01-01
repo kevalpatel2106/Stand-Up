@@ -17,16 +17,22 @@
 
 package com.kevalpatel2106.standup.about.repo
 
-import io.reactivex.Flowable
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
 /**
- * Created by Kevalpatel2106 on 29-Dec-17.
+ * Created by Kevalpatel2106 on 01-Jan-18.
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-interface AboutRepository {
+@RunWith(JUnit4::class)
+class ReportIssueResponseTest{
 
-    fun getLatestVersion(): Flowable<CheckVersionResponse>
-
-    fun reportIssue(title: String, message: String, deviceId: String): Flowable<ReportIssueResponse>
+    @Test
+    fun checkConstructor(){
+        val reportIssueResponse = ReportIssueResponse(1234567)
+        Assert.assertEquals(reportIssueResponse.issueId, 1234567)
+    }
 }

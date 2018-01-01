@@ -47,8 +47,8 @@ class AboutRepositoryImpl(private val baseUrl: String) : AboutRepository {
                 .map { t -> t.data }
     }
 
-    override fun reportIssue(title: String, message: String): Flowable<ReportIssueResponse> {
-        val reportIssueRequest = ReportIssueRequest(title, message)
+    override fun reportIssue(title: String, message: String, deviceId: String): Flowable<ReportIssueResponse> {
+        val reportIssueRequest = ReportIssueRequest(title, message, deviceId)
 
         val call = ApiProvider.getRetrofitClient(baseUrl)
                 .create(AboutApiService::class.java)

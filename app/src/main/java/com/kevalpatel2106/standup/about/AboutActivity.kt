@@ -108,7 +108,7 @@ class AboutActivity : MaterialAboutActivity() {
                         .icon(R.drawable.ic_update)
                         .setIconGravity(Gravity.START)
                         .text(R.string.check_update_new_update_available)
-                        .subText("New version is " + update.latestVersion + ". Click here to update.")
+                        .subText("New version is " + update.latestVersionName + ". Click here to update.")
                         .setOnLongClickAction {
                             update.releaseNotes?.let {
                                 //Show the release note

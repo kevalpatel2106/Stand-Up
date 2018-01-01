@@ -17,8 +17,10 @@
 
 package com.kevalpatel2106.standup.reminder.repo
 
+import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import io.reactivex.Completable
 import io.reactivex.Single
 import timber.log.Timber
@@ -28,7 +30,10 @@ import timber.log.Timber
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class ReminderRepoImpl : ReminderRepo {
+internal class ReminderRepoImpl(private val userActivityDao: UserActivityDao, private val baseUrl: String) : ReminderRepo {
+
+    constructor() : this(StandUpDb.getDb().userActivityDao(), BuildConfig.BASE_URL)
+
     override fun sendPendingActivitiesToServer(): Completable {
         return Completable.create {
             Timber.d("Syncing pending events...")
@@ -43,12 +48,12 @@ internal class ReminderRepoImpl : ReminderRepo {
      */
     override fun insertNewAndTerminatePreviousActivity(newActivity: UserActivity): Single<Long> {
         return Single.create({
-            val lastActivity = StandUpDb.getDb().userActivityDao().getLatestActivity()
+            val lastActivity = userActivityDao.getLatestActivity()
 
             when {
                 lastActivity == null -> {
                     //Add the first event to the database
-                    val id = StandUpDb.getDb().userActivityDao().insert(newActivity)
+                    val id = userActivityDao.insert(newActivity)
                     if (!it.isDisposed) it.onSuccess(id)
                 }
                 lastActivity.type != newActivity.type -> {
@@ -57,10 +62,10 @@ internal class ReminderRepoImpl : ReminderRepo {
                     //This is new user activity.
                     //Update the end time of the last user event.
                     lastActivity.eventEndTimeMills = newActivity.eventStartTimeMills
-                    StandUpDb.getDb().userActivityDao().update(lastActivity)
+                    userActivityDao.update(lastActivity)
 
                     //Add the event to the database
-                    val id = StandUpDb.getDb().userActivityDao().insert(newActivity)
+                    val id = userActivityDao.insert(newActivity)
                     if (!it.isDisposed) it.onSuccess(id)
                 }
                 else -> {

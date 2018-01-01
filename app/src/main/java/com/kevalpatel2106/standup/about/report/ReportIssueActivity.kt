@@ -27,6 +27,7 @@ import butterknife.OnClick
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.misc.SUUtils
+import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_report_issue.*
 import org.jetbrains.anko.alert
@@ -109,6 +110,8 @@ class ReportIssueActivity : BaseActivity() {
 
     @OnClick(R.id.submit_issue_btn)
     fun reportIssue() {
-        model.reportIssue(report_issue_title_et.getTrimmedText(), report_issue_description_et.getTrimmedText())
+        model.reportIssue(report_issue_title_et.getTrimmedText(),
+                report_issue_description_et.getTrimmedText(),
+                Utils.getDeviceId(this@ReportIssueActivity))
     }
 }

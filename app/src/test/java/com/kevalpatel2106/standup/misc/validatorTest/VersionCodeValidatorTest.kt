@@ -15,35 +15,37 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.repo
+package com.kevalpatel2106.standup.misc.validatorTest
 
-import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.base.annotations.Model
 import com.kevalpatel2106.standup.misc.Validator
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 
 /**
- * Created by Kevalpatel2106 on 29-Dec-17.
+ * Created by Kevalpatel2106 on 04-Dec-17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Model
-data class CheckVersionRequest(
-
-        @SerializedName("version")
-        val versionCode: Int
-) {
+@RunWith(Parameterized::class)
+class VersionCodeValidatorTest(private val input: Int, private val expected: Boolean) {
 
     companion object {
-        const val PLATFORM_NAME = "android"
+
+        @JvmStatic
+        @Parameterized.Parameters
+        fun data(): ArrayList<Array<out Any?>> {
+            val list = ArrayList<Array<out Any?>>()
+            list.add(arrayOf(0, false))
+            list.add(arrayOf(32, true))
+            list.add(arrayOf(-1, false))
+            return list
+        }
     }
 
-    @SerializedName("platform")
-    val platform = PLATFORM_NAME
-
-    init {
-        if (!Validator.isValidVersionCode(versionCode)) {
-            throw IllegalArgumentException("Version name must be positive non-zero number. Current: "
-                    .plus(versionCode))
-        }
+    @Test
+    fun testIsValidVersionCode() {
+        assertEquals(expected, Validator.isValidVersionCode(input))
     }
 }

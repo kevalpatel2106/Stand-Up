@@ -53,7 +53,7 @@ internal class AboutViewModel : BaseViewModel {
      * Repository to provide user authentications.
      */
     @VisibleForTesting
-    internal var mAuthRepository: AboutRepository
+    internal var authRepository: AboutRepository
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
@@ -63,7 +63,7 @@ internal class AboutViewModel : BaseViewModel {
     @Suppress("unused")
     @VisibleForTesting
     constructor(authRepository: AboutRepository) : super() {
-        this.mAuthRepository = authRepository
+        this.authRepository = authRepository
     }
 
     /**
@@ -72,7 +72,7 @@ internal class AboutViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() : super() {
         //This is the original user authentication repo.
-        mAuthRepository = AboutRepositoryImpl()
+        authRepository = AboutRepositoryImpl()
     }
 
     internal val isCheckingUpdate = MutableLiveData<Boolean>()
@@ -98,7 +98,7 @@ internal class AboutViewModel : BaseViewModel {
     }
 
     fun checkForUpdate() {
-        mAuthRepository.getLatestVersion()
+        authRepository.getLatestVersion()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe { isCheckingUpdate.value = true }

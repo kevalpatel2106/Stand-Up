@@ -19,6 +19,8 @@ package com.kevalpatel2106.standup.about.repo
 
 import com.google.gson.annotations.SerializedName
 import com.kevalpatel2106.base.annotations.Model
+import com.kevalpatel2106.standup.BuildConfig
+import com.kevalpatel2106.standup.misc.Validator
 
 /**
  * Created by Kevalpatel2106 on 29-Dec-17.
@@ -28,12 +30,23 @@ import com.kevalpatel2106.base.annotations.Model
 @Model
 data class CheckVersionResponse(
 
-        @SerializedName("latest")
-        val latestVersion: String,
+        @SerializedName("latestVersionName")
+        val latestVersionName: String,
 
-        @SerializedName("isUpdate")
-        val isUpdate: Boolean,
+        @SerializedName("latestVersionCode")
+        val latestVersionCode: Int,
 
         @SerializedName("releaseNotes")
         val releaseNotes: String?
-)
+) {
+
+    val isUpdate: Boolean
+        get() = latestVersionCode > BuildConfig.VERSION_CODE
+
+    init {
+        if (!Validator.isValidVersionCode(latestVersionCode)) {
+            throw IllegalArgumentException("Version name must be positive non-zero number. Current: "
+                    .plus(latestVersionCode))
+        }
+    }
+}
