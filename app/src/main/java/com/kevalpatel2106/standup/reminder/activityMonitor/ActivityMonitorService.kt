@@ -138,6 +138,9 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
 
         //Reschedule the notification if the user is currently moving
         if (userActivity.userActivityType == UserActivityType.MOVING) {
+            //Cancel current job if it's scheduled.
+            NotificationSchedulerService.cancel(this@ActivityMonitorService)
+
             //Push the notification back to 1 hour
             NotificationSchedulerService.scheduleNotification(this@ActivityMonitorService)
         }

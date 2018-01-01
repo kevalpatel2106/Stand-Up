@@ -18,18 +18,15 @@
 package com.kevalpatel2106.standup.reminder.repo
 
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
-import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoUnitTestImpl
+import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.testutils.MockServerManager
-import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.observers.TestObserver
-import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito
 
 /**
  * Created by Kevalpatel2106 on 01-Jan-18.
@@ -40,7 +37,7 @@ import org.mockito.Mockito
 class ReminderRepoImplTest {
 
     private lateinit var reminderRepo: ReminderRepoImpl
-    private lateinit var userActivityDao: UserActivityDaoUnitTestImpl
+    private lateinit var mUserActivityDao: UserActivityDaoMockImpl
     private lateinit var mockWebServerManager: MockServerManager
 
     @Before
@@ -48,9 +45,9 @@ class ReminderRepoImplTest {
         mockWebServerManager = MockServerManager()
         mockWebServerManager.startMockWebServer()
 
-        userActivityDao = UserActivityDaoUnitTestImpl()
+        mUserActivityDao = UserActivityDaoMockImpl()
 
-        reminderRepo = ReminderRepoImpl(userActivityDao, mockWebServerManager.getBaseUrl())
+        reminderRepo = ReminderRepoImpl(mUserActivityDao, mockWebServerManager.getBaseUrl())
     }
 
     @After
@@ -61,10 +58,10 @@ class ReminderRepoImplTest {
     @Test
     fun checkInsertNewAndTerminatePreviousActivityWithNoLatestActivity() {
 
-        //Set userActivityDao data.
-        userActivityDao.latestUserActivity = null
-        userActivityDao.insertItemId = 1234567L
-        userActivityDao.numberOfUpdatedItem = 1
+        //Set mUserActivityDao data.
+        mUserActivityDao.latestUserActivity = null
+        mUserActivityDao.insertItemId = 1234567L
+        mUserActivityDao.numberOfUpdatedItem = 1
 
         val userActivityToInsert = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis() - 3600000,
@@ -87,15 +84,15 @@ class ReminderRepoImplTest {
     @Test
     fun checkInsertNewAndTerminatePreviousActivityWithLatestActivityOfSameType() {
 
-        //Set userActivityDao data.
-        userActivityDao.latestUserActivity =  UserActivity(
+        //Set mUserActivityDao data.
+        mUserActivityDao.latestUserActivity = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis() - 3600000,
                 eventEndTimeMills = 0,
                 isSynced = false,
                 type = UserActivityType.MOVING.toString().toLowerCase()
         )
-        userActivityDao.insertItemId = 1234567L
-        userActivityDao.numberOfUpdatedItem = 1
+        mUserActivityDao.insertItemId = 1234567L
+        mUserActivityDao.numberOfUpdatedItem = 1
 
         val userActivityToInsert = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis() - 180000,
@@ -118,15 +115,15 @@ class ReminderRepoImplTest {
     @Test
     fun checkInsertNewAndTerminatePreviousActivityWithLatestActivityOfDifferentType() {
 
-        //Set userActivityDao data.
-        userActivityDao.latestUserActivity =  UserActivity(
+        //Set mUserActivityDao data.
+        mUserActivityDao.latestUserActivity = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis() - 3600000,
                 eventEndTimeMills = 0,
                 isSynced = false,
                 type = UserActivityType.SITTING.toString().toLowerCase()
         )
-        userActivityDao.insertItemId = 1234567L
-        userActivityDao.numberOfUpdatedItem = 1
+        mUserActivityDao.insertItemId = 1234567L
+        mUserActivityDao.numberOfUpdatedItem = 1
 
         val userActivityToInsert = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis() - 180000,

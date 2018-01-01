@@ -17,17 +17,11 @@
 
 package com.kevalpatel2106.testutils;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.test.runner.AndroidJUnitRunner;
-
-import java.lang.reflect.Method;
 
 /**
  * Tests can fail for other reasons than code, it´ because of the animations and espresso sync and
@@ -49,19 +43,10 @@ public final class CustomTestRunner extends AndroidJUnitRunner {
     public void onStart() {
         Context context = CustomTestRunner.this.getTargetContext().getApplicationContext();
         runOnMainSync(() -> {
-            disableAnimations(context);
             unlockScreen(context, CustomTestRunner.class.getSimpleName());
             keepScreenAwake(context, CustomTestRunner.class.getSimpleName());
         });
         super.onStart();
-    }
-
-    @Override
-    public void finish(int resultCode, Bundle results) {
-        super.finish(resultCode, results);
-
-        //Re-enable all the animations.
-        enableAnimations(getContext());
     }
 
     /**
@@ -90,56 +75,5 @@ public final class CustomTestRunner extends AndroidJUnitRunner {
     private void unlockScreen(Context context, String name) {
         KeyguardManager keyguard = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         keyguard.newKeyguardLock(name).disableKeyguard();
-    }
-
-    /**
-     * Disable all animations by applying 0 scale to {@link #setSystemAnimationsScale(float)}.
-     *
-     * @param context Instance of the caller.
-     */
-    private void disableAnimations(Context context) {
-        int permStatus = context.checkCallingOrSelfPermission(Manifest.permission.SET_ANIMATION_SCALE);
-        if (permStatus == PackageManager.PERMISSION_GRANTED) {
-            setSystemAnimationsScale(0.0f);
-        }
-    }
-
-    /**
-     * Enable all animations by applying 1 scale to {@link #setSystemAnimationsScale(float)}.
-     *
-     * @param context Instance of the caller.
-     */
-    private void enableAnimations(Context context) {
-        int permStatus = context.checkCallingOrSelfPermission(Manifest.permission.SET_ANIMATION_SCALE);
-        if (permStatus == PackageManager.PERMISSION_GRANTED) {
-            setSystemAnimationsScale(1.0f);
-        }
-    }
-
-    /**
-     * Set the system animation scale.
-     *
-     * @param animationScale Scale.
-     */
-    private void setSystemAnimationsScale(float animationScale) {
-        try {
-            Class<?> windowManagerStubClazz = Class.forName("android.view.IWindowManager$Stub");
-            Method asInterface = windowManagerStubClazz.getDeclaredMethod("asInterface", IBinder.class);
-            @SuppressLint("PrivateApi") Class<?> serviceManagerClazz = Class.forName("android.os.ServiceManager");
-            Method getService = serviceManagerClazz.getDeclaredMethod("getService", String.class);
-            Class<?> windowManagerClazz = Class.forName("android.view.IWindowManager");
-            Method setAnimationScales = windowManagerClazz.getDeclaredMethod("setAnimationScales", float[].class);
-            Method getAnimationScales = windowManagerClazz.getDeclaredMethod("getAnimationScales");
-
-            IBinder windowManagerBinder = (IBinder) getService.invoke(null, "window");
-            Object windowManagerObj = asInterface.invoke(null, windowManagerBinder);
-            float[] currentScales = (float[]) getAnimationScales.invoke(windowManagerObj);
-            for (int i = 0; i < currentScales.length; i++) {
-                currentScales[i] = animationScale;
-            }
-            setAnimationScales.invoke(windowManagerObj, new Object[]{currentScales});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

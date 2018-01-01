@@ -54,7 +54,7 @@ internal class ReminderRepoImpl(private val userActivityDao: UserActivityDao, pr
                 lastActivity == null -> {
                     //Add the first event to the database
                     val id = userActivityDao.insert(newActivity)
-                    if (!it.isDisposed) it.onSuccess(id)
+                    it.onSuccess(id)
                 }
                 lastActivity.type != newActivity.type -> {
                     //Check if the user activity is changed or not?
@@ -66,12 +66,12 @@ internal class ReminderRepoImpl(private val userActivityDao: UserActivityDao, pr
 
                     //Add the event to the database
                     val id = userActivityDao.insert(newActivity)
-                    if (!it.isDisposed) it.onSuccess(id)
+                    it.onSuccess(id)
                 }
                 else -> {
                     //Activity type did not changed/
                     //Do noting
-                    if (!it.isDisposed) it.onSuccess(0)
+                    it.onSuccess(0)
                 }
             }
         })

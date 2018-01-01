@@ -32,9 +32,9 @@ internal object UserActivityHelper {
     fun getActivityType(type: String): UserActivityType {
 
         return when (type) {
-            UserActivityType.SITTING.name.toLowerCase() -> UserActivityType.SITTING
-            UserActivityType.MOVING.name.toLowerCase() -> UserActivityType.MOVING
-            UserActivityType.NOT_TRACKED.name.toLowerCase() -> UserActivityType.NOT_TRACKED
+            "sitting" -> UserActivityType.SITTING
+            "moving" -> UserActivityType.MOVING
+            "not_tracked" -> UserActivityType.NOT_TRACKED
             else -> {/*This should never happen*/
                 Timber.e("Invalid user activity type ->".plus(type))
                 UserActivityType.NOT_TRACKED

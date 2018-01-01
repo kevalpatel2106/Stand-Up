@@ -21,7 +21,7 @@ import android.arch.persistence.db.SupportSQLiteOpenHelper
 import android.arch.persistence.room.DatabaseConfiguration
 import android.arch.persistence.room.InvalidationTracker
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
-import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoUnitTestImpl
+import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoMockImpl
 
 /**
  * Created by Kevalpatel2106 on 01-Jan-18.
@@ -37,5 +37,5 @@ class StandUpDbMockImpl : StandUpDb() {
         return null
     }
 
-    override fun userActivityDao(): UserActivityDao = UserActivityDaoUnitTestImpl()
+    override fun userActivityDao(): UserActivityDao = UserActivityDaoMockImpl()
 }

@@ -31,19 +31,22 @@ class UserActivityHelperTest {
     @Test
     @Throws(IOException::class)
     fun checkGetActivityTypeForSitting() {
-        Assert.assertEquals(UserActivityHelper.getActivityType("sitting"), UserActivityType.SITTING)
+        Assert.assertEquals(UserActivityHelper.getActivityType(UserActivityType.SITTING.toString().toLowerCase()),
+                UserActivityType.SITTING)
     }
 
     @Test
     @Throws(IOException::class)
     fun checkGetActivityTypeForStanding() {
-        Assert.assertEquals(UserActivityHelper.getActivityType("moving"), UserActivityType.MOVING)
+        Assert.assertEquals(UserActivityHelper.getActivityType(UserActivityType.MOVING.toString().toLowerCase()),
+                UserActivityType.MOVING)
     }
 
     @Test
     @Throws(IOException::class)
     fun checkGetActivityTypeForSleeping() {
-        Assert.assertEquals(UserActivityHelper.getActivityType("not_tracked"), UserActivityType.NOT_TRACKED)
+        Assert.assertEquals(UserActivityHelper.getActivityType(UserActivityType.NOT_TRACKED.toString().toLowerCase()),
+                UserActivityType.NOT_TRACKED)
     }
 
     @Test

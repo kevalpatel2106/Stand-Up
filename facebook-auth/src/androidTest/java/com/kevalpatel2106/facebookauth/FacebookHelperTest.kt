@@ -94,7 +94,7 @@ class FacebookHelperTest : BaseTestClass() {
         Assert.assertEquals(fbUser.name, "John Doe")
         Assert.assertEquals(fbUser.email, "john@example.com")
         Assert.assertEquals(fbUser.gender, "female")
-        Assert.assertEquals(fbUser.profilePic, "https://scontent.xx.fbcdn.net/v/t1.0-1/c154.33.413.413/s50x50/427144_108142642648116_878107670_n.jpg?oh=a0dd9353b55c083bab97c5a46dd4ce04&oe=5A94F71A")
+        Assert.assertEquals(fbUser.profilePic, "http://graph.facebook.com/398475894375893/picture?type=normal")
         Assert.assertEquals(fbUser.coverPicUrl, "https://scontent.xx.fbcdn.net/v/t1.0-1/c154.33.413.413/s50x50/427144_108142642648116_878107670_n.jpg?oh=a0dd9353b55c083bab97c5a46dd4ce04&oe=5A94F71A")
         Assert.assertEquals(fbUser.about, "This is the test about.")
         Assert.assertEquals(fbUser.bio, "This is the test bio.")
