@@ -26,7 +26,6 @@ import android.support.annotation.RequiresApi
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
-import com.kevalpatel2106.utils.ViewUtils
 
 /**
  * Created by Kevalpatel2106 on 15-Dec-17.
@@ -139,7 +138,7 @@ class TimeLineView : View {
 
         //Prepare the label text
         labelTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        labelTextPaint.textSize = ViewUtils.toPx(ctx, TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR).toFloat()
+        labelTextPaint.textSize = Utils.toPx(ctx, TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR).toFloat()
 
         //Prepare block color
         timeLineBlockPaint = Paint(Paint.ANTI_ALIAS_FLAG)

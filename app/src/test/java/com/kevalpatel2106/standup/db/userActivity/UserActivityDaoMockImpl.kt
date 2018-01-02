@@ -17,43 +17,71 @@
 
 package com.kevalpatel2106.standup.db.userActivity
 
+import java.util.*
+
 /**
  * Created by Kevalpatel2106 on 01-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class UserActivityDaoMockImpl : UserActivityDao {
-    override fun nukeTable() {
-        //NO OP
+class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserActivityDao {
+
+    init {
+        sort()
     }
 
-    internal var insertItemId = 1234567L
     override fun insert(userActivity: UserActivity): Long {
-        return insertItemId
+        tableItems.add(userActivity)
+        sort()
+        return tableItems.lastIndex.toLong()
     }
 
-    internal var numberOfUpdatedItem = 1
+    override fun nukeTable() {
+        tableItems.clear()
+    }
+
     override fun update(userActivity: UserActivity): Int {
+        val numberOfUpdatedItem = 0
+        (0 until tableItems.size)
+                .filter { it -> tableItems[it].localId == userActivity.localId }
+                .forEach { it ->
+                    numberOfUpdatedItem.inc()
+                    tableItems[it] = userActivity
+                }
+
+        sort()
         return numberOfUpdatedItem
     }
 
-    internal var latestUserActivity: UserActivity? = null
     override fun getLatestActivity(): UserActivity? {
-        return latestUserActivity
+        return if (tableItems.isEmpty()) null else tableItems.last()
     }
 
-    internal lateinit var activityBetweenDuration: ArrayList<UserActivity>
     override fun getActivityBetweenDuration(afterTimeMills: Long, beforeTimeMills: Long): List<UserActivity> {
+        val activityBetweenDuration = ArrayList<UserActivity>()
+
+        tableItems.filter { it -> it.eventStartTimeMills in (afterTimeMills + 1)..(beforeTimeMills - 1) }
+                .forEach { it ->
+                    activityBetweenDuration.add(it)
+                }
         return activityBetweenDuration
     }
 
-    internal lateinit var activityAfter: ArrayList<UserActivity>
     override fun getActivityAfter(afterTimeMills: Long): List<UserActivity> {
+        val activityAfter = ArrayList<UserActivity>()
+
+        tableItems.filter { it -> it.eventStartTimeMills > afterTimeMills }
+                .forEach { it ->
+                    activityAfter.add(it)
+                }
         return activityAfter
     }
 
-    internal var oldestActivity: UserActivity? = null
     override fun getOldestActivity(): UserActivity? {
-        return oldestActivity
+        return if (tableItems.isEmpty()) null else tableItems.first()
+    }
+
+    private fun sort() = Collections.sort(tableItems) { o1, o2 ->
+        (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt()
     }
 }

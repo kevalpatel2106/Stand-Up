@@ -17,7 +17,9 @@
 
 package com.kevalpatel2106.standup.timelineview
 
+import android.content.Context
 import android.graphics.Color
+import android.util.TypedValue
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.
@@ -97,4 +99,9 @@ internal object Utils {
         return items
     }
 
+
+    @JvmStatic
+    fun toPx(context: Context, dp: Int): Int = TypedValue
+            .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), context.resources.displayMetrics)
+            .toInt()
 }
