@@ -188,7 +188,7 @@ class DailyActivitySummaryTest {
 
             //Check for the duration
             val expectedDuration = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis())
-            Assert.assertEquals(summary.durationMills, expectedDuration)
+            Assert.assertTrue(Math.abs(summary.durationMills - expectedDuration) < 100)
             Assert.assertEquals(summary.durationTimeHours, TimeUtils.convertToHourMinutes(summary.durationMills))
         } catch (e: Exception) {
             Assert.fail(e.message)
