@@ -57,4 +57,8 @@ interface UserActivityDao {
     @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE
             + " ORDER BY " + UserActivity.EVENT_START_TIME + " ASC LIMIT 1")
     fun getOldestActivity(): UserActivity?
+
+
+    @Query("DELETE FROM " + UserActivity.USER_ACTIVITY_TABLE)
+    fun nukeTable()
 }

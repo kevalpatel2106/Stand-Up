@@ -22,6 +22,8 @@ import android.support.annotation.CallSuper
 import com.firebase.jobdispatcher.*
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.sync.SyncService
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import timber.log.Timber
 
 /**
@@ -58,11 +60,16 @@ class NotificationSchedulerService : JobService() {
 
             //Schedule the job
             FirebaseJobDispatcher(GooglePlayDriver(context)).mustSchedule(monitoringJob)
+
+            //Save the time of upcoming notification.
+            SharedPrefsProvider.savePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME,
+                    System.currentTimeMillis() + scheduleAfter)
         }
 
         @JvmStatic
         internal fun cancel(context: Context) {
             FirebaseJobDispatcher(GooglePlayDriver(context)).cancel(REMINDER_NOTIFICATION_JOB_TAG)
+            SharedPrefsProvider.removePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
         }
     }
 
@@ -75,14 +82,20 @@ class NotificationSchedulerService : JobService() {
     override fun onStartJob(p0: JobParameters?): Boolean {
         Timber.d("Notification reminder job started.")
 
-        //Fire reminder notification
-        ReminderNotification.notify(this@NotificationSchedulerService)
+        if (shouldDisplayNotification()) {
+            //Fire reminder notification
+            ReminderNotification.notify(this@NotificationSchedulerService)
 
-        //Schedule the next notification
-        scheduleNotification(this@NotificationSchedulerService)
+            //Schedule the next notification
+            scheduleNotification(this@NotificationSchedulerService)
 
-        //Sync the database
-        SyncService.syncNow(this@NotificationSchedulerService)
+            //Sync the database
+            SyncService.syncNow(this@NotificationSchedulerService)
+        }
         return false /* Stop the service */
+    }
+
+    internal fun shouldDisplayNotification(): Boolean {
+        return UserSessionManager.isUserLoggedIn
     }
 }

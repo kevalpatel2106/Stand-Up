@@ -27,6 +27,10 @@ import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.constants.logEvent
+import com.kevalpatel2106.standup.db.StandUpDb
+import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
+import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
+import com.kevalpatel2106.standup.reminder.sync.SyncService
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
@@ -52,15 +56,17 @@ internal object Logout {
         SharedPrefsProvider.removePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED)
         SharedPrefsProvider.removePreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED)
 
-        //Log analytics
-        context.logEvent(AnalyticsEvents.EVENT_LOGOUT)
-
         //Clear user session
         UserSessionManager.clearUserSession()
         UserSessionManager.clearToken()
 
-        //TODO Stop monitor service
+        //Nuke the table
+        StandUpDb.getDb().userActivityDao().nukeTable()
 
+        //Cancel all the jobs
+        NotificationSchedulerService.cancel(context)
+        ActivityMonitorService.cancel(context)
+        SyncService.cancel(context)
 
         //Clear all the notifications
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -69,6 +75,9 @@ internal object Logout {
         //Launch splash
         val splashIntent = SplashActivity.getLaunchIntent(context)
         context.startActivity(splashIntent)
+
+        //Log analytics
+        context.logEvent(AnalyticsEvents.EVENT_LOGOUT)
     }
 
     /**

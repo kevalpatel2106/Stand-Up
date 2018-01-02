@@ -39,4 +39,6 @@ internal object ReminderConfig {
     internal const val MONITOR_SERVICE_PERIOD_TOLERANCE = 5  //sec
 
     internal const val NOTIFICATION_SERVICE_PERIOD_TOLERANCE = 60  //sec
+
+    internal const val PREF_KEY_NEXT_NOTIFICATION_TIME = "next_notification_time"
 }
