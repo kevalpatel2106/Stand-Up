@@ -10,7 +10,7 @@ notifications:
 
 env:
   global:
-    - ANDROID_TARGET=android-22
+    - ANDROID_TARGET=android-21
     - ANDROID_ABI=armeabi-v7a
     - ADB_INSTALL_TIMEOUT=10
     - secure: "rYeWDqlP8GXcoHHriPmnQRQ5bwOtVU8XBk4SzLuCXEVn8TwrTyfegJYk9TqrK4Mg3U8iaX9H+DTzYvrBU9XfiQHnXqAk+MUkEmpxSW1f5o27ZMEq4nwKgBtyv/BzYm7996xujOEFavNBSPKF4sRARzGJVOV638lLJg+53lvqUSwn7tsasfTJsCGNdMV0oeBKJzFu3ufh/6gEak5YjeGMhEYogIEctadgpuXVtAzzHnXKNwj1b+oCSovPkHIHSzRw2GnhdcyLsqIFnbKXg6L6LSK2/63htRIn0cDZd4SCyJ0ldBojoDejoiU97nnNNxrGJt7IVRRSFEtEYsIZTJUl0rHdzu+iwcAeWtvZkpE2gcqSIloALNCqbMu+vaf0TZ2ylC9T2GuNDPj66rt5e4jFHZUaEdEudo84hKZalw9cX1UTzU0kGavxQqshA1HyE9BcMaOtOfCQmU+4T2o4yGJJGFW8CO2Awezsq2iP7cQWLin3nqvrT0Yrh9tqIpS7si1f+ctp6WC4fCkuT3ajz8Vu/YKoNIPgjk1ZLeAUUl4v1qkFLdf8VKHhMLNpCFdFCoNOB1D25aZSYQZWhEcKlt9bKQqLy7Nt7f30c6effi5w01r0I5VjSU+bGgyWBDuoyPG7BwQx0nWjBFyImQj3mbn68ZbWaNl1WIu4HPXW27zlASc="
@@ -55,6 +55,7 @@ android:
 
 before_script:
   - chmod +x gradlew
+  - chmod +x ./scripts/set_emulator_prop.sh
 
   - cloc . 2> ./cloc.txt
 
@@ -62,9 +63,7 @@ before_script:
 
   # Create emulator
   - echo no | android create avd --force --name test -t $ANDROID_TARGET --abi $ANDROID_ABI -d "Nexus 6"
-
-script:
-  - ./gradlew jacocoTestReportDebug assembleAndroidTest app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
+  - bash ./scripts/set_emulator_prop.sh
 
   # Start emulator
   - emulator -avd test -no-skin -no-audio -no-window &
@@ -76,7 +75,8 @@ script:
   - adb shell settings put global animator_duration_scale 0.0
   - adb shell input keyevent 82 &
 
-  - ./gradlew connectedCheck
+script:
+  - ./gradlew jacocoTestReportDebug connectedCheck app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
 
   - if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
       chmod +x ./scripts/dependency_check.sh

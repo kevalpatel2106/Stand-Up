@@ -108,7 +108,7 @@ ext {
     }
 
     adbOption = {
-        timeOutInMs 60000   //1 min
+        timeOutInMs 10 * 60 * 1000  // 10 minutes
     }
 
     signingConfig = {
