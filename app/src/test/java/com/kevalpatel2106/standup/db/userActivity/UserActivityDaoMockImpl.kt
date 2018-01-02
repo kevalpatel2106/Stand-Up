@@ -23,6 +23,9 @@ package com.kevalpatel2106.standup.db.userActivity
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 class UserActivityDaoMockImpl : UserActivityDao {
+    override fun nukeTable() {
+        //NO OP
+    }
 
     internal var insertItemId = 1234567L
     override fun insert(userActivity: UserActivity): Long {
