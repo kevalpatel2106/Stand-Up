@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.about.donate
 
+import android.annotation.SuppressLint
 import android.support.annotation.StringRes
 import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.standup.R
@@ -29,6 +30,7 @@ import com.kevalpatel2106.standup.R
 @ViewModel(SupportDevelopmentActivity::class)
 internal class SupportDevelopmentViewModel {
 
+    @SuppressLint("SwitchIntDef")
     @StringRes
     internal fun getDonationLink(@DonationAmount amount: Int): Int = when (amount) {
         2 -> R.string.donate_2_dollar_link

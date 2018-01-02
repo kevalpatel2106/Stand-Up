@@ -36,7 +36,7 @@ class FacebookHelperTest {
     @Test
     fun checkParseFbUser() {
         try {
-            val response = JSONObject(FileReader.getStringFromRawFile(InstrumentationRegistry.getInstrumentation().context, R.raw.fb_response))
+            val response = JSONObject(FileReader.getStringFromRawFile(InstrumentationRegistry.getInstrumentation().context, com.kevalpatel2106.facebookauth.test.R.raw.fb_response))
 
             val fbUser = FacebookHelper.parseResponse(response)
             Assert.assertEquals(fbUser.facebookID, "398475894375893")

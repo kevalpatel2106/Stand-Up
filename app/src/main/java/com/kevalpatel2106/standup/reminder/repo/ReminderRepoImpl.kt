@@ -30,7 +30,8 @@ import timber.log.Timber
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class ReminderRepoImpl(private val userActivityDao: UserActivityDao, private val baseUrl: String) : ReminderRepo {
+internal class ReminderRepoImpl(private val userActivityDao: UserActivityDao,
+                                private val baseUrl: String) : ReminderRepo {
 
     constructor() : this(StandUpDb.getDb().userActivityDao(), BuildConfig.BASE_URL)
 

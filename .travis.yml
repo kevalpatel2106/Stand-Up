@@ -62,22 +62,22 @@ before_script:
 
   - android list targets
 
-  # Create emulator
-  - echo no | android create avd --force --name test -t $ANDROID_TARGET --abi $ANDROID_ABI -d "Nexus 6"
-  - bash ./scripts/set_emulator_prop.sh
-
-  # Start emulator
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-
-  - adb devices   #Display list of devices
-  - adb shell settings put global window_animation_scale 0.0 
-  - adb shell settings put global transition_animation_scale 0.0
-  - adb shell settings put global animator_duration_scale 0.0
-  - adb shell input keyevent 82 &
+#  # Create emulator
+#  - echo no | android create avd --force --name test -t $ANDROID_TARGET --abi $ANDROID_ABI -d "Nexus 6"
+#  - bash ./scripts/set_emulator_prop.sh
+#
+#  # Start emulator
+#  - emulator -avd test -no-skin -no-audio -no-window &
+#  - android-wait-for-emulator
+#
+#  - adb devices   #Display list of devices
+#  - adb shell settings put global window_animation_scale 0.0 
+#  - adb shell settings put global transition_animation_scale 0.0
+#  - adb shell settings put global animator_duration_scale 0.0
+#  - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew jacocoTestReportDebug connectedDebugAndroidTest app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
+  - ./gradlew jacocoTestReportDebug app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
   - bash ./scripts/ci-cron-script.sh
 
 after_success:

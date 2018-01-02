@@ -30,6 +30,7 @@ ext {
 
     def espressoVersion = "3.0.1"
     def mockitoVersion = "2.13.0"
+    def dggerVersion = "2.11"
 
     //Exclude group for the test dependency
     excludeGrp = {
@@ -179,5 +180,12 @@ ext {
             [configuration: "implementation", dependency: 'com.facebook.stetho:stetho-okhttp3:' + stethoVersion],
             [configuration: "debugImplementation", dependency: 'com.amitshekhar.android:debug-db:1.0.1'],
             [configuration: "debugImplementation", dependency: 'com.squareup.leakcanary:leakcanary-android:1.5.4']
+    ]
+
+    dagger = [
+            [configuration: "implementation", dependency: "com.google.dagger:dagger-android:" + dggerVersion],
+            [configuration: "implementation", dependency: 'com.google.dagger:dagger-android-support:' + dggerVersion],
+            [configuration: "kapt", dependency: 'com.google.dagger:dagger-android-processor:' + dggerVersion],
+            [configuration: "kapt", dependency: 'com.google.dagger:dagger-compiler:' + dggerVersion],
     ]
 }
