@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-./gradlew app:assembleDebug connectedAndroidTest jacocoTestReportDebug --continue --profile --daemon --parallel
+./gradlew connectedAndroidTest jacocoTestReportDebug app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
+if [ $? != 0 ]
+then
+ exit $?
+fi
 
 if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
 
@@ -9,5 +13,10 @@ if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
 
     # Create the clean release build with the release test reports
     ./gradlew --stop
-    ./gradlew clean app:assembleRelease connectedAndroidTest jacocoTestReportRelease lintRelease --continue --profile --daemon --parallel
+    ./gradlew jacocoTestReportRelease lintRelease app:assembleRelease -PdisablePreDex --continue --profile --daemon --parallel
+    if [ $? != 0 ]
+    then
+     exit $?
+    fi
+
 fi
