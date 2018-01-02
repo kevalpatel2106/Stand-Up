@@ -107,8 +107,7 @@ class NWInterceptorAuthTest {
     @Test
     @Throws(IOException::class)
     fun checkApiRequestWithAuthHeader() {
-        mockWebServer.enqueueResponse(mockWebServer
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
         val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)

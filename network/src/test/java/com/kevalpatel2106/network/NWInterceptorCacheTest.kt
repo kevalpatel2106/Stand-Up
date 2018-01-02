@@ -90,8 +90,7 @@ class NWInterceptorCacheTest {
     @Test
     @Throws(IOException::class)
     fun checkNoCacheHeader() {
-        mockWebServer.enqueueResponse(mockWebServer
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
         val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -105,8 +104,7 @@ class NWInterceptorCacheTest {
     @Test
     @Throws(IOException::class)
     fun checkCacheHeader() {
-        mockWebServer.enqueueResponse(mockWebServer
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
         val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)

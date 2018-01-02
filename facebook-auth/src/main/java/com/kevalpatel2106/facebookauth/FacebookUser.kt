@@ -32,6 +32,7 @@ data class FacebookUser(val facebookID: String) {
     var bio: String? = null
     var coverPicUrl: String? = null
     var profilePic: String? = null
+
     override fun hashCode(): Int = facebookID.hashCode()
 
     override fun equals(other: Any?): Boolean {

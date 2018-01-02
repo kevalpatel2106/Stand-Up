@@ -86,8 +86,7 @@ class UserProfileRepoImplTest {
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(123456789)
         Mockito.`when`(sharedPrefs.getBoolean(anyString(), anyBoolean())).thenReturn(true)
 
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/get_profile_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_profile_success.json"))
 
 
         val testSubscriber = TestSubscriber<GetProfileResponse>()
@@ -110,8 +109,7 @@ class UserProfileRepoImplTest {
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(123456789)
         Mockito.`when`(sharedPrefs.getBoolean(anyString(), anyBoolean())).thenReturn(true)
 
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/get_profile_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_profile_success.json"))
 
         val testSubscriber = TestSubscriber<GetProfileResponse>()
         mUserProfileRepoImpl.getUserProfile(12345678).subscribe(testSubscriber)
@@ -129,8 +127,7 @@ class UserProfileRepoImplTest {
         //Mock the shared prefrance
         Mockito.`when`(sharedPrefs.getString(anyString(), isNull())).thenReturn(null)
 
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/get_profile_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_profile_success.json"))
 
         val testSubscriber = TestSubscriber<GetProfileResponse>()
         mUserProfileRepoImpl.getUserProfile(12345678).subscribe(testSubscriber)
@@ -150,8 +147,7 @@ class UserProfileRepoImplTest {
         Mockito.`when`(sharedPrefs.getString(anyString(), anyString())).thenReturn("149.3")
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(123456789)
 
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/save_profile_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/save_profile_success.json"))
 
         val testSubscriber = TestSubscriber<SaveProfileResponse>()
         mUserProfileRepoImpl.saveUserProfile(name = "Test User",

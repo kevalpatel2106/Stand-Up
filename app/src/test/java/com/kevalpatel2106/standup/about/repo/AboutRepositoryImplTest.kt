@@ -77,8 +77,7 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkGetLatestVersionSuccessUpdateAvailable() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/get_latest_version_success_update_available.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_update_available.json"))
 
         val testSubscriber = TestSubscriber<CheckVersionResponse>()
         aboutRepository.getLatestVersion().subscribe(testSubscriber)
@@ -97,8 +96,7 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkGetLatestVersionSuccessLatestVersionAvailable() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/get_latest_version_success_latest_available.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_latest_available.json"))
 
         val testSubscriber = TestSubscriber<CheckVersionResponse>()
         aboutRepository.getLatestVersion().subscribe(testSubscriber)
@@ -117,8 +115,7 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkGetLatestVersionError() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<CheckVersionResponse>()
         aboutRepository.getLatestVersion().subscribe(testSubscriber)
@@ -130,8 +127,7 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkReportIssueSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/report_issue_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/report_issue_success.json"))
 
         val testSubscriber = TestSubscriber<ReportIssueResponse>()
         aboutRepository.reportIssue("This is test title.",
@@ -147,8 +143,7 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkReportIssueError() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<ReportIssueResponse>()
         aboutRepository.reportIssue("This is test title.",

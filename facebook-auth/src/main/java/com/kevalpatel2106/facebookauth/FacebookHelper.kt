@@ -20,6 +20,7 @@ package com.kevalpatel2106.facebookauth
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -93,31 +94,6 @@ class FacebookHelper(private val listener: FacebookResponse,
     }
 
     /**
-     * Parse the response received into [FacebookUser] object.
-     *
-     * @param object response received.
-     *
-     * @return [FacebookUser] with required fields.
-     *
-     * @throws JSONException - If json parsing is failed.
-     */
-    @Throws(JSONException::class)
-    internal fun parseResponse(`object`: JSONObject): FacebookUser {
-        val user = FacebookUser(facebookID = `object`.getString("id"))
-        if (`object`.has("email")) user.email = `object`.getString("email")
-        if (`object`.has("name")) user.name = `object`.getString("name")
-        if (`object`.has("gender"))
-            user.gender = `object`.getString("gender")
-        if (`object`.has("about")) user.about = `object`.getString("about")
-        if (`object`.has("bio")) user.bio = `object`.getString("bio")
-        if (`object`.has("cover"))
-            user.coverPicUrl = `object`.getJSONObject("cover").getString("source")
-        if (`object`.has("picture"))
-            user.profilePic = "http://graph.facebook.com/" + user.facebookID + "/picture?type=normal"
-        return user
-    }
-
-    /**
      * Perform facebook sign in.
      *
      *
@@ -160,4 +136,35 @@ class FacebookHelper(private val listener: FacebookResponse,
         LoginManager.getInstance().logOut()
         listener.onFBSignOut()
     }
+
+    companion object {
+
+        /**
+         * Parse the response received into [FacebookUser] object.
+         *
+         * @param object response received.
+         *
+         * @return [FacebookUser] with required fields.
+         *
+         * @throws JSONException - If json parsing is failed.
+         */
+        @JvmStatic
+        @Throws(JSONException::class)
+        @VisibleForTesting
+        internal fun parseResponse(`object`: JSONObject): FacebookUser {
+            val user = FacebookUser(facebookID = `object`.getString("id"))
+            if (`object`.has("email")) user.email = `object`.getString("email")
+            if (`object`.has("name")) user.name = `object`.getString("name")
+            if (`object`.has("gender"))
+                user.gender = `object`.getString("gender")
+            if (`object`.has("about")) user.about = `object`.getString("about")
+            if (`object`.has("bio")) user.bio = `object`.getString("bio")
+            if (`object`.has("cover"))
+                user.coverPicUrl = `object`.getJSONObject("cover").getString("source")
+            if (`object`.has("picture"))
+                user.profilePic = "http://graph.facebook.com/" + user.facebookID + "/picture?type=normal"
+            return user
+        }
+    }
+
 }

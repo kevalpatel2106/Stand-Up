@@ -68,8 +68,7 @@ class JsonResponsesTest {
     @Test
     @Throws(IOException::class)
     fun checkFieldMissingResponse() {
-        mockWebServer.enqueueResponse(mockWebServer
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/required_field_missing_sample.json")))
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/required_field_missing_sample.json"))
 
         val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -84,8 +83,7 @@ class JsonResponsesTest {
     @Test
     @Throws(IOException::class)
     fun checkServerExceptionResponse() {
-        mockWebServer.enqueueResponse(mockWebServer
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/exception_sample.json")))
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/exception_sample.json"))
 
         val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -100,8 +98,7 @@ class JsonResponsesTest {
     @Test
     @Throws(IOException::class)
     fun checkServerUnAuthorisedResponse() {
-        mockWebServer.enqueueResponse(mockWebServer
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/unauthorised_sample.json")))
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/unauthorised_sample.json"))
 
         val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -117,8 +114,7 @@ class JsonResponsesTest {
     @Test
     @Throws(IOException::class)
     fun checkSuccessResponse() {
-        mockWebServer.enqueueResponse(mockWebServer
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
         val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -133,8 +129,7 @@ class JsonResponsesTest {
     @Test
     @Throws(IOException::class)
     fun checkSuccessResponseWithoutData() {
-        mockWebServer.enqueueResponse(mockWebServer
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/success_sample_without_data.json")))
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/success_sample_without_data.json"))
 
         val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)

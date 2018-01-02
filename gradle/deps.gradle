@@ -170,6 +170,7 @@ ext {
             openSourceLibraries: 'com.mikepenz:aboutlibraries:6.0.1@aar',
             aboutlibraries     : 'com.github.daniel-stoneuk:material-about-library:2.2.3-support26.1.0',
             chartLayout        : 'com.github.PhilJay:MPAndroidChart:v3.0.3',
+            externalJson       : 'org.json:json:20171018'
     ]
 
     debugLibs = [

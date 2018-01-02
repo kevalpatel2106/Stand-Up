@@ -64,4 +64,5 @@ dependencies {
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
+    testImplementation 'org.json:json:20140107'
 }

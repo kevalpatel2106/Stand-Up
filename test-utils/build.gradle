@@ -54,6 +54,7 @@ tasks.withType(Test) {
 
 dependencies {
     testLib.each { add("api", it) }
+
     ide.each { add("implementation", it) }
     rxLib.each { add("implementation", it) }
     debugLibs.each { add(it.configuration, it.dependency) }

@@ -79,8 +79,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkLogoutSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/logout_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/logout_success.json"))
 
         val testSubscriber = TestSubscriber<LogoutResponse>()
         userAuthRepositoryImpl
@@ -100,8 +99,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkLogoutFail() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<LogoutResponse>()
         userAuthRepositoryImpl
@@ -135,8 +133,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkForgotPasswordSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/forgot_password_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/forgot_password_success.json"))
 
         val testSubscriber = TestSubscriber<ForgotPasswordResponse>()
         userAuthRepositoryImpl
@@ -153,8 +150,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkForgotPasswordFail() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<ForgotPasswordResponse>()
         userAuthRepositoryImpl
@@ -170,8 +166,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkResendVerifyEmailSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/resend_verification_email_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/resend_verification_email_success.json"))
 
         val testSubscriber = TestSubscriber<ResendVerificationResponse>()
         userAuthRepositoryImpl
@@ -188,8 +183,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkResendVerifyEmailFail() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<ResendVerificationResponse>()
         userAuthRepositoryImpl
@@ -205,8 +199,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkRegisterDeviceSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/device_reg_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/device_reg_success.json"))
 
         val testSubscriber = TestSubscriber<DeviceRegisterResponse>()
         userAuthRepositoryImpl
@@ -227,8 +220,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkRegisterDeviceFail() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<DeviceRegisterResponse>()
         userAuthRepositoryImpl
@@ -245,8 +237,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkLoginSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/user_login_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/user_login_success.json"))
 
         val testSubscriber = TestSubscriber<LoginResponse>()
         userAuthRepositoryImpl
@@ -270,8 +261,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkLoginFail() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<LoginResponse>()
         userAuthRepositoryImpl
@@ -287,8 +277,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkSignUpSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/user_sign_up_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/user_sign_up_success.json"))
 
         val testSubscriber = TestSubscriber<SignUpResponse>()
         userAuthRepositoryImpl
@@ -316,8 +305,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkSignUpFail() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<SignUpResponse>()
         userAuthRepositoryImpl
@@ -336,8 +324,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkSocialSignUpSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/social_user_sign_up_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_sign_up_success.json"))
 
         val testSubscriber = TestSubscriber<SignUpResponse>()
         userAuthRepositoryImpl
@@ -365,8 +352,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkSocialLoginSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/social_user_login_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_login_success.json"))
 
         val testSubscriber = TestSubscriber<SignUpResponse>()
         userAuthRepositoryImpl
@@ -394,8 +380,7 @@ class UserAuthRepositoryImplTest {
     @Test
     @Throws(IOException::class)
     fun checkSocialSignUpFail() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<SignUpResponse>()
         userAuthRepositoryImpl

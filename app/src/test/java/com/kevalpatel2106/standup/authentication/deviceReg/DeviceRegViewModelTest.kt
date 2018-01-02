@@ -109,8 +109,7 @@ class DeviceRegViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkInvalidDeviceRegSuccess() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/device_reg_success.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/device_reg_success.json"))
 
         deviceRegViewModel.register("test-device-id", "test-firebase-id")
 
@@ -121,8 +120,7 @@ class DeviceRegViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkInvalidDeviceRegFieldMissing() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         deviceRegViewModel.register("test-device-id", "test-firebase-id")
 

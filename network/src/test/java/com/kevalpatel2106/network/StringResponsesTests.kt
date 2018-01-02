@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.network
 
+import com.kevalpatel2106.testutils.FileReader
 import com.kevalpatel2106.testutils.MockServerManager
 import okhttp3.mockwebserver.MockResponse
 import org.junit.*
@@ -69,8 +70,7 @@ class StringResponsesTests {
     @Test
     @Throws(IOException::class)
     fun checkForTheStringSuccessResponse() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")), "text/plain")
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"), "text/plain")
 
         val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -79,8 +79,7 @@ class StringResponsesTests {
 
         Assert.assertTrue(response.isSuccessful)
         Assert.assertEquals(response.code(), HttpURLConnection.HTTP_OK)
-        Assert.assertEquals(response.body(),
-                mockServerManager.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
+        Assert.assertEquals(response.body(), FileReader.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
         Assert.assertEquals(response.message(), "OK")
     }
 
@@ -90,7 +89,7 @@ class StringResponsesTests {
         mockServerManager.mockWebServer.enqueue(MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_FORBIDDEN)
                 .setHeader("Content-Type", "text/html")
-                .setBody(mockServerManager.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
+                .setBody(FileReader.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
         val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)

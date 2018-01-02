@@ -83,8 +83,7 @@ class AboutViewModelTest{
 
     @Test
     fun checkGetLatestVersionSuccessUpdateAvailable() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/get_latest_version_success_update_available.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_update_available.json"))
 
         Assert.assertFalse(viewModel.isCheckingUpdate.value!!)
 
@@ -99,8 +98,7 @@ class AboutViewModelTest{
 
     @Test
     fun checkGetLatestVersionSuccessLatestVersionAvailable() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/get_latest_version_success_latest_available.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_latest_available.json"))
 
         Assert.assertFalse(viewModel.isCheckingUpdate.value!!)
 
@@ -115,8 +113,7 @@ class AboutViewModelTest{
 
     @Test
     fun checkGetLatestVersionError() {
-        mockServerManager.enqueueResponse(mockServerManager
-                .getStringFromFile(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json")))
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
         Assert.assertFalse(viewModel.isCheckingUpdate.value!!)
 
