@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-if [ "$TRAVIS_EVENT_TYPE" != "cron" ]; then
+./gradlew jacocoTestReportDebug app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
+if [ $? -ne "0" ]; then
+    exit $?
+fi
+
+if [ "$TRAVIS_EVENT_TYPE" == "cron" ]; then
     chmod +x ./scripts/dependency_check.sh
     bash ./scripts/dependency_check.sh
 

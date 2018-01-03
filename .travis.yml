@@ -77,8 +77,7 @@ before_script:
 #  - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew jacocoTestReportDebug app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
-  - bash ./scripts/ci-cron-script.sh
+  - bash ./scripts/ci-script.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
