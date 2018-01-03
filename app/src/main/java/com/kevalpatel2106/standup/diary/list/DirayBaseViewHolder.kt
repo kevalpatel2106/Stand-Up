@@ -17,20 +17,12 @@
 
 package com.kevalpatel2106.standup.diary.list
 
-import com.kevalpatel2106.standup.db.DailyActivitySummary
+import android.view.View
+import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
 
 /**
- * Created by Keval on 27/12/17.
+ * Created by Keval on 23/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Suppress("DEPRECATION")
-internal class MonthHeader(monthOfYear: Int, year: Int) : DailyActivitySummary(
-        dayOfMonth = 1,
-        monthOfYear = monthOfYear,
-        year = year,
-        dayActivity = ArrayList(0)
-) {
-
-    fun getMonthHeader() = "$monthInitials, $year"
-}
+internal open class DirayBaseViewHolder(itemView: View) : PageRecyclerViewAdapter.PageViewHolder(itemView)

@@ -23,7 +23,7 @@ import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
-import com.kevalpatel2106.standup.diary.repo.DairyRepo.Companion.PAGE_SIZE
+import com.kevalpatel2106.standup.diary.repo.DiaryRepo.Companion.PAGE_SIZE
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
@@ -37,8 +37,8 @@ import kotlin.collections.ArrayList
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class DairyRepoImpl @VisibleForTesting constructor(private val userActivityDao: UserActivityDao,
-                                                   private val baseUrl: String) : DairyRepo {
+class DiaryRepoImpl @VisibleForTesting constructor(private val userActivityDao: UserActivityDao,
+                                                   private val baseUrl: String) : DiaryRepo {
 
     constructor() : this(StandUpDb.getDb().userActivityDao(), BuildConfig.BASE_URL)
 
@@ -88,7 +88,7 @@ class DairyRepoImpl @VisibleForTesting constructor(private val userActivityDao: 
                     return@Function DailyActivitySummary.fromDayActivityList(ArrayList(it))
                 })
 
-        return flowable.zipWith(Flowable.range(1, DairyRepo.PAGE_SIZE)  /*Flowable that emits 1 to 10*/,
+        return flowable.zipWith(Flowable.range(1, DiaryRepo.PAGE_SIZE)  /*Flowable that emits 1 to 10*/,
                 BiFunction<DailyActivitySummary, Int, DailyActivitySummary> { t1, _ ->
                     t1 /* Emit the DailyActivitySummary list */
                 })

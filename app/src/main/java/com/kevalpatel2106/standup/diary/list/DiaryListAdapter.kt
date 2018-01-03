@@ -18,10 +18,11 @@
 package com.kevalpatel2106.standup.diary.list
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.view.ViewGroup
 import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
 import com.kevalpatel2106.standup.db.DailyActivitySummary
-import com.kevalpatel2106.standup.diary.repo.DairyRepo
+import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 
 /**
  * Created by Keval on 23/12/17.
@@ -30,28 +31,34 @@ import com.kevalpatel2106.standup.diary.repo.DairyRepo
  */
 internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivitySummary>,
                                 listener: RecyclerViewListener<DailyActivitySummary>?)
-    : PageRecyclerViewAdapter<DiaryBaseViewHolder, DailyActivitySummary>(context, data, listener) {
+    : PageRecyclerViewAdapter<DirayBaseViewHolder, DailyActivitySummary>(context, data, listener) {
 
-    private val TYPE_DAY_VIEW = 1
-    private val TYPE_MONTH_VIEW = 2
+    companion object {
+
+        @VisibleForTesting
+        internal val TYPE_DAY_VIEW = 1
+
+        @VisibleForTesting
+        internal val TYPE_MONTH_VIEW = 2
+    }
 
 
-    override fun bindView(holder: DiaryBaseViewHolder, item: DailyActivitySummary) {
+    override fun bindView(holder: DirayBaseViewHolder, item: DailyActivitySummary) {
         when (holder) {
-            is DairyMonthViewHolder -> {
+            is DiaryMonthViewHolder -> {
                 holder.setData(item as MonthHeader)
             }
-            is DairyDayViewHolder -> {
+            is DiaryDayViewHolder -> {
                 holder.setData(item)
             }
             else -> throw IllegalStateException("Invalid view holder type.")
         }
     }
 
-    override fun prepareViewHolder(parent: ViewGroup?, viewType: Int): DiaryBaseViewHolder {
+    override fun prepareViewHolder(parent: ViewGroup?, viewType: Int): DirayBaseViewHolder {
         return when (viewType) {
-            TYPE_DAY_VIEW -> DairyDayViewHolder.create(context, parent)
-            TYPE_MONTH_VIEW -> DairyMonthViewHolder.create(context, parent)
+            TYPE_DAY_VIEW -> DiaryDayViewHolder.create(context, parent)
+            TYPE_MONTH_VIEW -> DiaryMonthViewHolder.create(context, parent)
             else -> throw IllegalArgumentException("Invalid view type: ".plus(viewType))
         }
     }
@@ -60,5 +67,5 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
         return if (getItem(position) is MonthHeader) TYPE_MONTH_VIEW else TYPE_DAY_VIEW
     }
 
-    override fun getPageSize(): Int = DairyRepo.PAGE_SIZE
+    override fun getPageSize(): Int = DiaryRepo.PAGE_SIZE
 }

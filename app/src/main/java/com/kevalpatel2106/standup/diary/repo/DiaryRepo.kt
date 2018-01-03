@@ -27,7 +27,7 @@ import java.util.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-interface DairyRepo {
+interface DiaryRepo {
 
     companion object {
         const val PAGE_SIZE = 10

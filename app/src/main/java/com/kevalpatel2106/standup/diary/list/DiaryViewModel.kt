@@ -25,8 +25,8 @@ import com.kevalpatel2106.base.arch.CallbackEvent
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.db.DailyActivitySummary
-import com.kevalpatel2106.standup.diary.repo.DairyRepo
-import com.kevalpatel2106.standup.diary.repo.DairyRepoImpl
+import com.kevalpatel2106.standup.diary.repo.DiaryRepo
+import com.kevalpatel2106.standup.diary.repo.DiaryRepoImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -49,17 +49,17 @@ internal class DiaryViewModel : BaseViewModel {
     val pageLoadingCompleteCallback = CallbackEvent()
 
     @VisibleForTesting
-    internal val userActivityRepo: DairyRepo
+    internal val mUserActivityRepo: DiaryRepo
 
     /**
-     * Private constructor to add the custom [DairyRepo] for testing.
+     * Private constructor to add the custom [DiaryRepo] for testing.
      *
-     * @param dairyRepo Add your own [DairyRepo].
+     * @param diaryRepo Add your own [DiaryRepo].
      */
     @Suppress("unused")
     @VisibleForTesting
-    constructor(dairyRepo: DairyRepo) : super() {
-        this.userActivityRepo = dairyRepo
+    constructor(diaryRepo: DiaryRepo) : super() {
+        this.mUserActivityRepo = diaryRepo
 
         //Load the first page
         loadNext(System.currentTimeMillis())
@@ -71,7 +71,7 @@ internal class DiaryViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() : super() {
         //This is the original user authentication repo.
-        userActivityRepo = DairyRepoImpl()
+        mUserActivityRepo = DiaryRepoImpl()
 
         //Load the first page
         loadNext(System.currentTimeMillis(), true)
@@ -84,8 +84,8 @@ internal class DiaryViewModel : BaseViewModel {
 
     internal fun loadNext(oldestEventTimeMills: Long,
                           isFirstPage: Boolean = false) {
-        addDisposable(userActivityRepo
-                .loadDaysSummaryList(oldestEventTimeMills)
+        addDisposable(mUserActivityRepo
+                .loadDaysSummaryList(oldestEventTimeMills - 1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe({
@@ -104,7 +104,8 @@ internal class DiaryViewModel : BaseViewModel {
                         if (it.isEmpty()) {
                             val message = ErrorMessage("No data available!!")
                             errorMessage.value = message
-                        } else if (it.size.rem(DairyRepo.PAGE_SIZE) != 0) {
+                            noMoreData.value = true
+                        } else if (it.size.rem(DiaryRepo.PAGE_SIZE) != 0) {
                             //If after terminate there not enough item that can fill the page...
                             //Indicates there is no more data to show.
                             noMoreData.value = true
@@ -116,14 +117,23 @@ internal class DiaryViewModel : BaseViewModel {
                 }
                 .subscribe({
                     //Update data
+                    @Suppress("UnnecessaryVariable")
                     val newItem = it
                     activities.value?.let {
 
-                        //Check if the month is changed?
-                        if (it.isEmpty() || newItem.monthOfYear != it.last().monthOfYear) {
+                        if (it.isEmpty()) { //It's the first item
                             //Add the month header.
                             it.add(MonthHeader(newItem.monthOfYear, newItem.year))
+                        } else if (newItem !is MonthHeader && it.last() !is MonthHeader) {
+
+                            //Last item is view,
+                            if (newItem.monthOfYear != it.last().monthOfYear     //Month is changed
+                                    || newItem.year != it.last().year) {        //Year is changed
+                                //Add the month header.
+                                it.add(MonthHeader(newItem.monthOfYear, newItem.year))
+                            }
                         }
+
 
                         //Add the new item
                         it.add(newItem)

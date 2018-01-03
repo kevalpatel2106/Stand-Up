@@ -40,11 +40,11 @@ import java.util.*
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(JUnit4::class)
-class DairyRepoImplTest {
+class DiaryRepoImplTest {
     private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/diary/repo",
             Paths.get("").toAbsolutePath().toString())
 
-    private lateinit var dairyRepoImpl: DairyRepoImpl
+    private lateinit var dairyRepoImpl: DiaryRepoImpl
     private lateinit var userActivityDao: UserActivityDaoMockImpl
     private lateinit var mockWebServerManager: MockServerManager
 
@@ -59,7 +59,7 @@ class DairyRepoImplTest {
         //Mock database table
         userActivityDao = UserActivityDaoMockImpl(ArrayList())
 
-        dairyRepoImpl = DairyRepoImpl(userActivityDao, mockWebServerManager.getBaseUrl())
+        dairyRepoImpl = DiaryRepoImpl(userActivityDao, mockWebServerManager.getBaseUrl())
     }
 
     @After
@@ -112,7 +112,7 @@ class DairyRepoImplTest {
 
         testSubscriber.awaitTerminalEvent()
         testSubscriber.assertNoErrors()
-                .assertValueCount(DairyRepo.PAGE_SIZE)
+                .assertValueCount(DiaryRepo.PAGE_SIZE)
                 .assertComplete()
     }
 
@@ -129,7 +129,7 @@ class DairyRepoImplTest {
 
         testSubscriber.awaitTerminalEvent()
         testSubscriber.assertNoErrors()
-                .assertValueCount((DairyRepo.PAGE_SIZE + 4) / 2)
+                .assertValueCount((DiaryRepo.PAGE_SIZE + 4) / 2)
                 .assertComplete()
     }
 
@@ -212,7 +212,7 @@ class DairyRepoImplTest {
         //Set fake db items so that we have at least one user activity with past 10 days.
         val cal = TimeUtils.getTodaysCalender12AM()
 
-        for (i in DairyRepo.PAGE_SIZE + 4 downTo 1) {
+        for (i in DiaryRepo.PAGE_SIZE + 4 downTo 1) {
 
             if (i.rem(2) == 0) cal.add(Calendar.DAY_OF_MONTH, -1)
 
@@ -253,7 +253,7 @@ class DairyRepoImplTest {
         //Set fake db items so that we have at least one user activity with past 10 days.
         val cal = TimeUtils.getTodaysCalender12AM()
 
-        for (i in DairyRepo.PAGE_SIZE + 5 downTo 1) {
+        for (i in DiaryRepo.PAGE_SIZE + 5 downTo 1) {
             cal.add(Calendar.DAY_OF_MONTH, -1)
             val startTime = cal.timeInMillis
             val endTime = startTime + DIFF_BETWEEN_END_AND_START

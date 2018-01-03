@@ -32,7 +32,6 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
 
     override fun insert(userActivity: UserActivity): Long {
         tableItems.add(userActivity)
-        sortDescendingByStartTime()
         return tableItems.lastIndex.toLong()
     }
 
@@ -49,17 +48,18 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
                     tableItems[it] = userActivity
                 }
 
-        sortDescendingByStartTime()
         return numberOfUpdatedItem
     }
 
     override fun getLatestActivity(): UserActivity? {
+        sortDescendingByStartTime()
         return if (tableItems.isEmpty()) null else tableItems.first()
     }
 
     override fun getActivityBetweenDuration(afterTimeMills: Long, beforeTimeMills: Long): List<UserActivity> {
         val activityBetweenDuration = ArrayList<UserActivity>()
 
+        sortDescendingByStartTime()
         tableItems.filter { it -> it.eventStartTimeMills in (afterTimeMills + 1)..(beforeTimeMills - 1) }
                 .forEach { it -> activityBetweenDuration.add(it) }
         return activityBetweenDuration
@@ -68,6 +68,7 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
     override fun getActivityAfter(afterTimeMills: Long): List<UserActivity> {
         val activityAfter = ArrayList<UserActivity>()
 
+        sortDescendingByStartTime()
         tableItems.filter { it -> it.eventStartTimeMills > afterTimeMills }
                 .forEach { it ->
                     activityAfter.add(it)
@@ -80,6 +81,9 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
     }
 
     private fun sortDescendingByStartTime() = Collections.sort(tableItems) { o1, o2 ->
-        (o2.eventStartTimeMills - o1.eventStartTimeMills).toInt()
+        val diff = (o2.eventStartTimeMills - o1.eventStartTimeMills)
+        if (diff < 0) return@sort -1
+        else if (diff > 0) return@sort 1
+        return@sort 0
     }
 }
