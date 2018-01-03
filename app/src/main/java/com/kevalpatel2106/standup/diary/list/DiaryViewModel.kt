@@ -85,7 +85,7 @@ internal class DiaryViewModel : BaseViewModel {
     internal fun loadNext(oldestEventTimeMills: Long,
                           isFirstPage: Boolean = false) {
         addDisposable(userActivityRepo
-                .loadDaysList(oldestEventTimeMills)
+                .loadDaysSummaryList(oldestEventTimeMills)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe({

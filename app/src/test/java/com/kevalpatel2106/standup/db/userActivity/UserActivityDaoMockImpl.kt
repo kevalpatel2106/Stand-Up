@@ -27,12 +27,12 @@ import java.util.*
 class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserActivityDao {
 
     init {
-        sort()
+        sortDescendingByStartTime()
     }
 
     override fun insert(userActivity: UserActivity): Long {
         tableItems.add(userActivity)
-        sort()
+        sortDescendingByStartTime()
         return tableItems.lastIndex.toLong()
     }
 
@@ -49,21 +49,19 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
                     tableItems[it] = userActivity
                 }
 
-        sort()
+        sortDescendingByStartTime()
         return numberOfUpdatedItem
     }
 
     override fun getLatestActivity(): UserActivity? {
-        return if (tableItems.isEmpty()) null else tableItems.last()
+        return if (tableItems.isEmpty()) null else tableItems.first()
     }
 
     override fun getActivityBetweenDuration(afterTimeMills: Long, beforeTimeMills: Long): List<UserActivity> {
         val activityBetweenDuration = ArrayList<UserActivity>()
 
         tableItems.filter { it -> it.eventStartTimeMills in (afterTimeMills + 1)..(beforeTimeMills - 1) }
-                .forEach { it ->
-                    activityBetweenDuration.add(it)
-                }
+                .forEach { it -> activityBetweenDuration.add(it) }
         return activityBetweenDuration
     }
 
@@ -78,10 +76,10 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
     }
 
     override fun getOldestActivity(): UserActivity? {
-        return if (tableItems.isEmpty()) null else tableItems.first()
+        return if (tableItems.isEmpty()) null else tableItems.last()
     }
 
-    private fun sort() = Collections.sort(tableItems) { o1, o2 ->
-        (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt()
+    private fun sortDescendingByStartTime() = Collections.sort(tableItems) { o1, o2 ->
+        (o2.eventStartTimeMills - o1.eventStartTimeMills).toInt()
     }
 }

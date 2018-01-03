@@ -46,5 +46,5 @@ interface DairyRepo {
      *
      * @see loadUserActivityByDay
      */
-    fun loadDaysList(beforeMills: Long): Flowable<DailyActivitySummary>
+    fun loadDaysSummaryList(beforeMills: Long): Flowable<DailyActivitySummary>
 }

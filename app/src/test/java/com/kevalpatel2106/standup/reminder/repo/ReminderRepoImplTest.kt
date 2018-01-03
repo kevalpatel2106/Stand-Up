@@ -118,9 +118,9 @@ class ReminderRepoImplTest {
                 .assertValueAt(0) { it == 0L }
                 .assertComplete()
         Assert.assertEquals(mUserActivityDao.tableItems.size, 2)
-        Assert.assertEquals(mUserActivityDao.tableItems[1].eventStartTimeMills, startTime)
-        Assert.assertEquals(mUserActivityDao.tableItems[1].eventEndTimeMills, 0 /* Event not ended yet */)
-        Assert.assertEquals(mUserActivityDao.tableItems[1].userActivityType, UserActivityType.MOVING)
+        Assert.assertEquals(mUserActivityDao.tableItems[0].eventStartTimeMills, startTime)
+        Assert.assertEquals(mUserActivityDao.tableItems[0].eventEndTimeMills, 0 /* Event not ended yet */)
+        Assert.assertEquals(mUserActivityDao.tableItems[0].userActivityType, UserActivityType.MOVING)
     }
 
     @Test
@@ -165,9 +165,9 @@ class ReminderRepoImplTest {
         Assert.assertEquals(mUserActivityDao.tableItems[1].eventEndTimeMills, startTimeOfNewEvent)
         Assert.assertEquals(mUserActivityDao.tableItems[1].userActivityType, UserActivityType.MOVING)
 
-        Assert.assertEquals(mUserActivityDao.tableItems[2].eventStartTimeMills, startTimeOfNewEvent)
-        Assert.assertEquals(mUserActivityDao.tableItems[2].eventEndTimeMills, endTimeOfNewEvent)
-        Assert.assertEquals(mUserActivityDao.tableItems[2].userActivityType, UserActivityType.SITTING)
+        Assert.assertEquals(mUserActivityDao.tableItems[0].eventStartTimeMills, startTimeOfNewEvent)
+        Assert.assertEquals(mUserActivityDao.tableItems[0].eventEndTimeMills, endTimeOfNewEvent)
+        Assert.assertEquals(mUserActivityDao.tableItems[0].userActivityType, UserActivityType.SITTING)
     }
 
 }

@@ -17,9 +17,12 @@
 
 package com.kevalpatel2106.standup.diary.repo
 
+import android.support.annotation.VisibleForTesting
+import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.diary.repo.DairyRepo.Companion.PAGE_SIZE
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -34,7 +37,10 @@ import kotlin.collections.ArrayList
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class DairyRepoImpl : DairyRepo {
+class DairyRepoImpl @VisibleForTesting constructor(private val userActivityDao: UserActivityDao,
+                                                   private val baseUrl: String) : DairyRepo {
+
+    constructor() : this(StandUpDb.getDb().userActivityDao(), BuildConfig.BASE_URL)
 
     /**
      * Calling this function will load maximum [PAGE_SIZE] number of days summary which is [beforeMills]
@@ -47,7 +53,7 @@ class DairyRepoImpl : DairyRepo {
      *
      * @see loadUserActivityByDay
      */
-    override fun loadDaysList(beforeMills: Long): Flowable<DailyActivitySummary> {
+    override fun loadDaysSummaryList(beforeMills: Long): Flowable<DailyActivitySummary> {
 
         val flowable = Flowable.create(FlowableOnSubscribe<List<UserActivity>> { e ->
 
@@ -56,7 +62,7 @@ class DairyRepoImpl : DairyRepo {
             calender.timeInMillis = beforeMills
 
             //Get the oldest day
-            val oldestActivity = StandUpDb.getDb().userActivityDao().getOldestActivity()
+            val oldestActivity = userActivityDao.getOldestActivity()
 
             //Loop until the oldest event received
             while (oldestActivity != null && calender.timeInMillis > oldestActivity.eventStartTimeMills) {
@@ -93,16 +99,14 @@ class DairyRepoImpl : DairyRepo {
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        val startTimeMills = calendar.timeInMillis
+        val startTimeMills = calendar.timeInMillis - 1
 
         calendar.set(Calendar.HOUR_OF_DAY, 23)
         calendar.set(Calendar.MINUTE, 59)
         calendar.set(Calendar.SECOND, 59)
         calendar.set(Calendar.MILLISECOND, 999)
-        val endTimeMills = calendar.timeInMillis
+        val endTimeMills = calendar.timeInMillis + 1
 
-        return StandUpDb.getDb()
-                .userActivityDao()
-                .getActivityBetweenDuration(startTimeMills, endTimeMills)
+        return userActivityDao.getActivityBetweenDuration(startTimeMills, endTimeMills)
     }
 }
