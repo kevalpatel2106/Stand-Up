@@ -17,9 +17,12 @@
 
 package com.kevalpatel2106.standup.dashboard.repo
 
+import android.support.annotation.VisibleForTesting
+import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -32,7 +35,10 @@ import kotlin.collections.ArrayList
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class DashboardRepoImpl : DashboardRepo {
+class DashboardRepoImpl @VisibleForTesting constructor(private val userActivityDao: UserActivityDao,
+                                                       private val baseUrl: String) : DashboardRepo {
+
+    constructor() : this(StandUpDb.getDb().userActivityDao(), BuildConfig.BASE_URL)
 
     override fun getTodaySummary(): Flowable<DailyActivitySummary> {
         val calendar = TimeUtils.getTodaysCalender12AM()
@@ -41,10 +47,8 @@ class DashboardRepoImpl : DashboardRepo {
         calendar.set(Calendar.HOUR_OF_DAY, 24)
         val endTimeMills = calendar.timeInMillis
 
-
         return Flowable.create(FlowableOnSubscribe<List<UserActivity>> {
-            val item = StandUpDb.getDb().userActivityDao()
-                    .getActivityBetweenDuration(startTimeMills, endTimeMills)
+            val item = userActivityDao.getActivityBetweenDuration(startTimeMills, endTimeMills)
 
             it.onNext(item)
             it.onComplete()

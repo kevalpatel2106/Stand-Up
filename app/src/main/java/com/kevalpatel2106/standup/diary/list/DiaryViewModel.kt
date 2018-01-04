@@ -62,7 +62,7 @@ internal class DiaryViewModel : BaseViewModel {
         this.mUserActivityRepo = diaryRepo
 
         //Load the first page
-        loadNext(System.currentTimeMillis())
+        loadNext(System.currentTimeMillis(), true)
     }
 
     /**
@@ -97,6 +97,8 @@ internal class DiaryViewModel : BaseViewModel {
                     blockUi.value = false
                 }
                 .doOnComplete {
+                    blockUi.value = false
+
                     activities.value?.let {
 
                         //If there are no items on the list...

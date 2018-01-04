@@ -21,23 +21,13 @@ package com.kevalpatel2106.standup.dashboard
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.timelineview.TimeLineLength
-import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
@@ -70,10 +60,12 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setEfficiencyCard()
         today_time_line.timelineDuration = TimeLineLength.A_DAY
 
         val model = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        model.setPieChart(context!!, home_efficiency_card_pie_chart)
+        model.setPieChartData(context!!, home_efficiency_card_pie_chart, 0F, 0F)
+
         //Observe error messages
         model.errorMessage.observe(this@DashboardFragment, Observer {
             it!!.getMessage(context)?.let { showSnack(it) }
@@ -97,7 +89,9 @@ class DashboardFragment : Fragment() {
                 //Display summary
                 efficiency_card_view_flipper.displayedChild = 0
 
-                setPieChartData(sittingDurationPercent = it.sittingPercent,
+                model.setPieChartData(context = context!!,
+                        pieChart = home_efficiency_card_pie_chart,
+                        sittingDurationPercent = it.sittingPercent,
                         standingDurationPercent = it.standingPercent)
 
                 tracked_time_tv.text = it.durationTimeHours
@@ -113,77 +107,5 @@ class DashboardFragment : Fragment() {
                 today_time_line.timelineItems = it
             }
         })
-    }
-
-    /**
-     * Set up the efficiency card.
-     */
-    private fun setEfficiencyCard() {
-        /* Set the pie chart */
-        home_efficiency_card_pie_chart.setDrawCenterText(false) //Don't want to draw text on center
-        home_efficiency_card_pie_chart.description.isEnabled = false    //Don't want to display any description
-        home_efficiency_card_pie_chart.setUsePercentValues(true)    //All the values in %.
-        home_efficiency_card_pie_chart.animateY(AppConfig.PIE_CHART_TIME, Easing.EasingOption.EaseInOutQuad)
-        home_efficiency_card_pie_chart.setDrawEntryLabels(false)
-
-        //The hole in the middle
-        home_efficiency_card_pie_chart.isDrawHoleEnabled = true //Display the hole in the middle
-        home_efficiency_card_pie_chart.holeRadius = 50F //Keep the hole radius 40% of total chart radius
-        home_efficiency_card_pie_chart.transparentCircleRadius = home_efficiency_card_pie_chart.holeRadius  //Keep the transparent radius 40% of total chart radius
-        home_efficiency_card_pie_chart.setHoleColor(Color.TRANSPARENT)  //Keep hole transparent.
-
-        //Set rotation
-        home_efficiency_card_pie_chart.isRotationEnabled = true //User can rotate by touching
-        home_efficiency_card_pie_chart.rotationAngle = 0F   //Initially set the chart at 0 degree
-        home_efficiency_card_pie_chart.dragDecelerationFrictionCoef = 0.95f
-        home_efficiency_card_pie_chart.isHighlightPerTapEnabled = true  //Tapping on any segment of chart will highlight it.
-
-        //Set legends
-        home_efficiency_card_pie_chart.legend.isEnabled = true
-
-        val l = home_efficiency_card_pie_chart.legend
-        l.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        l.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        l.orientation = Legend.LegendOrientation.VERTICAL
-        l.setDrawInside(false)
-        l.textColor = Color.WHITE
-        l.textSize = ViewUtils.toPx(context!!, 5).toFloat()
-
-        setPieChartData(0F, 0F)
-    }
-
-    private fun setPieChartData(sittingDurationPercent: Float, standingDurationPercent: Float) {
-        val isValueToDisplay = standingDurationPercent + sittingDurationPercent == 0F
-        //Prepare the values in the pie chart.
-        val entries = ArrayList<PieEntry>()
-        entries.add(PieEntry(sittingDurationPercent, "Sitting"))   //Sitting time percentage
-        entries.add(PieEntry(standingDurationPercent, "Standing"))  //Standing time percentage
-
-        //Prepare the colors for each segment in the pie chart.
-        val colors = ArrayList<Int>()
-        colors.add(ContextCompat.getColor(context!!, android.R.color.holo_green_dark))       //Chart color for sitting segment
-        colors.add(ContextCompat.getColor(context!!, android.R.color.holo_orange_dark)) //Chart color for standing segment
-
-        if (isValueToDisplay) {
-            entries.add(PieEntry(100F, "Not tracked"))  //Standing time percentage
-            colors.add(ContextCompat.getColor(context!!, android.R.color.darker_gray)) //Chart color for standing segment
-        }
-        home_efficiency_card_pie_chart.isHighlightPerTapEnabled = !isValueToDisplay
-
-        val dataSet = PieDataSet(entries, "")
-        dataSet.setDrawIcons(false)
-        dataSet.colors = colors
-        dataSet.sliceSpace = 2F
-        dataSet.setAutomaticallyDisableSliceSpacing(true)
-        dataSet.setDrawValues(!isValueToDisplay)
-
-        val data = PieData(dataSet)
-        data.setValueFormatter(PercentFormatter())
-        data.setValueTextSize(16f)
-        data.setValueTextColor(Color.WHITE)
-
-        home_efficiency_card_pie_chart.data = data
-        home_efficiency_card_pie_chart.highlightValue(null)
-        home_efficiency_card_pie_chart.invalidate()
     }
 }
