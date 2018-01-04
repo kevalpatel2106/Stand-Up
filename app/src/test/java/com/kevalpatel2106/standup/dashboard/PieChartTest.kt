@@ -21,6 +21,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.graphics.Color
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.formatter.PercentFormatter
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
@@ -87,5 +88,70 @@ class PieChartTest {
         Assert.assertEquals(pieChart.legend.horizontalAlignment, Legend.LegendHorizontalAlignment.RIGHT)
         Assert.assertEquals(pieChart.legend.orientation, Legend.LegendOrientation.VERTICAL)
         Assert.assertEquals(pieChart.legend.textColor, Color.WHITE)
+    }
+
+    @Test
+    fun checkSettingPieChartDateWithData() {
+        val pieChart = PieChart(RuntimeEnvironment.application)
+
+        model.setPieChart(RuntimeEnvironment.application, pieChart)
+        model.setPieChartData(RuntimeEnvironment.application, pieChart, 40F, 60F)
+
+        Assert.assertTrue(pieChart.isHighlightPerTapEnabled)
+
+        val pieData = pieChart.data
+        val dataSet = pieData.dataSet
+
+        Assert.assertTrue(dataSet.valueFormatter is PercentFormatter)
+        Assert.assertEquals(dataSet.valueTextColor, Color.WHITE)
+        Assert.assertEquals(dataSet.valueTextSize, 16F)
+        Assert.assertEquals(dataSet.sliceSpace, 2F)
+        Assert.assertTrue(dataSet.isDrawValuesEnabled)
+        Assert.assertTrue(dataSet.isAutomaticallyDisableSliceSpacingEnabled)
+
+        //Check for the color
+        val colorList = dataSet.colors
+        Assert.assertEquals(2, colorList.size)
+
+        //Check for the data set entry
+        Assert.assertEquals(pieData.entryCount, 2)
+        Assert.assertEquals(dataSet.getEntryForIndex(0).value, 40F)
+        Assert.assertEquals(dataSet.getEntryForIndex(0).label, "Sitting")
+        Assert.assertEquals(dataSet.getEntryForIndex(1).value, 60F)
+        Assert.assertEquals(dataSet.getEntryForIndex(1).label, "Standing")
+    }
+
+
+    @Test
+    fun checkSettingPieChartDateWithNoData() {
+        val pieChart = PieChart(RuntimeEnvironment.application)
+
+        model.setPieChart(RuntimeEnvironment.application, pieChart)
+        model.setPieChartData(RuntimeEnvironment.application, pieChart, 0F, 0F)
+
+        Assert.assertFalse(pieChart.isHighlightPerTapEnabled)
+
+        val pieData = pieChart.data
+        val dataSet = pieData.dataSet
+
+        Assert.assertTrue(dataSet.valueFormatter is PercentFormatter)
+        Assert.assertEquals(dataSet.valueTextColor, Color.WHITE)
+        Assert.assertEquals(dataSet.valueTextSize, 16F)
+        Assert.assertEquals(dataSet.sliceSpace, 2F)
+        Assert.assertFalse(dataSet.isDrawValuesEnabled)
+        Assert.assertTrue(dataSet.isAutomaticallyDisableSliceSpacingEnabled)
+
+        //Check for the color
+        val colorList = dataSet.colors
+        Assert.assertEquals(3, colorList.size)
+
+        //Check for the data set entry
+        Assert.assertEquals(pieData.entryCount, 3)
+        Assert.assertEquals(dataSet.getEntryForIndex(0).value, 0F)
+        Assert.assertEquals(dataSet.getEntryForIndex(0).label, "Sitting")
+        Assert.assertEquals(dataSet.getEntryForIndex(1).value, 0F)
+        Assert.assertEquals(dataSet.getEntryForIndex(1).label, "Standing")
+        Assert.assertEquals(dataSet.getEntryForIndex(2).value, 100F)
+        Assert.assertEquals(dataSet.getEntryForIndex(2).label, "Not tracked")
     }
 }

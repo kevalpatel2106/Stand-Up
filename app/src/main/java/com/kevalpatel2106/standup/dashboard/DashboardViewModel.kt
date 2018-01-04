@@ -31,6 +31,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.CallbackEvent
 import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
@@ -92,7 +93,7 @@ internal class DashboardViewModel : BaseViewModel {
                 }
                 .doOnComplete {
                     if (timelineEventsList.value == null)
-                        todaySummaryErrorCallback.value = ErrorMessage("No activity found today.")
+                        todaySummaryErrorCallback.value = ErrorMessage(R.string.dashboard_today_summary_not_fount)
                 }
                 .subscribe({
                     todaySummary.value = it
@@ -106,7 +107,6 @@ internal class DashboardViewModel : BaseViewModel {
                     todaySummaryErrorCallback.value = ErrorMessage(it.message)
                 })
     }
-
 
     /**
      * Set up the efficiency card.

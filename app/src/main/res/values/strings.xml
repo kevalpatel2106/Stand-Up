@@ -114,6 +114,7 @@
     <string name="issue_success_alert_title">Issue reported.</string>
     <string name="issue_success_alert_message">Your issue id: %d</string>
     <string name="report_issue_reporting_message">Reporting issue</string>
+    <string name="dashboard_today_summary_not_fount">No activity found today.</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>
