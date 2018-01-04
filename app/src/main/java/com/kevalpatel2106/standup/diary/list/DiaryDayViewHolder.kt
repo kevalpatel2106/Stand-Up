@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.row_dairy_list_item.view.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class DiaryDayViewHolder(itemView: View) : DirayBaseViewHolder(itemView) {
+internal class DiaryDayViewHolder(itemView: View) : DiaryBaseViewHolder(itemView) {
 
 
     companion object {

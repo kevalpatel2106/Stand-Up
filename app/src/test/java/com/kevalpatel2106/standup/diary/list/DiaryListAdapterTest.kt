@@ -45,7 +45,7 @@ class DiaryListAdapterTest {
     }
 
     @Test
-    fun prepareViewTypeForHeaderType() {
+    fun checkPrepareViewTypeForHeaderType() {
         arrayList.add(MonthHeader(9, 2016))
         val type = diaryListAdapter.prepareViewType(0)
 
@@ -53,7 +53,7 @@ class DiaryListAdapterTest {
     }
 
     @Test
-    fun prepareViewTypeForUserActivityType() {
+    fun checkPrepareViewTypeForUserActivityType() {
         @Suppress("DEPRECATION")
         arrayList.add(DailyActivitySummary(
                 dayOfMonth = 1,
@@ -67,7 +67,7 @@ class DiaryListAdapterTest {
     }
 
     @Test
-    fun getPageSize() {
+    fun checkGetPageSize() {
         Assert.assertEquals(diaryListAdapter.getPageSize(), DiaryRepo.PAGE_SIZE)
     }
 

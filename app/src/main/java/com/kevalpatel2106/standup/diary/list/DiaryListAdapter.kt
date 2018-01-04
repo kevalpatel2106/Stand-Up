@@ -31,7 +31,7 @@ import com.kevalpatel2106.standup.diary.repo.DiaryRepo
  */
 internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivitySummary>,
                                 listener: RecyclerViewListener<DailyActivitySummary>?)
-    : PageRecyclerViewAdapter<DirayBaseViewHolder, DailyActivitySummary>(context, data, listener) {
+    : PageRecyclerViewAdapter<DiaryBaseViewHolder, DailyActivitySummary>(context, data, listener) {
 
     companion object {
 
@@ -43,7 +43,7 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
     }
 
 
-    override fun bindView(holder: DirayBaseViewHolder, item: DailyActivitySummary) {
+    override fun bindView(holder: DiaryBaseViewHolder, item: DailyActivitySummary) {
         when (holder) {
             is DiaryMonthViewHolder -> {
                 holder.setData(item as MonthHeader)
@@ -55,7 +55,7 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
         }
     }
 
-    override fun prepareViewHolder(parent: ViewGroup?, viewType: Int): DirayBaseViewHolder {
+    override fun prepareViewHolder(parent: ViewGroup?, viewType: Int): DiaryBaseViewHolder {
         return when (viewType) {
             TYPE_DAY_VIEW -> DiaryDayViewHolder.create(context, parent)
             TYPE_MONTH_VIEW -> DiaryMonthViewHolder.create(context, parent)

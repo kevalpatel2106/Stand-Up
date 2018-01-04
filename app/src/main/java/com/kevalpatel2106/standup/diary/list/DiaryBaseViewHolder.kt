@@ -25,4 +25,4 @@ import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal open class DirayBaseViewHolder(itemView: View) : PageRecyclerViewAdapter.PageViewHolder(itemView)
+internal open class DiaryBaseViewHolder(itemView: View) : PageRecyclerViewAdapter.PageViewHolder(itemView)
