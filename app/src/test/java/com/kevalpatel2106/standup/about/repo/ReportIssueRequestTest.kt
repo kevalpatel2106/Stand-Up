@@ -1,5 +1,5 @@
 /*
- *  Copyright 2017 Keval Patel.
+ *  Copyright 2018 Keval Patel.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,13 +19,9 @@ package com.kevalpatel2106.standup.about.repo
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.facebook.FacebookSdk
-import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
 import org.junit.Assert
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

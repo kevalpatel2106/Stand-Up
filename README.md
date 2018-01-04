@@ -12,7 +12,7 @@ Sitting is next cancer.
 Hit me on twitter [![Twitter](https://img.shields.io/badge/Twitter-@kevalpatel2106-blue.svg?style=flat)](https://twitter.com/kevalpatel2106) or join us on slack [![Slack](https://img.shields.io/badge/Join-Slack-red.svg?style=flat)](https://join.slack.com/t/stand-up-opensource/shared_invite/enQtMjkwODQ0MTQ1MTg4LTMwYjQyMmViYTc5ODkwODgxNzNlZmQzODAyNDNiMGEzZTM1YmUzZjZkNDAxOThjY2IyZmUxNWQ2ZTM2NDU1Yjg).
 
 ## License
-Copyright 2017 Keval Patel
+Copyright 2018 Keval Patel
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

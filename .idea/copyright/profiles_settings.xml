@@ -1,5 +1,5 @@
 <component name="CopyrightManager">
-  <settings default="Apche 2.0">
+  <settings>
     <module2copyright>
       <element module="All" copyright="Apche 2.0" />
     </module2copyright>

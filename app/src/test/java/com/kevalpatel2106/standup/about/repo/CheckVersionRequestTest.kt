@@ -1,5 +1,5 @@
 /*
- *  Copyright 2017 Keval Patel.
+ *  Copyright 2018 Keval Patel.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,12 +18,9 @@
 package com.kevalpatel2106.standup.about.repo
 
 import org.junit.Assert
-import org.junit.Assert.*
 import org.junit.Test
-import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.junit.runners.Parameterized
 import java.io.IOException
 
 /**
