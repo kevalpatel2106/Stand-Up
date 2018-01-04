@@ -23,6 +23,7 @@ import android.graphics.Paint
 import android.os.Build
 import android.support.annotation.ColorInt
 import android.support.annotation.RequiresApi
+import android.support.annotation.VisibleForTesting
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -127,7 +128,8 @@ class TimeLineView : View {
     /**
      * [TextPaint] to display the axis labels.
      */
-    private lateinit var labelTextPaint: TextPaint
+    @VisibleForTesting
+    internal lateinit var labelTextPaint: TextPaint
 
     private lateinit var timeLineBlockPaint: Paint
 

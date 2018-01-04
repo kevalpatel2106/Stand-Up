@@ -17,8 +17,10 @@
 
 package com.kevalpatel2106.standup.timelineview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.support.annotation.VisibleForTesting
 import android.util.TypedValue
 
 /**
@@ -28,7 +30,8 @@ import android.util.TypedValue
  */
 internal object Utils {
 
-    private fun convertTimeLineLengthToSeconds(timeLineLength: TimeLineLength): Long {
+    @VisibleForTesting
+    internal fun convertTimeLineLengthToSeconds(timeLineLength: TimeLineLength): Long {
 
         return when (timeLineLength) {
             TimeLineLength.AN_HOUR -> 3600
@@ -39,8 +42,9 @@ internal object Utils {
         }
     }
 
-    private fun getNumberOfIdicatorBlocks(timeLineLength: TimeLineLength): Int = when (timeLineLength) {
-        TimeLineLength.AN_HOUR -> 10
+    @VisibleForTesting
+    internal fun getNumberOfIndicatorBlocks(timeLineLength: TimeLineLength): Int = when (timeLineLength) {
+        TimeLineLength.AN_HOUR -> 6
         TimeLineLength.SIX_HOUR -> 6
         TimeLineLength.TWELVE_HOUR -> 12
         TimeLineLength.SIXTEEN_HOURS -> 16
@@ -49,6 +53,7 @@ internal object Utils {
 
     fun convertToSeconds(timeInMills: Long): Long = timeInMills / 1000
 
+    @SuppressLint("VisibleForTests")
     fun getIndicatorBlockList(timeLineLength: TimeLineLength): ArrayList<TimeLineItem> {
         val timeLineItems: ArrayList<TimeLineItem>
 
@@ -66,7 +71,7 @@ internal object Utils {
             }
             TimeLineLength.SIX_HOUR, TimeLineLength.TWELVE_HOUR, TimeLineLength.SIXTEEN_HOURS, TimeLineLength.A_DAY -> {
 
-                val capacity: Int = Utils.getNumberOfIdicatorBlocks(timeLineLength)
+                val capacity: Int = Utils.getNumberOfIndicatorBlocks(timeLineLength)
                 timeLineItems = ArrayList(capacity)
                 with(timeLineItems) {
                     (0..capacity).mapTo(this) {
@@ -84,6 +89,7 @@ internal object Utils {
         }
     }
 
+    @SuppressLint("VisibleForTests")
     fun calculateBlockCoordinates(viewWidth: Int,
                                   items: ArrayList<TimeLineItem>,
                                   timelineDuration: TimeLineLength): ArrayList<TimeLineItem> {

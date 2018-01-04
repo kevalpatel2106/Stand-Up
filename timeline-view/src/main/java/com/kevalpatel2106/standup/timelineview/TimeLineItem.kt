@@ -34,6 +34,11 @@ data class TimeLineItem(
         val color: Int
 ) {
 
+    init {
+        if (endTime < startTime)
+            throw IllegalArgumentException("End time cannot be less than start time.")
+    }
+
     internal var startX: Float = 0F
 
     internal var endX: Float = 0F
