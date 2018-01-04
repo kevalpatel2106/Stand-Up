@@ -17,20 +17,36 @@
 
 package com.kevalpatel2106.utils
 
+import org.junit.Assert
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
 /**
- * Created by Kevalpatel2106 on 22-Dec-17.
+ * Created by Keval on 04/01/18.
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-class StringExtensionsKtTest {
+@RunWith(JUnit4::class)
+class StringExtensionsTest {
+
     @Test
-    fun toFloatSafe() {
+    fun checkSafeFloatWithEmpty() {
+        Assert.assertEquals(0F, "".toFloatSafe())
     }
 
     @Test
-    fun toIntSafe() {
+    fun checkSafeFloatWithString() {
+        Assert.assertEquals(100F, "100".toFloatSafe())
     }
 
+    @Test
+    fun checkSafeIntWithEmpty() {
+        Assert.assertEquals(0, "".toIntSafe())
+    }
+
+    @Test
+    fun checkSafeIntWithString() {
+        Assert.assertEquals(100, "100".toIntSafe())
+    }
 }

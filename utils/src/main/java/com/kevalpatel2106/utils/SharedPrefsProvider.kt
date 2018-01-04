@@ -19,6 +19,7 @@ package com.kevalpatel2106.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.support.annotation.VisibleForTesting
 
 /**
  * Created by Keval on 20-Aug-16.
@@ -46,6 +47,12 @@ object SharedPrefsProvider {
     @JvmStatic
     fun init(context: Context) {
         sSharedPreference = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
+    }
+
+    @VisibleForTesting
+    @JvmStatic
+    internal fun init(sharedPreferences: SharedPreferences) {
+        sSharedPreference = sharedPreferences
     }
 
     /**

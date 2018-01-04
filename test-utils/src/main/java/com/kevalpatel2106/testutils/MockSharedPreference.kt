@@ -30,7 +30,7 @@ import java.util.*
  */
 class MockSharedPreference : SharedPreferences {
 
-    private val preferenceMap: HashMap<String, Any> = HashMap()
+    private val preferenceMap: HashMap<String, Any?> = HashMap()
     private val preferenceEditor: MockSharedPreferenceEditor
 
     init {
@@ -82,15 +82,15 @@ class MockSharedPreference : SharedPreferences {
 
     }
 
-    class MockSharedPreferenceEditor(private val preferenceMap: HashMap<String, Any>) : SharedPreferences.Editor {
+    class MockSharedPreferenceEditor(private val preferenceMap: HashMap<String, Any?>) : SharedPreferences.Editor {
 
         override fun putString(s: String, s1: String?): SharedPreferences.Editor {
-            s1?.let { preferenceMap.put(s, it) }
+            preferenceMap.put(s, s1)
             return this
         }
 
         override fun putStringSet(s: String, set: Set<String>?): SharedPreferences.Editor {
-            set?.let { preferenceMap.put(s, it) }
+            preferenceMap.put(s, set)
             return this
         }
 

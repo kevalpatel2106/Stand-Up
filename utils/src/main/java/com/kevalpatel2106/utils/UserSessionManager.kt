@@ -17,8 +17,6 @@
 
 package com.kevalpatel2106.utils
 
-import android.support.annotation.VisibleForTesting
-
 
 /**
  * Created by Keval on 24-Oct-16.
@@ -29,33 +27,15 @@ import android.support.annotation.VisibleForTesting
 
 object UserSessionManager {
     //User preference keys.
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val USER_ID = "USER_ID"                        //User unique id
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val USER_DISPLAY_NAME = "USER_DISPLAY_NAME"    //First name of the user
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val USER_EMAIL = "USER_EMAIL"                  //Email address of the user
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val USER_TOKEN = "USER_TOKEN"                  //Authentication token
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val USER_IS_MALE = "USER_IS_MALE"                  //Is user male
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val USER_HEIGHT = "USER_HEIGHT"                  //User height in cms
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val USER_WEIGHT = "USER_WEIGHT"                  //User weight in kg
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val USER_PHOTO = "USER_PHOTO"                  //User photo
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    internal val USER_IS_VERIFIED = "USER_IS_VERIFIED"        //Is the user verified.
+    private val USER_ID = "USER_ID"                        //User unique id
+    private val USER_DISPLAY_NAME = "USER_DISPLAY_NAME"    //First name of the user
+    private val USER_EMAIL = "USER_EMAIL"                  //Email address of the user
+    private val USER_TOKEN = "USER_TOKEN"                  //Authentication token
+    private val USER_IS_MALE = "USER_IS_MALE"                  //Is user male
+    private val USER_HEIGHT = "USER_HEIGHT"                  //User height in cms
+    private val USER_WEIGHT = "USER_WEIGHT"                  //User weight in kg
+    private val USER_PHOTO = "USER_PHOTO"                  //User photo
+    private val USER_IS_VERIFIED = "USER_IS_VERIFIED"        //Is the user verified.
 
     /**
      * Get the user id of current user.
@@ -168,7 +148,7 @@ object UserSessionManager {
     @JvmStatic
     @Synchronized
     fun updateSession(displayName: String,
-                      photoUrl: String?,
+                      photoUrl: String? = null,
                       height: Float = 0F,
                       weight: Float = 0F,
                       isMale: Boolean = true) {
