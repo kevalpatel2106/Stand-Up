@@ -26,16 +26,16 @@ import android.support.annotation.ColorInt
  */
 data class TimeLineItem(
 
-        val startTime: Long,
+        val startTimeMills: Long,    //Mills
 
-        val endTime: Long,
+        val endTimeMills: Long,      //Mills
 
         @ColorInt
         val color: Int
 ) {
 
     init {
-        if (endTime < startTime)
+        if (endTimeMills < startTimeMills)
             throw IllegalArgumentException("End time cannot be less than start time.")
     }
 

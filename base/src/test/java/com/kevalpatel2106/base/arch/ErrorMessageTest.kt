@@ -53,6 +53,16 @@ class ErrorMessageTest {
 
     @Test
     @Throws(IOException::class)
+    fun checkInitWithErrorImage() {
+        val errorMessage = ErrorMessage(R.string.error_activity_not_found)
+        errorMessage.errorImage = 1234
+        Assert.assertEquals(errorMessage.errorRes, R.string.error_activity_not_found)
+        Assert.assertEquals(errorMessage.errorImage, 1234)
+        Assert.assertNull(errorMessage.errorMessage)
+    }
+
+    @Test
+    @Throws(IOException::class)
     fun checkErrorBtn() {
         val errorMessage = ErrorMessage(R.string.error_activity_not_found)
         errorMessage.setErrorBtn(R.string.btn_title_retry, {})

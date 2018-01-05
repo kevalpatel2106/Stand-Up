@@ -74,8 +74,8 @@ object SUUtils {
         val timeLineStartTime = TimeUtils.getMilliSecFrom12AM(userActivity.eventStartTimeMills)
         val timelineEndTime = timeLineStartTime + (userActivity.eventEndTimeMills - userActivity.eventStartTimeMills)
         return TimeLineItem(
-                startTime = timeLineStartTime,
-                endTime = timelineEndTime,
+                startTimeMills = timeLineStartTime,
+                endTimeMills = timelineEndTime,
                 color = when (userActivity.userActivityType) {
                     UserActivityType.MOVING -> AppConfig.COLOR_STANDING
                     UserActivityType.SITTING -> AppConfig.COLOR_SITTING

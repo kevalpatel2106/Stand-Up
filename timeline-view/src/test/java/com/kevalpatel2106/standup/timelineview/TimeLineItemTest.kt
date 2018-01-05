@@ -36,8 +36,8 @@ class TimeLineItemTest {
             val currentTime = System.currentTimeMillis()
             val timelineItem = TimeLineItem(currentTime, currentTime + 1000, 123)
 
-            Assert.assertEquals(currentTime, timelineItem.startTime)
-            Assert.assertEquals(currentTime + 1000, timelineItem.endTime)
+            Assert.assertEquals(currentTime, timelineItem.startTimeMills)
+            Assert.assertEquals(currentTime + 1000, timelineItem.endTimeMills)
             Assert.assertEquals(123, timelineItem.color)
             Assert.assertEquals(0F, timelineItem.endX)
             Assert.assertEquals(0F, timelineItem.startX)
@@ -65,8 +65,8 @@ class TimeLineItemTest {
             val currentTime = System.currentTimeMillis()
             val timelineItem = TimeLineItem(currentTime, currentTime, 123)
 
-            Assert.assertEquals(currentTime, timelineItem.startTime)
-            Assert.assertEquals(currentTime, timelineItem.endTime)
+            Assert.assertEquals(currentTime, timelineItem.startTimeMills)
+            Assert.assertEquals(currentTime, timelineItem.endTimeMills)
             Assert.assertEquals(123, timelineItem.color)
             Assert.assertEquals(0F, timelineItem.endX)
             Assert.assertEquals(0F, timelineItem.startX)

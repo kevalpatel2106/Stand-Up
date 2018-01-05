@@ -51,19 +51,17 @@ internal object Utils {
         TimeLineLength.A_DAY -> 24
     }
 
-    fun convertToSeconds(timeInMills: Long): Long = timeInMills / 1000
-
     @SuppressLint("VisibleForTests")
     fun getIndicatorBlockList(timeLineLength: TimeLineLength): ArrayList<TimeLineItem> {
         val timeLineItems: ArrayList<TimeLineItem>
 
         return when (timeLineLength) {
             TimeLineLength.AN_HOUR -> {
-                timeLineItems = ArrayList(6 /*Number of hours in a day*/)
+                timeLineItems = ArrayList(6 /*60 / 6 = 10 mins of block*/)
                 with(timeLineItems) {
-                    (0..23).mapTo(this) {
-                        TimeLineItem(startTime = it * 360L,
-                                endTime = (it + 1) * 360L,
+                    (0 until 6).mapTo(this) {
+                        TimeLineItem(startTimeMills = it * 360L,
+                                endTimeMills = (it + 1) * 360L,
                                 color = if (it % 2 == 0) Color.GRAY else Color.LTGRAY
                         )
                     }
@@ -74,14 +72,11 @@ internal object Utils {
                 val capacity: Int = Utils.getNumberOfIndicatorBlocks(timeLineLength)
                 timeLineItems = ArrayList(capacity)
                 with(timeLineItems) {
-                    (0..capacity).mapTo(this) {
-                        TimeLineItem(startTime = it * 3600L,
-                                endTime = (it + 1) * 3600L,
-                                color = if (it % 2 == 0) {
-                                    Color.parseColor(TimeLineConfig.INDICATOR_DARK_COLOR)
-                                } else {
-                                    Color.parseColor(TimeLineConfig.INDICATOR_LIGHT_COLOR)
-                                }
+                    (0 until capacity).mapTo(this) {
+                        TimeLineItem(startTimeMills = it * 3600L,
+                                endTimeMills = (it + 1) * 3600L,
+                                color = if (it % 2 == 0) (TimeLineConfig.INDICATOR_DARK_COLOR)
+                                else (TimeLineConfig.INDICATOR_LIGHT_COLOR)
                         )
                     }
                 }
@@ -98,8 +93,8 @@ internal object Utils {
         val eachSecondWidth = viewWidth.toFloat() / timeLineLengthSec
 
         items.forEach {
-            it.startX = it.startTime * eachSecondWidth
-            it.endX = it.endTime * eachSecondWidth
+            it.startX = it.startTimeMills.div(1000) * eachSecondWidth
+            it.endX = it.endTimeMills.div(1000) * eachSecondWidth
         }
 
         return items

@@ -18,50 +18,43 @@
 package com.kevalpatel2106.standup.timelineview
 
 import android.graphics.Color
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 
-class DemoActivity : AppCompatActivity() {
+/**
+ * Created by Kevalpatel2106 on 05-Jan-18.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ */
+internal object TestingUtils {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_demo)
+    private val ONE_HOUR_MILLS = 3600.times(1000).toLong()
 
-        //Timeline view
-        val timeline = findViewById<TimeLineView>(R.id.timeline_view_demo)
-        timeline.timelineDuration = TimeLineLength.A_DAY
-
+    fun getTestTimelineItems(): ArrayList<TimeLineItem> {
         val timelineItems = ArrayList<TimeLineItem>()
         timelineItems.add(TimeLineItem(
-                startTimeMills = 3600,
-                endTimeMills = 2 * 3600,
+                startTimeMills = ONE_HOUR_MILLS,
+                endTimeMills = 2 * ONE_HOUR_MILLS,
                 color = Color.GREEN
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = (2.5 * 3600).toLong(),
-                endTimeMills = 3 * 3600,
+                startTimeMills = (2.5 * ONE_HOUR_MILLS).toLong(),
+                endTimeMills = 3 * ONE_HOUR_MILLS,
                 color = Color.YELLOW
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 3 * 3600,
-                endTimeMills = (3.25 * 3600).toLong(),
+                startTimeMills = 3 * ONE_HOUR_MILLS,
+                endTimeMills = (3.25 * ONE_HOUR_MILLS).toLong(),
                 color = Color.BLUE
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 6 * 3600,
-                endTimeMills = 8 * 3600,
+                startTimeMills = 6 * ONE_HOUR_MILLS,
+                endTimeMills = 8 * ONE_HOUR_MILLS,
                 color = Color.GREEN
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 5 * 3600,
-                endTimeMills = (5.90 * 3600).toLong(),
+                startTimeMills = 5 * ONE_HOUR_MILLS,
+                endTimeMills = (5.90 * ONE_HOUR_MILLS).toLong(),
                 color = Color.YELLOW
         ))
-        timelineItems.add(TimeLineItem(
-                startTimeMills = 12 * 3600,
-                endTimeMills = 23 * 3600,
-                color = Color.GREEN
-        ))
-        timeline.timelineItems = timelineItems
+        return timelineItems
     }
 }

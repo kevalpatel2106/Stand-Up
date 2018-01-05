@@ -31,7 +31,9 @@ import io.reactivex.FlowableEmitter
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 class Repository<T> internal constructor() {
+
     internal val mCaches: ArrayList<Cache<T>> = ArrayList()
+
     internal val mRefresher: ArrayList<Refresher<T>> = ArrayList()
 
     fun fetch(): Flowable<RepoData<T>> {

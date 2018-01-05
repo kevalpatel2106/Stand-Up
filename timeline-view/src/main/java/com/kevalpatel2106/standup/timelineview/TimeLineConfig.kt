@@ -33,6 +33,6 @@ internal object TimeLineConfig {
     const val DEFAULT_BLOCK_BG_COLOR = Color.BLACK
 
 
-    const val INDICATOR_DARK_COLOR = "#AACCCCCC"
-    const val INDICATOR_LIGHT_COLOR = "#99CCCCCC"
+    const val INDICATOR_DARK_COLOR = Color.GRAY
+    const val INDICATOR_LIGHT_COLOR = Color.LTGRAY
 }
