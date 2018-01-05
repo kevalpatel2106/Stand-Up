@@ -84,6 +84,17 @@ class LoginViewModelSignUpTest {
 
     @Test
     @Throws(IOException::class)
+    fun checkNameValidation() {
+        loginViewModel.performSignUp("test@example.com", "1234567989", "", "1234567989")
+
+        Assert.assertFalse(loginViewModel.blockUi.value!!)
+        Assert.assertNull(loginViewModel.mPasswordError.value)
+        Assert.assertNull(loginViewModel.mEmailError.value)
+        Assert.assertEquals(loginViewModel.mNameError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_name)
+    }
+
+    @Test
+    @Throws(IOException::class)
     fun checkPasswordValidation() {
         loginViewModel.performSignUp("test@example.com", "1234", "Test User", "1234567989")
 

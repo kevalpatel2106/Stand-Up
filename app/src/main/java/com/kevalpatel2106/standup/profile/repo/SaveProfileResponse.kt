@@ -17,8 +17,6 @@
 
 package com.kevalpatel2106.standup.profile.repo
 
-import android.os.Parcel
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -51,40 +49,4 @@ data class SaveProfileResponse(
 
         @SerializedName("isVerified")
         val isVerified: Boolean
-) : Parcelable {
-
-    constructor(parcel: Parcel) : this(
-            parcel.readLong(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readString(),
-            parcel.readByte() != 0.toByte())
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeLong(userId)
-        parcel.writeString(name)
-        parcel.writeString(email)
-        parcel.writeString(photo)
-        parcel.writeString(height)
-        parcel.writeString(weight)
-        parcel.writeString(gender)
-        parcel.writeByte(if (isVerified) 1 else 0)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<SaveProfileResponse> {
-        override fun createFromParcel(parcel: Parcel): SaveProfileResponse {
-            return SaveProfileResponse(parcel)
-        }
-
-        override fun newArray(size: Int): Array<SaveProfileResponse?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
+)

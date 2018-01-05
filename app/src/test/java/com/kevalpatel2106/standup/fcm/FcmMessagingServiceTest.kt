@@ -48,6 +48,12 @@ class FcmMessagingServiceTest {
 
     @Test
     @Throws(IOException::class)
+    fun checkShouldProcessNotificationWithEmptyRemoteData() {
+        assertFalse(FcmMessagingService().shouldProcessNotification(HashMap()))
+    }
+
+    @Test
+    @Throws(IOException::class)
     fun checkShouldProcessNotificationIfUserNotLoggedIn() {
         val userSessionManager = Mockito.mock(UserSessionManager::class.java)
         Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(false)
@@ -62,7 +68,9 @@ class FcmMessagingServiceTest {
         val userSessionManager = Mockito.mock(UserSessionManager::class.java)
         Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
 
-        assertFalse(FcmMessagingService().shouldProcessNotification(HashMap()))
+        val hashMap = HashMap<String, String>()
+        hashMap.put("xyz", "abc")
+        assertFalse(FcmMessagingService().shouldProcessNotification(hashMap))
     }
 
     @Test

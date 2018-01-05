@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.reminder
+package com.kevalpatel2106.standup.authentication.deviceReg
 
 import android.content.Context
 import android.content.res.Resources
@@ -23,25 +23,23 @@ import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.fcm.NotificationChannelType
-import com.kevalpatel2106.standup.reminder.notification.ReminderNotification
 import org.junit.Assert
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.IOException
 
-
 /**
- * Created by Kevalpatel2106 on 25-Dec-17.
+ * Created by Kevalpatel2106 on 05-Jan-18.
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(JUnit4::class)
-class ReminderNotificationTest {
+class DeviceRegisterNotificationTest {
+
     private val TEST_TITLE_STRING = "This is test notification title."
     private val TEST_MESSAGE_STRING = "This is test notification message."
 
@@ -51,25 +49,25 @@ class ReminderNotificationTest {
     fun setUp() {
         val context = Mockito.mock(Context::class.java)
         val resources = Mockito.mock(Resources::class.java)
-        Mockito.`when`(context.getString(R.string.reminder_notification_title)).thenReturn(TEST_TITLE_STRING)
-        Mockito.`when`(context.getString(R.string.reminder_notification_message)).thenReturn(TEST_MESSAGE_STRING)
-        Mockito.`when`(context.getColor(anyInt())).thenReturn(Color.RED)
+        Mockito.`when`(context.getString(R.string.application_name)).thenReturn(TEST_TITLE_STRING)
+        Mockito.`when`(context.getString(R.string.register_device_service_notification_message)).thenReturn(TEST_MESSAGE_STRING)
+        Mockito.`when`(context.getColor(ArgumentMatchers.anyInt())).thenReturn(Color.RED)
         Mockito.`when`(context.resources).thenReturn(resources)
-        Mockito.`when`(context.resources.getColor(anyInt())).thenReturn(Color.RED)
+        Mockito.`when`(context.resources.getColor(ArgumentMatchers.anyInt())).thenReturn(Color.RED)
 
-        notification = ReminderNotification.buildNotification(context)
+        notification = DeviceRegisterNotification.buildNotification(context)
     }
 
     @Test
     @Throws(IOException::class)
     fun testNotificationPriority() {
-        assertEquals(notification.priority, NotificationCompat.PRIORITY_HIGH)
+        Assert.assertEquals(notification.priority, NotificationCompat.PRIORITY_LOW)
     }
 
     @Test
     @Throws(IOException::class)
     fun testNotificationColor() {
-        assertEquals(notification.color, Color.RED)
+        Assert.assertEquals(notification.color, 0 /* Color not set */)
     }
 
     @Test
@@ -78,7 +76,7 @@ class ReminderNotificationTest {
         //Channel id
         val channelId = notification.javaClass.getDeclaredField("mChannelId")
         channelId.isAccessible = true
-        Assert.assertEquals(channelId.get(notification) as String, NotificationChannelType.REMINDER_NOTIFICATION_CHANNEL)
+        Assert.assertEquals(channelId.get(notification) as String, NotificationChannelType.SYNC_NOTIFICATION_CHANNEL)
     }
 
     @Test

@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.reminder.sync
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import com.firebase.jobdispatcher.*
@@ -41,12 +42,20 @@ class SyncService : JobService() {
 
     companion object {
 
-        private const val SYNC_JOB_TAG = "sync_job"
+        @VisibleForTesting
+        internal const val SYNC_JOB_TAG = "sync_job"
 
+        @SuppressLint("VisibleForTests")
         @JvmStatic
         internal fun syncNow(context: Context) {
+            //Schedule the job
+            FirebaseJobDispatcher(GooglePlayDriver(context)).mustSchedule(prepareJob(context))
+        }
 
-            val monitoringJob = FirebaseJobDispatcher(GooglePlayDriver(context))
+        @VisibleForTesting
+        @JvmStatic
+        internal fun prepareJob(context: Context): Job {
+            return FirebaseJobDispatcher(GooglePlayDriver(context))
                     .newJobBuilder()
                     .setService(SyncService::class.java)       // the JobService that will be called
                     .setTag(SYNC_JOB_TAG)         // uniquely identifies the job
@@ -57,14 +66,17 @@ class SyncService : JobService() {
                     .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
                     .addConstraint(Constraint.ON_ANY_NETWORK)
                     .build()
-
-            //Schedule the job
-            FirebaseJobDispatcher(GooglePlayDriver(context)).mustSchedule(monitoringJob)
         }
 
         @JvmStatic
         internal fun cancel(context: Context) {
             FirebaseJobDispatcher(GooglePlayDriver(context)).cancel(SYNC_JOB_TAG)
+        }
+
+        @VisibleForTesting
+        @JvmStatic
+        internal fun shouldSync(): Boolean {
+            return UserSessionManager.isUserLoggedIn
         }
     }
 
@@ -73,6 +85,7 @@ class SyncService : JobService() {
         compositeDisposable.dispose()
     }
 
+    @SuppressLint("VisibleForTests")
     override fun onStartJob(job: JobParameters): Boolean {
         Timber.d("Syncing job started.")
 
@@ -105,9 +118,5 @@ class SyncService : JobService() {
 
     override fun onStopJob(job: JobParameters?): Boolean {
         return true    //Job done. Wait for the jobParams to finish
-    }
-
-    internal fun shouldSync(): Boolean {
-        return UserSessionManager.isUserLoggedIn
     }
 }

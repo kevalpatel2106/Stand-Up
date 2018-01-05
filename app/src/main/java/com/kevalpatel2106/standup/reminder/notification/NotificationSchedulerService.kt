@@ -17,8 +17,10 @@
 
 package com.kevalpatel2106.standup.reminder.notification
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.CallSuper
+import android.support.annotation.VisibleForTesting
 import com.firebase.jobdispatcher.*
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.sync.SyncService
@@ -35,11 +37,22 @@ class NotificationSchedulerService : JobService() {
 
     companion object {
 
-        private const val REMINDER_NOTIFICATION_JOB_TAG = "reminder_notification_job"
+        @VisibleForTesting
+        internal const val REMINDER_NOTIFICATION_JOB_TAG = "reminder_notification_job"
 
+        @SuppressLint("VisibleForTests")
         @JvmStatic
         internal fun scheduleNotification(context: Context,
                                           scheduleAfter: Int = ReminderConfig.STAND_UP_DURATION) {
+            //Schedule the job
+            FirebaseJobDispatcher(GooglePlayDriver(context))
+                    .mustSchedule(prepareJob(context, scheduleAfter))
+        }
+
+        @JvmStatic
+        @VisibleForTesting
+        internal fun prepareJob(context: Context,
+                                scheduleAfter: Int = ReminderConfig.STAND_UP_DURATION): Job {
 
             Timber.e("Notification scheduled.")
             //Build the job
@@ -47,7 +60,11 @@ class NotificationSchedulerService : JobService() {
                     scheduleAfter - ReminderConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE,
                     scheduleAfter + ReminderConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE)
 
-            val monitoringJob = FirebaseJobDispatcher(GooglePlayDriver(context))
+            //Save the time of upcoming notification.
+            SharedPrefsProvider.savePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME,
+                    System.currentTimeMillis() + scheduleAfter)
+
+            return FirebaseJobDispatcher(GooglePlayDriver(context))
                     .newJobBuilder()
                     .setService(NotificationSchedulerService::class.java)       // the JobService that will be called
                     .setTag(REMINDER_NOTIFICATION_JOB_TAG)         // uniquely identifies the job
@@ -57,19 +74,17 @@ class NotificationSchedulerService : JobService() {
                     .setReplaceCurrent(true)
                     .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
                     .build()
-
-            //Schedule the job
-            FirebaseJobDispatcher(GooglePlayDriver(context)).mustSchedule(monitoringJob)
-
-            //Save the time of upcoming notification.
-            SharedPrefsProvider.savePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME,
-                    System.currentTimeMillis() + scheduleAfter)
         }
 
         @JvmStatic
         internal fun cancel(context: Context) {
             FirebaseJobDispatcher(GooglePlayDriver(context)).cancel(REMINDER_NOTIFICATION_JOB_TAG)
             SharedPrefsProvider.removePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
+        }
+
+        @VisibleForTesting
+        internal fun shouldDisplayNotification(): Boolean {
+            return UserSessionManager.isUserLoggedIn
         }
     }
 
@@ -78,6 +93,7 @@ class NotificationSchedulerService : JobService() {
         return true
     }
 
+    @SuppressLint("VisibleForTests")
     @CallSuper
     override fun onStartJob(p0: JobParameters?): Boolean {
         Timber.d("Notification reminder job started.")
@@ -93,9 +109,5 @@ class NotificationSchedulerService : JobService() {
             SyncService.syncNow(this@NotificationSchedulerService)
         }
         return false /* Stop the service */
-    }
-
-    internal fun shouldDisplayNotification(): Boolean {
-        return UserSessionManager.isUserLoggedIn
     }
 }

@@ -89,7 +89,7 @@ class RegisterDeviceService : Service() {
 
         //Make the service foreground by assigning notification
         startForeground(DeviceRegisterNotification.FOREGROUND_NOTIFICATION_ID,
-                DeviceRegisterNotification.buildNotification(this@RegisterDeviceService.applicationContext))
+                DeviceRegisterNotification.getNotification(this@RegisterDeviceService.applicationContext))
     }
 
     @SuppressLint("VisibleForTests")

@@ -51,7 +51,7 @@ object SharedPrefsProvider {
 
     @VisibleForTesting
     @JvmStatic
-    internal fun init(sharedPreferences: SharedPreferences) {
+    fun init(sharedPreferences: SharedPreferences) {
         sSharedPreference = sharedPreferences
     }
 
