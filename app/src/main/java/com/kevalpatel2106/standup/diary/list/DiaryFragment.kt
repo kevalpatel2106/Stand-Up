@@ -29,9 +29,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
 import com.kevalpatel2106.base.uiController.BaseFragment
+import com.kevalpatel2106.base.uiController.showSnack
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.db.DailyActivitySummary
-import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.fragment_siting_diary.*
 
 

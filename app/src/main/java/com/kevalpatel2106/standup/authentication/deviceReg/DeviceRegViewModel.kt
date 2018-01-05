@@ -30,7 +30,6 @@ import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.misc.Validator
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
-import hugo.weaving.DebugLog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -97,7 +96,6 @@ internal class DeviceRegViewModel : BaseViewModel {
      */
     @SuppressLint("HardwareIds")
     @VisibleForTesting
-    @DebugLog
     internal fun sendDeviceDataToServer(regId: String, deviceId: String) {
         //Prepare the request object
         val requestData = DeviceRegisterRequest(gcmKey = regId, deviceId = deviceId)

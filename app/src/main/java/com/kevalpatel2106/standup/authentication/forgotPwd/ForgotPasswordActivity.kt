@@ -27,12 +27,12 @@ import android.support.annotation.VisibleForTesting
 import android.view.View
 import butterknife.OnClick
 import com.kevalpatel2106.base.uiController.BaseActivity
+import com.kevalpatel2106.base.uiController.showSnack
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.ViewUtils
-import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 
 class ForgotPasswordActivity : BaseActivity() {

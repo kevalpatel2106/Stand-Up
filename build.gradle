@@ -36,11 +36,10 @@ buildscript {
         classpath gradlePlugins.versionScan
         classpath gradlePlugins.googleServices
         classpath gradlePlugins.firbase
-        classpath gradlePlugins.hugo
         classpath gradlePlugins.fabric
         classpath gradlePlugins.kotlin
         classpath gradlePlugins.dokka
-        classpath gradlePlugins.ktlint
+        classpath gradlePlugins.testLogger
 
         if (System.getenv('CI') == "true"){
             classpath gradlePlugins.buildScan

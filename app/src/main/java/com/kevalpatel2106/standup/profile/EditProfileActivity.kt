@@ -29,6 +29,7 @@ import android.view.MenuItem
 import android.widget.ProgressBar
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.base.uiController.BaseActivity
+import com.kevalpatel2106.base.uiController.showSnack
 import com.kevalpatel2106.rulerview.ObservableHorizontalScrollView
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
@@ -37,7 +38,6 @@ import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
 import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
-import com.kevalpatel2106.utils.showSnack
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 
 

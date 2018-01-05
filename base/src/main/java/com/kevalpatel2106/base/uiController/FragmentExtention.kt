@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.utils
+package com.kevalpatel2106.base.uiController
 
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar

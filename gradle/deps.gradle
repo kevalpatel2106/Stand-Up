@@ -53,10 +53,10 @@ ext {
             'com.vanniktech.android.junit.jacoco',
             'kotlin-android',
             'kotlin-android-extensions',
-            'com.jakewharton.hugo',
             'com.getkeepsafe.dexcount',
             'org.jetbrains.dokka',
             'kotlin-kapt',
+            'com.adarshr.test-logger'
     ]
 
     gradlePlugins = [
@@ -69,9 +69,8 @@ ext {
             buildScan     : "com.gradle:build-scan-plugin:1.11",
             googleServices: "com.google.gms:google-services:3.1.2",
             firbase       : "com.google.firebase:firebase-plugins:1.1.5",
-            hugo          : "com.jakewharton.hugo:hugo-plugin:1.2.1",
             fabric        : "io.fabric.tools:gradle:1.25.1",
-            ktlint        : 'gradle.plugin.org.jmailen.gradle:kotlinter-gradle:1.6.0'
+            testLogger    : "com.adarshr:gradle-test-logger-plugin:1.1.2",
     ]
 
     //Testing dependency
