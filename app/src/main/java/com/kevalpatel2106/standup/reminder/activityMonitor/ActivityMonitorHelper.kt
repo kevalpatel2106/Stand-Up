@@ -17,12 +17,19 @@
 
 package com.kevalpatel2106.standup.reminder.activityMonitor
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.support.annotation.VisibleForTesting
+import com.firebase.jobdispatcher.*
 import com.google.android.gms.location.DetectedActivity
 import com.kevalpatel2106.base.annotations.Helper
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.standup.reminder.ReminderConfig
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.TimeUtils
+import com.kevalpatel2106.utils.UserSessionManager
 import java.util.*
 
 /**
@@ -32,6 +39,31 @@ import java.util.*
  */
 @Helper(ActivityMonitorService::class)
 internal object ActivityMonitorHelper {
+    internal const val ACTIVITY_MONITOR_JOB_TAG = "activity_monitor_job"
+
+    @SuppressLint("VisibleForTests")
+    @JvmStatic
+    internal fun prepareJob(context: Context): Job {
+        return FirebaseJobDispatcher(GooglePlayDriver(context))
+                .newJobBuilder()
+                .setService(ActivityMonitorService::class.java)       // the JobService that will be called
+                .setTag(ACTIVITY_MONITOR_JOB_TAG)         // uniquely identifies the jobParams
+                .setRecurring(true)
+                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
+                .setTrigger(getExecutionWindow())
+                .setReplaceCurrent(true)
+                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
+                .build()
+    }
+
+
+    @JvmStatic
+    @VisibleForTesting
+    internal fun getExecutionWindow(): JobTrigger.ExecutionWindowTrigger {
+        return Trigger.executionWindow(
+                ReminderConfig.MONITOR_SERVICE_PERIOD - ReminderConfig.MONITOR_SERVICE_PERIOD_TOLERANCE,
+                ReminderConfig.MONITOR_SERVICE_PERIOD + ReminderConfig.MONITOR_SERVICE_PERIOD_TOLERANCE)
+    }
 
     internal fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
         if (detectedActivities.size <= 0)
@@ -104,5 +136,27 @@ internal object ActivityMonitorHelper {
             //User is moving
             UserActivityHelper.createLocalUserActivity(UserActivityType.MOVING)
         }
+    }
+
+
+    internal fun shouldScheduleNotification(userActivity: UserActivity): Boolean {
+        if (userActivity.userActivityType == UserActivityType.MOVING) {
+
+            // Reschedule the notification if the user is currently moving
+            return true
+        } else if (SharedPrefsProvider.getLongFromPreference(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
+                < (System.currentTimeMillis() + TimeUtils.convertToMilli(ReminderConfig.STAND_UP_DURATION.toLong()))) {
+
+            // There is no notification since an hour. That indicates that may be notification job
+            // is not scheduled for a long time or it was canceled.
+            // Schedule the new job for the future. Later on based on the user activity, we can push
+            // the job back.
+            return true
+        }
+        return false
+    }
+
+    internal fun shouldMonitoringActivity(): Boolean {
+        return UserSessionManager.isUserLoggedIn
     }
 }

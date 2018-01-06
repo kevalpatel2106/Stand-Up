@@ -20,10 +20,12 @@ package com.kevalpatel2106.standup.reminder.sync
 import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.VisibleForTesting
-import com.firebase.jobdispatcher.*
+import com.firebase.jobdispatcher.FirebaseJobDispatcher
+import com.firebase.jobdispatcher.GooglePlayDriver
+import com.firebase.jobdispatcher.JobParameters
+import com.firebase.jobdispatcher.JobService
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepoImpl
-import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -41,42 +43,17 @@ class SyncService : JobService() {
     internal var reminderRepo: ReminderRepo = ReminderRepoImpl()
 
     companion object {
-
-        @VisibleForTesting
-        internal const val SYNC_JOB_TAG = "sync_job"
-
         @SuppressLint("VisibleForTests")
         @JvmStatic
         internal fun syncNow(context: Context) {
             //Schedule the job
-            FirebaseJobDispatcher(GooglePlayDriver(context)).mustSchedule(prepareJob(context))
-        }
-
-        @VisibleForTesting
-        @JvmStatic
-        internal fun prepareJob(context: Context): Job {
-            return FirebaseJobDispatcher(GooglePlayDriver(context))
-                    .newJobBuilder()
-                    .setService(SyncService::class.java)       // the JobService that will be called
-                    .setTag(SYNC_JOB_TAG)         // uniquely identifies the job
-                    .setRecurring(false)
-                    .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
-                    .setTrigger(Trigger.NOW)
-                    .setReplaceCurrent(true)
-                    .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                    .addConstraint(Constraint.ON_ANY_NETWORK)
-                    .build()
+            FirebaseJobDispatcher(GooglePlayDriver(context))
+                    .mustSchedule(SyncServiceHelper.prepareJob(context))
         }
 
         @JvmStatic
         internal fun cancel(context: Context) {
-            FirebaseJobDispatcher(GooglePlayDriver(context)).cancel(SYNC_JOB_TAG)
-        }
-
-        @VisibleForTesting
-        @JvmStatic
-        internal fun shouldSync(): Boolean {
-            return UserSessionManager.isUserLoggedIn
+            FirebaseJobDispatcher(GooglePlayDriver(context)).cancel(SyncServiceHelper.SYNC_JOB_TAG)
         }
     }
 
@@ -89,7 +66,7 @@ class SyncService : JobService() {
     override fun onStartJob(job: JobParameters): Boolean {
         Timber.d("Syncing job started.")
 
-        if (shouldSync()) {
+        if (SyncServiceHelper.shouldSync()) {
             //Add the new value to database.
             reminderRepo.sendPendingActivitiesToServer()
                     .observeOn(AndroidSchedulers.mainThread())

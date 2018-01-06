@@ -19,20 +19,18 @@ package com.kevalpatel2106.standup.reminder.activityMonitor
 
 import android.content.Context
 import android.support.annotation.VisibleForTesting
-import com.firebase.jobdispatcher.*
+import com.firebase.jobdispatcher.FirebaseJobDispatcher
+import com.firebase.jobdispatcher.GooglePlayDriver
+import com.firebase.jobdispatcher.JobParameters
+import com.firebase.jobdispatcher.JobService
 import com.google.android.gms.awareness.Awareness
 import com.google.android.gms.awareness.snapshot.DetectedActivityResponse
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
-import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepoImpl
-import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.TimeUtils
-import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -66,34 +64,17 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
 
     companion object {
 
-        private const val ACTIVITY_MONITOR_JOB_TAG = "activity_monitor_job"
-
         @JvmStatic
         internal fun scheduleMonitoringJob(context: Context) {
-
-            //Build the jobParams
-            val executionWindow = Trigger.executionWindow(
-                    ReminderConfig.MONITOR_SERVICE_PERIOD - ReminderConfig.MONITOR_SERVICE_PERIOD_TOLERANCE,
-                    ReminderConfig.MONITOR_SERVICE_PERIOD + ReminderConfig.MONITOR_SERVICE_PERIOD_TOLERANCE)
-
-            val monitoringJob = FirebaseJobDispatcher(GooglePlayDriver(context))
-                    .newJobBuilder()
-                    .setService(ActivityMonitorService::class.java)       // the JobService that will be called
-                    .setTag(ACTIVITY_MONITOR_JOB_TAG)         // uniquely identifies the jobParams
-                    .setRecurring(true)
-                    .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
-                    .setTrigger(executionWindow)
-                    .setReplaceCurrent(true)
-                    .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                    .build()
-
             //Schedule the jobParams
-            FirebaseJobDispatcher(GooglePlayDriver(context)).mustSchedule(monitoringJob)
+            FirebaseJobDispatcher(GooglePlayDriver(context))
+                    .mustSchedule(ActivityMonitorHelper.prepareJob(context))
         }
 
         @JvmStatic
         internal fun cancel(context: Context) {
-            FirebaseJobDispatcher(GooglePlayDriver(context)).cancel(ACTIVITY_MONITOR_JOB_TAG)
+            FirebaseJobDispatcher(GooglePlayDriver(context))
+                    .cancel(ActivityMonitorHelper.ACTIVITY_MONITOR_JOB_TAG)
 
             //Stop the notifications
             NotificationSchedulerService.cancel(context)
@@ -107,7 +88,7 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
     override fun onStartJob(job: JobParameters): Boolean {
         Timber.d("Monitoring job started.")
 
-        if (shouldMonitoringActivity()) {
+        if (ActivityMonitorHelper.shouldMonitoringActivity()) {
             jobParams = job
 
             //Use the snapshot api to get result for the user activity.
@@ -150,7 +131,7 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
             return
         }
 
-        if (shouldScheduleNotification(userActivity)) {
+        if (ActivityMonitorHelper.shouldScheduleNotification(userActivity)) {
             NotificationSchedulerService.cancel(this@ActivityMonitorService)
             NotificationSchedulerService.scheduleNotification(this@ActivityMonitorService)
         }
@@ -168,26 +149,5 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
                     //NO OP
                     Timber.e(it.message)
                 })
-    }
-
-    private fun shouldScheduleNotification(userActivity: UserActivity): Boolean {
-        if (userActivity.userActivityType == UserActivityType.MOVING) {
-
-            // Reschedule the notification if the user is currently moving
-            return true
-        } else if (SharedPrefsProvider.getLongFromPreference(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
-                < (System.currentTimeMillis() + TimeUtils.convertToMilli(ReminderConfig.STAND_UP_DURATION.toLong()))) {
-
-            // There is no notification since an hour. That indicates that may be notification job
-            // is not scheduled for a long time or it was canceled.
-            // Schedule the new job for the future. Later on based on the user activity, we can push
-            // the job back.
-            return true
-        }
-        return false
-    }
-
-    internal fun shouldMonitoringActivity(): Boolean {
-        return UserSessionManager.isUserLoggedIn
     }
 }

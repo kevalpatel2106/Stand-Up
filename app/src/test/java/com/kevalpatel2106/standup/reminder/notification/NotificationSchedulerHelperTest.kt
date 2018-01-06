@@ -17,19 +17,22 @@
 
 package com.kevalpatel2106.standup.reminder.notification
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.firebase.jobdispatcher.Lifetime
 import com.firebase.jobdispatcher.RetryStrategy
+import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
+import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import java.io.IOException
 
 /**
  * Created by Kevalpatel2106 on 05-Jan-18.
@@ -38,33 +41,54 @@ import org.robolectric.annotation.Config
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class NotificationSchedulerServiceTest {
+class NotificationSchedulerHelperTest {
 
     @Test
+    @Throws(IOException::class)
     fun checkPrepareJobAfterDefaultTime() {
         SharedPrefsProvider.init(MockSharedPreference())
-        val builder = NotificationSchedulerService.prepareJob(RuntimeEnvironment.application)
+        val builder = NotificationSchedulerHelper.prepareJob(RuntimeEnvironment.application)
 
         Assert.assertEquals(builder.constraints.size, 0)
         Assert.assertFalse(builder.isRecurring)
-        Assert.assertEquals(builder.tag, NotificationSchedulerService.REMINDER_NOTIFICATION_JOB_TAG)
+        Assert.assertEquals(builder.tag, NotificationSchedulerHelper.REMINDER_NOTIFICATION_JOB_TAG)
         Assert.assertEquals(builder.retryStrategy, RetryStrategy.DEFAULT_LINEAR)
         Assert.assertEquals(builder.lifetime, Lifetime.UNTIL_NEXT_BOOT)
         Assert.assertEquals(builder.service, NotificationSchedulerService::class.java.canonicalName)
     }
 
 
+    @Test
+    @Throws(IOException::class)
     fun checkShouldNotSyncSync() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
-        Mockito.`when`(sharedPref.getBoolean(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean())).thenReturn(false)
+        Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(0L)
+        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
+        SharedPrefsProvider.init(sharedPref)
 
-        Assert.assertFalse(NotificationSchedulerService.shouldDisplayNotification())
+        Assert.assertFalse(NotificationSchedulerHelper.shouldDisplayNotification())
     }
 
+    @Test
+    @Throws(IOException::class)
     fun checkShouldSyncSync() {
+        val context = Mockito.mock(Context::class.java)
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
-        Mockito.`when`(sharedPref.getBoolean(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean())).thenReturn(true)
+        Mockito.`when`(context.getSharedPreferences(anyString(), anyInt())).thenReturn(sharedPref)
+        Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
+        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-token")
+        SharedPrefsProvider.init(context)
 
-        Assert.assertTrue(NotificationSchedulerService.shouldDisplayNotification())
+        Assert.assertTrue(NotificationSchedulerHelper.shouldDisplayNotification())
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkGetExecutionWindow() {
+        val executionWindow = NotificationSchedulerHelper.getExecutionWindow(3600)
+        Assert.assertEquals(executionWindow.windowStart,
+                3600 - ReminderConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE)
+        Assert.assertEquals(executionWindow.windowEnd,
+                3600 + ReminderConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE)
     }
 }

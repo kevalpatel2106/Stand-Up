@@ -22,11 +22,11 @@ import com.firebase.jobdispatcher.Constraint
 import com.firebase.jobdispatcher.Lifetime
 import com.firebase.jobdispatcher.RetryStrategy
 import com.firebase.jobdispatcher.Trigger
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyBoolean
-import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -39,16 +39,16 @@ import org.robolectric.annotation.Config
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class SyncServiceTest {
+class SyncServiceHelperTest {
 
     @Test
     fun checkSyncNow() {
-        val builder = SyncService.prepareJob(RuntimeEnvironment.application)
+        val builder = SyncServiceHelper.prepareJob(RuntimeEnvironment.application)
 
         Assert.assertTrue(builder.constraints.contains(Constraint.ON_ANY_NETWORK))
         Assert.assertEquals(builder.constraints.size, 1)
         Assert.assertFalse(builder.isRecurring)
-        Assert.assertEquals(builder.tag, SyncService.SYNC_JOB_TAG)
+        Assert.assertEquals(builder.tag, SyncServiceHelper.SYNC_JOB_TAG)
         Assert.assertEquals(builder.retryStrategy, RetryStrategy.DEFAULT_LINEAR)
         Assert.assertEquals(builder.lifetime, Lifetime.UNTIL_NEXT_BOOT)
         Assert.assertEquals(builder.trigger, Trigger.NOW)
@@ -56,15 +56,19 @@ class SyncServiceTest {
 
     fun checkShouldNotSyncSync() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
-        Mockito.`when`(sharedPref.getBoolean(anyString(), anyBoolean())).thenReturn(false)
+        Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
+        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
+        SharedPrefsProvider.init(sharedPref)
 
-        Assert.assertFalse(SyncService.shouldSync())
+        Assert.assertFalse(SyncServiceHelper.shouldSync())
     }
 
     fun checkShouldSyncSync() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
-        Mockito.`when`(sharedPref.getBoolean(anyString(), anyBoolean())).thenReturn(true)
+        Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
+        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-token")
+        SharedPrefsProvider.init(sharedPref)
 
-        Assert.assertTrue(SyncService.shouldSync())
+        Assert.assertTrue(SyncServiceHelper.shouldSync())
     }
 }
