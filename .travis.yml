@@ -76,7 +76,7 @@ before_script:
   - android list targets
 
   # Create emulator
-  - echo no | android create avd --force --name test -t ANDROID_EMULATOR_TARGET --abi $ANDROID_ABI -d "Nexus 6"
+  - echo no | android create avd --force --name test -t $ANDROID_EMULATOR_TARGET --abi $ANDROID_ABI -d "Nexus 6"
   - bash ./scripts/set_emulator_prop.sh
 
   # Start emulator
