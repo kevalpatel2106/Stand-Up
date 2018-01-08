@@ -10,8 +10,10 @@ notifications:
 
 env:
   global:
-    - ANDROID_TARGET=android-21
+    - ANDROID_TARGET=android-26
+    - ANDROID_BUILD_TOOLS_VERSION=27.0.2
     - ANDROID_ABI=armeabi-v7a
+    - ANDROID_EMULATOR_TARGET=android-21
     - ADB_INSTALL_TIMEOUT=10
     - secure: "rYeWDqlP8GXcoHHriPmnQRQ5bwOtVU8XBk4SzLuCXEVn8TwrTyfegJYk9TqrK4Mg3U8iaX9H+DTzYvrBU9XfiQHnXqAk+MUkEmpxSW1f5o27ZMEq4nwKgBtyv/BzYm7996xujOEFavNBSPKF4sRARzGJVOV638lLJg+53lvqUSwn7tsasfTJsCGNdMV0oeBKJzFu3ufh/6gEak5YjeGMhEYogIEctadgpuXVtAzzHnXKNwj1b+oCSovPkHIHSzRw2GnhdcyLsqIFnbKXg6L6LSK2/63htRIn0cDZd4SCyJ0ldBojoDejoiU97nnNNxrGJt7IVRRSFEtEYsIZTJUl0rHdzu+iwcAeWtvZkpE2gcqSIloALNCqbMu+vaf0TZ2ylC9T2GuNDPj66rt5e4jFHZUaEdEudo84hKZalw9cX1UTzU0kGavxQqshA1HyE9BcMaOtOfCQmU+4T2o4yGJJGFW8CO2Awezsq2iP7cQWLin3nqvrT0Yrh9tqIpS7si1f+ctp6WC4fCkuT3ajz8Vu/YKoNIPgjk1ZLeAUUl4v1qkFLdf8VKHhMLNpCFdFCoNOB1D25aZSYQZWhEcKlt9bKQqLy7Nt7f30c6effi5w01r0I5VjSU+bGgyWBDuoyPG7BwQx0nWjBFyImQj3mbn68ZbWaNl1WIu4HPXW27zlASc="
 
@@ -41,19 +43,30 @@ android:
   components:
     - platform-tools
     - tools
-    - build-tools-27.0.2
-    - android-26
+    - build-tools-$ANDROID_BUILD_TOOLS_VERSION
+    - $ANDROID_TARGET
     - extra-google-m2repository
     - extra-android-m2repository
 
     #system images
-    - sys-img-${ANDROID_ABI}-${ANDROID_TARGET}
+    - sys-img-${ANDROID_ABI}-${ANDROID_EMULATOR_TARGET}
   licenses:
     - android-sdk-preview-license-.+
     - android-sdk-license-.+
     - google-gdk-license-.+
 
 before_script:
+  # Free some memory
+  - sudo service postgresql stop || true
+  - sudo service mysql stop || true
+  - sudo service memcached stop || true
+  - sudo service bootlogd stop || true
+  - sudo service elasticsearch stop || true
+  - sudo service mongodb stop || true
+  - sudo service cassandra stop || true
+  - sudo service rsync stop || true
+  - sudo service x11-common stop || true
+
   - chmod +x gradlew
   - chmod +x ./scripts/set_emulator_prop.sh
   - chmod +x ./scripts/ci-script.sh
@@ -62,19 +75,19 @@ before_script:
 
   - android list targets
 
-#  # Create emulator
-#  - echo no | android create avd --force --name test -t $ANDROID_TARGET --abi $ANDROID_ABI -d "Nexus 6"
-#  - bash ./scripts/set_emulator_prop.sh
-#
-#  # Start emulator
-#  - emulator -avd test -no-skin -no-audio -no-window &
-#  - android-wait-for-emulator
-#
-#  - adb devices   #Display list of devices
-#  - adb shell settings put global window_animation_scale 0.0 
-#  - adb shell settings put global transition_animation_scale 0.0
-#  - adb shell settings put global animator_duration_scale 0.0
-#  - adb shell input keyevent 82 &
+  # Create emulator
+  - echo no | android create avd --force --name test -t ANDROID_EMULATOR_TARGET --abi $ANDROID_ABI -d "Nexus 6"
+  - bash ./scripts/set_emulator_prop.sh
+
+  # Start emulator
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+
+  - adb devices   #Display list of devices
+  - adb shell settings put global window_animation_scale 0.0 
+  - adb shell settings put global transition_animation_scale 0.0
+  - adb shell settings put global animator_duration_scale 0.0
+  - adb shell input keyevent 82 &
 
 script:
  - ./gradlew jacocoTestReportDebug app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel

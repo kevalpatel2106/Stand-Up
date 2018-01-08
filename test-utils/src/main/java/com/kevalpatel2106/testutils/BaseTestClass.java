@@ -53,7 +53,7 @@ public abstract class BaseTestClass {
     public abstract Activity getActivity();
 
     @Before
-    public void setup() {
+    public void unlockScreen() {
         // Unlock the screen if it's locked
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         try {
