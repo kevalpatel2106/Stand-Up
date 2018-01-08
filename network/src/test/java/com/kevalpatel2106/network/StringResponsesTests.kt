@@ -20,7 +20,10 @@ package com.kevalpatel2106.network
 import com.kevalpatel2106.testutils.FileReader
 import com.kevalpatel2106.testutils.MockServerManager
 import okhttp3.mockwebserver.MockResponse
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
@@ -39,27 +42,13 @@ import java.nio.file.Paths
 class StringResponsesTests {
     private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", Paths.get("").toAbsolutePath().toString())
 
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpClass() {
-            ApiProvider.init()
-        }
-
-
-        @JvmStatic
-        @AfterClass
-        fun tearUpClass() {
-            ApiProvider.close()
-        }
-    }
-
     private val mockServerManager = MockServerManager()
+    private lateinit var apiProvider: ApiProvider
 
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
+        apiProvider = ApiProvider()
     }
 
     @After
@@ -72,7 +61,7 @@ class StringResponsesTests {
     fun checkForTheStringSuccessResponse() {
         mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"), "text/plain")
 
-        val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseString()
                 .execute()
@@ -91,7 +80,7 @@ class StringResponsesTests {
                 .setHeader("Content-Type", "text/html")
                 .setBody(FileReader.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
-        val response = ApiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseString()
                 .execute()

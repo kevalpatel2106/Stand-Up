@@ -19,7 +19,6 @@ package com.kevalpatel2106.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.support.annotation.VisibleForTesting
 
 /**
  * Created by Keval on 20-Aug-16.
@@ -28,32 +27,9 @@ import android.support.annotation.VisibleForTesting
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object SharedPrefsProvider {
-    /**
-     * Name of the shared preference file.
-     */
-    private val PREF_FILE = "app_prefs"
+class SharedPrefsProvider(private val sharedPreference: SharedPreferences) {
 
-    /**
-     * Shared preference object.
-     */
-    lateinit var sSharedPreference: SharedPreferences
-
-    /**
-     * Get the singleton instance of the shared preference provider.
-     *
-     * @param context Application Context.
-     */
-    @JvmStatic
-    fun init(context: Context) {
-        sSharedPreference = context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE)
-    }
-
-    @VisibleForTesting
-    @JvmStatic
-    fun init(sharedPreferences: SharedPreferences) {
-        sSharedPreference = sharedPreferences
-    }
+    constructor(context: Context) : this(context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE))
 
     /**
      * Remove and clear data from preferences for given field
@@ -62,7 +38,7 @@ object SharedPrefsProvider {
      */
     fun removePreferences(key: String) {
         //Delete SharedPref
-        val prefsEditor = sSharedPreference.edit()
+        val prefsEditor = sharedPreference.edit()
         prefsEditor.remove(key)
         prefsEditor.apply()
     }
@@ -76,7 +52,7 @@ object SharedPrefsProvider {
      */
     fun savePreferences(key: String, value: String?) {
         //Save to share prefs
-        val prefsEditor = sSharedPreference.edit()
+        val prefsEditor = sharedPreference.edit()
         prefsEditor.putString(key, value)
         prefsEditor.apply()
     }
@@ -90,7 +66,7 @@ object SharedPrefsProvider {
      */
     fun savePreferences(key: String, value: Boolean) {
         //Save to share prefs
-        val prefsEditor = sSharedPreference.edit()
+        val prefsEditor = sharedPreference.edit()
         prefsEditor.putBoolean(key, value)
         prefsEditor.apply()
     }
@@ -104,7 +80,7 @@ object SharedPrefsProvider {
      */
     fun savePreferences(key: String, value: Int) {
         //Save to share prefs
-        val prefsEditor = sSharedPreference.edit()
+        val prefsEditor = sharedPreference.edit()
         prefsEditor.putInt(key, value)
         prefsEditor.apply()
     }
@@ -119,7 +95,7 @@ object SharedPrefsProvider {
      */
     fun savePreferences(key: String, value: Long) {
         //Save to share prefs
-        val prefsEditor = sSharedPreference.edit()
+        val prefsEditor = sharedPreference.edit()
         prefsEditor.putLong(key, value)
         prefsEditor.apply()
     }
@@ -132,7 +108,7 @@ object SharedPrefsProvider {
      * @return string value for given key else null if key not found.
      */
     @JvmOverloads
-    fun getStringFromPreferences(key: String, defVal: String? = null): String? = sSharedPreference.getString(key, defVal)
+    fun getStringFromPreferences(key: String, defVal: String? = null): String? = sharedPreference.getString(key, defVal)
 
     /**
      * Read string from shared preference file
@@ -142,7 +118,7 @@ object SharedPrefsProvider {
      * @return boolean value for given key else flase if key not found.
      */
     @JvmOverloads
-    fun getBoolFromPreferences(key: String, defVal: Boolean = false): Boolean = sSharedPreference.getBoolean(key, defVal)
+    fun getBoolFromPreferences(key: String, defVal: Boolean = false): Boolean = sharedPreference.getBoolean(key, defVal)
 
     /**
      * Read string from shared preference file
@@ -152,7 +128,7 @@ object SharedPrefsProvider {
      * @return long value for given key else -1 if key not found.
      */
     @JvmOverloads
-    fun getLongFromPreference(key: String, defVal: Long = -1): Long = sSharedPreference.getLong(key, defVal)
+    fun getLongFromPreference(key: String, defVal: Long = -1): Long = sharedPreference.getLong(key, defVal)
 
     /**
      * Read string from shared preference file
@@ -162,6 +138,12 @@ object SharedPrefsProvider {
      * @return int value for given key else -1 if key not found.
      */
     @JvmOverloads
-    fun getIntFromPreference(key: String, defVal: Int = -1): Int = sSharedPreference.getInt(key, defVal)
+    fun getIntFromPreference(key: String, defVal: Int = -1): Int = sharedPreference.getInt(key, defVal)
 
+    companion object {
+        /**
+         * Name of the shared preference file.
+         */
+        private val PREF_FILE = "app_prefs"
+    }
 }

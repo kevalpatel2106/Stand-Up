@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import com.google.gson.GsonBuilder
-import com.kevalpatel2106.utils.UserSessionManager
 import okhttp3.*
 import org.apache.commons.codec.binary.Base64
 import java.io.File
@@ -34,7 +33,9 @@ import java.net.HttpURLConnection
  *
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
-internal class NWInterceptor(private val context: Context?) : Interceptor {
+internal class NWInterceptor(private val context: Context?,
+                             private val userId: String?,
+                             private val token: String?) : Interceptor {
 
     private val gson = GsonBuilder()
             .registerTypeAdapter(BaseResponse::class.java, BaseResponseJsonDeserializer())
@@ -62,7 +63,7 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
         var request = chain.request()
 
         //Set the authorization header
-        request = addAuthHeader(request)
+        request = addAuthHeader(request, userId, token)
 
         var response = chain.proceed(request)
 
@@ -207,14 +208,13 @@ internal class NWInterceptor(private val context: Context?) : Interceptor {
      * Adds the auth header if the username and passwords are provided for the authentication and
      * there is no "No-Authorization" header.
      */
-    fun addAuthHeader(request: Request): Request {
+    fun addAuthHeader(request: Request, userId: String?, token: String?): Request {
         var request1 = request
-        if (request1.header("Add-Auth") != null) {
+        if (request1.header("Add-Auth") != null && userId != null && token != null) {
             request1 = request1
                     .newBuilder()
                     .header("Authorization", "Basic " + String(
-                            Base64.encodeBase64((UserSessionManager.userId.toString()
-                                    + ":" + UserSessionManager.token).toByteArray())))
+                            Base64.encodeBase64((userId + ":" + token).toByteArray())))
                     .removeHeader("Add-Auth")
                     .build()
         }

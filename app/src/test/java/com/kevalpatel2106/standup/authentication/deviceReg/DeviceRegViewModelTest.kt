@@ -20,11 +20,13 @@ package com.kevalpatel2106.standup.authentication.deviceReg
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.content.SharedPreferences
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.UnitTestUtils
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
@@ -43,7 +45,7 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class DeviceRegViewModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
+    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
 
     @Rule
     @JvmField
@@ -54,14 +56,9 @@ class DeviceRegViewModelTest {
     val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
 
     private lateinit var deviceRegViewModel: DeviceRegViewModel
+    private lateinit var apiProvider: ApiProvider
+    private lateinit var userSessionManager: UserSessionManager
     private val mockServerManager = MockServerManager()
-
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setGlobal() = UnitTestUtils.initApp()
-    }
 
     @Before
     fun setUp() {
@@ -72,7 +69,9 @@ class DeviceRegViewModelTest {
         Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("149.3")
 
-        //Set the repo
+        //Init server
+        apiProvider = ApiProvider()
+        userSessionManager = UserSessionManager(SharedPrefsProvider(sharedPrefs))
         mockServerManager.startMockWebServer()
         deviceRegViewModel = DeviceRegViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
     }

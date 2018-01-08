@@ -15,34 +15,18 @@
  *
  */
 
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.di
 
 import android.app.Application
-import com.facebook.FacebookSdk
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
+import dagger.Component
 
 /**
- * Created by Keval on 31/12/17.
+ * Created by Kevalpatel2106 on 08-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-abstract class BaseSUApplication : Application() {
+@Component(modules = [AppModule::class])
+interface AppComponent {
 
-    override fun onCreate() {
-        super.onCreate()
-
-        //Initialize firebase.
-        FirebaseApp.initializeApp(this@BaseSUApplication)
-
-        //Initialize facebook
-        @Suppress("DEPRECATION")
-        FacebookSdk.sdkInitialize(this@BaseSUApplication)
-
-        //Enable firebase analytics
-        FirebaseAnalytics.getInstance(this@BaseSUApplication)
-                .setAnalyticsCollectionEnabled(isReleaseBuild())
-    }
-
-    abstract fun isReleaseBuild(): Boolean
+    fun inject(application: Application)
 }

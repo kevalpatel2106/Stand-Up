@@ -37,6 +37,7 @@ import org.mockito.Mockito
 class SharedPrefsProviderTest {
 
     private lateinit var sharedPreferences: MockSharedPreference
+    private lateinit var sharedPrefsProvider: SharedPrefsProvider
     private val TEST_KEY = "test_key"
 
     @Before
@@ -46,7 +47,7 @@ class SharedPrefsProviderTest {
         sharedPreferences = MockSharedPreference()
         Mockito.`when`(context.getSharedPreferences(anyString(), anyInt())).thenReturn(sharedPreferences)
 
-        SharedPrefsProvider.init(context)
+        sharedPrefsProvider = SharedPrefsProvider(sharedPreferences)
     }
 
     @Test
@@ -56,7 +57,7 @@ class SharedPrefsProviderTest {
         editor.putString(TEST_KEY, "String")
         editor.apply()
 
-        SharedPrefsProvider.removePreferences(TEST_KEY)
+        sharedPrefsProvider.removePreferences(TEST_KEY)
         assertTrue(sharedPreferences.getString(TEST_KEY, null) == null)
     }
 
@@ -64,7 +65,7 @@ class SharedPrefsProviderTest {
     @Throws(Exception::class)
     fun savePreferences() {
         assertFalse(sharedPreferences.getInt(TEST_KEY, -1) != -1)
-        SharedPrefsProvider.savePreferences(TEST_KEY, "String")
+        sharedPrefsProvider.savePreferences(TEST_KEY, "String")
         assertTrue(sharedPreferences.getString(TEST_KEY, null) != null)
     }
 
@@ -72,7 +73,7 @@ class SharedPrefsProviderTest {
     @Throws(Exception::class)
     fun savePreferences1() {
         assertFalse(sharedPreferences.getInt(TEST_KEY, -1) != -1)
-        SharedPrefsProvider.savePreferences(TEST_KEY, 1)
+        sharedPrefsProvider.savePreferences(TEST_KEY, 1)
         assertTrue(sharedPreferences.getInt(TEST_KEY, -1) != -1)
     }
 
@@ -80,7 +81,7 @@ class SharedPrefsProviderTest {
     @Throws(Exception::class)
     fun savePreferences2() {
         assertFalse(sharedPreferences.getLong(TEST_KEY, -1) != -1L)
-        SharedPrefsProvider.savePreferences(TEST_KEY, 100000L)
+        sharedPrefsProvider.savePreferences(TEST_KEY, 100000L)
         assertTrue(sharedPreferences.getLong(TEST_KEY, -1) != -1L)
     }
 
@@ -88,7 +89,7 @@ class SharedPrefsProviderTest {
     @Throws(Exception::class)
     fun savePreferences3() {
         assertFalse(sharedPreferences.getBoolean(TEST_KEY, false))
-        SharedPrefsProvider.savePreferences(TEST_KEY, true)
+        sharedPrefsProvider.savePreferences(TEST_KEY, true)
         assertTrue(sharedPreferences.getBoolean(TEST_KEY, false))
     }
 
@@ -101,7 +102,7 @@ class SharedPrefsProviderTest {
         editor.putString(TEST_KEY, testVal)
         editor.apply()
 
-        assertTrue(SharedPrefsProvider.getStringFromPreferences(TEST_KEY) == testVal)
+        assertTrue(sharedPrefsProvider.getStringFromPreferences(TEST_KEY) == testVal)
     }
 
     @Test
@@ -114,7 +115,7 @@ class SharedPrefsProviderTest {
         editor.apply()
 
 
-        assertTrue(SharedPrefsProvider.getBoolFromPreferences(TEST_KEY) == testVal)
+        assertTrue(sharedPrefsProvider.getBoolFromPreferences(TEST_KEY) == testVal)
     }
 
     @Test
@@ -126,7 +127,7 @@ class SharedPrefsProviderTest {
         editor.putLong(TEST_KEY, testVal)
         editor.apply()
 
-        assertTrue(SharedPrefsProvider.getLongFromPreference(TEST_KEY) == testVal)
+        assertTrue(sharedPrefsProvider.getLongFromPreference(TEST_KEY) == testVal)
     }
 
     @Test
@@ -138,6 +139,6 @@ class SharedPrefsProviderTest {
         editor.putInt(TEST_KEY, testVal)
         editor.apply()
 
-        assertTrue(SharedPrefsProvider.getIntFromPreference(TEST_KEY) == testVal)
+        assertTrue(sharedPrefsProvider.getIntFromPreference(TEST_KEY) == testVal)
     }
 }

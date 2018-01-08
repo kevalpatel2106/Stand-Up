@@ -24,7 +24,10 @@ import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import okhttp3.Request
 import org.apache.commons.codec.binary.Base64
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.ArgumentMatchers
@@ -50,21 +53,8 @@ class NWInterceptorAuthTest {
     private val TEST_PREF_LONG = 100L
 
     private val mockWebServer = MockServerManager()
-
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpClass() {
-            ApiProvider.init()
-        }
-
-        @JvmStatic
-        @AfterClass
-        fun tearUpClass() {
-            ApiProvider.close()
-        }
-    }
+    private lateinit var apiProvider: ApiProvider
+    private lateinit var userSessionManager: UserSessionManager
 
     @Before
     fun setUp() {
@@ -76,8 +66,9 @@ class NWInterceptorAuthTest {
         Mockito.`when`(sharedPrefs.getString(anyString(), anyString())).thenReturn(TEST_PREF_STRING)
         Mockito.`when`(sharedPrefs.getString(anyString(), ArgumentMatchers.isNull())).thenReturn(TEST_PREF_STRING)
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(TEST_PREF_LONG)
-        SharedPrefsProvider.init(context)
 
+        userSessionManager = UserSessionManager(SharedPrefsProvider(context))
+        apiProvider = ApiProvider(null, userSessionManager)
         mockWebServer.startMockWebServer()
     }
 
@@ -94,14 +85,19 @@ class NWInterceptorAuthTest {
                 .addHeader("Add-Auth", "true")
                 .build()
 
-        val modifiedRequest = NWInterceptor(null).addAuthHeader(request)
+        val modifiedRequest = NWInterceptor(null,
+                "test-user-id",
+                "test-token")
+                .addAuthHeader(request,
+                        "test-user-id",
+                        "test-token")
 
         Assert.assertNull(modifiedRequest.headers().get("Add-Auth"))
 
         Assert.assertNotNull(modifiedRequest.headers().get("Authorization"))
         Assert.assertEquals(modifiedRequest.headers().get("Authorization"),
-                "Basic " + String(Base64.encodeBase64((UserSessionManager.userId.toString()
-                        + ":" + UserSessionManager.token).toByteArray())))
+                "Basic " + String(Base64.encodeBase64(("test-user-id"
+                        + ":" + "test-token").toByteArray())))
     }
 
     @Test
@@ -109,15 +105,14 @@ class NWInterceptorAuthTest {
     fun checkApiRequestWithAuthHeader() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
-        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithAuthHeader()
                 .execute()
 
         Assert.assertNotNull(response.raw().request().headers().get("Authorization"))
         Assert.assertEquals(response.raw().request().headers().get("Authorization"),
-                "Basic " + String(
-                        Base64.encodeBase64((UserSessionManager.userId.toString()
-                                + ":" + UserSessionManager.token).toByteArray())))
+                "Basic " + String(Base64.encodeBase64(("test-user-id"
+                        + ":" + "test-token").toByteArray())))
     }
 }

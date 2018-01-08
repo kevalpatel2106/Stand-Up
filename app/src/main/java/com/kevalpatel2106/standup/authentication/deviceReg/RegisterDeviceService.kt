@@ -76,7 +76,7 @@ class RegisterDeviceService : Service() {
     override fun onBind(intent: Intent): IBinder? = null
 
     @VisibleForTesting
-    internal var mModel = DeviceRegViewModel()
+    internal var model = DeviceRegViewModel()
 
     private val errorObserver = Observer<ErrorMessage> { stopSelf() }
 
@@ -84,8 +84,8 @@ class RegisterDeviceService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        mModel.reposeToken.observeForever(successObserver)
-        mModel.errorMessage.observeForever(errorObserver)
+        model.reposeToken.observeForever(successObserver)
+        model.errorMessage.observeForever(errorObserver)
 
         //Make the service foreground by assigning notification
         startForeground(DeviceRegisterNotification.FOREGROUND_NOTIFICATION_ID,
@@ -97,7 +97,7 @@ class RegisterDeviceService : Service() {
         if (intent.getBooleanExtra(ARG_STOP_SERVICE, false)) {   //Stop the service
             stopSelf()
         } else {
-            mModel.register(Utils.getDeviceId(this@RegisterDeviceService),
+            model.register(Utils.getDeviceId(this@RegisterDeviceService),
                     FirebaseInstanceId.getInstance().token)
         }
         return START_NOT_STICKY
@@ -116,8 +116,8 @@ class RegisterDeviceService : Service() {
     }
 
     private fun clear() {
-        mModel.errorMessage.removeObserver(errorObserver)
-        mModel.reposeToken.removeObserver(successObserver)
+        model.errorMessage.removeObserver(errorObserver)
+        model.reposeToken.removeObserver(successObserver)
 
         stopForeground(true)
     }

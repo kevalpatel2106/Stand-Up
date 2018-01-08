@@ -124,6 +124,8 @@ dependencies {
     implementation(butterKnifeLib.butterKnife, excludeGrp)
     kapt(butterKnifeLib.annotationProcessor, excludeGrp)
 
+    dagger.each { add(it.configuration, it.dependency) }
+
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4

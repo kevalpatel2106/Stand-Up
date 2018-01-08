@@ -38,7 +38,7 @@ abstract class StandUpDb : RoomDatabase() {
         private var database: StandUpDb? = null
 
         @Suppress("NO_REFLECTION_IN_CLASS_PATH")
-        fun init(context: Context) {
+        fun init(context: Context): StandUpDb {
             database = Room.databaseBuilder(context, StandUpDb::class.java, StandUpDb::class.simpleName.toString())
                     .fallbackToDestructiveMigration()
                     .addCallback(object : Callback() {
@@ -53,9 +53,13 @@ abstract class StandUpDb : RoomDatabase() {
                         }
                     })
                     .build()
+            return database!!
         }
 
+        //TODO Remove
         fun getDb() = database ?: throw ExceptionInInitializerError("You must call init() to initialize the database.")
+
+        fun getDb(context: Context) = database ?: init(context)
     }
 
     abstract fun userActivityDao(): UserActivityDao

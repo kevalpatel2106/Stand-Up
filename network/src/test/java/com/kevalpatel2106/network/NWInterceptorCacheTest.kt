@@ -21,7 +21,10 @@ import com.kevalpatel2106.testutils.MockServerManager
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
@@ -40,25 +43,12 @@ class NWInterceptorCacheTest {
     private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", Paths.get("").toAbsolutePath().toString())
 
     private val mockWebServer = MockServerManager()
-
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpClass() {
-            ApiProvider.init()
-        }
-
-        @JvmStatic
-        @AfterClass
-        fun tearUpClass() {
-            ApiProvider.close()
-        }
-    }
+    private lateinit var apiProvider: ApiProvider
 
     @Before
     fun setUp() {
         mockWebServer.startMockWebServer()
+        apiProvider = ApiProvider()
     }
 
     @After
@@ -79,7 +69,7 @@ class NWInterceptorCacheTest {
                 .code(0)
                 .message("This is test request.")
                 .build()
-        val modifiedResponse = NWInterceptor(null)
+        val modifiedResponse = NWInterceptor(null, null, null)
                 .addCachingHeaders(request, response)
 
         Assert.assertNull(modifiedResponse.headers().get("Cache-Time"))
@@ -92,7 +82,7 @@ class NWInterceptorCacheTest {
     fun checkNoCacheHeader() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
-        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithoutCache()
                 .execute()
@@ -106,7 +96,7 @@ class NWInterceptorCacheTest {
     fun checkCacheHeader() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
-        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithCache()
                 .execute()
