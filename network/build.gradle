@@ -52,6 +52,8 @@ dependencies {
     implementation project(':base')
     implementation project(':utils')
     implementation project(':base')
+
+    //Test dependency
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 

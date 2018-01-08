@@ -109,8 +109,11 @@ dependencies {
     implementation project(':google-auth')
     implementation project(':ruler-view')
     implementation project(':timeline-view')
+
+    //Test dependency
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
+    testImplementation(otherLib.roboElectric, excludeGrp)
 
     ide.each { add("implementation", it) }
     anko.each { add("implementation", it) }

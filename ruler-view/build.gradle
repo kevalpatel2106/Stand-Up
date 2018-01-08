@@ -48,9 +48,10 @@ dokka dokkaConfig
 kotlin kotlinOption
 
 dependencies {
-    //Modules
+    //Test dependency
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
+    testImplementation(otherLib.roboElectric, excludeGrp)
 
     ide.each { add("implementation", it) }
     debugLibs.each { add(it.configuration, it.dependency) }
