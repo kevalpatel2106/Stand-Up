@@ -38,34 +38,16 @@ import io.reactivex.schedulers.Schedulers
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class DeviceRegViewModel : BaseViewModel {
-
-    /**
-     * Repository to provide user authentications.
-     */
-    internal var mUserAuthRepo: UserAuthRepository
-
-    /**
-     * Private constructor to add the custom [UserAuthRepository] for testing.
-     *
-     * @param userAuthRepo Add your own [UserAuthRepository].
-     */
-    @Suppress("unused")
-    @VisibleForTesting
-    constructor(userAuthRepo: UserAuthRepository) : super() {
-        mUserAuthRepo = userAuthRepo
-    }
+internal class DeviceRegViewModel @VisibleForTesting constructor(private val userAuthRepo: UserAuthRepository)
+    : BaseViewModel() {
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        mUserAuthRepo = UserAuthRepositoryImpl()
-    }
+    constructor() : this(UserAuthRepositoryImpl())
 
-    internal val token = MutableLiveData<String>()
+    internal val reposeToken = MutableLiveData<String>()
 
     @SuppressLint("VisibleForTests")
     internal fun register(deviceId: String, fcmId: String?) {
@@ -101,7 +83,7 @@ internal class DeviceRegViewModel : BaseViewModel {
         val requestData = DeviceRegisterRequest(gcmKey = regId, deviceId = deviceId)
 
         //Register to the server
-        addDisposable(mUserAuthRepo
+        addDisposable(userAuthRepo
                 .registerDevice(requestData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -115,7 +97,7 @@ internal class DeviceRegViewModel : BaseViewModel {
                     data?.let {
                         SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
                         UserSessionManager.token = data.token
-                        token.value = data.token
+                        reposeToken.value = data.token
                     }
 
                 }, {

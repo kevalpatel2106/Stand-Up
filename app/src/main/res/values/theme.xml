@@ -54,7 +54,7 @@
         <item name="android:windowBackground">@null</item>
     </style>
 
-    <style name="AppTheme.NoActionbar.GreenBg" parent="AppTheme.NoActionbar">
+    <style name="AppTheme.NoActionbar.RedBg" parent="AppTheme.NoActionbar">
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
     </style>
 

@@ -74,11 +74,12 @@ class IntroViewModelTest {
         mockServerManager.close()
     }
 
-
     @Test
     @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(introViewModel.blockUi.value!!)
+        Assert.assertFalse(introViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(introViewModel.isFacebookLoginProgress.value!!)
     }
 
     @Test
@@ -93,8 +94,8 @@ class IntroViewModelTest {
         //There should be success.
         Assert.assertFalse(introViewModel.blockUi.value!!)
         Assert.assertNull(introViewModel.errorMessage.value)
-        Assert.assertTrue(introViewModel.mIntroUiModel.value!!.isSuccess)
-        Assert.assertTrue(introViewModel.mIntroUiModel.value!!.isNewUser)
+        Assert.assertTrue(introViewModel.introUiModel.value!!.isSuccess)
+        Assert.assertTrue(introViewModel.introUiModel.value!!.isNewUser)
     }
 
     @Test
@@ -109,8 +110,8 @@ class IntroViewModelTest {
         //There should be success.
         Assert.assertFalse(introViewModel.blockUi.value!!)
         Assert.assertNull(introViewModel.errorMessage.value)
-        Assert.assertTrue(introViewModel.mIntroUiModel.value!!.isSuccess)
-        Assert.assertFalse(introViewModel.mIntroUiModel.value!!.isNewUser)
+        Assert.assertTrue(introViewModel.introUiModel.value!!.isSuccess)
+        Assert.assertFalse(introViewModel.introUiModel.value!!.isNewUser)
     }
 
     @Test
@@ -124,7 +125,7 @@ class IntroViewModelTest {
         //There should be success.
         Thread.sleep(2000)
         Assert.assertFalse(introViewModel.blockUi.value!!)
-        Assert.assertFalse(introViewModel.mIntroUiModel.value!!.isSuccess)
+        Assert.assertFalse(introViewModel.introUiModel.value!!.isSuccess)
         Assert.assertEquals(introViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 

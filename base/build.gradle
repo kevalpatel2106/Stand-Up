@@ -51,6 +51,7 @@ kotlin kotlinOption
 
 dependencies {
     implementation project(':utils')
+    api project(':progress-button')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 

@@ -37,62 +37,48 @@ import io.reactivex.schedulers.Schedulers
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(ForgotPasswordActivity::class)
-class ForgotPasswordViewModel : BaseViewModel {
-    /**
-     * Repository to provide user authentications.
-     */
-    @VisibleForTesting
-    internal var mUserAuthRepo: UserAuthRepository
-
-    /**
-     * [ForgotPasswordUiModel] to hold the response form the user resend api calls. UI element can
-     * observe this [MutableLiveData] to change the state when user authentication succeed or fails.
-     */
-    @VisibleForTesting
-    internal val mUiModel = MutableLiveData<ForgotPasswordUiModel>()
-
-    /**
-     * Private constructor to add the custom [UserAuthRepository] for testing.
-     *
-     * @param userAuthRepo Add your own [UserAuthRepository].
-     */
-    @Suppress("unused")
-    @VisibleForTesting
-    constructor(userAuthRepo: UserAuthRepository) : super() {
-        mUserAuthRepo = userAuthRepo
-    }
+internal class ForgotPasswordViewModel @VisibleForTesting constructor(private val userAuthRepo: UserAuthRepository)
+    : BaseViewModel() {
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        mUserAuthRepo = UserAuthRepositoryImpl()
-    }
+    constructor() : this(UserAuthRepositoryImpl())
 
-    internal val mEmailError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
+    internal val isRequesting = MutableLiveData<Boolean>()
+
+    internal val isForgotRequestSuccessful = MutableLiveData<Boolean>()
+
+    internal val emailError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
+
+    init {
+        isForgotRequestSuccessful.value = false
+        isRequesting.value = false
+    }
 
     fun forgotPasswordRequest(email: String) {
         if (Validator.isValidEmail(email)) {
-            addDisposable(mUserAuthRepo
+            addDisposable(userAuthRepo
                     .forgotPassword(ForgotPasswordRequest(email))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe({
+                        isForgotRequestSuccessful.value = false
                         blockUi.postValue(true)
+                        isRequesting.value = true
                     })
                     .doAfterTerminate({
                         blockUi.value = false
+                        isRequesting.value = false
                     })
                     .subscribe({
-                        mUiModel.value = ForgotPasswordUiModel(true)
+                        isForgotRequestSuccessful.value = true
                     }, { t ->
-                        mUiModel.value = ForgotPasswordUiModel(false)
                         errorMessage.value = ErrorMessage(t.message)
                     }))
         } else {
-            mEmailError.value = ErrorMessage(R.string.error_login_invalid_email)
+            emailError.value = ErrorMessage(R.string.error_login_invalid_email)
         }
     }
 }

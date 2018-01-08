@@ -123,7 +123,8 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login_using_email" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_login_using_email"
+        app:spinning_bar_color="?attr/colorPrimary" />
 
     <com.kevalpatel2106.base.view.BaseButton
         android:id="@+id/btn_login_fb_signin"
@@ -138,5 +139,6 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login_google_signin" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_login_google_signin"
+        app:spinning_bar_color="?attr/colorAccent" />
 </android.support.constraint.ConstraintLayout>

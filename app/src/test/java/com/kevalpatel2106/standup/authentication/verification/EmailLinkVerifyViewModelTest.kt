@@ -101,8 +101,6 @@ class EmailLinkVerifyViewModelTest {
 
         Thread.sleep(1000)
         Assert.assertFalse(emailLinkVerifyViewModel.blockUi.value!!)
-        Assert.assertEquals(emailLinkVerifyViewModel.errorMessage.value!!.errorRes,
-                R.string.verify_email_link_fail)
         Assert.assertEquals(emailLinkVerifyViewModel.errorMessage.value!!.errorImage,
                 R.drawable.ic_warning)
     }

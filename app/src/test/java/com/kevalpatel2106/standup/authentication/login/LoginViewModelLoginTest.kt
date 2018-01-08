@@ -74,6 +74,9 @@ class LoginViewModelLoginTest {
     @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(loginViewModel.blockUi.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
     }
 
     @Test
@@ -81,7 +84,10 @@ class LoginViewModelLoginTest {
     fun checkEmailValidation() {
         loginViewModel.performSignIn("test@example", "1234567989")
 
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertEquals(loginViewModel.mEmailError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
         Assert.assertNull(loginViewModel.mPasswordError.value)
         Assert.assertNull(loginViewModel.mNameError.value)
@@ -92,7 +98,10 @@ class LoginViewModelLoginTest {
     fun checkPasswordValidation() {
         loginViewModel.performSignIn("test@example.com", "1234")
 
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertNull(loginViewModel.mEmailError.value)
         Assert.assertEquals(loginViewModel.mPasswordError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_password)
         Assert.assertNull(loginViewModel.mNameError.value)
@@ -103,6 +112,9 @@ class LoginViewModelLoginTest {
     fun checkInvalidEmailAndPassword() {
         loginViewModel.performSignIn("test@example", "1234")
 
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertEquals(loginViewModel.mEmailError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
         Assert.assertNull(loginViewModel.mPasswordError.value)
@@ -118,6 +130,9 @@ class LoginViewModelLoginTest {
         loginViewModel.performSignIn("test@example.com", "1234567989")
 
         //There should be success.
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isSuccess)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isVerify)
@@ -133,6 +148,9 @@ class LoginViewModelLoginTest {
         loginViewModel.performSignIn("test@example.com", "1234567989")
 
         //There should be success.
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isSuccess)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isVerify)

@@ -66,7 +66,7 @@ class SyncServiceHelperTest {
     fun checkShouldSyncSync() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
-        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-token")
+        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
         SharedPrefsProvider.init(sharedPref)
 
         Assert.assertTrue(SyncServiceHelper.shouldSync())

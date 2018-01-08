@@ -140,8 +140,7 @@
                 android:layout_gravity="end"
                 android:text="@string/btn_title_forgot_password"
                 android:textAppearance="@style/SmallText.Primary"
-                android:textColor="@android:color/white"
-                android:visibility="gone" />
+                android:textColor="@android:color/white" />
 
             <!--Enter confirm password-->
             <android.support.design.widget.TextInputLayout
@@ -181,6 +180,7 @@
                     android:id="@+id/btn_login"
                     style="@style/LoginBtn"
                     android:layout_marginTop="20dp"
+                    android:text="@string/create_account"
                     tools:text="@string/login" />
 
                 <!--Sign in with Google button-->

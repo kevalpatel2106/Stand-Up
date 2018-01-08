@@ -84,7 +84,7 @@ class RegisterDeviceService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        mModel.token.observeForever(successObserver)
+        mModel.reposeToken.observeForever(successObserver)
         mModel.errorMessage.observeForever(errorObserver)
 
         //Make the service foreground by assigning notification
@@ -117,7 +117,7 @@ class RegisterDeviceService : Service() {
 
     private fun clear() {
         mModel.errorMessage.removeObserver(errorObserver)
-        mModel.token.removeObserver(successObserver)
+        mModel.reposeToken.removeObserver(successObserver)
 
         stopForeground(true)
     }

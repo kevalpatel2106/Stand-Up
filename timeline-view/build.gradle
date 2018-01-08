@@ -62,5 +62,3 @@ dependencies {
     debugImplementation supportLib.supportv4
     debugImplementation supportLib.appCompat
 }
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'

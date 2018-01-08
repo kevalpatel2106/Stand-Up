@@ -71,11 +71,24 @@ class LoginViewModelSignUpTest {
         mockServerManager.close()
     }
 
+
+    @Test
+    @Throws(IOException::class)
+    fun checkInitialization() {
+        Assert.assertFalse(loginViewModel.blockUi.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
+    }
+
     @Test
     @Throws(IOException::class)
     fun checkEmailValidation() {
         loginViewModel.performSignUp("test@example", "1234567989", "Test User", "1234567989")
 
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertEquals(loginViewModel.mEmailError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
         Assert.assertNull(loginViewModel.mPasswordError.value)
@@ -87,6 +100,9 @@ class LoginViewModelSignUpTest {
     fun checkNameValidation() {
         loginViewModel.performSignUp("test@example.com", "1234567989", "", "1234567989")
 
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertNull(loginViewModel.mPasswordError.value)
         Assert.assertNull(loginViewModel.mEmailError.value)
@@ -98,6 +114,9 @@ class LoginViewModelSignUpTest {
     fun checkPasswordValidation() {
         loginViewModel.performSignUp("test@example.com", "1234", "Test User", "1234567989")
 
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertNull(loginViewModel.mEmailError.value)
         Assert.assertEquals(loginViewModel.mPasswordError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_password)
@@ -109,6 +128,9 @@ class LoginViewModelSignUpTest {
     fun checkPasswordsDidNotMatch() {
         loginViewModel.performSignUp("test@example.com", "1234567989", "Test User", "123")
 
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertNull(loginViewModel.mEmailError.value)
         Assert.assertEquals(loginViewModel.mPasswordError.value!!.errorRes, com.kevalpatel2106.standup.R.string.login_error_password_did_not_match)
@@ -124,6 +146,9 @@ class LoginViewModelSignUpTest {
         loginViewModel.performSignUp("test@example.com", "1234567989", "Test User", "1234567989")
 
         //There should be success.
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isSuccess)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isVerify)
@@ -140,6 +165,9 @@ class LoginViewModelSignUpTest {
         loginViewModel.performSignUp("test@example.com", "1234567989", "Test User", "1234567989")
 
         //There should be success.
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isVerify)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isSuccess)

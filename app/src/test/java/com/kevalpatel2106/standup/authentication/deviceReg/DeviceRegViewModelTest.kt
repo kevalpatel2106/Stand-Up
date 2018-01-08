@@ -114,7 +114,7 @@ class DeviceRegViewModelTest {
         deviceRegViewModel.register("test-device-id", "test-firebase-id")
 
         Assert.assertNull(deviceRegViewModel.errorMessage.value)
-        Assert.assertEquals(deviceRegViewModel.token.value, "64df48e6-45de-4bb5-879d-4c1a722f23fd")
+        Assert.assertEquals(deviceRegViewModel.reposeToken.value, "64df48e6-45de-4bb5-879d-4c1a722f23fd")
     }
 
     @Test
@@ -125,6 +125,6 @@ class DeviceRegViewModelTest {
         deviceRegViewModel.register("test-device-id", "test-firebase-id")
 
         Assert.assertEquals(deviceRegViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
-        Assert.assertNull(deviceRegViewModel.token.value)
+        Assert.assertNull(deviceRegViewModel.reposeToken.value)
     }
 }

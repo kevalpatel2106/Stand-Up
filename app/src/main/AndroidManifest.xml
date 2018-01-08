@@ -54,7 +54,7 @@
             android:launchMode="singleInstance"
             android:noHistory="true"
             android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.GreenBg"
+            android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute">
             <intent-filter>
@@ -96,7 +96,7 @@
             android:name=".authentication.intro.IntroActivity"
             android:launchMode="singleInstance"
             android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.GreenBg"
+            android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
 
@@ -104,7 +104,7 @@
         <activity
             android:name=".authentication.login.LoginActivity"
             android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.GreenBg"
+            android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
 
@@ -112,7 +112,7 @@
         <activity
             android:name=".authentication.forgotPwd.ForgotPasswordActivity"
             android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.GreenBg"
+            android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
 
@@ -129,7 +129,7 @@
             android:name=".authentication.verification.EmailLinkVerificationActivity"
             android:configChanges="orientation|screenSize|keyboard"
             android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.GreenBg"
+            android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity

@@ -16,6 +16,7 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_intro"
     android:layout_width="match_parent"
@@ -34,7 +35,8 @@
         style="@style/GoogleSignInBtn"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:text="@string/sign_in_with_google" />
+        android:text="@string/sign_in_with_google"
+        app:spinning_bar_color="?attr/colorPrimary" />
 
     <com.kevalpatel2106.base.view.BaseButton
         android:id="@+id/btn_login_using_email"

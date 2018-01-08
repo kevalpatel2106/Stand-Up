@@ -15,11 +15,13 @@
  *
  */
 
-include ':app', ':timeline-view',
+include ':app',
+        ':timeline-view',
         ':base',
         ':utils',
         ':test-utils',
         ':network',
         ':facebook-auth',
         ':google-auth',
-        ':ruler-view'
+        ':ruler-view',
+        'progress-button'

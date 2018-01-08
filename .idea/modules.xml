@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/facebook-auth/facebook-auth.iml" filepath="$PROJECT_DIR$/facebook-auth/facebook-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/google-auth/google-auth.iml" filepath="$PROJECT_DIR$/google-auth/google-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />
+      <module fileurl="file://$PROJECT_DIR$/progress-button/progress-button.iml" filepath="$PROJECT_DIR$/progress-button/progress-button.iml" />
       <module fileurl="file://$PROJECT_DIR$/ruler-view/ruler-view.iml" filepath="$PROJECT_DIR$/ruler-view/ruler-view.iml" />
       <module fileurl="file://$PROJECT_DIR$/test-utils/test-utils.iml" filepath="$PROJECT_DIR$/test-utils/test-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/timeline-view/timeline-view.iml" filepath="$PROJECT_DIR$/timeline-view/timeline-view.iml" />

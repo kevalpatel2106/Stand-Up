@@ -57,11 +57,9 @@ class ForgotPasswordActivity : BaseActivity() {
         mModel = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
         setContentView(R.layout.activity_forgot_password)
 
-        //Observer the api call changes
-        mModel.blockUi.observe(this@ForgotPasswordActivity, Observer<Boolean> {
-            forgot_password_submit_btn.isEnabled = !it!!
+        mModel.isRequesting.observe(this@ForgotPasswordActivity, Observer<Boolean> {
+            it?.let { forgot_password_submit_btn.displayLoader(it) }
         })
-        forgot_password_submit_btn.isEnabled = !mModel.blockUi.value!!
 
         //Observe error messages
         mModel.errorMessage.observe(this@ForgotPasswordActivity, Observer {
@@ -69,20 +67,14 @@ class ForgotPasswordActivity : BaseActivity() {
         })
 
         //Set email error
-        mModel.mEmailError.observe(this@ForgotPasswordActivity, Observer {
+        mModel.emailError.observe(this@ForgotPasswordActivity, Observer {
             forgot_password_email_et.error = it!!.getMessage(this@ForgotPasswordActivity)
         })
 
         //Observer the api responses.
-        mModel.mUiModel.observe(this@ForgotPasswordActivity, Observer<ForgotPasswordUiModel> {
-
-            //Log analytics
-            val bundle = Bundle()
-            bundle.putString(AnalyticsEvents.KEY_EMAIL, forgot_password_email_et.getTrimmedText())
-            logEvent(AnalyticsEvents.EVENT_FORGOT_PASSWORD, bundle)
-
+        mModel.isForgotRequestSuccessful.observe(this@ForgotPasswordActivity, Observer<Boolean> {
             it?.let {
-                if (it.isSuccess) {
+                if (it) {
                     showSnack(getString(R.string.forgot_password_successful),
                             getString(R.string.btn_title_open_mail), View.OnClickListener { SUUtils.openEmailDialog(this@ForgotPasswordActivity) })
 
@@ -96,6 +88,11 @@ class ForgotPasswordActivity : BaseActivity() {
 
     @OnClick(R.id.forgot_password_submit_btn)
     fun submit() {
+        //Log analytics
+        val bundle = Bundle()
+        bundle.putString(AnalyticsEvents.KEY_EMAIL, forgot_password_email_et.getTrimmedText())
+        logEvent(AnalyticsEvents.EVENT_FORGOT_PASSWORD, bundle)
+
         ViewUtils.hideKeyboard(forgot_password_email_et)
         mModel.forgotPasswordRequest(forgot_password_email_et.getTrimmedText())
     }

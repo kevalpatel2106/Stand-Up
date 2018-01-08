@@ -23,6 +23,8 @@ import android.os.Build
 import android.support.v7.widget.AppCompatButton
 import android.util.AttributeSet
 import android.view.MotionEvent
+import com.kevalpatel2106.progressButton.customViews.ProgressButton
+import com.kevalpatel2106.utils.ViewUtils
 
 
 /**
@@ -32,7 +34,8 @@ import android.view.MotionEvent
 
  * @author 'https://github.com/kevalpatel2106'
  */
-class BaseButton : AppCompatButton {
+class BaseButton : ProgressButton {
+
     constructor(context: Context) : super(context) {
         init(context)
     }
@@ -49,6 +52,8 @@ class BaseButton : AppCompatButton {
     private fun init(@Suppress("UNUSED_PARAMETER") context: Context) {
         //set type face
         //setTypeface(ResourcesCompat.getFont(context, R.font.open_sans));
+
+        setPaddingProgress(ViewUtils.toPx(context, 8).toFloat())
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -66,5 +71,14 @@ class BaseButton : AppCompatButton {
             }
         }
         return super.onTouchEvent(event)
+    }
+
+    fun displayLoader(display: Boolean) {
+        isEnabled = !display
+        if (display) {
+            startAnimation()
+        } else {
+            revertAnimation()
+        }
     }
 }

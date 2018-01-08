@@ -76,7 +76,7 @@ class NotificationSchedulerHelperTest {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(context.getSharedPreferences(anyString(), anyInt())).thenReturn(sharedPref)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
-        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-token")
+        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
         SharedPrefsProvider.init(context)
 
         Assert.assertTrue(NotificationSchedulerHelper.shouldDisplayNotification())

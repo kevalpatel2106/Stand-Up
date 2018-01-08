@@ -63,8 +63,7 @@ class DeepLinkActivity : BaseActivity() {
                 //This link is from our servers only
                 when (uri.pathSegments[0]) {
                     "verifyEmailLink" -> {  //Verify the email link
-                        val isOpened = EmailLinkVerificationActivity.launch(context = this@DeepLinkActivity, url = uri)
-                        if (!isOpened) openLink(uri.toString())
+                        EmailLinkVerificationActivity.launch(context = this@DeepLinkActivity, url = uri)
                     }
                     "forgotPasswordLink" -> { //The password reset link
                         openLink(uri.toString())

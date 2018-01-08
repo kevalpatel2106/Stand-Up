@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.design.widget.Snackbar
 import android.view.View
+import android.view.WindowManager
 import butterknife.OnClick
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.base.uiController.BaseActivity
@@ -35,7 +36,9 @@ import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.utils.getColorCompat
 import kotlinx.android.synthetic.main.activity_verify_email.*
+
 
 @UIController
 class VerifyEmailActivity : BaseActivity() {
@@ -53,10 +56,17 @@ class VerifyEmailActivity : BaseActivity() {
     }
 
     @VisibleForTesting
-    internal lateinit var mModel: VerifyEmailViewModel
+    internal lateinit var model: VerifyEmailViewModel
+
+    private var resendingSnackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Make the status bar gray
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = getColorCompat(R.color.colorWindowBackgroundDark)
+
         setContentView(R.layout.activity_verify_email)
         setViewModel()
 
@@ -65,16 +75,16 @@ class VerifyEmailActivity : BaseActivity() {
     }
 
     private fun setViewModel() {
-        mModel = ViewModelProviders.of(this).get(VerifyEmailViewModel::class.java)
+        model = ViewModelProviders.of(this).get(VerifyEmailViewModel::class.java)
 
-        mModel.blockUi.observe(this@VerifyEmailActivity, Observer<Boolean> {
+        model.blockUi.observe(this@VerifyEmailActivity, Observer<Boolean> {
             verify_btn_skip.isEnabled = !it!!
             verify_btn_resend.isEnabled = !it
             verify_btn_open_mail_btn.isEnabled = !it
         })
 
         //Observe error messages
-        mModel.errorMessage.observe(this@VerifyEmailActivity, Observer {
+        model.errorMessage.observe(this@VerifyEmailActivity, Observer {
             it!!.getMessage(this@VerifyEmailActivity)?.let {
                 showSnack(message = it, actionName = R.string.error_retry_try_again,
                         duration = Snackbar.LENGTH_LONG,
@@ -82,26 +92,34 @@ class VerifyEmailActivity : BaseActivity() {
             }
         })
 
-        mModel.mUiModel.observe(this@VerifyEmailActivity, Observer<VerifyEmailUiModel> {
-            logEvent(AnalyticsEvents.EVENT_RESEND_VERIFICATION_MAIL)
 
+        model.resendInProgress.observe(this@VerifyEmailActivity, Observer {
             it?.let {
-                if (it.isSuccess) {
-                    showSnack(message = getString(R.string.message_verification_email_sent), duration = Snackbar.LENGTH_LONG)
+                if (it) {
+                    resendingSnackbar = showSnack(message = R.string.message_resending_verification_email,
+                            duration = Snackbar.LENGTH_INDEFINITE)
+                } else {
+                    resendingSnackbar?.dismiss()
                 }
             }
+        })
+
+        model.resendSuccessful.observe(this@VerifyEmailActivity, Observer {
+            it?.let { if (it) showSnack(R.string.message_verification_email_sent) }
         })
     }
 
     @OnClick(R.id.verify_btn_skip)
     fun onSkip() {
         MainActivity.launch(this@VerifyEmailActivity)
+        finish()
     }
 
 
     @OnClick(R.id.verify_btn_resend)
     fun onResendEmail() {
-        mModel.resendEmail(UserSessionManager.userId)
+        logEvent(AnalyticsEvents.EVENT_RESEND_VERIFICATION_MAIL)
+        model.resendEmail(UserSessionManager.userId)
     }
 
     @OnClick(R.id.verify_btn_open_mail_btn)

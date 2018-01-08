@@ -115,6 +115,7 @@
     <string name="issue_success_alert_message">Your issue id: %d</string>
     <string name="report_issue_reporting_message">Reporting issue</string>
     <string name="dashboard_today_summary_not_fount">No activity found today.</string>
+    <string name="message_resending_verification_email">Resending the verification email...</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

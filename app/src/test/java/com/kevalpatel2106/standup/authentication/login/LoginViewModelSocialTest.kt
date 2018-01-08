@@ -75,6 +75,17 @@ class LoginViewModelSocialTest {
         mockServerManager.close()
     }
 
+
+    @Test
+    @Throws(IOException::class)
+    fun checkInitialization() {
+        Assert.assertFalse(loginViewModel.blockUi.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
+    }
+
+
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateGoogleUserWithoutEmail() {
@@ -84,6 +95,9 @@ class LoginViewModelSocialTest {
         loginViewModel.authenticateSocialUser(googleAuthUser)
 
         //There should be success.
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertEquals(loginViewModel.errorMessage.value!!.errorRes, R.string.error_google_login_email_not_found)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
     }
@@ -95,6 +109,9 @@ class LoginViewModelSocialTest {
         loginViewModel.authenticateSocialUser(fbUser)
 
         //There should be success.
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertEquals(loginViewModel.errorMessage.value!!.errorRes, R.string.error_fb_login_email_not_found)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
     }
@@ -109,6 +126,9 @@ class LoginViewModelSocialTest {
         loginViewModel.authenticateSocialUser(signInRequest)
 
         //There should be success.
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isSuccess)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isVerify)
@@ -125,7 +145,10 @@ class LoginViewModelSocialTest {
         loginViewModel.authenticateSocialUser(signInRequest)
 
         //There should be success.
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isSuccess)
         Assert.assertTrue(loginViewModel.mLoginUiModel.value!!.isVerify)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isNewUser)
@@ -140,6 +163,9 @@ class LoginViewModelSocialTest {
         loginViewModel.authenticateSocialUser(SignUpRequest("test@example.com", "Test User", null, null))
 
         //There should be success.
+        Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
+        Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertFalse(loginViewModel.mLoginUiModel.value!!.isSuccess)
         Assert.assertEquals(loginViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")

@@ -79,36 +79,15 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
     private lateinit var mFacebookSignInHelper: FacebookHelper
 
     @VisibleForTesting
-    internal lateinit var mModel: IntroViewModel
+    internal lateinit var model: IntroViewModel
 
     @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
 
-        mModel = ViewModelProviders.of(this).get(IntroViewModel::class.java)
-
-        //Observer the api call changes
-        mModel.blockUi.observe(this@IntroActivity, Observer<Boolean> {
-            manageButtons(!it!!)
-        })
-        manageButtons(!mModel.blockUi.value!!)
-
-        //Observe error messages
-        mModel.errorMessage.observe(this@IntroActivity, Observer {
-            it!!.getMessage(this@IntroActivity)?.let { showSnack(it) }
-        })
-
-        //Observer the api responses.
-        mModel.mIntroUiModel.observe(this@IntroActivity, Observer<IntroUiModel> {
-            it?.let {
-                if (it.isSuccess) {
-                    //Start syncing the token
-                    DeviceRegisterActivity.launch(this, it.isNewUser, true)
-                    finish()
-                }
-            }
-        })
+        //Set view model
+        setViewModel()
 
         intro_view_pager.adapter = IntroPagerAdapter(supportFragmentManager)
 
@@ -120,12 +99,45 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 getString(R.string.fb_login_field_string))
     }
 
+    @SuppressLint("VisibleForTests")
+    private fun setViewModel() {
+        model = ViewModelProviders.of(this).get(IntroViewModel::class.java)
+
+        //Observer the api call changes
+        model.blockUi.observe(this@IntroActivity, Observer<Boolean> {
+            it?.let { manageButtons(!it) }
+        })
+
+        model.isGoogleLoginProgress.observe(this@IntroActivity, Observer<Boolean> {
+            it?.let { btn_login_google_signin.displayLoader(it) }
+        })
+
+        model.isFacebookLoginProgress.observe(this@IntroActivity, Observer<Boolean> {
+            it?.let { btn_login_fb_signin?.displayLoader(it) }
+        })
+
+        //Observe error messages
+        model.errorMessage.observe(this@IntroActivity, Observer {
+            it?.let { it.getMessage(this@IntroActivity)?.let { showSnack(it) } }
+        })
+
+        //Observer the api responses.
+        model.introUiModel.observe(this@IntroActivity, Observer<IntroUiModel> {
+            it?.let {
+                if (it.isSuccess) {
+                    //Start syncing the token
+                    DeviceRegisterActivity.launch(this, it.isNewUser, true)
+                    finish()
+                }
+            }
+        })
+    }
+
     /**
      * Enable/Disable all the buttons.
      */
     @Suppress("PLUGIN_WARNING")
-    @VisibleForTesting
-    fun manageButtons(enableAllViews: Boolean) {
+    private fun manageButtons(enableAllViews: Boolean) {
         btn_login_fb_signin?.let { it.isEnabled = enableAllViews }
         btn_create_account.isEnabled = enableAllViews
         btn_login_google_signin.isEnabled = enableAllViews
@@ -204,7 +216,7 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onGoogleAuthSignIn(user: GoogleAuthUser) = mModel.authenticateSocialUser(user)
+    override fun onGoogleAuthSignIn(user: GoogleAuthUser) = model.authenticateSocialUser(user)
 
     override fun onGoogleAuthSignInFailed() {
         showSnack(getString(R.string.error_google_signin_fail),
@@ -228,7 +240,7 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      *
      * @param facebookUser [FacebookUser].
      */
-    override fun onFbProfileReceived(facebookUser: FacebookUser) = mModel.authenticateSocialUser(facebookUser)
+    override fun onFbProfileReceived(facebookUser: FacebookUser) = model.authenticateSocialUser(facebookUser)
 
     /**
      * This callback will be available whenever facebook sign out call completes. No matter success of

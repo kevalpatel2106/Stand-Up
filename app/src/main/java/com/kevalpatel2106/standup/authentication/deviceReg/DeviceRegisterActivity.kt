@@ -63,17 +63,16 @@ class DeviceRegisterActivity : AppCompatActivity() {
     }
 
     @VisibleForTesting
-    internal lateinit var mModel: DeviceRegViewModel
+    internal lateinit var model: DeviceRegViewModel
 
     @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mModel = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
+        model = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
 
         setContentView(R.layout.activity_device_register)
 
-
-        mModel.token.observe(this@DeviceRegisterActivity, Observer {
+        model.reposeToken.observe(this@DeviceRegisterActivity, Observer {
             it?.let {
 
                 //Log the analytics event
@@ -83,7 +82,7 @@ class DeviceRegisterActivity : AppCompatActivity() {
             }
         })
 
-        mModel.errorMessage.observe(this@DeviceRegisterActivity, Observer {
+        model.errorMessage.observe(this@DeviceRegisterActivity, Observer {
             it!!.getMessage(this@DeviceRegisterActivity)?.let { showSnack(it) }
         })
 
@@ -91,7 +90,7 @@ class DeviceRegisterActivity : AppCompatActivity() {
             (device_reg_iv.drawable as Animatable).start()
         }
 
-        mModel.register(Utils.getDeviceId(this@DeviceRegisterActivity), FirebaseInstanceId.getInstance().token)
+        model.register(Utils.getDeviceId(this@DeviceRegisterActivity), FirebaseInstanceId.getInstance().token)
     }
 
     @VisibleForTesting

@@ -71,7 +71,7 @@ internal class EmailLinkVerifyViewModel : BaseViewModel {
                 .subscribe({
                     emailVerified.dispatch()
                 }, {
-                    val errorMsg = ErrorMessage(R.string.verify_email_link_fail)
+                    val errorMsg = ErrorMessage(it.message)
                     errorMsg.errorImage = R.drawable.ic_warning
                     this.errorMessage.value = errorMsg
                 }))

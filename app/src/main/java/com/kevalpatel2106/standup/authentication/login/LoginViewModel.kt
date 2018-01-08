@@ -44,33 +44,13 @@ import io.reactivex.schedulers.Schedulers
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(LoginActivity::class)
-internal class LoginViewModel : BaseViewModel {
-
-    /**
-     * Repository to provide user authentications.
-     */
-    @VisibleForTesting
-    var mUserAuthRepo: UserAuthRepository
-
-    /**
-     * Private constructor to add the custom [UserAuthRepository] for testing.
-     *
-     * @param userAuthRepo Add your own [UserAuthRepository].
-     */
-    @Suppress("unused")
-    @VisibleForTesting
-    constructor(userAuthRepo: UserAuthRepository) : super() {
-        mUserAuthRepo = userAuthRepo
-    }
+internal class LoginViewModel @VisibleForTesting constructor(private val userAuthRepo: UserAuthRepository) : BaseViewModel() {
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        mUserAuthRepo = UserAuthRepositoryImpl()
-    }
+    constructor() : this(UserAuthRepositoryImpl())
 
     /**
      * [LoginUiModel] to hold the response form the user authentication. UI element can
@@ -83,6 +63,18 @@ internal class LoginViewModel : BaseViewModel {
     internal val mPasswordError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
 
     internal val mNameError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
+
+    internal val isGoogleLoginProgress = MutableLiveData<Boolean>()
+
+    internal val isFacebookLoginProgress = MutableLiveData<Boolean>()
+
+    internal val isEmailLoginProgress = MutableLiveData<Boolean>()
+
+    init {
+        isEmailLoginProgress.value = false
+        isFacebookLoginProgress.value = false
+        isGoogleLoginProgress.value = false
+    }
 
     /**
      * Authenticate new user while sign up.
@@ -104,13 +96,15 @@ internal class LoginViewModel : BaseViewModel {
                     //Validate confirm password.
                     if (password == confirmPassword) {
 
-                        mUserAuthRepo.signUp(SignUpRequest(email, name, password, null))
+                        userAuthRepo.signUp(SignUpRequest(email, name, password, null))
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .doOnSubscribe({
+                                    isEmailLoginProgress.value = true
                                     blockUi.postValue(true)
                                 })
                                 .doAfterTerminate({
+                                    isEmailLoginProgress.value = false
                                     blockUi.value = false
                                 })
                                 .subscribe({
@@ -157,13 +151,15 @@ internal class LoginViewModel : BaseViewModel {
             //validate password
             if (Validator.isValidPassword(password)) {
 
-                mUserAuthRepo.login(LoginRequest(email, password))
+                userAuthRepo.login(LoginRequest(email, password))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe({
+                            isEmailLoginProgress.value = true
                             blockUi.postValue(true)
                         })
                         .doAfterTerminate({
+                            isEmailLoginProgress.value = false
                             blockUi.value = false
                         })
                         .subscribe({
@@ -199,6 +195,9 @@ internal class LoginViewModel : BaseViewModel {
         if (fbUser.email.isNullOrEmpty() || fbUser.name.isNullOrEmpty()) {
             errorMessage.value = ErrorMessage(R.string.error_fb_login_email_not_found)
         } else {
+            blockUi.value = true
+            isFacebookLoginProgress.value = true
+
             authenticateSocialUser(SignUpRequest(fbUser = fbUser))
         }
     }
@@ -211,6 +210,9 @@ internal class LoginViewModel : BaseViewModel {
         if (googleUser.email.isEmpty() || googleUser.name.isEmpty()) {
             errorMessage.value = ErrorMessage(R.string.error_google_login_email_not_found)
         } else {
+            isGoogleLoginProgress.value = true
+            blockUi.value = true
+
             authenticateSocialUser(SignUpRequest(googleUser = googleUser))
         }
     }
@@ -222,14 +224,16 @@ internal class LoginViewModel : BaseViewModel {
      */
     @VisibleForTesting
     fun authenticateSocialUser(requestData: SignUpRequest) {
-        mUserAuthRepo.socialSignUp(requestData)
+        userAuthRepo.socialSignUp(requestData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
-                    blockUi.postValue(true)
+                    blockUi.value = true
                 })
                 .doAfterTerminate({
                     blockUi.value = false
+                    isGoogleLoginProgress.value = false
+                    isFacebookLoginProgress.value = false
                 })
                 .subscribe({
                     //Save into the user session

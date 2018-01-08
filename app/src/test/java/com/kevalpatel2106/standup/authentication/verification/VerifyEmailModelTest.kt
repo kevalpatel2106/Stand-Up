@@ -28,7 +28,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
-
 import java.nio.file.Paths
 
 /**
@@ -75,10 +74,11 @@ class VerifyEmailModelTest {
     @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
+        Assert.assertNull(verifyEmailViewModel.resendInProgress.value)
 
         //Normal init
         val model = VerifyEmailViewModel()
-        Assert.assertTrue(model.mUserAuthRepo is UserAuthRepositoryImpl)
+        Assert.assertTrue(model.userAuthRepo is UserAuthRepositoryImpl)
     }
 
     @Test
@@ -86,13 +86,15 @@ class VerifyEmailModelTest {
     fun checkResendVerificationEmailSuccess() {
         mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/resend_verification_email_success.json"))
 
+        Assert.assertNull(verifyEmailViewModel.resendInProgress.value)
+        Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
+
         //Make the api call to the mock server
         verifyEmailViewModel.resendEmail(123)
 
         //There should be success.
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
-        Assert.assertTrue(verifyEmailViewModel.mUiModel.value!!.isSuccess)
-        Assert.assertNull(verifyEmailViewModel.errorMessage.value)
+        Assert.assertFalse(verifyEmailViewModel.resendInProgress.value!!)
     }
 
     @Test
@@ -100,12 +102,15 @@ class VerifyEmailModelTest {
     fun checkResendVerificationEmailFieldMissing() {
         mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
 
+        Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
+        Assert.assertNull(verifyEmailViewModel.resendInProgress.value)
+
         //Make the api call to the mock server
         verifyEmailViewModel.resendEmail(123)
 
         //There should be success.
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
-        Assert.assertFalse(verifyEmailViewModel.mUiModel.value!!.isSuccess)
+        Assert.assertFalse(verifyEmailViewModel.resendInProgress.value!!)
         Assert.assertEquals(verifyEmailViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 }

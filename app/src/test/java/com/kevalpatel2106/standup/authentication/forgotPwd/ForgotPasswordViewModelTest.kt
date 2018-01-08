@@ -70,6 +70,8 @@ class ForgotPasswordViewModelTest {
     @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
+        Assert.assertFalse(forgotPasswordViewModel.isRequesting.value!!)
+        Assert.assertFalse(forgotPasswordViewModel.isForgotRequestSuccessful.value!!)
     }
 
     @Test
@@ -78,7 +80,7 @@ class ForgotPasswordViewModelTest {
         forgotPasswordViewModel.forgotPasswordRequest("test@example")
 
         Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
-        Assert.assertEquals(forgotPasswordViewModel.mEmailError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
+        Assert.assertEquals(forgotPasswordViewModel.emailError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
     }
 
     @Test
@@ -91,7 +93,8 @@ class ForgotPasswordViewModelTest {
 
         //There should be success.
         Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
-        Assert.assertTrue(forgotPasswordViewModel.mUiModel.value!!.isSuccess)
+        Assert.assertFalse(forgotPasswordViewModel.isRequesting.value!!)
+        Assert.assertTrue(forgotPasswordViewModel.isForgotRequestSuccessful.value!!)
         Assert.assertNull(forgotPasswordViewModel.errorMessage.value)
     }
 
@@ -105,7 +108,8 @@ class ForgotPasswordViewModelTest {
 
         //There should be success.
         Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
-        Assert.assertFalse(forgotPasswordViewModel.mUiModel.value!!.isSuccess)
+        Assert.assertFalse(forgotPasswordViewModel.isRequesting.value!!)
+        Assert.assertFalse(forgotPasswordViewModel.isForgotRequestSuccessful.value!!)
         Assert.assertEquals(forgotPasswordViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 }

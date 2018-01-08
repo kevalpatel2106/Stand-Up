@@ -41,38 +41,29 @@ import io.reactivex.schedulers.Schedulers
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(IntroActivity::class)
-internal class IntroViewModel : BaseViewModel {
-
-    /**
-     * Repository to provide user authentications.
-     */
-    private val mUserAuthRepo: UserAuthRepository
-
-    /**
-     * Private constructor to add the custom [UserAuthRepository] for testing.
-     *
-     * @param userAuthRepo Add your own [UserAuthRepository].
-     */
-    @Suppress("unused")
-    @VisibleForTesting
-    constructor(userAuthRepo: UserAuthRepository) : super() {
-        mUserAuthRepo = userAuthRepo
-    }
+internal class IntroViewModel @VisibleForTesting constructor(private val userAuthRepo: UserAuthRepository)
+    : BaseViewModel() {
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        mUserAuthRepo = UserAuthRepositoryImpl()
-    }
+    constructor() : this(UserAuthRepositoryImpl())
 
     /**
      * [IntroUiModel] to hold the response form the user authentication. UI element can
      * observe this [MutableLiveData] to change the state when user authentication succeed or fails.
      */
-    internal val mIntroUiModel: MutableLiveData<IntroUiModel> = MutableLiveData()
+    internal val introUiModel: MutableLiveData<IntroUiModel> = MutableLiveData()
+
+    internal val isGoogleLoginProgress = MutableLiveData<Boolean>()
+
+    internal val isFacebookLoginProgress = MutableLiveData<Boolean>()
+
+    init {
+        isFacebookLoginProgress.value = false
+        isGoogleLoginProgress.value = false
+    }
 
     /**
      * Start the authentication flow for the user signed in using facebook.
@@ -80,8 +71,13 @@ internal class IntroViewModel : BaseViewModel {
     @SuppressLint("VisibleForTests")
     fun authenticateSocialUser(fbUser: FacebookUser) {
         if (fbUser.email.isNullOrEmpty() || fbUser.name.isNullOrEmpty()) {
+
             errorMessage.value = ErrorMessage(R.string.error_fb_login_email_not_found)
+            isFacebookLoginProgress.value = false
         } else {
+            blockUi.value = true
+            isFacebookLoginProgress.value = true
+
             authenticateSocialUser(SignUpRequest(fbUser = fbUser))
         }
     }
@@ -92,8 +88,12 @@ internal class IntroViewModel : BaseViewModel {
     @SuppressLint("VisibleForTests")
     fun authenticateSocialUser(googleUser: GoogleAuthUser) {
         if (googleUser.email.isEmpty() || googleUser.name.isEmpty()) {
+
             errorMessage.value = ErrorMessage(R.string.error_google_login_email_not_found)
         } else {
+            isGoogleLoginProgress.value = true
+            blockUi.value = true
+
             authenticateSocialUser(SignUpRequest(googleUser = googleUser))
         }
     }
@@ -103,14 +103,16 @@ internal class IntroViewModel : BaseViewModel {
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun authenticateSocialUser(requestData: SignUpRequest) {
-        addDisposable(mUserAuthRepo.socialSignUp(requestData)
+        addDisposable(userAuthRepo.socialSignUp(requestData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
-                    blockUi.postValue(true)
+                    blockUi.value = true
                 })
                 .doAfterTerminate({
                     blockUi.value = false
+                    isGoogleLoginProgress.value = false
+                    isFacebookLoginProgress.value = false
                 })
                 .subscribe({ data ->
                     //Save into the user session
@@ -121,12 +123,12 @@ internal class IntroViewModel : BaseViewModel {
                             photoUrl = data.photoUrl,
                             isVerified = data.isVerified)
 
-                    val introUiModel = IntroUiModel(true)
-                    introUiModel.isNewUser = data.isNewUser
-                    mIntroUiModel.value = introUiModel
+                    val model = IntroUiModel(true)
+                    model.isNewUser = data.isNewUser
+                    introUiModel.value = model
                 }, { t ->
                     //Update the activity
-                    mIntroUiModel.value = IntroUiModel(false)
+                    introUiModel.value = IntroUiModel(false)
                     errorMessage.value = ErrorMessage(t.message)
                 }))
     }
