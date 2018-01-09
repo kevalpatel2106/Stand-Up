@@ -78,7 +78,7 @@ class EmailLinkVerifyViewModelTest {
 
         //Normal init
         val model = EmailLinkVerifyViewModel()
-        Assert.assertTrue(model.mUserAuthRepo is UserAuthRepositoryImpl)
+        Assert.assertTrue(model.userAuthRepo is UserAuthRepositoryImpl)
     }
 
     @Test

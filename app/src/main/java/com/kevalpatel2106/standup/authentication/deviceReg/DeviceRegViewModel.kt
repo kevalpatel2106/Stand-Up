@@ -22,30 +22,45 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.BaseSUApplication
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.misc.Validator
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Keval on 07/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class DeviceRegViewModel @VisibleForTesting constructor(private val userAuthRepo: UserAuthRepository)
-    : BaseViewModel() {
+class DeviceRegViewModel : BaseViewModel {
 
-    /**
-     * Zero parameter constructor.
-     */
-    @Suppress("unused")
-    constructor() : this(UserAuthRepositoryImpl())
+    @Inject lateinit var userAuthRepo: UserAuthRepository
+    @Inject lateinit var sharedPrefsProvider: SharedPrefsProvider
+    @Inject lateinit var userSessionManager: UserSessionManager
+
+    constructor() {
+        DaggerUserAuthComponent.builder()
+                .appComponent(BaseSUApplication.getApplicationComponent())
+                .build()
+                .inject(this@DeviceRegViewModel)
+    }
+
+    @VisibleForTesting
+    constructor(userAuthRepo: UserAuthRepository,
+                sharedPrefsProvider: SharedPrefsProvider,
+                userSessionManager: UserSessionManager) {
+        this.userAuthRepo = userAuthRepo
+        this.sharedPrefsProvider = sharedPrefsProvider
+        this.userSessionManager = userSessionManager
+    }
+
 
     internal val reposeToken = MutableLiveData<String>()
 
@@ -54,14 +69,14 @@ internal class DeviceRegViewModel @VisibleForTesting constructor(private val use
 
         //Validate device id.
         if (!Validator.isValidDeviceId(deviceId)) {
-            SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+            sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
             errorMessage.value = ErrorMessage(R.string.device_reg_error_invalid_device_id)
             return
         }
 
         //Validate the FCM Id.
         if (!Validator.isValidFcmId(fcmId)) {
-            SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+            sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
             errorMessage.value = ErrorMessage(R.string.device_reg_error_invalid_fcm_id)
             return
         }
@@ -95,13 +110,13 @@ internal class DeviceRegViewModel @VisibleForTesting constructor(private val use
                 })
                 .subscribe({ data ->
                     data?.let {
-                        SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
-                        UserSessionManager.token = data.token
+                        sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
+                        userSessionManager.token = data.token
                         reposeToken.value = data.token
                     }
 
                 }, {
-                    SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+                    sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
                     errorMessage.value = ErrorMessage(it.message)
                 }))
     }

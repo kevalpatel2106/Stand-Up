@@ -21,6 +21,10 @@ import android.app.Application
 import com.facebook.FacebookSdk
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.kevalpatel2106.standup.misc.di.AppComponent
+import com.kevalpatel2106.standup.misc.di.AppModule
+import com.kevalpatel2106.standup.misc.di.DaggerAppComponent
+import com.kevalpatel2106.standup.misc.di.NetworkModule
 
 /**
  * Created by Keval on 31/12/17.
@@ -29,8 +33,23 @@ import com.google.firebase.analytics.FirebaseAnalytics
  */
 abstract class BaseSUApplication : Application() {
 
+
+    companion object {
+        private lateinit var appComponent: AppComponent
+
+        @JvmStatic
+        fun getApplicationComponent(): AppComponent {
+            return appComponent
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
+
+        appComponent = DaggerAppComponent.builder()
+                .appModule(AppModule(this))
+                .networkModule(NetworkModule(BuildConfig.BASE_URL))
+                .build()
 
         //Initialize firebase.
         FirebaseApp.initializeApp(this@BaseSUApplication)

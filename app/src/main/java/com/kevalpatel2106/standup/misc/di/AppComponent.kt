@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.di
+package com.kevalpatel2106.standup.misc.di
 
 import android.app.Application
 import dagger.Component
@@ -25,7 +25,7 @@ import dagger.Component
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Component(modules = [AppModule::class])
+@Component(modules = [AppModule::class, NetworkModule::class])
 interface AppComponent {
 
     fun inject(application: Application)

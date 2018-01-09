@@ -38,6 +38,12 @@ class ApiProvider(context: Context? = null,
                   private val userSessionManager: UserSessionManager? = null) {
 
     /**
+     * Constructor with zero params. This will ignore all user authentication and won't broadcast for
+     * unauthorized access.
+     */
+    constructor() : this(null, null)
+
+    /**
      * OkHttp instance. New instances will be shallow copy of this instance.
      *
      * @see .getOkHttpClientBuilder

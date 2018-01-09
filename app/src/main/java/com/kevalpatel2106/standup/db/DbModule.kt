@@ -15,28 +15,19 @@
  *
  */
 
-package com.kevalpatel2106.standup.di
+package com.kevalpatel2106.standup.db
 
-import android.app.Application
-import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.standup.db.StandUpDb
-import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 /**
- * Created by Kevalpatel2106 on 08-Jan-18.
+ * Created by Kevalpatel2106 on 09-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Module
-class AppModule(private val appContext: Application) {
-
-    @Provides
-    @Singleton
-    fun provideAppContext() = appContext
+class DbModule {
 
     @Provides
     @Singleton
@@ -44,15 +35,5 @@ class AppModule(private val appContext: Application) {
 
     @Provides
     @Singleton
-    fun provideSharedPrefProvider() = SharedPrefsProvider(appContext)
-
-    @Provides
-    @Singleton
-    fun provideUserSession() = UserSessionManager(provideSharedPrefProvider())
-
-    @Provides
-    @Singleton
-    fun provideApiProvider() = ApiProvider(appContext, provideUserSession())
-
-
+    fun provideUserActivityDao(db: StandUpDb) = db.userActivityDao()
 }

@@ -15,29 +15,19 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.repo
+package com.kevalpatel2106.standup.misc.di;
 
-import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.utils.Utils
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.inject.Scope;
 
 /**
- * Created by Keval on 29/12/17.
+ * Created by Kevalpatel2106 on 09-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class ReportIssueRequest(
-        @SerializedName("uid")
-        val userId: Long,
-
-        @SerializedName("title")
-        val title: String,
-
-        @SerializedName("message")
-        val message: String,
-
-        @SerializedName("deviceId")
-        val deviceId: String
-) {
-    @SerializedName("deviceName")
-    val deviceName: String = Utils.getDeviceName()
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AppScope {
 }

@@ -15,29 +15,24 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.repo
+package com.kevalpatel2106.standup.about.di
 
-import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.utils.Utils
+import com.kevalpatel2106.standup.about.AboutViewModel
+import com.kevalpatel2106.standup.about.report.ReportIssueViewModel
+import com.kevalpatel2106.standup.misc.di.AppComponent
+import com.kevalpatel2106.standup.misc.di.AppScope
+import dagger.Component
 
 /**
- * Created by Keval on 29/12/17.
+ * Created by Kevalpatel2106 on 09-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class ReportIssueRequest(
-        @SerializedName("uid")
-        val userId: Long,
+@AppScope
+@Component(dependencies = [AppComponent::class], modules = [AboutModule::class])
+interface AboutComponent {
 
-        @SerializedName("title")
-        val title: String,
+    fun inject(aboutViewModel: AboutViewModel)
 
-        @SerializedName("message")
-        val message: String,
-
-        @SerializedName("deviceId")
-        val deviceId: String
-) {
-    @SerializedName("deviceName")
-    val deviceName: String = Utils.getDeviceName()
+    fun inject(reportIssueViewModel: ReportIssueViewModel)
 }

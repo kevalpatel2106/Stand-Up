@@ -28,7 +28,7 @@ import com.kevalpatel2106.standup.R
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(SupportDevelopmentActivity::class)
-internal class SupportDevelopmentViewModel {
+class SupportDevelopmentViewModel {
 
     @SuppressLint("SwitchIntDef")
     @StringRes

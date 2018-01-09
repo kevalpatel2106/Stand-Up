@@ -19,9 +19,10 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.kevalpatel2106.base.annotations.Repository
 import com.kevalpatel2106.base.repository.RepoBuilder
-import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.network.RetrofitNetworkRefresher
 import io.reactivex.Flowable
+import retrofit2.Retrofit
+import javax.inject.Named
 
 /**
  * Created by Kevalpatel2106 on 20-Nov-17.
@@ -30,14 +31,10 @@ import io.reactivex.Flowable
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRepository {
-
-    constructor() : this(UserApiService.baseUrl())
+class UserAuthRepositoryImpl(@Named("WITH_TOKEN") private val retrofit: Retrofit) : UserAuthRepository {
 
     override fun logout(logoutRequest: LogoutRequest): Flowable<LogoutResponse> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
-                .create(UserApiService::class.java)
-                .logout(logoutRequest)
+        val call = retrofit.create(UserApiService::class.java).logout(logoutRequest)
 
         return RepoBuilder<LogoutResponse>()
                 .addRefresher(RetrofitNetworkRefresher(call))
@@ -47,9 +44,7 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
     }
 
     override fun verifyEmailLink(url: String): Flowable<String> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
-                .create(UserApiService::class.java)
-                .verifyEmailLink(url)
+        val call = retrofit.create(UserApiService::class.java).verifyEmailLink(url)
 
         return RepoBuilder<String>()
                 .addRefresher(RetrofitNetworkRefresher(call))
@@ -59,9 +54,7 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
     }
 
     override fun forgotPassword(forgotPasswordRequest: ForgotPasswordRequest): Flowable<ForgotPasswordResponse> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
-                .create(UserApiService::class.java)
-                .forgotPassword(forgotPasswordRequest)
+        val call = retrofit.create(UserApiService::class.java).forgotPassword(forgotPasswordRequest)
 
         return RepoBuilder<ForgotPasswordResponse>()
                 .addRefresher(RetrofitNetworkRefresher(call))
@@ -71,9 +64,7 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
     }
 
     override fun resendVerifyEmail(request: ResendVerificationRequest): Flowable<ResendVerificationResponse> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
-                .create(UserApiService::class.java)
-                .resendVerifyEmail(request)
+        val call = retrofit.create(UserApiService::class.java).resendVerifyEmail(request)
 
         return RepoBuilder<ResendVerificationResponse>()
                 .addRefresher(RetrofitNetworkRefresher(call))
@@ -83,9 +74,7 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
     }
 
     override fun registerDevice(request: DeviceRegisterRequest): Flowable<DeviceRegisterResponse> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
-                .create(UserApiService::class.java)
-                .registerDevice(request)
+        val call = retrofit.create(UserApiService::class.java).registerDevice(request)
 
         return RepoBuilder<DeviceRegisterResponse>()
                 .addRefresher(RetrofitNetworkRefresher(call))
@@ -95,9 +84,7 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
     }
 
     override fun login(loginRequest: LoginRequest): Flowable<LoginResponse> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
-                .create(UserApiService::class.java)
-                .login(loginRequest)
+        val call = retrofit.create(UserApiService::class.java).login(loginRequest)
 
         return RepoBuilder<LoginResponse>()
                 .addRefresher(RetrofitNetworkRefresher(call))
@@ -107,9 +94,7 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
     }
 
     override fun signUp(signUpRequest: SignUpRequest): Flowable<SignUpResponse> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
-                .create(UserApiService::class.java)
-                .signUp(signUpRequest)
+        val call = retrofit.create(UserApiService::class.java).signUp(signUpRequest)
 
         return RepoBuilder<SignUpResponse>()
                 .addRefresher(RetrofitNetworkRefresher(call))
@@ -119,9 +104,7 @@ internal class UserAuthRepositoryImpl(private val baseUrl: String) : UserAuthRep
     }
 
     override fun socialSignUp(signUpRequest: SignUpRequest): Flowable<SignUpResponse> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
-                .create(UserApiService::class.java)
-                .socialSignUp(signUpRequest)
+        val call = retrofit.create(UserApiService::class.java).socialSignUp(signUpRequest)
 
         return RepoBuilder<SignUpResponse>()
                 .addRefresher(RetrofitNetworkRefresher(call))

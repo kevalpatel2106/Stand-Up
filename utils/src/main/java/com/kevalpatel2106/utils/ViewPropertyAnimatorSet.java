@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.misc;
+package com.kevalpatel2106.utils;
 
 import android.animation.Animator;
 import android.view.ViewPropertyAnimator;

@@ -15,29 +15,26 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.repo
+package com.kevalpatel2106.standup.authentication.di
 
-import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.utils.Utils
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
+import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.di.NetworkModule
+import dagger.Module
+import dagger.Provides
+import retrofit2.Retrofit
+import javax.inject.Named
 
 /**
- * Created by Keval on 29/12/17.
+ * Created by Kevalpatel2106 on 09-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class ReportIssueRequest(
-        @SerializedName("uid")
-        val userId: Long,
+@Module(includes = [NetworkModule::class])
+class UserAuthModule {
 
-        @SerializedName("title")
-        val title: String,
-
-        @SerializedName("message")
-        val message: String,
-
-        @SerializedName("deviceId")
-        val deviceId: String
-) {
-    @SerializedName("deviceName")
-    val deviceName: String = Utils.getDeviceName()
+    @Provides
+    @AppScope
+    fun provideUserAuthRepo(@Named("WITH_TOKEN") retrofit: Retrofit): UserAuthRepository = UserAuthRepositoryImpl(retrofit)
 }

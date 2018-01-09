@@ -30,6 +30,7 @@ import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
+import javax.inject.Inject
 
 /**
  * This is the launch activity for the application. It handles redirection logic for login, notifications
@@ -38,6 +39,9 @@ import com.kevalpatel2106.utils.UserSessionManager
  * @author <a href="https://github.com/kevalpatel2106">Keval</a>
  */
 class SplashActivity : BaseActivity() {
+
+    @Inject lateinit var userSessionManager: UserSessionManager
+    @Inject lateinit var sharedPrefProvider: SharedPrefsProvider
 
     companion object {
 
@@ -55,22 +59,22 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!UserSessionManager.isUserLoggedIn) {   //User is not logged in. Complete the authentication flow.
+        if (!userSessionManager.isUserLoggedIn) {   //User is not logged in. Complete the authentication flow.
             IntroActivity.launch(this@SplashActivity)
         } else {    //User is logged in.
 
             //If the device is not registered, register the device with the server.
-            if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED)) {
+            if (!sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED)) {
                 DeviceRegisterActivity.launch(this@SplashActivity,
                         false,
-                        UserSessionManager.isUserVerified)
+                        userSessionManager.isUserVerified)
             }
 
             //Continue with the app launch flow.
-            if (!UserSessionManager.isUserVerified) {   //If user is not verified, open verify screen.
+            if (!userSessionManager.isUserVerified) {   //If user is not verified, open verify screen.
 
                 VerifyEmailActivity.launch(this@SplashActivity)
-            } else if (UserSessionManager.displayName.isNullOrEmpty()) {   //User profile is not complete.
+            } else if (userSessionManager.displayName.isNullOrEmpty()) {   //User profile is not complete.
 
                 EditProfileActivity.launch(this@SplashActivity)
             } else {    //All looks good.
