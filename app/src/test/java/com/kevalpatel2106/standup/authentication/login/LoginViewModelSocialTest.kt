@@ -20,12 +20,15 @@ package com.kevalpatel2106.standup.authentication.login
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.UnitTestUtils
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
+import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
@@ -42,7 +45,10 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class LoginViewModelSocialTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", path)
 
     @Rule
     @JvmField
@@ -54,20 +60,17 @@ class LoginViewModelSocialTest {
     val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
 
     private lateinit var loginViewModel: LoginViewModel
+    private val userSessionManager = UserSessionManager(SharedPrefsProvider(MockSharedPreference()))
     private val mockServerManager = MockServerManager()
-
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setGlobal() = UnitTestUtils.initApp()
-    }
 
     @Before
     fun setUp() {
         //Set the repo
         mockServerManager.startMockWebServer()
-        loginViewModel = LoginViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
+        loginViewModel = LoginViewModel(
+                UserAuthRepositoryImpl(ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())),
+                userSessionManager
+        )
     }
 
     @After

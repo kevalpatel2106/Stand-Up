@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.diary.list
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
@@ -58,7 +59,10 @@ class DiaryViewModelTest {
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
-        diaryRepo = DiaryRepoImpl(userActivityDao, mockServerManager.getBaseUrl())
+        diaryRepo = DiaryRepoImpl(
+                ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl()),
+                userActivityDao
+        )
     }
 
     @Test

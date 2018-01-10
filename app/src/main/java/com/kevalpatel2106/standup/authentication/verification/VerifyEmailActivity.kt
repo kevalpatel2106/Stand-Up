@@ -46,18 +46,6 @@ import javax.inject.Inject
 @UIController
 class VerifyEmailActivity : BaseActivity() {
 
-    companion object {
-        /**
-         * Launch the [VerifyEmailActivity].
-         *
-         * @param context Instance of the caller.
-         */
-        fun launch(context: Context) {
-            val launchIntent = Intent(context, VerifyEmailActivity::class.java)
-            context.startActivity(launchIntent)
-        }
-    }
-
     @Inject lateinit var userSessionManager: UserSessionManager
 
     @VisibleForTesting
@@ -137,5 +125,18 @@ class VerifyEmailActivity : BaseActivity() {
     @OnClick(R.id.verify_btn_open_mail_btn)
     fun onOpenEmail() {
         SUUtils.openEmailDialog(this@VerifyEmailActivity)
+    }
+
+
+    companion object {
+        /**
+         * Launch the [VerifyEmailActivity].
+         *
+         * @param context Instance of the caller.
+         */
+        fun launch(context: Context) {
+            val launchIntent = Intent(context, VerifyEmailActivity::class.java)
+            context.startActivity(launchIntent)
+        }
     }
 }

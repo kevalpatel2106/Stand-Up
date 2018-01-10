@@ -52,11 +52,13 @@ class ForgotPasswordViewModel : BaseViewModel {
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@ForgotPasswordViewModel)
+        init()
     }
 
     @VisibleForTesting
     constructor(userAuthRepo: UserAuthRepository) {
         this.userAuthRepo = userAuthRepo
+        init()
     }
 
     internal val isRequesting = MutableLiveData<Boolean>()
@@ -65,7 +67,7 @@ class ForgotPasswordViewModel : BaseViewModel {
 
     internal val emailError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
 
-    init {
+    fun init() {
         isForgotRequestSuccessful.value = false
         isRequesting.value = false
     }

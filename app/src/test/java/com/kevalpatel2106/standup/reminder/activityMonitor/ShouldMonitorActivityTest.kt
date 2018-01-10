@@ -19,6 +19,7 @@ package com.kevalpatel2106.standup.reminder.activityMonitor
 
 import android.content.SharedPreferences
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,9 +42,10 @@ class ShouldMonitorActivityTest {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
-        SharedPrefsProvider.init(sharedPref)
 
-        Assert.assertFalse(ActivityMonitorHelper.shouldMonitoringActivity())
+        Assert.assertFalse(ActivityMonitorHelper.shouldMonitoringActivity(
+                UserSessionManager(SharedPrefsProvider(sharedPref)))
+        )
     }
 
     @Test
@@ -52,8 +54,9 @@ class ShouldMonitorActivityTest {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
-        SharedPrefsProvider.init(sharedPref)
 
-        Assert.assertTrue(ActivityMonitorHelper.shouldMonitoringActivity())
+        Assert.assertTrue(ActivityMonitorHelper.shouldMonitoringActivity(
+                UserSessionManager(SharedPrefsProvider(sharedPref)))
+        )
     }
 }

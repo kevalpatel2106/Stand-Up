@@ -17,10 +17,8 @@
 
 package com.kevalpatel2106.standup.fcm
 
-import com.kevalpatel2106.standup.UnitTestUtils
 import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.Assert.assertFalse
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -34,11 +32,6 @@ import java.io.IOException
  */
 @RunWith(JUnit4::class)
 class FcmMessagingServiceTest {
-
-    @Before
-    fun setUp() {
-        UnitTestUtils.initApp()
-    }
 
     @Test
     @Throws(IOException::class)

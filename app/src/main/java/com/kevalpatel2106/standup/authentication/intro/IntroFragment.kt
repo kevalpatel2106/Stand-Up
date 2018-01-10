@@ -66,7 +66,7 @@ class IntroFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? =
+                              savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_intro, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,7 +75,6 @@ class IntroFragment : BaseFragment() {
             intro_tv.setText(arguments!!.getInt(ARG_CAPTION))
             intro_iv.setImageResource(arguments!!.getInt(ARG_IMAGE))
         }
-
     }
 
 }

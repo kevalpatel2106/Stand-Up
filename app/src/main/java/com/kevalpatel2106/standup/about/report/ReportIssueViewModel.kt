@@ -38,10 +38,6 @@ import javax.inject.Inject
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 class ReportIssueViewModel : BaseViewModel {
-    internal val versionUpdateResult = MutableLiveData<CheckVersionResponse>()
-
-    internal val issueId = MutableLiveData<Long>()
-
     /**
      * Repository to provide user authentications.
      */
@@ -69,6 +65,15 @@ class ReportIssueViewModel : BaseViewModel {
                 .inject(this@ReportIssueViewModel)
     }
 
+    internal val versionUpdateResult = MutableLiveData<CheckVersionResponse>()
+
+    internal val issueId = MutableLiveData<Long>()
+
+    /**
+     * Check for the new version update to the server. If the new update is available
+     * [versionUpdateResult] will return new version info. [errorMessage] will contain the error
+     * detail if any error occurs.
+     */
     fun checkForUpdate() {
         addDisposable(aboutRepository.getLatestVersion()
                 .observeOn(AndroidSchedulers.mainThread())

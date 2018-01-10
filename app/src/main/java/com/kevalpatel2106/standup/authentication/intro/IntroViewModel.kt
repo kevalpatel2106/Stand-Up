@@ -46,6 +46,7 @@ import javax.inject.Inject
 class IntroViewModel : BaseViewModel {
 
     @Inject lateinit var userAuthRepo: UserAuthRepository
+
     @Inject lateinit var userSessionManager: UserSessionManager
 
     /**
@@ -57,12 +58,17 @@ class IntroViewModel : BaseViewModel {
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@IntroViewModel)
+
+        init()
     }
 
-    @VisibleForTesting constructor(userAuthRepo: UserAuthRepository,
+    @VisibleForTesting
+    constructor(userAuthRepo: UserAuthRepository,
                                    userSessionManager: UserSessionManager) {
         this.userAuthRepo = userAuthRepo
         this.userSessionManager = userSessionManager
+
+        init()
     }
 
     /**
@@ -75,7 +81,7 @@ class IntroViewModel : BaseViewModel {
 
     internal val isFacebookLoginProgress = MutableLiveData<Boolean>()
 
-    init {
+    fun init() {
         isFacebookLoginProgress.value = false
         isGoogleLoginProgress.value = false
     }

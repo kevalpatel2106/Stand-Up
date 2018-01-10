@@ -37,42 +37,30 @@ import kotlinx.android.synthetic.main.activity_forgot_password.*
 
 class ForgotPasswordActivity : BaseActivity() {
 
-    companion object {
-
-        /**
-         * Launch the [ForgotPasswordActivity].
-         *
-         * @param context Instance of the caller.
-         */
-        fun launch(context: Context) {
-            context.startActivity(Intent(context, ForgotPasswordActivity::class.java))
-        }
-    }
-
     @VisibleForTesting
-    internal lateinit var mModel: ForgotPasswordViewModel
+    internal lateinit var model: ForgotPasswordViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mModel = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
+        model = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
         setContentView(R.layout.activity_forgot_password)
 
-        mModel.isRequesting.observe(this@ForgotPasswordActivity, Observer<Boolean> {
+        model.isRequesting.observe(this@ForgotPasswordActivity, Observer<Boolean> {
             it?.let { forgot_password_submit_btn.displayLoader(it) }
         })
 
         //Observe error messages
-        mModel.errorMessage.observe(this@ForgotPasswordActivity, Observer {
+        model.errorMessage.observe(this@ForgotPasswordActivity, Observer {
             it!!.getMessage(this@ForgotPasswordActivity)?.let { showSnack(it) }
         })
 
         //Set email error
-        mModel.emailError.observe(this@ForgotPasswordActivity, Observer {
+        model.emailError.observe(this@ForgotPasswordActivity, Observer {
             forgot_password_email_et.error = it!!.getMessage(this@ForgotPasswordActivity)
         })
 
         //Observer the api responses.
-        mModel.isForgotRequestSuccessful.observe(this@ForgotPasswordActivity, Observer<Boolean> {
+        model.isForgotRequestSuccessful.observe(this@ForgotPasswordActivity, Observer<Boolean> {
             it?.let {
                 if (it) {
                     showSnack(getString(R.string.forgot_password_successful),
@@ -94,6 +82,20 @@ class ForgotPasswordActivity : BaseActivity() {
         logEvent(AnalyticsEvents.EVENT_FORGOT_PASSWORD, bundle)
 
         ViewUtils.hideKeyboard(forgot_password_email_et)
-        mModel.forgotPasswordRequest(forgot_password_email_et.getTrimmedText())
+
+        model.forgotPasswordRequest(forgot_password_email_et.getTrimmedText())
+    }
+
+
+    companion object {
+
+        /**
+         * Launch the [ForgotPasswordActivity].
+         *
+         * @param context Instance of the caller.
+         */
+        fun launch(context: Context) {
+            context.startActivity(Intent(context, ForgotPasswordActivity::class.java))
+        }
     }
 }

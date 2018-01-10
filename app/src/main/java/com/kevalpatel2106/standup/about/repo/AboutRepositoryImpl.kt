@@ -35,9 +35,7 @@ class AboutRepositoryImpl(@Named("WITH_TOKEN") private val retrofit: Retrofit,
 
     override fun getLatestVersion(): Flowable<CheckVersionResponse> {
         val checkVersionRequest = CheckVersionRequest(BuildConfig.VERSION_CODE)
-
-        val call = retrofit.create(AboutApiService::class.java)
-                .getLatestVersion(checkVersionRequest)
+        val call = retrofit.create(AboutApiService::class.java).getLatestVersion(checkVersionRequest)
 
         return RepoBuilder<CheckVersionResponse>()
                 .addRefresher(RetrofitNetworkRefresher(call))
@@ -48,9 +46,7 @@ class AboutRepositoryImpl(@Named("WITH_TOKEN") private val retrofit: Retrofit,
 
     override fun reportIssue(title: String, message: String, deviceId: String): Flowable<ReportIssueResponse> {
         val reportIssueRequest = ReportIssueRequest(userSessionManager.userId, title, message, deviceId)
-
-        val call = retrofit.create(AboutApiService::class.java)
-                .reportIssue(reportIssueRequest)
+        val call = retrofit.create(AboutApiService::class.java).reportIssue(reportIssueRequest)
 
         return RepoBuilder<ReportIssueResponse>()
                 .addRefresher(RetrofitNetworkRefresher(call))

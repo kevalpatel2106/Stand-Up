@@ -57,6 +57,7 @@ class LoginViewModel : BaseViewModel {
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@LoginViewModel)
+        init()
     }
 
     @VisibleForTesting
@@ -64,6 +65,7 @@ class LoginViewModel : BaseViewModel {
                 userSessionManager: UserSessionManager) {
         this.userAuthRepo = userAuthRepo
         this.userSessionManager = userSessionManager
+        init()
     }
 
     /**
@@ -84,7 +86,7 @@ class LoginViewModel : BaseViewModel {
 
     internal val isEmailLoginProgress = MutableLiveData<Boolean>()
 
-    init {
+    fun init() {
         isEmailLoginProgress.value = false
         isFacebookLoginProgress.value = false
         isGoogleLoginProgress.value = false

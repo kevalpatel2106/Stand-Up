@@ -45,7 +45,10 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class DeviceRegViewModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/app/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", path)
 
     @Rule
     @JvmField
@@ -56,8 +59,8 @@ class DeviceRegViewModelTest {
     val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
 
     private lateinit var deviceRegViewModel: DeviceRegViewModel
-    private lateinit var apiProvider: ApiProvider
     private lateinit var userSessionManager: UserSessionManager
+    private lateinit var sharedPrefProvider: SharedPrefsProvider
     private val mockServerManager = MockServerManager()
 
     @Before
@@ -69,11 +72,16 @@ class DeviceRegViewModelTest {
         Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("149.3")
 
-        //Init server
-        apiProvider = ApiProvider()
-        userSessionManager = UserSessionManager(SharedPrefsProvider(sharedPrefs))
         mockServerManager.startMockWebServer()
-        deviceRegViewModel = DeviceRegViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
+
+        //Init server
+        sharedPrefProvider = SharedPrefsProvider(sharedPrefs)
+        userSessionManager = UserSessionManager(sharedPrefProvider)
+        deviceRegViewModel = DeviceRegViewModel(
+                UserAuthRepositoryImpl(ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())),
+                sharedPrefProvider,
+                userSessionManager
+        )
     }
 
     @After

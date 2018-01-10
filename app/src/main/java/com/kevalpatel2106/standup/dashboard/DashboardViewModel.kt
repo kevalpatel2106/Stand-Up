@@ -78,10 +78,8 @@ class DashboardViewModel : BaseViewModel {
     val todaySummary = MutableLiveData<DailyActivitySummary>()
     val todaySummaryErrorCallback = MutableLiveData<ErrorMessage>()
     val todaySummaryStartLoading = CallbackEvent()
-
     val timelineEventsList = MutableLiveData<ArrayList<TimeLineItem>>()
 
-    @VisibleForTesting
     internal fun getTodaysSummary() {
         userActivityRepo.getTodaySummary()
                 .subscribeOn(Schedulers.io())

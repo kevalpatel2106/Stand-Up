@@ -19,7 +19,6 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -48,14 +47,14 @@ class DeviceRegisterResponseTest {
         val sharedPrefs = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(TEST_USER_ID)
-
-        SharedPrefsProvider.init(context)
     }
 
     @Test
     @Throws(IOException::class)
     fun checkInit() {
-        val deviceRegisterRequest = DeviceRegisterRequest(deviceId = "test-device-id", gcmKey = "test-firebase-fcm-key")
+        val deviceRegisterRequest = DeviceRegisterRequest(deviceId = "test-device-id",
+                gcmKey = "test-firebase-fcm-key",
+                userId = TEST_USER_ID)
 
         assertEquals(deviceRegisterRequest.deviceId, "test-device-id")
         assertEquals(deviceRegisterRequest.gcmKey, "test-firebase-fcm-key")
@@ -64,14 +63,18 @@ class DeviceRegisterResponseTest {
     @Test
     @Throws(IOException::class)
     fun checkDeviceName() {
-        val deviceRegisterRequest = DeviceRegisterRequest(deviceId = "test-device-id", gcmKey = "test-firebase-fcm-key")
+        val deviceRegisterRequest = DeviceRegisterRequest(deviceId = "test-device-id",
+                gcmKey = "test-firebase-fcm-key",
+                userId = TEST_USER_ID)
         assertEquals(deviceRegisterRequest.deviceName, Utils.getDeviceName())
     }
 
     @Test
     @Throws(IOException::class)
     fun checkUserId() {
-        val deviceRegisterRequest = DeviceRegisterRequest(deviceId = "test-device-id", gcmKey = "test-firebase-fcm-key")
+        val deviceRegisterRequest = DeviceRegisterRequest(deviceId = "test-device-id",
+                gcmKey = "test-firebase-fcm-key",
+                userId = TEST_USER_ID)
         assertEquals(deviceRegisterRequest.userId, TEST_USER_ID)
     }
 }

@@ -55,7 +55,6 @@ class ShouldScheduleNotificationTest {
         //Next notification time is less than the stand up duration.
         //That means notification is scheduled in one hour (Stand Up Reminder period)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(nextNotificationTimeLessThanHour)
-        SharedPrefsProvider.init(sharedPref)
 
         val userActivity = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis(),
@@ -64,7 +63,10 @@ class ShouldScheduleNotificationTest {
                 isSynced = false
         )
 
-        Assert.assertTrue(ActivityMonitorHelper.shouldScheduleNotification(userActivity))
+        Assert.assertTrue(ActivityMonitorHelper.shouldScheduleNotification(
+                userActivity,
+                SharedPrefsProvider(sharedPref)
+        ))
     }
 
 
@@ -74,7 +76,6 @@ class ShouldScheduleNotificationTest {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         //Next notification time is more than the stand up duration.
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(nextNotificationTimeAfterAnHour)
-        SharedPrefsProvider.init(sharedPref)
 
         val userActivity = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis(),
@@ -83,7 +84,10 @@ class ShouldScheduleNotificationTest {
                 isSynced = false
         )
 
-        Assert.assertFalse(ActivityMonitorHelper.shouldScheduleNotification(userActivity))
+        Assert.assertFalse(ActivityMonitorHelper.shouldScheduleNotification(
+                userActivity,
+                SharedPrefsProvider(sharedPref)
+        ))
     }
 
     @Test
@@ -93,7 +97,6 @@ class ShouldScheduleNotificationTest {
         //Next notification time is less than the stand up duration.
         //That means notification is scheduled in one hour (Stand Up Reminder period)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(nextNotificationTimeLessThanHour)
-        SharedPrefsProvider.init(sharedPref)
 
         val userActivity = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis(),
@@ -102,7 +105,10 @@ class ShouldScheduleNotificationTest {
                 isSynced = false
         )
 
-        Assert.assertTrue(ActivityMonitorHelper.shouldScheduleNotification(userActivity))
+        Assert.assertTrue(ActivityMonitorHelper.shouldScheduleNotification(
+                userActivity,
+                SharedPrefsProvider(sharedPref)
+        ))
     }
 
     @Test
@@ -111,7 +117,6 @@ class ShouldScheduleNotificationTest {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         //Next notification time is more than the stand up duration.
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(nextNotificationTimeAfterAnHour)
-        SharedPrefsProvider.init(sharedPref)
 
         val userActivity = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis(),
@@ -120,7 +125,10 @@ class ShouldScheduleNotificationTest {
                 isSynced = false
         )
 
-        Assert.assertFalse(ActivityMonitorHelper.shouldScheduleNotification(userActivity))
+        Assert.assertFalse(ActivityMonitorHelper.shouldScheduleNotification(
+                userActivity,
+                SharedPrefsProvider(sharedPref)
+        ))
     }
 
 
@@ -131,7 +139,6 @@ class ShouldScheduleNotificationTest {
         //Next notification time is less than the stand up duration.
         //That means notification is scheduled in one hour (Stand Up Reminder period)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(nextNotificationTimeLessThanHour)
-        SharedPrefsProvider.init(sharedPref)
 
         val userActivity = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis(),
@@ -140,7 +147,10 @@ class ShouldScheduleNotificationTest {
                 isSynced = false
         )
 
-        Assert.assertTrue(ActivityMonitorHelper.shouldScheduleNotification(userActivity))
+        Assert.assertTrue(ActivityMonitorHelper.shouldScheduleNotification(
+                userActivity,
+                SharedPrefsProvider(sharedPref)
+        ))
     }
 
     @Test
@@ -149,7 +159,6 @@ class ShouldScheduleNotificationTest {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         //Next notification time is more than the stand up duration.
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(nextNotificationTimeAfterAnHour)
-        SharedPrefsProvider.init(sharedPref)
 
         val userActivity = UserActivity(
                 eventStartTimeMills = System.currentTimeMillis(),
@@ -158,6 +167,9 @@ class ShouldScheduleNotificationTest {
                 isSynced = false
         )
 
-        Assert.assertTrue(ActivityMonitorHelper.shouldScheduleNotification(userActivity))
+        Assert.assertTrue(ActivityMonitorHelper.shouldScheduleNotification(
+                userActivity,
+                SharedPrefsProvider(sharedPref)
+        ))
     }
 }

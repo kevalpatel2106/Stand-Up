@@ -22,12 +22,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.UnitTestUtils
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepoImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
@@ -45,7 +45,10 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class EditProfileModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/profile/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/profile/repo", path)
 
     @Rule
     @JvmField
@@ -58,13 +61,6 @@ class EditProfileModelTest {
     private lateinit var editProfileModel: EditProfileModel
     private val mockServerManager = MockServerManager()
 
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setGlobal() = UnitTestUtils.initApp()
-    }
-
     private lateinit var sharedPrefs: SharedPreferences
 
     @Before
@@ -75,12 +71,15 @@ class EditProfileModelTest {
         Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
         Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
 
-        SharedPrefsProvider.init(context)
-        ApiProvider.init()
-
         //Set the repo
         mockServerManager.startMockWebServer()
-        editProfileModel = EditProfileModel(UserProfileRepoImpl(mockServerManager.getBaseUrl()), false)
+        editProfileModel = EditProfileModel(
+                UserProfileRepoImpl(
+                        ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl()),
+                        UserSessionManager(SharedPrefsProvider(sharedPrefs))
+                ),
+                UserSessionManager(SharedPrefsProvider(sharedPrefs))
+        )
     }
 
     @After

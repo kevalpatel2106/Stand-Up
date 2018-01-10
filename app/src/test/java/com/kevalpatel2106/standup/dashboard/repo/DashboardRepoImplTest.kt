@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.dashboard.repo
 
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoMockImpl
@@ -47,8 +48,12 @@ class DashboardRepoImplTest {
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
+
         userActivityDao = UserActivityDaoMockImpl(ArrayList())
-        dashboardRepo = DashboardRepoImpl(userActivityDao, mockServerManager.getBaseUrl())
+        dashboardRepo = DashboardRepoImpl(
+                userActivityDao,
+                ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())
+        )
     }
 
     @After

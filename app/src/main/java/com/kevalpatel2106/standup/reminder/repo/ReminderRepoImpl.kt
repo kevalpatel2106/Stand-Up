@@ -17,9 +17,6 @@
 
 package com.kevalpatel2106.standup.reminder.repo
 
-import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.standup.BuildConfig
-import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import io.reactivex.Completable

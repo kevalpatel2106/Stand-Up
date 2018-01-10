@@ -65,6 +65,8 @@ class AboutViewModel : BaseViewModel {
     @VisibleForTesting
     constructor(authRepository: AboutRepository) : super() {
         this.authRepository = authRepository
+
+        init()
     }
 
     /**
@@ -76,13 +78,15 @@ class AboutViewModel : BaseViewModel {
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@AboutViewModel)
+
+        init()
     }
 
     internal val isCheckingUpdate = MutableLiveData<Boolean>()
 
     internal val versionUpdateResult = MutableLiveData<CheckVersionResponse>()
 
-    init {
+    fun init() {
         isCheckingUpdate.value = false
     }
 
