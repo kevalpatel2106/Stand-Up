@@ -62,6 +62,10 @@ class DashboardFragment : Fragment() {
 
         today_time_line.timelineDuration = TimeLineLength.A_DAY
 
+        setModel()
+    }
+
+    private fun setModel() {
         val model = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         model.setPieChart(context!!, home_efficiency_card_pie_chart)
         model.setPieChartData(context!!, home_efficiency_card_pie_chart, 0F, 0F)
@@ -107,5 +111,8 @@ class DashboardFragment : Fragment() {
                 today_time_line.timelineItems = it
             }
         })
+
+        //Load the today's summary
+        model.getTodaysSummary()
     }
 }

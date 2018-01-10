@@ -19,17 +19,19 @@ package com.kevalpatel2106.standup.reminder.sync
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.annotation.VisibleForTesting
 import com.firebase.jobdispatcher.FirebaseJobDispatcher
 import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService
+import com.kevalpatel2106.standup.BaseApplication
+import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
-import com.kevalpatel2106.standup.reminder.repo.ReminderRepoImpl
+import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Created by Keval on 31/12/17.
@@ -38,9 +40,6 @@ import timber.log.Timber
  */
 class SyncService : JobService() {
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
-
-    @VisibleForTesting
-    internal var reminderRepo: ReminderRepo = ReminderRepoImpl()
 
     companion object {
         @SuppressLint("VisibleForTests")
@@ -57,6 +56,19 @@ class SyncService : JobService() {
         }
     }
 
+    @Inject lateinit var userSessionManager: UserSessionManager
+
+    @Inject lateinit var reminderRepo: ReminderRepo
+
+    override fun onCreate() {
+        super.onCreate()
+
+        DaggerReminderComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@SyncService)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.dispose()
@@ -66,7 +78,7 @@ class SyncService : JobService() {
     override fun onStartJob(job: JobParameters): Boolean {
         Timber.d("Syncing job started.")
 
-        if (SyncServiceHelper.shouldSync()) {
+        if (SyncServiceHelper.shouldSync(userSessionManager)) {
             //Add the new value to database.
             reminderRepo.sendPendingActivitiesToServer()
                     .observeOn(AndroidSchedulers.mainThread())

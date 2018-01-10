@@ -27,8 +27,6 @@ import android.os.IBinder
 import android.support.annotation.VisibleForTesting
 import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 
 
@@ -106,7 +104,7 @@ class RegisterDeviceService : Service() {
     override fun onTaskRemoved(rootIntent: Intent) {
         super.onTaskRemoved(rootIntent)
         //Error occurred. Mark device as not registered.
-        SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+        model.markDeviceRegFailed()
         clear()
     }
 

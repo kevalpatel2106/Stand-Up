@@ -200,7 +200,7 @@
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->
         <receiver
-            android:name=".UnauthorizedReceiver"
+            android:name=".authentication.UnauthorizedReceiver"
             android:enabled="false"
             android:exported="false">
             <intent-filter>

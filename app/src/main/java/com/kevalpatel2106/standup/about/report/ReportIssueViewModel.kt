@@ -21,7 +21,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.standup.BaseSUApplication
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.about.di.DaggerAboutComponent
 import com.kevalpatel2106.standup.about.repo.AboutRepository
@@ -63,7 +63,7 @@ class ReportIssueViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() {
         DaggerAboutComponent.builder()
-                .appComponent(BaseSUApplication.getApplicationComponent())
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@ReportIssueViewModel)
     }

@@ -26,7 +26,7 @@ import io.reactivex.Single
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal interface ReminderRepo {
+ interface ReminderRepo {
 
     /**
      * This will store [newActivity] into the database and terminate the previous event with the

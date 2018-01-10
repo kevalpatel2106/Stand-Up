@@ -26,6 +26,7 @@ import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.main.MainActivity
+import com.kevalpatel2106.standup.misc.di.DaggerSplashComponent
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -58,6 +59,11 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        DaggerSplashComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@SplashActivity)
 
         if (!userSessionManager.isUserLoggedIn) {   //User is not logged in. Complete the authentication flow.
             IntroActivity.launch(this@SplashActivity)

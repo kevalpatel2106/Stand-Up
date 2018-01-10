@@ -90,7 +90,7 @@ class EditProfileActivity : BaseActivity() {
         mModel = ViewModelProviders.of(this).get(EditProfileModel::class.java)
 
         //Observe user profile
-        mModel.mUserProfile.observe(this@EditProfileActivity, Observer<GetProfileResponse> {
+        mModel.userProfile.observe(this@EditProfileActivity, Observer<GetProfileResponse> {
             it?.let {
                 edit_profile_height_picker.scrollToValue(it.heightFloat())
                 edit_profile_weight_picker.scrollToValue(it.weightFloat())
@@ -101,7 +101,7 @@ class EditProfileActivity : BaseActivity() {
         })
 
         //Monitor save profile api call.
-        mModel.mProfileUpdateStatus.observe(this@EditProfileActivity, Observer<SaveProfileResponse> {
+        mModel.profileUpdateStatus.observe(this@EditProfileActivity, Observer<SaveProfileResponse> {
             showSnack(R.string.message_profile_updated)
             Handler().postDelayed({
 

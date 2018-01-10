@@ -17,11 +17,13 @@
 
 package com.kevalpatel2106.standup.authentication.di
 
+import com.kevalpatel2106.standup.authentication.UnauthorizedReceiver
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegViewModel
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordViewModel
 import com.kevalpatel2106.standup.authentication.intro.IntroViewModel
 import com.kevalpatel2106.standup.authentication.login.LoginViewModel
 import com.kevalpatel2106.standup.authentication.verification.EmailLinkVerifyViewModel
+import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailViewModel
 import com.kevalpatel2106.standup.misc.di.AppComponent
 import com.kevalpatel2106.standup.misc.di.AppScope
@@ -47,4 +49,8 @@ interface UserAuthComponent {
     fun inject(verifyEmailViewModel: VerifyEmailViewModel)
 
     fun inject(emailLinkVerifyViewModel: EmailLinkVerifyViewModel)
+
+    fun inject(unauthorizedReceiver: UnauthorizedReceiver)
+
+    fun inject(verifyEmailActivity: VerifyEmailActivity)
 }

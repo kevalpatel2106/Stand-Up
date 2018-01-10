@@ -15,26 +15,21 @@
  *
  */
 
-package com.kevalpatel2106.standup.db
+package com.kevalpatel2106.standup.main
 
+import com.kevalpatel2106.standup.misc.di.AppComponent
 import com.kevalpatel2106.standup.misc.di.AppScope
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import com.kevalpatel2106.standup.misc.di.PrefModule
+import dagger.Component
 
 /**
- * Created by Kevalpatel2106 on 09-Jan-18.
+ * Created by Keval on 10/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module
-class DbModule {
+@AppScope
+@Component(dependencies = [AppComponent::class], modules = [PrefModule::class])
+interface MainComponent {
 
-    @Provides
-    @AppScope
-    fun provideDatabase() = StandUpDb.getDb()
-
-    @Provides
-    @AppScope
-    fun provideUserActivityDao(db: StandUpDb) = db.userActivityDao()
+    fun inject(mainActivity: MainActivity)
 }

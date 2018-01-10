@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.misc.di
 
 import android.app.Application
+import com.kevalpatel2106.standup.SplashActivity
 import dagger.Component
 
 /**

@@ -35,6 +35,7 @@ import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import kotlinx.android.synthetic.main.activity_email_link_verification.*
 
@@ -67,7 +68,7 @@ class EmailLinkVerificationActivity : BaseActivity() {
             }
 
             //Check if the user is verified
-            if (UserSessionManager.isUserVerified) {
+            if (UserSessionManager(SharedPrefsProvider(context)).isUserVerified) {
                 Toast.makeText(context, "User already verified.", Toast.LENGTH_LONG).show()
                 return false
             }
@@ -135,9 +136,6 @@ class EmailLinkVerificationActivity : BaseActivity() {
                 .scaleX(1.2f)
                 .scaleY(1.2f)
                 .start()
-
-        //Change the flag to true.
-        UserSessionManager.isUserVerified = true
 
         //Go to the email link activity
         Handler().postDelayed({

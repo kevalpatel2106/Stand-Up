@@ -15,26 +15,30 @@
  *
  */
 
-package com.kevalpatel2106.standup.db
+package com.kevalpatel2106.standup.diary.di
 
+import com.kevalpatel2106.standup.db.DbModule
+import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
+import com.kevalpatel2106.standup.diary.repo.DiaryRepo
+import com.kevalpatel2106.standup.diary.repo.DiaryRepoImpl
 import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.di.NetworkModule
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
+import retrofit2.Retrofit
 
 /**
- * Created by Kevalpatel2106 on 09-Jan-18.
+ * Created by Keval on 10/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module
-class DbModule {
+@Module(includes = [NetworkModule::class, DbModule::class])
+class DiaryModule {
 
     @Provides
     @AppScope
-    fun provideDatabase() = StandUpDb.getDb()
+    fun provideDiaryRepo(userActivityDao: UserActivityDao,
+                         retrofit: Retrofit): DiaryRepo
+            = DiaryRepoImpl(retrofit, userActivityDao)
 
-    @Provides
-    @AppScope
-    fun provideUserActivityDao(db: StandUpDb) = db.userActivityDao()
 }

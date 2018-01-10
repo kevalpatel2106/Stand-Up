@@ -90,7 +90,7 @@ class VerifyEmailModelTest {
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
 
         //Make the api call to the mock server
-        verifyEmailViewModel.resendEmail(123)
+        verifyEmailViewModel.resendEmail()
 
         //There should be success.
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
@@ -106,7 +106,7 @@ class VerifyEmailModelTest {
         Assert.assertNull(verifyEmailViewModel.resendInProgress.value)
 
         //Make the api call to the mock server
-        verifyEmailViewModel.resendEmail(123)
+        verifyEmailViewModel.resendEmail()
 
         //There should be success.
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)

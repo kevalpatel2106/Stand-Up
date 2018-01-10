@@ -15,26 +15,30 @@
  *
  */
 
-package com.kevalpatel2106.standup.db
+package com.kevalpatel2106.standup.profile.di
 
 import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.di.NetworkModule
+import com.kevalpatel2106.standup.misc.di.PrefModule
+import com.kevalpatel2106.standup.profile.repo.UserProfileRepo
+import com.kevalpatel2106.standup.profile.repo.UserProfileRepoImpl
+import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
+import retrofit2.Retrofit
+import javax.inject.Named
 
 /**
- * Created by Kevalpatel2106 on 09-Jan-18.
+ * Created by Keval on 10/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module
-class DbModule {
+@Module(includes = [PrefModule::class, NetworkModule::class])
+class ProfileModule {
 
     @Provides
     @AppScope
-    fun provideDatabase() = StandUpDb.getDb()
-
-    @Provides
-    @AppScope
-    fun provideUserActivityDao(db: StandUpDb) = db.userActivityDao()
+    fun provideUserProfileRepo(@Named("WITH_TOKEN") retrofit: Retrofit,
+                               userSessionManager: UserSessionManager): UserProfileRepo
+            = UserProfileRepoImpl(retrofit, userSessionManager)
 }

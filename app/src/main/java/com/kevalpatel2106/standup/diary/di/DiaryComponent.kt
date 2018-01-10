@@ -15,26 +15,24 @@
  *
  */
 
-package com.kevalpatel2106.standup.db
+package com.kevalpatel2106.standup.diary.di
 
+import com.kevalpatel2106.standup.db.DbModule
+import com.kevalpatel2106.standup.diary.list.DiaryViewModel
+import com.kevalpatel2106.standup.misc.di.AppComponent
 import com.kevalpatel2106.standup.misc.di.AppScope
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import com.kevalpatel2106.standup.misc.di.NetworkModule
+import dagger.Component
 
 /**
- * Created by Kevalpatel2106 on 09-Jan-18.
+ * Created by Keval on 10/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module
-class DbModule {
+@AppScope
+@Component(dependencies = [AppComponent::class], modules = [DiaryModule::class])
+interface DiaryComponent {
 
-    @Provides
-    @AppScope
-    fun provideDatabase() = StandUpDb.getDb()
+    fun inject(diaryViewModel: DiaryViewModel)
 
-    @Provides
-    @AppScope
-    fun provideUserActivityDao(db: StandUpDb) = db.userActivityDao()
 }

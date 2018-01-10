@@ -22,9 +22,11 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.base.arch.SingleLiveEvent
-import com.kevalpatel2106.standup.BaseSUApplication
+import com.kevalpatel2106.standup.BaseApplication
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.ResendVerificationRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
+import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -35,8 +37,9 @@ class VerifyEmailViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */
-    @VisibleForTesting
     @Inject lateinit var userAuthRepo: UserAuthRepository
+
+    @Inject lateinit var userSessionManager: UserSessionManager
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
@@ -44,8 +47,10 @@ class VerifyEmailViewModel : BaseViewModel {
      * @param userAuthRepo Add your own [UserAuthRepository].
      */
     @VisibleForTesting
-    constructor(userAuthRepo: UserAuthRepository) : super() {
+    constructor(userAuthRepo: UserAuthRepository,
+                userSessionManager: UserSessionManager) : super() {
         this.userAuthRepo = userAuthRepo
+        this.userSessionManager = userSessionManager
     }
 
     /**
@@ -54,7 +59,7 @@ class VerifyEmailViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() {
         DaggerUserAuthComponent.builder()
-                .appComponent(BaseSUApplication.getApplicationComponent())
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@VerifyEmailViewModel)
     }
@@ -64,10 +69,10 @@ class VerifyEmailViewModel : BaseViewModel {
     internal val resendSuccessful = SingleLiveEvent<Boolean>()
 
     /**
-     * Resend the verification email to the given [userId].
+     * Resend the verification email to the given user Id.
      */
-    fun resendEmail(userId: Long) {
-        userAuthRepo.resendVerifyEmail(ResendVerificationRequest(userId))
+    fun resendEmail() {
+        userAuthRepo.resendVerifyEmail(ResendVerificationRequest(userSessionManager.userId))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({

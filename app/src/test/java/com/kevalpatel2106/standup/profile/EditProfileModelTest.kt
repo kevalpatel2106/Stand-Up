@@ -111,14 +111,14 @@ class EditProfileModelTest {
 
         //There should be success.
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNotNull(editProfileModel.mUserProfile.value)
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.email, "test@example.com")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.name, "Test User")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.userId, 5715999101812736)
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.height, "180.0")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.weight, "60.0")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.gender, AppConfig.GENDER_MALE)
-        Assert.assertTrue(editProfileModel.mUserProfile.value!!.isVerified)
+        Assert.assertNotNull(editProfileModel.userProfile.value)
+        Assert.assertEquals(editProfileModel.userProfile.value!!.email, "test@example.com")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.name, "Test User")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.userId, 5715999101812736)
+        Assert.assertEquals(editProfileModel.userProfile.value!!.height, "180.0")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.weight, "60.0")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.gender, AppConfig.GENDER_MALE)
+        Assert.assertTrue(editProfileModel.userProfile.value!!.isVerified)
         Assert.assertNull(editProfileModel.errorMessage.value)
     }
 
@@ -138,14 +138,14 @@ class EditProfileModelTest {
 
         //There should be cache data in the profile model.
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNotNull(editProfileModel.mUserProfile.value)
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.email, "149.3")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.name, "149.3")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.userId, 123456789)
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.height, "149.3")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.weight, "149.3")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.gender, AppConfig.GENDER_MALE)
-        Assert.assertTrue(editProfileModel.mUserProfile.value!!.isVerified)
+        Assert.assertNotNull(editProfileModel.userProfile.value)
+        Assert.assertEquals(editProfileModel.userProfile.value!!.email, "149.3")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.name, "149.3")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.userId, 123456789)
+        Assert.assertEquals(editProfileModel.userProfile.value!!.height, "149.3")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.weight, "149.3")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.gender, AppConfig.GENDER_MALE)
+        Assert.assertTrue(editProfileModel.userProfile.value!!.isVerified)
         Assert.assertEquals(editProfileModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 
@@ -159,7 +159,7 @@ class EditProfileModelTest {
 
         //There should be error.
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNull(editProfileModel.mUserProfile.value)
+        Assert.assertNull(editProfileModel.userProfile.value)
         Assert.assertEquals(editProfileModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 
@@ -178,14 +178,14 @@ class EditProfileModelTest {
 
         //There should be success.
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNotNull(editProfileModel.mProfileUpdateStatus.value)
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.email, "test@example.com")
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.name, "Test User")
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.userId, 5715999101812736)
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.height, "180.0")
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.weight, "60.0")
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.gender, AppConfig.GENDER_MALE)
-        Assert.assertTrue(editProfileModel.mProfileUpdateStatus.value!!.isVerified)
+        Assert.assertNotNull(editProfileModel.profileUpdateStatus.value)
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.email, "test@example.com")
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.name, "Test User")
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.userId, 5715999101812736)
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.height, "180.0")
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.weight, "60.0")
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.gender, AppConfig.GENDER_MALE)
+        Assert.assertTrue(editProfileModel.profileUpdateStatus.value!!.isVerified)
         Assert.assertNull(editProfileModel.errorMessage.value)
     }
 
@@ -204,7 +204,7 @@ class EditProfileModelTest {
 
         //There should be error
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNull(editProfileModel.mProfileUpdateStatus.value)
+        Assert.assertNull(editProfileModel.profileUpdateStatus.value)
         Assert.assertEquals(editProfileModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 

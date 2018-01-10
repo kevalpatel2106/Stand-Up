@@ -17,12 +17,15 @@
 
 package com.kevalpatel2106.standup.profile
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.misc.Validator
+import com.kevalpatel2106.standup.profile.di.DaggerProfileComponent
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
 import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepo
@@ -30,6 +33,7 @@ import com.kevalpatel2106.standup.profile.repo.UserProfileRepoImpl
 import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Keval on 29/11/17.
@@ -44,7 +48,9 @@ class EditProfileModel : BaseViewModel {
      *
      * @see UserProfileRepo
      */
-    private val mUserProfileRepo: UserProfileRepo
+    @Inject lateinit var userProfileRepo: UserProfileRepo
+
+    @Inject lateinit var userSessionManager: UserSessionManager
 
     /**
      * Private constructor to add the custom [UserProfileRepo] for testing.
@@ -53,35 +59,37 @@ class EditProfileModel : BaseViewModel {
      */
     @Suppress("unused")
     @VisibleForTesting
-    constructor(userProfileRepo: UserProfileRepo, loadProfile: Boolean) : super() {
-        mUserProfileRepo = userProfileRepo
+    constructor(userProfileRepo: UserProfileRepo, userSessionManager: UserSessionManager) : super() {
+        this.userProfileRepo = userProfileRepo
+        this.userSessionManager = userSessionManager
 
-        //Start loading user profile.
-        if (loadProfile) loadMyProfile()
+        init()
     }
 
     /**
      * Zero parameter constructor. This will set the [UserProfileRepoImpl] as the [UserProfileRepo].
      */
     @Suppress("unused")
-    constructor() : super() {
-        mUserProfileRepo = UserProfileRepoImpl()
+    constructor() {
+        DaggerProfileComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@EditProfileModel)
 
-        //Start loading user profile.
-        loadMyProfile()
+        init()
     }
 
     /**
      * Current user profile information. This information will be loaded while initiating this
      * class by calling [loadMyProfile].
      */
-    internal val mUserProfile: MutableLiveData<GetProfileResponse> = MutableLiveData()
+    internal val userProfile: MutableLiveData<GetProfileResponse> = MutableLiveData()
 
     /**
      * The response from received from the [saveMyProfile] call. Activity can monitor this to get
      * buildNotification when the profile saved on the server.
      */
-    internal val mProfileUpdateStatus: MutableLiveData<SaveProfileResponse> = MutableLiveData()
+    internal val profileUpdateStatus: MutableLiveData<SaveProfileResponse> = MutableLiveData()
 
     /**
      * Boolean wil be true if the user profile is currently loading.
@@ -97,9 +105,13 @@ class EditProfileModel : BaseViewModel {
      */
     internal val isSavingProfile: MutableLiveData<Boolean> = MutableLiveData()
 
-    init {
+    @SuppressLint("VisibleForTests")
+    private fun init() {
         isSavingProfile.value = false
         isLoadingProfile.value = false
+
+        //Start loading user profile.
+        loadMyProfile()
     }
 
     /**
@@ -108,7 +120,7 @@ class EditProfileModel : BaseViewModel {
      */
     @VisibleForTesting
     internal fun loadMyProfile() {
-        addDisposable(mUserProfileRepo.getUserProfile(UserSessionManager.userId)
+        addDisposable(userProfileRepo.getUserProfile(userSessionManager.userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
@@ -119,7 +131,7 @@ class EditProfileModel : BaseViewModel {
                 })
                 .subscribe({
                     isLoadingProfile.value = false
-                    mUserProfile.value = it
+                    userProfile.value = it
                 }, {
                     //Error occurred.
                     errorMessage.value = ErrorMessage(it.message)
@@ -164,7 +176,7 @@ class EditProfileModel : BaseViewModel {
         //Make server call to save the data.
         //NOTE: Don't add this disposable to composite one. We need to keep this api call running
         //even if the activity is destroyed.
-        mUserProfileRepo.saveUserProfile(name, photo, height, weight, isMale)
+        userProfileRepo.saveUserProfile(name, photo, height, weight, isMale)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
@@ -175,10 +187,10 @@ class EditProfileModel : BaseViewModel {
                 })
                 .subscribe({
                     //Update the save profile status
-                    mProfileUpdateStatus.value = it
+                    profileUpdateStatus.value = it
                 }, {
                     //Error occurred.
-                    mProfileUpdateStatus.value = null
+                    profileUpdateStatus.value = null
                     errorMessage.value = ErrorMessage(it.message)
                 })
     }

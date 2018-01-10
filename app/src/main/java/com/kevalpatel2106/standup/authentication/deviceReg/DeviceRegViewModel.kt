@@ -22,8 +22,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.standup.BaseSUApplication
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
@@ -47,7 +48,7 @@ class DeviceRegViewModel : BaseViewModel {
 
     constructor() {
         DaggerUserAuthComponent.builder()
-                .appComponent(BaseSUApplication.getApplicationComponent())
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@DeviceRegViewModel)
     }
@@ -95,7 +96,9 @@ class DeviceRegViewModel : BaseViewModel {
     @VisibleForTesting
     internal fun sendDeviceDataToServer(regId: String, deviceId: String) {
         //Prepare the request object
-        val requestData = DeviceRegisterRequest(gcmKey = regId, deviceId = deviceId)
+        val requestData = DeviceRegisterRequest(gcmKey = regId,
+                deviceId = deviceId,
+                userId = userSessionManager.userId)
 
         //Register to the server
         addDisposable(userAuthRepo
@@ -120,4 +123,6 @@ class DeviceRegViewModel : BaseViewModel {
                     errorMessage.value = ErrorMessage(it.message)
                 }))
     }
+
+    fun markDeviceRegFailed() = sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
 }

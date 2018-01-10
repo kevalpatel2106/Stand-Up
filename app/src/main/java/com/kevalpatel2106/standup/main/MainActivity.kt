@@ -32,6 +32,7 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.base.view.BaseTextView
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.about.AboutActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
@@ -42,6 +43,7 @@ import com.kevalpatel2106.utils.SwipeDetector
 import com.kevalpatel2106.utils.UserSessionManager
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 /**
  * Main activity which user will see after opening the application.
@@ -64,13 +66,22 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private lateinit var drawerToggle: ActionBarDrawerToggle
+    @Inject lateinit var sharedPrefsProvider: SharedPrefsProvider
 
-    private lateinit var mModel: MainViewModel
+    @Inject lateinit var userSessionMananger: UserSessionManager
+
+    private lateinit var drawerToggle: ActionBarDrawerToggle
+    private lateinit var model: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mModel = ViewModelProviders.of(this@MainActivity).get(MainViewModel::class.java)
+
+        DaggerMainComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@MainActivity)
+
+        model = ViewModelProviders.of(this@MainActivity).get(MainViewModel::class.java)
 
         setContentView(R.layout.activity_main)
 
@@ -89,15 +100,15 @@ class MainActivity : BaseActivity() {
     private fun setUpDrawer(isFirstRun: Boolean) {
         //Set up the header
         val header = dashboard_navigation_view.getHeaderView(0)
-        header.findViewById<BaseTextView>(R.id.nav_email_tv).text = UserSessionManager.email ?: ""
-        header.findViewById<BaseTextView>(R.id.nav_name_tv).text = UserSessionManager.displayName ?: "Hi there!"
+        header.findViewById<BaseTextView>(R.id.nav_email_tv).text = userSessionMananger.email ?: ""
+        header.findViewById<BaseTextView>(R.id.nav_name_tv).text = userSessionMananger.displayName ?: "Hi there!"
 
         val headerProfileIv = header.findViewById<CircleImageView>(R.id.nav_profile_iv)
-        if (UserSessionManager.photo.isNullOrEmpty()) {
+        if (userSessionMananger.photo.isNullOrEmpty()) {
             headerProfileIv.setImageResource(R.drawable.ic_user_profile_default)
         } else {
             Glide.with(this@MainActivity)
-                    .load(UserSessionManager.photo)
+                    .load(userSessionMananger.photo)
                     .thumbnail(0.1f)
                     .into(headerProfileIv)
         }
@@ -148,9 +159,9 @@ class MainActivity : BaseActivity() {
             handleDrawerNavigation(DrawerItem.HOME)
 
             //Check if the drawer tutorial completed?
-            if (!SharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED)) {
+            if (!sharedPrefsProvider.getBoolFromPreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED)) {
                 //Mark tutorial completed
-                SharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED, true)
+                sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED, true)
 
                 headerProfileIv.scaleX = 0.7f
                 headerProfileIv.scaleY = 0.7f
@@ -181,21 +192,21 @@ class MainActivity : BaseActivity() {
             DrawerItem.HOME -> {
                 dashboard_navigation_view.menu.findItem(R.id.nav_home).isChecked = true
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.dashboard_container, mModel.homeFragment)
+                        .replace(R.id.dashboard_container, model.homeFragment)
                         .commit()
                 false
             }
             DrawerItem.DIARY -> {
                 dashboard_navigation_view.menu.findItem(R.id.nav_diary).isChecked = true
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.dashboard_container, mModel.diaryFragment)
+                        .replace(R.id.dashboard_container, model.diaryFragment)
                         .commit()
                 false
             }
             DrawerItem.STATS -> {
                 dashboard_navigation_view.menu.findItem(R.id.nav_stats).isChecked = true
                 supportFragmentManager.beginTransaction()
-                        .replace(R.id.dashboard_container, mModel.statsFragment)
+                        .replace(R.id.dashboard_container, model.statsFragment)
                         .commit()
                 false
             }

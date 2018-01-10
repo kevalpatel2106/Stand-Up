@@ -24,17 +24,19 @@ import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import io.reactivex.Completable
 import io.reactivex.Single
+import retrofit2.Retrofit
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Created by Keval on 14/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class ReminderRepoImpl @VisibleForTesting constructor(private val userActivityDao: UserActivityDao,
-                                                               private val baseUrl: String) : ReminderRepo {
-
-    constructor() : this(StandUpDb.getDb().userActivityDao(), BuildConfig.BASE_URL)
+ class ReminderRepoImpl @Inject constructor(private val userActivityDao: UserActivityDao,
+                                                    @Named("WITH_TOKEN") private val retrofit: Retrofit)
+    : ReminderRepo {
 
     override fun sendPendingActivitiesToServer(): Completable {
         return Completable.create {

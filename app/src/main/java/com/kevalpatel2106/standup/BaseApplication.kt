@@ -31,7 +31,7 @@ import com.kevalpatel2106.standup.misc.di.NetworkModule
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-abstract class BaseSUApplication : Application() {
+abstract class BaseApplication : Application() {
 
 
     companion object {
@@ -52,14 +52,14 @@ abstract class BaseSUApplication : Application() {
                 .build()
 
         //Initialize firebase.
-        FirebaseApp.initializeApp(this@BaseSUApplication)
+        FirebaseApp.initializeApp(this@BaseApplication)
 
         //Initialize facebook
         @Suppress("DEPRECATION")
-        FacebookSdk.sdkInitialize(this@BaseSUApplication)
+        FacebookSdk.sdkInitialize(this@BaseApplication)
 
         //Enable firebase analytics
-        FirebaseAnalytics.getInstance(this@BaseSUApplication)
+        FirebaseAnalytics.getInstance(this@BaseApplication)
                 .setAnalyticsCollectionEnabled(isReleaseBuild())
     }
 

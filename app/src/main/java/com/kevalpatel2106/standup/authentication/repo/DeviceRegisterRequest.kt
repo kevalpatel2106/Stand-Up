@@ -30,6 +30,10 @@ import com.kevalpatel2106.utils.Utils
  */
 @Model
 data class DeviceRegisterRequest(
+        @SerializedName("uid")
+        @Expose
+        val userId: Long,
+
         @SerializedName("deviceId")
         @Expose
         val deviceId: String ,
@@ -41,8 +45,4 @@ data class DeviceRegisterRequest(
     @SerializedName("deviceName")
     @Expose
     val deviceName: String = Utils.getDeviceName()
-
-    @SerializedName("uid")
-    @Expose
-    val userId: Long = UserSessionManager.userId
 }

@@ -15,26 +15,24 @@
  *
  */
 
-package com.kevalpatel2106.standup.db
+package com.kevalpatel2106.standup.dashboard.di
 
+import com.kevalpatel2106.standup.about.AboutViewModel
+import com.kevalpatel2106.standup.about.report.ReportIssueViewModel
+import com.kevalpatel2106.standup.dashboard.DashboardFragment
+import com.kevalpatel2106.standup.dashboard.DashboardViewModel
+import com.kevalpatel2106.standup.misc.di.AppComponent
 import com.kevalpatel2106.standup.misc.di.AppScope
-import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import dagger.Component
 
 /**
  * Created by Kevalpatel2106 on 09-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module
-class DbModule {
+@AppScope
+@Component(dependencies = [AppComponent::class], modules = [DashboardModule::class])
+interface DashboardComponent {
 
-    @Provides
-    @AppScope
-    fun provideDatabase() = StandUpDb.getDb()
-
-    @Provides
-    @AppScope
-    fun provideUserActivityDao(db: StandUpDb) = db.userActivityDao()
+    fun inject(dashboardViewModel: DashboardViewModel)
 }

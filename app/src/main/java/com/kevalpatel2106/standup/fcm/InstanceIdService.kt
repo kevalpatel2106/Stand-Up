@@ -18,8 +18,10 @@
 package com.kevalpatel2106.standup.fcm
 
 import com.google.firebase.iid.FirebaseInstanceIdService
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.utils.UserSessionManager
+import javax.inject.Inject
 
 /**
  * Created by Keval on 01-Jun-17.
@@ -31,11 +33,22 @@ import com.kevalpatel2106.utils.UserSessionManager
 
 class InstanceIdService : FirebaseInstanceIdService() {
 
+    @Inject lateinit var userSessionManager: UserSessionManager
+
+    override fun onCreate() {
+        super.onCreate()
+
+        DaggerFcmComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@InstanceIdService)
+    }
+
     override fun onTokenRefresh() {
         super.onTokenRefresh()
 
         //Start syncing the new token
-        if (UserSessionManager.isUserLoggedIn) RegisterDeviceService.start(this)
+        if (userSessionManager.isUserLoggedIn) RegisterDeviceService.start(this)
     }
 
 }

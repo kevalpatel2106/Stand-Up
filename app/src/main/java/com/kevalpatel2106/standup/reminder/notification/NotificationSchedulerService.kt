@@ -24,10 +24,14 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher
 import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.reminder.ReminderConfig
+import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.standup.reminder.sync.SyncService
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 13-Dec-17.
@@ -44,7 +48,8 @@ class NotificationSchedulerService : JobService() {
                                           scheduleAfter: Int = ReminderConfig.STAND_UP_DURATION) {
             //Schedule the job
             FirebaseJobDispatcher(GooglePlayDriver(context))
-                    .mustSchedule(NotificationSchedulerHelper.prepareJob(context, scheduleAfter))
+                    .mustSchedule(NotificationSchedulerHelper.prepareJob(context, scheduleAfter,
+                            SharedPrefsProvider(context)))
         }
 
 
@@ -52,8 +57,19 @@ class NotificationSchedulerService : JobService() {
         internal fun cancel(context: Context) {
             FirebaseJobDispatcher(GooglePlayDriver(context))
                     .cancel(NotificationSchedulerHelper.REMINDER_NOTIFICATION_JOB_TAG)
-            SharedPrefsProvider.removePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
+            SharedPrefsProvider(context).removePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
         }
+    }
+
+    @Inject lateinit var userSessionManager: UserSessionManager
+
+    override fun onCreate() {
+        super.onCreate()
+
+        DaggerReminderComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@NotificationSchedulerService)
     }
 
     @CallSuper
@@ -66,7 +82,7 @@ class NotificationSchedulerService : JobService() {
     override fun onStartJob(p0: JobParameters?): Boolean {
         Timber.d("Notification reminder job started.")
 
-        if (NotificationSchedulerHelper.shouldDisplayNotification()) {
+        if (NotificationSchedulerHelper.shouldDisplayNotification(userSessionManager)) {
             //Fire reminder notification
             ReminderNotification.notify(this@NotificationSchedulerService)
 

@@ -23,8 +23,9 @@ import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.base.arch.SingleLiveEvent
-import com.kevalpatel2106.standup.BaseSUApplication
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.ForgotPasswordRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.misc.Validator
@@ -48,7 +49,7 @@ class ForgotPasswordViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() {
         DaggerUserAuthComponent.builder()
-                .appComponent(BaseSUApplication.getApplicationComponent())
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@ForgotPasswordViewModel)
     }
