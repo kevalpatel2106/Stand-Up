@@ -109,16 +109,12 @@ class EditProfileModel : BaseViewModel {
     private fun init() {
         isSavingProfile.value = false
         isLoadingProfile.value = false
-
-        //Start loading user profile.
-        loadMyProfile()
     }
 
     /**
      * Load the user profile of the current user from the shared prefrance cache and refresh the cache
      * from te network.
      */
-    @VisibleForTesting
     internal fun loadMyProfile() {
         addDisposable(userProfileRepo.getUserProfile(userSessionManager.userId)
                 .subscribeOn(Schedulers.io())

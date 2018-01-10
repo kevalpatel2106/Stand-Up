@@ -18,6 +18,7 @@
 package com.kevalpatel2106.network
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -41,6 +42,7 @@ class ApiProvider(context: Context? = null,
      * Constructor with zero params. This will ignore all user authentication and won't broadcast for
      * unauthorized access.
      */
+    @VisibleForTesting
     constructor() : this(null, null)
 
     /**

@@ -87,10 +87,6 @@ class VerifyEmailModelTest {
     fun checkInitialization() {
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
         Assert.assertNull(verifyEmailViewModel.resendInProgress.value)
-
-        //Normal init
-        val model = VerifyEmailViewModel()
-        Assert.assertTrue(model.userAuthRepo is UserAuthRepositoryImpl)
     }
 
     @Test

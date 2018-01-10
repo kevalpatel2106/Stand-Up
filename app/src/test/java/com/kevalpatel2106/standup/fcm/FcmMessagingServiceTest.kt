@@ -19,6 +19,8 @@ package com.kevalpatel2106.standup.fcm
 
 import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -33,47 +35,52 @@ import java.io.IOException
 @RunWith(JUnit4::class)
 class FcmMessagingServiceTest {
 
+    private lateinit var userSessionManager: UserSessionManager
+
+    @Before
+    fun setUp() {
+        userSessionManager = Mockito.mock(UserSessionManager::class.java)
+    }
+
     @Test
     @Throws(IOException::class)
     fun checkShouldProcessNotificationWithNullRemoteData() {
-        assertFalse(FcmMessagingService().shouldProcessNotification(null))
+        Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
+        assertFalse(FcmMessagingService().shouldProcessNotification(null, userSessionManager))
     }
 
     @Test
     @Throws(IOException::class)
     fun checkShouldProcessNotificationWithEmptyRemoteData() {
-        assertFalse(FcmMessagingService().shouldProcessNotification(HashMap()))
+        Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
+        assertFalse(FcmMessagingService().shouldProcessNotification(HashMap(), userSessionManager))
     }
 
     @Test
     @Throws(IOException::class)
     fun checkShouldProcessNotificationIfUserNotLoggedIn() {
-        val userSessionManager = Mockito.mock(UserSessionManager::class.java)
         Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(false)
-
-        assertFalse(FcmMessagingService().shouldProcessNotification(HashMap()))
+        assertFalse(FcmMessagingService().shouldProcessNotification(HashMap(), userSessionManager))
     }
 
 
     @Test
     @Throws(IOException::class)
     fun checkShouldProcessNotificationWithoutType() {
-        val userSessionManager = Mockito.mock(UserSessionManager::class.java)
         Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
 
         val hashMap = HashMap<String, String>()
         hashMap.put("xyz", "abc")
-        assertFalse(FcmMessagingService().shouldProcessNotification(hashMap))
+        assertFalse(FcmMessagingService().shouldProcessNotification(hashMap, userSessionManager))
     }
 
     @Test
     @Throws(IOException::class)
     fun checkShouldProcessNotificationAllGood() {
-        val userSessionManager = Mockito.mock(UserSessionManager::class.java)
         Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
 
         val data = HashMap<String, String>()
         data.put("type", "xyz")
-        assertFalse(FcmMessagingService().shouldProcessNotification(data))
+        assertTrue(FcmMessagingService().shouldProcessNotification(data, userSessionManager))
     }
 }

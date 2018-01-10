@@ -126,7 +126,7 @@
 -keep public class android.support.v7.internal.view.menu.** { *; }
 
 -keep public class * extends android.support.v4.view.ActionProvider {
-    public <createDb>(android.content.Context);
+    public <init>(android.content.Context);
 }
 ##---------------End: proguard configuration for appcompat lib  ----------
 

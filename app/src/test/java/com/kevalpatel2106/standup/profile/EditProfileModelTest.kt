@@ -91,13 +91,15 @@ class EditProfileModelTest {
     @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(editProfileModel.blockUi.value!!)
+        Assert.assertFalse(editProfileModel.isSavingProfile.value!!)
+        Assert.assertFalse(editProfileModel.blockUi.value!!)
     }
 
 
     @Test
     @Throws(IOException::class)
     fun checkLoadProfileSuccess() {
-        //Mock the shared prefrance
+        //Mock the shared preference
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("149.3")
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn("149.3")
         Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(123456789)

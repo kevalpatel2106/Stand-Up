@@ -77,10 +77,6 @@ class EmailLinkVerifyViewModelTest {
     @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(emailLinkVerifyViewModel.blockUi.value!!)
-
-        //Normal init
-        val model = EmailLinkVerifyViewModel()
-        Assert.assertTrue(model.userAuthRepo is UserAuthRepositoryImpl)
     }
 
     @Test

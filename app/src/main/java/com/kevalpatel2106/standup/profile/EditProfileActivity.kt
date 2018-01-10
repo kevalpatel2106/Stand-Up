@@ -68,7 +68,7 @@ class EditProfileActivity : BaseActivity() {
     private var selectedHeight: Float = 0.0f
 
     @VisibleForTesting
-    internal lateinit var mModel: EditProfileModel
+    internal lateinit var model: EditProfileModel
     private var btnMenuSave: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,16 +81,17 @@ class EditProfileActivity : BaseActivity() {
         setWeightPicker()
 
         setViewModel()
+        model.loadMyProfile()
     }
 
     /**
      * Set the [EditProfileModel] and the observers.
      */
     private fun setViewModel() {
-        mModel = ViewModelProviders.of(this).get(EditProfileModel::class.java)
+        model = ViewModelProviders.of(this).get(EditProfileModel::class.java)
 
         //Observe user profile
-        mModel.userProfile.observe(this@EditProfileActivity, Observer<GetProfileResponse> {
+        model.userProfile.observe(this@EditProfileActivity, Observer<GetProfileResponse> {
             it?.let {
                 edit_profile_height_picker.scrollToValue(it.heightFloat())
                 edit_profile_weight_picker.scrollToValue(it.weightFloat())
@@ -101,7 +102,7 @@ class EditProfileActivity : BaseActivity() {
         })
 
         //Monitor save profile api call.
-        mModel.profileUpdateStatus.observe(this@EditProfileActivity, Observer<SaveProfileResponse> {
+        model.profileUpdateStatus.observe(this@EditProfileActivity, Observer<SaveProfileResponse> {
             showSnack(R.string.message_profile_updated)
             Handler().postDelayed({
 
@@ -116,12 +117,12 @@ class EditProfileActivity : BaseActivity() {
         })
 
         //Monitor all error messages.
-        mModel.errorMessage.observe(this@EditProfileActivity, Observer {
+        model.errorMessage.observe(this@EditProfileActivity, Observer {
             it!!.getMessage(this@EditProfileActivity)?.let { showSnack(it) }
         })
 
         //Monitor if the current user profile loaded or not.
-        mModel.isLoadingProfile.observe(this@EditProfileActivity, Observer<Boolean> {
+        model.isLoadingProfile.observe(this@EditProfileActivity, Observer<Boolean> {
             invalidateOptionsMenu()
 
             if (it!!) {
@@ -132,7 +133,7 @@ class EditProfileActivity : BaseActivity() {
         })
 
         //Monitor if the saving profile completed or not?
-        mModel.isSavingProfile.observe(this@EditProfileActivity, Observer<Boolean> {
+        model.isSavingProfile.observe(this@EditProfileActivity, Observer<Boolean> {
             invalidateOptionsMenu()
         })
     }
@@ -142,8 +143,8 @@ class EditProfileActivity : BaseActivity() {
 
         //Remove any action overlay
         btnMenuSave = menu.findItem(R.id.action_save)
-        btnMenuSave!!.isVisible = !mModel.isLoadingProfile.value!!
-        if (mModel.isSavingProfile.value!!) {
+        btnMenuSave!!.isVisible = !model.isLoadingProfile.value!!
+        if (model.isSavingProfile.value!!) {
 
             //Display the progressbar in toolbar
             val progressBar = ProgressBar(this)
@@ -162,7 +163,7 @@ class EditProfileActivity : BaseActivity() {
         return when (item.itemId) {
             R.id.action_save -> {
                 //Save the profile.
-                mModel.saveMyProfile(name = edit_profile_name_et.getTrimmedText(),
+                model.saveMyProfile(name = edit_profile_name_et.getTrimmedText(),
                         photo = null,
                         height = selectedHeight,
                         weight = selectedWeight,

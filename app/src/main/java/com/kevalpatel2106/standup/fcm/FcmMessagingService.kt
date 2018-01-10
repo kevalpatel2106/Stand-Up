@@ -54,7 +54,7 @@ class FcmMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         super.onMessageReceived(remoteMessage)
 
-        if (!shouldProcessNotification(remoteMessage?.data)) return
+        if (!shouldProcessNotification(remoteMessage?.data, userSessionManager)) return
 
         Timber.d("onMessageReceived: " + remoteMessage!!.data.toString())
 
@@ -77,7 +77,8 @@ class FcmMessagingService : FirebaseMessagingService() {
     }
 
     @VisibleForTesting
-    internal fun shouldProcessNotification(data: Map<String, String>?): Boolean {
+    internal fun shouldProcessNotification(data: Map<String, String>?,
+                                           userSessionManager: UserSessionManager): Boolean {
         if (data == null || data.isEmpty()) {
             Timber.w("No message received in the FCM payload.")
             return false

@@ -63,7 +63,7 @@ internal class NWInterceptor(private val context: Context?,
         var request = chain.request()
 
         //Set the authorization header
-        request = addAuthHeader(request, userId, token)
+        request = addAuthHeader(request)
 
         var response = chain.proceed(request)
 
@@ -208,7 +208,7 @@ internal class NWInterceptor(private val context: Context?,
      * Adds the auth header if the username and passwords are provided for the authentication and
      * there is no "No-Authorization" header.
      */
-    fun addAuthHeader(request: Request, userId: String?, token: String?): Request {
+    fun addAuthHeader(request: Request): Request {
         var request1 = request
         if (request1.header("Add-Auth") != null && userId != null && token != null) {
             request1 = request1

@@ -44,6 +44,7 @@ class ServerErrorCodeTests {
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
+        apiProvider = ApiProvider()
     }
 
     @After

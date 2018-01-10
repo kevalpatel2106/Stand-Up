@@ -57,7 +57,6 @@ class EmailLinkVerifyViewModel : BaseViewModel {
     /**
      * Zero parameter constructor.
      */
-    @Suppress("unused")
     constructor() {
         DaggerUserAuthComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())

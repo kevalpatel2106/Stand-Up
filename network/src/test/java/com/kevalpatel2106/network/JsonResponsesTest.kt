@@ -38,7 +38,10 @@ import java.nio.file.Paths
 
 @RunWith(JUnit4::class)
 class JsonResponsesTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("network")) it else it.plus("/network")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", path)
 
     private lateinit var apiProvider: ApiProvider
     private val mockWebServer = MockServerManager()
