@@ -18,16 +18,12 @@
 package com.kevalpatel2106.standup.authentication.di
 
 import android.app.Application
-import android.content.Context
 import com.kevalpatel2106.standup.authentication.logout.Logout
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.db.DbModule
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
-import com.kevalpatel2106.standup.misc.di.AppModule
 import com.kevalpatel2106.standup.misc.di.AppScope
-import com.kevalpatel2106.standup.misc.di.NetworkModule
-import com.kevalpatel2106.standup.misc.di.PrefModule
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Module
@@ -40,7 +36,7 @@ import javax.inject.Named
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module(includes = [NetworkModule::class, AppModule::class, PrefModule::class, DbModule::class])
+@Module(includes = [DbModule::class])
 class UserAuthModule {
 
     @Provides

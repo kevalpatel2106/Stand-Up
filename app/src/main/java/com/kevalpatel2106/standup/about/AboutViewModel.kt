@@ -40,6 +40,7 @@ import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 
 /**
@@ -53,8 +54,7 @@ class AboutViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */
-    @VisibleForTesting
-    lateinit var authRepository: AboutRepository
+    @Inject lateinit var authRepository: AboutRepository
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.

@@ -26,7 +26,7 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @AppScope
-@Component(dependencies = [AppComponent::class], modules = [PrefModule::class])
+@Component(dependencies = [AppComponent::class])
 interface SplashComponent {
 
     fun inject(splashActivity: SplashActivity)

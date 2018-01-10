@@ -18,8 +18,6 @@
 package com.kevalpatel2106.standup.profile.di
 
 import com.kevalpatel2106.standup.misc.di.AppScope
-import com.kevalpatel2106.standup.misc.di.NetworkModule
-import com.kevalpatel2106.standup.misc.di.PrefModule
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepo
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepoImpl
 import com.kevalpatel2106.utils.UserSessionManager
@@ -33,7 +31,7 @@ import javax.inject.Named
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module(includes = [PrefModule::class, NetworkModule::class])
+@Module
 class ProfileModule {
 
     @Provides

@@ -17,10 +17,10 @@
 
 package com.kevalpatel2106.standup.db
 
+import android.app.Application
 import com.kevalpatel2106.standup.misc.di.AppScope
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
 
 /**
  * Created by Kevalpatel2106 on 09-Jan-18.
@@ -32,7 +32,7 @@ class DbModule {
 
     @Provides
     @AppScope
-    fun provideDatabase() = StandUpDb.getDb()
+    fun provideDatabase(application: Application) = StandUpDb.getDb(application)
 
     @Provides
     @AppScope

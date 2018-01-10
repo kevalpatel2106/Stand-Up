@@ -22,23 +22,23 @@ import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 import com.kevalpatel2106.standup.diary.repo.DiaryRepoImpl
 import com.kevalpatel2106.standup.misc.di.AppScope
-import com.kevalpatel2106.standup.misc.di.NetworkModule
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
+import javax.inject.Named
 
 /**
  * Created by Keval on 10/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module(includes = [NetworkModule::class, DbModule::class])
+@Module(includes = [DbModule::class])
 class DiaryModule {
 
     @Provides
     @AppScope
     fun provideDiaryRepo(userActivityDao: UserActivityDao,
-                         retrofit: Retrofit): DiaryRepo
+                         @Named("WITH_TOKEN") retrofit: Retrofit): DiaryRepo
             = DiaryRepoImpl(retrofit, userActivityDao)
 
 }

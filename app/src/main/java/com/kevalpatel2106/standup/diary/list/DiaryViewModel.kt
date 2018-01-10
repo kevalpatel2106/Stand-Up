@@ -30,6 +30,7 @@ import com.kevalpatel2106.standup.diary.di.DaggerDiaryComponent
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Keval on 23/12/17.
@@ -40,7 +41,7 @@ import io.reactivex.schedulers.Schedulers
 @ViewModel(DiaryFragment::class)
 class DiaryViewModel : BaseViewModel {
 
-    lateinit var userActivityRepo: DiaryRepo
+    @Inject lateinit var userActivityRepo: DiaryRepo
 
     /**
      * Private constructor to add the custom [DiaryRepo] for testing.

@@ -17,15 +17,11 @@
 
 package com.kevalpatel2106.standup.dashboard.di
 
-import com.kevalpatel2106.standup.about.repo.AboutRepository
-import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
 import com.kevalpatel2106.standup.db.DbModule
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.misc.di.AppScope
-import com.kevalpatel2106.standup.misc.di.NetworkModule
-import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -36,7 +32,7 @@ import javax.inject.Named
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module(includes = [NetworkModule::class, DbModule::class])
+@Module(includes = [DbModule::class])
 class DashboardModule {
 
     @Provides

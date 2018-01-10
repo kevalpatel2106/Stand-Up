@@ -20,7 +20,6 @@ package com.kevalpatel2106.standup.about.di
 import com.kevalpatel2106.standup.about.repo.AboutRepository
 import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
 import com.kevalpatel2106.standup.misc.di.AppScope
-import com.kevalpatel2106.standup.misc.di.NetworkModule
 import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Module
 import dagger.Provides
@@ -32,7 +31,7 @@ import javax.inject.Named
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module(includes = [NetworkModule::class])
+@Module
 class AboutModule {
 
     @Provides

@@ -19,7 +19,6 @@ package com.kevalpatel2106.standup.main
 
 import com.kevalpatel2106.standup.misc.di.AppComponent
 import com.kevalpatel2106.standup.misc.di.AppScope
-import com.kevalpatel2106.standup.misc.di.PrefModule
 import dagger.Component
 
 /**
@@ -28,7 +27,7 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @AppScope
-@Component(dependencies = [AppComponent::class], modules = [PrefModule::class])
+@Component(dependencies = [AppComponent::class])
 interface MainComponent {
 
     fun inject(mainActivity: MainActivity)

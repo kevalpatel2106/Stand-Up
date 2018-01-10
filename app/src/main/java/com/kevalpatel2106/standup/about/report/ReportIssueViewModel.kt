@@ -30,6 +30,7 @@ import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.misc.Validator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.
@@ -44,14 +45,14 @@ class ReportIssueViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */
-    @VisibleForTesting
-    lateinit var aboutRepository: AboutRepository
+    @Inject lateinit var aboutRepository: AboutRepository
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
      *
      * @param authRepository Add your own [UserAuthRepository].
      */
+    @Suppress("unused")
     @VisibleForTesting
     constructor(authRepository: AboutRepository) {
         this.aboutRepository = authRepository

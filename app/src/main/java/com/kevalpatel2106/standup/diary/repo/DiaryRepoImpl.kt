@@ -17,10 +17,7 @@
 
 package com.kevalpatel2106.standup.diary.repo
 
-import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.db.DailyActivitySummary
-import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo.Companion.PAGE_SIZE

@@ -18,16 +18,38 @@
 package com.kevalpatel2106.standup.misc.di
 
 import android.app.Application
-import com.kevalpatel2106.standup.SplashActivity
+import android.content.Context
+import com.kevalpatel2106.standup.BaseApplication
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Component
+import retrofit2.Retrofit
+import javax.inject.Named
+import javax.inject.Singleton
+
 
 /**
  * Created by Kevalpatel2106 on 08-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Component(modules = [AppModule::class, NetworkModule::class])
+@Singleton
+@Component(modules = [AppModule::class])
 interface AppComponent {
 
-    fun inject(application: Application)
+    fun inject(application: BaseApplication)
+
+    fun getContext(): Context
+
+    fun getApplication(): Application
+
+    @Named("WITH_TOKEN")
+    fun geRetrofit(): Retrofit
+
+    @Named("WITHOUT_TOKEN")
+    fun getRetrofit(): Retrofit
+
+    fun getUserSessionManagerProvider(): UserSessionManager
+
+    fun getSharedPrefsProvider(): SharedPrefsProvider
 }

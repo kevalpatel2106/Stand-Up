@@ -18,8 +18,15 @@
 package com.kevalpatel2106.standup.misc.di
 
 import android.app.Application
+import android.content.Context
+import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
+import javax.inject.Named
+import javax.inject.Singleton
 
 /**
  * Created by Kevalpatel2106 on 08-Jan-18.
@@ -27,9 +34,36 @@ import dagger.Provides
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Module
-class AppModule(private val appContext: Application) {
+class AppModule(private val appContext: Application, private val baseUrl: String) {
 
     @Provides
-    @AppScope
-    fun provideAppContext() = appContext
+    @Singleton
+    fun provideAppContext(): Application = appContext
+
+
+    @Provides
+    @Singleton
+    fun provideContext(): Context = appContext
+
+    @Provides
+    @Singleton
+    fun provideSharedPrefProvider(appContext: Application): SharedPrefsProvider
+            = SharedPrefsProvider(appContext)
+
+    @Provides
+    @Singleton
+    fun provideUserSession(sharedPrefsProvider: SharedPrefsProvider): UserSessionManager
+            = UserSessionManager(sharedPrefsProvider)
+
+    @Provides
+    @Singleton
+    @Named("WITH_TOKEN")
+    fun provideRetrofitClient(appContext: Application, userSessionManager: UserSessionManager): Retrofit =
+            ApiProvider(appContext, userSessionManager).getRetrofitClient(baseUrl)
+
+    @Provides
+    @Singleton
+    @Named("WITHOUT_TOKEN")
+    fun provideRetrofitClientWithoutToken(): Retrofit
+            = ApiProvider().getRetrofitClient(baseUrl)
 }

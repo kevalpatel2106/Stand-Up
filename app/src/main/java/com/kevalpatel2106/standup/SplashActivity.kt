@@ -60,6 +60,7 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Inject
         DaggerSplashComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()

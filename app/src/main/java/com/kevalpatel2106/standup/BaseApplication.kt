@@ -24,7 +24,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.kevalpatel2106.standup.misc.di.AppComponent
 import com.kevalpatel2106.standup.misc.di.AppModule
 import com.kevalpatel2106.standup.misc.di.DaggerAppComponent
-import com.kevalpatel2106.standup.misc.di.NetworkModule
 
 /**
  * Created by Keval on 31/12/17.
@@ -35,7 +34,7 @@ abstract class BaseApplication : Application() {
 
 
     companion object {
-        private lateinit var appComponent: AppComponent
+        lateinit var appComponent: AppComponent
 
         @JvmStatic
         fun getApplicationComponent(): AppComponent {
@@ -46,10 +45,11 @@ abstract class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        //Inject dagger
         appComponent = DaggerAppComponent.builder()
-                .appModule(AppModule(this))
-                .networkModule(NetworkModule(BuildConfig.BASE_URL))
+                .appModule(AppModule(this@BaseApplication, BuildConfig.BASE_URL))
                 .build()
+        appComponent.inject(this@BaseApplication)
 
         //Initialize firebase.
         FirebaseApp.initializeApp(this@BaseApplication)
