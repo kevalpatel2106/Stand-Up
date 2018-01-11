@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup.settings.list
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -56,8 +57,27 @@ class SettingsViewModel : BaseViewModel {
         settingsItemList.value = null
     }
 
-    internal fun prepareSettingsList(): Array<SettingsItem> {
+    internal fun prepareSettingsList() {
         val arrayList = ArrayList<SettingsItem>()
-        return arrayList.toArray(arrayOf<SettingsItem>())
+
+        //Add sync
+        arrayList.add(SettingsItem("Sync", R.drawable.ic_sync))
+
+        //Add DND
+        arrayList.add(SettingsItem("DND", R.drawable.ic_dnd_on))
+
+        //Add Notifications
+        arrayList.add(SettingsItem("Notifications", R.drawable.ic_notifications_bell))
+
+        //Add Sleep hour
+        arrayList.add(SettingsItem("Sleep hours", R.drawable.ic_sleeping))
+
+        //Add Sleep hour
+        arrayList.add(SettingsItem("Logout", R.drawable.ic_logout))
+
+        //Add Sleep hour
+        arrayList.add(SettingsItem("Privacy Policy", R.drawable.ic_privacy_policy))
+
+        settingsItemList.value = arrayList.toArray(arrayOf<SettingsItem>())
     }
 }

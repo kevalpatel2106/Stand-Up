@@ -34,7 +34,7 @@ class SettingsActivity : BaseActivity(), SettingsClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        setToolbar(R.id.toolbar, R.string.title_activity_settings, true)
+        setToolbar(R.id.include2, R.string.title_activity_settings, true)
 
         settings_list_rv.layoutManager = LinearLayoutManager(this@SettingsActivity)
         settings_list_rv.itemAnimator = DefaultItemAnimator()

@@ -46,7 +46,7 @@ class SettingListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
         fun createViewHolder(context: Context, parent: ViewGroup?): SettingListViewHolder {
             return SettingListViewHolder(LayoutInflater.from(context)
-                    .inflate(R.layout.row_settings, parent))
+                    .inflate(R.layout.row_settings, parent, false))
         }
     }
 }

@@ -24,14 +24,14 @@
 
     <com.kevalpatel2106.base.view.BaseImageView
         android:id="@+id/setting_row_icon_iv"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="?listPreferredItemPaddingLeft"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?attr/colorPrimary"
-        tools:srcCompat="@drawable/ic_changelog" />
+        tools:srcCompat="@drawable/ic_notifications_bell"/>
 
     <com.kevalpatel2106.base.view.BaseTextView
         android:id="@+id/setting_row_title_tv"
