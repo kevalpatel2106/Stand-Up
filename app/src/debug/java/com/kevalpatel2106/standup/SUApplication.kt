@@ -31,7 +31,7 @@ import timber.log.Timber
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 
-class SUApplication : BaseSUApplication() {
+class SUApplication : BaseApplication() {
     override fun isReleaseBuild(): Boolean = false
 
     override fun onCreate() {

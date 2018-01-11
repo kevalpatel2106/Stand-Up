@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.dashboard
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
@@ -59,7 +60,11 @@ class DashboardViewModelTest {
     fun setUp() {
         mockServerManager.startMockWebServer()
         userActivityDao = UserActivityDaoMockImpl(ArrayList())
-        dashboardRepo = DashboardRepoImpl(userActivityDao, mockServerManager.getBaseUrl())
+
+        dashboardRepo = DashboardRepoImpl(
+                userActivityDao,
+                ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())
+        )
 
         model = DashboardViewModel(dashboardRepo)
     }

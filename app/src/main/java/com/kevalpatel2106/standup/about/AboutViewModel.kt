@@ -27,10 +27,11 @@ import android.support.annotation.VisibleForTesting
 import com.google.android.gms.appinvite.AppInviteInvitation
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.about.di.DaggerAboutComponent
 import com.kevalpatel2106.standup.about.donate.SupportDevelopmentActivity
 import com.kevalpatel2106.standup.about.repo.AboutRepository
-import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
 import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
 import com.kevalpatel2106.standup.about.report.ReportIssueActivity
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
@@ -39,6 +40,7 @@ import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 
 /**
@@ -46,14 +48,13 @@ import io.reactivex.schedulers.Schedulers
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class AboutViewModel : BaseViewModel {
+class AboutViewModel : BaseViewModel {
     val REQUEST_CODE_INVITE = 6123
 
     /**
      * Repository to provide user authentications.
      */
-    @VisibleForTesting
-    internal var authRepository: AboutRepository
+    @Inject lateinit var authRepository: AboutRepository
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
@@ -64,22 +65,28 @@ internal class AboutViewModel : BaseViewModel {
     @VisibleForTesting
     constructor(authRepository: AboutRepository) : super() {
         this.authRepository = authRepository
+
+        init()
     }
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        authRepository = AboutRepositoryImpl()
+    constructor() {
+        DaggerAboutComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@AboutViewModel)
+
+        init()
     }
 
     internal val isCheckingUpdate = MutableLiveData<Boolean>()
 
     internal val versionUpdateResult = MutableLiveData<CheckVersionResponse>()
 
-    init {
+    fun init() {
         isCheckingUpdate.value = false
     }
 

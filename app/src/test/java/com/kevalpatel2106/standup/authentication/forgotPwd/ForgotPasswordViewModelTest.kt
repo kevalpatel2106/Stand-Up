@@ -18,7 +18,7 @@
 package com.kevalpatel2106.standup.authentication.forgotPwd
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.standup.UnitTestUtils
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -34,7 +34,10 @@ import java.nio.file.Paths
  * @author 'https://github.com/kevalpatel2106'
  */
 class ForgotPasswordViewModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", path)
 
     @Rule
     @JvmField
@@ -47,18 +50,13 @@ class ForgotPasswordViewModelTest {
     private lateinit var forgotPasswordViewModel: ForgotPasswordViewModel
     private val mockServerManager = MockServerManager()
 
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setGlobal() = UnitTestUtils.initApp()
-    }
-
     @Before
     fun setUp() {
         //Set the repo
         mockServerManager.startMockWebServer()
-        forgotPasswordViewModel = ForgotPasswordViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
+        forgotPasswordViewModel = ForgotPasswordViewModel(
+                UserAuthRepositoryImpl(ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl()))
+        )
     }
 
     @After

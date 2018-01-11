@@ -20,11 +20,13 @@ package com.kevalpatel2106.standup.authentication.deviceReg
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.content.SharedPreferences
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.UnitTestUtils
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
@@ -43,7 +45,10 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class DeviceRegViewModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", path)
 
     @Rule
     @JvmField
@@ -54,14 +59,9 @@ class DeviceRegViewModelTest {
     val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
 
     private lateinit var deviceRegViewModel: DeviceRegViewModel
+    private lateinit var userSessionManager: UserSessionManager
+    private lateinit var sharedPrefProvider: SharedPrefsProvider
     private val mockServerManager = MockServerManager()
-
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setGlobal() = UnitTestUtils.initApp()
-    }
 
     @Before
     fun setUp() {
@@ -72,9 +72,16 @@ class DeviceRegViewModelTest {
         Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("149.3")
 
-        //Set the repo
         mockServerManager.startMockWebServer()
-        deviceRegViewModel = DeviceRegViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
+
+        //Init server
+        sharedPrefProvider = SharedPrefsProvider(sharedPrefs)
+        userSessionManager = UserSessionManager(sharedPrefProvider)
+        deviceRegViewModel = DeviceRegViewModel(
+                UserAuthRepositoryImpl(ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())),
+                sharedPrefProvider,
+                userSessionManager
+        )
     }
 
     @After

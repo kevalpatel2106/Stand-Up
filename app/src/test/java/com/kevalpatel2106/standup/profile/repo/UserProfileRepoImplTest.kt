@@ -22,6 +22,7 @@ import android.content.SharedPreferences
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
@@ -43,33 +44,39 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class UserProfileRepoImplTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/profile/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/profile/repo", path)
 
     private val mockServerManager = MockServerManager()
     private lateinit var mUserProfileRepoImpl: UserProfileRepoImpl
+    private lateinit var sharedPrefs: SharedPreferences
 
     companion object {
 
-        private lateinit var sharedPrefs: SharedPreferences
 
         @JvmStatic
         @BeforeClass
         fun setUpClass() {
-            val context = Mockito.mock(Context::class.java)
-            sharedPrefs = Mockito.mock(SharedPreferences::class.java)
-            val sharedPrefsEditor = Mockito.mock(SharedPreferences.Editor::class.java)
-            Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
-            Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
 
-            SharedPrefsProvider.init(context)
-            ApiProvider.init()
         }
     }
 
     @Before
     fun setUp() {
+        val context = Mockito.mock(Context::class.java)
+        sharedPrefs = Mockito.mock(SharedPreferences::class.java)
+
+        val sharedPrefsEditor = Mockito.mock(SharedPreferences.Editor::class.java)
+        Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
+        Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
+
         mockServerManager.startMockWebServer()
-        mUserProfileRepoImpl = UserProfileRepoImpl(mockServerManager.getBaseUrl())
+        mUserProfileRepoImpl = UserProfileRepoImpl(
+                ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl()),
+                UserSessionManager(SharedPrefsProvider(sharedPrefs))
+        )
     }
 
     @After

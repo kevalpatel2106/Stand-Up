@@ -17,10 +17,7 @@
 
 package com.kevalpatel2106.standup.diary.repo
 
-import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.db.DailyActivitySummary
-import com.kevalpatel2106.standup.db.StandUpDb
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo.Companion.PAGE_SIZE
@@ -29,7 +26,10 @@ import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function
+import retrofit2.Retrofit
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.collections.ArrayList
 
 /**
@@ -37,10 +37,8 @@ import kotlin.collections.ArrayList
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class DiaryRepoImpl @VisibleForTesting constructor(private val userActivityDao: UserActivityDao,
-                                                   private val baseUrl: String) : DiaryRepo {
-
-    constructor() : this(StandUpDb.getDb().userActivityDao(), BuildConfig.BASE_URL)
+class DiaryRepoImpl @Inject constructor(@Named("WITH_TOKEN") private val retrofit: Retrofit,
+                                        private val userActivityDao: UserActivityDao) : DiaryRepo {
 
     /**
      * Calling this function will load maximum [PAGE_SIZE] number of days summary which is [beforeMills]

@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.reminder.repo
 
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
@@ -38,7 +39,7 @@ import org.junit.runners.JUnit4
 class ReminderRepoImplTest {
 
     private lateinit var reminderRepo: ReminderRepoImpl
-    private lateinit var mUserActivityDao: UserActivityDaoMockImpl
+    private lateinit var userActivityDao: UserActivityDaoMockImpl
     private lateinit var mockWebServerManager: MockServerManager
 
     @Before
@@ -48,9 +49,12 @@ class ReminderRepoImplTest {
         mockWebServerManager.startMockWebServer()
 
         //Mock database table
-        mUserActivityDao = UserActivityDaoMockImpl(ArrayList())
+        userActivityDao = UserActivityDaoMockImpl(ArrayList())
 
-        reminderRepo = ReminderRepoImpl(mUserActivityDao, mockWebServerManager.getBaseUrl())
+        reminderRepo = ReminderRepoImpl(
+                userActivityDao,
+                ApiProvider().getRetrofitClient(mockWebServerManager.getBaseUrl())
+        )
     }
 
     @After
@@ -78,23 +82,23 @@ class ReminderRepoImplTest {
                 .assertValueCount(1)
                 .assertValueAt(0) { it == 0L }
                 .assertComplete()
-        Assert.assertEquals(mUserActivityDao.tableItems.size, 1)
-        Assert.assertEquals(mUserActivityDao.tableItems[0].eventStartTimeMills, startTime)
-        Assert.assertEquals(mUserActivityDao.tableItems[0].eventEndTimeMills, endTime)
-        Assert.assertEquals(mUserActivityDao.tableItems[0].userActivityType, UserActivityType.MOVING)
+        Assert.assertEquals(userActivityDao.tableItems.size, 1)
+        Assert.assertEquals(userActivityDao.tableItems[0].eventStartTimeMills, startTime)
+        Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, endTime)
+        Assert.assertEquals(userActivityDao.tableItems[0].userActivityType, UserActivityType.MOVING)
     }
 
     @Test
     fun checkInsertNewAndTerminatePreviousActivityWithLatestActivityOfSameType() {
         val startTime = System.currentTimeMillis() - 3600000
         //Set fake data.
-        mUserActivityDao.insert(UserActivity(
+        userActivityDao.insert(UserActivity(
                 eventStartTimeMills = System.currentTimeMillis() - 4200000,
                 eventEndTimeMills = System.currentTimeMillis() - 3600000,
                 isSynced = false,
                 type = UserActivityType.MOVING.toString().toLowerCase())
         )
-        mUserActivityDao.insert(UserActivity(
+        userActivityDao.insert(UserActivity(
                 eventStartTimeMills = startTime,
                 eventEndTimeMills = 0,
                 isSynced = false,
@@ -117,10 +121,10 @@ class ReminderRepoImplTest {
                 .assertValueCount(1)
                 .assertValueAt(0) { it == 0L }
                 .assertComplete()
-        Assert.assertEquals(mUserActivityDao.tableItems.size, 2)
-        Assert.assertEquals(mUserActivityDao.tableItems[0].eventStartTimeMills, startTime)
-        Assert.assertEquals(mUserActivityDao.tableItems[0].eventEndTimeMills, 0 /* Event not ended yet */)
-        Assert.assertEquals(mUserActivityDao.tableItems[0].userActivityType, UserActivityType.MOVING)
+        Assert.assertEquals(userActivityDao.tableItems.size, 2)
+        Assert.assertEquals(userActivityDao.tableItems[0].eventStartTimeMills, startTime)
+        Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, 0 /* Event not ended yet */)
+        Assert.assertEquals(userActivityDao.tableItems[0].userActivityType, UserActivityType.MOVING)
     }
 
     @Test
@@ -129,13 +133,13 @@ class ReminderRepoImplTest {
         val startTime = System.currentTimeMillis() - 3600000
         val startTimeOfNewEvent = System.currentTimeMillis() - 180000
         val endTimeOfNewEvent = System.currentTimeMillis()
-        mUserActivityDao.insert(UserActivity(
+        userActivityDao.insert(UserActivity(
                 eventStartTimeMills = System.currentTimeMillis() - 4200000,
                 eventEndTimeMills = System.currentTimeMillis() - 3600000,
                 isSynced = false,
                 type = UserActivityType.MOVING.toString().toLowerCase())
         )
-        mUserActivityDao.insert(UserActivity(
+        userActivityDao.insert(UserActivity(
                 eventStartTimeMills = startTime,
                 eventEndTimeMills = 0,
                 isSynced = false,
@@ -159,15 +163,15 @@ class ReminderRepoImplTest {
                 .assertValueAt(0) { it == 2L }
                 .assertComplete()
 
-        Assert.assertEquals(mUserActivityDao.tableItems.size, 3)
+        Assert.assertEquals(userActivityDao.tableItems.size, 3)
 
-        Assert.assertEquals(mUserActivityDao.tableItems[1].eventStartTimeMills, startTime)
-        Assert.assertEquals(mUserActivityDao.tableItems[1].eventEndTimeMills, startTimeOfNewEvent)
-        Assert.assertEquals(mUserActivityDao.tableItems[1].userActivityType, UserActivityType.MOVING)
+        Assert.assertEquals(userActivityDao.tableItems[1].eventStartTimeMills, startTime)
+        Assert.assertEquals(userActivityDao.tableItems[1].eventEndTimeMills, startTimeOfNewEvent)
+        Assert.assertEquals(userActivityDao.tableItems[1].userActivityType, UserActivityType.MOVING)
 
-        Assert.assertEquals(mUserActivityDao.tableItems[0].eventStartTimeMills, startTimeOfNewEvent)
-        Assert.assertEquals(mUserActivityDao.tableItems[0].eventEndTimeMills, endTimeOfNewEvent)
-        Assert.assertEquals(mUserActivityDao.tableItems[0].userActivityType, UserActivityType.SITTING)
+        Assert.assertEquals(userActivityDao.tableItems[0].eventStartTimeMills, startTimeOfNewEvent)
+        Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, endTimeOfNewEvent)
+        Assert.assertEquals(userActivityDao.tableItems[0].userActivityType, UserActivityType.SITTING)
     }
 
 }

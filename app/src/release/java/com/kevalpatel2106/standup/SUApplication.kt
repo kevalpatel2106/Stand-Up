@@ -1,5 +1,5 @@
 /*
- *  Copyright 2017 Keval Patel.
+ *  Copyright 2018 Keval Patel.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@
 
 package com.kevalpatel2106.standup
 
+import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.core.CrashlyticsCore
 import com.facebook.stetho.Stetho
-import com.google.firebase.analytics.FirebaseAnalytics
+import io.fabric.sdk.android.Fabric
 import timber.log.Timber
 
 /**
@@ -27,7 +29,7 @@ import timber.log.Timber
  * Application class for the release application. This will initialize the timber tree.
  */
 
-class SUApplication : BaseSUApplication() {
+class SUApplication : BaseApplication() {
     override fun isReleaseBuild() = true
 
     override fun onCreate() {
@@ -40,8 +42,8 @@ class SUApplication : BaseSUApplication() {
         Stetho.initializeWithDefaults(this)
 
         // Initializes Fabric for builds that don't use the debug build type.
-//        Fabric.with(this, Crashlytics.Builder()
-//                .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-//                .build())
+        Fabric.with(this, Crashlytics.Builder()
+                .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .build())
     }
 }

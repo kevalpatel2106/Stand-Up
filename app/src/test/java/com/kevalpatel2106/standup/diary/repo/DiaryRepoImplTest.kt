@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.diary.repo
 
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoMockImpl
@@ -41,25 +42,29 @@ import java.util.*
  */
 @RunWith(JUnit4::class)
 class DiaryRepoImplTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/diary/repo",
-            Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/diary/repo", path)
 
     private lateinit var dairyRepoImpl: DiaryRepoImpl
     private lateinit var userActivityDao: UserActivityDaoMockImpl
-    private lateinit var mockWebServerManager: MockServerManager
+    private val mockWebServerManager = MockServerManager()
 
     private val DIFF_BETWEEN_END_AND_START = 60000L   //60 Sec
 
     @Before
     fun setUp() {
         //Mock network set
-        mockWebServerManager = MockServerManager()
         mockWebServerManager.startMockWebServer()
 
         //Mock database table
         userActivityDao = UserActivityDaoMockImpl(ArrayList())
 
-        dairyRepoImpl = DiaryRepoImpl(userActivityDao, mockWebServerManager.getBaseUrl())
+        dairyRepoImpl = DiaryRepoImpl(
+                ApiProvider().getRetrofitClient(mockWebServerManager.getBaseUrl()),
+                userActivityDao
+        )
     }
 
     @After

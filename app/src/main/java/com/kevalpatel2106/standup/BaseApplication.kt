@@ -21,38 +21,45 @@ import android.app.Application
 import com.facebook.FacebookSdk
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.standup.db.StandUpDb
-import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.standup.misc.di.AppComponent
+import com.kevalpatel2106.standup.misc.di.AppModule
+import com.kevalpatel2106.standup.misc.di.DaggerAppComponent
 
 /**
  * Created by Keval on 31/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-abstract class BaseSUApplication : Application() {
+abstract class BaseApplication : Application() {
+
+
+    companion object {
+        lateinit var appComponent: AppComponent
+
+        @JvmStatic
+        fun getApplicationComponent(): AppComponent {
+            return appComponent
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
 
-        //Initialize shared preference
-        SharedPrefsProvider.init(this)
-
-        //Initialize db
-        StandUpDb.init(this@BaseSUApplication)
-
-        //Initialize the api module
-        ApiProvider.init(this@BaseSUApplication)
+        //Inject dagger
+        appComponent = DaggerAppComponent.builder()
+                .appModule(AppModule(this@BaseApplication, BuildConfig.BASE_URL))
+                .build()
+        appComponent.inject(this@BaseApplication)
 
         //Initialize firebase.
-        FirebaseApp.initializeApp(this@BaseSUApplication)
+        FirebaseApp.initializeApp(this@BaseApplication)
 
         //Initialize facebook
         @Suppress("DEPRECATION")
-        FacebookSdk.sdkInitialize(this@BaseSUApplication)
+        FacebookSdk.sdkInitialize(this@BaseApplication)
 
         //Enable firebase analytics
-        FirebaseAnalytics.getInstance(this@BaseSUApplication)
+        FirebaseAnalytics.getInstance(this@BaseApplication)
                 .setAnalyticsCollectionEnabled(isReleaseBuild())
     }
 

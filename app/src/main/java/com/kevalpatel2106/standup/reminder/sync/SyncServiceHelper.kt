@@ -52,8 +52,8 @@ object SyncServiceHelper {
 
     @VisibleForTesting
     @JvmStatic
-    internal fun shouldSync(): Boolean {
-        return UserSessionManager.isUserLoggedIn
+    internal fun shouldSync(userSessionManager: UserSessionManager): Boolean {
+        return userSessionManager.isUserLoggedIn
     }
 
 }

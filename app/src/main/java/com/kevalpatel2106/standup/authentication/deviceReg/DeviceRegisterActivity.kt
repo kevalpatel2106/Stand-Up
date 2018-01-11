@@ -40,38 +40,25 @@ import kotlinx.android.synthetic.main.activity_device_register.*
 
 class DeviceRegisterActivity : AppCompatActivity() {
 
-    companion object {
-
-        @VisibleForTesting
-        const val ARG_IS_NEW_USER = "arg_is_new_user"
-
-        @VisibleForTesting
-        const val ARG_IS_VERIFIED = "arg_is_verified"
-
-        /**
-         * Launch the [DeviceRegisterActivity].
-         *
-         * @param context Instance of the caller.
-         */
-        @JvmStatic
-        fun launch(context: Context, isNewUser: Boolean, isVerified: Boolean) {
-            val launchIntent = Intent(context, DeviceRegisterActivity::class.java)
-            launchIntent.putExtra(ARG_IS_NEW_USER, isNewUser)
-            launchIntent.putExtra(ARG_IS_VERIFIED, isVerified)
-            context.startActivity(launchIntent)
-        }
-    }
-
     @VisibleForTesting
     internal lateinit var model: DeviceRegViewModel
 
     @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        model = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
 
         setContentView(R.layout.activity_device_register)
+        if (device_reg_iv.drawable is Animatable) {
+            (device_reg_iv.drawable as Animatable).start()
+        }
 
+        setModel()
+        model.register(Utils.getDeviceId(this@DeviceRegisterActivity), FirebaseInstanceId.getInstance().token)
+    }
+
+    @SuppressLint("VisibleForTests")
+    private fun setModel() {
+        model = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
         model.reposeToken.observe(this@DeviceRegisterActivity, Observer {
             it?.let {
 
@@ -85,12 +72,6 @@ class DeviceRegisterActivity : AppCompatActivity() {
         model.errorMessage.observe(this@DeviceRegisterActivity, Observer {
             it!!.getMessage(this@DeviceRegisterActivity)?.let { showSnack(it) }
         })
-
-        if (device_reg_iv.drawable is Animatable) {
-            (device_reg_iv.drawable as Animatable).start()
-        }
-
-        model.register(Utils.getDeviceId(this@DeviceRegisterActivity), FirebaseInstanceId.getInstance().token)
     }
 
     @VisibleForTesting
@@ -112,5 +93,27 @@ class DeviceRegisterActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         //Do nothing
+    }
+
+    companion object {
+
+        @VisibleForTesting
+        const val ARG_IS_NEW_USER = "arg_is_new_user"
+
+        @VisibleForTesting
+        const val ARG_IS_VERIFIED = "arg_is_verified"
+
+        /**
+         * Launch the [DeviceRegisterActivity].
+         *
+         * @param context Instance of the caller.
+         */
+        @JvmStatic
+        fun launch(context: Context, isNewUser: Boolean, isVerified: Boolean) {
+            val launchIntent = Intent(context, DeviceRegisterActivity::class.java)
+            launchIntent.putExtra(ARG_IS_NEW_USER, isNewUser)
+            launchIntent.putExtra(ARG_IS_VERIFIED, isVerified)
+            context.startActivity(launchIntent)
+        }
     }
 }

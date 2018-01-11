@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup.constants
 import android.content.Context
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
 
@@ -60,8 +61,9 @@ fun Context.logEvent(event: String,
 
     val param = bundle ?: Bundle()
 
-    if (UserSessionManager.isUserLoggedIn) {
-        param.putLong(AnalyticsEvents.KEY_USER_ID, UserSessionManager.userId)
+    val userSessionManager = UserSessionManager(SharedPrefsProvider(this))
+    if (userSessionManager.isUserLoggedIn) {
+        param.putLong(AnalyticsEvents.KEY_USER_ID, userSessionManager.userId)
         param.putString(AnalyticsEvents.KEY_DEVICE_ID, Utils.getDeviceId(applicationContext))
     }
 

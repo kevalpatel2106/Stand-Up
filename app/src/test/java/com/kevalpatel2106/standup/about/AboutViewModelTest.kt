@@ -18,7 +18,6 @@
 package com.kevalpatel2106.standup.about
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
@@ -26,7 +25,11 @@ import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import org.junit.*
+import com.kevalpatel2106.utils.UserSessionManager
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -42,7 +45,11 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class AboutViewModelTest{
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/about/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/about/repo", path)
+    private val TEST_USER_ID: Long = 12L
 
     @Rule
     @JvmField
@@ -55,28 +62,20 @@ class AboutViewModelTest{
     private lateinit var viewModel: AboutViewModel
     private val mockServerManager = MockServerManager()
 
-    companion object {
-
-        private lateinit var sharedPrefs: SharedPreferences
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpClass() {
-            val context = Mockito.mock(Context::class.java)
-            sharedPrefs = Mockito.mock(SharedPreferences::class.java)
-            val sharedPrefsEditor = Mockito.mock(SharedPreferences.Editor::class.java)
-            Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
-            Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
-
-            SharedPrefsProvider.init(context)
-            ApiProvider.init()
-        }
-    }
 
     @Before
     fun setUp(){
+        val sharedPrefs = Mockito.mock(SharedPreferences::class.java)
+        Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(TEST_USER_ID)
+
+        val sharedPrefsEditor = Mockito.mock(SharedPreferences.Editor::class.java)
+        Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
+
         mockServerManager.startMockWebServer()
-        val aboutRepository = AboutRepositoryImpl(mockServerManager.getBaseUrl())
+        val aboutRepository = AboutRepositoryImpl(
+                ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl()),
+                UserSessionManager(SharedPrefsProvider(sharedPrefs))
+        )
         viewModel = AboutViewModel(aboutRepository)
     }
 

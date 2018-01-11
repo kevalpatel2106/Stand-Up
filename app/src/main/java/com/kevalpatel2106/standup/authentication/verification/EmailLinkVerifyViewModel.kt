@@ -21,22 +21,25 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.CallbackEvent
 import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 @com.kevalpatel2106.base.annotations.ViewModel(VerifyEmailActivity::class)
-internal class EmailLinkVerifyViewModel : BaseViewModel {
+class EmailLinkVerifyViewModel : BaseViewModel {
 
     /**
      * Repository to provide user authentications.
      */
-    @VisibleForTesting
-    internal var mUserAuthRepo: UserAuthRepository
+    @Inject lateinit var userAuthRepo: UserAuthRepository
 
-    internal val emailVerified = CallbackEvent()
+    @Inject lateinit var userSessionManager: UserSessionManager
+
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
@@ -45,21 +48,26 @@ internal class EmailLinkVerifyViewModel : BaseViewModel {
      */
     @Suppress("unused")
     @VisibleForTesting
-    constructor(userAuthRepo: UserAuthRepository) : super() {
-        mUserAuthRepo = userAuthRepo
+    constructor(userAuthRepo: UserAuthRepository,
+                userSessionManager: UserSessionManager) : super() {
+        this.userAuthRepo = userAuthRepo
+        this.userSessionManager = userSessionManager
     }
 
     /**
      * Zero parameter constructor.
      */
-    @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        mUserAuthRepo = UserAuthRepositoryImpl()
+    constructor() {
+        DaggerUserAuthComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@EmailLinkVerifyViewModel)
     }
 
+    internal val emailVerified = CallbackEvent()
+
     internal fun verifyEmail(url: String) {
-        addDisposable(mUserAuthRepo.verifyEmailLink(url)
+        addDisposable(userAuthRepo.verifyEmailLink(url)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnTerminate {
@@ -70,6 +78,9 @@ internal class EmailLinkVerifyViewModel : BaseViewModel {
                 }
                 .subscribe({
                     emailVerified.dispatch()
+
+                    //Change the flag to true.
+                    userSessionManager.isUserVerified = true
                 }, {
                     val errorMsg = ErrorMessage(it.message)
                     errorMsg.errorImage = R.drawable.ic_warning

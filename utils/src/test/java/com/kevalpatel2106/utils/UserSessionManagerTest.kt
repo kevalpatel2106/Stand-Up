@@ -40,11 +40,13 @@ class UserSessionManagerTest {
     private val testHeight = 123F
     private val testWeight = 222F
 
+    private lateinit var userSessionManager: UserSessionManager
+
     @Before
     fun setUp() {
-        SharedPrefsProvider.init(MockSharedPreference())
+        userSessionManager = UserSessionManager(SharedPrefsProvider(MockSharedPreference()))
 
-        UserSessionManager.setNewSession(
+        userSessionManager.setNewSession(
                 testUserId,
                 testDisplayName,
                 testEmail,
@@ -55,16 +57,16 @@ class UserSessionManagerTest {
 
     @Test
     fun checkSetNewSessionWithToken() {
-        Assert.assertEquals(UserSessionManager.userId, testUserId)
-        Assert.assertEquals(UserSessionManager.displayName, testDisplayName)
-        Assert.assertEquals(UserSessionManager.email, testEmail)
-        Assert.assertEquals(UserSessionManager.token, testToken)
-        Assert.assertTrue(UserSessionManager.isUserVerified)
+        Assert.assertEquals(userSessionManager.userId, testUserId)
+        Assert.assertEquals(userSessionManager.displayName, testDisplayName)
+        Assert.assertEquals(userSessionManager.email, testEmail)
+        Assert.assertEquals(userSessionManager.token, testToken)
+        Assert.assertTrue(userSessionManager.isUserVerified)
     }
 
     @Test
     fun checkSetNewSessionWithoutToken() {
-        UserSessionManager.setNewSession(
+        userSessionManager.setNewSession(
                 testUserId,
                 testDisplayName,
                 testEmail,
@@ -72,16 +74,16 @@ class UserSessionManagerTest {
                 testPhotoUrl,
                 false)
 
-        Assert.assertEquals(UserSessionManager.userId, testUserId)
-        Assert.assertEquals(UserSessionManager.displayName, testDisplayName)
-        Assert.assertEquals(UserSessionManager.email, testEmail)
-        Assert.assertNull(UserSessionManager.token)
-        Assert.assertFalse(UserSessionManager.isUserVerified)
+        Assert.assertEquals(userSessionManager.userId, testUserId)
+        Assert.assertEquals(userSessionManager.displayName, testDisplayName)
+        Assert.assertEquals(userSessionManager.email, testEmail)
+        Assert.assertNull(userSessionManager.token)
+        Assert.assertFalse(userSessionManager.isUserVerified)
     }
 
     @Test
     fun checkUpdateSession() {
-        UserSessionManager.updateSession(
+        userSessionManager.updateSession(
                 testDisplayName.plus("1"),
                 testPhotoUrl.plus("1"),
                 testHeight,
@@ -89,77 +91,77 @@ class UserSessionManagerTest {
                 false
         )
 
-        Assert.assertEquals(UserSessionManager.userId, testUserId)
-        Assert.assertEquals(UserSessionManager.email, testEmail)
-        Assert.assertEquals(UserSessionManager.token, testToken)
-        Assert.assertTrue(UserSessionManager.isUserVerified)
-        Assert.assertEquals(UserSessionManager.displayName, testDisplayName.plus("1"))
-        Assert.assertEquals(UserSessionManager.photo, testPhotoUrl.plus("1"))
-        Assert.assertEquals(UserSessionManager.height, testHeight)
-        Assert.assertEquals(UserSessionManager.weight, testWeight)
-        Assert.assertFalse(UserSessionManager.isMale)
+        Assert.assertEquals(userSessionManager.userId, testUserId)
+        Assert.assertEquals(userSessionManager.email, testEmail)
+        Assert.assertEquals(userSessionManager.token, testToken)
+        Assert.assertTrue(userSessionManager.isUserVerified)
+        Assert.assertEquals(userSessionManager.displayName, testDisplayName.plus("1"))
+        Assert.assertEquals(userSessionManager.photo, testPhotoUrl.plus("1"))
+        Assert.assertEquals(userSessionManager.height, testHeight)
+        Assert.assertEquals(userSessionManager.weight, testWeight)
+        Assert.assertFalse(userSessionManager.isMale)
     }
 
     @Test
     fun checkUpdateSessionWithMinParams() {
-        UserSessionManager.updateSession(testDisplayName.plus("1"))
+        userSessionManager.updateSession(testDisplayName.plus("1"))
 
-        Assert.assertEquals(UserSessionManager.userId, testUserId)
-        Assert.assertEquals(UserSessionManager.email, testEmail)
-        Assert.assertEquals(UserSessionManager.token, testToken)
-        Assert.assertTrue(UserSessionManager.isUserVerified)
-        Assert.assertEquals(UserSessionManager.displayName, testDisplayName.plus("1"))
-        Assert.assertNull(UserSessionManager.photo)
-        Assert.assertEquals(UserSessionManager.height, 0F)
-        Assert.assertEquals(UserSessionManager.weight, 0F)
-        Assert.assertTrue(UserSessionManager.isMale)
+        Assert.assertEquals(userSessionManager.userId, testUserId)
+        Assert.assertEquals(userSessionManager.email, testEmail)
+        Assert.assertEquals(userSessionManager.token, testToken)
+        Assert.assertTrue(userSessionManager.isUserVerified)
+        Assert.assertEquals(userSessionManager.displayName, testDisplayName.plus("1"))
+        Assert.assertNull(userSessionManager.photo)
+        Assert.assertEquals(userSessionManager.height, 0F)
+        Assert.assertEquals(userSessionManager.weight, 0F)
+        Assert.assertTrue(userSessionManager.isMale)
     }
 
     @Test
     fun checkClearSession() {
-        UserSessionManager.clearUserSession()
+        userSessionManager.clearUserSession()
 
-        Assert.assertEquals(UserSessionManager.userId, -1L)
-        Assert.assertNull(UserSessionManager.email)
-        Assert.assertNull(UserSessionManager.token)
-        Assert.assertFalse(UserSessionManager.isUserVerified)
-        Assert.assertNull(UserSessionManager.displayName)
-        Assert.assertNull(UserSessionManager.photo)
-        Assert.assertEquals(UserSessionManager.height, 0F)
-        Assert.assertEquals(UserSessionManager.weight, 0F)
-        Assert.assertTrue(UserSessionManager.isMale)
+        Assert.assertEquals(userSessionManager.userId, -1L)
+        Assert.assertNull(userSessionManager.email)
+        Assert.assertNull(userSessionManager.token)
+        Assert.assertFalse(userSessionManager.isUserVerified)
+        Assert.assertNull(userSessionManager.displayName)
+        Assert.assertNull(userSessionManager.photo)
+        Assert.assertEquals(userSessionManager.height, 0F)
+        Assert.assertEquals(userSessionManager.weight, 0F)
+        Assert.assertTrue(userSessionManager.isMale)
     }
 
     @Test
     fun checkClearToken() {
-        UserSessionManager.clearToken()
+        userSessionManager.clearToken()
 
-        Assert.assertEquals(UserSessionManager.userId, testUserId)
-        Assert.assertEquals(UserSessionManager.displayName, testDisplayName)
-        Assert.assertEquals(UserSessionManager.email, testEmail)
-        Assert.assertNull(UserSessionManager.token)
-        Assert.assertTrue(UserSessionManager.isUserVerified)
+        Assert.assertEquals(userSessionManager.userId, testUserId)
+        Assert.assertEquals(userSessionManager.displayName, testDisplayName)
+        Assert.assertEquals(userSessionManager.email, testEmail)
+        Assert.assertNull(userSessionManager.token)
+        Assert.assertTrue(userSessionManager.isUserVerified)
     }
 
     @Test
     fun checkIsItMeWithOwnId() {
-        Assert.assertTrue(UserSessionManager.isItMe(testUserId))
+        Assert.assertTrue(userSessionManager.isItMe(testUserId))
     }
 
     @Test
     fun checkIsItMeWithOtherId() {
-        Assert.assertFalse(UserSessionManager.isItMe(9876543L))
+        Assert.assertFalse(userSessionManager.isItMe(9876543L))
     }
 
     @Test
     fun checkEmail() {
-        UserSessionManager.email = testEmail
-        Assert.assertEquals(UserSessionManager.email, testEmail)
+        userSessionManager.email = testEmail
+        Assert.assertEquals(userSessionManager.email, testEmail)
     }
 
     @Test
     fun checkToken() {
-        UserSessionManager.token = testToken
-        Assert.assertEquals(UserSessionManager.token, testToken)
+        userSessionManager.token = testToken
+        Assert.assertEquals(userSessionManager.token, testToken)
     }
 }

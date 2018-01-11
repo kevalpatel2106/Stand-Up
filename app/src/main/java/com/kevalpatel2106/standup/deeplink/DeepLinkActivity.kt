@@ -25,6 +25,7 @@ import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.verification.EmailLinkVerificationActivity
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 
 /**
@@ -44,7 +45,7 @@ class DeepLinkActivity : BaseActivity() {
         super.onNewIntent(intent)
 
         //Check if the user is logged in?
-        if (!UserSessionManager.isUserLoggedIn) {
+        if (!UserSessionManager(SharedPrefsProvider(this@DeepLinkActivity)).isUserLoggedIn) {
             startActivity(SplashActivity.getLaunchIntent(this@DeepLinkActivity))
             return
         }

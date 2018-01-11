@@ -18,7 +18,10 @@
 package com.kevalpatel2106.network
 
 import com.kevalpatel2106.testutils.MockServerManager
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
@@ -35,29 +38,18 @@ import java.nio.file.Paths
 
 @RunWith(JUnit4::class)
 class JsonResponsesTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", Paths.get("").toAbsolutePath().toString())
-
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpClass() {
-            ApiProvider.init()
-        }
-
-
-        @JvmStatic
-        @AfterClass
-        fun tearUpClass() {
-            ApiProvider.close()
-        }
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("network")) it else it.plus("/network")
     }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", path)
 
+    private lateinit var apiProvider: ApiProvider
     private val mockWebServer = MockServerManager()
 
     @Before
     fun setUp() {
         mockWebServer.startMockWebServer()
+        apiProvider = ApiProvider()
     }
 
     @After
@@ -70,7 +62,7 @@ class JsonResponsesTest {
     fun checkFieldMissingResponse() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/required_field_missing_sample.json"))
 
-        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -85,7 +77,7 @@ class JsonResponsesTest {
     fun checkServerExceptionResponse() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/exception_sample.json"))
 
-        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -100,7 +92,7 @@ class JsonResponsesTest {
     fun checkServerUnAuthorisedResponse() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/unauthorised_sample.json"))
 
-        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -116,7 +108,7 @@ class JsonResponsesTest {
     fun checkSuccessResponse() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
-        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()
@@ -131,7 +123,7 @@ class JsonResponsesTest {
     fun checkSuccessResponseWithoutData() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/success_sample_without_data.json"))
 
-        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBase()
                 .execute()

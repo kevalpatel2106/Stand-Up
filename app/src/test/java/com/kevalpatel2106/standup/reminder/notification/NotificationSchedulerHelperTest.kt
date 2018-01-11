@@ -24,6 +24,7 @@ import com.firebase.jobdispatcher.RetryStrategy
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,8 +47,10 @@ class NotificationSchedulerHelperTest {
     @Test
     @Throws(IOException::class)
     fun checkPrepareJobAfterDefaultTime() {
-        SharedPrefsProvider.init(MockSharedPreference())
-        val builder = NotificationSchedulerHelper.prepareJob(RuntimeEnvironment.application)
+        val builder = NotificationSchedulerHelper.prepareJob(
+                context = RuntimeEnvironment.application,
+                sharedPrefsProvider = SharedPrefsProvider(MockSharedPreference())
+        )
 
         Assert.assertEquals(builder.constraints.size, 0)
         Assert.assertFalse(builder.isRecurring)
@@ -64,9 +67,10 @@ class NotificationSchedulerHelperTest {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(0L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
-        SharedPrefsProvider.init(sharedPref)
 
-        Assert.assertFalse(NotificationSchedulerHelper.shouldDisplayNotification())
+        Assert.assertFalse(NotificationSchedulerHelper.shouldDisplayNotification(
+                UserSessionManager(SharedPrefsProvider(sharedPref))
+        ))
     }
 
     @Test
@@ -77,9 +81,10 @@ class NotificationSchedulerHelperTest {
         Mockito.`when`(context.getSharedPreferences(anyString(), anyInt())).thenReturn(sharedPref)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
-        SharedPrefsProvider.init(context)
 
-        Assert.assertTrue(NotificationSchedulerHelper.shouldDisplayNotification())
+        Assert.assertTrue(NotificationSchedulerHelper.shouldDisplayNotification(
+                UserSessionManager(SharedPrefsProvider(sharedPref))
+        ))
     }
 
     @Test

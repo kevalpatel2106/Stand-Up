@@ -186,5 +186,6 @@ ext {
             [configuration: "implementation", dependency: 'com.google.dagger:dagger-android-support:' + dggerVersion],
             [configuration: "kapt", dependency: 'com.google.dagger:dagger-android-processor:' + dggerVersion],
             [configuration: "kapt", dependency: 'com.google.dagger:dagger-compiler:' + dggerVersion],
+            [configuration: "provided", dependency: 'javax.annotation:jsr250-api:1.0'],
     ]
 }

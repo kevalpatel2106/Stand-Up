@@ -18,7 +18,6 @@
 package com.kevalpatel2106.standup.about.repo
 
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
 
 /**
@@ -27,6 +26,8 @@ import com.kevalpatel2106.utils.Utils
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 data class ReportIssueRequest(
+        @SerializedName("uid")
+        val userId: Long,
 
         @SerializedName("title")
         val title: String,
@@ -37,10 +38,6 @@ data class ReportIssueRequest(
         @SerializedName("deviceId")
         val deviceId: String
 ) {
-
-    @SerializedName("uid")
-    val userId: Long = UserSessionManager.userId
-
     @SerializedName("deviceName")
     val deviceName: String = Utils.getDeviceName()
 }

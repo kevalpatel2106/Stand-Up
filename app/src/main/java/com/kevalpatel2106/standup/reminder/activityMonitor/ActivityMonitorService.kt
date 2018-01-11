@@ -18,7 +18,6 @@
 package com.kevalpatel2106.standup.reminder.activityMonitor
 
 import android.content.Context
-import android.support.annotation.VisibleForTesting
 import com.firebase.jobdispatcher.FirebaseJobDispatcher
 import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobParameters
@@ -27,14 +26,18 @@ import com.google.android.gms.awareness.Awareness
 import com.google.android.gms.awareness.snapshot.DetectedActivityResponse
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.reminder.ReminderConfig
+import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
-import com.kevalpatel2106.standup.reminder.repo.ReminderRepoImpl
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import javax.inject.Inject
 
 
 /**
@@ -57,10 +60,9 @@ import timber.log.Timber
 class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityResponse> {
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    @VisibleForTesting
-    internal var reminderRepo: ReminderRepo = ReminderRepoImpl()
-
-    private lateinit var jobParams: JobParameters
+    @Inject lateinit var reminderRepo: ReminderRepo
+    @Inject lateinit var userSessionManager: UserSessionManager
+    @Inject lateinit var sharedPrefsProvider: SharedPrefsProvider
 
     companion object {
 
@@ -81,6 +83,16 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
         }
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        DaggerReminderComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@ActivityMonitorService)
+    }
+
+    private lateinit var jobParams: JobParameters
+
     override fun onStopJob(job: JobParameters?): Boolean {
         return true    //Job done. Do not retry it.
     }
@@ -88,7 +100,7 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
     override fun onStartJob(job: JobParameters): Boolean {
         Timber.d("Monitoring job started.")
 
-        if (ActivityMonitorHelper.shouldMonitoringActivity()) {
+        if (ActivityMonitorHelper.shouldMonitoringActivity(userSessionManager)) {
             jobParams = job
 
             //Use the snapshot api to get result for the user activity.
@@ -131,7 +143,7 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
             return
         }
 
-        if (ActivityMonitorHelper.shouldScheduleNotification(userActivity)) {
+        if (ActivityMonitorHelper.shouldScheduleNotification(userActivity, sharedPrefsProvider)) {
             NotificationSchedulerService.cancel(this@ActivityMonitorService)
             NotificationSchedulerService.scheduleNotification(this@ActivityMonitorService)
         }

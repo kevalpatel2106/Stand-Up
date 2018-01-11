@@ -34,5 +34,4 @@ internal data class IntroUiModel(var isSuccess: Boolean) {
      */
     var isNewUser: Boolean = false
         get() = if (!isSuccess) false else field
-
 }

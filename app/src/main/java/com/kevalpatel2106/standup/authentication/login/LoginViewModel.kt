@@ -26,15 +26,17 @@ import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.base.arch.SingleLiveEvent
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.LoginRequest
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.misc.Validator
 import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Keval on 19/11/17.
@@ -44,13 +46,27 @@ import io.reactivex.schedulers.Schedulers
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(LoginActivity::class)
-internal class LoginViewModel @VisibleForTesting constructor(private val userAuthRepo: UserAuthRepository) : BaseViewModel() {
+class LoginViewModel : BaseViewModel {
 
-    /**
-     * Zero parameter constructor.
-     */
+    @Inject lateinit var userAuthRepo: UserAuthRepository
+    @Inject lateinit var userSessionManager: UserSessionManager
+
     @Suppress("unused")
-    constructor() : this(UserAuthRepositoryImpl())
+    constructor() {
+        DaggerUserAuthComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@LoginViewModel)
+        init()
+    }
+
+    @VisibleForTesting
+    constructor(userAuthRepo: UserAuthRepository,
+                userSessionManager: UserSessionManager) {
+        this.userAuthRepo = userAuthRepo
+        this.userSessionManager = userSessionManager
+        init()
+    }
 
     /**
      * [LoginUiModel] to hold the response form the user authentication. UI element can
@@ -70,7 +86,7 @@ internal class LoginViewModel @VisibleForTesting constructor(private val userAut
 
     internal val isEmailLoginProgress = MutableLiveData<Boolean>()
 
-    init {
+    fun init() {
         isEmailLoginProgress.value = false
         isFacebookLoginProgress.value = false
         isGoogleLoginProgress.value = false
@@ -109,7 +125,7 @@ internal class LoginViewModel @VisibleForTesting constructor(private val userAut
                                 })
                                 .subscribe({
                                     //Save into the user session
-                                    UserSessionManager.setNewSession(userId = it.uid,
+                                    userSessionManager.setNewSession(userId = it.uid,
                                             displayName = name,
                                             token = null,
                                             email = email,
@@ -164,7 +180,7 @@ internal class LoginViewModel @VisibleForTesting constructor(private val userAut
                         })
                         .subscribe({
                             //Save into the user session
-                            UserSessionManager.setNewSession(userId = it.uid,
+                            userSessionManager.setNewSession(userId = it.uid,
                                     displayName = it.name,
                                     token = null,
                                     email = it.email,
@@ -237,7 +253,7 @@ internal class LoginViewModel @VisibleForTesting constructor(private val userAut
                 })
                 .subscribe({
                     //Save into the user session
-                    UserSessionManager.setNewSession(userId = it.uid,
+                    userSessionManager.setNewSession(userId = it.uid,
                             displayName = requestData.displayName,
                             token = null,
                             email = requestData.email,

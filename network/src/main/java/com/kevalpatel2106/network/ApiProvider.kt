@@ -17,12 +17,12 @@
 
 package com.kevalpatel2106.network
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.kevalpatel2106.utils.UserSessionManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -35,17 +35,30 @@ import java.util.concurrent.TimeUnit
  *
  * @author 'https://github.com/kevalpatel2106'
  */
-object ApiProvider {
+class ApiProvider(context: Context? = null,
+                  private val userSessionManager: UserSessionManager? = null) {
+
+    /**
+     * Constructor with zero params. This will ignore all user authentication and won't broadcast for
+     * unauthorized access.
+     */
+    @VisibleForTesting
+    constructor() : this(null, null)
 
     /**
      * OkHttp instance. New instances will be shallow copy of this instance.
      *
      * @see .getOkHttpClientBuilder
      */
-    @VisibleForTesting
-    internal lateinit var sOkHttpClient: OkHttpClient
+    internal val okHttpClient: OkHttpClient
 
-    @VisibleForTesting
+    /**
+     * Gson instance with custom gson deserializers.
+     */
+    private val sGson: Gson = GsonBuilder()
+            .setLenient()
+            .create()
+
     internal fun getOkHttpClient(context: Context?): OkHttpClient {
         val httpClientBuilder = OkHttpClient.Builder()
                 .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
@@ -61,48 +74,27 @@ object ApiProvider {
                     .addInterceptor(loggingInterceptor)
         }
 
+        val userId = if (userSessionManager == null || userSessionManager.userId == 0L)
+            null
+        else
+            userSessionManager.userId.toString()
+
+        val token = userSessionManager?.token
+
         return if (context == null) {
             httpClientBuilder
-                    .addInterceptor(NWInterceptor(null))  /* Add the interceptor. */
+                    .addInterceptor(NWInterceptor(null, userId, token))  /* Add the interceptor. */
                     .build()
         } else {
             httpClientBuilder
                     .cache(NWInterceptor.getCache(context)) /* Add caching */
-                    .addInterceptor(NWInterceptor(context))  /* Add the interceptor. */
+                    .addInterceptor(NWInterceptor(context, userId, token))  /* Add the interceptor. */
                     .build()
         }
     }
 
-    /**
-     * Gson instance with custom gson deserializers.
-     */
-    private val sGson: Gson = GsonBuilder()
-            .setLenient()
-            .create()
-
-    /**
-     * Get the singleton instance of the shared preference provider.
-     *
-     * @param context Application Context.
-     */
-    @SuppressLint("VisibleForTests")
-    @JvmStatic
-    fun init(context: Context) {
-        sOkHttpClient = getOkHttpClient(context)
-    }
-
-    /**
-     * Get the singleton instance of the shared preference provider.
-     */
-    @VisibleForTesting
-    @JvmStatic
-    fun init() {
-        sOkHttpClient = getOkHttpClient(null)
-    }
-
-    @VisibleForTesting
-    internal fun close() {
-        init()
+    init {
+        okHttpClient = getOkHttpClient(context)
     }
 
     /**
@@ -112,7 +104,7 @@ object ApiProvider {
      */
     fun getRetrofitClient(baseUrl: String): Retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
-            .client(sOkHttpClient)
+            .client(okHttpClient)
             .addConverterFactory(NWResponseConverter.create(sGson))
             .build()
 }

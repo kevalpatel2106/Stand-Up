@@ -19,7 +19,6 @@ package com.kevalpatel2106.standup.about.repo
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import org.junit.Assert
 import org.junit.Before
@@ -48,16 +47,15 @@ class ReportIssueRequestTest {
     fun setUp() {
         val context = Mockito.mock(Context::class.java)
         val mockSharedPref = Mockito.mock(SharedPreferences::class.java)
+
         Mockito.`when`(mockSharedPref.getLong(anyString(), anyLong())).thenReturn(TEST_USER_ID)
         Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt()))
                 .thenReturn(mockSharedPref)
-
-        SharedPrefsProvider.init(context)
     }
 
     @Test
     fun checkConstructor() {
-        val reportIssue = ReportIssueRequest(TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
+        val reportIssue = ReportIssueRequest(TEST_USER_ID, TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
 
         Assert.assertEquals(reportIssue.message, TEST_DESCRIPTION)
         Assert.assertEquals(reportIssue.title, TEST_TITLE)
@@ -66,13 +64,13 @@ class ReportIssueRequestTest {
 
     @Test
     fun checkDeviceId() {
-        val reportIssue = ReportIssueRequest(TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
+        val reportIssue = ReportIssueRequest(TEST_USER_ID, TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
         Assert.assertEquals(reportIssue.deviceName, Utils.getDeviceName())
     }
 
     @Test
     fun checkUserId() {
-        val reportIssue = ReportIssueRequest(TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
+        val reportIssue = ReportIssueRequest(TEST_USER_ID, TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
         Assert.assertEquals(reportIssue.userId, TEST_USER_ID)
     }
 }

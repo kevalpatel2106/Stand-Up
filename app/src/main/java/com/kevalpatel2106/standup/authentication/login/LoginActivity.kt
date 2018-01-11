@@ -46,7 +46,7 @@ import com.kevalpatel2106.googleauth.GoogleSignInHelper
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
-import com.kevalpatel2106.standup.misc.ViewPropertyAnimatorSet
+import com.kevalpatel2106.utils.ViewPropertyAnimatorSet
 import com.kevalpatel2106.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_login.*
 

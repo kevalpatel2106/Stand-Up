@@ -17,14 +17,16 @@
 
 package com.kevalpatel2106.network
 
-import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import okhttp3.Request
 import org.apache.commons.codec.binary.Base64
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.ArgumentMatchers
@@ -44,41 +46,30 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class NWInterceptorAuthTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("network")) it else it.plus("/network")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", path)
+
 
     private val TEST_PREF_STRING = "TestValue"
     private val TEST_PREF_LONG = 100L
 
     private val mockWebServer = MockServerManager()
-
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpClass() {
-            ApiProvider.init()
-        }
-
-        @JvmStatic
-        @AfterClass
-        fun tearUpClass() {
-            ApiProvider.close()
-        }
-    }
+    private lateinit var apiProvider: ApiProvider
+    private lateinit var userSessionManager: UserSessionManager
 
     @Before
     fun setUp() {
-        val context = Mockito.mock(Context::class.java)
         val sharedPrefs = Mockito.mock(SharedPreferences::class.java)
-        val sharedPrefsEditor = Mockito.mock(SharedPreferences.Editor::class.java)
-        Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
-        Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
         Mockito.`when`(sharedPrefs.getString(anyString(), anyString())).thenReturn(TEST_PREF_STRING)
         Mockito.`when`(sharedPrefs.getString(anyString(), ArgumentMatchers.isNull())).thenReturn(TEST_PREF_STRING)
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(TEST_PREF_LONG)
-        SharedPrefsProvider.init(context)
 
         mockWebServer.startMockWebServer()
+
+        userSessionManager = UserSessionManager(SharedPrefsProvider(sharedPrefs))
+        apiProvider = ApiProvider(null, userSessionManager)
     }
 
     @After
@@ -94,14 +85,15 @@ class NWInterceptorAuthTest {
                 .addHeader("Add-Auth", "true")
                 .build()
 
-        val modifiedRequest = NWInterceptor(null).addAuthHeader(request)
+        val modifiedRequest = NWInterceptor(null, "test-user-id", "test-token")
+                .addAuthHeader(request)
 
         Assert.assertNull(modifiedRequest.headers().get("Add-Auth"))
 
         Assert.assertNotNull(modifiedRequest.headers().get("Authorization"))
         Assert.assertEquals(modifiedRequest.headers().get("Authorization"),
-                "Basic " + String(Base64.encodeBase64((UserSessionManager.userId.toString()
-                        + ":" + UserSessionManager.token).toByteArray())))
+                "Basic " + String(Base64.encodeBase64(("test-user-id"
+                        + ":" + "test-token").toByteArray())))
     }
 
     @Test
@@ -109,15 +101,41 @@ class NWInterceptorAuthTest {
     fun checkApiRequestWithAuthHeader() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
-        val response = ApiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithAuthHeader()
                 .execute()
 
         Assert.assertNotNull(response.raw().request().headers().get("Authorization"))
         Assert.assertEquals(response.raw().request().headers().get("Authorization"),
-                "Basic " + String(
-                        Base64.encodeBase64((UserSessionManager.userId.toString()
-                                + ":" + UserSessionManager.token).toByteArray())))
+                "Basic " + String(Base64.encodeBase64((TEST_PREF_LONG.toString()
+                        + ":" + TEST_PREF_STRING).toByteArray())))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkApiRequestWithoutAuthHeader() {
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
+
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+                .create(TestApiService::class.java)
+                .callBaseWithoutAuthHeader()
+                .execute()
+
+        Assert.assertNull(response.raw().request().headers().get("Authorization"))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkApiWithNullUserSession() {
+        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
+
+        apiProvider = ApiProvider(null, null)
+        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+                .create(TestApiService::class.java)
+                .callBaseWithAuthHeader()
+                .execute()
+
+        Assert.assertNull(response.raw().request().headers().get("Authorization"))
     }
 }

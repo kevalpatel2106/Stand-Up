@@ -17,11 +17,11 @@
 
 package com.kevalpatel2106.standup.db
 
+import android.app.Application
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
-import android.content.Context
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import timber.log.Timber
@@ -31,15 +31,17 @@ import timber.log.Timber
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Database(entities = [(UserActivity::class)], exportSchema = true, version = 1)
+@Database(entities = [UserActivity::class], exportSchema = true, version = 1)
 abstract class StandUpDb : RoomDatabase() {
 
     companion object {
-        private var database: StandUpDb? = null
+        private var sDatabase: StandUpDb? = null
 
         @Suppress("NO_REFLECTION_IN_CLASS_PATH")
-        fun init(context: Context) {
-            database = Room.databaseBuilder(context, StandUpDb::class.java, StandUpDb::class.simpleName.toString())
+        private fun createDb(application: Application): StandUpDb {
+            sDatabase = Room.databaseBuilder(application,
+                    StandUpDb::class.java,
+                    StandUpDb::class.java.simpleName)
                     .fallbackToDestructiveMigration()
                     .addCallback(object : Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
@@ -53,11 +55,11 @@ abstract class StandUpDb : RoomDatabase() {
                         }
                     })
                     .build()
+            return sDatabase!!
         }
 
-        fun getDb() = database ?: throw ExceptionInInitializerError("You must call init() to initialize the database.")
+        fun getDb(application: Application): StandUpDb = sDatabase ?: createDb(application)
     }
 
     abstract fun userActivityDao(): UserActivityDao
-
 }

@@ -18,14 +18,20 @@
 package com.kevalpatel2106.standup.authentication.verification
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.standup.UnitTestUtils
+import android.content.SharedPreferences
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.ArgumentMatchers.anyLong
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.Mockito
 import java.io.File
 import java.io.IOException
 import java.nio.file.Paths
@@ -37,7 +43,11 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class VerifyEmailModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", path)
+    private val TEST_USER_ID = 12L
 
     @Rule
     @JvmField
@@ -50,18 +60,20 @@ class VerifyEmailModelTest {
     private lateinit var verifyEmailViewModel: VerifyEmailViewModel
     private val mockServerManager = MockServerManager()
 
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setGlobal() = UnitTestUtils.initApp()
-    }
-
     @Before
     fun setUp() {
+        val sharedPrefs = Mockito.mock(SharedPreferences::class.java)
+        Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(TEST_USER_ID)
+
+        val sharedPrefsEditor = Mockito.mock(SharedPreferences.Editor::class.java)
+        Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
+
         //Set the repo
         mockServerManager.startMockWebServer()
-        verifyEmailViewModel = VerifyEmailViewModel(UserAuthRepositoryImpl(mockServerManager.getBaseUrl()))
+        verifyEmailViewModel = VerifyEmailViewModel(
+                UserAuthRepositoryImpl(ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())),
+                UserSessionManager(SharedPrefsProvider(sharedPrefs))
+        )
     }
 
     @After
@@ -75,10 +87,6 @@ class VerifyEmailModelTest {
     fun checkInitialization() {
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
         Assert.assertNull(verifyEmailViewModel.resendInProgress.value)
-
-        //Normal init
-        val model = VerifyEmailViewModel()
-        Assert.assertTrue(model.userAuthRepo is UserAuthRepositoryImpl)
     }
 
     @Test
@@ -90,7 +98,7 @@ class VerifyEmailModelTest {
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
 
         //Make the api call to the mock server
-        verifyEmailViewModel.resendEmail(123)
+        verifyEmailViewModel.resendEmail()
 
         //There should be success.
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
@@ -106,7 +114,7 @@ class VerifyEmailModelTest {
         Assert.assertNull(verifyEmailViewModel.resendInProgress.value)
 
         //Make the api call to the mock server
-        verifyEmailViewModel.resendEmail(123)
+        verifyEmailViewModel.resendEmail()
 
         //There should be success.
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)

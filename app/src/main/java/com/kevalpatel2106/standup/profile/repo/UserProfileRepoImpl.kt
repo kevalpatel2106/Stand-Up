@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup.profile.repo
 import com.kevalpatel2106.base.annotations.Repository
 import com.kevalpatel2106.base.repository.RepoBuilder
 import com.kevalpatel2106.base.repository.RepoData
+import com.kevalpatel2106.base.repository.cache.Cache
 import com.kevalpatel2106.base.repository.cache.SharedPrefranceCache
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.network.RetrofitNetworkRefresher
@@ -28,6 +29,9 @@ import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.toFloatSafe
 import io.reactivex.Flowable
+import retrofit2.Retrofit
+import javax.inject.Inject
+import javax.inject.Named
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -36,20 +40,20 @@ import javax.net.ssl.HttpsURLConnection
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRepo {
+internal class UserProfileRepoImpl @Inject constructor(@Named("WITH_TOKEN") private val retrofit: Retrofit,
+                                                       private val userSessionManager: UserSessionManager)
+    : UserProfileRepo {
 
-    constructor() : this(ProfileApiService.baseUrl())
 
     override fun getUserProfile(userId: Long): Flowable<GetProfileResponse> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
-                .create(ProfileApiService::class.java)
+        val call = retrofit.create(ProfileApiService::class.java)
                 .getUserProfile(GetProfileRequest(userId))
 
-        val cache = object : SharedPrefranceCache<GetProfileResponse>(SharedPrefsProvider.sSharedPreference) {
+        val cache = object : Cache<GetProfileResponse> {
             override fun write(t: GetProfileResponse?) {
                 t?.let {
                     //Save to the cache.
-                    UserSessionManager.updateSession(displayName = it.name,
+                    userSessionManager.updateSession(displayName = it.name,
                             weight = it.weight.toFloatSafe(),
                             height = it.height.toFloatSafe(),
                             photoUrl = null,
@@ -58,7 +62,7 @@ internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRep
             }
 
             override fun read(): RepoData<GetProfileResponse> {
-                if (!UserSessionManager.isUserLoggedIn) {
+                if (!userSessionManager.isUserLoggedIn) {
                     //User is not logged in.
                     //Cannot do any thing
                     val errorData = RepoData<GetProfileResponse>(true)
@@ -69,14 +73,14 @@ internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRep
 
                 try {
                     val userProfile = GetProfileResponse(
-                            userId = UserSessionManager.userId,
-                            isVerified = UserSessionManager.isUserVerified,
-                            email = UserSessionManager.email ?: "",
-                            weight = UserSessionManager.weight.toString(),
-                            height = UserSessionManager.height.toString(),
-                            name = UserSessionManager.displayName ?: "",
-                            photo = UserSessionManager.photo,
-                            gender = if (UserSessionManager.isMale) AppConfig.GENDER_MALE else AppConfig.GENDER_FEMALE
+                            userId = userSessionManager.userId,
+                            isVerified = userSessionManager.isUserVerified,
+                            email = userSessionManager.email ?: "",
+                            weight = userSessionManager.weight.toString(),
+                            height = userSessionManager.height.toString(),
+                            name = userSessionManager.displayName ?: "",
+                            photo = userSessionManager.photo,
+                            gender = if (userSessionManager.isMale) AppConfig.GENDER_MALE else AppConfig.GENDER_FEMALE
                     )
                     return RepoData(false, userProfile)
                 } catch (e: Exception) {
@@ -101,12 +105,12 @@ internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRep
                                  height: Float,
                                  weight: Float,
                                  isMale: Boolean): Flowable<SaveProfileResponse> {
-        val call = ApiProvider.getRetrofitClient(baseUrl)
+        val call = retrofit
                 .create(ProfileApiService::class.java)
-                .saveUserProfile(SaveProfileRequest(userId = UserSessionManager.userId,
+                .saveUserProfile(SaveProfileRequest(userId = userSessionManager.userId,
                         name = name,
                         photo = photo,
-                        email = UserSessionManager.email!!,
+                        email = userSessionManager.email!!,
                         height = height.toString(),
                         weight = weight.toString(),
                         gender = if (isMale) AppConfig.GENDER_MALE else AppConfig.GENDER_FEMALE))
@@ -117,7 +121,7 @@ internal class UserProfileRepoImpl(private val baseUrl: String) : UserProfileRep
                 .fetch()
                 .map { t ->
                     t.data?.let {
-                        UserSessionManager.updateSession(displayName = it.name,
+                        userSessionManager.updateSession(displayName = it.name,
                                 weight = it.weight.toFloatSafe(),
                                 height = it.height.toFloatSafe(),
                                 photoUrl = null,

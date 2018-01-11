@@ -52,13 +52,21 @@ class ReportIssueActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        model = ViewModelProviders.of(this@ReportIssueActivity).get(ReportIssueViewModel::class.java)
 
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_report_issue)
         setToolbar(R.id.toolbar, "", true)
+        setModel()
 
+        if (savedInstanceState == null) {
+            //Check for the update automatically
+            model.checkForUpdate()
+        }
+    }
+
+    private fun setModel() {
+        model = ViewModelProviders.of(this@ReportIssueActivity).get(ReportIssueViewModel::class.java)
         model.errorMessage.observe(this@ReportIssueActivity, Observer {
             it!!.getMessage(this@ReportIssueActivity)?.let { showSnack(it) }
         })
@@ -101,11 +109,6 @@ class ReportIssueActivity : BaseActivity() {
                 }
             }
         })
-
-        if (savedInstanceState == null) {
-            //Check for the update automatically
-            model.checkForUpdate()
-        }
     }
 
     @OnClick(R.id.submit_issue_btn)

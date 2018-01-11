@@ -31,10 +31,11 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.CallbackEvent
 import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AppConfig
+import com.kevalpatel2106.standup.dashboard.di.DaggerDashboardComponent
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
-import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
@@ -42,21 +43,16 @@ import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.getColorCompat
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Keval on 21/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class DashboardViewModel : BaseViewModel {
+class DashboardViewModel : BaseViewModel {
 
-    private val userActivityRepo: DashboardRepo
-
-    val todaySummary = MutableLiveData<DailyActivitySummary>()
-    val todaySummaryErrorCallback = MutableLiveData<ErrorMessage>()
-    val todaySummaryStartLoading = CallbackEvent()
-
-    val timelineEventsList = MutableLiveData<ArrayList<TimeLineItem>>()
+    @Inject lateinit var userActivityRepo: DashboardRepo
 
     /**
      * Private constructor to add the custom [DashboardRepo] for testing.
@@ -67,22 +63,23 @@ internal class DashboardViewModel : BaseViewModel {
     @VisibleForTesting
     constructor(dashboardRepo: DashboardRepo) : super() {
         this.userActivityRepo = dashboardRepo
-        //For testing we won't start observing from here.
     }
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        userActivityRepo = DashboardRepoImpl()
-
-        //Start observing the database
-        getTodaysSummary()
+    constructor() {
+        DaggerDashboardComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build().inject(this@DashboardViewModel)
     }
 
-    @VisibleForTesting
+    val todaySummary = MutableLiveData<DailyActivitySummary>()
+    val todaySummaryErrorCallback = MutableLiveData<ErrorMessage>()
+    val todaySummaryStartLoading = CallbackEvent()
+    val timelineEventsList = MutableLiveData<ArrayList<TimeLineItem>>()
+
     internal fun getTodaysSummary() {
         userActivityRepo.getTodaySummary()
                 .subscribeOn(Schedulers.io())

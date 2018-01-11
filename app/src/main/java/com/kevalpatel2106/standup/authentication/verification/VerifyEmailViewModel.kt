@@ -22,50 +22,57 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.base.arch.SingleLiveEvent
+import com.kevalpatel2106.standup.BaseApplication
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.ResendVerificationRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 @com.kevalpatel2106.base.annotations.ViewModel(VerifyEmailActivity::class)
-internal class VerifyEmailViewModel : BaseViewModel {
+class VerifyEmailViewModel : BaseViewModel {
 
     /**
      * Repository to provide user authentications.
      */
-    @VisibleForTesting
-    internal var userAuthRepo: UserAuthRepository
+    @Inject lateinit var userAuthRepo: UserAuthRepository
 
-    internal val resendInProgress = MutableLiveData<Boolean>()
-
-    internal val resendSuccessful = SingleLiveEvent<Boolean>()
+    @Inject lateinit var userSessionManager: UserSessionManager
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
      *
      * @param userAuthRepo Add your own [UserAuthRepository].
      */
-    @Suppress("unused")
     @VisibleForTesting
-    constructor(userAuthRepo: UserAuthRepository) : super() {
+    constructor(userAuthRepo: UserAuthRepository,
+                userSessionManager: UserSessionManager) : super() {
         this.userAuthRepo = userAuthRepo
+        this.userSessionManager = userSessionManager
     }
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        userAuthRepo = UserAuthRepositoryImpl()
+    constructor() {
+        DaggerUserAuthComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@VerifyEmailViewModel)
     }
 
+    internal val resendInProgress = MutableLiveData<Boolean>()
+
+    internal val resendSuccessful = SingleLiveEvent<Boolean>()
+
     /**
-     * Resend the verification email to the given [userId].
+     * Resend the verification email to the given user Id.
      */
-    fun resendEmail(userId: Long) {
-        userAuthRepo.resendVerifyEmail(ResendVerificationRequest(userId))
+    fun resendEmail() {
+        userAuthRepo.resendVerifyEmail(ResendVerificationRequest(userSessionManager.userId))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({

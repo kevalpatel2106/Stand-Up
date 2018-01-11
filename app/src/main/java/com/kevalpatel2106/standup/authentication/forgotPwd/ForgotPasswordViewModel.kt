@@ -23,13 +23,15 @@ import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.base.arch.SingleLiveEvent
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.ForgotPasswordRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.misc.Validator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 23-Nov-17.
@@ -37,14 +39,27 @@ import io.reactivex.schedulers.Schedulers
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(ForgotPasswordActivity::class)
-internal class ForgotPasswordViewModel @VisibleForTesting constructor(private val userAuthRepo: UserAuthRepository)
-    : BaseViewModel() {
+class ForgotPasswordViewModel : BaseViewModel {
+
+    @Inject lateinit var userAuthRepo: UserAuthRepository
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : this(UserAuthRepositoryImpl())
+    constructor() {
+        DaggerUserAuthComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@ForgotPasswordViewModel)
+        init()
+    }
+
+    @VisibleForTesting
+    constructor(userAuthRepo: UserAuthRepository) {
+        this.userAuthRepo = userAuthRepo
+        init()
+    }
 
     internal val isRequesting = MutableLiveData<Boolean>()
 
@@ -52,7 +67,7 @@ internal class ForgotPasswordViewModel @VisibleForTesting constructor(private va
 
     internal val emailError: SingleLiveEvent<ErrorMessage> = SingleLiveEvent()
 
-    init {
+    fun init() {
         isForgotRequestSuccessful.value = false
         isRequesting.value = false
     }

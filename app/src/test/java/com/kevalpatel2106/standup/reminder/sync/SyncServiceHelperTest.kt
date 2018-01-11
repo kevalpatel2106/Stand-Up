@@ -23,6 +23,7 @@ import com.firebase.jobdispatcher.Lifetime
 import com.firebase.jobdispatcher.RetryStrategy
 import com.firebase.jobdispatcher.Trigger
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -58,17 +59,15 @@ class SyncServiceHelperTest {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
-        SharedPrefsProvider.init(sharedPref)
 
-        Assert.assertFalse(SyncServiceHelper.shouldSync())
+        Assert.assertFalse(SyncServiceHelper.shouldSync(UserSessionManager(SharedPrefsProvider(sharedPref))))
     }
 
     fun checkShouldSyncSync() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
-        SharedPrefsProvider.init(sharedPref)
 
-        Assert.assertTrue(SyncServiceHelper.shouldSync())
+        Assert.assertTrue(SyncServiceHelper.shouldSync(UserSessionManager(SharedPrefsProvider(sharedPref))))
     }
 }

@@ -22,12 +22,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.UnitTestUtils
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepoImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.UserSessionManager
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
@@ -45,7 +45,10 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class EditProfileModelTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/profile/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/profile/repo", path)
 
     @Rule
     @JvmField
@@ -58,13 +61,6 @@ class EditProfileModelTest {
     private lateinit var editProfileModel: EditProfileModel
     private val mockServerManager = MockServerManager()
 
-    companion object {
-
-        @JvmStatic
-        @BeforeClass
-        fun setGlobal() = UnitTestUtils.initApp()
-    }
-
     private lateinit var sharedPrefs: SharedPreferences
 
     @Before
@@ -75,12 +71,15 @@ class EditProfileModelTest {
         Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
         Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
 
-        SharedPrefsProvider.init(context)
-        ApiProvider.init()
-
         //Set the repo
         mockServerManager.startMockWebServer()
-        editProfileModel = EditProfileModel(UserProfileRepoImpl(mockServerManager.getBaseUrl()), false)
+        editProfileModel = EditProfileModel(
+                UserProfileRepoImpl(
+                        ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl()),
+                        UserSessionManager(SharedPrefsProvider(sharedPrefs))
+                ),
+                UserSessionManager(SharedPrefsProvider(sharedPrefs))
+        )
     }
 
     @After
@@ -92,13 +91,15 @@ class EditProfileModelTest {
     @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(editProfileModel.blockUi.value!!)
+        Assert.assertFalse(editProfileModel.isSavingProfile.value!!)
+        Assert.assertFalse(editProfileModel.blockUi.value!!)
     }
 
 
     @Test
     @Throws(IOException::class)
     fun checkLoadProfileSuccess() {
-        //Mock the shared prefrance
+        //Mock the shared preference
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("149.3")
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn("149.3")
         Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(123456789)
@@ -111,14 +112,14 @@ class EditProfileModelTest {
 
         //There should be success.
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNotNull(editProfileModel.mUserProfile.value)
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.email, "test@example.com")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.name, "Test User")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.userId, 5715999101812736)
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.height, "180.0")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.weight, "60.0")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.gender, AppConfig.GENDER_MALE)
-        Assert.assertTrue(editProfileModel.mUserProfile.value!!.isVerified)
+        Assert.assertNotNull(editProfileModel.userProfile.value)
+        Assert.assertEquals(editProfileModel.userProfile.value!!.email, "test@example.com")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.name, "Test User")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.userId, 5715999101812736)
+        Assert.assertEquals(editProfileModel.userProfile.value!!.height, "180.0")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.weight, "60.0")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.gender, AppConfig.GENDER_MALE)
+        Assert.assertTrue(editProfileModel.userProfile.value!!.isVerified)
         Assert.assertNull(editProfileModel.errorMessage.value)
     }
 
@@ -138,14 +139,14 @@ class EditProfileModelTest {
 
         //There should be cache data in the profile model.
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNotNull(editProfileModel.mUserProfile.value)
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.email, "149.3")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.name, "149.3")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.userId, 123456789)
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.height, "149.3")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.weight, "149.3")
-        Assert.assertEquals(editProfileModel.mUserProfile.value!!.gender, AppConfig.GENDER_MALE)
-        Assert.assertTrue(editProfileModel.mUserProfile.value!!.isVerified)
+        Assert.assertNotNull(editProfileModel.userProfile.value)
+        Assert.assertEquals(editProfileModel.userProfile.value!!.email, "149.3")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.name, "149.3")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.userId, 123456789)
+        Assert.assertEquals(editProfileModel.userProfile.value!!.height, "149.3")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.weight, "149.3")
+        Assert.assertEquals(editProfileModel.userProfile.value!!.gender, AppConfig.GENDER_MALE)
+        Assert.assertTrue(editProfileModel.userProfile.value!!.isVerified)
         Assert.assertEquals(editProfileModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 
@@ -159,7 +160,7 @@ class EditProfileModelTest {
 
         //There should be error.
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNull(editProfileModel.mUserProfile.value)
+        Assert.assertNull(editProfileModel.userProfile.value)
         Assert.assertEquals(editProfileModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 
@@ -178,14 +179,14 @@ class EditProfileModelTest {
 
         //There should be success.
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNotNull(editProfileModel.mProfileUpdateStatus.value)
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.email, "test@example.com")
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.name, "Test User")
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.userId, 5715999101812736)
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.height, "180.0")
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.weight, "60.0")
-        Assert.assertEquals(editProfileModel.mProfileUpdateStatus.value!!.gender, AppConfig.GENDER_MALE)
-        Assert.assertTrue(editProfileModel.mProfileUpdateStatus.value!!.isVerified)
+        Assert.assertNotNull(editProfileModel.profileUpdateStatus.value)
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.email, "test@example.com")
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.name, "Test User")
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.userId, 5715999101812736)
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.height, "180.0")
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.weight, "60.0")
+        Assert.assertEquals(editProfileModel.profileUpdateStatus.value!!.gender, AppConfig.GENDER_MALE)
+        Assert.assertTrue(editProfileModel.profileUpdateStatus.value!!.isVerified)
         Assert.assertNull(editProfileModel.errorMessage.value)
     }
 
@@ -204,7 +205,7 @@ class EditProfileModelTest {
 
         //There should be error
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertNull(editProfileModel.mProfileUpdateStatus.value)
+        Assert.assertNull(editProfileModel.profileUpdateStatus.value)
         Assert.assertEquals(editProfileModel.errorMessage.value!!.getMessage(null), "Required field missing.")
     }
 

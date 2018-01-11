@@ -25,7 +25,7 @@ package com.kevalpatel2106.utils
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
 
-object UserSessionManager {
+class UserSessionManager(private val sharedPrefProvider: SharedPrefsProvider) {
     //User preference keys.
     private val USER_ID = "USER_ID"                        //User unique id
     private val USER_DISPLAY_NAME = "USER_DISPLAY_NAME"    //First name of the user
@@ -43,33 +43,33 @@ object UserSessionManager {
      * @return user id.
      */
     val userId: Long
-        get() = SharedPrefsProvider.getLongFromPreference(USER_ID)
+        get() = sharedPrefProvider.getLongFromPreference(USER_ID)
 
     /**
      * Photo of current user.
      */
     val photo: String?
-        get() = SharedPrefsProvider.getStringFromPreferences(USER_PHOTO)
+        get() = sharedPrefProvider.getStringFromPreferences(USER_PHOTO)
 
     /**
      * First name of the user.
      */
     val displayName: String?
-        get() = SharedPrefsProvider.getStringFromPreferences(USER_DISPLAY_NAME)
+        get() = sharedPrefProvider.getStringFromPreferences(USER_DISPLAY_NAME)
 
     /**
      * Current authentication token
      */
     var token: String?
-        get() = SharedPrefsProvider.getStringFromPreferences(USER_TOKEN)
-        set(token) = SharedPrefsProvider.savePreferences(USER_TOKEN, token)
+        get() = sharedPrefProvider.getStringFromPreferences(USER_TOKEN)
+        set(token) = sharedPrefProvider.savePreferences(USER_TOKEN, token)
 
     /**
      * Email of the user logged in.
      */
     var email: String?
-        get() = SharedPrefsProvider.getStringFromPreferences(USER_EMAIL)
-        set(email) = SharedPrefsProvider.savePreferences(USER_EMAIL, email)
+        get() = sharedPrefProvider.getStringFromPreferences(USER_EMAIL)
+        set(email) = sharedPrefProvider.savePreferences(USER_EMAIL, email)
 
     /**
      * Check if the user is currently logged in?
@@ -80,18 +80,18 @@ object UserSessionManager {
         get() = userId > 0 && token != null
 
     val isMale: Boolean
-        get() = SharedPrefsProvider.getBoolFromPreferences(USER_IS_MALE)
+        get() = sharedPrefProvider.getBoolFromPreferences(USER_IS_MALE)
 
     val height: Float
-        get() = if (SharedPrefsProvider.getStringFromPreferences(USER_HEIGHT) != null) {
-            SharedPrefsProvider.getStringFromPreferences(USER_HEIGHT)!!.toFloat()
+        get() = if (sharedPrefProvider.getStringFromPreferences(USER_HEIGHT) != null) {
+            sharedPrefProvider.getStringFromPreferences(USER_HEIGHT)!!.toFloat()
         } else {
             0F
         }
 
     val weight: Float
-        get() = if (SharedPrefsProvider.getStringFromPreferences(USER_WEIGHT) != null) {
-            SharedPrefsProvider.getStringFromPreferences(USER_WEIGHT)!!.toFloat()
+        get() = if (sharedPrefProvider.getStringFromPreferences(USER_WEIGHT) != null) {
+            sharedPrefProvider.getStringFromPreferences(USER_WEIGHT)!!.toFloat()
         } else {
             0F
         }
@@ -102,8 +102,8 @@ object UserSessionManager {
      * @return true if the user is currently logged in.
      */
     var isUserVerified: Boolean
-        get() = SharedPrefsProvider.getBoolFromPreferences(USER_IS_VERIFIED)
-        set(isVerified) = SharedPrefsProvider.savePreferences(USER_IS_VERIFIED, isVerified)
+        get() = sharedPrefProvider.getBoolFromPreferences(USER_IS_VERIFIED)
+        set(isVerified) = sharedPrefProvider.savePreferences(USER_IS_VERIFIED, isVerified)
 
     fun isItMe(id: Long) = userId == id
 
@@ -116,7 +116,6 @@ object UserSessionManager {
      * @param photoUrl User profile picture url.
      * @param token  authentication token.
      */
-    @JvmStatic
     @JvmOverloads
     @Synchronized
     fun setNewSession(userId: Long,
@@ -129,7 +128,7 @@ object UserSessionManager {
         synchronized(this) {
 
             //Save to the share prefs.
-            SharedPrefsProvider.savePreferences(USER_ID, userId)
+            sharedPrefProvider.savePreferences(USER_ID, userId)
             updateSession(displayName = displayName, photoUrl = photoUrl)
 
             this.email = email
@@ -145,7 +144,6 @@ object UserSessionManager {
      * @param displayName Display name of the user.
      * @param photoUrl User profile picture url.
      */
-    @JvmStatic
     @Synchronized
     fun updateSession(displayName: String,
                       photoUrl: String? = null,
@@ -155,32 +153,30 @@ object UserSessionManager {
         synchronized(this) {
 
             //Save to the share prefs.
-            SharedPrefsProvider.savePreferences(USER_IS_MALE, isMale)
-            SharedPrefsProvider.savePreferences(USER_HEIGHT, height.toString())
-            SharedPrefsProvider.savePreferences(USER_WEIGHT, weight.toString())
-            SharedPrefsProvider.savePreferences(USER_DISPLAY_NAME, displayName)
-            SharedPrefsProvider.savePreferences(USER_PHOTO, photoUrl)
+            sharedPrefProvider.savePreferences(USER_IS_MALE, isMale)
+            sharedPrefProvider.savePreferences(USER_HEIGHT, height.toString())
+            sharedPrefProvider.savePreferences(USER_WEIGHT, weight.toString())
+            sharedPrefProvider.savePreferences(USER_DISPLAY_NAME, displayName)
+            sharedPrefProvider.savePreferences(USER_PHOTO, photoUrl)
         }
     }
 
     /**
      * Clear token from the session.
      */
-    @JvmStatic
     fun clearToken() {
-        SharedPrefsProvider.removePreferences(USER_TOKEN)
+        sharedPrefProvider.removePreferences(USER_TOKEN)
     }
 
     /**
      * Clear user data.
      */
-    @JvmStatic
     fun clearUserSession() {
-        SharedPrefsProvider.removePreferences(USER_ID)
-        SharedPrefsProvider.removePreferences(USER_DISPLAY_NAME)
-        SharedPrefsProvider.removePreferences(USER_EMAIL)
-        SharedPrefsProvider.removePreferences(USER_PHOTO)
-        SharedPrefsProvider.removePreferences(USER_IS_VERIFIED)
+        sharedPrefProvider.removePreferences(USER_ID)
+        sharedPrefProvider.removePreferences(USER_DISPLAY_NAME)
+        sharedPrefProvider.removePreferences(USER_EMAIL)
+        sharedPrefProvider.removePreferences(USER_PHOTO)
+        sharedPrefProvider.removePreferences(USER_IS_VERIFIED)
 
         clearToken()
     }

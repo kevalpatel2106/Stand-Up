@@ -35,6 +35,7 @@ import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import kotlinx.android.synthetic.main.activity_email_link_verification.*
 
@@ -46,39 +47,6 @@ import kotlinx.android.synthetic.main.activity_email_link_verification.*
 @UIController
 class EmailLinkVerificationActivity : BaseActivity() {
 
-    companion object {
-
-        @VisibleForTesting
-        const val ARG_URL = "arg_url"
-
-        /**
-         * Launch the [EmailLinkVerificationActivity].
-         *
-         * @param context Instance of the caller.
-         * @param url [Uri] received in the deep link
-         * @return True if the activity opened.
-         */
-        fun launch(context: Context, url: Uri): Boolean {
-
-            //Validate the url
-            if (url.pathSegments.size != 3) {
-                Toast.makeText(context, "Invalid verification link.", Toast.LENGTH_LONG).show()
-                return false
-            }
-
-            //Check if the user is verified
-            if (UserSessionManager.isUserVerified) {
-                Toast.makeText(context, "User already verified.", Toast.LENGTH_LONG).show()
-                return false
-            }
-
-            val launchIntent = Intent(context, EmailLinkVerificationActivity::class.java)
-            launchIntent.putExtra(ARG_URL, url.toString())
-            context.startActivity(launchIntent)
-            return true
-        }
-    }
-
     internal lateinit var model: EmailLinkVerifyViewModel
 
     private var allowBackPress: Boolean = false
@@ -87,7 +55,13 @@ class EmailLinkVerificationActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email_link_verification)
+        setModel()
 
+        //Make an GET api call
+        model.verifyEmail(intent.getStringExtra(ARG_URL))
+    }
+
+    private fun setModel() {
         model = ViewModelProviders.of(this@EmailLinkVerificationActivity)
                 .get(EmailLinkVerifyViewModel::class.java)
 
@@ -117,9 +91,6 @@ class EmailLinkVerificationActivity : BaseActivity() {
             //Success
             setSuccess()
         })
-
-        //Make an GET api call
-        model.verifyEmail(intent.getStringExtra(ARG_URL))
     }
 
     private fun setSuccess() {
@@ -135,9 +106,6 @@ class EmailLinkVerificationActivity : BaseActivity() {
                 .scaleX(1.2f)
                 .scaleY(1.2f)
                 .start()
-
-        //Change the flag to true.
-        UserSessionManager.isUserVerified = true
 
         //Go to the email link activity
         Handler().postDelayed({
@@ -168,5 +136,39 @@ class EmailLinkVerificationActivity : BaseActivity() {
 
     override fun onBackPressed() {
         if (allowBackPress) super.onBackPressed()
+    }
+
+
+    companion object {
+
+        @VisibleForTesting
+        const val ARG_URL = "arg_url"
+
+        /**
+         * Launch the [EmailLinkVerificationActivity].
+         *
+         * @param context Instance of the caller.
+         * @param url [Uri] received in the deep link
+         * @return True if the activity opened.
+         */
+        fun launch(context: Context, url: Uri): Boolean {
+
+            //Validate the url
+            if (url.pathSegments.size != 3) {
+                Toast.makeText(context, "Invalid verification link.", Toast.LENGTH_LONG).show()
+                return false
+            }
+
+            //Check if the user is verified
+            if (UserSessionManager(SharedPrefsProvider(context)).isUserVerified) {
+                Toast.makeText(context, "User already verified.", Toast.LENGTH_LONG).show()
+                return false
+            }
+
+            val launchIntent = Intent(context, EmailLinkVerificationActivity::class.java)
+            launchIntent.putExtra(ARG_URL, url.toString())
+            context.startActivity(launchIntent)
+            return true
+        }
     }
 }

@@ -21,11 +21,12 @@ import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.authentication.verification.EmailVerifiedNotification
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 
 import timber.log.Timber
+import javax.inject.Inject
 
 
 /**
@@ -38,12 +39,22 @@ import timber.log.Timber
 
 class FcmMessagingService : FirebaseMessagingService() {
 
+    @Inject lateinit var userSessionManager: UserSessionManager
+
+    override fun onCreate() {
+        super.onCreate()
+
+        DaggerFcmComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@FcmMessagingService)
+    }
+
     @SuppressLint("BinaryOperationInTimber", "VisibleForTests")
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         super.onMessageReceived(remoteMessage)
 
-        SharedPrefsProvider.init(this@FcmMessagingService)
-        if (!shouldProcessNotification(remoteMessage?.data)) return
+        if (!shouldProcessNotification(remoteMessage?.data, userSessionManager)) return
 
         Timber.d("onMessageReceived: " + remoteMessage!!.data.toString())
 
@@ -57,7 +68,7 @@ class FcmMessagingService : FirebaseMessagingService() {
             NotificationType.TYPE_EMAIL_VERIFIED -> {
 
                 //Change the flag to true.
-                UserSessionManager.isUserVerified = true
+                userSessionManager.isUserVerified = true
 
                 //Fire the notification
                 EmailVerifiedNotification.notify(this.applicationContext, data["message"])
@@ -66,14 +77,15 @@ class FcmMessagingService : FirebaseMessagingService() {
     }
 
     @VisibleForTesting
-    internal fun shouldProcessNotification(data: Map<String, String>?): Boolean {
+    internal fun shouldProcessNotification(data: Map<String, String>?,
+                                           userSessionManager: UserSessionManager): Boolean {
         if (data == null || data.isEmpty()) {
             Timber.w("No message received in the FCM payload.")
             return false
         }
 
         //Check for the user logged in
-        if (!UserSessionManager.isUserLoggedIn) {
+        if (!userSessionManager.isUserLoggedIn) {
             Timber.w("User is not registered. Skipping the message.")
             return false
         }

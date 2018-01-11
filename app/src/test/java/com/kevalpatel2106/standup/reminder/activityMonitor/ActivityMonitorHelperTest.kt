@@ -20,8 +20,6 @@ package com.kevalpatel2106.standup.reminder.activityMonitor
 import com.firebase.jobdispatcher.Lifetime
 import com.firebase.jobdispatcher.RetryStrategy
 import com.kevalpatel2106.standup.reminder.ReminderConfig
-import com.kevalpatel2106.testutils.MockSharedPreference
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,7 +40,6 @@ class ActivityMonitorHelperTest {
     @Test
     @Throws(IOException::class)
     fun checkPrepareJob() {
-        SharedPrefsProvider.init(MockSharedPreference())
         val builder = ActivityMonitorHelper.prepareJob(RuntimeEnvironment.application)
 
         Assert.assertEquals(builder.constraints.size, 0)

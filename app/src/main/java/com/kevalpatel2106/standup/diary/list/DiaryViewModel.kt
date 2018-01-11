@@ -23,12 +23,14 @@ import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.CallbackEvent
 import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.db.DailyActivitySummary
+import com.kevalpatel2106.standup.diary.di.DaggerDiaryComponent
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
-import com.kevalpatel2106.standup.diary.repo.DiaryRepoImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Keval on 23/12/17.
@@ -37,7 +39,35 @@ import io.reactivex.schedulers.Schedulers
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(DiaryFragment::class)
-internal class DiaryViewModel : BaseViewModel {
+class DiaryViewModel : BaseViewModel {
+
+    @Inject lateinit var userActivityRepo: DiaryRepo
+
+    /**
+     * Private constructor to add the custom [DiaryRepo] for testing.
+     *
+     * @param diaryRepo Add your own [DiaryRepo].
+     */
+    @VisibleForTesting
+    constructor(diaryRepo: DiaryRepo) : super() {
+        this.userActivityRepo = diaryRepo
+
+        init()
+    }
+
+    /**
+     * Zero parameter constructor.
+     */
+    @Suppress("unused")
+    constructor() {
+        DaggerDiaryComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@DiaryViewModel)
+
+        init()
+    }
+
 
     /**
      * List of user activities.
@@ -48,43 +78,17 @@ internal class DiaryViewModel : BaseViewModel {
 
     val pageLoadingCompleteCallback = CallbackEvent()
 
-    @VisibleForTesting
-    internal val mUserActivityRepo: DiaryRepo
-
-    /**
-     * Private constructor to add the custom [DiaryRepo] for testing.
-     *
-     * @param diaryRepo Add your own [DiaryRepo].
-     */
-    @Suppress("unused")
-    @VisibleForTesting
-    constructor(diaryRepo: DiaryRepo) : super() {
-        this.mUserActivityRepo = diaryRepo
-
-        //Load the first page
-        loadNext(System.currentTimeMillis(), true)
-    }
-
-    /**
-     * Zero parameter constructor.
-     */
-    @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        mUserActivityRepo = DiaryRepoImpl()
-
-        //Load the first page
-        loadNext(System.currentTimeMillis(), true)
-    }
-
-    init {
+    fun init() {
         noMoreData.value = false
         activities.value = ArrayList()
+
+        //Load the first page
+        loadNext(System.currentTimeMillis(), true)
     }
 
     internal fun loadNext(oldestEventTimeMills: Long,
                           isFirstPage: Boolean = false) {
-        addDisposable(mUserActivityRepo
+        addDisposable(userActivityRepo
                 .loadDaysSummaryList(oldestEventTimeMills - 1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

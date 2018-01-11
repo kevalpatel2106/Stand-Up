@@ -30,7 +30,9 @@ import butterknife.OnClick
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.base.uiController.showSnack
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.main.MainActivity
@@ -38,27 +40,25 @@ import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.getColorCompat
 import kotlinx.android.synthetic.main.activity_verify_email.*
+import javax.inject.Inject
 
 
 @UIController
 class VerifyEmailActivity : BaseActivity() {
 
-    companion object {
-        /**
-         * Launch the [VerifyEmailActivity].
-         *
-         * @param context Instance of the caller.
-         */
-        fun launch(context: Context) {
-            val launchIntent = Intent(context, VerifyEmailActivity::class.java)
-            context.startActivity(launchIntent)
-        }
-    }
+    @Inject lateinit var userSessionManager: UserSessionManager
 
     @VisibleForTesting
     internal lateinit var model: VerifyEmailViewModel
 
     private var resendingSnackbar: Snackbar? = null
+
+    init {
+        DaggerUserAuthComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@VerifyEmailActivity)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +71,7 @@ class VerifyEmailActivity : BaseActivity() {
         setViewModel()
 
         verify_description_text.text = String.format(getString(R.string.verify_email_screen_message),
-                UserSessionManager.email)
+                userSessionManager.email)
     }
 
     private fun setViewModel() {
@@ -119,11 +119,24 @@ class VerifyEmailActivity : BaseActivity() {
     @OnClick(R.id.verify_btn_resend)
     fun onResendEmail() {
         logEvent(AnalyticsEvents.EVENT_RESEND_VERIFICATION_MAIL)
-        model.resendEmail(UserSessionManager.userId)
+        model.resendEmail()
     }
 
     @OnClick(R.id.verify_btn_open_mail_btn)
     fun onOpenEmail() {
         SUUtils.openEmailDialog(this@VerifyEmailActivity)
+    }
+
+
+    companion object {
+        /**
+         * Launch the [VerifyEmailActivity].
+         *
+         * @param context Instance of the caller.
+         */
+        fun launch(context: Context) {
+            val launchIntent = Intent(context, VerifyEmailActivity::class.java)
+            context.startActivity(launchIntent)
+        }
     }
 }

@@ -139,12 +139,13 @@ internal object ActivityMonitorHelper {
     }
 
 
-    internal fun shouldScheduleNotification(userActivity: UserActivity): Boolean {
+    internal fun shouldScheduleNotification(userActivity: UserActivity,
+                                            sharedPrefsProvider: SharedPrefsProvider): Boolean {
         if (userActivity.userActivityType == UserActivityType.MOVING) {
 
             // Reschedule the notification if the user is currently moving
             return true
-        } else if (SharedPrefsProvider.getLongFromPreference(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
+        } else if (sharedPrefsProvider.getLongFromPreference(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
                 < (System.currentTimeMillis() + TimeUtils.convertToMilli(ReminderConfig.STAND_UP_DURATION.toLong()))) {
 
             // There is no notification since an hour. That indicates that may be notification job
@@ -156,7 +157,7 @@ internal object ActivityMonitorHelper {
         return false
     }
 
-    internal fun shouldMonitoringActivity(): Boolean {
-        return UserSessionManager.isUserLoggedIn
+    internal fun shouldMonitoringActivity(userSessionManager: UserSessionManager): Boolean {
+        return userSessionManager.isUserLoggedIn
     }
 }

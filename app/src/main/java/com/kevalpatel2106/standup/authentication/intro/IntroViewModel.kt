@@ -25,13 +25,15 @@ import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.utils.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Keval on 19/11/17.
@@ -41,14 +43,33 @@ import io.reactivex.schedulers.Schedulers
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(IntroActivity::class)
-internal class IntroViewModel @VisibleForTesting constructor(private val userAuthRepo: UserAuthRepository)
-    : BaseViewModel() {
+class IntroViewModel : BaseViewModel {
+
+    @Inject lateinit var userAuthRepo: UserAuthRepository
+
+    @Inject lateinit var userSessionManager: UserSessionManager
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : this(UserAuthRepositoryImpl())
+    constructor() {
+        DaggerUserAuthComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@IntroViewModel)
+
+        init()
+    }
+
+    @VisibleForTesting
+    constructor(userAuthRepo: UserAuthRepository,
+                                   userSessionManager: UserSessionManager) {
+        this.userAuthRepo = userAuthRepo
+        this.userSessionManager = userSessionManager
+
+        init()
+    }
 
     /**
      * [IntroUiModel] to hold the response form the user authentication. UI element can
@@ -60,7 +81,7 @@ internal class IntroViewModel @VisibleForTesting constructor(private val userAut
 
     internal val isFacebookLoginProgress = MutableLiveData<Boolean>()
 
-    init {
+    fun init() {
         isFacebookLoginProgress.value = false
         isGoogleLoginProgress.value = false
     }
@@ -116,7 +137,7 @@ internal class IntroViewModel @VisibleForTesting constructor(private val userAut
                 })
                 .subscribe({ data ->
                     //Save into the user session
-                    UserSessionManager.setNewSession(userId = data.uid,
+                    userSessionManager.setNewSession(userId = data.uid,
                             displayName = requestData.displayName,
                             token = null,
                             email = requestData.email,

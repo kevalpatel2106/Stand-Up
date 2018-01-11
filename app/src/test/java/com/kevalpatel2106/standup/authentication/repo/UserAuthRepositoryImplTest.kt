@@ -17,20 +17,14 @@
 
 package com.kevalpatel2106.standup.authentication.repo
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.testutils.MockServerManager
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito
 import java.io.File
 import java.io.IOException
 import java.nio.file.Paths
@@ -42,33 +36,20 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class UserAuthRepositoryImplTest {
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", Paths.get("").toAbsolutePath().toString())
+    private val path = Paths.get("").toAbsolutePath().toString().let {
+        return@let if (it.endsWith("app")) it else it.plus("/app")
+    }
+    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/standup/authentication/repo", path)
 
     private val mockServerManager = MockServerManager()
     private lateinit var userAuthRepositoryImpl: UserAuthRepositoryImpl
 
-    companion object {
-
-        private lateinit var sharedPrefs: SharedPreferences
-
-        @JvmStatic
-        @BeforeClass
-        fun setUpClass() {
-            val context = Mockito.mock(Context::class.java)
-            sharedPrefs = Mockito.mock(SharedPreferences::class.java)
-            val sharedPrefsEditor = Mockito.mock(SharedPreferences.Editor::class.java)
-            Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
-            Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
-
-            SharedPrefsProvider.init(context)
-            ApiProvider.init()
-        }
-    }
-
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
-        userAuthRepositoryImpl = UserAuthRepositoryImpl(mockServerManager.getBaseUrl())
+        userAuthRepositoryImpl = UserAuthRepositoryImpl(
+                ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())
+        )
     }
 
     @After
@@ -203,7 +184,8 @@ class UserAuthRepositoryImplTest {
 
         val testSubscriber = TestSubscriber<DeviceRegisterResponse>()
         userAuthRepositoryImpl
-                .registerDevice(DeviceRegisterRequest("64df48e6-45de-4bb5-879d-4c1a722f23fd",
+                .registerDevice(DeviceRegisterRequest(12L,
+                        "64df48e6-45de-4bb5-879d-4c1a722f23fd",
                         "64df48e6-45de-4bb5-879d-4c1a722f23fd-yreuiyh-2837bmsf"))
                 .subscribe(testSubscriber)
         testSubscriber.awaitTerminalEvent()
@@ -224,7 +206,8 @@ class UserAuthRepositoryImplTest {
 
         val testSubscriber = TestSubscriber<DeviceRegisterResponse>()
         userAuthRepositoryImpl
-                .registerDevice(DeviceRegisterRequest("64df48e6-45de-4bb5-879d-4c1a722f23fd",
+                .registerDevice(DeviceRegisterRequest(12L,
+                        "64df48e6-45de-4bb5-879d-4c1a722f23fd",
                         "64df48e6-45de-4bb5-879d-4c1a722f23fd-yreuiyh-2837bmsf"))
                 .subscribe(testSubscriber)
         testSubscriber.awaitTerminalEvent()

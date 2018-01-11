@@ -39,16 +39,6 @@ import kotlinx.android.synthetic.main.layout_home_timeline_card.*
  */
 class DashboardFragment : Fragment() {
 
-    companion object {
-
-        /**
-         * Get the new instance of [DashboardFragment].
-         */
-        fun getNewInstance(): DashboardFragment {
-            return DashboardFragment()
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -56,13 +46,22 @@ class DashboardFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
+    private lateinit var model: DashboardViewModel
+
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         today_time_line.timelineDuration = TimeLineLength.A_DAY
 
-        val model = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
+        setModel()
+
+        //Load the today's summary
+        model.getTodaysSummary()
+    }
+
+    private fun setModel() {
+        model = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
         model.setPieChart(context!!, home_efficiency_card_pie_chart)
         model.setPieChartData(context!!, home_efficiency_card_pie_chart, 0F, 0F)
 
@@ -107,5 +106,15 @@ class DashboardFragment : Fragment() {
                 today_time_line.timelineItems = it
             }
         })
+    }
+
+    companion object {
+
+        /**
+         * Get the new instance of [DashboardFragment].
+         */
+        fun getNewInstance(): DashboardFragment {
+            return DashboardFragment()
+        }
     }
 }

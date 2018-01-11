@@ -39,10 +39,11 @@ internal object NotificationSchedulerHelper {
     @JvmStatic
     @VisibleForTesting
     internal fun prepareJob(context: Context,
-                            scheduleAfter: Int = ReminderConfig.STAND_UP_DURATION): Job {
+                            scheduleAfter: Int = ReminderConfig.STAND_UP_DURATION,
+                            sharedPrefsProvider: SharedPrefsProvider): Job {
 
         //Save the time of upcoming notification.
-        SharedPrefsProvider.savePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME,
+        sharedPrefsProvider.savePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME,
                 System.currentTimeMillis() + scheduleAfter)
 
         return FirebaseJobDispatcher(GooglePlayDriver(context))
@@ -66,7 +67,7 @@ internal object NotificationSchedulerHelper {
     }
 
     @VisibleForTesting
-    internal fun shouldDisplayNotification(): Boolean {
-        return UserSessionManager.isUserLoggedIn
+    internal fun shouldDisplayNotification(userSessionManager: UserSessionManager): Boolean {
+        return userSessionManager.isUserLoggedIn
     }
 }

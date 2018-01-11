@@ -21,30 +21,27 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.about.di.DaggerAboutComponent
 import com.kevalpatel2106.standup.about.repo.AboutRepository
-import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
 import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.misc.Validator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class ReportIssueViewModel : BaseViewModel {
-    internal val versionUpdateResult = MutableLiveData<CheckVersionResponse>()
-
-    internal val issueId = MutableLiveData<Long>()
-
+class ReportIssueViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */
-    @VisibleForTesting
-    internal var mAuthRepository: AboutRepository
+    @Inject lateinit var aboutRepository: AboutRepository
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
@@ -53,21 +50,32 @@ internal class ReportIssueViewModel : BaseViewModel {
      */
     @Suppress("unused")
     @VisibleForTesting
-    constructor(authRepository: AboutRepository) : super() {
-        this.mAuthRepository = authRepository
+    constructor(authRepository: AboutRepository) {
+        this.aboutRepository = authRepository
     }
 
     /**
      * Zero parameter constructor.
      */
     @Suppress("unused")
-    constructor() : super() {
-        //This is the original user authentication repo.
-        mAuthRepository = AboutRepositoryImpl()
+    constructor() {
+        DaggerAboutComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@ReportIssueViewModel)
     }
 
+    internal val versionUpdateResult = MutableLiveData<CheckVersionResponse>()
+
+    internal val issueId = MutableLiveData<Long>()
+
+    /**
+     * Check for the new version update to the server. If the new update is available
+     * [versionUpdateResult] will return new version info. [errorMessage] will contain the error
+     * detail if any error occurs.
+     */
     fun checkForUpdate() {
-        addDisposable(mAuthRepository.getLatestVersion()
+        addDisposable(aboutRepository.getLatestVersion()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
@@ -101,7 +109,7 @@ internal class ReportIssueViewModel : BaseViewModel {
         }
 
         //Report the issue
-        addDisposable(mAuthRepository.reportIssue(title, message, deviceId)
+        addDisposable(aboutRepository.reportIssue(title, message, deviceId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe { blockUi.value = true }
