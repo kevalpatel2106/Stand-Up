@@ -21,8 +21,8 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.CallbackEvent
 import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.utils.UserSessionManager

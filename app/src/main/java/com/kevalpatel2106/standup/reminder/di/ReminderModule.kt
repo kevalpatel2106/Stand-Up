@@ -19,7 +19,7 @@ package com.kevalpatel2106.standup.reminder.di
 
 import com.kevalpatel2106.standup.db.DbModule
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
-import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.ApplicationScope
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepoImpl
 import dagger.Module
@@ -36,7 +36,7 @@ import javax.inject.Named
 class ReminderModule {
 
     @Provides
-    @AppScope
+    @ApplicationScope
     fun provideReminderRepo(userActivityDao: UserActivityDao,
                             @Named("WITH_TOKEN") retrofit: Retrofit): ReminderRepo
             = ReminderRepoImpl(userActivityDao, retrofit)

@@ -19,7 +19,7 @@ package com.kevalpatel2106.standup.about.di
 
 import com.kevalpatel2106.standup.about.repo.AboutRepository
 import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
-import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.ApplicationScope
 import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Module
 import dagger.Provides
@@ -35,7 +35,7 @@ import javax.inject.Named
 class AboutModule {
 
     @Provides
-    @AppScope
+    @ApplicationScope
     fun provideUserAuthRepo(@Named("WITH_TOKEN") retrofit: Retrofit,
                             userSessionManager: UserSessionManager): AboutRepository
             = AboutRepositoryImpl(retrofit, userSessionManager)

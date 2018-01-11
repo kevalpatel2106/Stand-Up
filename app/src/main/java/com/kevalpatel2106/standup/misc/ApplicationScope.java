@@ -15,19 +15,19 @@
  *
  */
 
-package com.kevalpatel2106.standup.misc.di
+package com.kevalpatel2106.standup.misc;
 
-import com.kevalpatel2106.standup.SplashActivity
-import dagger.Component
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.inject.Scope;
 
 /**
- * Created by Keval on 10/01/18.
+ * Created by Kevalpatel2106 on 09-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@AppScope
-@Component(dependencies = [AppComponent::class])
-interface SplashComponent {
-
-    fun inject(splashActivity: SplashActivity)
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ApplicationScope {
 }

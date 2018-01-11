@@ -20,7 +20,7 @@ package com.kevalpatel2106.standup.authentication.logout
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
-import com.kevalpatel2106.standup.SplashActivity
+import com.kevalpatel2106.standup.application.SplashActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.repo.LogoutRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository

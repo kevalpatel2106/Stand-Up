@@ -21,7 +21,7 @@ import com.kevalpatel2106.standup.db.DbModule
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 import com.kevalpatel2106.standup.diary.repo.DiaryRepoImpl
-import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -36,7 +36,7 @@ import javax.inject.Named
 class DiaryModule {
 
     @Provides
-    @AppScope
+    @ApplicationScope
     fun provideDiaryRepo(userActivityDao: UserActivityDao,
                          @Named("WITH_TOKEN") retrofit: Retrofit): DiaryRepo
             = DiaryRepoImpl(retrofit, userActivityDao)

@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.misc.di
+package com.kevalpatel2106.standup.application.di
 
 import android.app.Application
 import android.content.Context

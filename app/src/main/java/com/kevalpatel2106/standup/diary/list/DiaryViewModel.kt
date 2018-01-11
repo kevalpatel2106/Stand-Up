@@ -23,8 +23,8 @@ import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.CallbackEvent
 import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.diary.di.DaggerDiaryComponent
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo

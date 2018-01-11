@@ -15,20 +15,11 @@
  *
  */
 
-package com.kevalpatel2106.standup.main
-
-import com.kevalpatel2106.standup.misc.di.AppComponent
-import com.kevalpatel2106.standup.misc.di.AppScope
-import dagger.Component
+package com.kevalpatel2106.standup.settings.repo
 
 /**
- * Created by Keval on 10/01/18.
+ * Created by Keval on 11/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@AppScope
-@Component(dependencies = [AppComponent::class])
-interface MainComponent {
-
-    fun inject(mainActivity: MainActivity)
-}
+interface SettingsRepo

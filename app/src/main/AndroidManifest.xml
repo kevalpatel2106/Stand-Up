@@ -14,7 +14,6 @@
   ~   limitations under the License.
   ~
   -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.kevalpatel2106.standup">
@@ -75,7 +74,7 @@
 
         <!-- Splash screen for the redirection. This is the single entry point to the application. -->
         <activity
-            android:name=".SplashActivity"
+            android:name=".application.SplashActivity"
             android:configChanges="orientation|screenLayout|screenSize"
             android:launchMode="singleInstance"
             android:noHistory="true"
@@ -185,13 +184,19 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".settings.list.SettingsActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
             android:name=".diary.detail.DetailActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionbar"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute" />
+        <activity
+            android:name=".settings.syncSettings.SyncSettingsActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
@@ -237,6 +242,7 @@
             </intent-filter>
         </service>
         <!-- End: Firebase service -->
+
 
         <!-- Service to register the device firebase token and other detail -->
         <service

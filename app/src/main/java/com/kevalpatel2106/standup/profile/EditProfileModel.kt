@@ -22,8 +22,8 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.misc.Validator
 import com.kevalpatel2106.standup.profile.di.DaggerProfileComponent
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse

@@ -21,7 +21,7 @@ import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
 import com.kevalpatel2106.standup.db.DbModule
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
-import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -36,7 +36,7 @@ import javax.inject.Named
 class DashboardModule {
 
     @Provides
-    @AppScope
+    @ApplicationScope
     fun provideDashboardRepo(@Named("WITH_TOKEN") retrofit: Retrofit,
                              userActivityDao: UserActivityDao): DashboardRepo
             = DashboardRepoImpl(userActivityDao, retrofit)

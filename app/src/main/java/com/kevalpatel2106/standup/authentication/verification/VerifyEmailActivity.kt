@@ -30,8 +30,8 @@ import butterknife.OnClick
 import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.base.uiController.showSnack
-import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent

@@ -15,18 +15,18 @@
  *
  */
 
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.application
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.base.uiController.BaseActivity
+import com.kevalpatel2106.standup.application.di.DaggerSplashComponent
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.main.MainActivity
-import com.kevalpatel2106.standup.misc.di.DaggerSplashComponent
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.utils.SharedPrefsProvider

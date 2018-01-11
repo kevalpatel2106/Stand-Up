@@ -15,11 +15,11 @@
  *
  */
 
-package com.kevalpatel2106.standup.misc.di
+package com.kevalpatel2106.standup.application.di
 
 import android.app.Application
 import android.content.Context
-import com.kevalpatel2106.standup.BaseApplication
+import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Component

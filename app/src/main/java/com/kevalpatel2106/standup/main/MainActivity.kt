@@ -32,12 +32,13 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.base.view.BaseTextView
-import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.about.AboutActivity
+import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
+import com.kevalpatel2106.standup.main.di.DaggerMainComponent
 import com.kevalpatel2106.standup.profile.EditProfileActivity
-import com.kevalpatel2106.standup.settings.SettingsActivity
+import com.kevalpatel2106.standup.settings.list.SettingsActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector
 import com.kevalpatel2106.utils.UserSessionManager

@@ -18,7 +18,7 @@
 package com.kevalpatel2106.standup.db
 
 import android.app.Application
-import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Module
 import dagger.Provides
 
@@ -31,10 +31,10 @@ import dagger.Provides
 class DbModule {
 
     @Provides
-    @AppScope
+    @ApplicationScope
     fun provideDatabase(application: Application) = StandUpDb.getDb(application)
 
     @Provides
-    @AppScope
+    @ApplicationScope
     fun provideUserActivityDao(db: StandUpDb) = db.userActivityDao()
 }

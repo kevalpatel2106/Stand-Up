@@ -26,7 +26,7 @@ import com.google.android.gms.awareness.Awareness
 import com.google.android.gms.awareness.snapshot.DetectedActivityResponse
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
-import com.kevalpatel2106.standup.BaseApplication
+import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService

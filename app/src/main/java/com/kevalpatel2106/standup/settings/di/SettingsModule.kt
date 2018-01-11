@@ -15,19 +15,25 @@
  *
  */
 
-package com.kevalpatel2106.standup.misc.di;
+package com.kevalpatel2106.standup.settings.di
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import javax.inject.Scope;
+import com.kevalpatel2106.standup.misc.ApplicationScope
+import com.kevalpatel2106.standup.settings.repo.SettingsRepo
+import com.kevalpatel2106.standup.settings.repo.SettingsRepoImpl
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import dagger.Module
+import dagger.Provides
 
 /**
- * Created by Kevalpatel2106 on 09-Jan-18.
+ * Created by Keval on 11/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Scope
-@Retention(RetentionPolicy.RUNTIME)
-public @interface AppScope {
+@Module
+class SettingsModule {
+
+    @ApplicationScope
+    @Provides
+    fun provideSettingsRepo(sharedPrefsProvider: SharedPrefsProvider): SettingsRepo
+            = SettingsRepoImpl(sharedPrefsProvider)
 }

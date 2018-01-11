@@ -23,7 +23,7 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher
 import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService
-import com.kevalpatel2106.standup.BaseApplication
+import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
 import com.kevalpatel2106.utils.UserSessionManager

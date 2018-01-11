@@ -17,12 +17,9 @@
 
 package com.kevalpatel2106.standup.dashboard.di
 
-import com.kevalpatel2106.standup.about.AboutViewModel
-import com.kevalpatel2106.standup.about.report.ReportIssueViewModel
-import com.kevalpatel2106.standup.dashboard.DashboardFragment
+import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.dashboard.DashboardViewModel
-import com.kevalpatel2106.standup.misc.di.AppComponent
-import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Component
 
 /**
@@ -30,7 +27,7 @@ import dagger.Component
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@AppScope
+@ApplicationScope
 @Component(dependencies = [AppComponent::class], modules = [DashboardModule::class])
 interface DashboardComponent {
 

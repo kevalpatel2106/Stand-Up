@@ -23,7 +23,7 @@ import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.standup.db.DbModule
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
-import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.ApplicationScope
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import dagger.Module
@@ -40,11 +40,11 @@ import javax.inject.Named
 class UserAuthModule {
 
     @Provides
-    @AppScope
+    @ApplicationScope
     fun provideUserAuthRepo(@Named("WITH_TOKEN") retrofit: Retrofit): UserAuthRepository = UserAuthRepositoryImpl(retrofit)
 
     @Provides
-    @AppScope
+    @ApplicationScope
     fun provideLogout(context: Application,
                       sharedPrefsProvider: SharedPrefsProvider,
                       userSessionManager: UserSessionManager,

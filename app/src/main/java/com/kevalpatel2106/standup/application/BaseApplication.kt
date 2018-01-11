@@ -15,15 +15,16 @@
  *
  */
 
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.application
 
 import android.app.Application
 import com.facebook.FacebookSdk
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.kevalpatel2106.standup.misc.di.AppComponent
-import com.kevalpatel2106.standup.misc.di.AppModule
-import com.kevalpatel2106.standup.misc.di.DaggerAppComponent
+import com.kevalpatel2106.standup.BuildConfig
+import com.kevalpatel2106.standup.application.di.AppComponent
+import com.kevalpatel2106.standup.application.di.AppModule
+import com.kevalpatel2106.standup.application.di.DaggerAppComponent
 
 /**
  * Created by Keval on 31/12/17.

@@ -19,6 +19,7 @@ package com.kevalpatel2106.standup
 
 import android.os.StrictMode
 import com.facebook.stetho.Stetho
+import com.kevalpatel2106.standup.application.BaseApplication
 import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
 

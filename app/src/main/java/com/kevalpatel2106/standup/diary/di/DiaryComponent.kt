@@ -17,9 +17,9 @@
 
 package com.kevalpatel2106.standup.diary.di
 
+import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.diary.list.DiaryViewModel
-import com.kevalpatel2106.standup.misc.di.AppComponent
-import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Component
 
 /**
@@ -27,7 +27,7 @@ import dagger.Component
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@AppScope
+@ApplicationScope
 @Component(dependencies = [AppComponent::class], modules = [DiaryModule::class])
 interface DiaryComponent {
 

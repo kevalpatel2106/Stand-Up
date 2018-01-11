@@ -15,35 +15,16 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings
+package com.kevalpatel2106.standup.settings.syncSettings
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.base.uiController.BaseActivity
+import android.support.v7.app.AppCompatActivity
 import com.kevalpatel2106.standup.R
 
-class SettingsActivity : BaseActivity() {
-
-
-    companion object {
-
-        /**
-         * Launch the [SettingsActivity].
-         *
-         * @param context Instance of the caller.
-         */
-        @JvmStatic
-        fun launch(context: Context) {
-            val launchIntent = Intent(context, SettingsActivity::class.java)
-            context.startActivity(launchIntent)
-        }
-    }
+class SyncSettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
-
-        setToolbar(R.id.toolbar, R.string.title_activity_settings, true)
+        setContentView(R.layout.activity_sync_settings)
     }
 }

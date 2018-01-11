@@ -21,9 +21,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.kevalpatel2106.standup.BaseApplication
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.SplashActivity
+import com.kevalpatel2106.standup.application.BaseApplication
+import com.kevalpatel2106.standup.application.SplashActivity
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.logout.Logout
 import com.kevalpatel2106.standup.constants.AnalyticsEvents

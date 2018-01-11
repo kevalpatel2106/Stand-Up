@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.authentication.di
 
+import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.authentication.UnauthorizedReceiver
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegViewModel
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordViewModel
@@ -25,8 +26,7 @@ import com.kevalpatel2106.standup.authentication.login.LoginViewModel
 import com.kevalpatel2106.standup.authentication.verification.EmailLinkVerifyViewModel
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailViewModel
-import com.kevalpatel2106.standup.misc.di.AppComponent
-import com.kevalpatel2106.standup.misc.di.AppScope
+import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Component
 
 /**
@@ -34,7 +34,7 @@ import dagger.Component
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@AppScope
+@ApplicationScope
 @Component(dependencies = [AppComponent::class], modules = [UserAuthModule::class])
 interface UserAuthComponent {
 
