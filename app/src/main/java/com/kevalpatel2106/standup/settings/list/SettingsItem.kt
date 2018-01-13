@@ -25,12 +25,16 @@ import android.support.annotation.DrawableRes
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 data class SettingsItem(
+        var id: SettingsId,
 
         val title: String,
 
         @DrawableRes
         val icon: Int
 ) {
+
+    var isSelected: Boolean = false
+
     init {
         if (title.isEmpty()) throw IllegalArgumentException("Title cannot be null or empty.")
     }

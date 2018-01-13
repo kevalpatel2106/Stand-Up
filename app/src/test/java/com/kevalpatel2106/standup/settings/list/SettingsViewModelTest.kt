@@ -53,7 +53,6 @@ class SettingsViewModelTest {
     @Test
     @Throws(Exception::class)
     fun checkInit() {
-        Assert.assertNull(model.settingsItemList.value)
         Assert.assertNull(model.errorMessage.value)
         Assert.assertFalse(model.blockUi.value!!)
     }

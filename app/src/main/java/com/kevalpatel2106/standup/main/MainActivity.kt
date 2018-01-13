@@ -38,7 +38,7 @@ import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.main.di.DaggerMainComponent
 import com.kevalpatel2106.standup.profile.EditProfileActivity
-import com.kevalpatel2106.standup.settings.list.SettingsActivity
+import com.kevalpatel2106.standup.settings.list.SettingsListActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector
 import com.kevalpatel2106.utils.UserSessionManager
@@ -218,7 +218,7 @@ class MainActivity : BaseActivity() {
             }
             DrawerItem.SETTING -> {
                 //Open the edit profile
-                SettingsActivity.launch(this@MainActivity)
+                SettingsListActivity.launch(this@MainActivity)
                 false
             }
             DrawerItem.ABOUT -> {

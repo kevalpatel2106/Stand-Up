@@ -184,7 +184,7 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.list.SettingsActivity"
+            android:name=".settings.list.SettingsListActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
@@ -196,9 +196,27 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.syncSettings.SyncSettingsActivity"
+            android:name=".settings.syncSettings.SyncSettingsDetailActivity"
             android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute" />
+        <activity
+            android:name=".settings.dndSettings.DndSettingsDetailActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute" />
+        <activity
+            android:name=".settings.sleepSettings.SleepSettingsDetailActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute" />
+        <activity
+            android:name=".settings.notificationsSettings.NotificationSettingsDetailActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
 

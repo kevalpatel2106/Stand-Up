@@ -29,7 +29,7 @@ import android.view.ViewGroup
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 class SettingsListAdapter(private val context: Context,
-                          private val data: Array<SettingsItem>,
+                          private val data: ArrayList<SettingsItem>,
                           private val clickListener: SettingsClickListener?)
     : RecyclerView.Adapter<SettingListViewHolder>() {
 

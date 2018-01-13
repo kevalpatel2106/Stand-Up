@@ -15,16 +15,20 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.syncSettings
+package com.kevalpatel2106.standup.settings.dndSettings
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v7.preference.PreferenceFragmentCompat
 import com.kevalpatel2106.standup.R
 
-class SyncSettingsActivity : AppCompatActivity() {
+class DndSettingsFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        addPreferencesFromResource(R.xml.settings_list)//TODO
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sync_settings)
+    companion object {
+        fun getNewInstance(): DndSettingsFragment {
+            return DndSettingsFragment()
+        }
     }
 }

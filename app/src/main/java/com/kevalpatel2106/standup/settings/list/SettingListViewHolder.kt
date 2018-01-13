@@ -35,10 +35,14 @@ class SettingListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
     private val iconIv: BaseImageView = itemView.findViewById(R.id.setting_row_icon_iv)
     private val titleTv: BaseTextView = itemView.findViewById(R.id.setting_row_title_tv)
+    private val rootView: View = itemView.findViewById(R.id.root_view)
 
     fun bind(settingsItem: SettingsItem, onClick: (settingsItem: SettingsItem) -> Unit) {
+        rootView.isSelected = settingsItem.isSelected
+
         iconIv.setImageResource(settingsItem.icon)
         titleTv.text = settingsItem.title
+
         itemView.setOnClickListener { onClick.invoke(settingsItem) }
     }
 

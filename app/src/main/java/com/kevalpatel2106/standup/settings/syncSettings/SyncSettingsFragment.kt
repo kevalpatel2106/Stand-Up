@@ -15,14 +15,20 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.list
+package com.kevalpatel2106.standup.settings.syncSettings
 
+import android.os.Bundle
+import android.support.v7.preference.PreferenceFragmentCompat
+import com.kevalpatel2106.standup.R
 
-/**
- * Created by Keval on 11/01/18.
- *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
- */
-interface SettingsClickListener {
-    fun onItemClick(clickedItem: SettingsItem)
+class SyncSettingsFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        addPreferencesFromResource(R.xml.settings_list)//TODO
+    }
+
+    companion object {
+        fun getNewInstance(): SyncSettingsFragment {
+            return SyncSettingsFragment()
+        }
+    }
 }

@@ -18,20 +18,21 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="?listPreferredItemHeight"
-    android:background="?selectableItemBackground">
+    android:background="@drawable/bg_settings_list_preference">
 
     <com.kevalpatel2106.base.view.BaseImageView
         android:id="@+id/setting_row_icon_iv"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_marginStart="?listPreferredItemPaddingLeft"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="?attr/colorPrimary"
-        tools:srcCompat="@drawable/ic_notifications_bell"/>
+        app:tint="?attr/colorAccent"
+        tools:srcCompat="@drawable/ic_notifications_bell" />
 
     <com.kevalpatel2106.base.view.BaseTextView
         android:id="@+id/setting_row_title_tv"
@@ -56,7 +57,7 @@
         android:background="@color/divider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/setting_row_title_tv" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -34,6 +34,7 @@ import com.kevalpatel2106.standup.reminder.sync.SyncService
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.UserSessionManager
 import com.kevalpatel2106.utils.Utils
+import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -66,7 +67,10 @@ class Logout constructor(private val application: Application,
         userSessionManager.clearToken()
 
         //Nuke the table
-        userActivityDao.nukeTable()
+        Completable.create({ userActivityDao.nukeTable() })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe()
 
         //Cancel all the jobs
         NotificationSchedulerService.cancel(application)

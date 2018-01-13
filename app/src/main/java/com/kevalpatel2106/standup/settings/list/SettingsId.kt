@@ -15,22 +15,16 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.di
-
-import com.kevalpatel2106.standup.application.di.AppComponent
-import com.kevalpatel2106.standup.authentication.di.UserAuthModule
-import com.kevalpatel2106.standup.misc.ApplicationScope
-import com.kevalpatel2106.standup.settings.list.SettingsViewModel
-import dagger.Component
+package com.kevalpatel2106.standup.settings.list
 
 /**
- * Created by Keval on 11/01/18.
+ * Created by Keval on 13/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [SettingsModule::class, UserAuthModule::class])
-interface SettingsComponent {
-
-    fun inject(settingsViewModel: SettingsViewModel)
+enum class SettingsId {
+    SYNC,
+    DND,
+    NOTIFICATION,
+    LOGOUT
 }

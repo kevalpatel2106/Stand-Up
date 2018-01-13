@@ -15,10 +15,20 @@
   ~
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--Created by Keval Patel. Author: 'https://github.com/kevalpatel2106' --><!--http://stackoverflow.com/a/42320389/4690731 Provide negative margin to fit ads-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.kevalpatel2106.standup.settings.syncSettings.SyncSettingsActivity">
+    android:layout_height="wrap_content">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/hint_pref_tv"
+        style="@style/SmallText.Secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_round_hint_preference"
+        android:padding="@dimen/spacing_small"
+        tools:text="@tools:sample/lorem/random" />
+</RelativeLayout>
