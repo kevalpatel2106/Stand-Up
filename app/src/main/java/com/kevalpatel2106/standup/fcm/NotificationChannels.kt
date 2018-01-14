@@ -25,6 +25,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.misc.UserSettingsManager
 
 /**
  * Created by Kevalpatel2106 on 04-Dec-17.
@@ -79,15 +80,36 @@ fun NotificationManager.addAccountNotificationChannel(context: Context) {
     }
 }
 
+/**
+ * Create or update the reminder notification channel in the application settings. This channel
+ * settings will be in sync with the notification settings user selected in the application settings
+ * screen. Method will read [userSettingsManager] settings such as vibration, led color and ringtone.
+ * We cannot relay on [NotificationManager] to set the prams while building the notification.
+ * [Here is the explanation.](https://stackoverflow.com/q/45081815)
+ */
 @TargetApi(Build.VERSION_CODES.O)
-fun NotificationManager.addReminderNotificationChannel(context: Context) {
+fun NotificationManager.addReminderNotificationChannel(context: Context,
+                                                       userSettingsManager: UserSettingsManager) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
         val chan2 = NotificationChannel(NotificationChannelType.REMINDER_NOTIFICATION_CHANNEL,
-                context.getString(R.string.notification_channel_title_reminders), NotificationManager.IMPORTANCE_HIGH)
-        chan2.lightColor = Color.BLUE
+                context.getString(R.string.notification_channel_title_reminders),
+                NotificationManager.IMPORTANCE_HIGH)
         chan2.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+
+        //Set the vibration to vibration provided in settings
+        chan2.enableVibration(userSettingsManager.shouldVibrate)
+
+        //Set the sound to ring tone uri to empty. We don't want android system to control the sound
+        //We will play the sound while displaying the notification using the media player API.
+        chan2.setSound(null, null)
+
+        //Set the light color
+        chan2.enableLights(true)
+        chan2.lightColor = userSettingsManager.ledColor
 
         createNotificationChannel(chan2)
     }
+
 }

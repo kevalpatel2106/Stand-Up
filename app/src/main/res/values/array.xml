@@ -17,13 +17,24 @@
 
 <resources>
     <string-array name="light_color_list">
-        <item>Yellow</item>
+        <item>None</item>
+        <item>White</item>
         <item>Red</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Cyan</item>
+        <item>Blue</item>
     </string-array>
     <string-array name="light_color_value_list">
-        <item>yellow</item>
+        <item>none</item>
+        <item>white</item>
         <item>red</item>
+        <item>yellow</item>
+        <item>green</item>
+        <item>cyan</item>
+        <item>blue</item>
     </string-array>
+
     <string-array name="play_in_silent_mode_list">
         <item>Don\'t play.</item>
         <item>Play only if headphones are connected.</item>

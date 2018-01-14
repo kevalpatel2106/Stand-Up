@@ -40,10 +40,6 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
 
     private lateinit var model: SyncSettingsViewModel
 
-    private lateinit var syncNowPref: BasePreference
-    private lateinit var backgroundSyncPref: BaseSwitchPreference
-    private lateinit var syncPrefCategory: BasePreferenceCategory
-
     init {
         DaggerSettingsComponent.builder()
                 .appComponent(BaseApplication.appComponent)
@@ -62,11 +58,13 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        syncPrefCategory = findPrefrance(R.string.pref_key_sync_category_title) as BasePreferenceCategory
+
+        //Set sync category
+        val syncPrefCategory = findPrefrance(R.string.pref_key_sync_category_title) as BasePreferenceCategory
         syncPrefCategory.title = String.format(getString(R.string.pref_title_logged_in_as), sessionManager.email)
 
         //Set sync now
-        syncNowPref = findPrefrance(R.string.pref_key_sync_now) as BasePreference
+        val syncNowPref = findPrefrance(R.string.pref_key_sync_now) as BasePreference
         syncNowPref.setOnPreferenceClickListener {
             context?.let { model.syncNow(it) }
             return@setOnPreferenceClickListener true
@@ -85,7 +83,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
         })
 
         //Set background sync
-        backgroundSyncPref = findPrefrance(R.string.pref_key_background_sync) as BaseSwitchPreference
+        val backgroundSyncPref = findPrefrance(R.string.pref_key_background_sync) as BaseSwitchPreference
         backgroundSyncPref.isChecked = settingsManager.enableBackgroundSync //Set initial value
     }
 

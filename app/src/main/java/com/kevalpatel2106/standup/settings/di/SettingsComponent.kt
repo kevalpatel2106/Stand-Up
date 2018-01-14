@@ -21,6 +21,8 @@ import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.authentication.di.UserAuthModule
 import com.kevalpatel2106.standup.misc.ApplicationScope
 import com.kevalpatel2106.standup.settings.list.SettingsViewModel
+import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsFragment
+import com.kevalpatel2106.standup.settings.notifications.NotificationsSettingsViewModel
 import com.kevalpatel2106.standup.settings.syncing.SyncSettingsFragment
 import com.kevalpatel2106.standup.settings.syncing.SyncSettingsViewModel
 import dagger.Component
@@ -34,9 +36,13 @@ import dagger.Component
 @Component(dependencies = [AppComponent::class], modules = [UserAuthModule::class])
 interface SettingsComponent {
 
-    fun inject(settingsViewModel: SyncSettingsViewModel)
+    fun inject(syncSettingsViewModel: SyncSettingsViewModel)
 
     fun inject(settingsViewModel: SettingsViewModel)
 
+    fun inject(notificationSyncSettingsViewModel: NotificationsSettingsViewModel)
+
     fun inject(syncSettingsFragment: SyncSettingsFragment)
+
+    fun inject(notificationSettingsFragment: NotificationSettingsFragment)
 }

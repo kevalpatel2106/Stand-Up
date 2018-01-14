@@ -17,20 +17,121 @@
 
 package com.kevalpatel2106.standup.settings.notifications
 
+import android.app.NotificationManager
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
+import android.support.v7.preference.ListPreference
 import android.support.v7.preference.PreferenceFragmentCompat
+import android.view.View
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.application.BaseApplication
+import com.kevalpatel2106.standup.fcm.addReminderNotificationChannel
+import com.kevalpatel2106.standup.misc.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSettingsManager
+import com.kevalpatel2106.standup.reminder.notification.ReminderNotification
+import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
+import com.kevalpatel2106.standup.settings.findPrefrance
+import com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
+import com.kevalpatel2106.utils.vibrate
+import javax.inject.Inject
 
 class NotificationSettingsFragment : PreferenceFragmentCompat() {
 
+    @Inject internal lateinit var sessionManager: UserSessionManager
+    @Inject internal lateinit var settingsManager: UserSettingsManager
+
+    private lateinit var model: NotificationsSettingsViewModel
+
+    init {
+        DaggerSettingsComponent.builder()
+                .appComponent(BaseApplication.appComponent)
+                .build()
+                .inject(this@NotificationSettingsFragment)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        model = ViewModelProviders.of(this@NotificationSettingsFragment).get(NotificationsSettingsViewModel::class.java)
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.notifications_settings)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //Set the notification sound.
+        val notificationTone = findPrefrance(R.string.pref_key_reminder_notifications_tone)
+        model.reminderToneName.observe(this@NotificationSettingsFragment, Observer {
+            notificationTone.summary = it
+        })
+        notificationTone.setOnPreferenceClickListener {
+            context?.let { model.openRingtonePicker(it, childFragmentManager) }
+            return@setOnPreferenceClickListener true
+        }
+
+        //Set the vibrate
+        val notificationVibrate = findPrefrance(R.string.pref_key_reminder_notifications_vibrate) as BaseSwitchPreference
+        notificationVibrate.isChecked = settingsManager.shouldVibrate
+        notificationVibrate.setOnPreferenceChangeListener { _, newValue ->
+            context?.vibrate(200)
+            notificationVibrate.isChecked = newValue as Boolean
+
+            //Update the channel settings
+            context?.let { updateReminderChannel(it, settingsManager) }
+            return@setOnPreferenceChangeListener false
+        }
+
+        //Set the color of LED pulse
+        val ledLight = findPrefrance(R.string.pref_key_reminder_notifications_led) as ListPreference
+        ledLight.value = settingsManager.ledColorValue
+        ledLight.summary = ledLight.entry
+        ledLight.setOnPreferenceChangeListener { _, newValue ->
+            ledLight.value = newValue as String
+            ledLight.summary = ledLight.entry
+
+            //Up[date the channel settings
+            context?.let { updateReminderChannel(it, settingsManager) }
+            return@setOnPreferenceChangeListener false
+        }
+
+        //Set the silent mode
+        val silentPref = findPrefrance(R.string.pref_key_reminder_notifications_play_in_silent) as ListPreference
+        silentPref.value = settingsManager.silentModeRawValue
+        silentPref.summary = silentPref.entry
+        silentPref.setOnPreferenceChangeListener { _, newValue ->
+            silentPref.value = newValue as String
+            silentPref.summary = silentPref.entry
+
+            //Up[date the channel settings
+            context?.let { updateReminderChannel(it, settingsManager) }
+            return@setOnPreferenceChangeListener false
+        }
+
+        //Test notification
+        findPrefrance(R.string.pref_key_reminder_notifications_test).setOnPreferenceClickListener {
+            context?.let { ReminderNotification().notify(it) }
+            return@setOnPreferenceClickListener true
+        }
+
     }
 
     companion object {
         fun getNewInstance(): NotificationSettingsFragment {
             return NotificationSettingsFragment()
         }
+    }
+
+    /**
+     * We have to update the notification channel accordingly the change is the application settings.
+     * We cannot relay on [NotificationManager] to set the prams while building the notification.
+     * [Here is the explanation.](https://stackoverflow.com/q/45081815)
+     */
+    private fun updateReminderChannel(context: Context, userSettingsManager: UserSettingsManager) {
+        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.addReminderNotificationChannel(context, userSettingsManager)
     }
 }

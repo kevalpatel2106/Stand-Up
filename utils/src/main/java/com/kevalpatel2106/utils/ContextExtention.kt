@@ -17,7 +17,11 @@
 
 package com.kevalpatel2106.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
 
@@ -27,3 +31,16 @@ import android.support.v4.content.ContextCompat
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 fun Context.getColorCompat(@ColorRes color: Int) = ContextCompat.getColor(this, color)
+
+@SuppressLint("MissingPermission")
+fun Context.vibrate(mills: Long) {
+    val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    if (vibrator.hasVibrator()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(mills, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            @Suppress("DEPRECATION")
+            vibrator.vibrate(mills)
+        }
+    }
+}

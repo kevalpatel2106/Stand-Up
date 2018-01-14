@@ -73,6 +73,73 @@ internal object SharedPreferenceKeys {
      * value is true.
      *
      * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.enableBackgroundSync]
      */
     const val PREF_KEY_ALLOW_BACKGROUND_SYNC = "pref_key_background_sync"
+
+    /**
+     * This preference holds the [android.net.Uri] of the selected ring tone in the string format.
+     * The default value of this preference will be null.
+     *
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.getReminderToneUri]
+     */
+    const val PREF_KEY_RINGTONE_URI = "pref_key_ringtone_uri"
+
+    /**
+     * Name of the selected reminder tone. The default value of this preference should be 'Default'.
+     *
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.getReminderToneName]
+     */
+    const val PREF_KEY_RINGTONE_NAME = "pref_key_ringtone_name"
+
+    /**
+     * Boolean to indicate weather to vibrate when the notification arrives or not? Default value is
+     * true.
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.shouldVibrate]
+     */
+    const val PREF_KEY_REMINDER_VIBRATE = "pref_key_reminder_notifications_vibrate"
+
+    /**
+     * String value of the led color to display when reminder notification arrives. Default value is
+     * red. Values should be from [com.kevalpatel2106.standup.R.array.light_color_value_list].
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.ledColorValue]
+     */
+    const val PREF_KEY_REMINDER_LED_COLOR = "pref_key_reminder_notifications_led"
+
+    /**
+     * String value of the silent mode operation. Values should be from
+     * [com.kevalpatel2106.standup.R.array.play_in_silent_mode_value_list].
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.silentModeRawValue]
+     */
+    const val PREF_KEY_SILENT_MODE = "pref_key_reminder_notifications_play_in_silent"
+
+    /**
+     * Boolean to indicate weather to display reminder pop up when the screen is on or not?
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.shouldDisplayPopUp]
+     */
+    const val PREF_KEY_IS_TO_DISPLAY_POPUP = "pref_key_reminder_pop_up_enable"
+
+    /**
+     * Boolean to indicate weather to display application update notification or not?
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.shouldDisplayUpdateNotification]
+     */
+    const val PREF_KEY_IS_TO_SHOW_UPDATE_NOTIFICATION = "pref_key_update_notifications_enable"
+
+    /**
+     * Boolean to indicate weather to display promotional/announcement notifications or not?
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.shouldDisplayPromotionalNotification]
+     */
+    const val PREF_KEY_IS_TO_SHOW_PROMOTIONAL_NOTIFICATION = "pref_key_promotional_notifications_enable"
 }

@@ -135,6 +135,7 @@
     <string name="sign_out_warning_positive_btn_title">Sign out</string>
     <string name="sign_out_warning_title">Sign out</string>
     <string name="sign_out_warning_message">Are you sure you want to sign out from the application?</string>
+    <string name="reminder_ringtone_picker_dialog_title">Pick notification tone</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>
