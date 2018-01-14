@@ -19,7 +19,6 @@ package com.kevalpatel2106.utils
 
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.math.min
 
 /**
  * Created by Kevalpatel2106 on 22-Dec-17.
@@ -27,9 +26,9 @@ import kotlin.math.min
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 object TimeUtils {
-    private const val ONE_MIN_MILLS = 60000L
-    private const val ONE_HOUR_MILLS = 3600000L
-    private const val ONE_HOUR_MINS = 60
+    const val ONE_MIN_MILLS = 60000L
+    const val ONE_HOUR_MILLS = 3600000L
+    const val ONE_HOUR_MINS = 60
 
     val ONE_DAY_MILLISECONDS = 86400000L
 

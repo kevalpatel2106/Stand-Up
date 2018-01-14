@@ -22,11 +22,9 @@ import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v7.preference.PreferenceViewHolder
 import android.support.v7.preference.SwitchPreferenceCompat
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.widget.TextView
-
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.utils.ViewUtils
 
@@ -59,7 +57,7 @@ class BaseTopSwitchPreference : SwitchPreferenceCompat {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-        holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+        holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.bg_color_top_pref_switch))
         holder.itemView.setPadding(ViewUtils.toPx(context, 50),
                 holder.itemView.paddingTop,
                 holder.itemView.paddingEnd,

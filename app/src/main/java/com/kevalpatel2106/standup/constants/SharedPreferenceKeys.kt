@@ -142,4 +142,21 @@ internal object SharedPreferenceKeys {
      * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.shouldDisplayPromotionalNotification]
      */
     const val PREF_KEY_IS_TO_SHOW_PROMOTIONAL_NOTIFICATION = "pref_key_promotional_notifications_enable"
+
+    /**
+     * Boolean to indicate weather daily review notifications are available or not?
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.isDailyReviewEnable]
+     */
+    const val PREF_KEY_DAILY_REVIEW_ENABLE = "pref_key_daily_review_enable"
+
+    /**
+     * Long indicates milliseconds from 12 AM of the day when the daily review notification
+     * should display.
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.dailyReviewTimeFrom12Am]
+     */
+    const val PREF_KEY_DAILY_REVIEW_TIME_12AM = "pref_key_daily_review_time_12am"
 }

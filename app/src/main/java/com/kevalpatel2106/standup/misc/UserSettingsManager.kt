@@ -39,6 +39,8 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
     private val DEFAULT_SHOULD_DISPLAY_POPUP = false
     private val DEFAULT_SHOULD_DISPLAY_UPDATE_NOTIFICATION = true
     private val DEFAULT_SHOULD_DISPLAY_PROMOTIONAL_NOTIFICATION = true
+    private val DEFAULT_DAILY_NOTIFICATION_ENABLE = true
+    private val DEFAULT_DAILY_REVIEW_TIME = 9 * 3600000L
 
     val enableBackgroundSync: Boolean
         get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_ALLOW_BACKGROUND_SYNC,
@@ -95,6 +97,15 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
     val shouldDisplayPromotionalNotification: Boolean
         get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_IS_TO_SHOW_PROMOTIONAL_NOTIFICATION,
                 DEFAULT_SHOULD_DISPLAY_PROMOTIONAL_NOTIFICATION)
+
+    val isDailyReviewEnable: Boolean
+        get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_ENABLE,
+                DEFAULT_DAILY_NOTIFICATION_ENABLE)
+
+    var dailyReviewTimeFrom12Am: Long
+        get() = sharedPrefProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_TIME_12AM,
+                DEFAULT_DAILY_REVIEW_TIME)
+        set(value) = sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_TIME_12AM, value)
 
 
     val ledColor: Int

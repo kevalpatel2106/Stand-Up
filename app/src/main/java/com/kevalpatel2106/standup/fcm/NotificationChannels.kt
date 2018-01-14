@@ -99,7 +99,7 @@ fun NotificationManager.addReminderNotificationChannel(context: Context,
         chan2.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
 
         //Set the vibration to vibration provided in settings
-        chan2.enableVibration(userSettingsManager.shouldVibrate)
+        chan2.enableVibration(false)
 
         //Set the sound to ring tone uri to empty. We don't want android system to control the sound
         //We will play the sound while displaying the notification using the media player API.

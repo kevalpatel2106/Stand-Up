@@ -53,7 +53,8 @@ class NotificationSettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        model = ViewModelProviders.of(this@NotificationSettingsFragment).get(NotificationsSettingsViewModel::class.java)
+        model = ViewModelProviders.of(this@NotificationSettingsFragment)
+                .get(NotificationsSettingsViewModel::class.java)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -77,12 +78,8 @@ class NotificationSettingsFragment : PreferenceFragmentCompat() {
         val notificationVibrate = findPrefrance(R.string.pref_key_reminder_notifications_vibrate) as BaseSwitchPreference
         notificationVibrate.isChecked = settingsManager.shouldVibrate
         notificationVibrate.setOnPreferenceChangeListener { _, newValue ->
-            context?.vibrate(200)
-            notificationVibrate.isChecked = newValue as Boolean
-
-            //Update the channel settings
-            context?.let { updateReminderChannel(it, settingsManager) }
-            return@setOnPreferenceChangeListener false
+            if (newValue as Boolean) context?.vibrate(200)
+            return@setOnPreferenceChangeListener true
         }
 
         //Set the color of LED pulse
@@ -92,9 +89,6 @@ class NotificationSettingsFragment : PreferenceFragmentCompat() {
         ledLight.setOnPreferenceChangeListener { _, newValue ->
             ledLight.value = newValue as String
             ledLight.summary = ledLight.entry
-
-            //Up[date the channel settings
-            context?.let { updateReminderChannel(it, settingsManager) }
             return@setOnPreferenceChangeListener false
         }
 
@@ -105,9 +99,6 @@ class NotificationSettingsFragment : PreferenceFragmentCompat() {
         silentPref.setOnPreferenceChangeListener { _, newValue ->
             silentPref.value = newValue as String
             silentPref.summary = silentPref.entry
-
-            //Up[date the channel settings
-            context?.let { updateReminderChannel(it, settingsManager) }
             return@setOnPreferenceChangeListener false
         }
 
@@ -117,6 +108,12 @@ class NotificationSettingsFragment : PreferenceFragmentCompat() {
             return@setOnPreferenceClickListener true
         }
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //Update the channel settings
+        context?.let { updateReminderChannel(it, settingsManager) }
     }
 
     companion object {

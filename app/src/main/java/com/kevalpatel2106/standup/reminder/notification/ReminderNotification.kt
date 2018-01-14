@@ -36,6 +36,7 @@ import com.kevalpatel2106.standup.fcm.NotificationChannelType
 import com.kevalpatel2106.standup.fcm.addReminderNotificationChannel
 import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
+import com.kevalpatel2106.utils.vibrate
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -62,14 +63,17 @@ class ReminderNotification {
 
     @SuppressLint("VisibleForTests", "NewApi")
     internal fun notify(context: Context) {
-        val shouldVibrate = shouldVibrate(context)
 
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.addReminderNotificationChannel(context, userSettingsManager)
 
         //Fire notification
-        nm.notify(NOTIFICATION_ID, buildNotification(context, shouldVibrate, userSettingsManager.ledColor)
+        nm.notify(NOTIFICATION_ID, buildNotification(context, userSettingsManager.ledColor)
                 .build())
+
+        if (shouldVibrate(context)) {
+            context.vibrate(200)
+        }
 
         if (shouldPlaySound(context)) {
             playSound(context, userSettingsManager.getReminderToneUri)
@@ -78,7 +82,6 @@ class ReminderNotification {
 
     @VisibleForTesting
     internal fun buildNotification(context: Context,
-                                   vibrate: Boolean,
                                    @ColorInt lightColor: Int): NotificationCompat.Builder {
 
         return NotificationCompat.Builder(context)
