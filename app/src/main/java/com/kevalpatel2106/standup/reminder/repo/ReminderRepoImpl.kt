@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.reminder.repo
 
+import com.kevalpatel2106.standup.application.di.AppModule
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import io.reactivex.Completable
@@ -32,7 +33,7 @@ import javax.inject.Named
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
  class ReminderRepoImpl @Inject constructor(private val userActivityDao: UserActivityDao,
-                                                    @Named("WITH_TOKEN") private val retrofit: Retrofit)
+                                                    @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit)
     : ReminderRepo {
 
     override fun sendPendingActivitiesToServer(): Completable {

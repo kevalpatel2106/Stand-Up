@@ -24,9 +24,10 @@ import com.kevalpatel2106.base.repository.cache.Cache
 import com.kevalpatel2106.base.repository.cache.SharedPrefranceCache
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.network.RetrofitNetworkRefresher
+import com.kevalpatel2106.standup.application.di.AppModule
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.utils.toFloatSafe
 import io.reactivex.Flowable
 import retrofit2.Retrofit
@@ -40,7 +41,7 @@ import javax.net.ssl.HttpsURLConnection
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-internal class UserProfileRepoImpl @Inject constructor(@Named("WITH_TOKEN") private val retrofit: Retrofit,
+internal class UserProfileRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit,
                                                        private val userSessionManager: UserSessionManager)
     : UserProfileRepo {
 

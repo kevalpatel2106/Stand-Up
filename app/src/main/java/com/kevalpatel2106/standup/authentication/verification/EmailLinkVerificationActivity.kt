@@ -36,7 +36,7 @@ import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import kotlinx.android.synthetic.main.activity_email_link_verification.*
 
 /**

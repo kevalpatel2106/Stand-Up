@@ -23,13 +23,14 @@ import android.support.annotation.VisibleForTesting
 import com.firebase.jobdispatcher.*
 import com.google.android.gms.location.DetectedActivity
 import com.kevalpatel2106.base.annotations.Helper
+import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import java.util.*
 
 /**
@@ -145,7 +146,7 @@ internal object ActivityMonitorHelper {
 
             // Reschedule the notification if the user is currently moving
             return true
-        } else if (sharedPrefsProvider.getLongFromPreference(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
+        } else if (sharedPrefsProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME)
                 < (System.currentTimeMillis() + TimeUtils.convertToMilli(ReminderConfig.STAND_UP_DURATION.toLong()))) {
 
             // There is no notification since an hour. That indicates that may be notification job

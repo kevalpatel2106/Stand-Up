@@ -16,8 +16,25 @@
   -->
 
 <resources>
-    <string name="key_sync_settings_heading">key_sync_settings_heading</string>
-    <string name="key_dnd_settings_heading">key_dnd_settings_heading</string>
-    <string name="key_notification_settings_heading">key_notification_settings_heading</string>
-    <string name="key_logout_settings_heading">key_logout_settings_heading</string>
+    <string name="pref_key_sync_now">pref_key_sync_now</string>
+    <string name="pref_key_sync_category_title">pref_key_sync_category_title</string>
+    <string name="pref_key_background_sync">pref_key_background_sync</string>
+
+    <!--Reminder notification-->
+    <string name="pref_key_reminder_notifications_tone">pref_key_reminder_notifications</string>
+    <string name="pref_key_reminder_notifications_vibrate">pref_key_reminder_notifications_vibrate</string>
+    <string name="pref_key_reminder_notifications_led">pref_key_reminder_notifications_led</string>
+    <string name="pref_key_reminder_notifications_play_in_silent">pref_key_reminder_notifications_play_in_silent</string>
+    <string name="pref_key_reminder_notifications_test">pref_key_reminder_notifications_test</string>
+
+    <!--Reminder popups-->
+    <string name="pref_key_reminder_pop_up_enable">pref_key_reminder_pop_up_enable</string>
+
+    <!--Daily review notification-->
+    <string name="pref_key_daily_review_enable">pref_key_daily_review_enable</string>
+    <string name="pref_key_daily_review_time">pref_key_daily_review_time</string>
+
+    <!--Other notifications-->
+    <string name="pref_key_promotional_notifications_enable">pref_key_promotional_notifications_enable</string>
+    <string name="pref_key_update_notifications_enable">pref_key_update_notifications_enable</string>
 </resources>

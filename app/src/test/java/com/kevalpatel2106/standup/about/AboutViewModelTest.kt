@@ -25,7 +25,7 @@ import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule

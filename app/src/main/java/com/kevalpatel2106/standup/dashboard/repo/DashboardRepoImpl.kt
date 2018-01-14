@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.dashboard.repo
 
+import com.kevalpatel2106.standup.application.di.AppModule
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
@@ -35,7 +36,7 @@ import kotlin.collections.ArrayList
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 class DashboardRepoImpl constructor(private val userActivityDao: UserActivityDao,
-                                    @Named("WITH_TOKEN") private val retrofit: Retrofit) : DashboardRepo {
+                                    @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit) : DashboardRepo {
 
     override fun getTodaySummary(): Flowable<DailyActivitySummary> {
         val calendar = TimeUtils.getTodaysCalender12AM()

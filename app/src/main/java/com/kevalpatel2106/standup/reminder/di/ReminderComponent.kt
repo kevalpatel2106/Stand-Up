@@ -19,6 +19,7 @@ package com.kevalpatel2106.standup.reminder.di
 
 import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.misc.ApplicationScope
+import com.kevalpatel2106.standup.reminder.SystemEventReceiver
 import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
 import com.kevalpatel2106.standup.reminder.sync.SyncService
@@ -38,4 +39,6 @@ interface ReminderComponent {
     fun inject(notificationSchedulerService: NotificationSchedulerService)
 
     fun inject(syncService: SyncService)
+
+    fun inject(systemEventReceiver: SystemEventReceiver)
 }

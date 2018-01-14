@@ -59,17 +59,21 @@ class BaseTopSwitchPreference : SwitchPreferenceCompat {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-
-        val params = holder.itemView.layoutParams as RecyclerView.LayoutParams
-        params.setMargins(ViewUtils.toPx(context, -16), 0, ViewUtils.toPx(context, -16), 0)
-
-        holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimaryLight))
+        holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
+        holder.itemView.setPadding(ViewUtils.toPx(context, 50),
+                holder.itemView.paddingTop,
+                holder.itemView.paddingEnd,
+                holder.itemView.paddingBottom)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            holder.itemView.elevation = ViewUtils.toPx(context, 2).toFloat()
+            holder.itemView.elevation = ViewUtils.toPx(context, 6).toFloat()
 
         //Set the title
         val titleView = holder.findViewById(android.R.id.title) as TextView
-        titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mContext.resources.getInteger(R.integer.prefrance_title_text_size).toFloat())
+        titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20.toFloat())
+        titleView.text = if (isChecked) "On" else "Off"
+
+        holder.isDividerAllowedAbove = false
+        holder.isDividerAllowedBelow = false
     }
 }

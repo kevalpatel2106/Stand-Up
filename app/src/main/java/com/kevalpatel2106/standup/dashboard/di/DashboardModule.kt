@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.dashboard.di
 
+import com.kevalpatel2106.standup.application.di.AppModule
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
 import com.kevalpatel2106.standup.db.DbModule
@@ -37,7 +38,7 @@ class DashboardModule {
 
     @Provides
     @ApplicationScope
-    fun provideDashboardRepo(@Named("WITH_TOKEN") retrofit: Retrofit,
+    fun provideDashboardRepo(@Named(AppModule.WITH_TOKEN) retrofit: Retrofit,
                              userActivityDao: UserActivityDao): DashboardRepo
             = DashboardRepoImpl(userActivityDao, retrofit)
 }

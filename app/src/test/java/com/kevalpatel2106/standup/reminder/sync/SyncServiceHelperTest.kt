@@ -23,7 +23,7 @@ import com.firebase.jobdispatcher.Lifetime
 import com.firebase.jobdispatcher.RetryStrategy
 import com.firebase.jobdispatcher.Trigger
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

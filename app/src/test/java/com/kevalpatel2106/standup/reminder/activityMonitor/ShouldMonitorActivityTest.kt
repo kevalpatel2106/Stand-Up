@@ -19,7 +19,7 @@ package com.kevalpatel2106.standup.reminder.activityMonitor
 
 import android.content.SharedPreferences
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

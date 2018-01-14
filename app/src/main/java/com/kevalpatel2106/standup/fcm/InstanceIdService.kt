@@ -20,7 +20,7 @@ package com.kevalpatel2106.standup.fcm
 import com.google.firebase.iid.FirebaseInstanceIdService
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import javax.inject.Inject
 
 /**

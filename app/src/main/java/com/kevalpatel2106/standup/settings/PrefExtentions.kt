@@ -15,20 +15,16 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.dndSettings
+package com.kevalpatel2106.standup.settings
 
-import android.os.Bundle
+import android.support.annotation.StringRes
+import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
-import com.kevalpatel2106.standup.R
+import android.support.v7.preference.PreferenceManager
 
-class DndSettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.settings_list)//TODO
-    }
-
-    companion object {
-        fun getNewInstance(): DndSettingsFragment {
-            return DndSettingsFragment()
-        }
-    }
-}
+/**
+ * Created by Keval on 13/01/18.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ */
+fun PreferenceFragmentCompat.findPrefrance(@StringRes keyRes: Int): Preference = findPreference(context?.getString(keyRes))

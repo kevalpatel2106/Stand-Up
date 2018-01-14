@@ -23,6 +23,7 @@ import android.os.Bundle
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.application.di.DaggerSplashComponent
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
+import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.main.MainActivity
@@ -30,7 +31,7 @@ import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.standup.settings.list.SettingsListActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import javax.inject.Inject
 
 /**
@@ -67,7 +68,7 @@ class SplashActivity : BaseActivity() {
                 .inject(this@SplashActivity)
 
         if (!userSessionManager.isUserLoggedIn) {   //User is not logged in. Complete the authentication flow.
-            SettingsListActivity.launch(this@SplashActivity)
+            IntroActivity.launch(this@SplashActivity)
         } else {    //User is logged in.
 
             //If the device is not registered, register the device with the server.

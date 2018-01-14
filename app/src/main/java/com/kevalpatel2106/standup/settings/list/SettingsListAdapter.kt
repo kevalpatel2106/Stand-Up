@@ -37,7 +37,9 @@ class SettingsListAdapter(private val context: Context,
 
     @SuppressLint("VisibleForTests")
     override fun onBindViewHolder(holder: SettingListViewHolder, position: Int)
-            = holder.bind(getItem(position), { clickListener?.onItemClick(it) })
+            = holder.bind(getItem(position), {
+        clickListener?.onItemClick(it)
+    })
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): SettingListViewHolder
             = SettingListViewHolder.createViewHolder(context, parent)

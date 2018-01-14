@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.dndSettings
+package com.kevalpatel2106.standup.settings.notifications
 
 import android.content.Context
 import android.content.Intent
@@ -28,22 +28,22 @@ import com.kevalpatel2106.standup.settings.BaseSettingsDetailActivity
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class DndSettingsDetailActivity : BaseSettingsDetailActivity() {
+class NotificationSettingsDetailActivity : BaseSettingsDetailActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.title = getString(R.string.title_activity_dnd_settings)
+        supportActionBar?.title = getString(R.string.title_activity_notification_settings)
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, DndSettingsFragment.getNewInstance())
+                .replace(R.id.container, NotificationSettingsFragment.getNewInstance())
                 .commit()
     }
 
     companion object {
 
         fun launch(context: Context) {
-            context.startActivity(Intent(context, DndSettingsDetailActivity::class.java))
+            context.startActivity(Intent(context, NotificationSettingsDetailActivity::class.java))
         }
     }
 }

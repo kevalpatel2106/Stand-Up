@@ -32,7 +32,7 @@ import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorServic
 import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
 import com.kevalpatel2106.standup.reminder.sync.SyncService
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.utils.Utils
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers

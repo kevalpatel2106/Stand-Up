@@ -21,10 +21,6 @@ import android.content.Context
 import android.support.v7.preference.PreferenceViewHolder
 import android.support.v7.preference.SwitchPreferenceCompat
 import android.util.AttributeSet
-import android.util.TypedValue
-import android.widget.TextView
-
-import com.kevalpatel2106.standup.R
 
 /**
  * Created by Keval on 07-Mar-17.
@@ -54,13 +50,13 @@ class BaseSwitchPreference : SwitchPreferenceCompat {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-
-        //Set the title
-        val titleView = holder.findViewById(android.R.id.title) as TextView
-        titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mContext.resources.getInteger(R.integer.prefrance_title_text_size).toFloat())
-
-        //Set the summary
-        val summaryTv = holder.findViewById(android.R.id.summary) as TextView
-        summaryTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mContext.resources.getInteger(R.integer.prefrance_summary_text_size).toFloat())
+//
+//        //Set the title
+//        val titleView = holder.findViewById(android.R.id.title) as TextView
+//        titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mContext.resources.getInteger(R.integer.prefrance_title_text_size).toFloat())
+//
+//        //Set the summary
+//        val summaryTv = holder.findViewById(android.R.id.summary) as TextView
+//        summaryTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, mContext.resources.getInteger(R.integer.prefrance_summary_text_size).toFloat())
     }
 }

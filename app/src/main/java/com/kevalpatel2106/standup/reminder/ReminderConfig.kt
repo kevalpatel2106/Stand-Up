@@ -40,5 +40,7 @@ internal object ReminderConfig {
 
     internal const val NOTIFICATION_SERVICE_PERIOD_TOLERANCE = 60  //sec
 
-    internal const val PREF_KEY_NEXT_NOTIFICATION_TIME = "next_notification_time"
+    internal const val TAG_RX_SYNC_STARTED = "rx_sync_started"
+
+    internal const val TAG_RX_SYNC_ENDED = "rx_sync_ended"
 }

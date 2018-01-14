@@ -24,7 +24,7 @@ import com.firebase.jobdispatcher.RetryStrategy
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

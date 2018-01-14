@@ -21,7 +21,8 @@ import android.app.Application
 import android.content.Context
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSettingsManager
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -35,6 +36,11 @@ import javax.inject.Singleton
  */
 @Module
 class AppModule(private val appContext: Application, private val baseUrl: String) {
+
+    companion object {
+        const val WITH_TOKEN = "WITH_TOKEN"
+        const val WITHOUT_TOKEN = "WITHOUT_TOKEN"
+    }
 
     @Provides
     @Singleton
@@ -57,13 +63,18 @@ class AppModule(private val appContext: Application, private val baseUrl: String
 
     @Provides
     @Singleton
-    @Named("WITH_TOKEN")
-    fun provideRetrofitClient(appContext: Application, userSessionManager: UserSessionManager): Retrofit =
-            ApiProvider(appContext, userSessionManager).getRetrofitClient(baseUrl)
+    fun provideUserSettingsManager(sharedPrefsProvider: SharedPrefsProvider): UserSettingsManager
+            = UserSettingsManager(sharedPrefsProvider)
 
     @Provides
     @Singleton
-    @Named("WITHOUT_TOKEN")
-    fun provideRetrofitClientWithoutToken(): Retrofit
-            = ApiProvider().getRetrofitClient(baseUrl)
+    @Named(WITH_TOKEN)
+    fun provideRetrofitClient(appContext: Application, userSessionManager: UserSessionManager): Retrofit =
+            ApiProvider(appContext, userSessionManager.userId.toString(), userSessionManager.token.toString())
+                    .getRetrofitClient(baseUrl)
+
+    @Provides
+    @Singleton
+    @Named(WITHOUT_TOKEN)
+    fun provideRetrofitClientWithoutToken(): Retrofit = ApiProvider().getRetrofitClient(baseUrl)
 }

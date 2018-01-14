@@ -21,9 +21,10 @@ import android.content.Context
 import android.support.annotation.VisibleForTesting
 import com.firebase.jobdispatcher.*
 import com.kevalpatel2106.base.annotations.Helper
+import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 
 /**
  * Created by Keval on 05/01/18.
@@ -43,7 +44,7 @@ internal object NotificationSchedulerHelper {
                             sharedPrefsProvider: SharedPrefsProvider): Job {
 
         //Save the time of upcoming notification.
-        sharedPrefsProvider.savePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME,
+        sharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME,
                 System.currentTimeMillis() + scheduleAfter)
 
         return FirebaseJobDispatcher(GooglePlayDriver(context))

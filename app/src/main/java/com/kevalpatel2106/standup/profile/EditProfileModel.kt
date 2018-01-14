@@ -30,7 +30,7 @@ import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
 import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepo
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepoImpl
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

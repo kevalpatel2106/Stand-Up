@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.notificationsSettings
+package com.kevalpatel2106.standup.settings.syncing
 
 import android.content.Context
 import android.content.Intent
@@ -28,22 +28,22 @@ import com.kevalpatel2106.standup.settings.BaseSettingsDetailActivity
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class NotificationSettingsDetailActivity : BaseSettingsDetailActivity() {
+class SyncSettingsDetailActivity : BaseSettingsDetailActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.title = getString(R.string.title_activity_notification_settings)
+        supportActionBar?.title = getString(R.string.title_activity_sync_settings)
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, NotifficationSettingsFragment.getNewInstance())
+                .replace(R.id.container, SyncSettingsFragment.getNewInstance())
                 .commit()
     }
 
     companion object {
 
         fun launch(context: Context) {
-            context.startActivity(Intent(context, NotificationSettingsDetailActivity::class.java))
+            context.startActivity(Intent(context, SyncSettingsDetailActivity::class.java))
         }
     }
 }

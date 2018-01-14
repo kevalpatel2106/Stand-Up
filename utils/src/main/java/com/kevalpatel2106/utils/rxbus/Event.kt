@@ -15,20 +15,11 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.syncSettings
+package com.kevalpatel2106.utils.rxbus
 
-import android.os.Bundle
-import android.support.v7.preference.PreferenceFragmentCompat
-import com.kevalpatel2106.standup.R
-
-class SyncSettingsFragment : PreferenceFragmentCompat() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.settings_list)//TODO
-    }
-
-    companion object {
-        fun getNewInstance(): SyncSettingsFragment {
-            return SyncSettingsFragment()
-        }
-    }
-}
+/**
+ * Created by Keval on 06-Jul-17.
+ *
+ * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
+ */
+data class Event(val tag: String?)

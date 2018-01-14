@@ -22,9 +22,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.preference.PreferenceCategory
 import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
-import android.util.TypedValue
+import android.view.ViewGroup
 import android.widget.TextView
-
 import com.kevalpatel2106.standup.R
 
 
@@ -34,7 +33,7 @@ import com.kevalpatel2106.standup.R
  * @author 'https://github.com/kevalpatel2106'
  */
 
-class BasePrefranceCategory : PreferenceCategory {
+class BasePreferenceCategory : PreferenceCategory {
     private val mContext: Context
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int)
@@ -58,10 +57,11 @@ class BasePrefranceCategory : PreferenceCategory {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
+        holder.itemView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        holder.itemView.setPadding(holder.itemView.paddingLeft, 20, holder.itemView.paddingRight, 10)
 
         val titleView = holder.findViewById(android.R.id.title) as TextView
-        titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, mContext.resources.getInteger(R.integer.prefrance_category_text_size).toFloat())
-        titleView.setAllCaps(true)
-        titleView.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+        titleView.setAllCaps(false)
+        titleView.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
     }
 }

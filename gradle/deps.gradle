@@ -139,6 +139,10 @@ ext {
             awareness: 'com.google.android.gms:play-services-awareness:' + playServiceVersion,
     ]
 
+    kevalpatel2106 = [
+            ringtonePicker: "com.kevalpatel2106:ringtonepicker:1.1"
+    ]
+
     //retrofit dependency
     retrofitLib = [
             retrofit  : 'com.squareup.retrofit2:retrofit:' + retrofitVersion,

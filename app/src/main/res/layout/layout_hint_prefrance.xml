@@ -27,8 +27,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="4dp"
+        android:layout_marginStart="@dimen/spacing_small"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:layout_marginTop="@dimen/spacing_micro"
+        android:layout_marginBottom="@dimen/spacing_micro"
         android:background="@drawable/bg_round_hint_preference"
-        android:padding="@dimen/spacing_small"
+        android:padding="@dimen/spacing_micro"
+        tools:maxLines="5"
         tools:text="@tools:sample/lorem/random" />
 </RelativeLayout>

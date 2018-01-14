@@ -196,25 +196,25 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.syncSettings.SyncSettingsDetailActivity"
+            android:name=".settings.syncing.SyncSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.dndSettings.DndSettingsDetailActivity"
+            android:name=".settings.dnd.DndSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.sleepSettings.SleepSettingsDetailActivity"
+            android:name=".settings.dailyReview.DailyReviewSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.notificationsSettings.NotificationSettingsDetailActivity"
+            android:name=".settings.notifications.NotificationSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"

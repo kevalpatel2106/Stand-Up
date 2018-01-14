@@ -155,6 +155,8 @@ dependencies {
     implementation(playServiceLib.location, excludeGrp)
     implementation(playServiceLib.awareness, excludeGrp)
 
+    implementation(kevalpatel2106.ringtonePicker, excludeGrp)
+
     //Glide
     implementation(otherLib.glide, excludeGrp)
     kapt(otherLib.glideAnnotation, excludeGrp)

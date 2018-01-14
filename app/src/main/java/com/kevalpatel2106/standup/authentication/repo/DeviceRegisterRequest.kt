@@ -20,7 +20,7 @@ package com.kevalpatel2106.standup.authentication.repo
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.kevalpatel2106.base.annotations.Model
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.utils.Utils
 
 /**

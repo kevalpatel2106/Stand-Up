@@ -19,9 +19,4 @@
     <integer name="stroke_width">4</integer>
     <integer name="password_max_length">16</integer>
     <integer name="name_max_length">30</integer>
-
-    <!--Preference  text dimensions-->
-    <integer name="prefrance_title_text_size">18</integer>
-    <integer name="prefrance_category_text_size">14</integer>
-    <integer name="prefrance_summary_text_size">14</integer>
 </resources>

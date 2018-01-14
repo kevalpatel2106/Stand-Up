@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup.authentication.repo
 import com.kevalpatel2106.base.annotations.Repository
 import com.kevalpatel2106.base.repository.RepoBuilder
 import com.kevalpatel2106.network.RetrofitNetworkRefresher
+import com.kevalpatel2106.standup.application.di.AppModule
 import io.reactivex.Flowable
 import retrofit2.Retrofit
 import javax.inject.Named
@@ -31,7 +32,7 @@ import javax.inject.Named
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-class UserAuthRepositoryImpl(@Named("WITH_TOKEN") private val retrofit: Retrofit) : UserAuthRepository {
+class UserAuthRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit) : UserAuthRepository {
 
     override fun logout(logoutRequest: LogoutRequest): Flowable<LogoutResponse> {
         val call = retrofit.create(UserApiService::class.java).logout(logoutRequest)

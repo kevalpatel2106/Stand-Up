@@ -32,7 +32,7 @@ import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

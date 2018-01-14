@@ -26,7 +26,7 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.application.SplashActivity
 import com.kevalpatel2106.standup.authentication.verification.EmailLinkVerificationActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 
 /**
  * Created by Kevalpatel2106 on 27-Nov-17.

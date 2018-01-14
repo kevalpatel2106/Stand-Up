@@ -20,7 +20,7 @@ package com.kevalpatel2106.network
 import android.content.SharedPreferences
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import okhttp3.Request
 import org.apache.commons.codec.binary.Base64
 import org.junit.After

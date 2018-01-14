@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.diary.di
 
+import com.kevalpatel2106.standup.application.di.AppModule
 import com.kevalpatel2106.standup.db.DbModule
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
@@ -38,7 +39,7 @@ class DiaryModule {
     @Provides
     @ApplicationScope
     fun provideDiaryRepo(userActivityDao: UserActivityDao,
-                         @Named("WITH_TOKEN") retrofit: Retrofit): DiaryRepo
+                         @Named(AppModule.WITH_TOKEN) retrofit: Retrofit): DiaryRepo
             = DiaryRepoImpl(retrofit, userActivityDao)
 
 }

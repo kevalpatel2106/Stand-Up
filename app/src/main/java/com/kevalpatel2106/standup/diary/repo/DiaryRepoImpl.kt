@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.diary.repo
 
+import com.kevalpatel2106.standup.application.di.AppModule
 import com.kevalpatel2106.standup.db.DailyActivitySummary
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
@@ -37,7 +38,7 @@ import kotlin.collections.ArrayList
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class DiaryRepoImpl @Inject constructor(@Named("WITH_TOKEN") private val retrofit: Retrofit,
+class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit,
                                         private val userActivityDao: UserActivityDao) : DiaryRepo {
 
     /**

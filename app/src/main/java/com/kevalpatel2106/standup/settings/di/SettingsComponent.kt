@@ -21,6 +21,8 @@ import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.authentication.di.UserAuthModule
 import com.kevalpatel2106.standup.misc.ApplicationScope
 import com.kevalpatel2106.standup.settings.list.SettingsViewModel
+import com.kevalpatel2106.standup.settings.syncing.SyncSettingsFragment
+import com.kevalpatel2106.standup.settings.syncing.SyncSettingsViewModel
 import dagger.Component
 
 /**
@@ -29,8 +31,12 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [SettingsModule::class, UserAuthModule::class])
+@Component(dependencies = [AppComponent::class], modules = [UserAuthModule::class])
 interface SettingsComponent {
 
+    fun inject(settingsViewModel: SyncSettingsViewModel)
+
     fun inject(settingsViewModel: SettingsViewModel)
+
+    fun inject(syncSettingsFragment: SyncSettingsFragment)
 }

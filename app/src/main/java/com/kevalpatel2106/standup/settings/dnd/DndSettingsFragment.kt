@@ -15,14 +15,20 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.repo
+package com.kevalpatel2106.standup.settings.dnd
 
-import com.kevalpatel2106.utils.SharedPrefsProvider
-import javax.inject.Inject
+import android.os.Bundle
+import android.support.v7.preference.PreferenceFragmentCompat
+import com.kevalpatel2106.standup.R
 
-/**
- * Created by Keval on 11/01/18.
- *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
- */
-class SettingsRepoImpl @Inject constructor(private val sharedPrefsProvider: SharedPrefsProvider) : SettingsRepo
+class DndSettingsFragment : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        addPreferencesFromResource(R.xml.dnd_settings)
+    }
+
+    companion object {
+        fun getNewInstance(): DndSettingsFragment {
+            return DndSettingsFragment()
+        }
+    }
+}

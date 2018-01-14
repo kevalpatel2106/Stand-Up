@@ -15,10 +15,23 @@
   ~
   -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/colorPrimary" android:state_selected="true" />
-    <item android:color="@color/colorPrimary" android:state_checked="true" />
-    <item android:color="@color/colorPrimary" android:state_activated="true" />
-    <item android:color="@color/colorPrimaryDark" android:state_pressed="true" />
-    <item android:color="@android:color/transparent" />
-</selector>
+<resources>
+    <string-array name="light_color_list">
+        <item>Yellow</item>
+        <item>Red</item>
+    </string-array>
+    <string-array name="light_color_value_list">
+        <item>yellow</item>
+        <item>red</item>
+    </string-array>
+    <string-array name="play_in_silent_mode_list">
+        <item>Don\'t play.</item>
+        <item>Play only if headphones are connected.</item>
+        <item>Always play.</item>
+    </string-array>
+    <string-array name="play_in_silent_mode_value_list">
+        <item>do_not_play</item>
+        <item>only_with_headphone</item>
+        <item>always_play</item>
+    </string-array>
+</resources>

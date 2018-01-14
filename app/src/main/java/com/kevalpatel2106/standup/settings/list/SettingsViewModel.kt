@@ -25,13 +25,17 @@ import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.logout.Logout
+import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsDetailActivity
+import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsFragment
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
-import com.kevalpatel2106.standup.settings.dndSettings.DndSettingsDetailActivity
-import com.kevalpatel2106.standup.settings.dndSettings.DndSettingsFragment
-import com.kevalpatel2106.standup.settings.notificationsSettings.NotifficationSettingsFragment
-import com.kevalpatel2106.standup.settings.notificationsSettings.NotificationSettingsDetailActivity
-import com.kevalpatel2106.standup.settings.syncSettings.SyncSettingsDetailActivity
-import com.kevalpatel2106.standup.settings.syncSettings.SyncSettingsFragment
+import com.kevalpatel2106.standup.settings.dnd.DndSettingsDetailActivity
+import com.kevalpatel2106.standup.settings.dnd.DndSettingsFragment
+import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsFragment
+import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsDetailActivity
+import com.kevalpatel2106.standup.settings.syncing.SyncSettingsDetailActivity
+import com.kevalpatel2106.standup.settings.syncing.SyncSettingsFragment
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.cancelButton
 import javax.inject.Inject
 
 /**
@@ -83,6 +87,9 @@ class SettingsViewModel : BaseViewModel {
             //Add DND
             it.add(SettingsItem(SettingsId.DND, "DND", R.drawable.ic_dnd_on))
 
+            //Add daily review
+            it.add(SettingsItem(SettingsId.DAILY_REVIEW, "Daily Review", R.drawable.ic_stats_black))
+
             //Add Notifications
             it.add(SettingsItem(SettingsId.NOTIFICATION, "Notifications", R.drawable.ic_notifications_bell))
 
@@ -112,14 +119,30 @@ class SettingsViewModel : BaseViewModel {
             }
             SettingsId.NOTIFICATION -> {
                 if (isTwoPane) {
-                    detailFragment.value = NotifficationSettingsFragment.getNewInstance()
+                    detailFragment.value = NotificationSettingsFragment.getNewInstance()
                 } else {
                     NotificationSettingsDetailActivity.launch(context)
                 }
             }
+            SettingsId.DAILY_REVIEW -> {
+                if (isTwoPane) {
+                    detailFragment.value = DailyReviewSettingsFragment.getNewInstance()
+                } else {
+                    DailyReviewSettingsDetailActivity.launch(context)
+                }
+            }
             SettingsId.LOGOUT -> {
-                logoutInProgress.value = true
-                logout.logout()
+                val signOutWarningAlert = context.alert {
+                    message = context.getString(R.string.sign_out_warning_message)
+                    title = context.getString(R.string.sign_out_warning_title)
+                    isCancelable = true
+                }
+                signOutWarningAlert.positiveButton(R.string.sign_out_warning_positive_btn_title, {
+                    logoutInProgress.value = true
+                    logout.logout()
+                })
+                signOutWarningAlert.cancelButton({ /* NO OP */ })
+                signOutWarningAlert.show()
                 return
             }
         }

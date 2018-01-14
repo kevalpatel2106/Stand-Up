@@ -19,6 +19,7 @@ package com.kevalpatel2106.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.preference.PreferenceManager
 
 /**
  * Created by Keval on 20-Aug-16.
@@ -29,7 +30,7 @@ import android.content.SharedPreferences
  */
 class SharedPrefsProvider(private val sharedPreference: SharedPreferences) {
 
-    constructor(context: Context) : this(context.getSharedPreferences(PREF_FILE, Context.MODE_PRIVATE))
+    constructor(context: Context) : this(PreferenceManager.getDefaultSharedPreferences(context))
 
     /**
      * Remove and clear data from preferences for given field
@@ -140,10 +141,14 @@ class SharedPrefsProvider(private val sharedPreference: SharedPreferences) {
     @JvmOverloads
     fun getIntFromPreference(key: String, defVal: Int = -1): Int = sharedPreference.getInt(key, defVal)
 
+    fun nukePrefrance() {
+        sharedPreference.edit().clear().apply()
+    }
+
     companion object {
         /**
          * Name of the shared preference file.
          */
-        private val PREF_FILE = "app_prefs"
+        val USER_PREF_FILE = "app_prefs"
     }
 }

@@ -21,9 +21,6 @@ import android.content.Context
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceViewHolder
 import android.util.AttributeSet
-import android.util.TypedValue
-import android.widget.TextView
-
 import com.kevalpatel2106.standup.R
 
 /**
@@ -54,15 +51,6 @@ class BasePreference : Preference {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-
-        //Set the title
-        val titleView = holder.findViewById(android.R.id.title) as TextView
-        titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP,
-                mContext.resources.getInteger(R.integer.prefrance_title_text_size).toFloat())
-
-        //Set the summary
-        val summaryTv = holder.findViewById(android.R.id.summary) as TextView
-        summaryTv.setTextSize(TypedValue.COMPLEX_UNIT_SP,
-                mContext.resources.getInteger(R.integer.prefrance_summary_text_size).toFloat())
+        holder.itemView.background = context.getDrawable(R.drawable.bg_settings_list_preference)
     }
 }

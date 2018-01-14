@@ -31,7 +31,7 @@ import com.kevalpatel2106.standup.R
  * @author 'https://github.com/kevalpatel2106'
  */
 
-class HintPrefrance : Preference {
+class HintPreference : Preference {
 
     constructor(context: Context) : super(context, null) {
         super.setLayoutResource(R.layout.layout_hint_prefrance)
@@ -55,5 +55,8 @@ class HintPrefrance : Preference {
 
         val hintTv = holder.findViewById(R.id.hint_pref_tv) as TextView
         hintTv.text = summary
+
+        holder.isDividerAllowedBelow = false
+        holder.isDividerAllowedAbove = false
     }
 }

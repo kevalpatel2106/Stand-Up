@@ -41,7 +41,7 @@ import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.standup.settings.list.SettingsListActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject

@@ -24,9 +24,14 @@ import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService
 import com.kevalpatel2106.standup.application.BaseApplication
+import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
+import com.kevalpatel2106.standup.misc.UserSessionManager
+import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.standup.reminder.repo.ReminderRepo
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.rxbus.Event
+import com.kevalpatel2106.utils.rxbus.RxBus
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -42,6 +47,7 @@ class SyncService : JobService() {
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     companion object {
+
         @SuppressLint("VisibleForTests")
         @JvmStatic
         internal fun syncNow(context: Context) {
@@ -54,6 +60,11 @@ class SyncService : JobService() {
         internal fun cancel(context: Context) {
             FirebaseJobDispatcher(GooglePlayDriver(context)).cancel(SyncServiceHelper.SYNC_JOB_TAG)
         }
+
+        //Flag to let others know if the syn is running.
+        private var isSyncing = false
+
+        internal fun isSyncingCurrently() = isSyncing
     }
 
     @Inject lateinit var userSessionManager: UserSessionManager
@@ -85,9 +96,22 @@ class SyncService : JobService() {
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe {
                         compositeDisposable.add(it)
+
+                        //Let others know sync started.
+                        isSyncing = true
+                        RxBus.post(Event(ReminderConfig.TAG_RX_SYNC_STARTED))
                     }
                     .doAfterTerminate {
                         jobFinished(job, false)
+
+                        //Save the last syncing time
+                        SharedPrefsProvider(this@SyncService).savePreferences(
+                                SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME,
+                                System.currentTimeMillis() - 1000L /* Remove one second to prevent displaying 0 seconds in sync settings. */)
+
+                        //Syncing stopped.
+                        isSyncing = false
+                        RxBus.post(Event(ReminderConfig.TAG_RX_SYNC_ENDED))
                     }
                     .subscribe({
                         //NO OP

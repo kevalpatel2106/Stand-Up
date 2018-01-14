@@ -25,11 +25,13 @@ import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService
 import com.kevalpatel2106.standup.application.BaseApplication
+import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.standup.reminder.sync.SyncService
+import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.UserSessionManager
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -57,11 +59,12 @@ class NotificationSchedulerService : JobService() {
         internal fun cancel(context: Context) {
             FirebaseJobDispatcher(GooglePlayDriver(context))
                     .cancel(NotificationSchedulerHelper.REMINDER_NOTIFICATION_JOB_TAG)
-            SharedPrefsProvider(context).removePreferences(ReminderConfig.PREF_KEY_NEXT_NOTIFICATION_TIME)
+            SharedPrefsProvider(context).removePreferences(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME)
         }
     }
 
     @Inject lateinit var userSessionManager: UserSessionManager
+    @Inject lateinit var userSettingsManager: UserSettingsManager
 
     override fun onCreate() {
         super.onCreate()
@@ -90,7 +93,8 @@ class NotificationSchedulerService : JobService() {
             scheduleNotification(this@NotificationSchedulerService)
 
             //Sync the database
-            SyncService.syncNow(this@NotificationSchedulerService)
+            if (userSettingsManager.enableBackgroundSync)
+                SyncService.syncNow(this@NotificationSchedulerService)
         }
         return false /* Stop the service */
     }

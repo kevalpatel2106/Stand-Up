@@ -20,7 +20,8 @@ package com.kevalpatel2106.standup.about.repo
 import com.kevalpatel2106.base.repository.RepoBuilder
 import com.kevalpatel2106.network.RetrofitNetworkRefresher
 import com.kevalpatel2106.standup.BuildConfig
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.application.di.AppModule
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import io.reactivex.Flowable
 import retrofit2.Retrofit
 import javax.inject.Named
@@ -30,7 +31,7 @@ import javax.inject.Named
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class AboutRepositoryImpl(@Named("WITH_TOKEN") private val retrofit: Retrofit,
+class AboutRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit,
                           private val userSessionManager: UserSessionManager) : AboutRepository {
 
     override fun getLatestVersion(): Flowable<CheckVersionResponse> {

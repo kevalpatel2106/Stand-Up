@@ -72,13 +72,13 @@ class SettingsListActivity : BaseActivity(), SettingsClickListener {
         settings_list_rv.layoutManager = LinearLayoutManager(this@SettingsListActivity)
         settings_list_rv.itemAnimator = DefaultItemAnimator()
         settings_list_rv.adapter = SettingsListAdapter(this@SettingsListActivity,
-                model.settingsItems.value!!, this)
+                model.settingsItems.value!!, this@SettingsListActivity)
         model.settingsItems.observe(this@SettingsListActivity, Observer {
             it?.let { settings_list_rv.adapter.notifyDataSetChanged() }
         })
 
         //Select the first item by default
-        onItemClick(model.settingsItems.value!![0])
+        if (model.isTwoPane) onItemClick(model.settingsItems.value!![0])
     }
 
     override fun onItemClick(clickedItem: SettingsItem) {

@@ -43,7 +43,9 @@ class SettingListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         iconIv.setImageResource(settingsItem.icon)
         titleTv.text = settingsItem.title
 
-        itemView.setOnClickListener { onClick.invoke(settingsItem) }
+        itemView.setOnClickListener {
+            onClick.invoke(settingsItem)
+        }
     }
 
     companion object {

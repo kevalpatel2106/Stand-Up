@@ -15,20 +15,22 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.notificationsSettings
+package com.kevalpatel2106.standup.settings.dailyReview
 
 import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
 import com.kevalpatel2106.standup.R
 
-class NotifficationSettingsFragment : PreferenceFragmentCompat() {
+class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
+
+    
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        addPreferencesFromResource(R.xml.settings_list)//TODO
+        addPreferencesFromResource(R.xml.daily_review_setting)
     }
 
     companion object {
-        fun getNewInstance(): NotifficationSettingsFragment {
-            return NotifficationSettingsFragment()
+        fun getNewInstance(): DailyReviewSettingsFragment {
+            return DailyReviewSettingsFragment()
         }
     }
 }

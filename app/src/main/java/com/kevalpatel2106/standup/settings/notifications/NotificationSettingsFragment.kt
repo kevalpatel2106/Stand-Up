@@ -15,11 +15,22 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.repo
+package com.kevalpatel2106.standup.settings.notifications
 
-/**
- * Created by Keval on 11/01/18.
- *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
- */
-interface SettingsRepo
+import android.os.Bundle
+import android.support.v7.preference.PreferenceFragmentCompat
+import com.kevalpatel2106.standup.R
+
+class NotificationSettingsFragment : PreferenceFragmentCompat() {
+
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        addPreferencesFromResource(R.xml.notifications_settings)
+    }
+
+    companion object {
+        fun getNewInstance(): NotificationSettingsFragment {
+            return NotificationSettingsFragment()
+        }
+    }
+}

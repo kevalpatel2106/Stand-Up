@@ -25,6 +25,7 @@ package com.kevalpatel2106.standup.settings.list
 enum class SettingsId {
     SYNC,
     DND,
+    DAILY_REVIEW,
     NOTIFICATION,
     LOGOUT
 }

@@ -15,25 +15,19 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.di
+package com.kevalpatel2106.standup.misc
 
-import com.kevalpatel2106.standup.misc.ApplicationScope
-import com.kevalpatel2106.standup.settings.repo.SettingsRepo
-import com.kevalpatel2106.standup.settings.repo.SettingsRepoImpl
+import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import dagger.Module
-import dagger.Provides
 
 /**
- * Created by Keval on 11/01/18.
+ * Created by Keval on 14/01/18.
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-@Module
-class SettingsModule {
 
-    @ApplicationScope
-    @Provides
-    fun provideSettingsRepo(sharedPrefsProvider: SharedPrefsProvider): SettingsRepo
-            = SettingsRepoImpl(sharedPrefsProvider)
+class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider){
+
+    val enableBackgroundSync : Boolean
+        get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_ALLOW_BACKGROUND_SYNC, true)
 }

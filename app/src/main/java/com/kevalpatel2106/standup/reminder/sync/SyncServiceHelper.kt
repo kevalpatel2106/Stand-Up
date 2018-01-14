@@ -21,7 +21,7 @@ import android.content.Context
 import android.support.annotation.VisibleForTesting
 import com.firebase.jobdispatcher.*
 import com.kevalpatel2106.base.annotations.Helper
-import com.kevalpatel2106.utils.UserSessionManager
+import com.kevalpatel2106.standup.misc.UserSessionManager
 
 /**
  * Created by Keval on 05/01/18.

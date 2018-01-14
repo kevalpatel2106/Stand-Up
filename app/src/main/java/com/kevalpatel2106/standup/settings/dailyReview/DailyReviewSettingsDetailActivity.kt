@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.settings.syncSettings
+package com.kevalpatel2106.standup.settings.dailyReview
 
 import android.content.Context
 import android.content.Intent
@@ -28,22 +28,22 @@ import com.kevalpatel2106.standup.settings.BaseSettingsDetailActivity
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class SyncSettingsDetailActivity : BaseSettingsDetailActivity() {
+class DailyReviewSettingsDetailActivity : BaseSettingsDetailActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        supportActionBar?.title = getString(R.string.title_activity_sync_settings)
+        supportActionBar?.title = getString(R.string.title_activity_daily_review_settings)
 
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, SyncSettingsFragment.getNewInstance())
+                .replace(R.id.container, DailyReviewSettingsFragment.getNewInstance())
                 .commit()
     }
 
     companion object {
 
         fun launch(context: Context) {
-            context.startActivity(Intent(context, SyncSettingsDetailActivity::class.java))
+            context.startActivity(Intent(context, DailyReviewSettingsDetailActivity::class.java))
         }
     }
 }
