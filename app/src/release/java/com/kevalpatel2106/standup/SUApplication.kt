@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.facebook.stetho.Stetho
+import com.kevalpatel2106.standup.application.BaseApplication
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
 
