@@ -70,7 +70,7 @@ class DailyReviewSettingsViewModel : BaseViewModel {
         TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { _, hours, mins ->
 
             //Save new time
-            settingsManager.dailyReviewTimeFrom12Am = hours.times(TimeUtils.ONE_HOUR_MILLS) + mins.times(TimeUtils.ONE_MIN_MILLS)
+            settingsManager.dailyReviewTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(hours, mins)
 
             updateDailyReviewTimeSummary()
         }, cal.get(Calendar.HOUR_OF_DAY),
@@ -81,14 +81,7 @@ class DailyReviewSettingsViewModel : BaseViewModel {
 
     @VisibleForTesting
     internal fun updateDailyReviewTimeSummary() {
-        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        cal.timeInMillis = settingsManager.dailyReviewTimeFrom12Am
-
-
-        dailyReviewTimeSummary.value = String.format("%s:%s %s",
-                if (cal.get(Calendar.HOUR) < 10) "0${cal.get(Calendar.HOUR)}" else "${cal.get(Calendar.HOUR)}",
-                if (cal.get(Calendar.MINUTE) < 10) "0${cal.get(Calendar.MINUTE)}" else "${cal.get(Calendar.MINUTE)}",
-                if (cal.get(Calendar.AM_PM) == Calendar.AM) "AM" else "PM")
+        dailyReviewTimeSummary.value = TimeUtils.convertToHHmmaFrom12Am(settingsManager.dailyReviewTimeFrom12Am)
     }
 
 }

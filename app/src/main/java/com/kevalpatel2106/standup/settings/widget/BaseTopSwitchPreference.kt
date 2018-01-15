@@ -39,19 +39,23 @@ class BaseTopSwitchPreference : SwitchPreferenceCompat {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int, defStyleRes: Int)
             : super(context, attrs, defStyleAttr, defStyleRes) {
         mContext = context
+        title = "Enable"
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int)
             : super(context, attrs, defStyleAttr) {
         mContext = context
+        title = "Enable"
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         mContext = context
+        title = "Enable"
     }
 
     constructor(context: Context) : super(context) {
         mContext = context
+        title = "Enable"
     }
 
 

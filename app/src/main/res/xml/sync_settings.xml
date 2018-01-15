@@ -42,9 +42,9 @@
 
         <!--Background sync interval-->
         <android.support.v7.preference.ListPreference
-            android:entries="@array/play_in_silent_mode_list"
-            android:entryValues="@array/play_in_silent_mode_value_list"
-            android:key="@string/pref_key_reminder_notifications_play_in_silent"
+            android:entries="@array/sync_interval_duration_list"
+            android:entryValues="@array/sync_interval_duration_value_list"
+            android:key="@string/pref_key_sync_interval"
             android:title="Sync interval" />
     </com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory>
 </android.support.v7.preference.PreferenceScreen>

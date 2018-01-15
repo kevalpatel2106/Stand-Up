@@ -18,6 +18,7 @@
 <resources>
     <string name="pref_key_sync_now">pref_key_sync_now</string>
     <string name="pref_key_sync_category_title">pref_key_sync_category_title</string>
+    <string name="pref_key_sync_interval">pref_key_sync_interval</string>
     <string name="pref_key_background_sync">pref_key_background_sync</string>
 
     <!--Reminder notification-->
@@ -37,4 +38,12 @@
     <!--Other notifications-->
     <string name="pref_key_promotional_notifications_enable">pref_key_promotional_notifications_enable</string>
     <string name="pref_key_update_notifications_enable">pref_key_update_notifications_enable</string>
+
+    <!--DND settings-->
+    <string name="pref_key_dnd_enable">pref_key_dnd_enable</string>
+    <string name="pref_key_auto_dnd_enable">pref_key_auto_dnd_enable</string>
+    <string name="pref_key_auto_dnd_duration">pref_key_auto_dnd_duration</string>
+    <string name="pref_key_dnd_quick_toggle_hint">pref_key_dnd_quick_toggle_hint</string>
+    <string name="pref_key_dnd_sleep_hour">pref_key_dnd_sleep_hour</string>
+
 </resources>

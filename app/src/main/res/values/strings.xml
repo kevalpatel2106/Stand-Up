@@ -136,6 +136,10 @@
     <string name="sign_out_warning_title">Sign out</string>
     <string name="sign_out_warning_message">Are you sure you want to sign out from the application?</string>
     <string name="reminder_ringtone_picker_dialog_title">Pick notification tone</string>
+    <string name="dnd_pref_auto_dnd_switch_summary_on">Application will turn into DND mode automatically between %s.</string>
+    <string name="dnd_pref_auto_dnd_switch_summary_off">Do not disturb mode won\'t start automatically. You can turn it on on/off manually though.</string>
+    <string name="dnd_pref_auto_dnd_switch_title_off">Disable</string>
+    <string name="dnd_pref_auto_dnd_switch_title_on">Enable</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

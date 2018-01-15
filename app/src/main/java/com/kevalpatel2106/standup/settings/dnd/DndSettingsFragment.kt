@@ -17,13 +17,94 @@
 
 package com.kevalpatel2106.standup.settings.dnd
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
+import android.view.View
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.settings.findPrefrance
+import com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
 
 class DndSettingsFragment : PreferenceFragmentCompat() {
+
+    internal lateinit var model: DndSettingsViewModel
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        model = ViewModelProviders.of(this@DndSettingsFragment).get(DndSettingsViewModel::class.java)
         addPreferencesFromResource(R.xml.dnd_settings)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setAutoDndSection()
+        setSleepHours()
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            findPrefrance(R.string.pref_key_dnd_quick_toggle_hint).isVisible = false
+        }
+    }
+
+    private fun setAutoDndSection() {
+        val autoDndSwitch = findPrefrance(R.string.pref_key_auto_dnd_enable) as BaseSwitchPreference
+        val autoDndTime = findPrefrance(R.string.pref_key_auto_dnd_duration)
+
+        model.autoDndTime.observe(this@DndSettingsFragment, Observer {
+            autoDndTime.summary = it
+
+            //Change the summary of switch
+            if (model.isAutoDndEnable.value!!)
+                autoDndSwitch.summary = String.format(getString(R.string.dnd_pref_auto_dnd_switch_summary_on), it)
+        })
+        model.isAutoDndEnable.observe(this@DndSettingsFragment, Observer {
+            it?.let {
+                autoDndSwitch.isChecked = it
+
+                //Set the title
+                autoDndSwitch.title = if (it) {
+                    getString(R.string.dnd_pref_auto_dnd_switch_title_on)
+                } else {
+                    getString(R.string.dnd_pref_auto_dnd_switch_title_off)
+                }
+
+                //Set the summary
+                autoDndSwitch.summary = if (it) {
+                    String.format(getString(R.string.dnd_pref_auto_dnd_switch_summary_on), model.autoDndTime.value)
+                } else {
+                    getString(R.string.dnd_pref_auto_dnd_switch_summary_off)
+                }
+
+                autoDndTime.isEnabled = it
+            }
+        })
+
+        autoDndSwitch.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue as Boolean) {
+                model.onAutoDndTurnedOn()
+            } else {
+                model.onAutoDndTurnedOff()
+            }
+            return@setOnPreferenceChangeListener true
+        }
+
+        autoDndTime.setOnPreferenceClickListener {
+            model.onSelectAutoDndTime(childFragmentManager)
+            return@setOnPreferenceClickListener true
+        }
+    }
+
+    private fun setSleepHours() {
+        val sleepTimePref = findPrefrance(R.string.pref_key_dnd_sleep_hour)
+        model.sleepTime.observe(this@DndSettingsFragment, Observer {
+            sleepTimePref.summary = it
+        })
+
+        sleepTimePref.setOnPreferenceClickListener {
+            model.onSelectSleepTime(childFragmentManager)
+            return@setOnPreferenceClickListener true
+        }
     }
 
     companion object {

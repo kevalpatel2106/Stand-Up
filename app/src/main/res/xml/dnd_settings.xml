@@ -19,16 +19,36 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--Select weather to display popups or not?-->
-    <com.kevalpatel2106.standup.settings.widget.BaseTopSwitchPreference
-        android:key="@string/pref_key_daily_review_enable"
-        android:switchTextOff="@string/switch_off"
-        android:switchTextOn="@string/switch_on"
-        android:title="Enable" />
+    <com.kevalpatel2106.standup.settings.widget.BaseTopSwitchPreference android:key="@string/pref_key_dnd_enable" />
 
-    <com.kevalpatel2106.standup.settings.widget.BasePreference
-        android:key="@string/pref_key_daily_review_time"
-        android:title="Send notification at..."
-        tools:summary="9:00 AM" />
+    <com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory android:title="Auto DND">
 
-    <com.kevalpatel2106.standup.settings.widget.HintPreference android:summary="Get daily summary of your previous day activities. Hope this will motivated you!!!" />
+        <com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
+            android:key="@string/pref_key_auto_dnd_enable"
+            android:switchTextOff="@string/switch_off"
+            android:switchTextOn="@string/switch_on"
+            tools:title="Enable Auto DND" />
+
+        <com.kevalpatel2106.standup.settings.widget.BasePreference
+            android:key="@string/pref_key_auto_dnd_duration"
+            android:title="Turn on do not disturb mode between..."
+            tools:summary="9:00 AM - 10:00 AM" />
+
+
+        <com.kevalpatel2106.standup.settings.widget.HintPreference android:summary="NOTE: During do not disturb mode, application won't send stand up reminder notifications but application will track your physical activity to generate batter statistics." />
+    </com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory>
+
+    <com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory android:title="Sleep Hours">
+
+        <com.kevalpatel2106.standup.settings.widget.BasePreference
+            android:key="@string/pref_key_dnd_sleep_hour"
+            android:title="Sleep Timing"
+            tools:summary="9:00 AM - 10:00 AM" />
+
+        <com.kevalpatel2106.standup.settings.widget.HintPreference android:summary="NOTE: During sleep, application won't send stand up reminder notifications and application won't track your physical activity." />
+    </com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory>
+
+    <com.kevalpatel2106.standup.settings.widget.HintPreference
+        android:key="@string/pref_key_dnd_quick_toggle_hint"
+        android:summary="Did you know that you can add DND quick toggle into you statusbar widgets? Add the quick toggle and turn on/off do not disturb from anywhere int your phone." />
 </android.support.v7.preference.PreferenceScreen>

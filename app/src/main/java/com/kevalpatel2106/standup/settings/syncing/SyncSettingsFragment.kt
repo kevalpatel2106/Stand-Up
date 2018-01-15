@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup.settings.syncing
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.preference.ListPreference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
 import com.kevalpatel2106.standup.R
@@ -66,7 +67,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
         //Set sync now
         val syncNowPref = findPrefrance(R.string.pref_key_sync_now) as BasePreference
         syncNowPref.setOnPreferenceClickListener {
-            context?.let { model.syncNow(it) }
+            context?.let { model.manualSync(it) }
             return@setOnPreferenceClickListener true
         }
         model.isSyncing.observe(this@SyncSettingsFragment, Observer {
@@ -82,9 +83,40 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
             }
         })
 
+        //Set sync interval
+        val syncInterval = findPrefrance(R.string.pref_key_sync_interval) as ListPreference
+        syncInterval.value = settingsManager.syncInterval.toString()
+        syncInterval.summary = syncInterval.entry
+        syncInterval.isEnabled = settingsManager.enableBackgroundSync
+        syncInterval.setOnPreferenceChangeListener { _, newValue ->
+            syncInterval.value = newValue as String
+            syncInterval.summary = syncInterval.entry
+
+            //Reschedule the sync job
+            context?.let {
+                model.onBackgroundSyncPolicyChange(it,
+                        settingsManager.enableBackgroundSync,
+                        newValue.toInt())
+            }
+            return@setOnPreferenceChangeListener false
+        }
+
         //Set background sync
         val backgroundSyncPref = findPrefrance(R.string.pref_key_background_sync) as BaseSwitchPreference
         backgroundSyncPref.isChecked = settingsManager.enableBackgroundSync //Set initial value
+        backgroundSyncPref.setOnPreferenceChangeListener { _, newValue ->
+
+            syncInterval.isEnabled = newValue as Boolean
+
+            //Reschedule the job
+            context?.let {
+                model.onBackgroundSyncPolicyChange(it,
+                        newValue,
+                        settingsManager.syncInterval.toInt())
+            }
+            return@setOnPreferenceChangeListener true
+        }
+
     }
 
     companion object {

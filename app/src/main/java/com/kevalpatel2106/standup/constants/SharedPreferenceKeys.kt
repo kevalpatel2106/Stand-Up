@@ -78,6 +78,14 @@ internal object SharedPreferenceKeys {
     const val PREF_KEY_ALLOW_BACKGROUND_SYNC = "pref_key_background_sync"
 
     /**
+     * This key holds sync interval in milliseconds. The default value is 1 hour.
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.syncInterval]
+     */
+    const val PREF_KEY_SYNC_INTERVAL = "pref_key_sync_interval"
+
+    /**
      * This preference holds the [android.net.Uri] of the selected ring tone in the string format.
      * The default value of this preference will be null.
      *
@@ -159,4 +167,44 @@ internal object SharedPreferenceKeys {
      * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.dailyReviewTimeFrom12Am]
      */
     const val PREF_KEY_DAILY_REVIEW_TIME_12AM = "pref_key_daily_review_time_12am"
+
+    /**
+     * Boolean to indicate weather the auto dnd is enabled or not? Default value is false.
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.isAutoDndEnable]
+     */
+    const val PREF_KEY_IS_AUTO_DND_ENABLE = "pref_key_dnd_enable"
+
+    /**
+     * Long that indicates start time for the auto dnd mode in milliseconds from the 12 AM of the day.
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.autoDndStartTime]
+     */
+    const val PREF_KEY_AUTO_DND_START_TIME_FROM_12AM = "pref_key_auto_dnd_start_time_from_12am"
+
+    /**
+     * Long that indicates end time for the auto dnd mode in milliseconds from the 12 AM of the day.
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.autoDndEndTime]
+     */
+    const val PREF_KEY_AUTO_DND_END_TIME_FROM_12AM = "pref_key_auto_dnd_end_time_from_12am"
+
+    /**
+     * Long that indicates start time for the sleep mode in milliseconds from the 12 AM of the day.
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.autoDndStartTime]
+     */
+    const val PREF_KEY_SLEEP_START_TIME_FROM_12AM = "pref_key_sleep_start_time_from_12am"
+
+    /**
+     * Long that indicates end time for the sleep mode in milliseconds from the 12 AM of the day.
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.autoDndEndTime]
+     */
+    const val PREF_KEY_SLEEP_END_TIME_FROM_12AM = "pref_key_sleep_end_time_from_12am"
 }

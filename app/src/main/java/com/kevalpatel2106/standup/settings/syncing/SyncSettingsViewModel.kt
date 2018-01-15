@@ -67,20 +67,32 @@ class SyncSettingsViewModel : BaseViewModel {
         addDisposable(RxBus.register(ReminderConfig.TAG_RX_SYNC_ENDED).subscribe {
             isSyncing.value = false
 
-            lastSyncTime.value = TimeUtils.getTimeAgo(sharedPrefsProvider
+            lastSyncTime.value = TimeUtils.calculateHumanReadableDurationFromNow(sharedPrefsProvider
                     .getLongFromPreference(SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME))
         })
 
         lastSyncTime.value = sharedPrefsProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME).let {
-            if (it <= 0) "" else TimeUtils.getTimeAgo(it)
+            if (it <= 0) "" else TimeUtils.calculateHumanReadableDurationFromNow(it)
         }
     }
 
     /**
-     * Start syncing the database with the server.
+     * Start syncing the database with the server right now if the network is available.
      */
-    fun syncNow(context: Context) {
-        SyncService.syncNow(context)
+    fun manualSync(context: Context) {
+        if (!SyncService.isSyncingCurrently()) SyncService.syncNow(context)
         isSyncing.value = true
+    }
+
+
+    fun onBackgroundSyncPolicyChange(context: Context, isEnabled: Boolean, interval: Int) {
+
+        //Canceled current job
+        SyncService.cancelScheduledSync(context)
+
+        //reschedule the job if background sync is enabled.
+        if (isEnabled) {
+            SyncService.scheduleSync(context, interval)
+        }
     }
 }

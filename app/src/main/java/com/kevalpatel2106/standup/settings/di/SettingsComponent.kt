@@ -22,6 +22,7 @@ import com.kevalpatel2106.standup.authentication.di.UserAuthModule
 import com.kevalpatel2106.standup.misc.ApplicationScope
 import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsFragment
 import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsViewModel
+import com.kevalpatel2106.standup.settings.dnd.DndSettingsViewModel
 import com.kevalpatel2106.standup.settings.list.SettingsViewModel
 import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsFragment
 import com.kevalpatel2106.standup.settings.notifications.NotificationsSettingsViewModel
@@ -51,4 +52,6 @@ interface SettingsComponent {
     fun inject(dailyReviewSettingsFragment: DailyReviewSettingsFragment)
 
     fun inject(dailyReviewSettingsViewModel: DailyReviewSettingsViewModel)
+
+    fun inject(dndSettingsViewModel: DndSettingsViewModel)
 }

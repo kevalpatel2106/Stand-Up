@@ -29,24 +29,52 @@ object TimeUtils {
     const val ONE_MIN_MILLS = 60000L
     const val ONE_HOUR_MILLS = 3600000L
     const val ONE_HOUR_MINS = 60
-
-    val ONE_DAY_MILLISECONDS = 86400000L
-
-    /**
-     * Converts [timeMills] into (hour)h (minutes)m format. Here hour will be in 24 hours format.
-     */
-    @JvmStatic
-    fun convertToHourMinutes(timeMills: Long): String {
-        if (timeMills < 0) throw IllegalArgumentException("Time cannot be negative.")
-
-        val totalMins = timeMills / ONE_MIN_MILLS
-        val hours = (totalMins.div(ONE_HOUR_MINS)).toInt()
-        return "${hours}h ${totalMins - (hours * ONE_HOUR_MINS)}m"
-    }
+    const val ONE_DAY_MILLISECONDS = 86400000L
 
     fun convertToNano(timeInMills: Long): Long = TimeUnit.MILLISECONDS.toNanos(timeInMills)
 
     fun convertToMilli(timeInNano: Long): Long = TimeUnit.NANOSECONDS.toMillis(timeInNano)
+
+    fun getMilliSecFrom12AM(unixMills: Long): Long {
+        if (unixMills <= 0)
+            throw IllegalArgumentException("Invalid unix time: ".plus(unixMills))
+
+        val today12AmCal = Calendar.getInstance()
+        today12AmCal.timeInMillis = unixMills
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
+        today12AmCal.set(Calendar.MINUTE, 0)
+        today12AmCal.set(Calendar.SECOND, 0)
+        today12AmCal.set(Calendar.MILLISECOND, 0)
+        return unixMills - today12AmCal.timeInMillis
+    }
+
+    fun getMilliSecFrom12AM(hourOfTheDay: Int, minutes: Int): Long {
+        return hourOfTheDay.times(TimeUtils.ONE_HOUR_MILLS) + minutes.times(TimeUtils.ONE_MIN_MILLS)
+    }
+
+    fun getCalender12AM(dayOfMonth: Int, monthOfYear: Int, year: Int): Calendar {
+        val calender12Am = getTodaysCalender12AM()
+        calender12Am.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        calender12Am.set(Calendar.MONTH, monthOfYear)
+        calender12Am.set(Calendar.YEAR, year)
+        return calender12Am
+    }
+
+    fun getCalender12AM(unixMills: Long): Calendar {
+        val calender12Am = Calendar.getInstance()
+        calender12Am.timeInMillis = unixMills
+        calender12Am.set(Calendar.HOUR_OF_DAY, 0)
+        calender12Am.set(Calendar.MINUTE, 0)
+        calender12Am.set(Calendar.SECOND, 0)
+        calender12Am.set(Calendar.MILLISECOND, 0)
+        return calender12Am
+    }
+
+    fun getTodaysCalender12AM(): Calendar {
+        return getCalender12AM(System.currentTimeMillis())
+    }
+
+    //*********** Human readable month formats *********//
 
     fun getMonthInitials(monthOfYear: Int): String = when (monthOfYear) {
         0 -> "JAN"
@@ -80,47 +108,9 @@ object TimeUtils {
         else -> throw IllegalArgumentException("Invalid month: ".plus(monthOfYear))
     }
 
-    fun getMilliSecFrom12AM(unixMills: Long): Long {
-        if (unixMills <= 0)
-            throw IllegalArgumentException("Invalid unix time: ".plus(unixMills))
+    //*********** Human readable time formats *********//
 
-        val today12AmCal = Calendar.getInstance()
-        today12AmCal.timeInMillis = unixMills
-        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
-        today12AmCal.set(Calendar.MINUTE, 0)
-        today12AmCal.set(Calendar.SECOND, 0)
-        today12AmCal.set(Calendar.MILLISECOND, 0)
-        return unixMills - today12AmCal.timeInMillis
-    }
-
-    fun getCalender12AM(dayOfMonth: Int, monthOfYear: Int, year: Int): Calendar {
-        val calender12Am = getTodaysCalender12AM()
-        calender12Am.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        calender12Am.set(Calendar.MONTH, monthOfYear)
-        calender12Am.set(Calendar.YEAR, year)
-        return calender12Am
-    }
-
-    fun getCalender12AM(unixMills: Long): Calendar {
-        val calender12Am = Calendar.getInstance()
-        calender12Am.timeInMillis = unixMills
-        calender12Am.set(Calendar.HOUR_OF_DAY, 0)
-        calender12Am.set(Calendar.MINUTE, 0)
-        calender12Am.set(Calendar.SECOND, 0)
-        calender12Am.set(Calendar.MILLISECOND, 0)
-        return calender12Am
-    }
-
-    fun getTodaysCalender12AM(): Calendar {
-        val calender12Am = Calendar.getInstance()
-        calender12Am.set(Calendar.HOUR_OF_DAY, 0)
-        calender12Am.set(Calendar.MINUTE, 0)
-        calender12Am.set(Calendar.SECOND, 0)
-        calender12Am.set(Calendar.MILLISECOND, 0)
-        return calender12Am
-    }
-
-    fun getTimeAgo(timeToCalculate: Long): String {
+    fun calculateHumanReadableDurationFromNow(timeToCalculate: Long): String {
         var diff = (System.currentTimeMillis() - timeToCalculate)
         if (diff < 0) throw IllegalArgumentException("Cannot pass future time in argument.")
 
@@ -144,5 +134,29 @@ object TimeUtils {
             result = result.plus(secs).plus(" seconds ")
         }
         return result
+    }
+
+
+    /**
+     * Converts [timeMills] into (hour)h (minutes)m format. Here hour will be in 24 hours format.
+     */
+    @JvmStatic
+    fun convertToHourMinutes(timeMills: Long): String {
+        if (timeMills < 0) throw IllegalArgumentException("Time cannot be negative.")
+
+        val totalMins = timeMills / ONE_MIN_MILLS
+        val hours = (totalMins.div(ONE_HOUR_MINS)).toInt()
+        return "${hours}h ${totalMins - (hours * ONE_HOUR_MINS)}m"
+    }
+
+    fun convertToHHmmaFrom12Am(millsFrom12Am: Long): String {
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        cal.timeInMillis = millsFrom12Am
+
+
+        return String.format("%s:%s %s",
+                if (cal.get(Calendar.HOUR) < 10) "0${cal.get(Calendar.HOUR)}" else "${cal.get(Calendar.HOUR)}",
+                if (cal.get(Calendar.MINUTE) < 10) "0${cal.get(Calendar.MINUTE)}" else "${cal.get(Calendar.MINUTE)}",
+                if (cal.get(Calendar.AM_PM) == Calendar.AM) "AM" else "PM")
     }
 }

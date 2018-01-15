@@ -32,6 +32,7 @@ import com.kevalpatel2106.utils.SharedPrefsProvider
 class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
 
     private val DEFAULT_LED_COLOR = "red"
+    private val DEFAULT_SYNC_INTERVAL = 3600000.toString()    /* 1 hour */
     private val DEFAULT_RINGTONE_NAME = "Default"
     private val DEFAULT_ENABLE_BACKGROUND_SYNC = true
     private val DEFAULT_SHOULD_VIBRATE = true
@@ -41,10 +42,19 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
     private val DEFAULT_SHOULD_DISPLAY_PROMOTIONAL_NOTIFICATION = true
     private val DEFAULT_DAILY_NOTIFICATION_ENABLE = true
     private val DEFAULT_DAILY_REVIEW_TIME = 9 * 3600000L
+    private val DEFAULT_AUTO_DND_ENABLE = false
+    private val DEFAULT_AUTO_DND_START_TIME = 9 * 3600000L
+    private val DEFAULT_AUTO_DND_END_TIME = 10 * 3600000L
+    private val DEFAULT_SLEEP_START_TIME = 22 * 3600000L
+    private val DEFAULT_SLEEP_END_TIME = 7 * 3600000L
 
     val enableBackgroundSync: Boolean
         get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_ALLOW_BACKGROUND_SYNC,
                 DEFAULT_ENABLE_BACKGROUND_SYNC)
+
+    val syncInterval: Long
+        get() = sharedPrefProvider.getStringFromPreferences(SharedPreferenceKeys.PREF_KEY_SYNC_INTERVAL,
+                DEFAULT_SYNC_INTERVAL)!!.toLong()
 
     val getReminderToneName: String?
         get() = sharedPrefProvider.getStringFromPreferences(SharedPreferenceKeys.PREF_KEY_RINGTONE_NAME,
@@ -107,7 +117,6 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
                 DEFAULT_DAILY_REVIEW_TIME)
         set(value) = sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_TIME_12AM, value)
 
-
     val ledColor: Int
         get() = when (ledColorValue) {
             "none" -> Color.TRANSPARENT
@@ -120,9 +129,42 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
             else -> Color.TRANSPARENT
         }
 
+    val isAutoDndEnable = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE,
+            DEFAULT_AUTO_DND_ENABLE)
+
+    val autoDndStartTime: Long
+        get() = sharedPrefProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_AUTO_DND_START_TIME_FROM_12AM,
+                DEFAULT_AUTO_DND_START_TIME)
+
+    val autoDndEndTime: Long
+        get() = sharedPrefProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_AUTO_DND_END_TIME_FROM_12AM,
+                DEFAULT_AUTO_DND_END_TIME)
+
+    val sleepStartTime: Long
+        get() = sharedPrefProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_SLEEP_START_TIME_FROM_12AM,
+                DEFAULT_SLEEP_START_TIME)
+
+    val sleepEndTime: Long
+        get() = sharedPrefProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_SLEEP_END_TIME_FROM_12AM,
+                DEFAULT_SLEEP_END_TIME)
+
 
     fun setReminderTone(name: String, uri: Uri) {
         sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_RINGTONE_NAME, name)
         sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_RINGTONE_URI, uri.toString())
+    }
+
+    fun setAutoDndTime(startTimeMillsFron12Am: Long, endTimeMillsFron12Am: Long) {
+        sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_AUTO_DND_START_TIME_FROM_12AM,
+                startTimeMillsFron12Am)
+        sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_AUTO_DND_END_TIME_FROM_12AM,
+                endTimeMillsFron12Am)
+    }
+
+    fun setSleepime(startTimeMillsFron12Am: Long, endTimeMillsFron12Am: Long) {
+        sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_SLEEP_START_TIME_FROM_12AM,
+                startTimeMillsFron12Am)
+        sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_SLEEP_END_TIME_FROM_12AM,
+                endTimeMillsFron12Am)
     }
 }

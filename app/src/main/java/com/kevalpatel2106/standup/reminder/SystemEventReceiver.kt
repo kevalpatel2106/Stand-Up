@@ -22,11 +22,11 @@ import android.content.Context
 import android.content.Intent
 import com.google.android.gms.common.GoogleApiAvailability
 import com.kevalpatel2106.standup.application.BaseApplication
+import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
 import com.kevalpatel2106.standup.reminder.sync.SyncService
-import com.kevalpatel2106.standup.misc.UserSettingsManager
 import javax.inject.Inject
 
 /**
@@ -45,6 +45,7 @@ class SystemEventReceiver : BroadcastReceiver() {
                 .inject(this@SystemEventReceiver)
 
         // Check if the Google Play Services updated?
+        // If other package updated, we don't care.
         // Issue: https://github.com/firebase/firebase-jobdispatcher-android/issues/6
         if (intent.action == Intent.ACTION_PACKAGE_CHANGED && intent.extras[Intent.EXTRA_PACKAGE_NAME]
                 != GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)
@@ -54,7 +55,9 @@ class SystemEventReceiver : BroadcastReceiver() {
         ActivityMonitorService.scheduleMonitoringJob(context)
 
         //Sync all the pending activities.
-        if (userSettingsManager.enableBackgroundSync) SyncService.syncNow(context)
+        if (userSettingsManager.enableBackgroundSync) {
+            SyncService.scheduleSync(context, userSettingsManager.syncInterval.toInt())
+        }
 
         //Schedule the next reminder
         NotificationSchedulerService.scheduleNotification(context)

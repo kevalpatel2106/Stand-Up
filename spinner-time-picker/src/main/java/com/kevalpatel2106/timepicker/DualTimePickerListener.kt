@@ -15,20 +15,16 @@
  *
  */
 
-include ':app'
+package com.kevalpatel2106.timepicker
 
-// Base layer modules.
-include ':base'
-include ':test-utils'
-include ':utils'
-include ':network'
+import java.io.Serializable
 
-//Social login
-include ':facebook-auth'
-include ':google-auth'
+/**
+ * Created by Keval on 15/01/18.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ */
+interface DualTimePickerListener : Serializable {
 
-//Custom views
-include ':timeline-view'
-include ':ruler-view'
-include ':progress-button'
-include ':spinner-time-picker'
+    fun onTimeSelected(startHourOfDay: Int, startMinutes: Int, endHourOfDay: Int, endMins: Int)
+}

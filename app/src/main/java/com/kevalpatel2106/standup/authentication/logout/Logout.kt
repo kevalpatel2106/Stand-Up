@@ -28,11 +28,11 @@ import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
 import com.kevalpatel2106.standup.reminder.sync.SyncService
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.utils.Utils
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -75,7 +75,7 @@ class Logout constructor(private val application: Application,
         //Cancel all the jobs
         NotificationSchedulerService.cancel(application)
         ActivityMonitorService.cancel(application)
-        SyncService.cancel(application)
+        SyncService.cancelScheduledSync(application)
 
         //Clear all the notifications
         val manager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

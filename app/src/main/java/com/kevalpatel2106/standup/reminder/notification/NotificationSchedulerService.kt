@@ -30,7 +30,6 @@ import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
-import com.kevalpatel2106.standup.reminder.sync.SyncService
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -91,10 +90,6 @@ class NotificationSchedulerService : JobService() {
 
             //Schedule the next notification
             scheduleNotification(this@NotificationSchedulerService)
-
-            //Sync the database
-            if (userSettingsManager.enableBackgroundSync)
-                SyncService.syncNow(this@NotificationSchedulerService)
         }
         return false /* Stop the service */
     }

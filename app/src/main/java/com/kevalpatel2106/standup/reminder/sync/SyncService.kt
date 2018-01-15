@@ -56,8 +56,16 @@ class SyncService : JobService() {
                     .mustSchedule(SyncServiceHelper.prepareJob(context))
         }
 
+        @SuppressLint("VisibleForTests")
         @JvmStatic
-        internal fun cancel(context: Context) {
+        internal fun scheduleSync(context: Context, interval: Int) {
+            //Schedule the job
+            FirebaseJobDispatcher(GooglePlayDriver(context))
+                    .mustSchedule(SyncServiceHelper.prepareJob(context, interval))
+        }
+
+        @JvmStatic
+        internal fun cancelScheduledSync(context: Context) {
             FirebaseJobDispatcher(GooglePlayDriver(context)).cancel(SyncServiceHelper.SYNC_JOB_TAG)
         }
 

@@ -19,11 +19,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--Select weather to display popups or not?-->
-    <com.kevalpatel2106.standup.settings.widget.BaseTopSwitchPreference
-        android:key="@string/pref_key_daily_review_enable"
-        android:switchTextOff="@string/switch_off"
-        android:switchTextOn="@string/switch_on"
-        android:title="Enable" />
+    <com.kevalpatel2106.standup.settings.widget.BaseTopSwitchPreference android:key="@string/pref_key_daily_review_enable" />
 
     <com.kevalpatel2106.standup.settings.widget.BasePreference
         android:key="@string/pref_key_daily_review_time"
