@@ -81,5 +81,4 @@ object SyncServiceHelper {
                 interval - ReminderConfig.SYNC_SERVICE_PERIOD_TOLERANCE,
                 interval + ReminderConfig.SYNC_SERVICE_PERIOD_TOLERANCE)
     }
-
 }

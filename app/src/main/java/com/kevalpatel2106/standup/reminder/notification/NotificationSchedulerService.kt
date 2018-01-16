@@ -31,11 +31,13 @@ import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.standup.reminder.di.DaggerReminderComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 13-Dec-17.
+ * Service to fire reminder notification. This job will run after given duration and display the
+ * reminder notification if user is logged in. This service will automatically schedule the next
+ * job after [ReminderConfig.STAND_UP_DURATION].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
@@ -43,6 +45,11 @@ class NotificationSchedulerService : JobService() {
 
     companion object {
 
+        /**
+         * Schedule the [NotificationSchedulerService] job after [scheduleAfter] milliseconds.
+         * This will override all the previous scheduled [NotificationSchedulerService] job. This
+         * job will be one shot not recurring.
+         */
         @SuppressLint("VisibleForTests")
         @JvmStatic
         internal fun scheduleNotification(context: Context,
@@ -53,7 +60,10 @@ class NotificationSchedulerService : JobService() {
                             SharedPrefsProvider(context)))
         }
 
-
+        /**
+         * Cancel all the [NotificationSchedulerService] jobs if any job is scheduled with
+         * [NotificationSchedulerHelper.REMINDER_NOTIFICATION_JOB_TAG].
+         */
         @JvmStatic
         internal fun cancel(context: Context) {
             FirebaseJobDispatcher(GooglePlayDriver(context))
@@ -62,12 +72,20 @@ class NotificationSchedulerService : JobService() {
         }
     }
 
+    /**
+     * [UserSessionManager] for getting the user session details.
+     */
     @Inject lateinit var userSessionManager: UserSessionManager
+
+    /**
+     * [UserSettingsManager] for getting the user settings details.
+     */
     @Inject lateinit var userSettingsManager: UserSettingsManager
 
     override fun onCreate() {
         super.onCreate()
 
+        //Dagger injection
         DaggerReminderComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
@@ -79,10 +97,15 @@ class NotificationSchedulerService : JobService() {
         return true
     }
 
+    /**
+     * When the job starts, programme will first check if the user is logged in or not?
+     * </p>
+     * If the user is logged in, it will display the notification and schedule the next job
+     * after [ReminderConfig.STAND_UP_DURATION].
+     */
     @SuppressLint("VisibleForTests")
     @CallSuper
     override fun onStartJob(p0: JobParameters?): Boolean {
-        Timber.d("Notification reminder job started.")
 
         if (NotificationSchedulerHelper.shouldDisplayNotification(userSessionManager)) {
             //Fire reminder notification

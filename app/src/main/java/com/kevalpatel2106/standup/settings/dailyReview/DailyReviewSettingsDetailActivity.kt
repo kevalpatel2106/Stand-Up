@@ -25,6 +25,7 @@ import com.kevalpatel2106.standup.settings.BaseSettingsDetailActivity
 
 /**
  * Created by Keval on 13/01/18.
+ * Activity to hold the [DailyReviewSettingsFragment].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
@@ -42,6 +43,9 @@ class DailyReviewSettingsDetailActivity : BaseSettingsDetailActivity() {
 
     companion object {
 
+        /**
+         * Launch [DailyReviewSettingsDetailActivity] on the [context] provided.
+         */
         fun launch(context: Context) {
             context.startActivity(Intent(context, DailyReviewSettingsDetailActivity::class.java))
         }

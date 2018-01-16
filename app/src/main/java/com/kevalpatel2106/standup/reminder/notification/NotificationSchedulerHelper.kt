@@ -22,9 +22,9 @@ import android.support.annotation.VisibleForTesting
 import com.firebase.jobdispatcher.*
 import com.kevalpatel2106.base.annotations.Helper
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
+import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.standup.reminder.ReminderConfig
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
 
 /**
  * Created by Keval on 05/01/18.
@@ -50,7 +50,7 @@ internal object NotificationSchedulerHelper {
         return FirebaseJobDispatcher(GooglePlayDriver(context))
                 .newJobBuilder()
                 .setService(NotificationSchedulerService::class.java)       // the JobService that will be called
-                .setTag(REMINDER_NOTIFICATION_JOB_TAG)         // uniquely identifies the job
+                .setTag(REMINDER_NOTIFICATION_JOB_TAG)                      // uniquely identifies the job
                 .setRecurring(false)
                 .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
                 .setTrigger(getExecutionWindow(scheduleAfter))

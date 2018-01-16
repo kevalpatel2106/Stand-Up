@@ -32,6 +32,7 @@ import dagger.Component
 
 /**
  * Created by Keval on 11/01/18.
+ * Dagger [Component] for settings package.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */

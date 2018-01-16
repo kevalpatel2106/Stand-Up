@@ -29,10 +29,20 @@ import com.kevalpatel2106.standup.settings.findPrefrance
 import com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
 import com.kevalpatel2106.standup.settings.widget.BaseTopSwitchPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import javax.inject.Inject
 
+/**
+ * Created by Keval on 13/01/18.
+ * [PreferenceFragmentCompat] class to display Do not disturb mode settings. Do not disturb settings
+ * contains enable/disable DND mode, auto DND enable/disable, auto DND duration. It also contains
+ * settings to get user sleep timings.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ */
 class DndSettingsFragment : PreferenceFragmentCompat() {
 
+    /**
+     * [DndSettingsViewModel] view model.
+     */
     internal lateinit var model: DndSettingsViewModel
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -49,10 +59,15 @@ class DndSettingsFragment : PreferenceFragmentCompat() {
         setSleepHours()
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            //Display about the quick toggle.
+            //Quick toggle were available after Android N.
             findPrefrance(R.string.pref_key_dnd_quick_toggle_hint).isVisible = false
         }
     }
 
+    /**
+     * Set up auto dnd settings.
+     */
     private fun setAutoDndSection() {
         val autoDndSwitch = findPrefrance(R.string.pref_key_auto_dnd_enable) as BaseSwitchPreference
         val autoDndTime = findPrefrance(R.string.pref_key_auto_dnd_duration)
@@ -101,6 +116,9 @@ class DndSettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
+    /**
+     * Set the sleep hour section.
+     */
     private fun setSleepHours() {
         val sleepTimePref = findPrefrance(R.string.pref_key_dnd_sleep_hour)
         model.sleepTime.observe(this@DndSettingsFragment, Observer {
@@ -114,6 +132,11 @@ class DndSettingsFragment : PreferenceFragmentCompat() {
     }
 
     companion object {
+
+        /**
+         * Get the new instance of [DndSettingsFragment].  Use this method to get new instance
+         * of this fragment instead of creating using constructor.
+         */
         fun getNewInstance(): DndSettingsFragment {
             return DndSettingsFragment()
         }

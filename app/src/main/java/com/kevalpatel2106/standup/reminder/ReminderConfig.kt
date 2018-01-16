@@ -17,6 +17,8 @@
 
 package com.kevalpatel2106.standup.reminder
 
+import com.kevalpatel2106.standup.BuildConfig
+
 /**
  * Created by Keval on 24/11/17.
  *
@@ -27,7 +29,7 @@ internal object ReminderConfig {
     /**
      * Interval between two "Stand up now" notifications in seconds.
      */
-    internal const val STAND_UP_DURATION = 60 * 60 /* 60 min */
+    internal var STAND_UP_DURATION = if (BuildConfig.DEBUG) 5 * 60 else 60 * 60 /* 60 min */
 
     /**
      * Minimum threshold required for the user activity for processing the data.

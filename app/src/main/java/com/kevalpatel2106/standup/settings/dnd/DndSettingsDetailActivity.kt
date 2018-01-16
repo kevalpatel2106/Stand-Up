@@ -25,6 +25,7 @@ import com.kevalpatel2106.standup.settings.BaseSettingsDetailActivity
 
 /**
  * Created by Keval on 13/01/18.
+ * Activity to hold [DndSettingsFragment].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
@@ -33,6 +34,7 @@ class DndSettingsDetailActivity : BaseSettingsDetailActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //Title
         supportActionBar?.title = getString(R.string.title_activity_dnd_settings)
 
         supportFragmentManager.beginTransaction()
@@ -42,6 +44,9 @@ class DndSettingsDetailActivity : BaseSettingsDetailActivity() {
 
     companion object {
 
+        /**
+         * Launch [DndSettingsDetailActivity] on the [context] provided.
+         */
         fun launch(context: Context) {
             context.startActivity(Intent(context, DndSettingsDetailActivity::class.java))
         }

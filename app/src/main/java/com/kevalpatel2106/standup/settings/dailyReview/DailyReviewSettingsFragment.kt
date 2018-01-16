@@ -27,8 +27,18 @@ import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.standup.settings.findPrefrance
 import javax.inject.Inject
 
+/**
+ * Created by Keval on 13/01/18.
+ * [PreferenceFragmentCompat] class to display user's daily review settings. Daily review settings
+ * contain enable/disable switch and a preference to set the time for daily review notification.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ */
 class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
 
+    /**
+     * [UserSettingsManager] for getting the settings.
+     */
     @Inject internal lateinit var settingsManager: UserSettingsManager
 
     init {
@@ -38,6 +48,9 @@ class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
                 .inject(this@DailyReviewSettingsFragment)
     }
 
+    /**
+     * [DailyReviewSettingsViewModel] view model.
+     */
     private lateinit var model: DailyReviewSettingsViewModel
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -46,6 +59,7 @@ class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
 
         addPreferencesFromResource(R.xml.daily_review_setting)
 
+        //Review notification time
         val dailyReviewTime = findPrefrance(R.string.pref_key_daily_review_time)
         dailyReviewTime.setOnPreferenceClickListener {
             context?.let { model.displayDateDialog(it) }
@@ -55,16 +69,21 @@ class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
             dailyReviewTime.summary = it
         })
 
+        //Enable/Disable switch
         val dailyReviewEnableSwitch = findPrefrance(R.string.pref_key_daily_review_enable)
         dailyReviewTime.isEnabled = settingsManager.isDailyReviewEnable
         dailyReviewEnableSwitch.setOnPreferenceChangeListener { _, newValue ->
             dailyReviewTime.isEnabled = newValue as Boolean
             return@setOnPreferenceChangeListener true
         }
-
     }
 
     companion object {
+
+        /**
+         * Get the new instance of [DailyReviewSettingsFragment]. Use this method to get new instance
+         * of this fragment instead of creating using constructor.
+         */
         fun getNewInstance(): DailyReviewSettingsFragment {
             return DailyReviewSettingsFragment()
         }

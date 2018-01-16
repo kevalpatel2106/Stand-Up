@@ -32,14 +32,21 @@ import javax.inject.Inject
 
 /**
  * Created by Keval on 14/01/18.
+ * View model for [DailyReviewSettingsFragment].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
 class DailyReviewSettingsViewModel : BaseViewModel {
 
+    /**
+     * [UserSettingsManager] for getting the settings.
+     */
     @Inject lateinit var settingsManager: UserSettingsManager
 
+    /**
+     * [MutableLiveData] to get the daily review time in HH:mm a format. (e.g. 09:04 AM)
+     */
     internal val dailyReviewTimeSummary = MutableLiveData<String>()
 
     @VisibleForTesting
@@ -57,11 +64,17 @@ class DailyReviewSettingsViewModel : BaseViewModel {
         init()
     }
 
+    /**
+     * Initialise view model.
+     */
     @SuppressLint("VisibleForTests")
     private fun init() {
         updateDailyReviewTimeSummary()
     }
 
+    /**
+     * Display the time picker dialog. This allows user to select the time for review notifications.
+     */
     @SuppressLint("VisibleForTests")
     internal fun displayDateDialog(context: Context) {
         val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -79,6 +92,9 @@ class DailyReviewSettingsViewModel : BaseViewModel {
                 .show()
     }
 
+    /**
+     * Load the daily review time from the [settingsManager] and update [dailyReviewTimeSummary].
+     */
     @VisibleForTesting
     internal fun updateDailyReviewTimeSummary() {
         dailyReviewTimeSummary.value = TimeUtils.convertToHHmmaFrom12Am(settingsManager.dailyReviewTimeFrom12Am)
