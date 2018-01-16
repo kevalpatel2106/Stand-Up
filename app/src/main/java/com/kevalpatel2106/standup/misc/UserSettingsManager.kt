@@ -22,6 +22,8 @@ import android.media.RingtoneManager
 import android.net.Uri
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.TimeUtils
+import java.util.*
 
 /**
  * Created by Keval on 14/01/18.
@@ -42,6 +44,7 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
     private val DEFAULT_SHOULD_DISPLAY_PROMOTIONAL_NOTIFICATION = true
     private val DEFAULT_DAILY_NOTIFICATION_ENABLE = true
     private val DEFAULT_DAILY_REVIEW_TIME = 9 * 3600000L
+    private val DEFAULT_MANNUAL_DND_ENABLE = false
     private val DEFAULT_AUTO_DND_ENABLE = false
     private val DEFAULT_AUTO_DND_START_TIME = 9 * 3600000L
     private val DEFAULT_AUTO_DND_END_TIME = 10 * 3600000L
@@ -129,8 +132,37 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
             else -> Color.TRANSPARENT
         }
 
-    val isAutoDndEnable = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE,
-            DEFAULT_AUTO_DND_ENABLE)
+    val isDndEnable: Boolean
+        get() {
+            if (isForceDndEnable) return true
+
+            //Check if we have auto DND enabled?
+            if (isAutoDndEnable) {
+                val currentMillsFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis())
+
+                //Check if we are in the range of auto dnd time?
+                return if (autoDndEndTime >= autoDndStartTime) {
+                    //End time is more than start time
+                    //e.g. start time is 4:00 PM and end time is 5:00 PM
+                    currentMillsFrom12Am in autoDndStartTime..autoDndEndTime
+                } else {
+                    //End time is less than start time
+                    //e.g. start time is 11:00 PM and end time is 1:00 AM
+                    currentMillsFrom12Am in autoDndStartTime..TimeUtils.ONE_DAY_MILLISECONDS
+                            && currentMillsFrom12Am in 0..autoDndEndTime
+                }
+            }
+
+            return false
+        }
+
+    private val isForceDndEnable: Boolean
+        get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE,
+                DEFAULT_MANNUAL_DND_ENABLE)
+
+    val isAutoDndEnable
+        get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE,
+                DEFAULT_AUTO_DND_ENABLE)
 
     val autoDndStartTime: Long
         get() = sharedPrefProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_AUTO_DND_START_TIME_FROM_12AM,

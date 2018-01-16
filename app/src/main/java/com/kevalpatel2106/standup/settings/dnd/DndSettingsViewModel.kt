@@ -56,6 +56,7 @@ class DndSettingsViewModel : BaseViewModel {
     internal val autoDndTime = MutableLiveData<String>()
     internal val sleepTime = MutableLiveData<String>()
     internal val isAutoDndEnable = MutableLiveData<Boolean>()
+    internal val isDndEnable = MutableLiveData<Boolean>()
 
     fun init() {
         isAutoDndEnable.value = userSettingsManager.isAutoDndEnable
@@ -65,10 +66,16 @@ class DndSettingsViewModel : BaseViewModel {
 
     fun onAutoDndTurnedOn() {
         isAutoDndEnable.value = true
+
+        //Check iff the DND status
+        isDndEnable.value = userSettingsManager.isDndEnable
     }
 
     fun onAutoDndTurnedOff() {
         isAutoDndEnable.value = false
+
+        //Check iff the DND status
+        isDndEnable.value = userSettingsManager.isDndEnable
     }
 
     fun onSelectAutoDndTime(supportFragmentManager: FragmentManager) {
@@ -85,6 +92,9 @@ class DndSettingsViewModel : BaseViewModel {
 
                 //Publish the update
                 autoDndTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndEndTime)}"
+
+                //Check iff the DND status
+                isDndEnable.value = userSettingsManager.isDndEnable
             }
         })
     }

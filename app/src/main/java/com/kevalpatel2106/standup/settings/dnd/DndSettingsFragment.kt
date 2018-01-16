@@ -24,8 +24,12 @@ import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.standup.settings.findPrefrance
 import com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
+import com.kevalpatel2106.standup.settings.widget.BaseTopSwitchPreference
+import com.kevalpatel2106.utils.SharedPrefsProvider
+import javax.inject.Inject
 
 class DndSettingsFragment : PreferenceFragmentCompat() {
 
@@ -38,6 +42,8 @@ class DndSettingsFragment : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val manualDndSwitch = findPrefrance(R.string.pref_key_dnd_enable) as BaseTopSwitchPreference
+        manualDndSwitch.isChecked = UserSettingsManager(SharedPrefsProvider(context!!)).isDndEnable
 
         setAutoDndSection()
         setSleepHours()

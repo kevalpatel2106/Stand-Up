@@ -169,12 +169,20 @@ internal object SharedPreferenceKeys {
     const val PREF_KEY_DAILY_REVIEW_TIME_12AM = "pref_key_daily_review_time_12am"
 
     /**
+     * Boolean to indicate weather the manual dnd is enabled or not? Default value is false.
+     *
+     * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.isAutoDndEnable]
+     */
+    const val PREF_KEY_IS_FORCE_DND_ENABLE = "pref_key_dnd_enable"
+
+    /**
      * Boolean to indicate weather the auto dnd is enabled or not? Default value is false.
      *
      * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.
      * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.isAutoDndEnable]
      */
-    const val PREF_KEY_IS_AUTO_DND_ENABLE = "pref_key_dnd_enable"
+    const val PREF_KEY_IS_AUTO_DND_ENABLE = "pref_key_auto_dnd_enable"
 
     /**
      * Long that indicates start time for the auto dnd mode in milliseconds from the 12 AM of the day.
