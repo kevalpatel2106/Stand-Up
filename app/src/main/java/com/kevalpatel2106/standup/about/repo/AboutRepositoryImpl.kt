@@ -34,6 +34,18 @@ import javax.inject.Named
 class AboutRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit,
                           private val userSessionManager: UserSessionManager) : AboutRepository {
 
+    /**
+     * Get the latest version of the android application.
+     *
+     * It calls [AboutApiService.getLatestVersion] endpoint to call the server and returns the response
+     * as [CheckVersionResponse]. In the response [CheckVersionResponse.isUpdate] true indicates that,
+     * the application has update available. [CheckVersionResponse.latestVersionName] contains the
+     * latest version name.
+     *
+     * @see AboutApiService.getLatestVersion
+     * @see CheckVersionRequest
+     * @see CheckVersionResponse
+     */
     override fun getLatestVersion(): Flowable<CheckVersionResponse> {
         val checkVersionRequest = CheckVersionRequest(BuildConfig.VERSION_CODE)
         val call = retrofit.create(AboutApiService::class.java).getLatestVersion(checkVersionRequest)
@@ -45,6 +57,19 @@ class AboutRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Ret
                 .map { t -> t.data }
     }
 
+    /**
+     * Report new issue for the application based on issue [title] and the issue [message]. The
+     * unique [deviceId] is passed along with other device information such as [ReportIssueRequest.deviceId]
+     * and [ReportIssueRequest.deviceName].
+     *
+     * This function will internally call [AboutApiService.reportIssue]
+     * endpoint and send the issue data to the server. The response [ReportIssueResponse] contains
+     * [ReportIssueResponse.issueId] to uniquely identify the issue later on.
+     *
+     * @see AboutApiService.reportIssue
+     * @see ReportIssueRequest
+     * @see ReportIssueResponse
+     */
     override fun reportIssue(title: String, message: String, deviceId: String): Flowable<ReportIssueResponse> {
         val reportIssueRequest = ReportIssueRequest(userSessionManager.userId, title, message, deviceId)
         val call = retrofit.create(AboutApiService::class.java).reportIssue(reportIssueRequest)

@@ -27,11 +27,11 @@ import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.constants.logEvent
+import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorService
+import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerService
+import com.kevalpatel2106.standup.core.sync.SyncService
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.misc.UserSessionManager
-import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
-import com.kevalpatel2106.standup.reminder.notification.NotificationSchedulerService
-import com.kevalpatel2106.standup.reminder.sync.SyncService
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import io.reactivex.Completable

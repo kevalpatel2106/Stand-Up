@@ -15,35 +15,30 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.di
+package com.kevalpatel2106.standup.core.di
 
-import com.kevalpatel2106.standup.about.repo.AboutRepository
-import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
 import com.kevalpatel2106.standup.application.di.AppModule
+import com.kevalpatel2106.standup.core.repo.CoreRepo
+import com.kevalpatel2106.standup.core.repo.CoreRepoImpl
+import com.kevalpatel2106.standup.db.DbModule
+import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.misc.ApplicationScope
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
 import javax.inject.Named
 
 /**
- * Created by Kevalpatel2106 on 09-Jan-18.
- * A dagger [Module] for about package.
+ * Created by Keval on 10/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module
-class AboutModule {
+@Module(includes = [DbModule::class])
+class CoreModule {
 
-    /**
-     * Get the instance of [com.kevalpatel2106.standup.authentication.repo.UserAuthRepository].
-     *
-     * @see Provides
-     */
     @Provides
     @ApplicationScope
-    fun provideUserAuthRepo(@Named(AppModule.WITH_TOKEN) retrofit: Retrofit,
-                            userSessionManager: UserSessionManager): AboutRepository
-            = AboutRepositoryImpl(retrofit, userSessionManager)
+    fun provideReminderRepo(userActivityDao: UserActivityDao,
+                            @Named(AppModule.WITH_TOKEN) retrofit: Retrofit): CoreRepo
+            = CoreRepoImpl(userActivityDao, retrofit)
 }

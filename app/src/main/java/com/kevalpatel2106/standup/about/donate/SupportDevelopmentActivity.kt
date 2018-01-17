@@ -21,18 +21,29 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import butterknife.OnClick
+import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.misc.SUUtils
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.
+ * A [BaseActivity] to display the support development screen. This screen contains options to
+ * donate money via PayPal. User can donate any amount from [DonationAmount].
+ * TODO : Convert PayPal donations to IAP.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@UIController
 class SupportDevelopmentActivity : BaseActivity() {
 
+    /**
+     * View model for this activity.
+     *
+     * @see [SupportDevelopmentViewModel]
+     */
     private lateinit var model: SupportDevelopmentViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,31 +51,49 @@ class SupportDevelopmentActivity : BaseActivity() {
         model = SupportDevelopmentViewModel()
 
         setContentView(R.layout.activity_support_developement)
-        setToolbar(R.id.toolbar, "", true)
+
+        //Set the toolbar
+        setToolbar(R.id.toolbar, "" /* Title is set in the xml. */, true)
     }
 
+    /**
+     * Method handles donate 2 dollar button click.
+     */
     @OnClick(R.id.donate_two_dollar_card)
     fun donate2Dollar() {
-        SUUtils.openLink(this@SupportDevelopmentActivity,
-                getString(model.getDonationLink(2)))
+
+        //Open the PayPal link
+        SUUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(2)))
     }
 
+    /**
+     * Method handles donate 5 dollar button click.
+     */
     @OnClick(R.id.donate_five_dollar_card)
     fun donate5Dollar() {
-        SUUtils.openLink(this@SupportDevelopmentActivity,
-                getString(model.getDonationLink(5)))
+
+        //Open the PayPal link
+        SUUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(5)))
     }
 
+    /**
+     * Method handles donate 10 dollar button click.
+     */
     @OnClick(R.id.donate_ten_dollar_card)
     fun donate10Dollar() {
-        SUUtils.openLink(this@SupportDevelopmentActivity,
-                getString(model.getDonationLink(10)))
+
+        //Open the PayPal link
+        SUUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(10)))
     }
 
+    /**
+     * Method handles donate 20 dollar button click. Awesome!!! :-)
+     */
     @OnClick(R.id.donate_twenty_dollar_card)
     fun donate20Dollar() {
-        SUUtils.openLink(this@SupportDevelopmentActivity,
-                getString(model.getDonationLink(20)))
+
+        //Open the PayPal link
+        SUUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(20)))
     }
 
     companion object {

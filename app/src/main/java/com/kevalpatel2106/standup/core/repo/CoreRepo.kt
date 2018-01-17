@@ -15,21 +15,25 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.donate;
+package com.kevalpatel2106.standup.core.repo
 
-import android.support.annotation.IntDef;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import io.reactivex.Completable
+import io.reactivex.Single
 
 /**
- * Created by Keval on 23/12/17.
- * Annotation for the donation amounts.
+ * Created by Keval on 15/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+interface CoreRepo {
 
-@Retention(RetentionPolicy.SOURCE)
-@IntDef({2, 5, 10, 20})
-@interface DonationAmount {
+    /**
+     * This will store [newActivity] into the database and terminate the previous event with the
+     * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
+     * inert [newActivity].
+     */
+    fun insertNewAndTerminatePreviousActivity(newActivity: UserActivity): Single<Long>
+
+    fun sendPendingActivitiesToServer(): Completable
 }

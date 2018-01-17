@@ -234,8 +234,8 @@
 
         <!-- Receive the broadcast if the user is unauthorised. -->
         <receiver
-            android:name=".reminder.SystemEventReceiver"
-            android:enabled="false"
+            android:name=".core.SystemEventReceiver"
+            android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -243,6 +243,11 @@
                 <action android:name="android.intent.action.PACKAGE_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".core.dailyReview.DailyReviewReceiver"
+            android:enabled="false"
+            android:exported="false" />
 
         <!-- =============================== SERVICE ================================ -->
         <!-- Begin: Firebase service -->
@@ -270,7 +275,7 @@
 
         <!-- Job service to fire the reminder notifications -->
         <service
-            android:name=".reminder.notification.NotificationSchedulerService"
+            android:name=".core.reminder.NotificationSchedulerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
@@ -279,7 +284,7 @@
 
         <!-- Job service to monitor the user activity. -->
         <service
-            android:name=".reminder.activityMonitor.ActivityMonitorService"
+            android:name=".core.activityMonitor.ActivityMonitorService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
@@ -288,7 +293,7 @@
 
         <!-- Job service to sync all the user activity data with the server -->
         <service
-            android:name=".reminder.sync.SyncService"
+            android:name=".core.sync.SyncService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />

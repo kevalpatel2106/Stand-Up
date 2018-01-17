@@ -15,21 +15,19 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.donate;
+package com.kevalpatel2106.standup.core.repo
 
-import android.support.annotation.IntDef;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import okhttp3.Response
+import retrofit2.Call
+import retrofit2.http.POST
 
 /**
- * Created by Keval on 23/12/17.
- * Annotation for the donation amounts.
+ * Created by Keval on 15/12/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+internal interface CoreApiService {
 
-@Retention(RetentionPolicy.SOURCE)
-@IntDef({2, 5, 10, 20})
-@interface DonationAmount {
+    @POST("/addActivity")
+    fun addNewActivity(): Call<Response>
 }

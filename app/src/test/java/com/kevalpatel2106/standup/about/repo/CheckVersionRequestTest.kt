@@ -36,7 +36,7 @@ class CheckVersionRequestTest {
     fun checkInit() {
         val request = CheckVersionRequest(1)
 
-        Assert.assertEquals(request.platform, CheckVersionRequest.PLATFORM_NAME)
+        Assert.assertEquals(request.platform, CheckVersionRequest.PLATFORM_NAME_ANDROID)
         Assert.assertEquals(request.versionCode, 1)
     }
 

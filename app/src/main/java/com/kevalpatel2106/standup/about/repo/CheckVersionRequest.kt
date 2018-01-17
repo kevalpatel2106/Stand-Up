@@ -23,24 +23,41 @@ import com.kevalpatel2106.standup.misc.Validator
 
 /**
  * Created by Kevalpatel2106 on 29-Dec-17.
+ * Request POKO for the [AboutApiService.getLatestVersion] endpoint.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @see AboutApiService.getLatestVersion
  */
 @Model
 data class CheckVersionRequest(
 
+        /**
+         * Current version code of the application. It must be positive, non-zero integer value.
+         * Check [com.kevalpatel2106.standup.misc.Validator.isValidVersionCode] for validation.
+         *
+         * @see com.kevalpatel2106.standup.misc.Validator.isValidVersionCode
+         */
         @SerializedName("version")
         val versionCode: Int
 ) {
 
     companion object {
-        const val PLATFORM_NAME = "android"
+
+        /**
+         * Name of android platform as defined on the backend.
+         */
+        const val PLATFORM_NAME_ANDROID = "android"
     }
 
+    /**
+     * Name of the application platform. For this code base it will be [PLATFORM_NAME_ANDROID].
+     */
     @SerializedName("platform")
-    val platform = PLATFORM_NAME
+    val platform = PLATFORM_NAME_ANDROID
 
     init {
+
+        //Check if the version code is valid.
         if (!Validator.isValidVersionCode(versionCode)) {
             throw IllegalArgumentException("Version name must be positive non-zero number. Current: "
                     .plus(versionCode))

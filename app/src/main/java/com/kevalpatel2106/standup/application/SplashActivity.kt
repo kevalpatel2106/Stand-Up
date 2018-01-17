@@ -26,12 +26,11 @@ import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivit
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
+import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.standup.main.MainActivity
-import com.kevalpatel2106.standup.profile.EditProfileActivity
-import com.kevalpatel2106.standup.reminder.activityMonitor.ActivityMonitorService
-import com.kevalpatel2106.standup.settings.list.SettingsListActivity
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.standup.misc.UserSessionManager
+import com.kevalpatel2106.standup.profile.EditProfileActivity
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import javax.inject.Inject
 
 /**

@@ -23,15 +23,27 @@ import retrofit2.http.POST
 
 /**
  * Created by Kevalpatel2106 on 29-Dec-17.
+ * This class contains the list of retrofit end-points for the about package.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 interface AboutApiService {
 
+    /**
+     * Get the latest version of the android application available.
+     *
+     * @see checkVersionRequest
+     */
     //TODO Create api from the server side
     @POST("/checkVersion")
     fun getLatestVersion(@Body checkVersionRequest: CheckVersionRequest): Call<CheckVersionResponse>
 
+    /**
+     * Report an issue for the application. This end-point sends the json request based on
+     * [ReportIssueRequest] which contains [ReportIssueRequest.title] and [ReportIssueRequest.message].
+     *
+     * @see ReportIssueRequest
+     */
     //TODO Create api from the server side
     @POST("/reportIssue")
     fun reportIssue(@Body issue: ReportIssueRequest): Call<ReportIssueResponse>

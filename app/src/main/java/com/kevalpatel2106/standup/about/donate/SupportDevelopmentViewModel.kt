@@ -24,12 +24,21 @@ import com.kevalpatel2106.standup.R
 
 /**
  * Created by Keval on 23/12/17.
+ * A [com.kevalpatel2106.base.annotations.ViewModel] for [SupportDevelopmentActivity].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @see SupportDevelopmentActivity
  */
 @ViewModel(SupportDevelopmentActivity::class)
 class SupportDevelopmentViewModel {
 
+    /**
+     * Get the link for the PayPal.me donation base on the donation [amount]. Donation [amount] must
+     * be from [DonationAmount]. If the amount is other than [DonationAmount], this method will return
+     * [R.string.donate_2_dollar_link].
+     *
+     * @see DonationAmount
+     */
     @SuppressLint("SwitchIntDef")
     @StringRes
     internal fun getDonationLink(@DonationAmount amount: Int): Int = when (amount) {

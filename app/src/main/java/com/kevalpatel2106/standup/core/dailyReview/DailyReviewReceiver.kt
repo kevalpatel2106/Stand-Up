@@ -15,21 +15,26 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.donate;
+package com.kevalpatel2106.standup.core.dailyReview
 
-import android.support.annotation.IntDef;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import timber.log.Timber
 
 /**
- * Created by Keval on 23/12/17.
- * Annotation for the donation amounts.
+ * Created by Keval on 17/01/18.
+ * A receiver to get callback whenever the daily review alarm goes off. This receiver will generate
+ * the daily review notification and fire it.
+ *
+ * Due to the background limitations in Android O, we can not let this function run more than 10 secs.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+class DailyReviewReceiver : BroadcastReceiver() {
 
-@Retention(RetentionPolicy.SOURCE)
-@IntDef({2, 5, 10, 20})
-@interface DonationAmount {
+    override fun onReceive(p0: Context?, p1: Intent?) {
+        Timber.i("Displaying the daily review notification.")
+    }
+
 }

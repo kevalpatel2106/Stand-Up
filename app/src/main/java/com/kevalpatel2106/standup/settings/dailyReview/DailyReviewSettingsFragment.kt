@@ -74,6 +74,14 @@ class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
         dailyReviewTime.isEnabled = settingsManager.isDailyReviewEnable
         dailyReviewEnableSwitch.setOnPreferenceChangeListener { _, newValue ->
             dailyReviewTime.isEnabled = newValue as Boolean
+
+            context?.let {
+                if (newValue) {
+                    model.onDailyReviewTurnedOn(it)
+                } else {
+                    model.onDailyReviewTurnedOff(it)
+                }
+            }
             return@setOnPreferenceChangeListener true
         }
     }

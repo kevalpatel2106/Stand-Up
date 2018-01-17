@@ -15,26 +15,33 @@
  *
  */
 
-package com.kevalpatel2106.standup.about.di
+package com.kevalpatel2106.standup.core.di
 
-import com.kevalpatel2106.standup.about.AboutViewModel
-import com.kevalpatel2106.standup.about.report.ReportIssueViewModel
 import com.kevalpatel2106.standup.application.di.AppComponent
+import com.kevalpatel2106.standup.core.SystemEventReceiver
+import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorService
+import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerService
+import com.kevalpatel2106.standup.core.reminder.ReminderNotification
+import com.kevalpatel2106.standup.core.sync.SyncService
 import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Component
 
 /**
- * Created by Kevalpatel2106 on 09-Jan-18.
- * A dagger [Component] for the about module. This [Component] includes [AboutModule].
+ * Created by Keval on 10/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
- * @see AboutModule
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [AboutModule::class])
-interface AboutComponent {
+@Component(dependencies = [AppComponent::class], modules = [CoreModule::class])
+interface CoreComponent {
 
-    fun inject(aboutViewModel: AboutViewModel)
+    fun inject(activityMonitorService: ActivityMonitorService)
 
-    fun inject(reportIssueViewModel: ReportIssueViewModel)
+    fun inject(notificationSchedulerService: NotificationSchedulerService)
+
+    fun inject(syncService: SyncService)
+
+    fun inject(systemEventReceiver: SystemEventReceiver)
+
+    fun inject(reminderNotification: ReminderNotification)
 }

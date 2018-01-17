@@ -24,26 +24,48 @@ import com.kevalpatel2106.standup.misc.Validator
 
 /**
  * Created by Kevalpatel2106 on 29-Dec-17.
+ * Response POKO for the [AboutApiService.getLatestVersion] endpoint.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @see AboutApiService.getLatestVersion
  */
 @Model
 data class CheckVersionResponse(
 
+        /**
+         * Name of the latest version of available application. (e.g. 1.1.0)
+         */
         @SerializedName("latestVersionName")
         val latestVersionName: String,
 
+        /**
+         * Version code of the latest available application. (e.g. 45) It must be positive, non-zero
+         * integer value. Check [com.kevalpatel2106.standup.misc.Validator.isValidVersionCode] for
+         * validation.
+         *
+         * @see com.kevalpatel2106.standup.misc.Validator.isValidVersionCode
+         */
         @SerializedName("latestVersionCode")
         val latestVersionCode: Int,
 
+        /**
+         * Release note /Changelog for the latest version. (e.g. Bug fixes.) This may be null.
+         */
         @SerializedName("releaseNotes")
         val releaseNotes: String?
 ) {
 
+    /**
+     * Boolean to set tru if there is new update available or false. It checks [latestVersionCode]
+     * with the [BuildConfig.VERSION_CODE] and if the [latestVersionCode] is higher than
+     * [BuildConfig.VERSION_CODE] indicates new version for the application is available.
+     */
     val isUpdate: Boolean
         get() = latestVersionCode > BuildConfig.VERSION_CODE
 
     init {
+
+        //Validate the version code
         if (!Validator.isValidVersionCode(latestVersionCode)) {
             throw IllegalArgumentException("Version name must be positive non-zero number. Current: "
                     .plus(latestVersionCode))

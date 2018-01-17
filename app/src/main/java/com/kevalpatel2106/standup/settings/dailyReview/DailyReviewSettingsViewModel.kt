@@ -24,6 +24,7 @@ import android.content.Context
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.application.BaseApplication
+import com.kevalpatel2106.standup.core.dailyReview.DailyReviewHelper
 import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.utils.TimeUtils
@@ -69,7 +70,22 @@ class DailyReviewSettingsViewModel : BaseViewModel {
      */
     @SuppressLint("VisibleForTests")
     private fun init() {
-        updateDailyReviewTimeSummary()
+        dailyReviewTimeSummary.value = TimeUtils.convertToHHmmaFrom12Am(settingsManager.dailyReviewTimeFrom12Am)
+    }
+
+    internal fun onDailyReviewTurnedOff(context: Context) {
+        //Cancel the upcoming alarm, if any.
+        DailyReviewHelper.cancelAlarm(context)
+    }
+
+    internal fun onDailyReviewTurnedOn(context: Context) = rescheduleDailyReviewAlarm(context)
+
+    private fun rescheduleDailyReviewAlarm(context: Context) {
+        //Cancel the upcoming alarm, if any.
+        DailyReviewHelper.cancelAlarm(context)
+
+        //Register new alarm
+        DailyReviewHelper.registerDailyReview(context, settingsManager)
     }
 
     /**
@@ -85,19 +101,14 @@ class DailyReviewSettingsViewModel : BaseViewModel {
             //Save new time
             settingsManager.dailyReviewTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(hours, mins)
 
-            updateDailyReviewTimeSummary()
+            //Update the summary time
+            dailyReviewTimeSummary.value = TimeUtils.convertToHHmmaFrom12Am(settingsManager.dailyReviewTimeFrom12Am)
+
+            //daily review timing changed. Update the alarms.
+            rescheduleDailyReviewAlarm(context)
         }, cal.get(Calendar.HOUR_OF_DAY),
                 cal.get(Calendar.MINUTE),
                 false)
                 .show()
     }
-
-    /**
-     * Load the daily review time from the [settingsManager] and update [dailyReviewTimeSummary].
-     */
-    @VisibleForTesting
-    internal fun updateDailyReviewTimeSummary() {
-        dailyReviewTimeSummary.value = TimeUtils.convertToHHmmaFrom12Am(settingsManager.dailyReviewTimeFrom12Am)
-    }
-
 }
