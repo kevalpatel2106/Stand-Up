@@ -240,7 +240,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-                <action android:name="android.intent.action.PACKAGE_CHANGED" />
             </intent-filter>
         </receiver>
 
@@ -272,33 +271,6 @@
         <service
             android:name=".authentication.deviceReg.RegisterDeviceService"
             tools:ignore="ExportedService" />
-
-        <!-- Job service to fire the reminder notifications -->
-        <service
-            android:name=".core.reminder.NotificationSchedulerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-
-        <!-- Job service to monitor the user activity. -->
-        <service
-            android:name=".core.activityMonitor.ActivityMonitorService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
-
-        <!-- Job service to sync all the user activity data with the server -->
-        <service
-            android:name=".core.sync.SyncService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>

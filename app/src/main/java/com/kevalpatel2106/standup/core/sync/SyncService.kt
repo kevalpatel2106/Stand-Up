@@ -18,13 +18,12 @@
 package com.kevalpatel2106.standup.core.sync
 
 import android.annotation.SuppressLint
-import android.content.Context
-import com.firebase.jobdispatcher.FirebaseJobDispatcher
-import com.firebase.jobdispatcher.GooglePlayDriver
-import com.firebase.jobdispatcher.JobParameters
-import com.firebase.jobdispatcher.JobService
+import android.support.annotation.VisibleForTesting
+import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
+import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.repo.CoreRepo
@@ -47,11 +46,11 @@ import javax.inject.Inject
  * with the server.
  *
  * Periodic Syncing:
- * - This [JobService] is scheduled to run periodically (untill the next boot) at the interval of
+ * - This [AsyncJob] is scheduled to run periodically (until the next boot) at the interval of
  * [com.kevalpatel2106.standup.misc.UserSettingsManager.syncInterval] milliseconds. User can change this
  * sync interval form the [com.kevalpatel2106.standup.settings.syncing.SyncSettingsFragment].
  *
- * - This [JobService] will only run if internet connection is available.
+ * - This [AsyncJob] will only run if internet connection is available.
  *
  * - Periodic syncing should only work if [com.kevalpatel2106.standup.misc.UserSettingsManager.enableBackgroundSync]
  * is true.
@@ -82,48 +81,76 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class SyncService : JobService() {
+class SyncService : AsyncJob() {
 
     /**
      * [CompositeDisposable] for collecting all [io.reactivex.disposables.Disposable]. It will get
      * cleared when the service stops.
      *
-     * @see onDestroy
+     * @see destroyJob
      */
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     companion object {
 
         /**
+         * A unique tag for periodic sync job.
+         *
+         * @see scheduleSync
+         */
+        @VisibleForTesting
+        internal const val SYNC_JOB_TAG = "sync_job"
+
+        /**
+         * Unique tag for manual sync job.
+         *
+         * @see syncNow
+         */
+        @VisibleForTesting
+        internal const val SYNC_NOW_JOB_TAG = "sync_now_job"
+
+        /**
          * Forcefully start syncing all the pending [com.kevalpatel2106.standup.db.userActivity.UserActivity]
          * with the server. This will ignore all the scheduled [SyncService] jobs and runs instantaneously.
          *
          * If the [SyncService] is already running while this method get invoke, call will be discarded.
-         *
-         * @see SyncServiceHelper.prepareJob
          */
         @SuppressLint("VisibleForTests")
         @JvmStatic
-        internal fun syncNow(context: Context) {
-            //Schedule the job
-            FirebaseJobDispatcher(GooglePlayDriver(context))
-                    .mustSchedule(SyncServiceHelper.prepareJob(context))
+        internal fun syncNow() {
+            synchronized(SyncService::class) {
 
-            Timber.i("Forcing the manual syncing...")
+                //Schedule the job
+                val id = JobRequest.Builder(SYNC_JOB_TAG)
+                        .setUpdateCurrent(true)
+                        .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                        .startNow()
+                        .build()
+                        .schedule()
+
+                Timber.i("Forcing the manual syncing with job id: $id")
+            }
         }
 
         @SuppressLint("VisibleForTests")
         @JvmStatic
-        internal fun scheduleSync(context: Context, interval: Int) {
-            //Schedule the job
-            FirebaseJobDispatcher(GooglePlayDriver(context))
-                    .mustSchedule(SyncServiceHelper.prepareJob(context, interval))
-            Timber.i("Next sync job is scheduled after :".plus(interval).plus(" milliseconds."))
+        internal fun scheduleSync(intervalMills: Long) {
+            synchronized(SyncService::class) {
+                //Schedule the job
+                val id = JobRequest.Builder(SYNC_JOB_TAG)
+                        .setUpdateCurrent(true)
+                        .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                        .setPeriodic(intervalMills, CoreConfig.SYNC_SERVICE_PERIOD_TOLERANCE)
+                        .build()
+                        .schedule()
+
+                Timber.i("Next sync job with id $id is scheduled after :$intervalMills milliseconds.")
+            }
         }
 
         @JvmStatic
-        internal fun cancelScheduledSync(context: Context) {
-            FirebaseJobDispatcher(GooglePlayDriver(context)).cancel(SyncServiceHelper.SYNC_JOB_TAG)
+        internal fun cancelScheduledSync() {
+            JobManager.instance().cancelAllForTag(SYNC_JOB_TAG)
             Timber.i("All the sync jobs are canceled.")
         }
 
@@ -138,28 +165,28 @@ class SyncService : JobService() {
         internal fun isSyncingCurrently() = isSyncing
     }
 
-    @Inject lateinit var userSessionManager: UserSessionManager
+    /**
+     * [SharedPrefsProvider] for accessing the preferences.
+     */
+    @Inject
+    lateinit var sharedPrefsProvider: SharedPrefsProvider
 
-    @Inject lateinit var coreRepo: CoreRepo
+    /**
+     * [UserSessionManager] for getting the user session details.
+     */
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
 
-    override fun onCreate() {
-        super.onCreate()
+    @Inject
+    lateinit var coreRepo: CoreRepo
+
+    override fun onRunJobAsync(params: Params) {
 
         //Inject dependencies
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SyncService)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
-    }
-
-    @SuppressLint("VisibleForTests")
-    override fun onStartJob(job: JobParameters): Boolean {
-        Timber.d("Syncing job started.")
 
         if (SyncServiceHelper.shouldSync(userSessionManager)) {
 
@@ -171,22 +198,13 @@ class SyncService : JobService() {
                         compositeDisposable.add(it)
 
                         //Let others know sync started.
-                        isSyncing = true
-                        RxBus.post(Event(CoreConfig.TAG_RX_SYNC_STARTED))
-                        Timber.i("Syncing started...")
+                        notifySyncStarted()
                     }
                     .doAfterTerminate {
-                        jobFinished(job, false)
+                        //Let others know sync stopped.
+                        notifySyncTerminated(sharedPrefsProvider)
 
-                        //Save the last syncing time
-                        SharedPrefsProvider(this@SyncService).savePreferences(
-                                SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME,
-                                System.currentTimeMillis() - 1000L /* Remove one second to prevent displaying 0 seconds in sync settings. */)
-
-                        //Syncing stopped.
-                        isSyncing = false
-                        RxBus.post(Event(CoreConfig.TAG_RX_SYNC_ENDED))
-                        Timber.i("Syncing completed...")
+                        destroyJob()
                     }
                     .subscribe({
                         //NO OP
@@ -195,16 +213,33 @@ class SyncService : JobService() {
                         //NO OP
                         Timber.e(it.message)
                     })
-            return true
         } else {
 
             //Do nothing.
             //You shouldn't be syncing.
-            return false
+            destroyJob()
         }
     }
 
-    override fun onStopJob(job: JobParameters?): Boolean {
-        return true    //Job done. Wait for the jobParams to finish
+    private fun notifySyncTerminated(sharedPrefsProvider: SharedPrefsProvider) {
+        //Save the last syncing time
+        sharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME,
+                System.currentTimeMillis() - 1000L /* Remove one second to prevent displaying 0 seconds in sync settings. */)
+
+        //Syncing stopped.
+        isSyncing = false
+        RxBus.post(Event(CoreConfig.TAG_RX_SYNC_ENDED))
+        Timber.i("Syncing completed...")
+    }
+
+    private fun notifySyncStarted() {
+        isSyncing = true
+        RxBus.post(Event(CoreConfig.TAG_RX_SYNC_STARTED))
+        Timber.i("Syncing started...")
+    }
+
+    private fun destroyJob() {
+        stopJob(Result.SUCCESS)
+        compositeDisposable.dispose()
     }
 }

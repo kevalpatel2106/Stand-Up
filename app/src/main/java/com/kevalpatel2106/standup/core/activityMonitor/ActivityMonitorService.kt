@@ -17,16 +17,17 @@
 
 package com.kevalpatel2106.standup.core.activityMonitor
 
+import android.app.job.JobScheduler
+import android.app.job.JobService
 import android.content.Context
-import com.firebase.jobdispatcher.FirebaseJobDispatcher
-import com.firebase.jobdispatcher.GooglePlayDriver
-import com.firebase.jobdispatcher.JobParameters
-import com.firebase.jobdispatcher.JobService
+import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobRequest
 import com.google.android.gms.awareness.Awareness
 import com.google.android.gms.awareness.snapshot.DetectedActivityResponse
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
 import com.kevalpatel2106.standup.application.BaseApplication
+import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerService
@@ -42,8 +43,11 @@ import javax.inject.Inject
 
 /**
  * Created by Keval on 30/12/17.
- * This is [JobService] runs periodically after [CoreConfig.MONITOR_SERVICE_PERIOD] seconds. This
- * service is responsible for detecting and monitoring the user activity.
+ * This service is responsible for detecting and monitoring the user activity. This is [JobService]
+ * runs every [CoreConfig.MONITOR_SERVICE_PERIOD] seconds. While finishing the the tasks, this job
+ * will reschedule it again after [CoreConfig.MONITOR_SERVICE_PERIOD]. We cannot set periodic
+ * [JobScheduler] job for such a small duration.
+ *
  *
  * This service will retrieve the activities, which user is currently doing using [
  * Awareness API](https://developers.google.com/awareness/). It users user activity snapshot api to
@@ -68,94 +72,90 @@ import javax.inject.Inject
  * @see ActivityMonitorHelper.isUserSitting
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityResponse> {
+class ActivityMonitorService : AsyncJob(), OnSuccessListener<DetectedActivityResponse> {
+
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    @Inject lateinit var coreRepo: CoreRepo
-    @Inject lateinit var userSessionManager: UserSessionManager
-    @Inject lateinit var sharedPrefsProvider: SharedPrefsProvider
-
     companion object {
+        internal const val ACTIVITY_MONITOR_JOB_TAG = "activity_monitor_job_tag"
 
         @JvmStatic
-        internal fun scheduleMonitoringJob(context: Context) {
-            //Schedule the jobParams
-            FirebaseJobDispatcher(GooglePlayDriver(context))
-                    .mustSchedule(ActivityMonitorHelper.prepareJob(context))
+        internal fun scheduleNextJob() {
+            synchronized(ActivityMonitorService::class) {
+
+                //Schedule the job
+                val id = JobRequest.Builder(ACTIVITY_MONITOR_JOB_TAG)
+                        .setUpdateCurrent(true)
+                        .setExact(CoreConfig.MONITOR_SERVICE_PERIOD)
+                        .build()
+                        .schedule()
+
+                Timber.i("Activity monitoring job with id $id scheduled after ${CoreConfig.MONITOR_SERVICE_PERIOD} milliseconds.")
+            }
         }
 
         @JvmStatic
         internal fun cancel(context: Context) {
-            FirebaseJobDispatcher(GooglePlayDriver(context))
-                    .cancel(ActivityMonitorHelper.ACTIVITY_MONITOR_JOB_TAG)
+            JobManager.instance().cancelAllForTag(ACTIVITY_MONITOR_JOB_TAG)
+
+            Timber.i("Canceling activity monitoring job.")
 
             //Stop the notifications
             NotificationSchedulerService.cancel(context)
         }
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        DaggerCoreComponent.builder()
-                .appComponent(BaseApplication.getApplicationComponent())
-                .build()
-                .inject(this@ActivityMonitorService)
-    }
+    @Inject
+    lateinit var coreRepo: CoreRepo
+
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
+
+    @Inject
+    lateinit var sharedPrefsProvider: SharedPrefsProvider
 
     /**
-     * [JobParameters] received in [onStartJob].
-     */
-    private lateinit var jobParams: JobParameters
-
-    override fun onStopJob(job: JobParameters?): Boolean {
-        return true    //Job done. Do not retry it.
-    }
-
-    /**
-     * Whenever job starts [onStartJob]  will be called. This will check if the activity should
+     * Whenever job starts [onRunJobAsync]  will be called. This will check if the activity should
      * get the list of [DetectedActivity] based on [ActivityMonitorHelper.shouldMonitoringActivity].
      *
      * If [ActivityMonitorHelper.shouldMonitoringActivity] returns true, using [Awareness API](https://developers.google.com/awareness/)
      * it will try to detect current user activity and invoke [onSuccess]. If the activity detection
      * fails, method will terminate current job.
      *
-     * If [ActivityMonitorHelper.shouldMonitoringActivity] returns false, it will terminate all the
-     * upcoming scheduled jobs.
+     * If [ActivityMonitorHelper.shouldMonitoringActivity] returns false, it will terminate the current
+     * job and won't schedule next job.
      *
      * @see onSuccess
      */
-    override fun onStartJob(job: JobParameters): Boolean {
+    override fun onRunJobAsync(params: Params) {
+        DaggerCoreComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@ActivityMonitorService)
 
         //Check if service should be monitoring user activities?
         if (ActivityMonitorHelper.shouldMonitoringActivity(userSessionManager)) {
-            jobParams = job
 
             //Use the snapshot api to get result for the user activity.
-            Awareness.getSnapshotClient(this).detectedActivity
+            Awareness.getSnapshotClient(context).detectedActivity
                     .addOnSuccessListener(this@ActivityMonitorService)
                     .addOnFailureListener {
                         //Error occurred
                         Timber.e(it.message)
-                        finishJob(job)
+
+                        destroyAndScheduleNextJob()
                     }
         } else {
-
-            //This shouldn't happen. Cancel all the upcoming jobs.
-            cancel(this)
-            return false
+            stopJob(Result.SUCCESS)
         }
-        return true    //Job done. Wait for the jobParams to finish
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    private fun destroyAndScheduleNextJob() {
         compositeDisposable.dispose()
+        scheduleNextJob()
+        stopJob(Result.SUCCESS)
     }
 
-    private fun finishJob(job: JobParameters) {
-        //Mark jobParams as finished
-        jobFinished(job, false /* Job done. Do not retry it. */)
-    }
 
     override fun onSuccess(activityResponse: DetectedActivityResponse) {
         Timber.i("Detected Activities: ".plus(activityResponse.activityRecognitionResult.probableActivities.toString()))
@@ -165,13 +165,12 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
 
         //Finish the job if the activity can ignored.
         if (userActivity == null) {
-            finishJob(jobParams)
+            destroyAndScheduleNextJob()
             return
         }
 
         if (ActivityMonitorHelper.shouldScheduleNotification(userActivity, sharedPrefsProvider)) {
-            NotificationSchedulerService.cancel(this@ActivityMonitorService)
-            NotificationSchedulerService.scheduleNotification(this@ActivityMonitorService)
+            NotificationSchedulerService.scheduleNotification(sharedPrefsProvider)
         }
 
         //Add the new value to database.
@@ -179,7 +178,7 @@ class ActivityMonitorService : JobService(), OnSuccessListener<DetectedActivityR
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe { compositeDisposable.add(it) }
-                .doAfterTerminate { finishJob(jobParams) }
+                .doAfterTerminate { destroyAndScheduleNextJob() }
                 .subscribe({
                     //NO OP
                 }, {

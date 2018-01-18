@@ -17,11 +17,7 @@
 
 package com.kevalpatel2106.standup.core.sync
 
-import android.content.Context
-import android.support.annotation.VisibleForTesting
-import com.firebase.jobdispatcher.*
 import com.kevalpatel2106.base.annotations.Helper
-import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.misc.UserSessionManager
 
 /**
@@ -34,53 +30,15 @@ import com.kevalpatel2106.standup.misc.UserSessionManager
 @Helper(SyncService::class)
 object SyncServiceHelper {
 
-    @VisibleForTesting
-    internal const val SYNC_JOB_TAG = "sync_job"
-
-    @VisibleForTesting
-    internal const val SYNC_NOW_JOB_TAG = "sync_now_job"
-
-    @VisibleForTesting
-    @JvmStatic
-    internal fun prepareJob(context: Context): Job {
-        return FirebaseJobDispatcher(GooglePlayDriver(context))
-                .newJobBuilder()
-                .setService(SyncService::class.java)       // the JobService that will be called
-                .setTag(SYNC_NOW_JOB_TAG)         // uniquely identifies the job
-                .setRecurring(false)
-                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
-                .setTrigger(Trigger.NOW)
-                .setReplaceCurrent(true)
-                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                .addConstraint(Constraint.ON_ANY_NETWORK)
-                .build()
-    }
-
-    @VisibleForTesting
-    @JvmStatic
-    internal fun prepareJob(context: Context, interval: Int): Job {
-        return FirebaseJobDispatcher(GooglePlayDriver(context))
-                .newJobBuilder()
-                .setService(SyncService::class.java)       // the JobService that will be called
-                .setTag(SYNC_JOB_TAG)         // uniquely identifies the job
-                .setRecurring(true)
-                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
-                .setTrigger(getExecutionWindow(interval))
-                .setReplaceCurrent(true)
-                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                .addConstraint(Constraint.ON_ANY_NETWORK)
-                .build()
-    }
-
-    @VisibleForTesting
+    /**
+     * Check if the [SyncService] should sync the data with the server?
+     *
+     * @param userSessionManager [UserSessionManager] for getting the current session information.
+     * @return True if sync should happen. False if sync should not perform. (Bad timing for syncing.)
+     * @see SyncService.onRunJobAsync
+     */
     @JvmStatic
     internal fun shouldSync(userSessionManager: UserSessionManager): Boolean {
         return userSessionManager.isUserLoggedIn
-    }
-
-    internal fun getExecutionWindow(interval: Int): JobTrigger.ExecutionWindowTrigger {
-        return Trigger.executionWindow(
-                interval - CoreConfig.SYNC_SERVICE_PERIOD_TOLERANCE,
-                interval + CoreConfig.SYNC_SERVICE_PERIOD_TOLERANCE)
     }
 }

@@ -17,14 +17,8 @@
 
 package com.kevalpatel2106.standup.core.reminder
 
-import android.content.Context
-import android.support.annotation.VisibleForTesting
-import com.firebase.jobdispatcher.*
 import com.kevalpatel2106.base.annotations.Helper
-import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
-import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.misc.UserSessionManager
-import com.kevalpatel2106.utils.SharedPrefsProvider
 
 /**
  * Created by Keval on 05/01/18.
@@ -34,40 +28,6 @@ import com.kevalpatel2106.utils.SharedPrefsProvider
 @Helper(NotificationSchedulerService::class)
 internal object NotificationSchedulerHelper {
 
-    @VisibleForTesting
-    internal const val REMINDER_NOTIFICATION_JOB_TAG = "reminder_notification_job"
-
-    @JvmStatic
-    @VisibleForTesting
-    internal fun prepareJob(context: Context,
-                            scheduleAfterSecs: Int = CoreConfig.STAND_UP_REMINDER_INTERVAL,
-                            sharedPrefsProvider: SharedPrefsProvider): Job {
-
-        //Save the time of upcoming notification.
-        sharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME,
-                System.currentTimeMillis() + scheduleAfterSecs.times(1000))
-
-        return FirebaseJobDispatcher(GooglePlayDriver(context))
-                .newJobBuilder()
-                .setService(NotificationSchedulerService::class.java)       // the JobService that will be called
-                .setTag(REMINDER_NOTIFICATION_JOB_TAG)                      // uniquely identifies the job
-                .setRecurring(false)
-                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
-                .setTrigger(getExecutionWindow(scheduleAfterSecs))
-                .setReplaceCurrent(true)
-                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                .build()
-    }
-
-    @JvmStatic
-    @VisibleForTesting
-    internal fun getExecutionWindow(scheduleAfterSec: Int): JobTrigger.ExecutionWindowTrigger {
-        return Trigger.executionWindow(
-                scheduleAfterSec - CoreConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE,
-                scheduleAfterSec + CoreConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE)
-    }
-
-    @VisibleForTesting
     internal fun shouldDisplayNotification(userSessionManager: UserSessionManager): Boolean {
         return userSessionManager.isUserLoggedIn
     }

@@ -20,9 +20,8 @@ package com.kevalpatel2106.standup.core
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.firebase.jobdispatcher.FirebaseJobDispatcher
-import com.firebase.jobdispatcher.GooglePlayDriver
-import com.google.android.gms.common.GoogleApiAvailability
+import android.support.annotation.VisibleForTesting
+import com.evernote.android.job.JobManager
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorService
 import com.kevalpatel2106.standup.core.dailyReview.DailyReviewHelper
@@ -30,6 +29,7 @@ import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerService
 import com.kevalpatel2106.standup.core.sync.SyncService
 import com.kevalpatel2106.standup.misc.UserSettingsManager
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,44 +40,69 @@ import javax.inject.Inject
  * 1.[Intent.ACTION_MY_PACKAGE_REPLACED] - Whenever stand up app gets updated, it will cancel all
  * the jobs and than after reschedule all the jobs.
  *
- * 2.[Intent.ACTION_PACKAGE_CHANGED] - Whenever the google play services gets updated, receiver
- * will cancel all the jobs and than after reschedule all the jobs. See
- * [issue](https://github.com/firebase/firebase-jobdispatcher-android/issues/6).
- *
- * 3.[Intent.ACTION_BOOT_COMPLETED] - Whenever boot completes, receiver will schedule all the jobs
+ * 2.[Intent.ACTION_BOOT_COMPLETED] - Whenever boot completes, receiver will schedule all the jobs
  * based on user settings in [UserSettingsManager].
+ *
+ * [onReceive] method will first cancel all the jobs scheduled by [JobManager]. Evernote android job
+ * registers all the jobs again on [Intent.ACTION_MY_PACKAGE_REPLACED] or [Intent.ACTION_BOOT_COMPLETED].
+ * So first unregister all the jobs and re-schedule jobs based on the current settings.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class SystemEventReceiver : BroadcastReceiver() {
+class SystemEventReceiver : BroadcastReceiver {
 
-    @Inject lateinit var userSettingsManager: UserSettingsManager
-
-    override fun onReceive(context: Context, intent: Intent) {
+    @Suppress("unused")
+    constructor() {
+        //Inject dependencies.
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SystemEventReceiver)
 
+    }
+
+    @VisibleForTesting
+    constructor(userSettingsManager: UserSettingsManager,
+                sharedPrefsProvider: SharedPrefsProvider) {
+        this.userSettingsManager = userSettingsManager
+        this.sharedPrefsProvider = sharedPrefsProvider
+    }
+
+    /**
+     * [UserSettingsManager] to provide user settings configs.
+     */
+    @Inject
+    lateinit var userSettingsManager: UserSettingsManager
+
+    /**
+     * [SharedPrefsProvider] to access shared preferences.
+     */
+    @Inject
+    lateinit var sharedPrefsProvider: SharedPrefsProvider
+
+    /**
+     * @see BroadcastReceiver.onReceive
+     */
+    override fun onReceive(context: Context, intent: Intent) {
+
+        //Validate the intent actions
+        if (intent.action != Intent.ACTION_BOOT_COMPLETED
+                && intent.action != Intent.ACTION_MY_PACKAGE_REPLACED)
+            return
+
         // Cancel all the job
-        FirebaseJobDispatcher(GooglePlayDriver(context)).cancelAll()
-
-        // Check if the Google Play Services or my current app updated?
-        // If other package updated, we don't care.
-        // Issue: https://github.com/firebase/firebase-jobdispatcher-android/issues/6
-        if (intent.action == Intent.ACTION_PACKAGE_CHANGED) {
-            if (intent.extras[Intent.EXTRA_PACKAGE_NAME] != GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE)  /* The updated app is not google play services */
-                return
-        }
-
-        //Sync all the pending activities.
-        setUpSync(context)
+        // Evernote job automatically schedules all the jobs for you on boot complete.
+        // So, we are going to cancel all the jobs and schedule our own jobs again.
+        JobManager.instance().cancelAll()
 
         //Start monitoring activity.
-        setUpActivityMonitoring(context)
+        setUpActivityMonitoring()
+
+        //Sync all the pending activities.
+        setUpSync()
 
         //Schedule the next reminder
-        setUpNotification(context)
+        setUpNotification(sharedPrefsProvider)
 
         //Schedule the next daily review.
         setUpDailyReview(context)
@@ -85,6 +110,11 @@ class SystemEventReceiver : BroadcastReceiver() {
         Timber.i("Rescheduling of all jobs and alarms completed. :-)")
     }
 
+    /**
+     * Register alarm for daily review notifications.
+     *
+     * @see DailyReviewHelper.registerDailyReview
+     */
     private fun setUpDailyReview(context: Context) {
 
         //Cancel the upcoming alarm, if any.
@@ -94,21 +124,38 @@ class SystemEventReceiver : BroadcastReceiver() {
         DailyReviewHelper.registerDailyReview(context, userSettingsManager)
     }
 
-    private fun setUpNotification(context: Context) {
-        NotificationSchedulerService.scheduleNotification(context)
+    /**
+     * Register the [NotificationSchedulerService] after [CoreConfig.STAND_UP_REMINDER_INTERVAL].
+     *
+     * @see NotificationSchedulerService.scheduleNotification
+     */
+    private fun setUpNotification(sharedPrefsProvider: SharedPrefsProvider) {
+        NotificationSchedulerService.scheduleNotification(sharedPrefsProvider)
     }
 
-    private fun setUpActivityMonitoring(context: Context) {
-        ActivityMonitorService.scheduleMonitoringJob(context)
+    /**
+     * Start monitoring user activity by registering [ActivityMonitorService] after
+     * [CoreConfig.MONITOR_SERVICE_PERIOD].
+     *
+     * @see ActivityMonitorService.scheduleNextJob
+     */
+    private fun setUpActivityMonitoring() {
+        ActivityMonitorService.scheduleNextJob()
     }
 
-    private fun setUpSync(context: Context) {
+    /**
+     * Register next sync with the server after [UserSettingsManager.syncInterval] by registering
+     * [SyncService].
+     *
+     * @see SyncService.scheduleSync
+     */
+    private fun setUpSync() {
 
         //Check if the background sync is enabled?
         if (userSettingsManager.enableBackgroundSync) {
 
             //Schedule periodic the sync service.
-            SyncService.scheduleSync(context, userSettingsManager.syncInterval.toInt())
+            SyncService.scheduleSync(userSettingsManager.syncInterval)
         } else {
             Timber.i("Background sync is disabled by the user. Skipping it.")
         }

@@ -87,7 +87,7 @@ class SplashActivity : BaseActivity() {
             } else {    //All looks good.
 
                 //Start activity monitoring if not running
-                ActivityMonitorService.scheduleMonitoringJob(this@SplashActivity)
+                ActivityMonitorService.scheduleNextJob()
 
                 //Launch the dashboard.
                 MainActivity.launch(this@SplashActivity)

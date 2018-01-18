@@ -17,14 +17,10 @@
 
 package com.kevalpatel2106.standup.core.activityMonitor
 
-import com.firebase.jobdispatcher.Lifetime
-import com.firebase.jobdispatcher.RetryStrategy
-import com.kevalpatel2106.standup.core.CoreConfig
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.io.IOException
 
@@ -40,27 +36,15 @@ class ActivityMonitorHelperTest {
     @Test
     @Throws(IOException::class)
     fun checkPrepareJob() {
-        val builder = ActivityMonitorHelper.prepareJob(RuntimeEnvironment.application)
+        val builder = ActivityMonitorHelper.prepareJob()
 
-        Assert.assertEquals(builder.constraints.size, 0)
-        Assert.assertTrue(builder.isRecurring)
-        Assert.assertEquals(builder.tag, ActivityMonitorHelper.ACTIVITY_MONITOR_JOB_TAG)
-        Assert.assertEquals(builder.retryStrategy, RetryStrategy.DEFAULT_LINEAR)
-        Assert.assertEquals(builder.lifetime, Lifetime.UNTIL_NEXT_BOOT)
-        Assert.assertEquals(builder.service, ActivityMonitorService::class.java.canonicalName)
-    }
-
-    @Test
-    @Throws(IOException::class)
-    fun checkGetExecutionWindow() {
-        val executionWindow = ActivityMonitorHelper.getExecutionWindow()
-
-        Assert.assertEquals(CoreConfig.MONITOR_SERVICE_PERIOD
-                - CoreConfig.MONITOR_SERVICE_PERIOD_TOLERANCE,
-                executionWindow.windowStart)
-
-        Assert.assertEquals(CoreConfig.MONITOR_SERVICE_PERIOD
-                + CoreConfig.MONITOR_SERVICE_PERIOD_TOLERANCE,
-                executionWindow.windowEnd)
+        Assert.assertFalse(builder.isPersisted)
+        Assert.assertTrue(builder.isRequireBatteryNotLow)
+        Assert.assertTrue(builder.isRequireCharging)
+        Assert.assertTrue(builder.isRequireDeviceIdle)
+        Assert.assertTrue(builder.isRequireStorageNotLow)
+        Assert.assertTrue(builder.isPeriodic)
+        Assert.assertEquals(builder.id, ActivityMonitorHelper.ACTIVITY_MONITOR_JOB_TAG)
+        Assert.assertEquals(builder.service.className, ActivityMonitorService::class.simpleName)
     }
 }

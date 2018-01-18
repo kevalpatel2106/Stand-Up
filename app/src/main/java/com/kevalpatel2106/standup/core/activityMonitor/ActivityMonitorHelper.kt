@@ -17,10 +17,6 @@
 
 package com.kevalpatel2106.standup.core.activityMonitor
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.support.annotation.VisibleForTesting
-import com.firebase.jobdispatcher.*
 import com.google.android.gms.location.DetectedActivity
 import com.kevalpatel2106.base.annotations.Helper
 import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
@@ -39,31 +35,6 @@ import java.util.*
  */
 @Helper(ActivityMonitorService::class)
 internal object ActivityMonitorHelper {
-    internal const val ACTIVITY_MONITOR_JOB_TAG = "activity_monitor_job"
-
-    @SuppressLint("VisibleForTests")
-    @JvmStatic
-    internal fun prepareJob(context: Context): Job {
-        return FirebaseJobDispatcher(GooglePlayDriver(context))
-                .newJobBuilder()
-                .setService(ActivityMonitorService::class.java)       // the JobService that will be called
-                .setTag(ACTIVITY_MONITOR_JOB_TAG)         // uniquely identifies the jobParams
-                .setRecurring(true)
-                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
-                .setTrigger(getExecutionWindow())
-                .setReplaceCurrent(true)
-                .setRetryStrategy(RetryStrategy.DEFAULT_LINEAR)
-                .build()
-    }
-
-
-    @JvmStatic
-    @VisibleForTesting
-    internal fun getExecutionWindow(): JobTrigger.ExecutionWindowTrigger {
-        return Trigger.executionWindow(
-                CoreConfig.MONITOR_SERVICE_PERIOD - CoreConfig.MONITOR_SERVICE_PERIOD_TOLERANCE,
-                CoreConfig.MONITOR_SERVICE_PERIOD + CoreConfig.MONITOR_SERVICE_PERIOD_TOLERANCE)
-    }
 
     internal fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
         if (detectedActivities.size <= 0)

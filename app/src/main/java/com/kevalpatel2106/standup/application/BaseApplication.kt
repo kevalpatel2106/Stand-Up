@@ -25,6 +25,7 @@ import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.application.di.AppModule
 import com.kevalpatel2106.standup.application.di.DaggerAppComponent
+import com.kevalpatel2106.standup.core.CoreJobCreator
 
 /**
  * Created by Keval on 31/12/17.
@@ -62,6 +63,8 @@ abstract class BaseApplication : Application() {
         //Enable firebase analytics
         FirebaseAnalytics.getInstance(this@BaseApplication)
                 .setAnalyticsCollectionEnabled(isReleaseBuild())
+
+        CoreJobCreator.init(this@BaseApplication)
     }
 
     abstract fun isReleaseBuild(): Boolean

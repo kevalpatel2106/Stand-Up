@@ -112,8 +112,6 @@ dependencies {
     implementation project(':spinner-time-picker')
 
     //Test dependency
-    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
     testImplementation(otherLib.roboElectric, excludeGrp)
@@ -152,17 +150,17 @@ dependencies {
     implementation(firebaseLib.core, excludeGrp)
     implementation(firebaseLib.fcm, excludeGrp)
     implementation(firebaseLib.invites, excludeGrp)
-    implementation(firebaseLib.jobDispacher, excludeGrp)
     implementation(playServiceLib.location, excludeGrp)
     implementation(playServiceLib.awareness, excludeGrp)
 
-    implementation(kevalpatel2106.ringtonePicker, excludeGrp)
 
     //Glide
     implementation(otherLib.glide, excludeGrp)
     kapt(otherLib.glideAnnotation, excludeGrp)
 
     //Other libs
+    implementation(kevalpatel2106.ringtonePicker, excludeGrp)
+    implementation(otherLib.evernoteJob, excludeGrp)
     implementation(otherLib.bottomsheet, excludeGrp)
     implementation(otherLib.circleImagView, excludeGrp)
     implementation(otherLib.aboutlibraries, excludeGrp)
@@ -171,6 +169,3 @@ dependencies {
     releaseImplementation(otherLib.crashalytics) { transitive = true }
 }
 apply plugin: 'com.google.gms.google-services'
-
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'

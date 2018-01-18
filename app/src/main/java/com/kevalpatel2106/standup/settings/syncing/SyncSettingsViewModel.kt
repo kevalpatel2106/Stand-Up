@@ -18,7 +18,6 @@
 package com.kevalpatel2106.standup.settings.syncing
 
 import android.arch.lifecycle.MutableLiveData
-import android.content.Context
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.application.BaseApplication
@@ -38,7 +37,8 @@ import javax.inject.Inject
  */
 class SyncSettingsViewModel : BaseViewModel {
 
-    @Inject lateinit var sharedPrefsProvider: SharedPrefsProvider
+    @Inject
+    lateinit var sharedPrefsProvider: SharedPrefsProvider
 
     internal val isSyncing = MutableLiveData<Boolean>()
     internal val lastSyncTime = MutableLiveData<String>()
@@ -79,20 +79,19 @@ class SyncSettingsViewModel : BaseViewModel {
     /**
      * Start syncing the database with the server right now if the network is available.
      */
-    fun manualSync(context: Context) {
-        if (!SyncService.isSyncingCurrently()) SyncService.syncNow(context)
+    fun manualSync() {
+        if (!SyncService.isSyncingCurrently()) SyncService.syncNow()
         isSyncing.value = true
     }
 
 
-    fun onBackgroundSyncPolicyChange(context: Context, isEnabled: Boolean, interval: Int) {
-
-        //Canceled current job
-        SyncService.cancelScheduledSync(context)
-
-        //reschedule the job if background sync is enabled.
+    fun onBackgroundSyncPolicyChange(isEnabled: Boolean, interval: Long) {
         if (isEnabled) {
-            SyncService.scheduleSync(context, interval)
+            //reschedule the job if background sync is enabled.
+            SyncService.scheduleSync(interval)
+        } else {
+            //Canceled current job
+            SyncService.cancelScheduledSync()
         }
     }
 }

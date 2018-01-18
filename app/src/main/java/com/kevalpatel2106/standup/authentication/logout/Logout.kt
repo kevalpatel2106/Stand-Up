@@ -75,7 +75,7 @@ class Logout constructor(private val application: Application,
         //Cancel all the jobs
         NotificationSchedulerService.cancel(application)
         ActivityMonitorService.cancel(application)
-        SyncService.cancelScheduledSync(application)
+        SyncService.cancelScheduledSync()
 
         //Clear all the notifications
         val manager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

@@ -67,7 +67,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
         //Set sync now
         val syncNowPref = findPrefrance(R.string.pref_key_sync_now) as BasePreference
         syncNowPref.setOnPreferenceClickListener {
-            context?.let { model.manualSync(it) }
+            context?.let { model.manualSync() }
             return@setOnPreferenceClickListener true
         }
         model.isSyncing.observe(this@SyncSettingsFragment, Observer {
@@ -94,9 +94,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
 
             //Reschedule the sync job
             context?.let {
-                model.onBackgroundSyncPolicyChange(it,
-                        settingsManager.enableBackgroundSync,
-                        newValue.toInt())
+                model.onBackgroundSyncPolicyChange(settingsManager.enableBackgroundSync, newValue.toLong())
             }
             return@setOnPreferenceChangeListener false
         }
@@ -110,9 +108,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
 
             //Reschedule the job
             context?.let {
-                model.onBackgroundSyncPolicyChange(it,
-                        newValue,
-                        settingsManager.syncInterval.toInt())
+                model.onBackgroundSyncPolicyChange(newValue, settingsManager.syncInterval)
             }
             return@setOnPreferenceChangeListener true
         }
