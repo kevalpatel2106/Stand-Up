@@ -49,9 +49,9 @@ dokka dokkaConfig
 kotlin kotlinOption
 
 dependencies {
-    implementation project(':base')
+    implementation project(':common')
     implementation project(':utils')
-    implementation project(':base')
+    implementation project(':common')
 
     //Test dependency
     testImplementation project(':test-utils')

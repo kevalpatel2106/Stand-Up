@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.core.di
 
+import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.core.SystemEventReceiver
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
@@ -25,7 +26,6 @@ import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.reminder.ReminderNotification
 import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob
 import com.kevalpatel2106.standup.core.sync.SyncJob
-import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Component
 
 /**

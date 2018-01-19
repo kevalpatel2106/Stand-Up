@@ -29,13 +29,13 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.google.android.gms.appinvite.AppInviteInvitation
-import com.kevalpatel2106.base.uiController.showSnack
+import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
-import com.kevalpatel2106.standup.misc.SUUtils
 import org.jetbrains.anko.alert
 
 class AboutActivity : MaterialAboutActivity() {

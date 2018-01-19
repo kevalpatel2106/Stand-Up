@@ -18,7 +18,7 @@
 package com.kevalpatel2106.standup.core.activityMonitor
 
 import android.content.SharedPreferences
-import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
 import org.junit.Test

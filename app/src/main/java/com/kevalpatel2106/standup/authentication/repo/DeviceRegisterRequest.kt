@@ -19,8 +19,8 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.base.annotations.Model
 import com.kevalpatel2106.utils.Utils
+import com.kevalpatel2106.utils.annotations.Model
 
 /**
  * Created by Keval on 02-Jan-17.

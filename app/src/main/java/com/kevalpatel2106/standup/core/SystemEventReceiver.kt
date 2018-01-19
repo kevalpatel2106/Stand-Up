@@ -22,7 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
-import com.kevalpatel2106.base.UserSettingsManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.dailyReview.DailyReviewHelper

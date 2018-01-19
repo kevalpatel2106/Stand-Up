@@ -17,9 +17,9 @@
 
 package com.kevalpatel2106.network
 
-import com.kevalpatel2106.base.repository.RepoData
-import com.kevalpatel2106.base.repository.SourceType
-import com.kevalpatel2106.base.repository.refresher.Refresher
+import com.kevalpatel2106.common.repository.RepoData
+import com.kevalpatel2106.common.repository.SourceType
+import com.kevalpatel2106.common.repository.refresher.Refresher
 import retrofit2.Call
 import retrofit2.Response
 

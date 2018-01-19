@@ -30,7 +30,7 @@ import android.support.annotation.ColorInt
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
-import com.kevalpatel2106.base.UserSettingsManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent

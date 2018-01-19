@@ -17,9 +17,9 @@
 
 package com.kevalpatel2106.standup.dashboard.di
 
+import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.dashboard.DashboardViewModel
-import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Component
 
 /**

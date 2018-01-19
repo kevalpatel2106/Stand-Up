@@ -17,9 +17,9 @@
 
 package com.kevalpatel2106.standup.settings.di
 
+import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.authentication.di.UserAuthModule
-import com.kevalpatel2106.standup.misc.ApplicationScope
 import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsFragment
 import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsViewModel
 import com.kevalpatel2106.standup.settings.dnd.DndSettingsViewModel

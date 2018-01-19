@@ -18,9 +18,9 @@
 package com.kevalpatel2106.standup.core.activityMonitor
 
 import android.content.SharedPreferences
+import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.standup.core.CoreConfig
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
-import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
 import org.junit.Assert

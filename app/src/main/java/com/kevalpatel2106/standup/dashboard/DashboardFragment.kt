@@ -26,7 +26,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kevalpatel2106.base.uiController.showSnack
+import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.timelineview.TimeLineLength
 import kotlinx.android.synthetic.main.fragment_dashboard.*

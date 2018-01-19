@@ -21,7 +21,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
-import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.logout.Logout
@@ -30,8 +30,8 @@ import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsFragme
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.standup.settings.dnd.DndSettingsDetailActivity
 import com.kevalpatel2106.standup.settings.dnd.DndSettingsFragment
-import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsFragment
 import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsDetailActivity
+import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsFragment
 import com.kevalpatel2106.standup.settings.syncing.SyncSettingsDetailActivity
 import com.kevalpatel2106.standup.settings.syncing.SyncSettingsFragment
 import org.jetbrains.anko.alert

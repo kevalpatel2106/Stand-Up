@@ -66,7 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.kevalpatel2106.base.view.BaseEditText
+                    <com.kevalpatel2106.common.view.BaseEditText
                         android:id="@+id/report_issue_title_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.kevalpatel2106.base.view.BaseEditText
+                    <com.kevalpatel2106.common.view.BaseEditText
                         android:id="@+id/report_issue_description_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

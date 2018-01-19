@@ -27,7 +27,7 @@ import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AppCompatActivity
 import com.google.firebase.iid.FirebaseInstanceId
-import com.kevalpatel2106.base.uiController.showSnack
+import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.AnalyticsEvents

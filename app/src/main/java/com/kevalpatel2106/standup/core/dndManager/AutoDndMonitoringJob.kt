@@ -20,7 +20,7 @@ package com.kevalpatel2106.standup.core.dndManager
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.base.UserSettingsManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent

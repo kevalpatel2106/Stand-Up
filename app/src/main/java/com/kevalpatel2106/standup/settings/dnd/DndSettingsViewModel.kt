@@ -20,8 +20,8 @@ package com.kevalpatel2106.standup.settings.dnd
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.FragmentManager
-import com.kevalpatel2106.base.UserSettingsManager
-import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
 import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob

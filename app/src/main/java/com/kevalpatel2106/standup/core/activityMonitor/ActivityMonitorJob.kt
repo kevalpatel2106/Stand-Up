@@ -26,7 +26,7 @@ import com.google.android.gms.awareness.Awareness
 import com.google.android.gms.awareness.snapshot.DetectedActivityResponse
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
-import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.CoreConfig

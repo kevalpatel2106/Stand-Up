@@ -18,14 +18,14 @@
 package com.kevalpatel2106.standup.core.activityMonitor
 
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.base.SharedPreferenceKeys
-import com.kevalpatel2106.base.UserSessionManager
-import com.kevalpatel2106.base.annotations.Helper
+import com.kevalpatel2106.common.SharedPreferenceKeys
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
+import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.standup.core.CoreConfig
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
-import com.kevalpatel2106.standup.db.userActivity.UserActivityHelper
-import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.annotations.Helper
 import java.util.*
 
 /**

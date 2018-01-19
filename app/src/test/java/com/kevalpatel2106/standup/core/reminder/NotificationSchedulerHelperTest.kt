@@ -19,7 +19,7 @@ package com.kevalpatel2106.standup.core.reminder
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider

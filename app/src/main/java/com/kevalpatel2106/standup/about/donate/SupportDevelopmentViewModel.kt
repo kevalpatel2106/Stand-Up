@@ -19,12 +19,12 @@ package com.kevalpatel2106.standup.about.donate
 
 import android.annotation.SuppressLint
 import android.support.annotation.StringRes
-import com.kevalpatel2106.base.annotations.ViewModel
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.utils.annotations.ViewModel
 
 /**
  * Created by Keval on 23/12/17.
- * A [com.kevalpatel2106.base.annotations.ViewModel] for [SupportDevelopmentActivity].
+ * A [com.kevalpatel2106.common.annotations.ViewModel] for [SupportDevelopmentActivity].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  * @see SupportDevelopmentActivity

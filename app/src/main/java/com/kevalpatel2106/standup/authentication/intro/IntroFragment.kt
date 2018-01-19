@@ -25,9 +25,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kevalpatel2106.base.annotations.UIController
-import com.kevalpatel2106.base.uiController.BaseFragment
+import com.kevalpatel2106.common.base.uiController.BaseFragment
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.utils.annotations.UIController
 import kotlinx.android.synthetic.main.fragment_intro.*
 
 

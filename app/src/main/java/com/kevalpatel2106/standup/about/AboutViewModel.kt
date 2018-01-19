@@ -25,9 +25,10 @@ import android.content.Intent
 import android.net.Uri
 import android.support.annotation.VisibleForTesting
 import com.google.android.gms.appinvite.AppInviteInvitation
-import com.kevalpatel2106.base.arch.BaseViewModel
-import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.about.di.DaggerAboutComponent
 import com.kevalpatel2106.standup.about.donate.SupportDevelopmentActivity
 import com.kevalpatel2106.standup.about.repo.AboutRepository
@@ -35,7 +36,6 @@ import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
 import com.kevalpatel2106.standup.about.report.ReportIssueActivity
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.misc.SUUtils
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers

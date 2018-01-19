@@ -17,7 +17,7 @@
 
 package com.kevalpatel2106.standup.authentication.repo
 
-import com.kevalpatel2106.base.annotations.Repository
+import com.kevalpatel2106.utils.annotations.Repository
 import io.reactivex.Flowable
 import retrofit2.http.*
 

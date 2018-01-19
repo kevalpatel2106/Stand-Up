@@ -20,12 +20,12 @@ package com.kevalpatel2106.standup.profile
 import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.base.UserSessionManager
-import com.kevalpatel2106.base.arch.BaseViewModel
-import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.Validator
+import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.misc.Validator
 import com.kevalpatel2106.standup.profile.di.DaggerProfileComponent
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
 import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
@@ -40,7 +40,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@com.kevalpatel2106.base.annotations.ViewModel(EditProfileActivity::class)
+@com.kevalpatel2106.utils.annotations.ViewModel(EditProfileActivity::class)
 class EditProfileModel : BaseViewModel {
 
     /**

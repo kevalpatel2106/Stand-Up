@@ -17,7 +17,7 @@
 
 package com.kevalpatel2106.standup.core.dndManager
 
-import com.kevalpatel2106.base.UserSettingsManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
 
 /**

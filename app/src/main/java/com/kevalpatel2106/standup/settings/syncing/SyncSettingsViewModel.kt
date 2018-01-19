@@ -19,8 +19,8 @@ package com.kevalpatel2106.standup.settings.syncing
 
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.base.SharedPreferenceKeys
-import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.common.SharedPreferenceKeys
+import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.sync.SyncJob

@@ -17,8 +17,8 @@
 
 package com.kevalpatel2106.standup.core.reminder
 
-import com.kevalpatel2106.base.UserSessionManager
-import com.kevalpatel2106.base.annotations.Helper
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.utils.annotations.Helper
 
 /**
  * Created by Keval on 05/01/18.

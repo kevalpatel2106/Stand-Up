@@ -20,11 +20,11 @@ package com.kevalpatel2106.standup.authentication.login
 import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.base.UserSessionManager
-import com.kevalpatel2106.base.annotations.ViewModel
-import com.kevalpatel2106.base.arch.BaseViewModel
-import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.base.arch.SingleLiveEvent
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.Validator
+import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.common.base.arch.ErrorMessage
+import com.kevalpatel2106.common.base.arch.SingleLiveEvent
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.standup.R
@@ -33,7 +33,7 @@ import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.LoginRequest
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.misc.Validator
+import com.kevalpatel2106.utils.annotations.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

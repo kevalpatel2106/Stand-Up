@@ -22,9 +22,9 @@ import android.content.Context
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.base.SharedPreferenceKeys
-import com.kevalpatel2106.base.UserSessionManager
-import com.kevalpatel2106.base.UserSettingsManager
+import com.kevalpatel2106.common.SharedPreferenceKeys
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent

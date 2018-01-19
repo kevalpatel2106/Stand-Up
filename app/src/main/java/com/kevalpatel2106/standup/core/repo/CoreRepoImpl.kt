@@ -17,9 +17,9 @@
 
 package com.kevalpatel2106.standup.core.repo
 
+import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.application.di.AppModule
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
-import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import io.reactivex.Completable
 import io.reactivex.Single
 import retrofit2.Retrofit

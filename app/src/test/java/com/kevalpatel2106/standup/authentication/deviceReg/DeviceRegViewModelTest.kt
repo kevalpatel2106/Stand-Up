@@ -20,7 +20,7 @@ package com.kevalpatel2106.standup.authentication.deviceReg
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.content.SharedPreferences
-import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl

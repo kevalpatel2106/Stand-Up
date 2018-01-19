@@ -23,7 +23,7 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
-import com.kevalpatel2106.base.UserSettingsManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.settings.findPrefrance
 import com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference

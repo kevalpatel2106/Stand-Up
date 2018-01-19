@@ -17,7 +17,7 @@
 
 package com.kevalpatel2106.standup.core.repo
 
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
+import com.kevalpatel2106.common.db.userActivity.UserActivity
 import io.reactivex.Completable
 import io.reactivex.Single
 

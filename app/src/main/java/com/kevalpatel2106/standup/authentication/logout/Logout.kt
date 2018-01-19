@@ -20,8 +20,9 @@ package com.kevalpatel2106.standup.authentication.logout
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
-import com.kevalpatel2106.base.SharedPreferenceKeys
-import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.common.SharedPreferenceKeys
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.repo.LogoutRequest
@@ -31,7 +32,6 @@ import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.sync.SyncJob
-import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import io.reactivex.Completable

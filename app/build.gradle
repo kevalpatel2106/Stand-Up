@@ -102,7 +102,7 @@ dokka dokkaConfig
 kotlin kotlinOption
 
 dependencies {
-    implementation project(':base')
+    implementation project(':common')
     implementation project(':utils')
     implementation project(':network')
     implementation project(':facebook-auth')

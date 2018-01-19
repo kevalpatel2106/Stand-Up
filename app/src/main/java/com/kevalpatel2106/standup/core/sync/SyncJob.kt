@@ -21,8 +21,8 @@ import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.base.SharedPreferenceKeys
-import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.common.SharedPreferenceKeys
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.CoreConfig

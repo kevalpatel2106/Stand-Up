@@ -22,11 +22,11 @@ import android.graphics.Color
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
-import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
-import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import org.junit.Assert

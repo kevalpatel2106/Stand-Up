@@ -22,8 +22,8 @@ import android.app.TimePickerDialog
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.base.UserSettingsManager
-import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.dailyReview.DailyReviewHelper
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent

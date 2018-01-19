@@ -18,9 +18,9 @@
 package com.kevalpatel2106.standup.about.repo
 
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.base.annotations.Model
+import com.kevalpatel2106.common.Validator
 import com.kevalpatel2106.standup.BuildConfig
-import com.kevalpatel2106.standup.misc.Validator
+import com.kevalpatel2106.utils.annotations.Model
 
 /**
  * Created by Kevalpatel2106 on 29-Dec-17.

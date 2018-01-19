@@ -18,7 +18,7 @@
 package com.kevalpatel2106.standup.authentication.verification
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
