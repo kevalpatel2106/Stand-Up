@@ -22,12 +22,12 @@ import android.content.Context
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
+import com.kevalpatel2106.base.SharedPreferenceKeys
+import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
-import com.kevalpatel2106.standup.misc.UserSessionManager
-import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -40,14 +40,14 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class NotificationSchedulerService : Job() {
+class NotificationSchedulerJob : Job() {
 
     companion object {
         internal const val REMINDER_NOTIFICATION_JOB_TAG = "reminder_notification_job"
 
         /**
-         * Schedule the [NotificationSchedulerService] job after [scheduleAfterMills] milliseconds.
-         * This will override all the previous scheduled [NotificationSchedulerService] job. This
+         * Schedule the [NotificationSchedulerJob] job after [scheduleAfterMills] milliseconds.
+         * This will override all the previous scheduled [NotificationSchedulerJob] job. This
          * job will be one shot not recurring.
          */
         @SuppressLint("VisibleForTests")
@@ -55,7 +55,7 @@ class NotificationSchedulerService : Job() {
         internal fun scheduleNotification(sharedPrefsProvider: SharedPrefsProvider,
                                           scheduleAfterMills: Long = CoreConfig.STAND_UP_REMINDER_INTERVAL) {
 
-            synchronized(NotificationSchedulerService::class) {
+            synchronized(NotificationSchedulerJob::class) {
 
                 //Save the time of upcoming notification.
                 sharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME,
@@ -73,7 +73,7 @@ class NotificationSchedulerService : Job() {
         }
 
         /**
-         * Cancel all the [NotificationSchedulerService] jobs if any job is scheduled with
+         * Cancel all the [NotificationSchedulerJob] jobs if any job is scheduled with
          * [REMINDER_NOTIFICATION_JOB_TAG].
          */
         @JvmStatic
@@ -116,7 +116,7 @@ class NotificationSchedulerService : Job() {
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
-                .inject(this@NotificationSchedulerService)
+                .inject(this@NotificationSchedulerJob)
 
         if (NotificationSchedulerHelper.shouldDisplayNotification(userSessionManager)) {
 

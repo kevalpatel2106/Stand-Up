@@ -20,9 +20,11 @@ package com.kevalpatel2106.standup.settings.dnd
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.FragmentManager
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.misc.UserSettingsManager
+import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
+import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.timepicker.DualTimePicker
 import com.kevalpatel2106.timepicker.DualTimePickerListener
@@ -36,7 +38,8 @@ import javax.inject.Inject
  */
 class DndSettingsViewModel : BaseViewModel {
 
-    @Inject lateinit var userSettingsManager: UserSettingsManager
+    @Inject
+    lateinit var userSettingsManager: UserSettingsManager
 
     @Suppress("unused")
     constructor() {
@@ -68,17 +71,24 @@ class DndSettingsViewModel : BaseViewModel {
         isAutoDndEnable.value = true
 
         //Check iff the DND status
-        isDndEnable.value = userSettingsManager.isDndEnable
+        isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
+
+        //Schedule the dnd monitoring job
+        AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled(userSettingsManager)
     }
 
     fun onAutoDndTurnedOff() {
         isAutoDndEnable.value = false
 
         //Check iff the DND status
-        isDndEnable.value = userSettingsManager.isDndEnable
+        isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
+
+        //Cancel all the dnd monitoring job
+        AutoDndMonitoringJob.cancelScheduledJob()
     }
 
     fun onSelectAutoDndTime(supportFragmentManager: FragmentManager) {
+
         DualTimePicker.show(supportFragmentManager = supportFragmentManager, dualTimePickerListener = object : DualTimePickerListener {
             override fun onTimeSelected(startHourOfDay: Int,
                                         startMinutes: Int,
@@ -94,12 +104,16 @@ class DndSettingsViewModel : BaseViewModel {
                 autoDndTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndEndTime)}"
 
                 //Check iff the DND status
-                isDndEnable.value = userSettingsManager.isDndEnable
+                isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
+
+                //Reschedule the auto dnd monitoring jobs.
+                AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled(userSettingsManager)
             }
         })
     }
 
     fun onSelectSleepTime(supportFragmentManager: FragmentManager) {
+
         DualTimePicker.show(supportFragmentManager = supportFragmentManager, dualTimePickerListener = object : DualTimePickerListener {
             override fun onTimeSelected(startHourOfDay: Int,
                                         startMinutes: Int,
@@ -109,10 +123,13 @@ class DndSettingsViewModel : BaseViewModel {
                 //Save the time
                 val startTimeMills = TimeUtils.getMilliSecFrom12AM(startHourOfDay, startMinutes)
                 val endTimeMils = TimeUtils.getMilliSecFrom12AM(endHourOfDay, endMins)
-                userSettingsManager.setSleepime(startTimeMills, endTimeMils)
+                userSettingsManager.setSleepTime(startTimeMills, endTimeMils)
 
                 //Publish the update
                 sleepTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepEndTime)}"
+
+                //Reschedule the sleep monitoring job
+                SleepModeMonitoringJob.scheduleJob(userSettingsManager)
             }
         })
     }

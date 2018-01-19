@@ -19,10 +19,12 @@ package com.kevalpatel2106.standup.core.di
 
 import com.kevalpatel2106.standup.application.di.AppComponent
 import com.kevalpatel2106.standup.core.SystemEventReceiver
-import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorService
-import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerService
+import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
+import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
+import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.reminder.ReminderNotification
-import com.kevalpatel2106.standup.core.sync.SyncService
+import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob
+import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.standup.misc.ApplicationScope
 import dagger.Component
 
@@ -35,13 +37,17 @@ import dagger.Component
 @Component(dependencies = [AppComponent::class], modules = [CoreModule::class])
 interface CoreComponent {
 
-    fun inject(activityMonitorService: ActivityMonitorService)
+    fun inject(activityMonitorJob: ActivityMonitorJob)
 
-    fun inject(notificationSchedulerService: NotificationSchedulerService)
+    fun inject(notificationSchedulerJob: NotificationSchedulerJob)
 
-    fun inject(syncService: SyncService)
+    fun inject(syncJob: SyncJob)
 
     fun inject(systemEventReceiver: SystemEventReceiver)
 
     fun inject(reminderNotification: ReminderNotification)
+
+    fun inject(autoDndMonitoringJob: AutoDndMonitoringJob)
+
+    fun inject(sleepModeMonitoringJob: SleepModeMonitoringJob)
 }

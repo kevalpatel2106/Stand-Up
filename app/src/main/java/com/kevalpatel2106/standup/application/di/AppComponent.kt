@@ -19,10 +19,10 @@ package com.kevalpatel2106.standup.application.di
 
 import android.app.Application
 import android.content.Context
+import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
-import com.kevalpatel2106.standup.misc.UserSettingsManager
 import dagger.Component
 import retrofit2.Retrofit
 import javax.inject.Named
@@ -47,7 +47,7 @@ interface AppComponent {
     @Named(AppModule.WITH_TOKEN)
     fun geRetrofit(): Retrofit
 
-    @Named("WITHOUT_TOKEN")
+    @Named(AppModule.WITHOUT_TOKEN)
     fun getRetrofit(): Retrofit
 
     fun getUserSessionManagerProvider(): UserSessionManager

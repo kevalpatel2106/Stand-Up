@@ -21,9 +21,11 @@ import android.app.Application
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobCreator
 import com.evernote.android.job.JobManager
-import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorService
-import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerService
-import com.kevalpatel2106.standup.core.sync.SyncService
+import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
+import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
+import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
+import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob
+import com.kevalpatel2106.standup.core.sync.SyncJob
 
 
 /**
@@ -56,20 +58,28 @@ class CoreJobCreator : JobCreator {
      * Get the job to run based on the tag provided while creating the job.
      *
      * Mapping:
-     * - [ActivityMonitorService.ACTIVITY_MONITOR_JOB_TAG] -> [ActivityMonitorService]
-     * - [SyncService.SYNC_JOB_TAG] -> [SyncService]
-     * - [SyncService.SYNC_NOW_JOB_TAG] -> [SyncService]
-     * - [NotificationSchedulerService.REMINDER_NOTIFICATION_JOB_TAG] -> [NotificationSchedulerService]
+     * - [ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG] -> [ActivityMonitorJob]
+     * - [SyncJob.SYNC_JOB_TAG] -> [SyncJob]
+     * - [SyncJob.SYNC_NOW_JOB_TAG] -> [SyncJob]
+     * - [NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG] -> [NotificationSchedulerJob]
+     * - [AutoDndMonitoringJob.AUTO_DND_START_JOB_TAG] -> [AutoDndMonitoringJob]
+     * - [AutoDndMonitoringJob.AUTO_DND_END_JOB_TAG] -> [AutoDndMonitoringJob]
+     * - [SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG] -> [SleepModeMonitoringJob]
+     * - [SleepModeMonitoringJob.SLEEP_MODE_END_JOB_TAG] -> [SleepModeMonitoringJob]
      *
      * @throws IllegalStateException if the job for the [tag] not declared.
      * @see [Evernote Job](https://github.com/evernote/android-job#usage)
      */
     override fun create(tag: String): Job? {
         return when (tag) {
-            ActivityMonitorService.ACTIVITY_MONITOR_JOB_TAG -> ActivityMonitorService()
-            SyncService.SYNC_JOB_TAG -> SyncService()
-            SyncService.SYNC_NOW_JOB_TAG -> SyncService()
-            NotificationSchedulerService.REMINDER_NOTIFICATION_JOB_TAG -> NotificationSchedulerService()
+            ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG -> ActivityMonitorJob()
+            SyncJob.SYNC_JOB_TAG -> SyncJob()
+            SyncJob.SYNC_NOW_JOB_TAG -> SyncJob()
+            NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG -> NotificationSchedulerJob()
+            AutoDndMonitoringJob.AUTO_DND_START_JOB_TAG -> AutoDndMonitoringJob()
+            AutoDndMonitoringJob.AUTO_DND_END_JOB_TAG -> AutoDndMonitoringJob()
+            SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG -> SleepModeMonitoringJob()
+            SleepModeMonitoringJob.SLEEP_MODE_END_JOB_TAG -> SleepModeMonitoringJob()
             else -> throw IllegalStateException("Did you forget to add job for $tag in CoreJobCreator?")
         }
     }

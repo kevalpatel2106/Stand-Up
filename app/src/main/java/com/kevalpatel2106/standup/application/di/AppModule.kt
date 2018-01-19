@@ -19,10 +19,10 @@ package com.kevalpatel2106.standup.application.di
 
 import android.app.Application
 import android.content.Context
+import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
-import com.kevalpatel2106.standup.misc.UserSettingsManager
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

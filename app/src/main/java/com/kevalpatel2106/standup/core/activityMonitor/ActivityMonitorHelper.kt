@@ -18,13 +18,13 @@
 package com.kevalpatel2106.standup.core.activityMonitor
 
 import com.google.android.gms.location.DetectedActivity
+import com.kevalpatel2106.base.SharedPreferenceKeys
+import com.kevalpatel2106.base.UserSessionManager
 import com.kevalpatel2106.base.annotations.Helper
-import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.db.userActivity.UserActivity
 import com.kevalpatel2106.standup.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.standup.db.userActivity.UserActivityType
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import java.util.*
 
@@ -33,7 +33,7 @@ import java.util.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Helper(ActivityMonitorService::class)
+@Helper(ActivityMonitorJob::class)
 internal object ActivityMonitorHelper {
 
     internal fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {

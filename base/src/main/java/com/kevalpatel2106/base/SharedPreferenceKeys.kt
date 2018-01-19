@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.constants
+package com.kevalpatel2106.base
 
 /**
  * Created by Keval on 17/11/17.
@@ -23,8 +23,7 @@ package com.kevalpatel2106.standup.constants
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-
-internal object SharedPreferenceKeys {
+object SharedPreferenceKeys {
 
     /**
      * This key holds to boolean to indicate if fcm token is synced or not?
@@ -175,6 +174,13 @@ internal object SharedPreferenceKeys {
      * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.isAutoDndEnable]
      */
     const val PREF_KEY_IS_FORCE_DND_ENABLE = "pref_key_dnd_enable"
+
+    /**
+     * Boolean to indicate weather application is currently in sleep mode or not?
+     *
+     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.isCurrentlyInSleepMode]
+     */
+    const val PREF_KEY_IN_SLEEP_MODE_ON = "pref_key_in_sleep_mode_on"
 
     /**
      * Boolean to indicate weather the auto dnd is enabled or not? Default value is false.

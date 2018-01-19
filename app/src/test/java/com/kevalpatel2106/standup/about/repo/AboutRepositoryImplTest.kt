@@ -18,10 +18,10 @@
 package com.kevalpatel2106.standup.about.repo
 
 import android.content.SharedPreferences
+import com.kevalpatel2106.base.UserSessionManager
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before

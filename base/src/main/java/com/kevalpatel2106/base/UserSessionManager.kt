@@ -15,9 +15,8 @@
  *
  */
 
-package com.kevalpatel2106.standup.misc
+package com.kevalpatel2106.base
 
-import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.utils.SharedPrefsProvider
 
 

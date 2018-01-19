@@ -22,13 +22,14 @@ import android.content.Context
 import android.content.Intent
 import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorService
+import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.dailyReview.DailyReviewHelper
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
-import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerService
-import com.kevalpatel2106.standup.core.sync.SyncService
-import com.kevalpatel2106.standup.misc.UserSettingsManager
+import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
+import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
+import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -107,6 +108,7 @@ class SystemEventReceiver : BroadcastReceiver {
         //Schedule the next daily review.
         setUpDailyReview(context)
 
+        setUpAutoDnd()
         Timber.i("Rescheduling of all jobs and alarms completed. :-)")
     }
 
@@ -125,29 +127,29 @@ class SystemEventReceiver : BroadcastReceiver {
     }
 
     /**
-     * Register the [NotificationSchedulerService] after [CoreConfig.STAND_UP_REMINDER_INTERVAL].
+     * Register the [NotificationSchedulerJob] after [CoreConfig.STAND_UP_REMINDER_INTERVAL].
      *
-     * @see NotificationSchedulerService.scheduleNotification
+     * @see NotificationSchedulerJob.scheduleNotification
      */
     private fun setUpNotification(sharedPrefsProvider: SharedPrefsProvider) {
-        NotificationSchedulerService.scheduleNotification(sharedPrefsProvider)
+        NotificationSchedulerJob.scheduleNotification(sharedPrefsProvider)
     }
 
     /**
-     * Start monitoring user activity by registering [ActivityMonitorService] after
+     * Start monitoring user activity by registering [ActivityMonitorJob] after
      * [CoreConfig.MONITOR_SERVICE_PERIOD].
      *
-     * @see ActivityMonitorService.scheduleNextJob
+     * @see ActivityMonitorJob.scheduleNextJob
      */
     private fun setUpActivityMonitoring() {
-        ActivityMonitorService.scheduleNextJob()
+        ActivityMonitorJob.scheduleNextJob()
     }
 
     /**
      * Register next sync with the server after [UserSettingsManager.syncInterval] by registering
-     * [SyncService].
+     * [SyncJob].
      *
-     * @see SyncService.scheduleSync
+     * @see SyncJob.scheduleSync
      */
     private fun setUpSync() {
 
@@ -155,9 +157,19 @@ class SystemEventReceiver : BroadcastReceiver {
         if (userSettingsManager.enableBackgroundSync) {
 
             //Schedule periodic the sync service.
-            SyncService.scheduleSync(userSettingsManager.syncInterval)
+            SyncJob.scheduleSync(userSettingsManager.syncInterval)
         } else {
             Timber.i("Background sync is disabled by the user. Skipping it.")
         }
+    }
+
+    /**
+     * Register the auto DND starting and ending jobs.
+     *
+     * @see AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled
+     * @see AutoDndMonitoringJob.cancelScheduledJob
+     */
+    private fun setUpAutoDnd() {
+        AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled(userSettingsManager)
     }
 }

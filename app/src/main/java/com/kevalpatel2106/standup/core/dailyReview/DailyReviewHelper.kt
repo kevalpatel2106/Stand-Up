@@ -24,7 +24,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.annotation.VisibleForTesting
 import com.facebook.FacebookSdk.getApplicationContext
-import com.kevalpatel2106.standup.misc.UserSettingsManager
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
 import timber.log.Timber
 

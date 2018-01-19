@@ -20,9 +20,9 @@ package com.kevalpatel2106.standup.settings.dailyReview
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.standup.settings.findPrefrance
 import javax.inject.Inject

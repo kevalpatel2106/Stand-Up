@@ -45,6 +45,6 @@ class ActivityMonitorHelperTest {
         Assert.assertTrue(builder.isRequireStorageNotLow)
         Assert.assertTrue(builder.isPeriodic)
         Assert.assertEquals(builder.id, ActivityMonitorHelper.ACTIVITY_MONITOR_JOB_TAG)
-        Assert.assertEquals(builder.service.className, ActivityMonitorService::class.simpleName)
+        Assert.assertEquals(builder.service.className, ActivityMonitorJob::class.simpleName)
     }
 }

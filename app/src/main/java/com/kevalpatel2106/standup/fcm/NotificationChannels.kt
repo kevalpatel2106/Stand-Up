@@ -24,8 +24,8 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.misc.UserSettingsManager
 
 /**
  * Created by Kevalpatel2106 on 04-Dec-17.

@@ -19,11 +19,11 @@ package com.kevalpatel2106.standup.settings.syncing
 
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
+import com.kevalpatel2106.base.SharedPreferenceKeys
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.core.CoreConfig
-import com.kevalpatel2106.standup.core.sync.SyncService
+import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
@@ -60,7 +60,7 @@ class SyncSettingsViewModel : BaseViewModel {
 
     private fun init() {
         //Set initial syncing value.
-        isSyncing.value = SyncService.isSyncingCurrently()
+        isSyncing.value = SyncJob.isSyncingCurrently()
 
         //Register for the sync events
         addDisposable(RxBus.register(CoreConfig.TAG_RX_SYNC_STARTED).subscribe { isSyncing.value = true })
@@ -80,7 +80,7 @@ class SyncSettingsViewModel : BaseViewModel {
      * Start syncing the database with the server right now if the network is available.
      */
     fun manualSync() {
-        if (!SyncService.isSyncingCurrently()) SyncService.syncNow()
+        if (!SyncJob.isSyncingCurrently()) SyncJob.syncNow()
         isSyncing.value = true
     }
 
@@ -88,10 +88,10 @@ class SyncSettingsViewModel : BaseViewModel {
     fun onBackgroundSyncPolicyChange(isEnabled: Boolean, interval: Long) {
         if (isEnabled) {
             //reschedule the job if background sync is enabled.
-            SyncService.scheduleSync(interval)
+            SyncJob.scheduleSync(interval)
         } else {
             //Canceled current job
-            SyncService.cancelScheduledSync()
+            SyncJob.cancelScheduledSync()
         }
     }
 }

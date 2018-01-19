@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.authentication.di
 
 import android.app.Application
+import com.kevalpatel2106.base.UserSessionManager
 import com.kevalpatel2106.standup.application.di.AppModule
 import com.kevalpatel2106.standup.authentication.logout.Logout
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
@@ -26,7 +27,6 @@ import com.kevalpatel2106.standup.db.DbModule
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.misc.ApplicationScope
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

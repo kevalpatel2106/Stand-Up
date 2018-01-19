@@ -19,10 +19,8 @@ package com.kevalpatel2106.standup.core.reminder
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.firebase.jobdispatcher.Lifetime
-import com.firebase.jobdispatcher.RetryStrategy
+import com.kevalpatel2106.base.UserSessionManager
 import com.kevalpatel2106.standup.core.CoreConfig
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
@@ -57,7 +55,7 @@ class NotificationSchedulerHelperTest {
         Assert.assertEquals(builder.tag, NotificationSchedulerHelper.REMINDER_NOTIFICATION_JOB_TAG)
         Assert.assertEquals(builder.retryStrategy, RetryStrategy.DEFAULT_LINEAR)
         Assert.assertEquals(builder.lifetime, Lifetime.UNTIL_NEXT_BOOT)
-        Assert.assertEquals(builder.service, NotificationSchedulerService::class.java.canonicalName)
+        Assert.assertEquals(builder.service, NotificationSchedulerJob::class.java.canonicalName)
     }
 
 

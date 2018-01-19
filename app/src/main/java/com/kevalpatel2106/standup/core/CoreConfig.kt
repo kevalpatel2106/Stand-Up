@@ -70,14 +70,14 @@ internal object CoreConfig {
     /**
      * Tag for the rx event. This event will broadcast when sync job starts.
      *
-     * @see com.kevalpatel2106.standup.core.sync.SyncService.notifySyncStarted
+     * @see com.kevalpatel2106.standup.core.sync.SyncJob.notifySyncStarted
      */
     internal const val TAG_RX_SYNC_STARTED = "rx_sync_started"
 
     /**
      * Tag for the rx event. This event will broadcast when sync job ends.
      *
-     * @see com.kevalpatel2106.standup.core.sync.SyncService.notifySyncTerminated
+     * @see com.kevalpatel2106.standup.core.sync.SyncJob.notifySyncTerminated
      */
     internal const val TAG_RX_SYNC_ENDED = "rx_sync_ended"
 }

@@ -17,15 +17,15 @@
 
 package com.kevalpatel2106.standup.core.reminder
 
+import com.kevalpatel2106.base.UserSessionManager
 import com.kevalpatel2106.base.annotations.Helper
-import com.kevalpatel2106.standup.misc.UserSessionManager
 
 /**
  * Created by Keval on 05/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Helper(NotificationSchedulerService::class)
+@Helper(NotificationSchedulerJob::class)
 internal object NotificationSchedulerHelper {
 
     internal fun shouldDisplayNotification(userSessionManager: UserSessionManager): Boolean {

@@ -21,10 +21,10 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.v4.app.FragmentManager
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import javax.inject.Inject

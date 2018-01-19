@@ -18,13 +18,13 @@
 package com.kevalpatel2106.standup.authentication.login
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import com.kevalpatel2106.base.UserSessionManager
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith

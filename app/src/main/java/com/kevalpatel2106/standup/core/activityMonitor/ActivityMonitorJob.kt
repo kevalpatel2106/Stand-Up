@@ -26,13 +26,13 @@ import com.google.android.gms.awareness.Awareness
 import com.google.android.gms.awareness.snapshot.DetectedActivityResponse
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
+import com.kevalpatel2106.base.UserSessionManager
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
-import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerService
+import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.repo.CoreRepo
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -58,9 +58,9 @@ import javax.inject.Inject
  *
  * Once this list of probable user activity is available, it will detect weather the user is sitting
  * or moving/standing based on the [DetectedActivity] using [ActivityMonitorHelper.isUserSitting].
- * If the user is sitting service will not reschedule the [NotificationSchedulerService]. But if the
+ * If the user is sitting service will not reschedule the [NotificationSchedulerJob]. But if the
  * user is moving currently (that means user has stretched his/het legs :-)) it will push back the
- * [NotificationSchedulerService] by [CoreConfig.STAND_UP_REMINDER_INTERVAL] seconds and reschedule
+ * [NotificationSchedulerJob] by [CoreConfig.STAND_UP_REMINDER_INTERVAL] seconds and reschedule
  * the service.
  *
  * This service will get the user activity list only if [ActivityMonitorHelper.shouldMonitoringActivity]
@@ -72,7 +72,7 @@ import javax.inject.Inject
  * @see ActivityMonitorHelper.isUserSitting
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class ActivityMonitorService : AsyncJob(), OnSuccessListener<DetectedActivityResponse> {
+class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivityResponse> {
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
@@ -80,8 +80,8 @@ class ActivityMonitorService : AsyncJob(), OnSuccessListener<DetectedActivityRes
         internal const val ACTIVITY_MONITOR_JOB_TAG = "activity_monitor_job_tag"
 
         @JvmStatic
-        internal fun scheduleNextJob() {
-            synchronized(ActivityMonitorService::class) {
+        internal fun scheduleNextJob(): Boolean {
+            synchronized(ActivityMonitorJob::class) {
 
                 //Schedule the job
                 val id = JobRequest.Builder(ACTIVITY_MONITOR_JOB_TAG)
@@ -91,6 +91,7 @@ class ActivityMonitorService : AsyncJob(), OnSuccessListener<DetectedActivityRes
                         .schedule()
 
                 Timber.i("Activity monitoring job with id $id scheduled after ${CoreConfig.MONITOR_SERVICE_PERIOD} milliseconds.")
+                return true
             }
         }
 
@@ -101,7 +102,7 @@ class ActivityMonitorService : AsyncJob(), OnSuccessListener<DetectedActivityRes
             Timber.i("Canceling activity monitoring job.")
 
             //Stop the notifications
-            NotificationSchedulerService.cancel(context)
+            NotificationSchedulerJob.cancel(context)
         }
     }
 
@@ -131,14 +132,14 @@ class ActivityMonitorService : AsyncJob(), OnSuccessListener<DetectedActivityRes
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
-                .inject(this@ActivityMonitorService)
+                .inject(this@ActivityMonitorJob)
 
         //Check if service should be monitoring user activities?
         if (ActivityMonitorHelper.shouldMonitoringActivity(userSessionManager)) {
 
             //Use the snapshot api to get result for the user activity.
             Awareness.getSnapshotClient(context).detectedActivity
-                    .addOnSuccessListener(this@ActivityMonitorService)
+                    .addOnSuccessListener(this@ActivityMonitorJob)
                     .addOnFailureListener {
                         //Error occurred
                         Timber.e(it.message)
@@ -170,7 +171,7 @@ class ActivityMonitorService : AsyncJob(), OnSuccessListener<DetectedActivityRes
         }
 
         if (ActivityMonitorHelper.shouldScheduleNotification(userActivity, sharedPrefsProvider)) {
-            NotificationSchedulerService.scheduleNotification(sharedPrefsProvider)
+            NotificationSchedulerJob.scheduleNotification(sharedPrefsProvider)
         }
 
         //Add the new value to database.

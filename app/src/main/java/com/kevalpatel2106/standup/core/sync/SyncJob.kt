@@ -21,16 +21,16 @@ import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
+import com.kevalpatel2106.base.SharedPreferenceKeys
+import com.kevalpatel2106.base.UserSessionManager
 import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.repo.CoreRepo
-import com.kevalpatel2106.standup.core.sync.SyncService.Companion.cancelScheduledSync
-import com.kevalpatel2106.standup.core.sync.SyncService.Companion.isSyncingCurrently
-import com.kevalpatel2106.standup.core.sync.SyncService.Companion.syncNow
-import com.kevalpatel2106.standup.misc.UserSessionManager
+import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.cancelScheduledSync
+import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.isSyncingCurrently
+import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.syncNow
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.rxbus.Event
 import com.kevalpatel2106.utils.rxbus.RxBus
@@ -58,11 +58,11 @@ import javax.inject.Inject
  * - If you want to cancel all scheduled sync jobs, call [cancelScheduledSync].
  *
  * Manual Syncing:
- * Application sync instantaneously using [syncNow]. This will ignore all the scheduled [SyncService]
+ * Application sync instantaneously using [syncNow]. This will ignore all the scheduled [SyncJob]
  * jobs and runs instantaneously.
  *
  * Getting the current state:
- * - Whenever the [SyncService] start syncing the activities with the server,
+ * - Whenever the [SyncJob] start syncing the activities with the server,
  * [CoreConfig.TAG_RX_SYNC_STARTED] event will get broadcast  on [RxBus]. Interested component can
  * register this [Event] tag on the [RxBus] and get callback when syncing starts.
  *
@@ -71,7 +71,7 @@ import javax.inject.Inject
  * get callback when syncing completes. This event will broadcast event if the synicng with the server
  * fails.
  *
- * - Any component can query [isSyncingCurrently] to check if the [SyncService] is syncing the activities
+ * - Any component can query [isSyncingCurrently] to check if the [SyncJob] is syncing the activities
  * currently or not?
  *
  * Getting the last sync time:
@@ -81,7 +81,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class SyncService : AsyncJob() {
+class SyncJob : AsyncJob() {
 
     /**
      * [CompositeDisposable] for collecting all [io.reactivex.disposables.Disposable]. It will get
@@ -111,14 +111,14 @@ class SyncService : AsyncJob() {
 
         /**
          * Forcefully start syncing all the pending [com.kevalpatel2106.standup.db.userActivity.UserActivity]
-         * with the server. This will ignore all the scheduled [SyncService] jobs and runs instantaneously.
+         * with the server. This will ignore all the scheduled [SyncJob] jobs and runs instantaneously.
          *
-         * If the [SyncService] is already running while this method get invoke, call will be discarded.
+         * If the [SyncJob] is already running while this method get invoke, call will be discarded.
          */
         @SuppressLint("VisibleForTests")
         @JvmStatic
         internal fun syncNow() {
-            synchronized(SyncService::class) {
+            synchronized(SyncJob::class) {
 
                 //Schedule the job
                 val id = JobRequest.Builder(SYNC_JOB_TAG)
@@ -135,7 +135,7 @@ class SyncService : AsyncJob() {
         @SuppressLint("VisibleForTests")
         @JvmStatic
         internal fun scheduleSync(intervalMills: Long) {
-            synchronized(SyncService::class) {
+            synchronized(SyncJob::class) {
                 //Schedule the job
                 val id = JobRequest.Builder(SYNC_JOB_TAG)
                         .setUpdateCurrent(true)
@@ -155,8 +155,8 @@ class SyncService : AsyncJob() {
         }
 
         /**
-         * Flag to let others know if the [SyncService] is running or not? The value of this boolean
-         * is modified internally from [SyncService] itself.
+         * Flag to let others know if the [SyncJob] is running or not? The value of this boolean
+         * is modified internally from [SyncJob] itself.
          *
          * @see isSyncingCurrently
          */
@@ -186,7 +186,7 @@ class SyncService : AsyncJob() {
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
-                .inject(this@SyncService)
+                .inject(this@SyncJob)
 
         if (SyncServiceHelper.shouldSync(userSessionManager)) {
 

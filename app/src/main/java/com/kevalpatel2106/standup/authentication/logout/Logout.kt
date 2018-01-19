@@ -20,18 +20,18 @@ package com.kevalpatel2106.standup.authentication.logout
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
-import com.kevalpatel2106.standup.application.SplashActivity
+import com.kevalpatel2106.base.SharedPreferenceKeys
+import com.kevalpatel2106.base.UserSessionManager
+import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.repo.LogoutRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
-import com.kevalpatel2106.standup.constants.SharedPreferenceKeys
 import com.kevalpatel2106.standup.constants.logEvent
-import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorService
-import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerService
-import com.kevalpatel2106.standup.core.sync.SyncService
+import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
+import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
+import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import io.reactivex.Completable
@@ -73,9 +73,9 @@ class Logout constructor(private val application: Application,
                 .subscribe()
 
         //Cancel all the jobs
-        NotificationSchedulerService.cancel(application)
-        ActivityMonitorService.cancel(application)
-        SyncService.cancelScheduledSync()
+        NotificationSchedulerJob.cancel(application)
+        ActivityMonitorJob.cancel(application)
+        SyncJob.cancelScheduledSync()
 
         //Clear all the notifications
         val manager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

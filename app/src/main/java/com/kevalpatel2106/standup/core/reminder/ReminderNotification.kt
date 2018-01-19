@@ -30,12 +30,12 @@ import android.support.annotation.ColorInt
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
+import com.kevalpatel2106.base.UserSettingsManager
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.fcm.NotificationChannelType
 import com.kevalpatel2106.standup.fcm.addReminderNotificationChannel
-import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.utils.vibrate
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers

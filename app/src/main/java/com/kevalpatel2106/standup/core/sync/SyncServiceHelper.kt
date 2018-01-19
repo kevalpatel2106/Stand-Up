@@ -17,25 +17,25 @@
 
 package com.kevalpatel2106.standup.core.sync
 
+import com.kevalpatel2106.base.UserSessionManager
 import com.kevalpatel2106.base.annotations.Helper
-import com.kevalpatel2106.standup.misc.UserSessionManager
 
 /**
  * Created by Keval on 05/01/18.
- * Helper class for [SyncService].
+ * Helper class for [SyncJob].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
- * @see SyncService
+ * @see SyncJob
  */
-@Helper(SyncService::class)
+@Helper(SyncJob::class)
 object SyncServiceHelper {
 
     /**
-     * Check if the [SyncService] should sync the data with the server?
+     * Check if the [SyncJob] should sync the data with the server?
      *
      * @param userSessionManager [UserSessionManager] for getting the current session information.
      * @return True if sync should happen. False if sync should not perform. (Bad timing for syncing.)
-     * @see SyncService.onRunJobAsync
+     * @see SyncJob.onRunJobAsync
      */
     @JvmStatic
     internal fun shouldSync(userSessionManager: UserSessionManager): Boolean {
