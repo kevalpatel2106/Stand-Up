@@ -49,9 +49,7 @@ dokka dokkaConfig
 kotlin kotlinOption
 
 dependencies {
-    implementation project(':common')
     implementation project(':utils')
-    implementation project(':common')
 
     //Test dependency
     testImplementation project(':test-utils')
@@ -62,7 +60,6 @@ dependencies {
     debugLibs.each { add(it.configuration, it.dependency) }
 
     //Support
-    implementation supportLib.appCompat
     implementation supportLib.supportv4
     implementation otherLib.commonsCodec
 
@@ -70,7 +67,7 @@ dependencies {
     api otherLib.gson
 
     //Retrofit
-    api retrofitLib.retrofit
+    implementation retrofitLib.retrofit
     implementation retrofitLib.gsonPlugin
     implementation retrofitLib.logger       //TODO Make it debug only
 }

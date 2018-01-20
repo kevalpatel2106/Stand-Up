@@ -22,10 +22,10 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.Validator
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.profile.di.DaggerProfileComponent
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
 import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse

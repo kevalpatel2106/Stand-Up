@@ -30,11 +30,11 @@ object NetworkConfig {
     internal const val CONNECTION_TIMEOUT = 1L
 
     //Error messages.
-    internal const val ERROR_MESSAGE_INTERNET_NOT_AVAILABLE = "Internet is not available. Please try again."
-    internal const val ERROR_MESSAGE_SOMETHING_WRONG = "Something went wrong."
-    internal const val ERROR_MESSAGE_BAD_REQUEST = "Invalid request. Please try again."
-    internal const val ERROR_MESSAGE_NOT_FOUND = "Cannot perform the request. Please try again."
-    internal const val ERROR_MESSAGE_SERVER_BUSY = "Server is too busy at this moment. Please try again."
+    const val ERROR_MESSAGE_INTERNET_NOT_AVAILABLE = "Internet is not available. Please try again."
+    const val ERROR_MESSAGE_SOMETHING_WRONG = "Something went wrong."
+    const val ERROR_MESSAGE_BAD_REQUEST = "Invalid request. Please try again."
+    const val ERROR_MESSAGE_NOT_FOUND = "Cannot perform the request. Please try again."
+    const val ERROR_MESSAGE_SERVER_BUSY = "Server is too busy at this moment. Please try again."
 
     //Unauthorized broadcast action
     const val BROADCAST_UNAUTHORIZED = "com.kevalpatel2106.network.unauthorized"

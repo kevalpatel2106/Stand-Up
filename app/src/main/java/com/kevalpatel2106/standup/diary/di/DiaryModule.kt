@@ -18,9 +18,9 @@
 package com.kevalpatel2106.standup.diary.di
 
 import com.kevalpatel2106.common.ApplicationScope
+import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.db.DbModule
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
-import com.kevalpatel2106.standup.application.di.AppModule
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 import com.kevalpatel2106.standup.diary.repo.DiaryRepoImpl
 import dagger.Module

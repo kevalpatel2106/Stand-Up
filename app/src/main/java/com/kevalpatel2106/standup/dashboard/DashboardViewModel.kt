@@ -28,13 +28,13 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.CallbackEvent
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.SUUtils
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.dashboard.di.DaggerDashboardComponent
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo

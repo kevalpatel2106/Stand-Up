@@ -51,7 +51,8 @@ kotlin kotlinOption
 
 dependencies {
     implementation project(':utils')
-    api project(':progress-button')
+    implementation project(':network')
+    implementation project(':progress-button')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -65,7 +66,6 @@ dependencies {
     implementation(butterKnifeLib.butterKnife, excludeGrp)
     kapt(butterKnifeLib.annotationProcessor, excludeGrp)
 
-
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
@@ -74,7 +74,8 @@ dependencies {
 
     //Room & Arch components
     implementation archComponent.lifecycle
-    implementation archComponent.room
     implementation archComponent.roomRx
     kapt archComponent.roomAnnotation
+
+    implementation retrofitLib.retrofit
 }

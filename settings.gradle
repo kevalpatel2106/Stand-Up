@@ -15,7 +15,7 @@
  *
  */
 
-include ':app'
+include ':app', ':core'
 
 // Base layer modules.
 include ':common'

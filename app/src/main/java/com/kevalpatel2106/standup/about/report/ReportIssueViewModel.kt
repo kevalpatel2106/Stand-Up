@@ -20,13 +20,13 @@ package com.kevalpatel2106.standup.about.report
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.Validator
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.about.di.DaggerAboutComponent
 import com.kevalpatel2106.standup.about.repo.AboutRepository
 import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

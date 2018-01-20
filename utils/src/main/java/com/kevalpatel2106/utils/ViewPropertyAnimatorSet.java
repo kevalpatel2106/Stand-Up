@@ -25,9 +25,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Keval on 08/01/18.
- * A very naive implementation of a set of
- * {@link android.support.v4.view.ViewPropertyAnimatorCompat}.
- * Borrowed from support lib's {@link android.support.v7.view.ViewPropertyAnimatorCompatSet}.
+ * A very naive implementation of a set of {ViewPropertyAnimatorCompat}.
+ * Borrowed from support lib's android.support.v7.view.ViewPropertyAnimatorCompatSet.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */

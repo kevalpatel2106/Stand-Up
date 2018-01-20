@@ -28,11 +28,11 @@ import android.view.View
 import android.view.WindowManager
 import butterknife.OnClick
 import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.SUUtils
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent

@@ -5,6 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/Stand-Up.iml" filepath="$PROJECT_DIR$/Stand-Up.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/base.iml" filepath="$PROJECT_DIR$/common/base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
       <module fileurl="file://$PROJECT_DIR$/facebook-auth/facebook-auth.iml" filepath="$PROJECT_DIR$/facebook-auth/facebook-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/google-auth/google-auth.iml" filepath="$PROJECT_DIR$/google-auth/google-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />

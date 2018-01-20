@@ -21,9 +21,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.logout.Logout
 import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsDetailActivity
 import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsFragment
@@ -65,7 +65,7 @@ class SettingsViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() {
         DaggerSettingsComponent.builder()
-                .appComponent(BaseApplication.appComponent)
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SettingsViewModel)
 

@@ -18,8 +18,11 @@
 package com.kevalpatel2106.standup
 
 import android.os.StrictMode
+import com.facebook.FacebookSdk
 import com.facebook.stetho.Stetho
-import com.kevalpatel2106.standup.application.BaseApplication
+import com.google.firebase.FirebaseApp
+import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.standup.core.CoreJobCreator
 import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
 
@@ -33,6 +36,9 @@ import timber.log.Timber
  */
 
 class SUApplication : BaseApplication() {
+
+    override fun baseUrl(): String = BuildConfig.BASE_URL
+
     override fun isReleaseBuild(): Boolean = false
 
     override fun onCreate() {
@@ -62,5 +68,14 @@ class SUApplication : BaseApplication() {
 
         //Init shetho
         Stetho.initializeWithDefaults(this@SUApplication)
+
+        //Initialize firebase.
+        FirebaseApp.initializeApp(this@SUApplication)
+
+        //Initialize facebook
+        @Suppress("DEPRECATION")
+        FacebookSdk.sdkInitialize(this@SUApplication)
+
+        CoreJobCreator.init(this@SUApplication)
     }
 }

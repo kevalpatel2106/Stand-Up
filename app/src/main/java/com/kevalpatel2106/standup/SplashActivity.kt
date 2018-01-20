@@ -22,8 +22,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.common.SharedPreferenceKeys
 import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity

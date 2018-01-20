@@ -18,7 +18,7 @@
 package com.kevalpatel2106.standup.diary.di
 
 import com.kevalpatel2106.common.ApplicationScope
-import com.kevalpatel2106.standup.application.di.AppComponent
+import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.standup.diary.list.DiaryViewModel
 import dagger.Component
 

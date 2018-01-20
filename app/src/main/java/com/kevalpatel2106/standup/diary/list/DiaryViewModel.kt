@@ -19,12 +19,12 @@ package com.kevalpatel2106.standup.diary.list
 
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.CallbackEvent
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.diary.di.DaggerDiaryComponent
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 import com.kevalpatel2106.utils.annotations.ViewModel

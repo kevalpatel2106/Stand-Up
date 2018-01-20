@@ -21,12 +21,12 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.SignUpRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository

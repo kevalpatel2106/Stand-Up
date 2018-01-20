@@ -25,9 +25,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
+import com.kevalpatel2106.common.notifications.NotificationChannelType
+import com.kevalpatel2106.common.notifications.addAccountNotificationChannel
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.fcm.NotificationChannelType
-import com.kevalpatel2106.standup.fcm.addAccountNotificationChannel
 
 @Suppress("DEPRECATION")
 internal object EmailVerifiedNotification {

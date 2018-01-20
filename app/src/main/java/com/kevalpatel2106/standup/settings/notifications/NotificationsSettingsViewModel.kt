@@ -22,9 +22,9 @@ import android.content.Context
 import android.support.v4.app.FragmentManager
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog
 import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import javax.inject.Inject
@@ -48,7 +48,7 @@ class NotificationsSettingsViewModel : BaseViewModel {
 
     constructor() {
         DaggerSettingsComponent.builder()
-                .appComponent(BaseApplication.appComponent)
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@NotificationsSettingsViewModel)
         init()

@@ -20,8 +20,8 @@ package com.kevalpatel2106.standup.settings.syncing
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.SharedPreferenceKeys
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
@@ -52,7 +52,7 @@ class SyncSettingsViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() {
         DaggerSettingsComponent.builder()
-                .appComponent(BaseApplication.appComponent)
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SyncSettingsViewModel)
         init()

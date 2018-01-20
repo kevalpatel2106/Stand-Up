@@ -27,10 +27,10 @@ import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.notifications.addReminderNotificationChannel
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.core.reminder.ReminderNotification
-import com.kevalpatel2106.standup.fcm.addReminderNotificationChannel
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.standup.settings.findPrefrance
 import com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
@@ -46,7 +46,7 @@ class NotificationSettingsFragment : PreferenceFragmentCompat() {
 
     init {
         DaggerSettingsComponent.builder()
-                .appComponent(BaseApplication.appComponent)
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@NotificationSettingsFragment)
     }
