@@ -17,5 +17,14 @@
 
 <resources>
     <string name="reminder_notification_title">Stand up now</string>
-    <string name="reminder_notification_message">Stand up now</string>
+    <string name="reminder_notification_message">It\'s time to stretch your legs. Go ahead and take a walk.</string>
+
+    <string name="sleep_notification_title">Sleep mode activated</string>
+    <string name="sleep_notification_message">Application will stop reminding you about stretching your legs until next morning. Have a nice sleep!</string>
+
+    <string name="daily_review_notification_title">Yesterday summary</string>
+    <string name="daily_review_notification_message">Here is the summary report of your yesterday activities.</string>
+
+    <string name="auto_dnd_notification_title">Do not disturb mode activated</string>
+    <string name="auto_dnd_notification_message">Application will stop reminding you about stretching your legs.</string>
 </resources>

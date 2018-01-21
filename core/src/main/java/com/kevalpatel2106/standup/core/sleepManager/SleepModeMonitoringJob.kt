@@ -18,7 +18,6 @@
 package com.kevalpatel2106.standup.core.sleepManager
 
 import com.evernote.android.job.Job
-import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
@@ -95,17 +94,12 @@ internal class SleepModeMonitoringJob : Job() {
                         .schedule()
 
                 Timber.i("`Sleep mode end` monitoring job with id $endJobId scheduled after $endSleepJobTime milliseconds.")
+
+                //Check if while scheduling this job, is sleep mode should turn on?
+                userSettingsManager.isCurrentlyInSleepMode = SleepModeMonitoringHelper.isCurrentlyInSleepMode(userSettingsManager)
+
                 return@synchronized true
             }
-        }
-
-        /**
-         * Cancel both [SLEEP_MODE_START_JOB_TAG] and [SLEEP_MODE_END_JOB_TAG] jobs.
-         */
-        @JvmStatic
-        internal fun cancelScheduledJob() {
-            JobManager.instance().cancelAllForTag(SLEEP_MODE_START_JOB_TAG)
-            JobManager.instance().cancelAllForTag(SLEEP_MODE_END_JOB_TAG)
         }
     }
 
@@ -145,7 +139,7 @@ internal class SleepModeMonitoringJob : Job() {
                     prefsProvider = sharedPrefsProvider)
                     .refresh()
 
-            //TODO may be display a small low priority notification?
+            SleepModeStartNotification.notify(context)
         }
     }
 
@@ -160,5 +154,7 @@ internal class SleepModeMonitoringJob : Job() {
 
         //Schedule the next sleep monitoring job
         scheduleJob(userSettingsManager)
+
+        SleepModeStartNotification.cancel(context)
     }
 }

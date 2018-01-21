@@ -22,6 +22,7 @@ import com.evernote.android.job.Job
 import com.evernote.android.job.JobCreator
 import com.evernote.android.job.JobManager
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
+import com.kevalpatel2106.standup.core.dailyReview.DailyReviewJob
 import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob
@@ -80,6 +81,7 @@ internal class CoreJobCreator : JobCreator {
             AutoDndMonitoringJob.AUTO_DND_END_JOB_TAG -> AutoDndMonitoringJob()
             SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG -> SleepModeMonitoringJob()
             SleepModeMonitoringJob.SLEEP_MODE_END_JOB_TAG -> SleepModeMonitoringJob()
+            DailyReviewJob.DAILY_REVIEW_TAG -> DailyReviewJob()
             else -> throw IllegalStateException("Did you forget to add job for $tag in CoreJobCreator?")
         }
     }

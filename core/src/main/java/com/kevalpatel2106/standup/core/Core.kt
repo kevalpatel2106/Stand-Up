@@ -90,6 +90,11 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
             return
         }
 
+
+        setUpSleepMode(userSettingsManager)
+
+        setUpAutoDnd(userSettingsManager)
+
         //Schedule all the jobs based on their preferences
         setUpActivityMonitoring(userSettingsManager)
 
@@ -98,10 +103,6 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
         setUpReminderNotification(userSettingsManager, prefsProvider)
 
         setUpSync(userSettingsManager)
-
-        setUpAutoDnd(userSettingsManager)
-
-        setUpSleepMode(userSettingsManager)
     }
 
     /**

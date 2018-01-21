@@ -78,4 +78,11 @@ internal object AutoDndMonitoringHelper {
             }
         }
     }
+
+    fun isCurrentlyInAutoDndMode(userSettingsManager: UserSettingsManager): Boolean {
+        val currentTimeFrom12Am = System.currentTimeMillis() - TimeUtils.getTodaysCalender12AM().timeInMillis
+        return userSettingsManager.isAutoDndEnable
+                && (userSettingsManager.autoDndStartTime <= currentTimeFrom12Am)
+                && (userSettingsManager.autoDndEndTime >= currentTimeFrom12Am)
+    }
 }

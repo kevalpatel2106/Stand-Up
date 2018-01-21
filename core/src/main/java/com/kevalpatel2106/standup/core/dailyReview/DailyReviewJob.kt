@@ -24,7 +24,6 @@ import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
-import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -64,7 +63,7 @@ internal class DailyReviewJob : Job() {
 
                 //Arrange the DND start job
                 val nextDailyReviewTime = DailyReviewHelper.getNextAlarmTime(userSettingsManager)
-                val startJobId = JobRequest.Builder(SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG)
+                val startJobId = JobRequest.Builder(DailyReviewJob.DAILY_REVIEW_TAG)
                         .setUpdateCurrent(true)
                         .setExact(nextDailyReviewTime - System.currentTimeMillis())
                         .build()
@@ -98,6 +97,7 @@ internal class DailyReviewJob : Job() {
         }
 
         //TODO Display daily review.
+        DailyReviewNotification.notify(context)
 
         return Result.SUCCESS
     }

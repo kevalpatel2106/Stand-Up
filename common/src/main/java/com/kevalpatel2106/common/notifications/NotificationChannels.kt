@@ -47,6 +47,11 @@ object NotificationChannelType {
     const val ACCOUNT_NOTIFICATION_CHANNEL = "account_notification_channel"
 
     /**
+     * Notifications for account activities.
+     */
+    const val OTHER_NOTIFICATION_CHANNEL = "other_notification_channel"
+
+    /**
      * Notifications for reminder activities.
      */
     const val REMINDER_NOTIFICATION_CHANNEL = "reminder_notification_channel"
@@ -74,6 +79,19 @@ fun NotificationManager.addAccountNotificationChannel(context: Context) {
         val chan2 = NotificationChannel(NotificationChannelType.ACCOUNT_NOTIFICATION_CHANNEL,
                 context.getString(R.string.notification_channel_title_accounts), NotificationManager.IMPORTANCE_LOW)
         chan2.lightColor = Color.BLUE
+        chan2.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+
+        createNotificationChannel(chan2)
+    }
+}
+
+@TargetApi(Build.VERSION_CODES.O)
+fun NotificationManager.addOtherNotificationChannel(context: Context) {
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val chan2 = NotificationChannel(NotificationChannelType.OTHER_NOTIFICATION_CHANNEL,
+                context.getString(R.string.notification_channel_title_other), NotificationManager.IMPORTANCE_LOW)
+        chan2.lightColor = Color.RED
         chan2.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
 
         createNotificationChannel(chan2)

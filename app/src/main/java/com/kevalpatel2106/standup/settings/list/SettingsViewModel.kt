@@ -88,7 +88,7 @@ class SettingsViewModel : BaseViewModel {
             it.add(SettingsItem(SettingsId.DND, "DND", R.drawable.ic_dnd_on))
 
             //Add daily review
-            it.add(SettingsItem(SettingsId.DAILY_REVIEW, "Daily Review", R.drawable.ic_stats_black))
+            it.add(SettingsItem(SettingsId.DAILY_REVIEW, "Daily Review", R.drawable.ic_daily_review_notification))
 
             //Add Notifications
             it.add(SettingsItem(SettingsId.NOTIFICATION, "Notifications", R.drawable.ic_notifications_bell))

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~  Copyright 2018 Keval Patel.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,12 @@
   ~
   -->
 
-<resources>
-    <string name="test">Test</string>
-    <string name="btn_title_retry">Retry</string>
-
-    <string name="notification_channel_title_syncing">Syncing Notifications</string>
-    <string name="notification_channel_title_accounts">Account Notifications</string>
-    <string name="notification_channel_title_other">Other Notifications</string>
-    <string name="notification_channel_title_reminders">Reminder Notifications</string>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportHeight="510.0"
+    android:viewportWidth="510.0">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M255,0C114.8,0 0,114.8 0,255s114.8,255 255,255s255,-114.8 255,-255S395.3,0 255,0zM51,255c0,-112.2 91.8,-204 204,-204c45.9,0 89.3,15.3 124.9,43.3l-285.6,285.6C66.3,344.3 51,300.9 51,255zM255,459c-45.9,0 -89.3,-15.3 -124.9,-43.3L415.6,130.1C443.7,165.8 459,209.1 459,255C459,367.2 367.2,459 255,459z" />
+</vector>

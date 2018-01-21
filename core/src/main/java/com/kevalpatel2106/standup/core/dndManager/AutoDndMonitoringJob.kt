@@ -98,6 +98,11 @@ internal class AutoDndMonitoringJob : Job() {
                         .schedule()
 
                 Timber.i("`Auto DND end` monitoring job with id $endJobId scheduled at $endDndJobTime milliseconds.")
+
+                if (AutoDndMonitoringHelper.isCurrentlyInAutoDndMode(userSettingsManager)) {
+                    userSettingsManager.isCurrentlyDndEnable = true
+                }
+
                 return@synchronized true
             }
         }
@@ -154,8 +159,8 @@ internal class AutoDndMonitoringJob : Job() {
                 prefsProvider = sharedPrefsProvider)
                 .refresh()
 
-        //TODO may be display a small low priority notification?
-
+        //DND mode started notification.
+        AutoDndStartNotification.notify(context)
     }
 
     private fun autoDndEnded() {
@@ -169,5 +174,8 @@ internal class AutoDndMonitoringJob : Job() {
 
         //Schedule the next dnd monitoring job
         scheduleJobIfAutoDndEnabled(userSettingsManager)
+
+        //Cancel notification
+        AutoDndStartNotification.cancel(context)
     }
 }

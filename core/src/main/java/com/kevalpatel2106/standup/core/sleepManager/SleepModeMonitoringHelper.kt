@@ -77,4 +77,10 @@ internal object SleepModeMonitoringHelper {
             }
         }
     }
+
+    fun isCurrentlyInSleepMode(userSettingsManager: UserSettingsManager): Boolean {
+        val currentTimeFrom12Am = System.currentTimeMillis() - TimeUtils.getTodaysCalender12AM().timeInMillis
+        return (userSettingsManager.sleepStartTime <= currentTimeFrom12Am)
+                && (userSettingsManager.sleepEndTime >= currentTimeFrom12Am)
+    }
 }
