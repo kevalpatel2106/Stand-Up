@@ -75,7 +75,7 @@ import javax.inject.Inject
  * @see ActivityMonitorHelper.isUserSitting
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivityResponse> {
+internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivityResponse> {
 
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 

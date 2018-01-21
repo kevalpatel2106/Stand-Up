@@ -26,7 +26,7 @@ import io.reactivex.Single
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-interface CoreRepo {
+internal interface CoreRepo {
 
     /**
      * This will store [newActivity] into the database and terminate the previous event with the

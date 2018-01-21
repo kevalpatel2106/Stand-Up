@@ -15,15 +15,14 @@
  *
  */
 
-package com.kevalpatel2106.standup.core
+package com.kevalpatel2106.standup.core.reminder
 
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.common.notifications.NotificationChannelType
-import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.core.reminder.ReminderNotification
+import com.kevalpatel2106.standup.core.R
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before

@@ -29,7 +29,7 @@ import com.kevalpatel2106.utils.annotations.Helper
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @Helper(AutoDndMonitoringJob::class)
-object AutoDndMonitoringHelper {
+internal object AutoDndMonitoringHelper {
 
     /**
      * Get the next DND mode start time in unix milliseconds. It will convert the
@@ -39,19 +39,18 @@ object AutoDndMonitoringHelper {
      *
      * @see UserSettingsManager.autoDndStartTime
      * @see TimeUtils.getTodaysCalender12AM
-     * @see TimeUtils.getTommorowsCalender12AM
      */
     @JvmStatic
     fun getAutoDndStartTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(userSettingsManager.autoDndStartTime) {
+        return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.autoDndStartTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
                 //Schedule the job tomorrow.
-                return@with TimeUtils.getTommorowsCalender12AM().timeInMillis + this
+                return@with this + TimeUtils.ONE_DAY_MILLISECONDS
             } else {    //Auto dnd start time is yet to pass.
                 //Schedule the job today itself.
-                return@with TimeUtils.getTodaysCalender12AM().timeInMillis + this
+                return@with this
             }
         }
     }
@@ -64,19 +63,18 @@ object AutoDndMonitoringHelper {
      *
      * @see UserSettingsManager.autoDndEndTime
      * @see TimeUtils.getTodaysCalender12AM
-     * @see TimeUtils.getTommorowsCalender12AM
      */
     @JvmStatic
     fun getAutoDndEndTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(userSettingsManager.autoDndEndTime) {
+        return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.autoDndEndTime) {
 
-            if (this < java.lang.System.currentTimeMillis()) {    //Auto dnd start time is already passed.
+            if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
                 //Schedule the job tomorrow.
-                return@with com.kevalpatel2106.utils.TimeUtils.getTommorowsCalender12AM().timeInMillis + this
+                return@with this + TimeUtils.ONE_DAY_MILLISECONDS
             } else {    //Auto dnd start time is yet to pass.
                 //Schedule the job today itself.
-                return@with com.kevalpatel2106.utils.TimeUtils.getTodaysCalender12AM().timeInMillis + this
+                return@with this
             }
         }
     }

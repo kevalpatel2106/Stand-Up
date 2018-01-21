@@ -29,7 +29,6 @@ import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.repo.CoreRepo
 import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.cancelScheduledSync
-import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.isSyncingCurrently
 import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.syncNow
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.rxbus.Event
@@ -81,7 +80,7 @@ import javax.inject.Inject
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-class SyncJob : AsyncJob() {
+internal class SyncJob : AsyncJob() {
 
     /**
      * [CompositeDisposable] for collecting all [io.reactivex.disposables.Disposable]. It will get
@@ -117,7 +116,7 @@ class SyncJob : AsyncJob() {
          */
         @SuppressLint("VisibleForTests")
         @JvmStatic
-        fun syncNow() {
+        internal fun syncNow() {
             synchronized(SyncJob::class) {
 
                 //Schedule the job
@@ -159,25 +158,23 @@ class SyncJob : AsyncJob() {
          *
          * @see isSyncingCurrently
          */
-        private var isSyncing = false
-
-        fun isSyncingCurrently() = isSyncing
+        internal var isSyncing = false
     }
 
     /**
      * [SharedPrefsProvider] for accessing the preferences.
      */
     @Inject
-    lateinit var sharedPrefsProvider: SharedPrefsProvider
+    internal lateinit var sharedPrefsProvider: SharedPrefsProvider
 
     /**
      * [UserSessionManager] for getting the user session details.
      */
     @Inject
-    lateinit var userSessionManager: UserSessionManager
+    internal lateinit var userSessionManager: UserSessionManager
 
     @Inject
-    lateinit var coreRepo: CoreRepo
+    internal lateinit var coreRepo: CoreRepo
 
     override fun onRunJobAsync(params: Params) {
 

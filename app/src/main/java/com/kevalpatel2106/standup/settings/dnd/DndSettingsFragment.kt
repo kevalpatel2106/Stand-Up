@@ -19,16 +19,16 @@ package com.kevalpatel2106.standup.settings.dnd
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
+import android.support.v7.preference.PreferenceManager
 import android.view.View
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.settings.findPrefrance
 import com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
 import com.kevalpatel2106.standup.settings.widget.BaseTopSwitchPreference
-import com.kevalpatel2106.utils.SharedPrefsProvider
 
 /**
  * Created by Keval on 13/01/18.
@@ -45,15 +45,44 @@ class DndSettingsFragment : PreferenceFragmentCompat() {
      */
     internal lateinit var model: DndSettingsViewModel
 
+    /**
+     * [SharedPreferences.OnSharedPreferenceChangeListener] to get callbacks whenever particular
+     * preference for this fragment changes.
+     *
+     * This monitors preferences with below keys:
+     * - [R.string.pref_key_dnd_enable]
+     * - [R.string.pref_key_dnd_enable]
+     */
+    private val prefChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        when (key) {
+            getString(R.string.pref_key_dnd_enable) -> model.onManualDadChanged()
+            getString(R.string.pref_key_auto_dnd_enable) -> model.onAutoDndChanged()
+        }
+    }
+
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         model = ViewModelProviders.of(this@DndSettingsFragment).get(DndSettingsViewModel::class.java)
+
         addPreferencesFromResource(R.xml.dnd_settings)
+
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .registerOnSharedPreferenceChangeListener(prefChangeListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .unregisterOnSharedPreferenceChangeListener(prefChangeListener)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val manualDndSwitch = findPrefrance(R.string.pref_key_dnd_enable) as BaseTopSwitchPreference
-        manualDndSwitch.isChecked = UserSettingsManager(SharedPrefsProvider(context!!)).isCurrentlyDndEnable
+        model.isDndEnable.observe(this@DndSettingsFragment, Observer {
+            it?.let { manualDndSwitch.isChecked = it }
+        })
 
         setAutoDndSection()
         setSleepHours()
@@ -79,6 +108,7 @@ class DndSettingsFragment : PreferenceFragmentCompat() {
             if (model.isAutoDndEnable.value!!)
                 autoDndSwitch.summary = String.format(getString(R.string.dnd_pref_auto_dnd_switch_summary_on), it)
         })
+
         model.isAutoDndEnable.observe(this@DndSettingsFragment, Observer {
             it?.let {
                 autoDndSwitch.isChecked = it
@@ -100,15 +130,6 @@ class DndSettingsFragment : PreferenceFragmentCompat() {
                 autoDndTime.isEnabled = it
             }
         })
-
-        autoDndSwitch.setOnPreferenceChangeListener { _, newValue ->
-            if (newValue as Boolean) {
-                model.onAutoDndTurnedOn()
-            } else {
-                model.onAutoDndTurnedOff()
-            }
-            return@setOnPreferenceChangeListener true
-        }
 
         autoDndTime.setOnPreferenceClickListener {
             model.onSelectAutoDndTime(childFragmentManager)

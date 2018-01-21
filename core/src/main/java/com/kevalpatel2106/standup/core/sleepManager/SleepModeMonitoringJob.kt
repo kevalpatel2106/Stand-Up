@@ -26,9 +26,6 @@ import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
-import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringHelper
-import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob.Companion.AUTO_DND_END_JOB_TAG
-import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob.Companion.AUTO_DND_START_JOB_TAG
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
@@ -39,7 +36,7 @@ import javax.inject.Inject
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-class SleepModeMonitoringJob : Job() {
+internal class SleepModeMonitoringJob : Job() {
 
     companion object {
         /**
@@ -87,7 +84,7 @@ class SleepModeMonitoringJob : Job() {
                         .build()
                         .schedule()
 
-                Timber.i("`Sleep mode begin` monitoring job with id $startJobId scheduled after $startSleepJobTime milliseconds.")
+                Timber.i("`Sleep mode begin` monitoring job with id $startJobId scheduled at $startSleepJobTime milliseconds.")
 
                 //Arrange the DND end job
                 val endSleepJobTime = SleepModeMonitoringHelper.getSleepEndTiming(userSettingsManager)

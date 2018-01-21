@@ -21,7 +21,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.standup.core.CoreConfig
-import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
 import org.junit.Test
@@ -29,7 +28,6 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import java.io.IOException
 
@@ -41,23 +39,6 @@ import java.io.IOException
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
 class NotificationSchedulerHelperTest {
-
-    @Test
-    @Throws(IOException::class)
-    fun checkPrepareJobAfterDefaultTime() {
-        val builder = NotificationSchedulerHelper.prepareJob(
-                context = RuntimeEnvironment.application,
-                sharedPrefsProvider = SharedPrefsProvider(MockSharedPreference())
-        )
-
-        Assert.assertEquals(builder.constraints.size, 0)
-        Assert.assertFalse(builder.isRecurring)
-        Assert.assertEquals(builder.tag, NotificationSchedulerHelper.REMINDER_NOTIFICATION_JOB_TAG)
-        Assert.assertEquals(builder.retryStrategy, RetryStrategy.DEFAULT_LINEAR)
-        Assert.assertEquals(builder.lifetime, Lifetime.UNTIL_NEXT_BOOT)
-        Assert.assertEquals(builder.service, NotificationSchedulerJob::class.java.canonicalName)
-    }
-
 
     @Test
     @Throws(IOException::class)

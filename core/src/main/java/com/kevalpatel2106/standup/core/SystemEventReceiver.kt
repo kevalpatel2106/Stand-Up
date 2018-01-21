@@ -24,13 +24,7 @@ import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
-import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
-import com.kevalpatel2106.standup.core.dailyReview.DailyReviewHelper
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
-import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
-import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
-import com.kevalpatel2106.standup.core.sync.SyncJob
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -84,7 +78,7 @@ class SystemEventReceiver : BroadcastReceiver {
         // Cancel all the job
         // Evernote job automatically schedules all the jobs for you on boot complete.
         // So, we are going to cancel all the jobs and schedule our own jobs again.
-        Core.meltdownCore()
+        Core.meltdown()
 
         core.refresh()
         Timber.i("Rescheduling of all jobs and alarms completed. :-)")

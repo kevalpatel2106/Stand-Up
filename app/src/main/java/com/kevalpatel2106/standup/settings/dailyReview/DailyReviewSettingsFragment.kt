@@ -17,14 +17,19 @@
 
 package com.kevalpatel2106.standup.settings.dailyReview
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
+import android.support.v7.preference.PreferenceManager
+import android.view.View
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.standup.settings.findPrefrance
+import com.kevalpatel2106.standup.settings.widget.BaseTopSwitchPreference
 import javax.inject.Inject
 
 /**
@@ -39,7 +44,21 @@ class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
     /**
      * [UserSettingsManager] for getting the settings.
      */
-    @Inject internal lateinit var settingsManager: UserSettingsManager
+    @Inject
+    internal lateinit var settingsManager: UserSettingsManager
+
+    /**
+     * [SharedPreferences.OnSharedPreferenceChangeListener] to get callbacks whenever particular
+     * preference for this fragment changes.
+     *
+     * This monitors preferences with below keys:
+     * - [R.string.pref_key_daily_review_enable]
+     */
+    private val prefChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        when (key) {
+            getString(R.string.pref_key_daily_review_enable) -> model.onDailyReviewSettingChange()
+        }
+    }
 
     init {
         DaggerSettingsComponent.builder()
@@ -59,6 +78,19 @@ class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
 
         addPreferencesFromResource(R.xml.daily_review_setting)
 
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .registerOnSharedPreferenceChangeListener(prefChangeListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .unregisterOnSharedPreferenceChangeListener(prefChangeListener)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         //Review notification time
         val dailyReviewTime = findPrefrance(R.string.pref_key_daily_review_time)
         dailyReviewTime.setOnPreferenceClickListener {
@@ -70,20 +102,14 @@ class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
         })
 
         //Enable/Disable switch
-        val dailyReviewEnableSwitch = findPrefrance(R.string.pref_key_daily_review_enable)
-        dailyReviewTime.isEnabled = settingsManager.isDailyReviewEnable
-        dailyReviewEnableSwitch.setOnPreferenceChangeListener { _, newValue ->
-            dailyReviewTime.isEnabled = newValue as Boolean
-
-            context?.let {
-                if (newValue) {
-                    model.onDailyReviewTurnedOn(it)
-                } else {
-                    model.onDailyReviewTurnedOff(it)
-                }
+        val dailyReviewEnableSwitch = findPrefrance(R.string.pref_key_daily_review_enable) as BaseTopSwitchPreference
+        model.isDailyReviewEnable.observe(this@DailyReviewSettingsFragment, Observer {
+            it?.let {
+                dailyReviewEnableSwitch.isChecked = it
+                dailyReviewTime.isEnabled = it
             }
-            return@setOnPreferenceChangeListener true
-        }
+        })
+
     }
 
     companion object {

@@ -39,7 +39,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class NotificationSchedulerJob : Job() {
+internal class NotificationSchedulerJob : Job() {
 
     companion object {
         internal const val REMINDER_NOTIFICATION_JOB_TAG = "reminder_notification_job"

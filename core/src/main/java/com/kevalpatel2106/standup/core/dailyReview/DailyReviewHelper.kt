@@ -17,73 +17,19 @@
 
 package com.kevalpatel2106.standup.core.dailyReview
 
-import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
-import timber.log.Timber
+import com.kevalpatel2106.utils.annotations.Helper
 
 
 /**
  * Created by Keval on 17/01/18.
- * An helper class for daily review package. This helper class manages registering and canceling the
- * daily review alarms.
+ * An helper class for daily review package.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@Helper(DailyReviewJob::class)
 internal object DailyReviewHelper {
-
-    /**
-     * Unique request code for pending intent.
-     */
-    private const val PENDING_INTENT_REQUEST_CODE = 463
-
-    /**
-     * Register the new daily review alarm based on the [UserSettingsManager.dailyReviewTimeFrom12Am]
-     * time. It will register the exact alarm on the time given by [getNextAlarmTime]. This alarm
-     * works event in dose mode.
-     *
-     * @see getNextAlarmTime
-     */
-    @SuppressLint("VisibleForTests")
-    fun registerDailyReview(context: Context, userSettingsManager: UserSettingsManager) {
-        val nextAlarmTime = getNextAlarmTime(userSettingsManager)
-
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.setExact(AlarmManager.RTC, nextAlarmTime, getPendingIntent(context))
-
-        Timber.i("Daily review notification scheduled after : ".plus(nextAlarmTime).plus(" milliseconds."))
-    }
-
-    /**
-     * Cancel daily review alarm if any registered before.
-     *
-     * @see registerDailyReview
-     */
-    fun cancelAlarm(context: Context) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(getPendingIntent(context))
-
-        Timber.i("Canceled daily review alarms.")
-    }
-
-    /**
-     * Get the [PendingIntent] for the daily review alarm. This [PendingIntent] will invoke
-     * [DailyReviewReceiver] when the alarm goes off. The request code of the [PendingIntent] is
-     * [PENDING_INTENT_REQUEST_CODE].
-     *
-     * @see DailyReviewReceiver
-     */
-    private fun getPendingIntent(context: Context): PendingIntent {
-        return PendingIntent.getBroadcast(context,
-                PENDING_INTENT_REQUEST_CODE,
-                Intent(context.applicationContext, DailyReviewReceiver::class.java),
-                PendingIntent.FLAG_UPDATE_CURRENT)
-    }
 
     /**
      * Get the next daily review alarm time. If the current day time is already passed than this
@@ -96,18 +42,17 @@ internal object DailyReviewHelper {
      *
      * @see UserSettingsManager.dailyReviewTimeFrom12Am
      */
-    @VisibleForTesting
     internal fun getNextAlarmTime(userSettingsManager: UserSettingsManager): Long {
-        val timeFrom12Am = userSettingsManager.dailyReviewTimeFrom12Am
-        val today12AmTimeMills = TimeUtils.getTodaysCalender12AM().timeInMillis
-        val alarmTime = timeFrom12Am + today12AmTimeMills
+        return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.dailyReviewTimeFrom12Am) {
 
-        //Check if the alarm time is passed?
-        //If the alarm time is passed, add one day into it and set an alarm for the next day.
-        return if (alarmTime < System.currentTimeMillis()) {
-            alarmTime + TimeUtils.ONE_DAY_MILLISECONDS  // Add one day
-        } else {
-            alarmTime
+            if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
+
+                //Schedule the job tomorrow.
+                return@with this + TimeUtils.ONE_DAY_MILLISECONDS
+            } else {    //Auto dnd start time is yet to pass.
+                //Schedule the job today itself.
+                return@with this
+            }
         }
     }
 }

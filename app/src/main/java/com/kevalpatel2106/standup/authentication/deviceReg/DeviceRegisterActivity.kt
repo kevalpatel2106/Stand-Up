@@ -32,16 +32,22 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.Utils
+import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_device_register.*
+import javax.inject.Inject
 
 
 class DeviceRegisterActivity : AppCompatActivity() {
 
     @VisibleForTesting
     internal lateinit var model: DeviceRegViewModel
+
+    @Inject
+    internal lateinit var core: Lazy<Core>
 
     @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +94,10 @@ class DeviceRegisterActivity : AppCompatActivity() {
             }
         }
 
+        //Start the core with jobs
+        core.get().refresh()
+
+        //Kill
         finish()
     }
 

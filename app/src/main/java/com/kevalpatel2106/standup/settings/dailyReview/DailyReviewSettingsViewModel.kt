@@ -52,6 +52,8 @@ class DailyReviewSettingsViewModel : BaseViewModel {
      */
     internal val dailyReviewTimeSummary = MutableLiveData<String>()
 
+    internal val isDailyReviewEnable = MutableLiveData<Boolean>()
+
     @VisibleForTesting
     constructor(settingsManager: UserSettingsManager) {
         this.settingsManager = settingsManager
@@ -72,17 +74,16 @@ class DailyReviewSettingsViewModel : BaseViewModel {
      */
     @SuppressLint("VisibleForTests")
     private fun init() {
+        isDailyReviewEnable.value = settingsManager.isDailyReviewEnable
         dailyReviewTimeSummary.value = TimeUtils.convertToHHmmaFrom12Am(settingsManager.dailyReviewTimeFrom12Am)
     }
 
-    internal fun onDailyReviewTurnedOff(context: Context) {
-        //Cancel the upcoming alarm, if any.
-        core.refresh()
-    }
+    fun onDailyReviewSettingChange() {
+        isDailyReviewEnable.value = settingsManager.isDailyReviewEnable
 
-    internal fun onDailyReviewTurnedOn(context: Context) = rescheduleDailyReviewAlarm()
+        //Update the summary time
+        dailyReviewTimeSummary.value = TimeUtils.convertToHHmmaFrom12Am(settingsManager.dailyReviewTimeFrom12Am)
 
-    private fun rescheduleDailyReviewAlarm() {
         core.refresh()
     }
 
@@ -99,11 +100,8 @@ class DailyReviewSettingsViewModel : BaseViewModel {
             //Save new time
             settingsManager.dailyReviewTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(hours, mins)
 
-            //Update the summary time
-            dailyReviewTimeSummary.value = TimeUtils.convertToHHmmaFrom12Am(settingsManager.dailyReviewTimeFrom12Am)
-
             //daily review timing changed. Update the alarms.
-            rescheduleDailyReviewAlarm()
+            onDailyReviewSettingChange()
         }, cal.get(Calendar.HOUR_OF_DAY),
                 cal.get(Calendar.MINUTE),
                 false)

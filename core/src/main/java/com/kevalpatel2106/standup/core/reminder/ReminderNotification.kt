@@ -22,6 +22,7 @@ import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
+import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
@@ -43,10 +44,10 @@ import javax.inject.Inject
 
 
 @Suppress("DEPRECATION")
-class ReminderNotification {
+internal class ReminderNotification {
 
     @Inject
-    lateinit var userSettingsManager: UserSettingsManager
+    internal lateinit var userSettingsManager: UserSettingsManager
 
     @VisibleForTesting
     constructor(userSettingsManager: UserSettingsManager) {
@@ -87,13 +88,13 @@ class ReminderNotification {
 
         return NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(android.R.drawable.ic_media_play)
+                .setSmallIcon(R.drawable.ic_reminder_notification_small)
                 .setContentTitle(context.getString(R.string.reminder_notification_title))
                 .setContentText(context.getString(R.string.reminder_notification_message))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setTicker(context.getString(R.string.reminder_notification_message))
                 .setAutoCancel(true)
-                .setColor(ViewUtils.getAccentColor(context))
+                .setColor(ViewUtils.getPrimaryColor(context))
                 .setWhen(System.currentTimeMillis())
                 .setLights(lightColor, 100, 1000)
                 .setChannelId(NotificationChannelType.REMINDER_NOTIFICATION_CHANNEL)
@@ -125,6 +126,18 @@ class ReminderNotification {
         }).subscribeOn(Schedulers.newThread()).subscribe()
     }
 
+    /**
+     * Check weather to play the reminder notification sound or not?
+     *
+     * - If phone is currently in ringer mode, the sound should always play.
+     * - If the phone is in silent or the vibrate more, notification sound will only play if the
+     * [UserSettingsManager.shouldPlayReminderSoundAlways] is true or the headphones are connected
+     * and [UserSettingsManager.shouldPlayReminderSoundWithHeadphones] is true.
+     *
+     * @return true if the sound should play or else false.
+     * @see isHeadsetOn
+     * @see [AudioManager.getRingerMode]
+     */
     private fun shouldPlaySound(context: Context): Boolean {
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -133,8 +146,8 @@ class ReminderNotification {
 
             //Check which setting user has selected?
             when {
-                userSettingsManager.shouldPlayReminderSoundAlways -> true
-                userSettingsManager.shouldPlayReminderSoundWithHeadphones -> am.isWiredHeadsetOn
+                userSettingsManager.shouldPlayReminderSoundAlways -> true   /* No matter what, play the sound. */
+                userSettingsManager.shouldPlayReminderSoundWithHeadphones -> isHeadsetOn(am) /* Play the sound only when head phone connected. */
                 else -> false
             }
         } else {
@@ -142,6 +155,9 @@ class ReminderNotification {
         }
     }
 
+    /**
+     * Check if the device should vibrate while playing the notifications or not?
+     */
     private fun shouldVibrate(context: Context): Boolean {
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         return userSettingsManager.shouldVibrate && am.ringerMode != AudioManager.RINGER_MODE_SILENT
@@ -155,5 +171,32 @@ class ReminderNotification {
     internal fun cancel(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.cancel(NOTIFICATION_ID)
+    }
+
+    /**
+     * Checks weather the headphones or the bluetooth headphones are connected based on the android
+     * version. This does not grantee that sound is being played over headphones or the bluetooth.
+     *
+     * @return True if either bluetooth A2DP device or headphones are connected else false.
+     * @see [AudioManager.isWiredHeadsetOn]
+     * @see [AudioManager.isBluetoothA2dpOn]
+     * @see [AudioManager.isBluetoothScoOn]
+     * @see [SOF](https://stackoverflow.com/a/45726363)
+     */
+    private fun isHeadsetOn(audioManager: AudioManager): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return audioManager.isWiredHeadsetOn || audioManager.isBluetoothA2dpOn
+        } else {
+            val devices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
+            for (i in devices.indices) {
+                val device = devices[i]
+                if (device.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES
+                        || device.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP
+                        || device.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 }

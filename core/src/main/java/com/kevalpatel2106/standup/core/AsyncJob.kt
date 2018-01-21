@@ -29,7 +29,7 @@ import java.util.concurrent.CountDownLatch
  * @see Job
  * @see [How can I run async operations in a job?](https://github.com/evernote/android-job/wiki/FAQ#how-can-i-run-async-operations-in-a-job)
  */
-abstract class AsyncJob : Job() {
+internal abstract class AsyncJob : Job() {
     /**
      * [CountDownLatch] that initialize with the value 1. This latch will keep the job running until
      * the background job completes.

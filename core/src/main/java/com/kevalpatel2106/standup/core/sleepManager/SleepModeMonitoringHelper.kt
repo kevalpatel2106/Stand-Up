@@ -38,19 +38,18 @@ internal object SleepModeMonitoringHelper {
      *
      * @see UserSettingsManager.sleepStartTime
      * @see TimeUtils.getTodaysCalender12AM
-     * @see TimeUtils.getTommorowsCalender12AM
      */
     @JvmStatic
     fun getSleepStartTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(userSettingsManager.sleepStartTime) {
+        return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.sleepStartTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
                 //Schedule the job tomorrow.
-                return@with TimeUtils.getTommorowsCalender12AM().timeInMillis + this
+                return@with this + TimeUtils.ONE_DAY_MILLISECONDS
             } else {    //Auto dnd start time is yet to pass.
                 //Schedule the job today itself.
-                return@with TimeUtils.getTodaysCalender12AM().timeInMillis + this
+                return@with this
             }
         }
     }
@@ -63,19 +62,18 @@ internal object SleepModeMonitoringHelper {
      *
      * @see UserSettingsManager.sleepEndTime
      * @see TimeUtils.getTodaysCalender12AM
-     * @see TimeUtils.getTommorowsCalender12AM
      */
     @JvmStatic
     fun getSleepEndTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(userSettingsManager.sleepEndTime) {
+        return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.sleepEndTime) {
 
-            if (this < java.lang.System.currentTimeMillis()) {    //Auto dnd start time is already passed.
+            if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
                 //Schedule the job tomorrow.
-                return@with com.kevalpatel2106.utils.TimeUtils.getTommorowsCalender12AM().timeInMillis + this
+                return@with this + TimeUtils.ONE_DAY_MILLISECONDS
             } else {    //Auto dnd start time is yet to pass.
                 //Schedule the job today itself.
-                return@with com.kevalpatel2106.utils.TimeUtils.getTodaysCalender12AM().timeInMillis + this
+                return@with this
             }
         }
     }

@@ -71,7 +71,7 @@ class Logout constructor(private val application: Application,
                 .subscribe()
 
         //Cancel all the jobs
-        Core.meltdownCore()
+        Core.meltdown()
 
         //Clear all the notifications
         val manager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

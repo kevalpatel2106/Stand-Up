@@ -21,6 +21,7 @@ import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.standup.core.SystemEventReceiver
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
+import com.kevalpatel2106.standup.core.dailyReview.DailyReviewJob
 import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.reminder.ReminderNotification
@@ -50,4 +51,6 @@ internal interface CoreComponent {
     fun inject(autoDndMonitoringJob: AutoDndMonitoringJob)
 
     fun inject(sleepModeMonitoringJob: SleepModeMonitoringJob)
+
+    fun inject(dailyReviewJob: DailyReviewJob)
 }

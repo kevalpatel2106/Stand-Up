@@ -24,7 +24,6 @@ import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.CoreConfig
-import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
@@ -68,7 +67,7 @@ class SyncSettingsViewModel : BaseViewModel {
 
     private fun init() {
         //Set initial syncing value.
-        isSyncing.value = SyncJob.isSyncingCurrently()
+        isSyncing.value = Core.isSyncingCurrently()
 
         //Register for the sync events
         addDisposable(RxBus.register(CoreConfig.TAG_RX_SYNC_STARTED).subscribe { isSyncing.value = true })
@@ -88,7 +87,7 @@ class SyncSettingsViewModel : BaseViewModel {
      * Start syncing the database with the server right now if the network is available.
      */
     fun manualSync() {
-        if (!SyncJob.isSyncingCurrently()) SyncJob.syncNow()
+        if (!Core.isSyncingCurrently()) Core.forceSync()
         isSyncing.value = true
     }
 

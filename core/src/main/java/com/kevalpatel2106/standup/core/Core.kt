@@ -16,16 +16,19 @@
  */package com.kevalpatel2106.standup.core
 
 import android.content.Context
+import android.os.Handler
 import com.evernote.android.job.JobManager
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorHelper
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
-import com.kevalpatel2106.standup.core.dailyReview.DailyReviewHelper
+import com.kevalpatel2106.standup.core.dailyReview.DailyReviewJob
 import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerHelper
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
+import com.kevalpatel2106.standup.core.reminder.ReminderNotification
+import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob
 import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
@@ -45,15 +48,28 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
         /**
          * Shut down the code by unregister all the jobs and stop the core.
          */
-        fun meltdownCore() {
+        fun meltdown() {
             JobManager.instance().cancelAll()
         }
 
+        fun forceSync() = SyncJob.syncNow()
+
+        fun isSyncingCurrently() = SyncJob.isSyncing
+
+        fun fireTestReminder(context: Context) {
+            ReminderNotification().notify(context)
+
+            //Cancel the notification after some time.
+            Handler().postDelayed({ ReminderNotification().cancel(context) }, 10000L /* 10 Seconds */)
+        }
     }
 
     /**
      * Start the core module. This will initialize [CoreJobCreator] and also schedules all the jobs
      * based on the [userSettingsManager] values.
+     *
+     * @see refresh
+     * @see meltdown
      */
     fun turnOn(application: BaseApplication) {
         //Initialize the core creator
@@ -62,43 +78,30 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
         refresh()
     }
 
-    fun dndStatusChanged() {
-
-    }
-
-    fun syncSchedulingChanged() {
-
-    }
-
-    fun sleepStatusChanged() {
-
-    }
-
     /**
      * Schedule/Cancel the jobs based on the update preferences.
      */
     fun refresh() {
+        Timber.i("Refreshing the core...")
 
         //Check iff the user is logged in?
-        if (!userSessionManager.isUserLoggedIn) return
+        if (!userSessionManager.isUserLoggedIn) {
+            Timber.w("User is not logged in. Skipping the refreshing of core.")
+            return
+        }
 
         //Schedule all the jobs based on their preferences
         setUpActivityMonitoring(userSettingsManager)
 
-//        setUpDailyReview(application, userSettingsManager)
+        setUpDailyReview(userSettingsManager)
 
         setUpReminderNotification(userSettingsManager, prefsProvider)
 
         setUpSync(userSettingsManager)
 
         setUpAutoDnd(userSettingsManager)
-    }
 
-    /**
-     * Schedule/Cancel the jobs based on the update preferences.
-     */
-    fun restart() {
-
+        setUpSleepMode(userSettingsManager)
     }
 
     /**
@@ -119,6 +122,7 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
         //Check if the sleep mode is running?
         //Don't start monitoring.
         if (userSettingsManager.isCurrentlyInSleepMode) {
+            Timber.i("Currently Sleep mode is enabled: ${userSettingsManager.isCurrentlyInSleepMode}.")
             ActivityMonitorJob.cancel()
             return
         }
@@ -155,6 +159,7 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
         //Do not schedule the next job and cancel the current job.
         if (userSettingsManager.isCurrentlyDndEnable || userSettingsManager.isCurrentlyInSleepMode) {
             Timber.i("Currently DND mode is enabled: ${userSettingsManager.isCurrentlyDndEnable}.")
+            Timber.i("Currently Sleep mode is enabled: ${userSettingsManager.isCurrentlyInSleepMode}.")
             NotificationSchedulerJob.cancel(sharedPrefsProvider)
             return
         }
@@ -174,14 +179,17 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
     /**
      * Register alarm for daily review notifications.
      *
-     * @see DailyReviewHelper.registerDailyReview
+     * @see DailyReviewJob.scheduleJob
      */
-    private fun setUpDailyReview(context: Context, userSettingsManager: UserSettingsManager) {
-        //Cancel the upcoming alarm, if any.
-        DailyReviewHelper.cancelAlarm(context)
+    private fun setUpDailyReview(userSettingsManager: UserSettingsManager) {
+        //Check if the daily review is enabled?
+        if (!userSettingsManager.isDailyReviewEnable) {
+            DailyReviewJob.cancelScheduledJob()
+            return
+        }
 
         //Register new alarm
-        DailyReviewHelper.registerDailyReview(context, userSettingsManager)
+        DailyReviewJob.scheduleJob(userSettingsManager)
     }
 
     /**
@@ -208,6 +216,22 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      * @see AutoDndMonitoringJob.cancelScheduledJob
      */
     private fun setUpAutoDnd(userSettingsManager: UserSettingsManager) {
+        //Check if the auto dnd is enabled?
+        if (!userSettingsManager.isAutoDndEnable) {
+            AutoDndMonitoringJob.cancelScheduledJob()
+            return
+        }
+
         AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled(userSettingsManager)
+    }
+
+    /**
+     * Register the sleep starting and ending jobs.
+     *
+     * @see AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled
+     * @see AutoDndMonitoringJob.cancelScheduledJob
+     */
+    private fun setUpSleepMode(userSettingsManager: UserSettingsManager) {
+        SleepModeMonitoringJob.scheduleJob(userSettingsManager)
     }
 }

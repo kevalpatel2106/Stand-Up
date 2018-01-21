@@ -19,13 +19,11 @@ package com.kevalpatel2106.standup.core.activityMonitor
 
 import com.evernote.android.job.JobManager
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.common.SharedPreferenceKeys
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.standup.core.CoreConfig
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.annotations.Helper
 import java.util.*
 
@@ -108,24 +106,6 @@ internal object ActivityMonitorHelper {
             //User is moving
             UserActivityHelper.createLocalUserActivity(UserActivityType.MOVING)
         }
-    }
-
-
-    internal fun shouldScheduleNotification(userActivity: UserActivity,
-                                            sharedPrefsProvider: SharedPrefsProvider): Boolean {
-        if (userActivity.userActivityType == UserActivityType.MOVING) {
-
-            // Reschedule the notification if the user is currently moving
-            return true
-        } else if (sharedPrefsProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME) == 0L) {
-
-            // There is no notification since an hour. That indicates that may be notification job
-            // is not scheduled for a long time or it was canceled.
-            // Schedule the new job for the future. Later on based on the user activity, we can push
-            // the job back.
-            return true
-        }
-        return false
     }
 
     internal fun shouldMonitoringActivity(userSessionManager: UserSessionManager): Boolean {

@@ -54,6 +54,7 @@ dependencies {
     implementation project(':common')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
+    testImplementation(otherLib.roboElectric, excludeGrp)
 
     ide.each { add("implementation", it) }
     rxLib.each { add("implementation", it) }

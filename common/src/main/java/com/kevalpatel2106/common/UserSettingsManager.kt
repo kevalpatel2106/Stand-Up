@@ -225,6 +225,7 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
         get() = sharedPrefProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_AUTO_DND_END_TIME_FROM_12AM,
                 DEFAULT_AUTO_DND_END_TIME)
 
+    //TODO Remove that get/set. Decide based on start/end time
     var isCurrentlyInSleepMode: Boolean
         get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_IN_SLEEP_MODE_ON, false)
         set(value) = sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IN_SLEEP_MODE_ON, value)

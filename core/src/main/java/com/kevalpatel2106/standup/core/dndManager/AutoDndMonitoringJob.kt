@@ -87,7 +87,7 @@ internal class AutoDndMonitoringJob : Job() {
                         .build()
                         .schedule()
 
-                Timber.i("`Auto DND begin` monitoring job with id $startJobId scheduled after $startDndJobTime milliseconds.")
+                Timber.i("`Auto DND begin` monitoring job with id $startJobId scheduled at $startDndJobTime milliseconds.")
 
                 //Arrange the DND end job
                 val endDndJobTime = AutoDndMonitoringHelper.getAutoDndEndTiming(userSettingsManager)
@@ -97,7 +97,7 @@ internal class AutoDndMonitoringJob : Job() {
                         .build()
                         .schedule()
 
-                Timber.i("`Auto DND end` monitoring job with id $endJobId scheduled after $endDndJobTime milliseconds.")
+                Timber.i("`Auto DND end` monitoring job with id $endJobId scheduled at $endDndJobTime milliseconds.")
                 return@synchronized true
             }
         }
@@ -127,6 +127,14 @@ internal class AutoDndMonitoringJob : Job() {
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@AutoDndMonitoringJob)
+
+
+        //Check if the user has stopped auto DND manually?
+        if (!userSettingsManager.isAutoDndEnable) {
+            //Auto DND is not enabled. Don't start/stop DND mode.
+            cancelScheduledJob()
+            return Result.SUCCESS
+        }
 
         when (params.tag) {
             AUTO_DND_START_JOB_TAG -> autoDndStarted()
