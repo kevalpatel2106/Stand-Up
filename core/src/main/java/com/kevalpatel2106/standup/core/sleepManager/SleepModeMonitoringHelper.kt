@@ -19,14 +19,27 @@ package com.kevalpatel2106.standup.core.sleepManager
 
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
+import com.kevalpatel2106.utils.annotations.Helper
 
 /**
  * Created by Keval on 19/01/18.
+ * Helper class for [SleepModeMonitoringJob].
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-object SleepModeMonitoringHelper {
+@Helper(SleepModeMonitoringJob::class)
+internal object SleepModeMonitoringHelper {
 
+    /**
+     * Get the next sleep mode start time in unix milliseconds. It will convert the
+     * [UserSettingsManager.sleepStartTime] which is in the milliseconds from the 12AM into the unix
+     * time of the current day if the the time is not passed away or it will give start time for the
+     * next day.
+     *
+     * @see UserSettingsManager.sleepStartTime
+     * @see TimeUtils.getTodaysCalender12AM
+     * @see TimeUtils.getTommorowsCalender12AM
+     */
     @JvmStatic
     fun getSleepStartTiming(userSettingsManager: UserSettingsManager): Long {
         return with(userSettingsManager.sleepStartTime) {
@@ -42,6 +55,16 @@ object SleepModeMonitoringHelper {
         }
     }
 
+    /**
+     * Get the next sleep mode end time in unix milliseconds. It will convert the
+     * [UserSettingsManager.sleepEndTime] which is in the milliseconds from the 12AM into the unix
+     * time of the current day if the the time is not passed away or it will give start time for the
+     * next day.
+     *
+     * @see UserSettingsManager.sleepEndTime
+     * @see TimeUtils.getTodaysCalender12AM
+     * @see TimeUtils.getTommorowsCalender12AM
+     */
     @JvmStatic
     fun getSleepEndTiming(userSettingsManager: UserSettingsManager): Long {
         return with(userSettingsManager.sleepEndTime) {

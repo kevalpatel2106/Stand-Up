@@ -63,23 +63,13 @@ class SystemEventReceiver : BroadcastReceiver {
     }
 
     @VisibleForTesting
-    constructor(userSettingsManager: UserSettingsManager,
-                sharedPrefsProvider: SharedPrefsProvider) {
-        this.userSettingsManager = userSettingsManager
-        this.sharedPrefsProvider = sharedPrefsProvider
+    constructor(core: Core) {
+        this.core = core
     }
 
-    /**
-     * [UserSettingsManager] to provide user settings configs.
-     */
-    @Inject
-    lateinit var userSettingsManager: UserSettingsManager
 
-    /**
-     * [SharedPrefsProvider] to access shared preferences.
-     */
     @Inject
-    lateinit var sharedPrefsProvider: SharedPrefsProvider
+    lateinit var core: Core
 
     /**
      * @see BroadcastReceiver.onReceive
@@ -94,82 +84,9 @@ class SystemEventReceiver : BroadcastReceiver {
         // Cancel all the job
         // Evernote job automatically schedules all the jobs for you on boot complete.
         // So, we are going to cancel all the jobs and schedule our own jobs again.
-        JobManager.instance().cancelAll()
+        Core.meltdownCore()
 
-        //Start monitoring activity.
-        setUpActivityMonitoring()
-
-        //Sync all the pending activities.
-        setUpSync()
-
-        //Schedule the next reminder
-        setUpNotification(sharedPrefsProvider)
-
-        //Schedule the next daily review.
-        setUpDailyReview(context)
-
-        setUpAutoDnd()
+        core.refresh()
         Timber.i("Rescheduling of all jobs and alarms completed. :-)")
-    }
-
-    /**
-     * Register alarm for daily review notifications.
-     *
-     * @see DailyReviewHelper.registerDailyReview
-     */
-    private fun setUpDailyReview(context: Context) {
-
-        //Cancel the upcoming alarm, if any.
-        DailyReviewHelper.cancelAlarm(context)
-
-        //Register new alarm
-        DailyReviewHelper.registerDailyReview(context, userSettingsManager)
-    }
-
-    /**
-     * Register the [NotificationSchedulerJob] after [CoreConfig.STAND_UP_REMINDER_INTERVAL].
-     *
-     * @see NotificationSchedulerJob.scheduleNotification
-     */
-    private fun setUpNotification(sharedPrefsProvider: SharedPrefsProvider) {
-        NotificationSchedulerJob.scheduleNotification(sharedPrefsProvider)
-    }
-
-    /**
-     * Start monitoring user activity by registering [ActivityMonitorJob] after
-     * [CoreConfig.MONITOR_SERVICE_PERIOD].
-     *
-     * @see ActivityMonitorJob.scheduleNextJob
-     */
-    private fun setUpActivityMonitoring() {
-        ActivityMonitorJob.scheduleNextJob()
-    }
-
-    /**
-     * Register next sync with the server after [UserSettingsManager.syncInterval] by registering
-     * [SyncJob].
-     *
-     * @see SyncJob.scheduleSync
-     */
-    private fun setUpSync() {
-
-        //Check if the background sync is enabled?
-        if (userSettingsManager.enableBackgroundSync) {
-
-            //Schedule periodic the sync service.
-            SyncJob.scheduleSync(userSettingsManager.syncInterval)
-        } else {
-            Timber.i("Background sync is disabled by the user. Skipping it.")
-        }
-    }
-
-    /**
-     * Register the auto DND starting and ending jobs.
-     *
-     * @see AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled
-     * @see AutoDndMonitoringJob.cancelScheduledJob
-     */
-    private fun setUpAutoDnd() {
-        AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled(userSettingsManager)
     }
 }

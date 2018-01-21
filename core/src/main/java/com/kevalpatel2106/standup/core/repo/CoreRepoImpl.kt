@@ -32,7 +32,7 @@ import javax.inject.Named
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class CoreRepoImpl @Inject constructor(private val userActivityDao: UserActivityDao,
+internal class CoreRepoImpl @Inject constructor(private val userActivityDao: UserActivityDao,
                                        @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit)
     : CoreRepo {
 

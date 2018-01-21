@@ -18,7 +18,6 @@
 package com.kevalpatel2106.standup.core.reminder
 
 import android.annotation.SuppressLint
-import android.content.Context
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
@@ -46,42 +45,50 @@ class NotificationSchedulerJob : Job() {
         internal const val REMINDER_NOTIFICATION_JOB_TAG = "reminder_notification_job"
 
         /**
-         * Schedule the [NotificationSchedulerJob] job after [scheduleAfterMills] milliseconds.
-         * This will override all the previous scheduled [NotificationSchedulerJob] job. This
-         * job will be one shot not recurring.
+         * Schedule the [NotificationSchedulerJob] job after [scheduleInterval] milliseconds.
+         * This will override all the previous scheduled [NotificationSchedulerJob] job. This job is
+         * recurring and having interval of [scheduleInterval].
+         *
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpReminderNotification]
+         * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
+         *
+         * @see com.kevalpatel2106.standup.core.Core.setUpReminderNotification
          */
         @SuppressLint("VisibleForTests")
         @JvmStatic
-        fun scheduleNotification(sharedPrefsProvider: SharedPrefsProvider,
-                                 scheduleAfterMills: Long = CoreConfig.STAND_UP_REMINDER_INTERVAL) {
+        internal fun scheduleNotification(sharedPrefsProvider: SharedPrefsProvider,
+                                          scheduleInterval: Long = CoreConfig.STAND_UP_REMINDER_INTERVAL) {
 
             synchronized(NotificationSchedulerJob::class) {
 
                 //Save the time of upcoming notification.
                 sharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME,
-                        System.currentTimeMillis() + scheduleAfterMills)
+                        System.currentTimeMillis() + scheduleInterval)
 
                 //Schedule the job
                 val id = JobRequest.Builder(REMINDER_NOTIFICATION_JOB_TAG)
                         .setUpdateCurrent(true)
-                        .setPeriodic(scheduleAfterMills, CoreConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE)
+                        .setPeriodic(scheduleInterval, CoreConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE)
                         .build()
                         .schedule()
 
-                Timber.i("Next notification job with id $id scheduled after $scheduleAfterMills milliseconds.")
+                Timber.i("Next notification job with id $id scheduled after $scheduleInterval milliseconds.")
             }
         }
 
         /**
          * Cancel all the [NotificationSchedulerJob] jobs if any job is scheduled with
          * [REMINDER_NOTIFICATION_JOB_TAG].
+         *
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpReminderNotification]
+         * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
          */
         @JvmStatic
-        fun cancel(context: Context) {
+        fun cancel(sharedPrefsProvider: SharedPrefsProvider) {
             JobManager.instance().cancelAllForTag(REMINDER_NOTIFICATION_JOB_TAG)
 
             //Remove the next reminder time. We are not having any next reminder scheduled.
-            SharedPrefsProvider(context).removePreferences(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME)
+            sharedPrefsProvider.removePreferences(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME)
 
             Timber.i("All the notification job canceled.")
         }

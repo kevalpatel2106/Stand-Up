@@ -19,14 +19,28 @@ package com.kevalpatel2106.standup.core.dndManager
 
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
+import com.kevalpatel2106.utils.annotations.Helper
 
 /**
  * Created by Keval on 19/01/18.
+ * Helper class for [AutoDndMonitoringJob].
  *
+ * @see AutoDndMonitoringJob
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
+@Helper(AutoDndMonitoringJob::class)
 object AutoDndMonitoringHelper {
 
+    /**
+     * Get the next DND mode start time in unix milliseconds. It will convert the
+     * [UserSettingsManager.autoDndStartTime] which is in the milliseconds from the 12AM into the unix
+     * time of the current day if the the time is not passed away or it will give start time for the
+     * next day.
+     *
+     * @see UserSettingsManager.autoDndStartTime
+     * @see TimeUtils.getTodaysCalender12AM
+     * @see TimeUtils.getTommorowsCalender12AM
+     */
     @JvmStatic
     fun getAutoDndStartTiming(userSettingsManager: UserSettingsManager): Long {
         return with(userSettingsManager.autoDndStartTime) {
@@ -42,6 +56,16 @@ object AutoDndMonitoringHelper {
         }
     }
 
+    /**
+     * Get the next DND mode end time in unix milliseconds. It will convert the
+     * [UserSettingsManager.autoDndEndTime] which is in the milliseconds from the 12AM into the unix
+     * time of the current day if the the time is not passed away or it will give start time for the
+     * next day.
+     *
+     * @see UserSettingsManager.autoDndEndTime
+     * @see TimeUtils.getTodaysCalender12AM
+     * @see TimeUtils.getTommorowsCalender12AM
+     */
     @JvmStatic
     fun getAutoDndEndTiming(userSettingsManager: UserSettingsManager): Long {
         return with(userSettingsManager.autoDndEndTime) {

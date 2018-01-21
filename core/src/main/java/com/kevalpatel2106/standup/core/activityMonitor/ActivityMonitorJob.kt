@@ -20,7 +20,6 @@ package com.kevalpatel2106.standup.core.activityMonitor
 import android.annotation.SuppressLint
 import android.app.job.JobScheduler
 import android.app.job.JobService
-import android.content.Context
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.google.android.gms.awareness.Awareness
@@ -28,10 +27,13 @@ import com.google.android.gms.awareness.snapshot.DetectedActivityResponse
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
 import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.AsyncJob
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
+import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerHelper
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.repo.CoreRepo
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -80,11 +82,29 @@ class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivityRespons
     companion object {
         internal const val ACTIVITY_MONITOR_JOB_TAG = "activity_monitor_job_tag"
 
+        /**
+         * This method will schedule the next [ActivityMonitorJob] after [CoreConfig.MONITOR_SERVICE_PERIOD]
+         * milliseconds.
+         *
+         * NOTE: If the user is in Sleep DND mode, i.e. if [UserSettingsManager.isCurrentlyInSleepMode]
+         * is true, this method won't schedule the job and simply return. This job will automatically
+         * scheduled by [com.kevalpatel2106.standup.core.Core] whenever the sleep mode goes off.
+         *
+         * NOTE: The scheduled job is not the periodic job. As periodic jobs will require with minimum
+         * 15 minutes of period between two subsequent jobs as described [here](https://stackoverflow.com/a/44169179).
+         *
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpActivityMonitoring]
+         * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
+         *
+         * @return True if the job is scheduled. False if the job is not scheduled.
+         * @see JobRequest.Builder.setExact
+         */
         @JvmStatic
-        fun scheduleNextJob(): Boolean {
+        internal fun scheduleNextJob(): Boolean {
             synchronized(ActivityMonitorJob::class) {
 
                 //Schedule the job
+                //This isn't the periodic job
                 val id = JobRequest.Builder(ACTIVITY_MONITOR_JOB_TAG)
                         .setUpdateCurrent(true)
                         .setExact(CoreConfig.MONITOR_SERVICE_PERIOD)
@@ -96,14 +116,16 @@ class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivityRespons
             }
         }
 
+        /**
+         * Cancel upcoming [ActivityMonitorJob].
+         *
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpActivityMonitoring]
+         * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
+         */
         @JvmStatic
-        fun cancel(context: Context) {
+        internal fun cancel() {
             JobManager.instance().cancelAllForTag(ACTIVITY_MONITOR_JOB_TAG)
-
             Timber.i("Canceling activity monitoring job.")
-
-            //Stop the notifications
-            NotificationSchedulerJob.cancel(context)
         }
     }
 
@@ -112,6 +134,12 @@ class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivityRespons
 
     @Inject
     lateinit var userSessionManager: UserSessionManager
+
+    @Inject
+    lateinit var userSettingsManager: dagger.Lazy<UserSettingsManager>
+
+    @Inject
+    lateinit var core: dagger.Lazy<Core>
 
     @Inject
     lateinit var sharedPrefsProvider: SharedPrefsProvider
@@ -172,8 +200,8 @@ class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivityRespons
             return
         }
 
-        if (ActivityMonitorHelper.shouldScheduleNotification(userActivity, sharedPrefsProvider)) {
-            NotificationSchedulerJob.scheduleNotification(sharedPrefsProvider)
+        if (!NotificationSchedulerHelper.isReminderScheduled()) {
+            core.get().setUpReminderNotification(userSettingsManager.get(), sharedPrefsProvider)
         }
 
         //Add the new value to database.

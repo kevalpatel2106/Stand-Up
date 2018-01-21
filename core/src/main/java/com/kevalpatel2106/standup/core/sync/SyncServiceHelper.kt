@@ -24,11 +24,11 @@ import com.kevalpatel2106.utils.annotations.Helper
  * Created by Keval on 05/01/18.
  * Helper class for [SyncJob].
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  * @see SyncJob
  */
 @Helper(SyncJob::class)
-object SyncServiceHelper {
+internal object SyncServiceHelper {
 
     /**
      * Check if the [SyncJob] should sync the data with the server?

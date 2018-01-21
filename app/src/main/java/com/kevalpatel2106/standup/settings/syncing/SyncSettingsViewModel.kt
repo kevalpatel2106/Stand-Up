@@ -22,12 +22,17 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.SharedPreferenceKeys
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.rxbus.RxBus
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -39,6 +44,9 @@ class SyncSettingsViewModel : BaseViewModel {
 
     @Inject
     lateinit var sharedPrefsProvider: SharedPrefsProvider
+
+    @Inject
+    lateinit var core: Core
 
     internal val isSyncing = MutableLiveData<Boolean>()
     internal val lastSyncTime = MutableLiveData<String>()
@@ -85,13 +93,11 @@ class SyncSettingsViewModel : BaseViewModel {
     }
 
 
-    fun onBackgroundSyncPolicyChange(isEnabled: Boolean, interval: Long) {
-        if (isEnabled) {
-            //reschedule the job if background sync is enabled.
-            SyncJob.scheduleSync(interval)
-        } else {
-            //Canceled current job
-            SyncJob.cancelScheduledSync()
-        }
+    fun onBackgroundSyncPolicyChange() {
+        Observable.timer(1000, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate { core.refresh() }
+                .subscribe()
     }
 }

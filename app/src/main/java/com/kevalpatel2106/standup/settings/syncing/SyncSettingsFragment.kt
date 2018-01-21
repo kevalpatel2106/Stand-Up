@@ -94,7 +94,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
 
             //Reschedule the sync job
             context?.let {
-                model.onBackgroundSyncPolicyChange(settingsManager.enableBackgroundSync, newValue.toLong())
+                model.onBackgroundSyncPolicyChange()
             }
             return@setOnPreferenceChangeListener false
         }
@@ -108,7 +108,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
 
             //Reschedule the job
             context?.let {
-                model.onBackgroundSyncPolicyChange(newValue, settingsManager.syncInterval)
+                model.onBackgroundSyncPolicyChange()
             }
             return@setOnPreferenceChangeListener true
         }

@@ -35,7 +35,7 @@ import timber.log.Timber
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object DailyReviewHelper {
+internal object DailyReviewHelper {
 
     /**
      * Unique request code for pending intent.

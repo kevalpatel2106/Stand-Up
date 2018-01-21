@@ -27,7 +27,6 @@ import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
-import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -87,10 +86,6 @@ class SplashActivity : BaseActivity() {
 
                 EditProfileActivity.launch(this@SplashActivity)
             } else {    //All looks good.
-
-                //Start activity monitoring if not running
-                ActivityMonitorJob.scheduleNextJob()
-
                 //Launch the dashboard.
                 MainActivity.launch(this@SplashActivity)
             }

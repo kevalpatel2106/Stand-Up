@@ -29,9 +29,7 @@ import com.kevalpatel2106.standup.authentication.repo.LogoutRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
-import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
-import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
-import com.kevalpatel2106.standup.core.sync.SyncJob
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import io.reactivex.Completable
@@ -73,9 +71,7 @@ class Logout constructor(private val application: Application,
                 .subscribe()
 
         //Cancel all the jobs
-        NotificationSchedulerJob.cancel(application)
-        ActivityMonitorJob.cancel(application)
-        SyncJob.cancelScheduledSync()
+        Core.meltdownCore()
 
         //Clear all the notifications
         val manager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

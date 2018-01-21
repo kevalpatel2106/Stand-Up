@@ -35,7 +35,7 @@ import dagger.Component
  */
 @ApplicationScope
 @Component(dependencies = [AppComponent::class], modules = [CoreModule::class])
-interface CoreComponent {
+internal interface CoreComponent {
 
     fun inject(activityMonitorJob: ActivityMonitorJob)
 

@@ -20,8 +20,10 @@ package com.kevalpatel2106.standup.core.dndManager
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
@@ -34,14 +36,41 @@ import javax.inject.Inject
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-class AutoDndMonitoringJob : Job() {
+internal class AutoDndMonitoringJob : Job() {
 
     companion object {
+        /**
+         * Unique tag for the job which notifies when the Auto DND mode starts.
+         */
         const val AUTO_DND_START_JOB_TAG = "auto_dnd_start_job_tag"
+
+        /**
+         * Unique tag for the job which notifies when the Auto DND mode ends.
+         */
         const val AUTO_DND_END_JOB_TAG = "auto_dnd_end_job_tag"
 
+        /**
+         * Schedule the job to notify when the auto dnd mode starts and when the auto dnd mode ends.
+         *
+         * Here two jobs will be scheduled:
+         * - Job with the tag [AUTO_DND_START_JOB_TAG] will run this job whenever the auto DND mode
+         * starts. This job is scheduled to run on [AutoDndMonitoringHelper.getAutoDndStartTiming]
+         * unix milliseconds. At this time, job will cancel the [NotificationSchedulerJob] to prevent
+         * stand up reminder notifications. This will set [UserSettingsManager.isCurrentlyDndEnable].
+         * - Job with the tag [AUTO_DND_END_JOB_TAG] will run this job whenever the auto DND mode
+         * ends. This job is scheduled to run on [AutoDndMonitoringHelper.getAutoDndEndTiming]
+         * unix milliseconds. At this time, job will reschedule the [NotificationSchedulerJob] to
+         * display reminder notifications. This will reset [UserSettingsManager.isCurrentlyDndEnable].
+         *
+         * This job is one-shot job not periodic. At the end of [AUTO_DND_END_JOB_TAG] job, it
+         * will reschedule this job for the next day.
+         *
+         * @return True if both the jobs are scheduled successfully else false.
+         * @see AutoDndMonitoringHelper.getAutoDndStartTiming
+         * @see AutoDndMonitoringHelper.getAutoDndEndTiming
+         */
         @JvmStatic
-        fun scheduleJobIfAutoDndEnabled(userSettingsManager: UserSettingsManager): Boolean {
+        internal fun scheduleJobIfAutoDndEnabled(userSettingsManager: UserSettingsManager): Boolean {
             return synchronized(ActivityMonitorJob::class) {
                 if (!userSettingsManager.isAutoDndEnable) {
 
@@ -73,8 +102,11 @@ class AutoDndMonitoringJob : Job() {
             }
         }
 
+        /**
+         * Cancel both [AUTO_DND_END_JOB_TAG] and [AUTO_DND_START_JOB_TAG] jobs.
+         */
         @JvmStatic
-        fun cancelScheduledJob() {
+        internal fun cancelScheduledJob() {
             JobManager.instance().cancelAllForTag(AUTO_DND_START_JOB_TAG)
             JobManager.instance().cancelAllForTag(AUTO_DND_END_JOB_TAG)
         }
@@ -85,6 +117,9 @@ class AutoDndMonitoringJob : Job() {
 
     @Inject
     lateinit var sharedPrefsProvider: SharedPrefsProvider
+
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
 
     override fun onRunJob(params: Params): Result {
         //Inject dependencies.
@@ -104,10 +139,12 @@ class AutoDndMonitoringJob : Job() {
 
     private fun autoDndStarted() {
         //Turn on the DND mode
-        userSettingsManager.isCurrentlyInSleepMode = true
+        userSettingsManager.isCurrentlyDndEnable = true
 
-        //Remove all the notification jobs
-        NotificationSchedulerJob.cancel(context)
+        Core(userSessionManager = userSessionManager,
+                userSettingsManager = userSettingsManager,
+                prefsProvider = sharedPrefsProvider)
+                .refresh()
 
         //TODO may be display a small low priority notification?
 
@@ -117,8 +154,10 @@ class AutoDndMonitoringJob : Job() {
         //Turn off the DND mode
         userSettingsManager.isCurrentlyDndEnable = false
 
-        //Start scheduling the notifications again
-        NotificationSchedulerJob.scheduleNotification(sharedPrefsProvider)
+        Core(userSessionManager = userSessionManager,
+                userSettingsManager = userSettingsManager,
+                prefsProvider = sharedPrefsProvider)
+                .refresh()
 
         //Schedule the next dnd monitoring job
         scheduleJobIfAutoDndEnabled(userSettingsManager)

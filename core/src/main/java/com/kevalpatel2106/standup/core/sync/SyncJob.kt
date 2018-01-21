@@ -79,7 +79,7 @@ import javax.inject.Inject
  * [com.kevalpatel2106.standup.constants.SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME]. This time is
  * in unix milliseconds.
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 class SyncJob : AsyncJob() {
 
@@ -133,7 +133,7 @@ class SyncJob : AsyncJob() {
 
         @SuppressLint("VisibleForTests")
         @JvmStatic
-        fun scheduleSync(intervalMills: Long) {
+        internal fun scheduleSync(intervalMills: Long) {
             synchronized(SyncJob::class) {
                 //Schedule the job
                 val id = JobRequest.Builder(SYNC_JOB_TAG)
@@ -148,7 +148,7 @@ class SyncJob : AsyncJob() {
         }
 
         @JvmStatic
-        fun cancelScheduledSync() {
+        internal fun cancelScheduledSync() {
             JobManager.instance().cancelAllForTag(SYNC_JOB_TAG)
             Timber.i("All the sync jobs are canceled.")
         }

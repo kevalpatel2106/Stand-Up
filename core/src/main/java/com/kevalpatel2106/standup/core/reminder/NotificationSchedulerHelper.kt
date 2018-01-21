@@ -17,6 +17,8 @@
 
 package com.kevalpatel2106.standup.core.reminder
 
+import com.evernote.android.job.Job
+import com.evernote.android.job.JobManager
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.utils.annotations.Helper
 
@@ -31,4 +33,8 @@ internal object NotificationSchedulerHelper {
     internal fun shouldDisplayNotification(userSessionManager: UserSessionManager): Boolean {
         return userSessionManager.isUserLoggedIn
     }
+
+    internal fun isReminderScheduled():Boolean = JobManager.instance()
+            .getAllJobRequestsForTag(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
+            .isNotEmpty()
 }

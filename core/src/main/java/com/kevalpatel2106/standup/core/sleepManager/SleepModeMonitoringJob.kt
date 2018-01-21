@@ -20,10 +20,15 @@ package com.kevalpatel2106.standup.core.sleepManager
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
+import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringHelper
+import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob.Companion.AUTO_DND_END_JOB_TAG
+import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob.Companion.AUTO_DND_START_JOB_TAG
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
@@ -37,11 +42,40 @@ import javax.inject.Inject
 class SleepModeMonitoringJob : Job() {
 
     companion object {
+        /**
+         * Unique tag for the job which notifies when the sleep mode starts.
+         */
         const val SLEEP_MODE_START_JOB_TAG = "sleep_mode_start_job_tag"
+
+        /**
+         * Unique tag for the job which notifies when the sleep mode ends.
+         */
         const val SLEEP_MODE_END_JOB_TAG = "sleep_mode_end_job_tag"
 
+        /**
+         * Schedule the job to notify when the sleep mode starts and when the sleep mode ends.
+         *
+         * Here two jobs will be scheduled:
+         * - Job with the tag [SLEEP_MODE_START_JOB_TAG] will run this job whenever the sleep mode
+         * starts. This job is scheduled to run on [SleepModeMonitoringHelper.getSleepStartTiming]
+         * unix milliseconds. At this time, job will cancel the [NotificationSchedulerJob] to prevent
+         * stand up reminder notifications and [ActivityMonitorJob] will stop monitoring user's
+         * activity. This will set [UserSettingsManager.isCurrentlyInSleepMode].
+         * - Job with the tag [SLEEP_MODE_END_JOB_TAG] will run this job whenever the sleep mode
+         * ends. This job is scheduled to run on [SleepModeMonitoringHelper.getSleepEndTiming]
+         * unix milliseconds. At this time, job will reschedule the [NotificationSchedulerJob] to
+         * display reminder notifications and [ActivityMonitorJob] to start monitoring user's activity.
+         * This will reset [UserSettingsManager.isCurrentlyInSleepMode].
+         *
+         * This job is one-shot job not periodic. At the end of [SLEEP_MODE_END_JOB_TAG] job, it
+         * will reschedule this job for the next day.
+         *
+         * @return True if both the jobs are scheduled successfully else false.
+         * @see SleepModeMonitoringHelper.getSleepStartTiming
+         * @see SleepModeMonitoringHelper.getSleepEndTiming
+         */
         @JvmStatic
-        fun scheduleJob(userSettingsManager: UserSettingsManager): Boolean {
+        internal fun scheduleJob(userSettingsManager: UserSettingsManager): Boolean {
 
             return synchronized(ActivityMonitorJob::class) {
 
@@ -68,8 +102,11 @@ class SleepModeMonitoringJob : Job() {
             }
         }
 
+        /**
+         * Cancel both [SLEEP_MODE_START_JOB_TAG] and [SLEEP_MODE_END_JOB_TAG] jobs.
+         */
         @JvmStatic
-        fun cancelScheduledJob() {
+        internal fun cancelScheduledJob() {
             JobManager.instance().cancelAllForTag(SLEEP_MODE_START_JOB_TAG)
             JobManager.instance().cancelAllForTag(SLEEP_MODE_END_JOB_TAG)
         }
@@ -80,6 +117,9 @@ class SleepModeMonitoringJob : Job() {
 
     @Inject
     lateinit var sharedPrefsProvider: SharedPrefsProvider
+
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
 
     override fun onRunJob(params: Params): Result {
         //Inject dependencies.
@@ -103,11 +143,10 @@ class SleepModeMonitoringJob : Job() {
             //Turn on sleep mode
             userSettingsManager.isCurrentlyInSleepMode = true
 
-            //Stop monitoring activity
-            ActivityMonitorJob.cancel(context)
-
-            //Remove all the notification jobs
-            NotificationSchedulerJob.cancel(context)
+            Core(userSessionManager = userSessionManager,
+                    userSettingsManager = userSettingsManager,
+                    prefsProvider = sharedPrefsProvider)
+                    .refresh()
 
             //TODO may be display a small low priority notification?
         }
@@ -117,11 +156,10 @@ class SleepModeMonitoringJob : Job() {
         //Turn off sleep mode
         userSettingsManager.isCurrentlyInSleepMode = false
 
-        //Start scheduling the notifications again
-        NotificationSchedulerJob.scheduleNotification(sharedPrefsProvider)
-
-        //Start monitoring activity
-        ActivityMonitorJob.scheduleNextJob()
+        Core(userSessionManager = userSessionManager,
+                userSettingsManager = userSettingsManager,
+                prefsProvider = sharedPrefsProvider)
+                .refresh()
 
         //Schedule the next sleep monitoring job
         scheduleJob(userSettingsManager)

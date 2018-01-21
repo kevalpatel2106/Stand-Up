@@ -25,7 +25,7 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
-import com.kevalpatel2106.standup.core.dailyReview.DailyReviewHelper
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.utils.TimeUtils
 import java.util.*
@@ -44,6 +44,8 @@ class DailyReviewSettingsViewModel : BaseViewModel {
      * [UserSettingsManager] for getting the settings.
      */
     @Inject lateinit var settingsManager: UserSettingsManager
+
+    @Inject lateinit var core: Core
 
     /**
      * [MutableLiveData] to get the daily review time in HH:mm a format. (e.g. 09:04 AM)
@@ -75,17 +77,13 @@ class DailyReviewSettingsViewModel : BaseViewModel {
 
     internal fun onDailyReviewTurnedOff(context: Context) {
         //Cancel the upcoming alarm, if any.
-        DailyReviewHelper.cancelAlarm(context)
+        core.refresh()
     }
 
-    internal fun onDailyReviewTurnedOn(context: Context) = rescheduleDailyReviewAlarm(context)
+    internal fun onDailyReviewTurnedOn(context: Context) = rescheduleDailyReviewAlarm()
 
-    private fun rescheduleDailyReviewAlarm(context: Context) {
-        //Cancel the upcoming alarm, if any.
-        DailyReviewHelper.cancelAlarm(context)
-
-        //Register new alarm
-        DailyReviewHelper.registerDailyReview(context, settingsManager)
+    private fun rescheduleDailyReviewAlarm() {
+        core.refresh()
     }
 
     /**
@@ -105,7 +103,7 @@ class DailyReviewSettingsViewModel : BaseViewModel {
             dailyReviewTimeSummary.value = TimeUtils.convertToHHmmaFrom12Am(settingsManager.dailyReviewTimeFrom12Am)
 
             //daily review timing changed. Update the alarms.
-            rescheduleDailyReviewAlarm(context)
+            rescheduleDailyReviewAlarm()
         }, cal.get(Calendar.HOUR_OF_DAY),
                 cal.get(Calendar.MINUTE),
                 false)

@@ -23,8 +23,7 @@ import android.support.v4.app.FragmentManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
-import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
-import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.timepicker.DualTimePicker
 import com.kevalpatel2106.timepicker.DualTimePickerListener
@@ -40,6 +39,9 @@ class DndSettingsViewModel : BaseViewModel {
 
     @Inject
     lateinit var userSettingsManager: UserSettingsManager
+
+    @Inject
+    lateinit var core: Core
 
     @Suppress("unused")
     constructor() {
@@ -74,7 +76,7 @@ class DndSettingsViewModel : BaseViewModel {
         isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
 
         //Schedule the dnd monitoring job
-        AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled(userSettingsManager)
+        core.refresh()
     }
 
     fun onAutoDndTurnedOff() {
@@ -84,7 +86,7 @@ class DndSettingsViewModel : BaseViewModel {
         isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
 
         //Cancel all the dnd monitoring job
-        AutoDndMonitoringJob.cancelScheduledJob()
+        core.refresh()
     }
 
     fun onSelectAutoDndTime(supportFragmentManager: FragmentManager) {
@@ -107,7 +109,7 @@ class DndSettingsViewModel : BaseViewModel {
                 isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
 
                 //Reschedule the auto dnd monitoring jobs.
-                AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled(userSettingsManager)
+                core.refresh()
             }
         })
     }
@@ -129,7 +131,7 @@ class DndSettingsViewModel : BaseViewModel {
                 sleepTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepEndTime)}"
 
                 //Reschedule the sleep monitoring job
-                SleepModeMonitoringJob.scheduleJob(userSettingsManager)
+                core.refresh()
             }
         })
     }

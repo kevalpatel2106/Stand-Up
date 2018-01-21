@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.core.activityMonitor
 
+import com.evernote.android.job.JobManager
 import com.google.android.gms.location.DetectedActivity
 import com.kevalpatel2106.common.SharedPreferenceKeys
 import com.kevalpatel2106.common.UserSessionManager
@@ -130,4 +131,10 @@ internal object ActivityMonitorHelper {
     internal fun shouldMonitoringActivity(userSessionManager: UserSessionManager): Boolean {
         return userSessionManager.isUserLoggedIn
     }
+
+    /**
+     * @return True if the [ActivityMonitorJob] is scheduled else false.
+     */
+    internal fun isAnyJobScheduled() : Boolean = JobManager.instance()
+            .getAllJobRequestsForTag(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG).isNotEmpty()
 }

@@ -35,7 +35,7 @@ import com.kevalpatel2106.standup.core.sync.SyncJob
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  * @see [Evernote Job](https://github.com/evernote/android-job#usage)
  */
-class CoreJobCreator : JobCreator {
+internal class CoreJobCreator : JobCreator {
 
     companion object {
 

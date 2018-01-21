@@ -21,10 +21,14 @@ import android.os.StrictMode
 import com.facebook.FacebookSdk
 import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
-import com.kevalpatel2106.standup.core.CoreJobCreator
+import com.kevalpatel2106.standup.core.Core
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.squareup.leakcanary.LeakCanary
 import timber.log.Timber
+import javax.inject.Inject
 
 
 /**
@@ -76,6 +80,8 @@ class SUApplication : BaseApplication() {
         @Suppress("DEPRECATION")
         FacebookSdk.sdkInitialize(this@SUApplication)
 
-        CoreJobCreator.init(this@SUApplication)
+        val prefProvider = SharedPrefsProvider(this@SUApplication)
+        Core(UserSessionManager(prefProvider), UserSettingsManager(prefProvider), prefProvider)
+                .turnOn(this@SUApplication)
     }
 }
