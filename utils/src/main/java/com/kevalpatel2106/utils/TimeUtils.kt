@@ -74,6 +74,10 @@ object TimeUtils {
         return getCalender12AM(System.currentTimeMillis())
     }
 
+    fun getTommorowsCalender12AM(): Calendar {
+        return getCalender12AM(System.currentTimeMillis() + TimeUtils.ONE_DAY_MILLISECONDS)
+    }
+
     //*********** Human readable month formats *********//
 
     fun getMonthInitials(monthOfYear: Int): String = when (monthOfYear) {

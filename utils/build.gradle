@@ -60,5 +60,5 @@ dependencies {
 
     //Support
     implementation supportLib.supportv4
-    implementation supportLib.appCompat
+    implementation supportLib.annotations
 }

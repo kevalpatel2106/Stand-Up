@@ -17,7 +17,7 @@
 
 package com.kevalpatel2106.standup.diary.list
 
-import com.kevalpatel2106.standup.db.DailyActivitySummary
+import com.kevalpatel2106.common.db.DailyActivitySummary
 
 /**
  * Created by Keval on 27/12/17.

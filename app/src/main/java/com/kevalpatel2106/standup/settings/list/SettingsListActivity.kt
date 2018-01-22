@@ -15,6 +15,8 @@
  *
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.kevalpatel2106.standup.settings.list
 
 import android.app.ProgressDialog
@@ -25,7 +27,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
-import com.kevalpatel2106.base.uiController.BaseActivity
+import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import kotlinx.android.synthetic.main.activity_settings_list.*
 

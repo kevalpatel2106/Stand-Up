@@ -21,7 +21,7 @@ import android.os.Bundle
 import android.support.annotation.CallSuper
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import com.kevalpatel2106.base.uiController.BaseActivity
+import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 
 /**

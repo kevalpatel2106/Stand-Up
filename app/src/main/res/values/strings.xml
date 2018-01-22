@@ -70,9 +70,6 @@
     <string name="menu_save">Save</string>
     <string name="forgot_password_successful">Password reset link sent to you on email. Please check your email</string>
     <string name="btn_title_open_mail">Open Mail</string>
-    <string name="notification_channel_title_syncing">Syncing Notifications</string>
-    <string name="notification_channel_title_accounts">Account Notifications</string>
-    <string name="notification_channel_title_reminders">Reminder Notifications</string>
     <string name="nav_header_home">Home</string>
     <string name="nav_header_dairy">Dairy</string>
     <string name="nav_header_stats">Statistics</string>
@@ -107,8 +104,6 @@
     <string name="error_invalid_issue_description">Please describe the issue.</string>
     <string name="title_activity_settings">Settings</string>
     <string name="btn_title_retry">Retry</string>
-    <string name="reminder_notification_title">Stand up now</string>
-    <string name="reminder_notification_message">Stand up now</string>
     <string name="today_summary_heading_since_today_midnight">Since today midnight…</string>
     <string name="error_message_report_issue">Cannot report the issue.</string>
     <string name="issue_success_alert_title">Issue reported.</string>
@@ -140,6 +135,7 @@
     <string name="dnd_pref_auto_dnd_switch_summary_off">Do not disturb mode won\'t start automatically. You can turn it on on/off manually though.</string>
     <string name="dnd_pref_auto_dnd_switch_title_off">Disable</string>
     <string name="dnd_pref_auto_dnd_switch_title_on">Enable</string>
+    <string name="notification_update_title">New update is available.</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

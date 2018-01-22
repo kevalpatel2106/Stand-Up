@@ -34,9 +34,8 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import butterknife.OnClick
 import butterknife.Optional
-import com.kevalpatel2106.base.annotations.UIController
-import com.kevalpatel2106.base.uiController.BaseActivity
-import com.kevalpatel2106.base.uiController.showSnack
+import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.facebookauth.FacebookHelper
 import com.kevalpatel2106.facebookauth.FacebookResponse
 import com.kevalpatel2106.facebookauth.FacebookUser
@@ -48,6 +47,7 @@ import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivit
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordActivity
 import com.kevalpatel2106.utils.ViewPropertyAnimatorSet
 import com.kevalpatel2106.utils.ViewUtils
+import com.kevalpatel2106.utils.annotations.UIController
 import kotlinx.android.synthetic.main.activity_login.*
 
 

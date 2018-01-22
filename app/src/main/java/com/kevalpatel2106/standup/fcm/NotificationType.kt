@@ -25,4 +25,6 @@ package com.kevalpatel2106.standup.fcm
  */
 internal object NotificationType {
     const val TYPE_EMAIL_VERIFIED = "email_verified"
+    const val TYPE_APP_UPDATE = "app_update"
+    const val TYPE_PROMOTIONAL = "promotional"
 }

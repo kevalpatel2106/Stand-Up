@@ -17,12 +17,12 @@
 
 package com.kevalpatel2106.standup.about.repo
 
-import com.kevalpatel2106.base.annotations.Repository
+import com.kevalpatel2106.utils.annotations.Repository
 import io.reactivex.Flowable
 
 /**
  * Created by Kevalpatel2106 on 29-Dec-17.
- * Abstract implementation of [com.kevalpatel2106.base.annotations.Repository] for the about module.
+ * Abstract implementation of [com.kevalpatel2106.common.annotations.Repository] for the about module.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */

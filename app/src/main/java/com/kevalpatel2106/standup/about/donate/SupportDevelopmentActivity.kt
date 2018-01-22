@@ -21,10 +21,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import butterknife.OnClick
-import com.kevalpatel2106.base.annotations.UIController
-import com.kevalpatel2106.base.uiController.BaseActivity
+import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.misc.SUUtils
+import com.kevalpatel2106.standup.SUUtils
+import com.kevalpatel2106.utils.annotations.UIController
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.

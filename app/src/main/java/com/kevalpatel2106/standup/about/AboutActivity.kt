@@ -29,13 +29,13 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.google.android.gms.appinvite.AppInviteInvitation
-import com.kevalpatel2106.base.uiController.showSnack
+import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
-import com.kevalpatel2106.standup.misc.SUUtils
 import org.jetbrains.anko.alert
 
 class AboutActivity : MaterialAboutActivity() {
@@ -175,7 +175,7 @@ class AboutActivity : MaterialAboutActivity() {
         versionItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_version_white)
                 .setIconGravity(Gravity.START)
-                .text("CheckVersionResponse")
+                .text("Check version")
                 .subText(BuildConfig.VERSION_NAME)
                 .setOnClickAction({
                     logEvent(AnalyticsEvents.EVENT_CHECK_UPDATE_MANUALLY)

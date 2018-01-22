@@ -62,7 +62,7 @@
                 style="@style/CardViewStyle"
                 android:foreground="?selectableItemBackground">
 
-                <com.kevalpatel2106.base.view.BaseTextView
+                <com.kevalpatel2106.common.view.BaseTextView
                     style="@style/Base.TextAppearance.AppCompat.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
                 style="@style/CardViewStyle"
                 android:foreground="?selectableItemBackground">
 
-                <com.kevalpatel2106.base.view.BaseTextView
+                <com.kevalpatel2106.common.view.BaseTextView
                     style="@style/Base.TextAppearance.AppCompat.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                 style="@style/CardViewStyle"
                 android:foreground="?selectableItemBackground">
 
-                <com.kevalpatel2106.base.view.BaseTextView
+                <com.kevalpatel2106.common.view.BaseTextView
                     style="@style/Base.TextAppearance.AppCompat.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                 style="@style/CardViewStyle"
                 android:foreground="?selectableItemBackground">
 
-                <com.kevalpatel2106.base.view.BaseTextView
+                <com.kevalpatel2106.common.view.BaseTextView
                     style="@style/Base.TextAppearance.AppCompat.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

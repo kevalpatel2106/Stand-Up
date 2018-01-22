@@ -22,7 +22,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
-import com.kevalpatel2106.standup.fcm.NotificationChannelType
+import com.kevalpatel2106.common.notifications.NotificationChannelType
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before

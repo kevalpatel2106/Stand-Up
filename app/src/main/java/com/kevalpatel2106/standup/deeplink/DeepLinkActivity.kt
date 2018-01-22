@@ -20,13 +20,13 @@ package com.kevalpatel2106.standup.deeplink
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.base.uiController.BaseActivity
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.SplashActivity
+import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.verification.EmailLinkVerificationActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
 
 /**
  * Created by Kevalpatel2106 on 27-Nov-17.

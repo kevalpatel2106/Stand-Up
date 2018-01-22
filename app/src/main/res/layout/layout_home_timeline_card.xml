@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <com.kevalpatel2106.base.view.BaseImageView
+        <com.kevalpatel2106.common.view.BaseImageView
             android:id="@+id/timeline_stand_label_iv"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -59,7 +59,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/today_time_line"/>
 
-        <com.kevalpatel2106.base.view.BaseImageView
+        <com.kevalpatel2106.common.view.BaseImageView
             android:id="@+id/timeline_sit_label_iv"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -73,7 +73,7 @@
             app:layout_constraintStart_toStartOf="@+id/guideline10"
             app:layout_constraintTop_toBottomOf="@id/today_time_line"/>
 
-        <com.kevalpatel2106.base.view.BaseTextView
+        <com.kevalpatel2106.common.view.BaseTextView
             android:id="@+id/timeline_stand_label_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
             app:layout_constraintStart_toEndOf="@+id/timeline_stand_label_iv"
             app:layout_constraintTop_toBottomOf="@+id/today_time_line"/>
 
-        <com.kevalpatel2106.base.view.BaseTextView
+        <com.kevalpatel2106.common.view.BaseTextView
             android:id="@+id/baseTextView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -17,7 +17,7 @@
 
 package com.kevalpatel2106.standup.dashboard.repo
 
-import com.kevalpatel2106.standup.db.DailyActivitySummary
+import com.kevalpatel2106.common.db.DailyActivitySummary
 import io.reactivex.Flowable
 
 /**

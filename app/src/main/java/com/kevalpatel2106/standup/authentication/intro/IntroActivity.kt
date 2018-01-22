@@ -33,9 +33,8 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import butterknife.OnClick
 import butterknife.Optional
-import com.kevalpatel2106.base.annotations.UIController
-import com.kevalpatel2106.base.uiController.BaseActivity
-import com.kevalpatel2106.base.uiController.showSnack
+import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.facebookauth.FacebookHelper
 import com.kevalpatel2106.facebookauth.FacebookResponse
 import com.kevalpatel2106.facebookauth.FacebookUser
@@ -45,6 +44,7 @@ import com.kevalpatel2106.googleauth.GoogleSignInHelper
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.login.LoginActivity
+import com.kevalpatel2106.utils.annotations.UIController
 import kotlinx.android.synthetic.main.activity_intro.*
 
 

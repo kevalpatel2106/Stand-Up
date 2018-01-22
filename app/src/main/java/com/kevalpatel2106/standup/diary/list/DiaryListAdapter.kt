@@ -20,8 +20,8 @@ package com.kevalpatel2106.standup.diary.list
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.view.ViewGroup
-import com.kevalpatel2106.base.paging.PageRecyclerViewAdapter
-import com.kevalpatel2106.standup.db.DailyActivitySummary
+import com.kevalpatel2106.common.base.paging.PageRecyclerViewAdapter
+import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 
 /**

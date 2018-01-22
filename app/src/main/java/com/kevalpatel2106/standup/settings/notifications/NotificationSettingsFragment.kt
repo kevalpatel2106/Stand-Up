@@ -25,12 +25,12 @@ import android.os.Bundle
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.notifications.addReminderNotificationChannel
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.core.reminder.ReminderNotification
-import com.kevalpatel2106.standup.fcm.addReminderNotificationChannel
-import com.kevalpatel2106.standup.misc.UserSessionManager
-import com.kevalpatel2106.standup.misc.UserSettingsManager
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.standup.settings.findPrefrance
 import com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
@@ -39,14 +39,16 @@ import javax.inject.Inject
 
 class NotificationSettingsFragment : PreferenceFragmentCompat() {
 
-    @Inject internal lateinit var sessionManager: UserSessionManager
-    @Inject internal lateinit var settingsManager: UserSettingsManager
+    @Inject
+    internal lateinit var sessionManager: UserSessionManager
+    @Inject
+    internal lateinit var settingsManager: UserSettingsManager
 
     private lateinit var model: NotificationsSettingsViewModel
 
     init {
         DaggerSettingsComponent.builder()
-                .appComponent(BaseApplication.appComponent)
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@NotificationSettingsFragment)
     }
@@ -104,7 +106,7 @@ class NotificationSettingsFragment : PreferenceFragmentCompat() {
 
         //Test notification
         findPrefrance(R.string.pref_key_reminder_notifications_test).setOnPreferenceClickListener {
-            context?.let { ReminderNotification().notify(it) }
+            context?.let { Core.fireTestReminder(it) }
             return@setOnPreferenceClickListener true
         }
 

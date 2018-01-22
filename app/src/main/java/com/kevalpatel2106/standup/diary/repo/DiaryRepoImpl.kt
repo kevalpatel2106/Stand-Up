@@ -17,10 +17,10 @@
 
 package com.kevalpatel2106.standup.diary.repo
 
-import com.kevalpatel2106.standup.application.di.AppModule
-import com.kevalpatel2106.standup.db.DailyActivitySummary
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
-import com.kevalpatel2106.standup.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.application.di.AppModule
+import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo.Companion.PAGE_SIZE
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable

@@ -21,17 +21,17 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
-import com.kevalpatel2106.base.arch.BaseViewModel
+import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.logout.Logout
 import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsDetailActivity
 import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsFragment
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.standup.settings.dnd.DndSettingsDetailActivity
 import com.kevalpatel2106.standup.settings.dnd.DndSettingsFragment
-import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsFragment
 import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsDetailActivity
+import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsFragment
 import com.kevalpatel2106.standup.settings.syncing.SyncSettingsDetailActivity
 import com.kevalpatel2106.standup.settings.syncing.SyncSettingsFragment
 import org.jetbrains.anko.alert
@@ -65,7 +65,7 @@ class SettingsViewModel : BaseViewModel {
     @Suppress("unused")
     constructor() {
         DaggerSettingsComponent.builder()
-                .appComponent(BaseApplication.appComponent)
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SettingsViewModel)
 
@@ -88,7 +88,7 @@ class SettingsViewModel : BaseViewModel {
             it.add(SettingsItem(SettingsId.DND, "DND", R.drawable.ic_dnd_on))
 
             //Add daily review
-            it.add(SettingsItem(SettingsId.DAILY_REVIEW, "Daily Review", R.drawable.ic_stats_black))
+            it.add(SettingsItem(SettingsId.DAILY_REVIEW, "Daily Review", R.drawable.ic_daily_review_notification))
 
             //Add Notifications
             it.add(SettingsItem(SettingsId.NOTIFICATION, "Notifications", R.drawable.ic_notifications_bell))

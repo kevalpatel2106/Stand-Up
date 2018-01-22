@@ -38,6 +38,9 @@ object ViewUtils {
     @ColorInt
     fun getAccentColor(context: Context): Int = getColorAttr(context, R.attr.colorAccent)
 
+    @ColorInt
+    fun getPrimaryColor(context: Context): Int = getColorAttr(context, R.attr.colorPrimary)
+
 
     @JvmStatic
     fun toPx(context: Context, dp: Int): Int = TypedValue

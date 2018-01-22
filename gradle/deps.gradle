@@ -21,8 +21,8 @@ ext {
     def archComponentVersion = '1.0.0'
     def butterKnifeVersion = "8.8.1"
 
-    def kotlinVersion = '1.2.10'
-    def ankoVersion = '0.10.3'
+    def kotlinVersion = '1.2.20'
+    def ankoVersion = '0.10.4'
 
     def okHttpVersion = "3.9.1"
     def retrofitVersion = "2.3.0"
@@ -30,7 +30,7 @@ ext {
 
     def espressoVersion = "3.0.1"
     def mockitoVersion = "2.13.0"
-    def dggerVersion = "2.11"
+    def dggerVersion = "2.14.1"
 
     //Exclude group for the test dependency
     excludeGrp = {
@@ -129,7 +129,6 @@ ext {
             preformance : 'com.google.firebase:firebase-perf:' + playServiceVersion,
             remoteConfig: 'com.google.firebase:firebase-config:' + playServiceVersion,
             invites     : 'com.google.firebase:firebase-invites:' + playServiceVersion,
-            jobDispacher: 'com.firebase:firebase-jobdispatcher:0.8.5',
     ]
 
     //Play services dependency
@@ -166,24 +165,25 @@ ext {
     //Other libs
     otherLib = [
             gson               : 'com.google.code.gson:gson:2.8.2',
-            glide              : 'com.github.bumptech.glide:glide:4.4.0',
-            glideAnnotation    : 'com.github.bumptech.glide:compiler:4.4.0',
+            glide              : 'com.github.bumptech.glide:glide:4.5.0',
+            glideAnnotation    : 'com.github.bumptech.glide:compiler:4.5.0',
             circleImagView     : 'de.hdodenhof:circleimageview:2.2.0',
             facebook           : 'com.facebook.android:facebook-android-sdk:4.29.0',
             bottomsheet        : 'com.cocosw:bottomsheet:1.3.1',
             commonsCodec       : 'commons-codec:commons-codec:1.11',
             crashalytics       : "com.crashlytics.sdk.android:crashlytics:2.8.0@aar",
-            openSourceLibraries: 'com.mikepenz:aboutlibraries:6.0.1@aar',
+            openSourceLibraries: 'com.mikepenz:aboutlibraries:6.0.2@aar',
             aboutlibraries     : 'com.github.daniel-stoneuk:material-about-library:2.2.3-support26.1.0',
             chartLayout        : 'com.github.PhilJay:MPAndroidChart:v3.0.3',
             roboElectric       : 'org.robolectric:robolectric:3.6.1',
+            evernoteJob        : 'com.evernote:android-job:1.2.2'
     ]
 
     debugLibs = [
             [configuration: "implementation", dependency: "com.jakewharton.timber:timber:4.6.0"],
             [configuration: "debugImplementation", dependency: 'com.facebook.stetho:stetho:' + stethoVersion],
             [configuration: "implementation", dependency: 'com.facebook.stetho:stetho-okhttp3:' + stethoVersion],
-            [configuration: "debugImplementation", dependency: 'com.amitshekhar.android:debug-db:1.0.1'],
+            [configuration: "debugImplementation", dependency: 'com.amitshekhar.android:debug-db:1.0.2'],
             [configuration: "debugImplementation", dependency: 'com.squareup.leakcanary:leakcanary-android:1.5.4']
     ]
 

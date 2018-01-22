@@ -19,16 +19,16 @@ package com.kevalpatel2106.standup.authentication.forgotPwd
 
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.base.annotations.ViewModel
-import com.kevalpatel2106.base.arch.BaseViewModel
-import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.base.arch.SingleLiveEvent
+import com.kevalpatel2106.common.Validator
+import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.common.base.arch.ErrorMessage
+import com.kevalpatel2106.common.base.arch.SingleLiveEvent
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.ForgotPasswordRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
-import com.kevalpatel2106.standup.misc.Validator
+import com.kevalpatel2106.utils.annotations.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

@@ -21,10 +21,11 @@ import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.kevalpatel2106.standup.application.BaseApplication
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.authentication.verification.EmailVerifiedNotification
-import com.kevalpatel2106.standup.misc.UserSessionManager
-
+import dagger.Lazy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,7 +40,11 @@ import javax.inject.Inject
 
 class FcmMessagingService : FirebaseMessagingService() {
 
-    @Inject lateinit var userSessionManager: UserSessionManager
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
+
+    @Inject
+    lateinit var userSettingsManager: Lazy<UserSettingsManager>
 
     override fun onCreate() {
         super.onCreate()
@@ -66,6 +71,25 @@ class FcmMessagingService : FirebaseMessagingService() {
     internal fun handleMessage(data: Map<String, String>) {
         when (data["type"]) {
             NotificationType.TYPE_EMAIL_VERIFIED -> {
+
+                //Change the flag to true.
+                userSessionManager.isUserVerified = true
+
+                //Fire the notification
+                EmailVerifiedNotification.notify(this.applicationContext, data["message"])
+            }
+            NotificationType.TYPE_PROMOTIONAL -> {
+                if (userSettingsManager.get().shouldDisplayPromotionalNotification
+                        && data["title"] != null
+                        && data["message"] != null) {
+
+                    //Fire the notification
+                    PromotionalNotification.notify(this.applicationContext, data["title"]!!, data["message"]!!)
+                } else {
+                    Timber.i("Promotional notifications are turned off.")
+                }
+            }
+            NotificationType.TYPE_APP_UPDATE -> {
 
                 //Change the flag to true.
                 userSessionManager.isUserVerified = true

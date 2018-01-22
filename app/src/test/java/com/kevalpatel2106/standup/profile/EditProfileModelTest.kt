@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup.profile
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.content.SharedPreferences
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AppConfig
@@ -27,7 +28,6 @@ import com.kevalpatel2106.standup.profile.repo.UserProfileRepoImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import org.junit.*
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith

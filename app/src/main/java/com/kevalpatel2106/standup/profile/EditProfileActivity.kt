@@ -27,9 +27,9 @@ import android.support.annotation.VisibleForTesting
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ProgressBar
-import com.kevalpatel2106.base.annotations.UIController
-import com.kevalpatel2106.base.uiController.BaseActivity
-import com.kevalpatel2106.base.uiController.showSnack
+import com.kevalpatel2106.common.Validator
+import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.rulerview.ObservableHorizontalScrollView
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
@@ -38,6 +38,7 @@ import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.standup.profile.repo.GetProfileResponse
 import com.kevalpatel2106.standup.profile.repo.SaveProfileResponse
+import com.kevalpatel2106.utils.annotations.UIController
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 
 
@@ -184,8 +185,8 @@ class EditProfileActivity : BaseActivity() {
         super.runItForFirstCreation()
 
         //These are the initial values of the height and weight pickers./
-        selectedWeight = AppConfig.MIN_WEIGHT + 30
-        selectedHeight = AppConfig.MIN_HEIGHT + 60
+        selectedWeight = Validator.MIN_WEIGHT + 30
+        selectedHeight = Validator.MIN_HEIGHT + 60
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -217,7 +218,7 @@ class EditProfileActivity : BaseActivity() {
      * @see edit_profile_weight_picker
      */
     private fun setWeightPicker() {
-        edit_profile_weight_picker.setMinMaxValue(AppConfig.MIN_WEIGHT, AppConfig.MAX_WEIGHT)
+        edit_profile_weight_picker.setMinMaxValue(Validator.MIN_WEIGHT, Validator.MAX_WEIGHT)
         edit_profile_weight_picker.setValueTypeMultiple(10)
         edit_profile_weight_picker.setOnScrollChangedListener(object : ObservableHorizontalScrollView.OnScrollChangedListener {
 
@@ -237,7 +238,7 @@ class EditProfileActivity : BaseActivity() {
      * @see edit_profile_height_picker
      */
     private fun setHeightPicker() {
-        edit_profile_height_picker.setMinMaxValue(AppConfig.MIN_HEIGHT, AppConfig.MAX_HEIGHT)
+        edit_profile_height_picker.setMinMaxValue(Validator.MIN_HEIGHT, Validator.MAX_HEIGHT)
         edit_profile_height_picker.setValueTypeMultiple(10)
         edit_profile_height_picker.setOnScrollChangedListener(object : ObservableHorizontalScrollView.OnScrollChangedListener {
             override fun onScrollChanged(p0: ObservableHorizontalScrollView?, p1: Int, p2: Int) {

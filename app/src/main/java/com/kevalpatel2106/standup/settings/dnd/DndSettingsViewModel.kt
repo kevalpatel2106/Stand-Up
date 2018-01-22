@@ -20,13 +20,16 @@ package com.kevalpatel2106.standup.settings.dnd
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.FragmentManager
-import com.kevalpatel2106.base.arch.BaseViewModel
-import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.misc.UserSettingsManager
+import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.standup.core.Core
+import com.kevalpatel2106.standup.settings.dailyReview.DailyReviewSettingsFragment
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.timepicker.DualTimePicker
 import com.kevalpatel2106.timepicker.DualTimePickerListener
 import com.kevalpatel2106.utils.TimeUtils
+import com.kevalpatel2106.utils.annotations.ViewModel
 import javax.inject.Inject
 
 /**
@@ -34,14 +37,19 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@ViewModel(DailyReviewSettingsFragment::class)
 class DndSettingsViewModel : BaseViewModel {
 
-    @Inject lateinit var userSettingsManager: UserSettingsManager
+    @Inject
+    lateinit var userSettingsManager: UserSettingsManager
+
+    @Inject
+    lateinit var core: Core
 
     @Suppress("unused")
     constructor() {
         DaggerSettingsComponent.builder()
-                .appComponent(BaseApplication.appComponent)
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@DndSettingsViewModel)
         init()
@@ -53,32 +61,64 @@ class DndSettingsViewModel : BaseViewModel {
         init()
     }
 
+    internal val isDndEnable = MutableLiveData<Boolean>()
+    internal val isAutoDndEnable = MutableLiveData<Boolean>()
     internal val autoDndTime = MutableLiveData<String>()
     internal val sleepTime = MutableLiveData<String>()
-    internal val isAutoDndEnable = MutableLiveData<Boolean>()
-    internal val isDndEnable = MutableLiveData<Boolean>()
 
     fun init() {
+        isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
         isAutoDndEnable.value = userSettingsManager.isAutoDndEnable
         autoDndTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndEndTime)}"
         sleepTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepEndTime)}"
     }
 
-    fun onAutoDndTurnedOn() {
-        isAutoDndEnable.value = true
-
+    /**
+     * Call this method when user turns on/off DND mode manually.
+     */
+    fun onManualDadChanged() {
         //Check iff the DND status
-        isDndEnable.value = userSettingsManager.isDndEnable
+        isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
+
+        //Schedule the dnd monitoring job
+        core.refresh()
     }
 
-    fun onAutoDndTurnedOff() {
-        isAutoDndEnable.value = false
+    /**
+     * Call this method whenever user turns on/off the auto dnd or the timing for auto dnd changes.
+     * This will refresh the human readable DND hours and refresh [Core] to reschedule with new jobs.
+     */
+    fun onAutoDndChanged() {
+        isAutoDndEnable.value = userSettingsManager.isAutoDndEnable
 
         //Check iff the DND status
-        isDndEnable.value = userSettingsManager.isDndEnable
+        isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
+
+        //Publish the update
+        autoDndTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndEndTime)}"
+
+        //Schedule the dnd monitoring job
+        core.refresh()
     }
 
+    /**
+     * Call this method whenever the sleep hours changes. This will refresh the human readable sleep
+     * hours and refresh [Core] to reschedule with new jobs.
+     */
+    fun onSleepTimeChanged() {
+        //Publish the update
+        sleepTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepEndTime)}"
+
+        //Reschedule the sleep monitoring job
+        core.refresh()
+    }
+
+    /**
+     * Call this method to open the [DualTimePicker] for taking input for start and end time of the
+     * auto dnd from the user.
+     */
     fun onSelectAutoDndTime(supportFragmentManager: FragmentManager) {
+
         DualTimePicker.show(supportFragmentManager = supportFragmentManager, dualTimePickerListener = object : DualTimePickerListener {
             override fun onTimeSelected(startHourOfDay: Int,
                                         startMinutes: Int,
@@ -90,16 +130,17 @@ class DndSettingsViewModel : BaseViewModel {
                 val endTimeMils = TimeUtils.getMilliSecFrom12AM(endHourOfDay, endMins)
                 userSettingsManager.setAutoDndTime(startTimeMills, endTimeMils)
 
-                //Publish the update
-                autoDndTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndEndTime)}"
-
-                //Check iff the DND status
-                isDndEnable.value = userSettingsManager.isDndEnable
+                onAutoDndChanged()
             }
         })
     }
 
+    /**
+     * Call this method to open the [DualTimePicker] for taking input for start and end time of
+     * sleep mode to turn on from the user.
+     */
     fun onSelectSleepTime(supportFragmentManager: FragmentManager) {
+
         DualTimePicker.show(supportFragmentManager = supportFragmentManager, dualTimePickerListener = object : DualTimePickerListener {
             override fun onTimeSelected(startHourOfDay: Int,
                                         startMinutes: Int,
@@ -109,10 +150,9 @@ class DndSettingsViewModel : BaseViewModel {
                 //Save the time
                 val startTimeMills = TimeUtils.getMilliSecFrom12AM(startHourOfDay, startMinutes)
                 val endTimeMils = TimeUtils.getMilliSecFrom12AM(endHourOfDay, endMins)
-                userSettingsManager.setSleepime(startTimeMills, endTimeMils)
+                userSettingsManager.setSleepTime(startTimeMills, endTimeMils)
 
-                //Publish the update
-                sleepTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepEndTime)}"
+                onSleepTimeChanged()
             }
         })
     }

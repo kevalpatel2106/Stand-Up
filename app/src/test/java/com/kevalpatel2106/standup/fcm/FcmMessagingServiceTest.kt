@@ -17,7 +17,7 @@
 
 package com.kevalpatel2106.standup.fcm
 
-import com.kevalpatel2106.standup.misc.UserSessionManager
+import com.kevalpatel2106.common.UserSessionManager
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before

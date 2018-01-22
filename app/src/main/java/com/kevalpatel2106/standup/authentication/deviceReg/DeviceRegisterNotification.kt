@@ -23,9 +23,9 @@ import android.app.NotificationManager
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
+import com.kevalpatel2106.common.notifications.NotificationChannelType
+import com.kevalpatel2106.common.notifications.addSyncNotificationChannel
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.fcm.NotificationChannelType
-import com.kevalpatel2106.standup.fcm.addSyncNotificationChannel
 
 @Suppress("DEPRECATION")
 internal object DeviceRegisterNotification {

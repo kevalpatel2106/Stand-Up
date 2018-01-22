@@ -17,11 +17,11 @@
 
 package com.kevalpatel2106.standup.diary.repo
 
+import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
+import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.standup.db.DailyActivitySummary
-import com.kevalpatel2106.standup.db.userActivity.UserActivity
-import com.kevalpatel2106.standup.db.userActivity.UserActivityDaoMockImpl
-import com.kevalpatel2106.standup.db.userActivity.UserActivityType
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.subscribers.TestSubscriber

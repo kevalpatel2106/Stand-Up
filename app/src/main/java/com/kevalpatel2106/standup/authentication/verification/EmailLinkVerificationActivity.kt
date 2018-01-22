@@ -30,13 +30,13 @@ import android.support.annotation.VisibleForTesting
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
-import com.kevalpatel2106.base.annotations.UIController
-import com.kevalpatel2106.base.arch.ErrorMessage
-import com.kevalpatel2106.base.uiController.BaseActivity
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.base.arch.ErrorMessage
+import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.standup.misc.UserSessionManager
+import com.kevalpatel2106.utils.annotations.UIController
 import kotlinx.android.synthetic.main.activity_email_link_verification.*
 
 /**

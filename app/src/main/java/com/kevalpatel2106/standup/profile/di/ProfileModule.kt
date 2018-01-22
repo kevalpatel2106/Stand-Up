@@ -17,11 +17,11 @@
 
 package com.kevalpatel2106.standup.profile.di
 
-import com.kevalpatel2106.standup.application.di.AppModule
-import com.kevalpatel2106.standup.misc.ApplicationScope
+import com.kevalpatel2106.common.ApplicationScope
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepo
 import com.kevalpatel2106.standup.profile.repo.UserProfileRepoImpl
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

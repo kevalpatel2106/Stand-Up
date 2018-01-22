@@ -15,10 +15,10 @@
  *
  */
 
-include ':app'
+include ':app', ':core'
 
 // Base layer modules.
-include ':base'
+include ':common'
 include ':test-utils'
 include ':utils'
 include ':network'

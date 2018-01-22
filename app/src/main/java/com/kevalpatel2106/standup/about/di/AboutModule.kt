@@ -17,11 +17,11 @@
 
 package com.kevalpatel2106.standup.about.di
 
+import com.kevalpatel2106.common.ApplicationScope
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.standup.about.repo.AboutRepository
 import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
-import com.kevalpatel2106.standup.application.di.AppModule
-import com.kevalpatel2106.standup.misc.ApplicationScope
-import com.kevalpatel2106.standup.misc.UserSessionManager
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

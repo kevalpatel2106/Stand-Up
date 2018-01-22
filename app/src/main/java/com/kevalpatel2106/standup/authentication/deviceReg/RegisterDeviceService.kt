@@ -26,7 +26,7 @@ import android.os.Build
 import android.os.IBinder
 import android.support.annotation.VisibleForTesting
 import com.google.firebase.iid.FirebaseInstanceId
-import com.kevalpatel2106.base.arch.ErrorMessage
+import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.utils.Utils
 
 

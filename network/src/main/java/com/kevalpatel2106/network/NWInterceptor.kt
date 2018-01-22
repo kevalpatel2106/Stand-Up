@@ -147,6 +147,7 @@ internal class NWInterceptor(private val context: Context?,
                 //Success
                 //Nothing to do. Go ahead.
                 //We consumed the response body once so we need to build it again.
+                @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
                 return if (baseResponse.d.isNullOrEmpty())
                     response.newBuilder()
                             .body(ResponseBody.create(MediaType.parse("application/json"), "{}"))

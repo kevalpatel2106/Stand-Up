@@ -20,8 +20,8 @@ package com.kevalpatel2106.standup.authentication.intro
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import com.kevalpatel2106.base.annotations.UIController
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.utils.annotations.UIController
 
 /**
  * Created by Keval on 19/11/17.

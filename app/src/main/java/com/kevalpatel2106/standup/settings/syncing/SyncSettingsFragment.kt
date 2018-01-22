@@ -23,10 +23,10 @@ import android.os.Bundle
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.application.BaseApplication
-import com.kevalpatel2106.standup.misc.UserSessionManager
-import com.kevalpatel2106.standup.misc.UserSettingsManager
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.standup.settings.findPrefrance
 import com.kevalpatel2106.standup.settings.widget.BasePreference
@@ -43,7 +43,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
 
     init {
         DaggerSettingsComponent.builder()
-                .appComponent(BaseApplication.appComponent)
+                .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SyncSettingsFragment)
     }
@@ -67,7 +67,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
         //Set sync now
         val syncNowPref = findPrefrance(R.string.pref_key_sync_now) as BasePreference
         syncNowPref.setOnPreferenceClickListener {
-            context?.let { model.manualSync(it) }
+            context?.let { model.manualSync() }
             return@setOnPreferenceClickListener true
         }
         model.isSyncing.observe(this@SyncSettingsFragment, Observer {
@@ -94,9 +94,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
 
             //Reschedule the sync job
             context?.let {
-                model.onBackgroundSyncPolicyChange(it,
-                        settingsManager.enableBackgroundSync,
-                        newValue.toInt())
+                model.onBackgroundSyncPolicyChange()
             }
             return@setOnPreferenceChangeListener false
         }
@@ -110,9 +108,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
 
             //Reschedule the job
             context?.let {
-                model.onBackgroundSyncPolicyChange(it,
-                        newValue,
-                        settingsManager.syncInterval.toInt())
+                model.onBackgroundSyncPolicyChange()
             }
             return@setOnPreferenceChangeListener true
         }

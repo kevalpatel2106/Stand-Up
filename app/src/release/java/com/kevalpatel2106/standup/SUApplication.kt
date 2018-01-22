@@ -19,8 +19,11 @@ package com.kevalpatel2106.standup
 
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
+import com.facebook.FacebookSdk
 import com.facebook.stetho.Stetho
-import com.kevalpatel2106.standup.application.BaseApplication
+import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.kevalpatel2106.common.application.BaseApplication
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
 
@@ -31,6 +34,9 @@ import timber.log.Timber
  */
 
 class SUApplication : BaseApplication() {
+
+    override fun baseUrl(): String = BuildConfig.BASE_URL
+
     override fun isReleaseBuild() = true
 
     override fun onCreate() {
@@ -46,5 +52,16 @@ class SUApplication : BaseApplication() {
         Fabric.with(this, Crashlytics.Builder()
                 .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
                 .build())
+
+        //Initialize firebase.
+        FirebaseApp.initializeApp(this@SUApplication)
+
+        //Initialize facebook
+        @Suppress("DEPRECATION")
+        FacebookSdk.sdkInitialize(this@SUApplication)
+
+        //Enable firebase analytics
+        FirebaseAnalytics.getInstance(this@SUApplication).setAnalyticsCollectionEnabled(true)
     }
+
 }

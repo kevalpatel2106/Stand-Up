@@ -22,8 +22,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kevalpatel2106.base.view.BaseImageView
-import com.kevalpatel2106.base.view.BaseTextView
+import com.kevalpatel2106.common.view.BaseImageView
+import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.standup.R
 
 /**

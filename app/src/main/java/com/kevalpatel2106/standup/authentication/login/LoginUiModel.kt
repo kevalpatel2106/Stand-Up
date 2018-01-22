@@ -17,7 +17,7 @@
 
 package com.kevalpatel2106.standup.authentication.login
 
-import com.kevalpatel2106.base.annotations.Model
+import com.kevalpatel2106.utils.annotations.Model
 
 /**
  * Created by Kevalpatel2106 on 22-Nov-17.
