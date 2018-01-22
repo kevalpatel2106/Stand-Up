@@ -22,6 +22,7 @@ import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo.Companion.PAGE_SIZE
+import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
@@ -93,7 +94,46 @@ class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) private val
                 })
     }
 
-    override fun loadUserActivityByDay(calendar: Calendar): List<UserActivity> {
+    override fun loadUserActivityByDay(dayOfMonth: Int, month: Int, year: Int): Flowable<ArrayList<UserActivity>> {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        calendar.set(Calendar.MONTH, month)
+        calendar.set(Calendar.YEAR, year)
+        return Flowable.create({
+            it.onNext(ArrayList(loadUserActivityByDay(calendar)))
+            it.onComplete()
+        }, BackpressureStrategy.DROP)
+    }
+
+    override fun loadSummary(dayOfMonth: Int, month: Int, year: Int): Flowable<DailyActivitySummary> {
+        //Get the calender for 12 AM of that day
+        var dayCal = Calendar.getInstance()
+        dayCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        dayCal.set(Calendar.MONTH, month)
+        dayCal.set(Calendar.YEAR, year)
+        dayCal = TimeUtils.getCalender12AM(dayCal.timeInMillis)
+
+        val startTimeMills = dayCal.timeInMillis
+
+        dayCal.set(Calendar.HOUR_OF_DAY, 24)
+        val endTimeMills = dayCal.timeInMillis
+
+        return Flowable.create(FlowableOnSubscribe<List<UserActivity>> {
+            val item = userActivityDao.getActivityBetweenDuration(startTimeMills, endTimeMills)
+
+            it.onNext(item)
+            it.onComplete()
+        }, BackpressureStrategy.DROP)
+                .filter { t -> t.isNotEmpty() }
+                .map { t -> ArrayList(t) }
+                .map { arrayList ->
+                    //Generate the summary
+                    DailyActivitySummary.convertToValidUserActivityList(arrayList)
+                    DailyActivitySummary.fromDayActivityList(arrayList)
+                }
+    }
+
+    internal fun loadUserActivityByDay(calendar: Calendar): List<UserActivity> {
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)

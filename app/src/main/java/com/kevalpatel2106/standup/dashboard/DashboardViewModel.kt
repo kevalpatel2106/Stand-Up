@@ -18,16 +18,7 @@
 package com.kevalpatel2106.standup.dashboard
 
 import android.arch.lifecycle.MutableLiveData
-import android.content.Context
-import android.graphics.Color
 import android.support.annotation.VisibleForTesting
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.CallbackEvent
@@ -35,12 +26,9 @@ import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.SUUtils
-import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.dashboard.di.DaggerDashboardComponent
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
-import com.kevalpatel2106.utils.ViewUtils
-import com.kevalpatel2106.utils.getColorCompat
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -103,79 +91,5 @@ class DashboardViewModel : BaseViewModel {
                     //Error message
                     todaySummaryErrorCallback.value = ErrorMessage(it.message)
                 })
-    }
-
-    /**
-     * Set up the efficiency card.
-     */
-    internal fun setPieChart(context: Context, pieChart: PieChart) {
-        /* Set the pie chart */
-        pieChart.setDrawCenterText(false) //Don't want to draw text on center
-        pieChart.description.isEnabled = false    //Don't want to display any description
-        pieChart.setUsePercentValues(true)    //All the values in %.
-        pieChart.animateY(AppConfig.PIE_CHART_TIME, Easing.EasingOption.EaseInOutQuad)
-        pieChart.setDrawEntryLabels(false)
-
-        //The hole in the middle
-        pieChart.isDrawHoleEnabled = true //Display the hole in the middle
-        pieChart.holeRadius = 50F //Keep the hole radius 40% of total chart radius
-        pieChart.transparentCircleRadius = pieChart.holeRadius  //Keep the transparent radius 40% of total chart radius
-        pieChart.setHoleColor(Color.TRANSPARENT)  //Keep hole transparent.
-
-        //Set rotation
-        pieChart.isRotationEnabled = true //User can rotate by touching
-        pieChart.rotationAngle = 0F   //Initially set the chart at 0 degree
-        pieChart.dragDecelerationFrictionCoef = 0.95f
-        pieChart.isHighlightPerTapEnabled = true  //Tapping on any segment of chart will highlight it.
-
-        //Set legends
-        pieChart.legend.isEnabled = true
-
-        val l = pieChart.legend
-        l.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        l.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        l.orientation = Legend.LegendOrientation.VERTICAL
-        l.setDrawInside(false)
-        l.textColor = Color.WHITE
-        l.textSize = ViewUtils.toPx(context, 5).toFloat()
-    }
-
-    internal fun setPieChartData(context: Context,
-                                 pieChart: PieChart,
-                                 sittingDurationPercent: Float,
-                                 standingDurationPercent: Float) {
-
-        val isValueToDisplay = standingDurationPercent + sittingDurationPercent == 0F
-        //Prepare the values in the pie chart.
-        val entries = ArrayList<PieEntry>()
-        entries.add(PieEntry(sittingDurationPercent, "Sitting"))   //Sitting time percentage
-        entries.add(PieEntry(standingDurationPercent, "Standing"))  //Standing time percentage
-
-        //Prepare the colors for each segment in the pie chart.
-        val colors = ArrayList<Int>()
-        colors.add(context.getColorCompat(android.R.color.holo_green_dark))  //Chart color for sitting segment
-        colors.add(context.getColorCompat(android.R.color.holo_orange_dark)) //Chart color for standing segment
-
-        if (isValueToDisplay) {
-            entries.add(PieEntry(100F, "Not tracked"))  //Standing time percentage
-            colors.add(context.getColorCompat(android.R.color.darker_gray)) //Chart color for standing segment
-        }
-        pieChart.isHighlightPerTapEnabled = !isValueToDisplay
-
-        val dataSet = PieDataSet(entries, "")
-        dataSet.setDrawIcons(false)
-        dataSet.colors = colors
-        dataSet.sliceSpace = 2F
-        dataSet.setAutomaticallyDisableSliceSpacing(true)
-        dataSet.setDrawValues(!isValueToDisplay)
-
-        val data = PieData(dataSet)
-        data.setValueFormatter(PercentFormatter())
-        data.setValueTextSize(16f)
-        data.setValueTextColor(Color.WHITE)
-
-        pieChart.data = data
-        pieChart.highlightValue(null)
-        pieChart.invalidate()
     }
 }

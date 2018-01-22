@@ -28,6 +28,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.setPieChart
+import com.kevalpatel2106.standup.setPieChartData
 import com.kevalpatel2106.standup.timelineview.TimeLineLength
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
@@ -62,8 +64,8 @@ class DashboardFragment : Fragment() {
 
     private fun setModel() {
         model = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        model.setPieChart(context!!, home_efficiency_card_pie_chart)
-        model.setPieChartData(context!!, home_efficiency_card_pie_chart, 0F, 0F)
+        home_efficiency_card_pie_chart.setPieChart(context!!)
+        home_efficiency_card_pie_chart.setPieChartData(context!!, 0F, 0F)
 
         //Observe error messages
         model.errorMessage.observe(this@DashboardFragment, Observer {
@@ -88,8 +90,7 @@ class DashboardFragment : Fragment() {
                 //Display summary
                 efficiency_card_view_flipper.displayedChild = 0
 
-                model.setPieChartData(context = context!!,
-                        pieChart = home_efficiency_card_pie_chart,
+                home_efficiency_card_pie_chart.setPieChartData(context = context!!,
                         sittingDurationPercent = it.sittingPercent,
                         standingDurationPercent = it.standingPercent)
 

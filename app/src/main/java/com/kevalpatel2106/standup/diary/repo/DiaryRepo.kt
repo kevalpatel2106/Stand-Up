@@ -20,7 +20,6 @@ package com.kevalpatel2106.standup.diary.repo
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import io.reactivex.Flowable
-import java.util.*
 
 /**
  * Created by Kevalpatel2106 on 25-Dec-17.
@@ -33,7 +32,9 @@ interface DiaryRepo {
         const val PAGE_SIZE = 10
     }
 
-    fun loadUserActivityByDay(calendar: Calendar): List<UserActivity>
+    fun loadUserActivityByDay(dayOfMonth: Int, month: Int, year: Int): Flowable<ArrayList<UserActivity>>
+
+    fun loadSummary(dayOfMonth: Int, month: Int, year: Int): Flowable<DailyActivitySummary>
 
     /**
      * Calling this function will load maximum [PAGE_SIZE] number of days summary which is [beforeMills]

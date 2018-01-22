@@ -50,7 +50,10 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
                 holder.setData(item as MonthHeader)
             }
             is DiaryDayViewHolder -> {
-                holder.setData(item, { DetailActivity.launch(context) })
+                holder.setData(item, {
+                    DetailActivity.launch(context = context, dayOfMonth = item.dayOfMonth,
+                            monthOfYear = item.monthOfYear, year = item.year)
+                })
             }
             else -> throw IllegalStateException("Invalid view holder type.")
         }

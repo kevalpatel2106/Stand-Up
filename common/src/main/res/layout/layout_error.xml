@@ -23,9 +23,11 @@
 
     <com.kevalpatel2106.common.view.BaseImageView
         android:id="@+id/error_iv"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         tools:src="@drawable/leak_canary_icon" />
 
     <com.kevalpatel2106.common.view.BaseTextView

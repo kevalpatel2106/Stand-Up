@@ -19,9 +19,7 @@ package com.kevalpatel2106.standup.diary.list
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
-import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 import com.kevalpatel2106.standup.diary.repo.DiaryRepoImpl
 import com.kevalpatel2106.testutils.MockServerManager

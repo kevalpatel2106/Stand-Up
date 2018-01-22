@@ -15,29 +15,28 @@
  *
  */
 
-package com.kevalpatel2106.standup.diary.detail
+package com.kevalpatel2106.standup.diary.userActivityList
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
 import com.kevalpatel2106.common.Validator
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.diary.userActivityList.UserActivityListActivity
-import com.kevalpatel2106.standup.setPieChart
-import com.kevalpatel2106.standup.setPieChartData
-import com.kevalpatel2106.utils.TimeUtils
-import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
-import kotlinx.android.synthetic.main.layout_home_timeline_card.*
-import kotlinx.android.synthetic.main.layout_open_user_activity_card.*
+import kotlinx.android.synthetic.main.activity_user_activity_list.*
 
-class DetailActivity : BaseActivity() {
+/**
+ * Created by Kevalpatel2106 on 22-Jan-18.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ */
+class UserActivityListActivity : BaseActivity() {
 
-    private lateinit var model: DetailViewModel
+    private lateinit var model: UserActivityListModel
 
     private var dayOfMonth: Int = 0
     private var month: Int = 0
@@ -45,54 +44,37 @@ class DetailActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         parseArguments()
-        setContentView(R.layout.activity_detail)
-        setToolbar(R.id.toolbar, "$dayOfMonth ${TimeUtils.getMonthInitials(month)} $year", true)
 
-        detail_efficiency_card_pie_chart.setPieChart(this@DetailActivity)
-        detail_efficiency_card_pie_chart.setPieChartData(this@DetailActivity, 0F, 0F)
+        setContentView(R.layout.activity_user_activity_list)
 
-        model = ViewModelProviders.of(this@DetailActivity).get(DetailViewModel::class.java)
-        model.blockUi.observe(this@DetailActivity, Observer {
+        setToolbar(R.id.include, getString(R.string.title_activity_user_activity_list), true)
+
+        model = ViewModelProviders.of(this@UserActivityListActivity).get(UserActivityListModel::class.java)
+
+        //Set recycler view
+        user_activity_list_rv.layoutManager = LinearLayoutManager(this@UserActivityListActivity)
+        user_activity_list_rv.itemAnimator = DefaultItemAnimator()
+        user_activity_list_rv.adapter = UserActivityAdapter(this@UserActivityListActivity, model.userActivities.value!!)
+        model.userActivities.observe(this@UserActivityListActivity, Observer {
+            it?.let {
+                user_activity_flipper.displayedChild = 0  /* Display list */
+                user_activity_list_rv.adapter.notifyDataSetChanged()
+            }
+        })
+        model.blockUi.observe(this@UserActivityListActivity, Observer {
             it?.let {
                 if (it) {
-                    detail_view_flipper.displayedChild = 1  /* Display loader */
+                    user_activity_flipper.displayedChild = 1  /* Display loader */
                 }
             }
         })
-        model.errorMessage.observe(this@DetailActivity, Observer {
+        model.errorMessage.observe(this@UserActivityListActivity, Observer {
             it?.let {
                 detail_error_view.setError(it)
-                detail_view_flipper.displayedChild = 2  /* Display error */
+                user_activity_flipper.displayedChild = 2  /* Display error */
             }
         })
-        model.summary.observe(this@DetailActivity, Observer {
-            it?.let {
-                //Display summary
-                detail_view_flipper.displayedChild = 0
-
-                detail_efficiency_card_pie_chart.setPieChartData(context = this@DetailActivity,
-                        sittingDurationPercent = it.sittingPercent,
-                        standingDurationPercent = it.standingPercent)
-
-                tracked_time_tv.text = it.durationTimeHours
-                total_standing_time_tv.text = it.standingTimeHours
-                total_sitting_time_tv.text = it.sittingTimeHours
-            }
-        })
-
-        //Observe events for time line card
-        model.timelineEventsList.observe(this@DetailActivity, Observer {
-            it?.let {
-                time_line_card.visibility = View.VISIBLE
-                today_time_line.timelineItems = it
-            }
-        })
-
-        view_user_activity_card.setOnClickListener {
-            UserActivityListActivity.launch(this@DetailActivity, dayOfMonth, month, year)
-        }
 
         if (savedInstanceState == null) {
             model.fetchData(dayOfMonth, month, year)
@@ -135,7 +117,7 @@ class DetailActivity : BaseActivity() {
                    monthOfYear: Int,
                    year: Int) {
 
-            context.startActivity(Intent(context, DetailActivity::class.java).apply {
+            context.startActivity(Intent(context, UserActivityListActivity::class.java).apply {
                 putExtra(ARG_DAY_OF_MONTH, dayOfMonth)
                 putExtra(ARG_MONTH, monthOfYear)
                 putExtra(ARG_YEAR, year)

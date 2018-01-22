@@ -19,7 +19,9 @@ package com.kevalpatel2106.standup.diary.di
 
 import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.common.application.di.AppComponent
+import com.kevalpatel2106.standup.diary.detail.DetailViewModel
 import com.kevalpatel2106.standup.diary.list.DiaryViewModel
+import com.kevalpatel2106.standup.diary.userActivityList.UserActivityListModel
 import dagger.Component
 
 /**
@@ -33,4 +35,7 @@ interface DiaryComponent {
 
     fun inject(diaryViewModel: DiaryViewModel)
 
+    fun inject(detailViewModel: DetailViewModel)
+
+    fun inject(userActivityListModel: UserActivityListModel)
 }

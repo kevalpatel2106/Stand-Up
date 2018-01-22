@@ -195,6 +195,12 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
+            android:name=".diary.userActivityList.UserActivityListActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme.NoActionbar"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute"/>
+        <activity
             android:name=".settings.syncing.SyncSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
