@@ -27,6 +27,8 @@
   </string>
     <string name="chrome_stable_package_name">com.android.chrome</string>
 
+    <string name="play_store_app_url">https://r3pqj.app.goo.gl/jdF1</string>
+
     <string name="rate_app_url">https://r3pqj.app.goo.gl/jdF1</string>
     <string name="author_profile_link">https://r3pqj.app.goo.gl/GZGa</string>
     <string name="author_github">https://r3pqj.app.goo.gl/TYCN</string>

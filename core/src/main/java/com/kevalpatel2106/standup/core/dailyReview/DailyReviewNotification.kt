@@ -25,7 +25,7 @@ import android.graphics.BitmapFactory
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.common.notifications.NotificationChannelType
-import com.kevalpatel2106.common.notifications.addOtherNotificationChannel
+import com.kevalpatel2106.common.notifications.addDailySummaryNotificationChannel
 import com.kevalpatel2106.standup.core.R
 
 @Suppress("DEPRECATION")
@@ -36,7 +36,7 @@ internal object DailyReviewNotification {
     @SuppressLint("VisibleForTests")
     internal fun notify(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        nm.addOtherNotificationChannel(context.applicationContext)
+        nm.addDailySummaryNotificationChannel(context.applicationContext)
         nm.notify(NOTIFICATION_ID, buildNotification(context).build())
     }
 
@@ -44,13 +44,13 @@ internal object DailyReviewNotification {
     internal fun buildNotification(context: Context): NotificationCompat.Builder {
         return NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(R.drawable.ic_sleep_mode_notification)
+                .setSmallIcon(R.drawable.ic_daily_review_notification)
                 .setContentTitle(context.getString(R.string.daily_review_notification_title))
                 .setContentText(context.getString(R.string.daily_review_notification_message))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_sleep_mode_notification))
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_daily_review_notification))
                 .setTicker(context.getString(R.string.daily_review_notification_message))
-                .setChannelId(NotificationChannelType.OTHER_NOTIFICATION_CHANNEL)
+                .setChannelId(NotificationChannelType.DAILY_SUMMARY_NOTIFICATION_CHANNEL)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())

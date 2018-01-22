@@ -19,8 +19,9 @@
     <string name="test">Test</string>
     <string name="btn_title_retry">Retry</string>
 
-    <string name="notification_channel_title_syncing">Syncing Notifications</string>
-    <string name="notification_channel_title_accounts">Account Notifications</string>
-    <string name="notification_channel_title_other">Other Notifications</string>
-    <string name="notification_channel_title_reminders">Reminder Notifications</string>
+    <string name="notification_channel_title_syncing">Syncing</string>
+    <string name="notification_channel_title_accounts">Account</string>
+    <string name="notification_channel_title_reminders">Reminder</string>
+    <string name="notification_channel_title_daily_summary">Daily summary</string>
+    <string name="notification_channel_title_other">Other</string>
 </resources>

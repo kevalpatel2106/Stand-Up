@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.core.dndManager
+package com.kevalpatel2106.standup.fcm
 
 import android.annotation.SuppressLint
 import android.app.Notification
@@ -26,37 +26,36 @@ import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.common.notifications.addOtherNotificationChannel
-import com.kevalpatel2106.standup.core.R
+import com.kevalpatel2106.standup.R
+
 
 @Suppress("DEPRECATION")
-internal object AutoDndStartNotification {
+internal object PromotionalNotification {
 
-    private val NOTIFICATION_ID = 1295
+    private val NOTIFICATION_ID = 3476
 
     @SuppressLint("VisibleForTests")
-    internal fun notify(context: Context) {
+    internal fun notify(context: Context, title: String, message: String) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.addOtherNotificationChannel(context.applicationContext)
-        nm.notify(NOTIFICATION_ID, buildNotification(context).build())
+        nm.notify(NOTIFICATION_ID, buildNotification(context, title, message).build())
     }
 
     @VisibleForTesting
-    internal fun buildNotification(context: Context): NotificationCompat.Builder {
+    internal fun buildNotification(context: Context, title: String, message: String): NotificationCompat.Builder {
         return NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(R.drawable.ic_do_not_disturb_notification)
-                .setContentTitle(context.getString(R.string.auto_dnd_notification_title))
-                .setContentText(context.getString(R.string.auto_dnd_notification_message))
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_sleep_mode_notification))
-                .setTicker(context.getString(R.string.auto_dnd_notification_message))
+                .setSmallIcon(R.drawable.ic_notififcation_launcher)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_notififcation_launcher))
+                .setTicker(message)
                 .setChannelId(NotificationChannelType.OTHER_NOTIFICATION_CHANNEL)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText(context.getString(R.string.auto_dnd_notification_message))
-                        .setBigContentTitle(context.getString(R.string.auto_dnd_notification_title)))
+                .setStyle(NotificationCompat.BigTextStyle().bigText(message).setBigContentTitle(title))
     }
 
     internal fun cancel(context: Context) {

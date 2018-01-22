@@ -135,6 +135,7 @@
     <string name="dnd_pref_auto_dnd_switch_summary_off">Do not disturb mode won\'t start automatically. You can turn it on on/off manually though.</string>
     <string name="dnd_pref_auto_dnd_switch_title_off">Disable</string>
     <string name="dnd_pref_auto_dnd_switch_title_on">Enable</string>
+    <string name="notification_update_title">New update is available.</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

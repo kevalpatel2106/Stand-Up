@@ -175,7 +175,7 @@ class AboutActivity : MaterialAboutActivity() {
         versionItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_version_white)
                 .setIconGravity(Gravity.START)
-                .text("CheckVersionResponse")
+                .text("Check version")
                 .subText(BuildConfig.VERSION_NAME)
                 .setOnClickAction({
                     logEvent(AnalyticsEvents.EVENT_CHECK_UPDATE_MANUALLY)
