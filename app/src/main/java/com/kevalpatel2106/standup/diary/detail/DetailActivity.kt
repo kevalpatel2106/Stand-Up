@@ -17,14 +17,30 @@
 
 package com.kevalpatel2106.standup.diary.detail
 
+import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : BaseActivity() {
+
+    private lateinit var model: DetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+
+        setToolbar(R.id.toolbar, "17 Dec 2017", true)
+
+        model = ViewModelProviders.of(this@DetailActivity).get(DetailViewModel::class.java)
+    }
+
+    companion object {
+
+        fun launch(context: Context) {
+            context.startActivity(Intent(context, DetailActivity::class.java))
+        }
     }
 }

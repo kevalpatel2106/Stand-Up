@@ -19,6 +19,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground">
@@ -74,14 +75,16 @@
     <com.kevalpatel2106.common.view.BaseTextView
         android:id="@+id/dairy_row_day_of_week_tv"
         style="@style/NanoText.Secondary"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="@dimen/spacing_small"
         app:layout_constraintBottom_toTopOf="@+id/dairy_row_sitting_time_tv"
+        app:layout_constraintEnd_toStartOf="@+id/dairy_row_sitting_percent_tv"
         app:layout_constraintStart_toEndOf="@+id/dairy_row_month_tv"
         app:layout_constraintTop_toTopOf="@+id/dairy_row_date_tv"
         app:layout_constraintVertical_chainStyle="spread"
-        tools:text="@tools:sample/date/day_of_week"/>
+        tools:text="@tools:sample/date/day_of_week" />
 
     <com.kevalpatel2106.common.view.BaseTextView
         android:id="@+id/dairy_row_sitting_time_tv"
@@ -97,7 +100,7 @@
     <com.kevalpatel2106.common.view.BaseTextView
         android:id="@+id/dairy_row_standing_time_tv"
         style="@style/MediumText.Primary"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/spacing_micro"
         android:layout_marginStart="@dimen/spacing_micro"
@@ -106,7 +109,7 @@
         app:layout_constraintEnd_toStartOf="@+id/dairy_row_sitting_percent_tv"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/dairy_row_sitting_time_tv"
-        tools:text="5 h 10 m"/>
+        tools:text="5 h 10 m" />
 
     <com.kevalpatel2106.common.view.BaseTextView
         android:id="@+id/dairy_row_sitting_percent_tv"

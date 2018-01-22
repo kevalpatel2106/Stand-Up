@@ -22,6 +22,7 @@ import android.support.annotation.VisibleForTesting
 import android.view.ViewGroup
 import com.kevalpatel2106.common.base.paging.PageRecyclerViewAdapter
 import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.standup.diary.detail.DetailActivity
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 
 /**
@@ -49,7 +50,7 @@ internal class DiaryListAdapter(context: Context, data: ArrayList<DailyActivityS
                 holder.setData(item as MonthHeader)
             }
             is DiaryDayViewHolder -> {
-                holder.setData(item)
+                holder.setData(item, { DetailActivity.launch(context) })
             }
             else -> throw IllegalStateException("Invalid view holder type.")
         }

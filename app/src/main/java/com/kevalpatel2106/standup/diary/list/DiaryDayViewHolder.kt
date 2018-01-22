@@ -41,12 +41,26 @@ internal class DiaryDayViewHolder(itemView: View) : DiaryBaseViewHolder(itemView
         }
     }
 
-    fun setData(summary: DailyActivitySummary) {
+    fun setData(summary: DailyActivitySummary, onClick: () -> Unit) {
+
         itemView.dairy_row_date_tv.text = summary.dayOfMonth.toString()
+        itemView.dairy_row_date_tv.setOnClickListener { onClick.invoke() }
+
         itemView.dairy_row_month_tv.text = summary.monthInitials
+        itemView.dairy_row_month_tv.setOnClickListener { onClick.invoke() }
+
         itemView.dairy_row_day_of_week_tv.text = "Monday"   //TODO
+        itemView.dairy_row_day_of_week_tv.setOnClickListener { onClick.invoke() }
+
         itemView.dairy_row_sitting_percent_tv.text = summary.sittingPercent.toString()
+        itemView.dairy_row_sitting_percent_tv.setOnClickListener { onClick.invoke() }
+
         itemView.dairy_row_sitting_time_tv.text = summary.sittingTimeHours
+        itemView.dairy_row_sitting_time_tv.setOnClickListener { onClick.invoke() }
+
         itemView.dairy_row_standing_time_tv.text = summary.standingTimeHours
+        itemView.dairy_row_standing_time_tv.setOnClickListener { onClick.invoke() }
+
+        itemView.setOnClickListener { onClick.invoke() }
     }
 }
