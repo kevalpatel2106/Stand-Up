@@ -30,15 +30,20 @@ import javax.inject.Named
 
 /**
  * Created by Keval on 10/01/18.
+ * Dagger [Module] to provide the dependency for the Core module.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Module(includes = [DbModule::class])
 internal class CoreModule {
 
+    /**
+     * Get the instance of [CoreRepo].
+     *
+     * @see CoreRepoImpl
+     */
     @Provides
     @ApplicationScope
     fun provideReminderRepo(userActivityDao: UserActivityDao,
-                            @Named(AppModule.WITH_TOKEN) retrofit: Retrofit): CoreRepo
-            = CoreRepoImpl(userActivityDao, retrofit)
+                            @Named(AppModule.WITH_TOKEN) retrofit: Retrofit): CoreRepo = CoreRepoImpl(userActivityDao, retrofit)
 }

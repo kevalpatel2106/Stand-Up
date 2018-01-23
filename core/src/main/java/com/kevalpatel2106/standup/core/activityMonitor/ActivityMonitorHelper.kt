@@ -29,12 +29,24 @@ import java.util.*
 
 /**
  * Created by Keval on 30/12/17.
+ * Helper class for [ActivityMonitorJob].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Helper(ActivityMonitorJob::class)
 internal object ActivityMonitorHelper {
 
+    /**
+     * Check if the user is sitting or not? If the activity with the most confidence in
+     * [detectedActivities] list is [DetectedActivity.STILL] or [DetectedActivity.IN_VEHICLE],
+     * it will return true else it will return false.
+     *
+     * NOTE: [detectedActivities] must be sorted by the descending order of [DetectedActivity.getConfidence].
+     *
+     * @return True if the user is sitting or else false.
+     * @throws IllegalStateException If the most confidante [DetectedActivity] in [detectedActivities]
+     * is [DetectedActivity.TILTING] or [DetectedActivity.UNKNOWN].
+     */
     internal fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
         if (detectedActivities.size <= 0)
             throw IllegalStateException("Detected activity list must have at least one item.")
@@ -53,6 +65,18 @@ internal object ActivityMonitorHelper {
         }
     }
 
+    /**
+     * This method will check if the given [detectedActivities] list can be ignore or not?
+     *
+     * If the list satisfy any of below points, than that can be ignored.
+     * - The activity with the highest confidence level in [detectedActivities] must have the
+     * confidence level more than [CoreConfig.CONFIDENCE_THRESHOLD].
+     * - If the detected activity is other than [DetectedActivity.STILL], [DetectedActivity.ON_FOOT],
+     * [DetectedActivity.WALKING], [DetectedActivity.RUNNING], [DetectedActivity.ON_BICYCLE] or
+     * [DetectedActivity.IN_VEHICLE].
+     *
+     * @throws IllegalStateException If the [detectedActivities] is empty.
+     */
     internal fun shouldIgnoreThisEvent(detectedActivities: ArrayList<DetectedActivity>): Boolean {
         if (detectedActivities.size <= 0)
             throw IllegalStateException("Detected activity list must have at least one item.")
@@ -72,6 +96,9 @@ internal object ActivityMonitorHelper {
         }
     }
 
+    /**
+     * Sort the given [detectedActivities] list in the descending order of the [DetectedActivity.getConfidence].
+     */
     internal fun sortDescendingByConfidence(detectedActivities: ArrayList<DetectedActivity>): ArrayList<DetectedActivity> {
         //Sort the array by confidence level
         //Descending
@@ -92,6 +119,12 @@ internal object ActivityMonitorHelper {
         return detectedActivities
     }
 
+    /**
+     * Convert the [detectedActivities] list into the [UserActivity] or return null if
+     * [detectedActivities] can be ignore.
+     *
+     * @see shouldIgnoreThisEvent
+     */
     internal fun convertToUserActivity(detectedActivities: ArrayList<DetectedActivity>): UserActivity? {
         if (shouldIgnoreThisEvent(detectedActivities)) {
             //Not enough confidence
@@ -108,6 +141,12 @@ internal object ActivityMonitorHelper {
         }
     }
 
+    /**
+     * Check if currently [ActivityMonitorJob] should be monitoring user activity base on the
+     * [userSessionManager]?
+     *
+     * @return True if it is okay to monitor the user activity or else false.
+     */
     internal fun shouldMonitoringActivity(userSessionManager: UserSessionManager): Boolean {
         return userSessionManager.isUserLoggedIn
     }
@@ -115,6 +154,6 @@ internal object ActivityMonitorHelper {
     /**
      * @return True if the [ActivityMonitorJob] is scheduled else false.
      */
-    internal fun isAnyJobScheduled() : Boolean = JobManager.instance()
+    internal fun isAnyJobScheduled(): Boolean = JobManager.instance()
             .getAllJobRequestsForTag(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG).isNotEmpty()
 }

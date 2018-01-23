@@ -31,6 +31,7 @@ import dagger.Component
 
 /**
  * Created by Keval on 10/01/18.
+ * Dagger [Component] for core module.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */

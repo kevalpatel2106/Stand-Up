@@ -7,7 +7,6 @@
       <module fileurl="file://F:\git-clone\Stand-Up\common\base.iml" filepath="F:\git-clone\Stand-Up\common\base.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
-      <module fileurl="file://F:\git-clone\Stand-Up\core\core.iml" filepath="F:\git-clone\Stand-Up\core\core.iml" />
       <module fileurl="file://$PROJECT_DIR$/facebook-auth/facebook-auth.iml" filepath="$PROJECT_DIR$/facebook-auth/facebook-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/google-auth/google-auth.iml" filepath="$PROJECT_DIR$/google-auth/google-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/network/network.iml" filepath="$PROJECT_DIR$/network/network.iml" />

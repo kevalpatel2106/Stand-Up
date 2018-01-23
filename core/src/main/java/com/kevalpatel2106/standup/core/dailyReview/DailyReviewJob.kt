@@ -83,14 +83,25 @@ internal class DailyReviewJob : Job() {
         }
     }
 
+    /**
+     * [UserSettingsManager] for getting the user settings information.
+     */
     @Inject
     internal lateinit var userSettingsManager: UserSettingsManager
 
+    /**
+     * Run the task to perform. This will display the [DailyReviewNotification] with the previous
+     * day summary.
+     *
+     * @see Job.onRunJob
+     */
     override fun onRunJob(params: Params): Result {
+        //Inject dependency
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this)
+
 
         if (!userSettingsManager.isDailyReviewEnable) {
             return Result.SUCCESS

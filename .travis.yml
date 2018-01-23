@@ -80,18 +80,19 @@ before_script:
   - bash ./scripts/set_emulator_prop.sh
 
   # Start emulator
-  - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-
-  - adb devices   #Display list of devices
-  - adb shell settings put global window_animation_scale 0.0 
-  - adb shell settings put global transition_animation_scale 0.0
-  - adb shell settings put global animator_duration_scale 0.0
-  - adb shell input keyevent 82 &
+#  - emulator -avd test -no-audio -no-window &
+#  - android-wait-for-emulator
+#
+#  - adb devices   #Display list of devices
+#  - adb shell settings put global window_animation_scale 0.0 
+#  - adb shell settings put global transition_animation_scale 0.0
+#  - adb shell settings put global animator_duration_scale 0.0
+#  - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew jacocoTestReportDebug app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
-  - ./gradlew connectedCheck -PdisablePreDex --continue --profile --daemon --parallel
+  - ./gradlew app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
+#  - ./gradlew jacocoTestReportDebug app:assembleDebug -PdisablePreDex --continue --profile --daemon --parallel
+#  - ./gradlew connectedCheck -PdisablePreDex --continue --profile --daemon --parallel
   - bash ./scripts/ci-script.sh
 
 after_success:

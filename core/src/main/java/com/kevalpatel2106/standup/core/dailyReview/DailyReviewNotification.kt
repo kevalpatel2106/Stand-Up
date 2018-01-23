@@ -28,11 +28,26 @@ import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.common.notifications.addDailySummaryNotificationChannel
 import com.kevalpatel2106.standup.core.R
 
+/**
+ * Class to manage [Notification] with previous day summary.
+ *
+ * @see DailyReviewJob
+ */
 @Suppress("DEPRECATION")
 internal object DailyReviewNotification {
 
+    /**
+     * Unique notification id.
+     */
+    @Suppress("MayBeConstant")
     private val NOTIFICATION_ID = 9870
 
+    /**
+     * Fire the [DailyReviewNotification]. This will add [NotificationManager.addDailySummaryNotificationChannel]
+     * for this notification.
+     *
+     * @see NotificationManager.addDailySummaryNotificationChannel
+     */
     @SuppressLint("VisibleForTests")
     internal fun notify(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -40,6 +55,11 @@ internal object DailyReviewNotification {
         nm.notify(NOTIFICATION_ID, buildNotification(context).build())
     }
 
+    /**
+     * Build the [DailyReviewNotification].
+     *
+     * @see NotificationCompat.Builder
+     */
     @VisibleForTesting
     internal fun buildNotification(context: Context): NotificationCompat.Builder {
         return NotificationCompat.Builder(context)
@@ -59,6 +79,11 @@ internal object DailyReviewNotification {
                         .setBigContentTitle(context.getString(R.string.daily_review_notification_title)))
     }
 
+    /**
+     * Cancel [DailyReviewNotification].
+     *
+     * @see NotificationManager.cancel
+     */
     internal fun cancel(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.cancel(NOTIFICATION_ID)

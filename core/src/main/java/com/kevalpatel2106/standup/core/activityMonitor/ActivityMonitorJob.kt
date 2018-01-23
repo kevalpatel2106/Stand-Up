@@ -52,8 +52,8 @@ import javax.inject.Inject
  * [JobScheduler] job for such a small duration.
  *
  *
- * This service will retrieve the activities, which user is currently doing using [
- * Awareness API](https://developers.google.com/awareness/). It users user activity snapshot api to
+ * This service will retrieve the activities, which user is currently doing using
+ * [Awareness API](https://developers.google.com/awareness/). It users user activity snapshot api to
  * retrieve the list of [DetectedActivity]. Service will validate if the list of all probable [DetectedActivity]
  * is valid for processing based on [ActivityMonitorHelper.shouldIgnoreThisEvent]. Basically, it will
  * only consider the [DetectedActivity] with the highest confidence level and the highest confidence
@@ -69,6 +69,10 @@ import javax.inject.Inject
  * This service will get the user activity list only if [ActivityMonitorHelper.shouldMonitoringActivity]
  * returns true. Otherwise, service will skip the processing [DetectedActivity] and terminate immediately.
  *
+ * Known Issue: In some devices, whenever user swipes off the application from recent menu and kills
+ * the application, all the [android.app.PendingIntent] for the application goes away. So the next
+ * subsequent jobs won't call.
+ *
  * @see [Get the current activity](https://developers.google.com/awareness/android-api/snapshot-get-data#get_the_current_activity)
  * @see <a href="https://1drv.ms/u/s!AiLigYLwpLlZk4lQcRMj8EZTxF5o3A">Diagram/Flow</a>
  * @see ActivityMonitorHelper.shouldIgnoreThisEvent
@@ -77,9 +81,10 @@ import javax.inject.Inject
  */
 internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivityResponse> {
 
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
-
     companion object {
+        /**
+         * Unique tag for the activity monitoring job.
+         */
         internal const val ACTIVITY_MONITOR_JOB_TAG = "activity_monitor_job_tag"
 
         /**
@@ -129,18 +134,49 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
         }
     }
 
+    /**
+     * [CompositeDisposable] for collecting all [io.reactivex.disposables.Disposable]. It will get
+     * cleared when the service stops.
+     *
+     * @see destroyAndScheduleNextJob
+     */
+    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
+
+    /**
+     * Repository for the core module.
+     *
+     * @see CoreRepo
+     */
     @Inject
     lateinit var coreRepo: CoreRepo
 
+    /**
+     * User session information.
+     *
+     * @see UserSessionManager
+     */
     @Inject
     lateinit var userSessionManager: UserSessionManager
 
+    /**
+     * User settings information.
+     *
+     * @see UserSettingsManager
+     */
     @Inject
     lateinit var userSettingsManager: dagger.Lazy<UserSettingsManager>
 
+    /**
+     * [dagger.Lazy] instance of the core module.
+     *
+     * @see UserSettingsManager
+     */
     @Inject
     lateinit var core: dagger.Lazy<Core>
 
+    /**
+     * @see SharedPrefsProvider
+     */
     @Inject
     lateinit var sharedPrefsProvider: SharedPrefsProvider
 
@@ -181,13 +217,26 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
         }
     }
 
+    /**
+     * Stop this async job.
+     *
+     * This will dispose [compositeDisposable] and schedule the next [ActivityMonitorJob] after
+     * [CoreConfig.MONITOR_SERVICE_PERIOD] milliseconds.
+     *
+     * @see AsyncJob.stopJob
+     */
     private fun destroyAndScheduleNextJob() {
         compositeDisposable.dispose()
         scheduleNextJob()
         stopJob(Result.SUCCESS)
     }
 
-
+    /**
+     * Whenever the [DetectedActivityResponse] is success while detecting the user activity, this method
+     * will be call. This method will analyse [activityResponse] and figure out user's current activity
+     * (If user is sitting or moving/standing ?). It will also enter new
+     * [com.kevalpatel2106.common.db.userActivity.UserActivity] to the database.
+     */
     override fun onSuccess(activityResponse: DetectedActivityResponse) {
         Timber.i("Detected Activities: ".plus(activityResponse.activityRecognitionResult.probableActivities.toString()))
 
@@ -200,6 +249,8 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
             return
         }
 
+        //Notification job is not scheduled.
+        //Schedule it now.
         if (!NotificationSchedulerHelper.isReminderScheduled()) {
             core.get().setUpReminderNotification(userSettingsManager.get(), sharedPrefsProvider)
         }
