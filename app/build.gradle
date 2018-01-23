@@ -57,7 +57,8 @@ android {
             zipAlignEnabled true
 
             buildConfigField "String", "BASE_URL", "\"" + RELEASE_SERVER_BASE_URL + "\""
-            resValue "string", "application_name", "Stand Up"
+            resValue "string", "application_name", DEBUG_APPLICATION_NAME
+            resValue "string", "package_name", DEBUG_PACKAGE_ID
             resValue "string", "api_host", "\"" + RELEASE_SERVER_BASE_URL.replace("https://", "") + "\""
             resValue "string", "server_client_id", RELEASE_SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", RELEASE_FACEBOOK_APP_ID
@@ -74,7 +75,8 @@ android {
             zipAlignEnabled true
 
             buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
-            resValue "string", "application_name", "Stand Up"
+            resValue "string", "application_name", RELEASE_APPLICATION_NAME
+            resValue "string", "package_name", RELEASE_PACKAGE_ID
             resValue "string", "api_host", "\"" + SERVER_BASE_URL.replace("https://", "") + "\""
             resValue "string", "server_client_id", SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", FACEBOOK_APP_ID
@@ -156,5 +158,7 @@ dependencies {
     implementation(otherLib.chartLayout, excludeGrp)
     implementation(otherLib.openSourceLibraries) { transitive = true }
     releaseImplementation(otherLib.crashalytics) { transitive = true }
+
+    implementation('com.philliphsu:bottomsheetpickers:2.3.2')
 }
 apply plugin: 'com.google.gms.google-services'

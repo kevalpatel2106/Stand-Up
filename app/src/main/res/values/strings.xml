@@ -136,7 +136,7 @@
     <string name="dnd_pref_auto_dnd_switch_title_off">Disable</string>
     <string name="dnd_pref_auto_dnd_switch_title_on">Enable</string>
     <string name="notification_update_title">New update is available.</string>
-    <string name="view_user_activity_list">View user activity list</string>
+    <string name="view_user_activity_list">View activities</string>
     <string name="title_activity_user_activity_list">User activities</string>
 
     <!-- TODO: remove this placeholder text -->
