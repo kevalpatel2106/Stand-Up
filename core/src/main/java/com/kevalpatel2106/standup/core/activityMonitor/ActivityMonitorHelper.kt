@@ -17,9 +17,11 @@
 
 package com.kevalpatel2106.standup.core.activityMonitor
 
+import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
 import com.google.android.gms.location.DetectedActivity
 import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
@@ -47,6 +49,7 @@ internal object ActivityMonitorHelper {
      * @throws IllegalStateException If the most confidante [DetectedActivity] in [detectedActivities]
      * is [DetectedActivity.TILTING] or [DetectedActivity.UNKNOWN].
      */
+    @VisibleForTesting
     internal fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
         if (detectedActivities.size <= 0)
             throw IllegalStateException("Detected activity list must have at least one item.")
@@ -147,8 +150,9 @@ internal object ActivityMonitorHelper {
      *
      * @return True if it is okay to monitor the user activity or else false.
      */
-    internal fun shouldMonitoringActivity(userSessionManager: UserSessionManager): Boolean {
-        return userSessionManager.isUserLoggedIn
+    internal fun shouldMonitoringActivity(userSessionManager: UserSessionManager,
+                                          userSettingsManager: UserSettingsManager): Boolean {
+        return userSessionManager.isUserLoggedIn && userSettingsManager.isCurrentlyInSleepMode
     }
 
     /**

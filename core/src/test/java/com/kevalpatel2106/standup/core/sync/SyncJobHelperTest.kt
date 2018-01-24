@@ -40,12 +40,12 @@ class SyncJobHelperTest {
 
     @Test
     fun checkSyncNow() {
-        val builder = SyncServiceHelper.prepareJob(RuntimeEnvironment.application)
+        val builder = SyncJobHelper.prepareJob(RuntimeEnvironment.application)
 
         Assert.assertTrue(builder.constraints.contains(Constraint.ON_ANY_NETWORK))
         Assert.assertEquals(builder.constraints.size, 1)
         Assert.assertFalse(builder.isRecurring)
-        Assert.assertEquals(builder.tag, SyncServiceHelper.SYNC_JOB_TAG)
+        Assert.assertEquals(builder.tag, SyncJobHelper.SYNC_JOB_TAG)
         Assert.assertEquals(builder.retryStrategy, RetryStrategy.DEFAULT_LINEAR)
         Assert.assertEquals(builder.lifetime, Lifetime.UNTIL_NEXT_BOOT)
         Assert.assertEquals(builder.trigger, Trigger.NOW)
@@ -56,7 +56,7 @@ class SyncJobHelperTest {
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
 
-        Assert.assertFalse(SyncServiceHelper.shouldSync(UserSessionManager(SharedPrefsProvider(sharedPref))))
+        Assert.assertFalse(SyncJobHelper.shouldRunJob(UserSessionManager(SharedPrefsProvider(sharedPref))))
     }
 
     fun checkShouldSyncSync() {
@@ -64,6 +64,6 @@ class SyncJobHelperTest {
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
 
-        Assert.assertTrue(SyncServiceHelper.shouldSync(UserSessionManager(SharedPrefsProvider(sharedPref))))
+        Assert.assertTrue(SyncJobHelper.shouldRunJob(UserSessionManager(SharedPrefsProvider(sharedPref))))
     }
 }

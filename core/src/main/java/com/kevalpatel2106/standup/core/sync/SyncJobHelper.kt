@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.core.sync
 
 import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.utils.annotations.Helper
 
 /**
@@ -28,17 +29,18 @@ import com.kevalpatel2106.utils.annotations.Helper
  * @see SyncJob
  */
 @Helper(SyncJob::class)
-internal object SyncServiceHelper {
+internal object SyncJobHelper {
 
     /**
      * Check if the [SyncJob] should sync the data with the server?
      *
      * @param userSessionManager [UserSessionManager] for getting the current session information.
+     * @param userSettingsManager [UserSettingsManager] for getting the settings information.
      * @return True if sync should happen. False if sync should not perform. (Bad timing for syncing.)
-     * @see SyncJob.onRunJobAsync
      */
     @JvmStatic
-    internal fun shouldSync(userSessionManager: UserSessionManager): Boolean {
-        return userSessionManager.isUserLoggedIn
+    internal fun shouldRunJob(userSessionManager: UserSessionManager,
+                              userSettingsManager: UserSettingsManager): Boolean {
+        return userSessionManager.isUserLoggedIn && userSettingsManager.enableBackgroundSync
     }
 }

@@ -19,6 +19,7 @@ package com.kevalpatel2106.standup.core.di
 
 import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.common.application.di.AppComponent
+import com.kevalpatel2106.standup.core.CorePrefsProvider
 import com.kevalpatel2106.standup.core.SystemEventReceiver
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.dailyReview.DailyReviewJob
@@ -54,4 +55,6 @@ internal interface CoreComponent {
     fun inject(sleepModeMonitoringJob: SleepModeMonitoringJob)
 
     fun inject(dailyReviewJob: DailyReviewJob)
+
+    fun inject(corePrefsProvider: CorePrefsProvider)
 }

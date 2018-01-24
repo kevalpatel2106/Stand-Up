@@ -32,13 +32,13 @@ import javax.inject.Inject
  * Created by Keval on 30/12/17.
  * This is the [BroadcastReceiver] that will receive below system events:
  *
- * 1.[Intent.ACTION_MY_PACKAGE_REPLACED] - Whenever stand up app gets updated, it will cancel all
+ * 1.[Intent.ACTION_MY_PACKAGE_REPLACED] - Whenever stand up app gets updated, it will cancelJob all
  * the jobs and than after reschedule all the jobs.
  *
  * 2.[Intent.ACTION_BOOT_COMPLETED] - Whenever boot completes, receiver will schedule all the jobs
  * based on user settings in [UserSettingsManager].
  *
- * [onReceive] method will first cancel all the jobs scheduled by [JobManager]. Evernote android job
+ * [onReceive] method will first cancelJob all the jobs scheduled by [JobManager]. Evernote android job
  * registers all the jobs again on [Intent.ACTION_MY_PACKAGE_REPLACED] or [Intent.ACTION_BOOT_COMPLETED].
  * So first unregister all the jobs and re-schedule jobs based on the current settings.
  *
@@ -77,7 +77,7 @@ class SystemEventReceiver : BroadcastReceiver {
 
         // Cancel all the job
         // Evernote job automatically schedules all the jobs for you on boot complete.
-        // So, we are going to cancel all the jobs and schedule our own jobs again.
+        // So, we are going to cancelJob all the jobs and schedule our own jobs again.
         Core.meltdown()
 
         core.refresh()

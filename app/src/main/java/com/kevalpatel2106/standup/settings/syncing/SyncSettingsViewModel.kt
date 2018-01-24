@@ -19,11 +19,11 @@ package com.kevalpatel2106.standup.settings.syncing
 
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.SharedPreferenceKeys
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.CoreConfig
+import com.kevalpatel2106.standup.core.CorePrefsProvider
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
@@ -46,6 +46,9 @@ class SyncSettingsViewModel : BaseViewModel {
 
     @Inject
     lateinit var core: Core
+
+    @Inject
+    lateinit var corePrefsProvider: CorePrefsProvider
 
     internal val isSyncing = MutableLiveData<Boolean>()
     internal val lastSyncTime = MutableLiveData<String>()
@@ -74,11 +77,10 @@ class SyncSettingsViewModel : BaseViewModel {
         addDisposable(RxBus.register(CoreConfig.TAG_RX_SYNC_ENDED).subscribe {
             isSyncing.value = false
 
-            lastSyncTime.value = TimeUtils.calculateHumanReadableDurationFromNow(sharedPrefsProvider
-                    .getLongFromPreference(SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME))
+            lastSyncTime.value = TimeUtils.calculateHumanReadableDurationFromNow(corePrefsProvider.lastSyncTime)
         })
 
-        lastSyncTime.value = sharedPrefsProvider.getLongFromPreference(SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME).let {
+        lastSyncTime.value = corePrefsProvider.lastSyncTime.let {
             if (it <= 0) "" else TimeUtils.calculateHumanReadableDurationFromNow(it)
         }
     }

@@ -35,17 +35,6 @@ object SharedPreferenceKeys {
      */
     const val IS_NAVIGATION_DRAWER_DISPLAYED: String = "is_navigation_drawer_displayed"
 
-    /**
-     * This key holds the time of the last sync time.
-     */
-    const val PREF_KEY_LAST_SYNC_TIME = "last_sync_time_mills"
-
-    /**
-     * This ket holds the time of the next standing notification in milliseconds.
-     */
-    const val PREF_KEY_NEXT_NOTIFICATION_TIME = "next_notification_time"
-
-
     // *********** User session keys. ************ //
     const val USER_ID = "user_id"                        //User unique id
 

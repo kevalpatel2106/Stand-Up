@@ -21,11 +21,12 @@ import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.common.SharedPreferenceKeys
 import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.CoreConfig
+import com.kevalpatel2106.standup.core.CorePrefsProvider
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.repo.CoreRepo
 import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.cancelScheduledSync
@@ -54,7 +55,7 @@ import javax.inject.Inject
  * - Periodic syncing should only work if [com.kevalpatel2106.standup.misc.UserSettingsManager.enableBackgroundSync]
  * is true.
  *
- * - If you want to cancel all scheduled sync jobs, call [cancelScheduledSync].
+ * - If you want to cancelJob all scheduled sync jobs, call [cancelScheduledSync].
  *
  * Manual Syncing:
  * Application sync instantaneously using [syncNow]. This will ignore all the scheduled [SyncJob]
@@ -130,6 +131,20 @@ internal class SyncJob : AsyncJob() {
             }
         }
 
+        /**
+         * This is an [AsyncJob] to sync the user data with the server periodically. The interval
+         * between two subsequent period is defined by [UserSettingsManager.syncInterval] in the
+         * milliseconds.
+         *
+         * This job is the periodic job with flex timings of [CoreConfig.SYNC_SERVICE_PERIOD_TOLERANCE].
+         * Before scheduling this job, make sure that [SyncJobHelper.shouldRunJob] is true.
+         *
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpDailyReview]
+         * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
+         *
+         * @see com.kevalpatel2106.standup.core.Core.setUpDailyReview
+         * @see AsyncJob
+         */
         @SuppressLint("VisibleForTests")
         @JvmStatic
         internal fun scheduleSync(intervalMills: Long) {
@@ -146,6 +161,10 @@ internal class SyncJob : AsyncJob() {
             }
         }
 
+        /**
+         * Cancel the [SyncJob]. This method will only cancel periodically scheduled job. (i.e. the
+         * job scheduled with [SyncJob.scheduleSync].)
+         */
         @JvmStatic
         internal fun cancelScheduledSync() {
             JobManager.instance().cancelAllForTag(SYNC_JOB_TAG)
@@ -155,17 +174,9 @@ internal class SyncJob : AsyncJob() {
         /**
          * Flag to let others know if the [SyncJob] is running or not? The value of this boolean
          * is modified internally from [SyncJob] itself.
-         *
-         * @see isSyncingCurrently
          */
         internal var isSyncing = false
     }
-
-    /**
-     * [SharedPrefsProvider] for accessing the preferences.
-     */
-    @Inject
-    internal lateinit var sharedPrefsProvider: SharedPrefsProvider
 
     /**
      * [UserSessionManager] for getting the user session details.
@@ -173,8 +184,17 @@ internal class SyncJob : AsyncJob() {
     @Inject
     internal lateinit var userSessionManager: UserSessionManager
 
+    /**
+     * [UserSettingsManager] for getting the user settings.
+     */
+    @Inject
+    internal lateinit var userSettingsManager: UserSettingsManager
+
     @Inject
     internal lateinit var coreRepo: CoreRepo
+
+    @Inject
+    internal lateinit var corePrefsProvider: CorePrefsProvider
 
     override fun onRunJobAsync(params: Params) {
 
@@ -184,7 +204,7 @@ internal class SyncJob : AsyncJob() {
                 .build()
                 .inject(this@SyncJob)
 
-        if (SyncServiceHelper.shouldSync(userSessionManager)) {
+        if (SyncJobHelper.shouldRunJob(userSessionManager, userSettingsManager)) {
 
             //Add the new value to database.
             coreRepo.sendPendingActivitiesToServer()
@@ -198,7 +218,7 @@ internal class SyncJob : AsyncJob() {
                     }
                     .doAfterTerminate {
                         //Let others know sync stopped.
-                        notifySyncTerminated(sharedPrefsProvider)
+                        notifySyncTerminated()
 
                         destroyJob()
                     }
@@ -210,17 +230,23 @@ internal class SyncJob : AsyncJob() {
                         Timber.e(it.message)
                     })
         } else {
-
-            //Do nothing.
             //You shouldn't be syncing.
+            cancelScheduledSync()
             destroyJob()
         }
     }
 
-    private fun notifySyncTerminated(sharedPrefsProvider: SharedPrefsProvider) {
+    /**
+     * Broadcast that sync is completed using [RxBus] event with tag [CoreConfig.TAG_RX_SYNC_ENDED].
+     * This will also reset the value of [isSyncing] and save the last sync time in [CorePrefsProvider].
+     *
+     * @see RxBus
+     * @see CorePrefsProvider
+     */
+    private fun notifySyncTerminated() {
         //Save the last syncing time
-        sharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME,
-                System.currentTimeMillis() - 1000L /* Remove one second to prevent displaying 0 seconds in sync settings. */)
+        corePrefsProvider.saveLastSyncTime(System.currentTimeMillis()
+                - 1000L /* Remove one second to prevent displaying 0 seconds in sync settings. */)
 
         //Syncing stopped.
         isSyncing = false
@@ -228,12 +254,23 @@ internal class SyncJob : AsyncJob() {
         Timber.i("Syncing completed...")
     }
 
+    /**
+     * Broadcast that sync is started using [RxBus] event with tag [CoreConfig.TAG_RX_SYNC_STARTED].
+     * This will also set the value of [isSyncing].
+     *
+     * @see RxBus
+     */
     private fun notifySyncStarted() {
         isSyncing = true
         RxBus.post(Event(CoreConfig.TAG_RX_SYNC_STARTED))
         Timber.i("Syncing started...")
     }
 
+    /**
+     * Destroy the async job.
+     *
+     * @see AsyncJob.stopJob
+     */
     private fun destroyJob() {
         stopJob(Result.SUCCESS)
         compositeDisposable.dispose()

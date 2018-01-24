@@ -50,6 +50,9 @@ internal class DailyReviewJob : Job() {
          * only if [UserSettingsManager.isDailyReviewEnable] is true. Next daily job will be schedule
          * on [DailyReviewHelper.getNextAlarmTime].
          *
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpDailyReview]
+         * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
+         *
          * @return True if the job is scheduled or else false.
          * @see DailyReviewHelper.getNextAlarmTime
          */

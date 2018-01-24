@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup.core.repo
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.utils.annotations.Repository
 import io.reactivex.Completable
 import io.reactivex.Single
 import retrofit2.Retrofit
@@ -32,8 +33,9 @@ import javax.inject.Named
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@Repository
 internal class CoreRepoImpl @Inject constructor(private val userActivityDao: UserActivityDao,
-                                       @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit)
+                                                @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit)
     : CoreRepo {
 
     override fun sendPendingActivitiesToServer(): Completable {

@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.core.repo
 
 import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.utils.annotations.Repository
 import io.reactivex.Completable
 import io.reactivex.Single
 
@@ -26,6 +27,7 @@ import io.reactivex.Single
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
+@Repository
 internal interface CoreRepo {
 
     /**

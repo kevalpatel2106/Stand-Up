@@ -29,14 +29,13 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
-import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerHelper
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.repo.CoreRepo
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -164,7 +163,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
      * @see UserSettingsManager
      */
     @Inject
-    lateinit var userSettingsManager: dagger.Lazy<UserSettingsManager>
+    lateinit var userSettingsManager: UserSettingsManager
 
     /**
      * [dagger.Lazy] instance of the core module.
@@ -173,12 +172,6 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
      */
     @Inject
     lateinit var core: dagger.Lazy<Core>
-
-    /**
-     * @see SharedPrefsProvider
-     */
-    @Inject
-    lateinit var sharedPrefsProvider: SharedPrefsProvider
 
     /**
      * Whenever job starts [onRunJobAsync]  will be called. This will check if the activity should
@@ -201,7 +194,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
                 .inject(this@ActivityMonitorJob)
 
         //Check if service should be monitoring user activities?
-        if (ActivityMonitorHelper.shouldMonitoringActivity(userSessionManager)) {
+        if (ActivityMonitorHelper.shouldMonitoringActivity(userSessionManager, userSettingsManager)) {
 
             //Use the snapshot api to get result for the user activity.
             Awareness.getSnapshotClient(context).detectedActivity
@@ -213,6 +206,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
                         destroyAndScheduleNextJob()
                     }
         } else {
+            Timber.i("User activity should not be monitored. Canceling the future activity monitoring jobs.")
             stopJob(Result.SUCCESS)
         }
     }
@@ -249,10 +243,10 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
             return
         }
 
-        //Notification job is not scheduled.
-        //Schedule it now.
-        if (!NotificationSchedulerHelper.isReminderScheduled()) {
-            core.get().setUpReminderNotification(userSettingsManager.get(), sharedPrefsProvider)
+        //Check if the user is moving/standing?
+        if (userActivity.userActivityType == UserActivityType.MOVING) {
+            Timber.i("Pushing the reminder back.")
+            core.get().setUpReminderNotification()
         }
 
         //Add the new value to database.

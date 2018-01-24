@@ -18,6 +18,7 @@
 package com.kevalpatel2106.standup.core.sleepManager
 
 import com.evernote.android.job.Job
+import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
@@ -27,6 +28,7 @@ import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import dagger.Lazy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -54,7 +56,7 @@ internal class SleepModeMonitoringJob : Job() {
          * Here two jobs will be scheduled:
          * - Job with the tag [SLEEP_MODE_START_JOB_TAG] will run this job whenever the sleep mode
          * starts. This job is scheduled to run on [SleepModeMonitoringHelper.getSleepStartTiming]
-         * unix milliseconds. At this time, job will cancel the [NotificationSchedulerJob] to prevent
+         * unix milliseconds. At this time, job will cancelJob the [NotificationSchedulerJob] to prevent
          * stand up reminder notifications and [ActivityMonitorJob] will stop monitoring user's
          * activity. This will set [UserSettingsManager.isCurrentlyInSleepMode].
          * - Job with the tag [SLEEP_MODE_END_JOB_TAG] will run this job whenever the sleep mode
@@ -65,6 +67,10 @@ internal class SleepModeMonitoringJob : Job() {
          *
          * This job is one-shot job not periodic. At the end of [SLEEP_MODE_END_JOB_TAG] job, it
          * will reschedule this job for the next day.
+         *
+         *
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpSleepMode]
+         * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
          *
          * @return True if both the jobs are scheduled successfully else false.
          * @see SleepModeMonitoringHelper.getSleepStartTiming
@@ -94,12 +100,18 @@ internal class SleepModeMonitoringJob : Job() {
                         .schedule()
 
                 Timber.i("`Sleep mode end` monitoring job with id $endJobId scheduled after $endSleepJobTime milliseconds.")
-
-                //Check if while scheduling this job, is sleep mode should turn on?
-                userSettingsManager.isCurrentlyInSleepMode = SleepModeMonitoringHelper.isCurrentlyInSleepMode(userSettingsManager)
-
                 return@synchronized true
             }
+        }
+
+
+        /**
+         * Cancel both [SLEEP_MODE_END_JOB_TAG] and [SLEEP_MODE_START_JOB_TAG] jobs.
+         */
+        @JvmStatic
+        internal fun cancelScheduledJob() {
+            JobManager.instance().cancelAllForTag(SLEEP_MODE_END_JOB_TAG)
+            JobManager.instance().cancelAllForTag(SLEEP_MODE_START_JOB_TAG)
         }
     }
 
@@ -112,12 +124,22 @@ internal class SleepModeMonitoringJob : Job() {
     @Inject
     lateinit var userSessionManager: UserSessionManager
 
+    @Inject
+    lateinit var core: Lazy<Core>
+
     override fun onRunJob(params: Params): Result {
         //Inject dependencies.
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SleepModeMonitoringJob)
+
+        //Check if the job should be running?
+        if (!SleepModeMonitoringHelper.shouldRunningJob(userSessionManager)) {
+            cancelScheduledJob()
+            return Result.SUCCESS
+        }
+
 
         when (params.tag) {
             SLEEP_MODE_START_JOB_TAG -> sleepModeStarted()
@@ -134,10 +156,7 @@ internal class SleepModeMonitoringJob : Job() {
             //Turn on sleep mode
             userSettingsManager.isCurrentlyInSleepMode = true
 
-            Core(userSessionManager = userSessionManager,
-                    userSettingsManager = userSettingsManager,
-                    prefsProvider = sharedPrefsProvider)
-                    .refresh()
+            core.get().refresh()
 
             SleepModeStartNotification.notify(context)
         }
@@ -147,10 +166,7 @@ internal class SleepModeMonitoringJob : Job() {
         //Turn off sleep mode
         userSettingsManager.isCurrentlyInSleepMode = false
 
-        Core(userSessionManager = userSessionManager,
-                userSettingsManager = userSettingsManager,
-                prefsProvider = sharedPrefsProvider)
-                .refresh()
+        core.get().refresh()
 
         //Schedule the next sleep monitoring job
         scheduleJob(userSettingsManager)

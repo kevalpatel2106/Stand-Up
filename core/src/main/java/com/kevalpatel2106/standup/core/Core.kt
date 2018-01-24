@@ -13,23 +13,31 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- */package com.kevalpatel2106.standup.core
+ */
+@file:Suppress("KDocUnresolvedReference")
+
+package com.kevalpatel2106.standup.core
 
 import android.content.Context
 import android.os.Handler
+import com.evernote.android.job.JobConfig
 import com.evernote.android.job.JobManager
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorHelper
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
+import com.kevalpatel2106.standup.core.dailyReview.DailyReviewHelper
 import com.kevalpatel2106.standup.core.dailyReview.DailyReviewJob
+import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringHelper
 import com.kevalpatel2106.standup.core.dndManager.AutoDndMonitoringJob
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerHelper
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.reminder.ReminderNotification
+import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringHelper
 import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringJob
 import com.kevalpatel2106.standup.core.sync.SyncJob
+import com.kevalpatel2106.standup.core.sync.SyncJobHelper
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -52,15 +60,28 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
             JobManager.instance().cancelAll()
         }
 
+        /**
+         * Sync the database with the server manually. This will run the [SyncJob] forcefully.
+         * This won't affect the period of the future periodic [SyncJob].
+         *
+         * @see SyncJob.syncNow
+         */
         fun forceSync() = SyncJob.syncNow()
 
+        /**
+         * Check if the [SyncJob] is currently running?
+         */
         fun isSyncingCurrently() = SyncJob.isSyncing
 
+        /**
+         * Fire the test [ReminderNotification]. This will cancelJob the [ReminderNotification] after
+         * 10 seconds.
+         */
         fun fireTestReminder(context: Context) {
             ReminderNotification().notify(context)
 
             //Cancel the notification after some time.
-            Handler().postDelayed({ ReminderNotification().cancel(context) }, 10000L /* 10 Seconds */)
+            Handler().postDelayed({ ReminderNotification().cancel(context) }, 10_000L /* 10 Seconds */)
         }
     }
 
@@ -72,6 +93,8 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      * @see meltdown
      */
     fun turnOn(application: BaseApplication) {
+        JobConfig.addLogger(EvernoteJobLogger())
+
         //Initialize the core creator
         CoreJobCreator.init(application)
 
@@ -82,7 +105,12 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      * Schedule/Cancel the jobs based on the update preferences.
      */
     fun refresh() {
-        Timber.i("Refreshing the core...")
+        if (BuildConfig.DEBUG) {
+            Timber.i("Refreshing the core...")
+            Timber.i("Is background sync enabled : ${userSettingsManager.isCurrentlyDndEnable}.")
+            Timber.i("Currently DND mode is enabled: ${userSettingsManager.isCurrentlyDndEnable}.")
+            Timber.i("Currently Sleep mode is enabled: ${userSettingsManager.isCurrentlyInSleepMode}.")
+        }
 
         //Check iff the user is logged in?
         if (!userSessionManager.isUserLoggedIn) {
@@ -90,19 +118,12 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
             return
         }
 
-
-        setUpSleepMode(userSettingsManager)
-
-        setUpAutoDnd(userSettingsManager)
-
-        //Schedule all the jobs based on their preferences
-        setUpActivityMonitoring(userSettingsManager)
-
-        setUpDailyReview(userSettingsManager)
-
-        setUpReminderNotification(userSettingsManager, prefsProvider)
-
-        setUpSync(userSettingsManager)
+        setUpSleepMode(userSessionManager, userSettingsManager)
+        setUpAutoDnd(userSessionManager, userSettingsManager)
+        setUpActivityMonitoring(userSessionManager, userSettingsManager)
+        setUpDailyReview(userSessionManager, userSettingsManager)
+        setUpReminderNotification(userSessionManager, userSettingsManager, prefsProvider)
+        setUpSync(userSessionManager, userSettingsManager)
     }
 
     /**
@@ -118,12 +139,13 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      * @see ActivityMonitorJob.cancel
      * @see ActivityMonitorHelper.isAnyJobScheduled
      */
-    internal fun setUpActivityMonitoring(userSettingsManager: UserSettingsManager) {
+    internal fun setUpActivityMonitoring(userSessionManager: UserSessionManager,
+                                         userSettingsManager: UserSettingsManager) {
 
         //Check if the sleep mode is running?
         //Don't start monitoring.
-        if (userSettingsManager.isCurrentlyInSleepMode) {
-            Timber.i("Currently Sleep mode is enabled: ${userSettingsManager.isCurrentlyInSleepMode}.")
+        if (!ActivityMonitorHelper.shouldMonitoringActivity(userSessionManager, userSettingsManager)) {
+            Timber.i("User activity should not be monitored. Canceling the future activity monitoring jobs.")
             ActivityMonitorJob.cancel()
             return
         }
@@ -138,6 +160,9 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
         ActivityMonitorJob.scheduleNextJob()
     }
 
+    fun setUpReminderNotification() {
+        setUpReminderNotification(userSessionManager, userSettingsManager, prefsProvider)
+    }
 
     /**
      * Register the [NotificationSchedulerJob] after [CoreConfig.STAND_UP_REMINDER_INTERVAL] if the
@@ -146,22 +171,22 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      *
      * This method guarantees that no duplicate jobs are scheduled and no jobs scheduled in DND mode
      * or in the sleep mode. Use this method instead of calling
-     * [NotificationSchedulerJob.scheduleNotification] or [NotificationSchedulerJob.cancel] to
+     * [NotificationSchedulerJob.scheduleNotification] or [NotificationSchedulerJob.cancelJob] to
      * control the job.
      *
      * @see NotificationSchedulerJob.scheduleNotification
-     * @see NotificationSchedulerJob.cancel
+     * @see NotificationSchedulerJob.cancelJob
      * @see NotificationSchedulerHelper.isReminderScheduled
      */
-    internal fun setUpReminderNotification(userSettingsManager: UserSettingsManager,
+    internal fun setUpReminderNotification(userSessionManager: UserSessionManager,
+                                           userSettingsManager: UserSettingsManager,
                                            sharedPrefsProvider: SharedPrefsProvider) {
 
         //DND mode is turned on or the sleep mode is turn on?.
-        //Do not schedule the next job and cancel the current job.
-        if (userSettingsManager.isCurrentlyDndEnable || userSettingsManager.isCurrentlyInSleepMode) {
-            Timber.i("Currently DND mode is enabled: ${userSettingsManager.isCurrentlyDndEnable}.")
-            Timber.i("Currently Sleep mode is enabled: ${userSettingsManager.isCurrentlyInSleepMode}.")
-            NotificationSchedulerJob.cancel(sharedPrefsProvider)
+        //Do not schedule the next job and cancelJob the current job.
+        if (!NotificationSchedulerHelper.shouldDisplayNotification(userSessionManager, userSettingsManager)) {
+            Timber.i("Not right time to schedule notifications. Canceling the job.")
+            NotificationSchedulerJob.cancelJob(sharedPrefsProvider)
             return
         }
 
@@ -182,9 +207,11 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      *
      * @see DailyReviewJob.scheduleJob
      */
-    private fun setUpDailyReview(userSettingsManager: UserSettingsManager) {
+    private fun setUpDailyReview(userSessionManager: UserSessionManager,
+                                 userSettingsManager: UserSettingsManager) {
         //Check if the daily review is enabled?
-        if (!userSettingsManager.isDailyReviewEnable) {
+        if (!DailyReviewHelper.shouldRunningThisJob(userSessionManager, userSettingsManager)) {
+            Timber.i("Daily reviews are disabled. Canceling the job.")
             DailyReviewJob.cancelScheduledJob()
             return
         }
@@ -199,14 +226,16 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      *
      * @see SyncJob.scheduleSync
      */
-    private fun setUpSync(userSettingsManager: UserSettingsManager) {
+    private fun setUpSync(userSessionManager: UserSessionManager,
+                          userSettingsManager: UserSettingsManager) {
         //Check if the background sync is enabled?
-        if (userSettingsManager.enableBackgroundSync) {
+        if (!SyncJobHelper.shouldRunJob(userSessionManager, userSettingsManager)) {
+            Timber.i("Background sync is disabled by the user. Skipping it.")
+            SyncJob.cancelScheduledSync()
+        } else {
 
             //Schedule periodic the sync service.
             SyncJob.scheduleSync(userSettingsManager.syncInterval)
-        } else {
-            Timber.i("Background sync is disabled by the user. Skipping it.")
         }
     }
 
@@ -216,11 +245,18 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      * @see AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled
      * @see AutoDndMonitoringJob.cancelScheduledJob
      */
-    private fun setUpAutoDnd(userSettingsManager: UserSettingsManager) {
+    private fun setUpAutoDnd(userSessionManager: UserSessionManager,
+                             userSettingsManager: UserSettingsManager) {
         //Check if the auto dnd is enabled?
-        if (!userSettingsManager.isAutoDndEnable) {
+        if (!AutoDndMonitoringHelper.shouldRunningThisJob(userSettingsManager, userSessionManager)) {
             AutoDndMonitoringJob.cancelScheduledJob()
             return
+        }
+
+        // If the auto dnd mode should be turned in currently...
+        // Set the flag
+        if (AutoDndMonitoringHelper.isCurrentlyInAutoDndMode(userSettingsManager)) {
+            userSettingsManager.isCurrentlyDndEnable = true
         }
 
         AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled(userSettingsManager)
@@ -232,7 +268,18 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      * @see AutoDndMonitoringJob.scheduleJobIfAutoDndEnabled
      * @see AutoDndMonitoringJob.cancelScheduledJob
      */
-    private fun setUpSleepMode(userSettingsManager: UserSettingsManager) {
+    private fun setUpSleepMode(userSessionManager: UserSessionManager,
+                               userSettingsManager: UserSettingsManager) {
+        //Check if the auto dnd is enabled?
+        if (!SleepModeMonitoringHelper.shouldRunningJob(userSessionManager)) {
+            SleepModeMonitoringJob.cancelScheduledJob()
+            return
+        }
+
+        //Check if while scheduling this job, is sleep mode should turn on?
+        userSettingsManager.isCurrentlyInSleepMode = SleepModeMonitoringHelper
+                .isCurrentlyInSleepMode(userSettingsManager)
+
         SleepModeMonitoringJob.scheduleJob(userSettingsManager)
     }
 }

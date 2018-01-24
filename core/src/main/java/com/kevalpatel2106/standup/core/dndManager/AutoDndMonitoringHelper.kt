@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.core.dndManager
 
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.annotations.Helper
@@ -79,10 +80,34 @@ internal object AutoDndMonitoringHelper {
         }
     }
 
+    /**
+     * Check if DND mode should be turned on based on the auto dnd timings? Based on the return value
+     * application figure out [UserSettingsManager.isCurrentlyDndEnable] to set true or false.
+     *
+     * The application should be in DND mode currently if [UserSettingsManager.isAutoDndEnable] is
+     * true (i.e. Auto DND feature is turned on) and current time (i.e. [System.currentTimeMillis] is
+     * between [UserSettingsManager.autoDndStartTime] and [UserSettingsManager.autoDndEndTime].
+     *
+     * @return True if the DND should be enabled.
+     */
     fun isCurrentlyInAutoDndMode(userSettingsManager: UserSettingsManager): Boolean {
         val currentTimeFrom12Am = System.currentTimeMillis() - TimeUtils.getTodaysCalender12AM().timeInMillis
         return userSettingsManager.isAutoDndEnable
                 && (userSettingsManager.autoDndStartTime <= currentTimeFrom12Am)
                 && (userSettingsManager.autoDndEndTime >= currentTimeFrom12Am)
+    }
+
+    /**
+     * Is it okay to run/schedule the [AutoDndMonitoringJob]?
+     *
+     * [AutoDndMonitoringJob] should only be running if auto dnd is turned on (i.e.
+     * [UserSettingsManager.isAutoDndEnable] is true) and user is logged in (i.e.
+     * [UserSessionManager.isUserLoggedIn] is true.).
+     *
+     * @return True if application is good to schedule/run the [AutoDndMonitoringJob] or else false.
+     */
+    fun shouldRunningThisJob(userSettingsManager: UserSettingsManager,
+                             userSessionManager: UserSessionManager): Boolean {
+        return userSettingsManager.isAutoDndEnable && userSessionManager.isUserLoggedIn
     }
 }

@@ -21,11 +21,11 @@ import android.annotation.SuppressLint
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.common.SharedPreferenceKeys
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.CoreConfig
+import com.kevalpatel2106.standup.core.CorePrefsProvider
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
@@ -42,6 +42,10 @@ import javax.inject.Inject
 internal class NotificationSchedulerJob : Job() {
 
     companion object {
+
+        /**
+         * Unique tag to identify [NotificationSchedulerJob].
+         */
         internal const val REMINDER_NOTIFICATION_JOB_TAG = "reminder_notification_job"
 
         /**
@@ -62,7 +66,7 @@ internal class NotificationSchedulerJob : Job() {
             synchronized(NotificationSchedulerJob::class) {
 
                 //Save the time of upcoming notification.
-                sharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME,
+                CorePrefsProvider(sharedPrefsProvider).saveNextNotificationTime(
                         System.currentTimeMillis() + scheduleInterval)
 
                 //Schedule the job
@@ -84,11 +88,12 @@ internal class NotificationSchedulerJob : Job() {
          * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
          */
         @JvmStatic
-        fun cancel(sharedPrefsProvider: SharedPrefsProvider) {
+        fun cancelJob(sharedPrefsProvider: SharedPrefsProvider) {
             JobManager.instance().cancelAllForTag(REMINDER_NOTIFICATION_JOB_TAG)
 
             //Remove the next reminder time. We are not having any next reminder scheduled.
-            sharedPrefsProvider.removePreferences(SharedPreferenceKeys.PREF_KEY_NEXT_NOTIFICATION_TIME)
+            //Save the time of upcoming notification.
+            CorePrefsProvider(sharedPrefsProvider).saveNextNotificationTime(0)
 
             Timber.i("All the notification job canceled.")
         }
@@ -125,7 +130,8 @@ internal class NotificationSchedulerJob : Job() {
                 .build()
                 .inject(this@NotificationSchedulerJob)
 
-        if (NotificationSchedulerHelper.shouldDisplayNotification(userSessionManager)) {
+        if (NotificationSchedulerHelper
+                        .shouldDisplayNotification(userSessionManager, userSettingsManager)) {
 
             //Fire reminder notification
             ReminderNotification().notify(context)
@@ -133,6 +139,9 @@ internal class NotificationSchedulerJob : Job() {
 
             //Schedule the next notification
             scheduleNotification(sharedPrefsProvider)
+        } else {
+            Timber.i("Not right time to schedule notifications. Canceling the job.")
+            cancelJob(sharedPrefsProvider)
         }
 
         return Result.SUCCESS

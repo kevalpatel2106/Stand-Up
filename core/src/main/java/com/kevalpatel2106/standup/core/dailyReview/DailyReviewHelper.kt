@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.core.dailyReview
 
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.annotations.Helper
@@ -24,7 +25,7 @@ import com.kevalpatel2106.utils.annotations.Helper
 
 /**
  * Created by Keval on 17/01/18.
- * An helper class for daily review package.
+ * An helper class for [DailyReviewNotification] and [DailyReviewJob].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
@@ -54,5 +55,19 @@ internal object DailyReviewHelper {
                 return@with this
             }
         }
+    }
+
+    /**
+     * Is it okay to run/schedule the [DailyReviewJob]?
+     *
+     * [DailyReviewJob] should only be running if daily review is turned on (i.e.
+     * [UserSettingsManager.isDailyReviewEnable] is true) and user is logged in (i.e.
+     * [UserSessionManager.isUserLoggedIn] is true.).
+     *
+     * @return True if application is good to schedule/run the [DailyReviewJob] or else false.
+     */
+    internal fun shouldRunningThisJob(userSessionManager: UserSessionManager,
+                                      userSettingsManager: UserSettingsManager): Boolean {
+        return userSessionManager.isUserLoggedIn && userSettingsManager.isDailyReviewEnable
     }
 }

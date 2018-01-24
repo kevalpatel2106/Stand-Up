@@ -47,7 +47,7 @@ object CoreConfig {
      * Value: 1 Hour
      */
     internal val STAND_UP_REMINDER_INTERVAL = if (BuildConfig.DEBUG) {
-        TimeUnit.MINUTES.toMillis(15)    /* 15 min */
+        TimeUnit.MINUTES.toMillis(60)    /* 15 min */
     } else {
         TimeUnit.MINUTES.toMillis(60)   /* 60 min */
     }

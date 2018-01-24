@@ -23,6 +23,7 @@ import retrofit2.http.POST
 
 /**
  * Created by Keval on 15/12/17.
+ * List of the end points for communicating with the server for "Core" module.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
