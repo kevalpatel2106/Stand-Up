@@ -20,6 +20,7 @@ package com.kevalpatel2106.standup.core.reminder
 import com.evernote.android.job.JobManager
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.standup.core.sleepManager.SleepModeMonitoringHelper
 import com.kevalpatel2106.utils.annotations.Helper
 
 /**
@@ -44,6 +45,7 @@ internal object NotificationSchedulerHelper {
                                            userSettingsManager: UserSettingsManager): Boolean {
         return userSessionManager.isUserLoggedIn
                 && !userSettingsManager.isCurrentlyInSleepMode
+                && SleepModeMonitoringHelper.isCurrentlyInSleepMode(userSettingsManager)
                 && !userSettingsManager.isCurrentlyDndEnable
     }
 

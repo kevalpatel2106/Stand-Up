@@ -94,7 +94,7 @@ class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
         //Review notification time
         val dailyReviewTime = findPrefrance(R.string.pref_key_daily_review_time)
         dailyReviewTime.setOnPreferenceClickListener {
-            context?.let { model.displayDateDialog(it) }
+            context?.let { model.displayDateDialog(it, childFragmentManager) }
             return@setOnPreferenceClickListener true
         }
         model.dailyReviewTimeSummary.observe(this@DailyReviewSettingsFragment, android.arch.lifecycle.Observer {

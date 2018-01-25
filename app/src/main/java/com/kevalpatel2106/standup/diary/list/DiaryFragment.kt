@@ -32,7 +32,7 @@ import com.kevalpatel2106.common.base.uiController.BaseFragment
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.standup.R
-import kotlinx.android.synthetic.main.fragment_siting_diary.*
+import kotlinx.android.synthetic.main.fragment_diary.*
 
 
 /**
@@ -56,7 +56,7 @@ class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListen
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_siting_diary, container, false)
+        return inflater.inflate(R.layout.fragment_diary, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

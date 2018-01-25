@@ -30,7 +30,7 @@ ext {
 
     def espressoVersion = "3.0.1"
     def mockitoVersion = "2.13.0"
-    def dggerVersion = "2.14.1"
+    def daggerVersion = "2.14.1"
 
     //Exclude group for the test dependency
     excludeGrp = {
@@ -88,7 +88,6 @@ ext {
             [configuration: "api", dependency: 'org.mockito:mockito-core:' + mockitoVersion],
     ]
 
-    //Support library dependency
     supportLib = [
             annotations : 'com.android.support:support-annotations:' + supportLibVersion,
             supportv4   : 'com.android.support:support-v4:' + supportLibVersion,
@@ -100,7 +99,9 @@ ext {
             prefrance   : 'com.android.support:preference-v7:' + supportLibVersion,
             prefrancev14: 'com.android.support:preference-v14:' + supportLibVersion,
             multidex    : 'com.android.support:multidex:1.0.2',
+            gridLayout  : 'com.android.support:gridlayout-v7:' + supportLibVersion,
     ]
+    //Support library dependency
 
     archComponent = [
             room               : 'android.arch.persistence.room:runtime:' + archComponentVersion,
@@ -188,10 +189,10 @@ ext {
     ]
 
     dagger = [
-            [configuration: "implementation", dependency: "com.google.dagger:dagger-android:" + dggerVersion],
-            [configuration: "implementation", dependency: 'com.google.dagger:dagger-android-support:' + dggerVersion],
-            [configuration: "kapt", dependency: 'com.google.dagger:dagger-android-processor:' + dggerVersion],
-            [configuration: "kapt", dependency: 'com.google.dagger:dagger-compiler:' + dggerVersion],
+            [configuration: "implementation", dependency: "com.google.dagger:dagger-android:" + daggerVersion],
+            [configuration: "implementation", dependency: 'com.google.dagger:dagger-android-support:' + daggerVersion],
+            [configuration: "kapt", dependency: 'com.google.dagger:dagger-android-processor:' + daggerVersion],
+            [configuration: "kapt", dependency: 'com.google.dagger:dagger-compiler:' + daggerVersion],
             [configuration: "provided", dependency: 'javax.annotation:jsr250-api:1.0'],
     ]
 }

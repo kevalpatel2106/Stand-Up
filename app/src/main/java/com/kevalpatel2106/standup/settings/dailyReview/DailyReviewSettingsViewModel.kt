@@ -18,16 +18,18 @@
 package com.kevalpatel2106.standup.settings.dailyReview
 
 import android.annotation.SuppressLint
-import android.app.TimePickerDialog
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.annotation.VisibleForTesting
+import android.support.v4.app.FragmentManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.settings.di.DaggerSettingsComponent
+import com.kevalpatel2106.standup.settings.setApplicationTheme
 import com.kevalpatel2106.utils.TimeUtils
+import com.philliphsu.bottomsheetpickers.time.grid.GridTimePickerDialog
 import java.util.*
 import javax.inject.Inject
 
@@ -43,9 +45,11 @@ class DailyReviewSettingsViewModel : BaseViewModel {
     /**
      * [UserSettingsManager] for getting the settings.
      */
-    @Inject lateinit var settingsManager: UserSettingsManager
+    @Inject
+    lateinit var settingsManager: UserSettingsManager
 
-    @Inject lateinit var core: Core
+    @Inject
+    lateinit var core: Core
 
     /**
      * [MutableLiveData] to get the daily review time in HH:mm a format. (e.g. 09:04 AM)
@@ -91,20 +95,17 @@ class DailyReviewSettingsViewModel : BaseViewModel {
      * Display the time picker dialog. This allows user to select the time for review notifications.
      */
     @SuppressLint("VisibleForTests")
-    internal fun displayDateDialog(context: Context) {
+    internal fun displayDateDialog(context: Context, fragmentManager: FragmentManager) {
         val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        cal.timeInMillis = settingsManager.dailyReviewTimeFrom12Am
-
-        TimePickerDialog(context, TimePickerDialog.OnTimeSetListener { _, hours, mins ->
-
+        val dialog = GridTimePickerDialog.newInstance({ _, hourOfDay, minute ->
             //Save new time
-            settingsManager.dailyReviewTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(hours, mins)
+            settingsManager.dailyReviewTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(hourOfDay, minute)
 
             //daily review timing changed. Update the alarms.
             onDailyReviewSettingChange()
-        }, cal.get(Calendar.HOUR_OF_DAY),
-                cal.get(Calendar.MINUTE),
-                false)
-                .show()
+        }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false)
+        dialog.setApplicationTheme(context)
+        dialog.show(fragmentManager, "DailyReviewTimePicker")
+
     }
 }

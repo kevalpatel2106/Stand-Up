@@ -21,19 +21,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
-    android:paddingBottom="@dimen/spacing_micro"
+    android:paddingBottom="@dimen/spacing_nano"
     android:paddingEnd="@dimen/spacing_small"
     android:paddingStart="@dimen/spacing_small"
-    android:paddingTop="@dimen/spacing_micro">
+    android:paddingTop="@dimen/spacing_small">
 
     <com.kevalpatel2106.common.view.BaseTextView
         android:id="@+id/dairy_row_month_name_header_tv"
         style="@style/SmallText.Secondary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="January, 2017" />
 </android.support.constraint.ConstraintLayout>
