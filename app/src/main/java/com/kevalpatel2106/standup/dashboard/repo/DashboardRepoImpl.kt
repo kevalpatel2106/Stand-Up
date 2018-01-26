@@ -33,7 +33,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by Kevalpatel2106 on 25-Dec-17.
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 class DashboardRepoImpl constructor(private val userActivityDao: UserActivityDao,
                                     @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit) : DashboardRepo {

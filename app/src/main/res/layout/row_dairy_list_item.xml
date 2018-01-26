@@ -137,13 +137,13 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/dairy_row_divider"
+        app:layout_constraintBottom_toTopOf="@+id/user_activity_row_divider"
         app:layout_constraintEnd_toStartOf="@+id/guideline12"
         app:layout_constraintTop_toTopOf="@+id/guideline13"
         tools:text="93%" />
 
     <View
-        android:id="@+id/dairy_row_divider"
+        android:id="@+id/user_activity_row_divider"
         android:layout_width="0dp"
         android:layout_height="1px"
         android:layout_marginTop="@dimen/spacing_small"

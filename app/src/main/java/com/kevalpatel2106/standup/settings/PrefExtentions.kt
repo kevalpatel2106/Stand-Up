@@ -18,22 +18,13 @@
 package com.kevalpatel2106.standup.settings
 
 import android.support.annotation.StringRes
-import android.support.v7.preference.ListPreference
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 
 /**
  * Created by Keval on 13/01/18.
+ * A class that contains all the extension functions for prefrance views.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 fun PreferenceFragmentCompat.findPrefrance(@StringRes keyRes: Int): Preference = findPreference(context?.getString(keyRes))
-
-fun ListPreference.getEntryForValue(value: String): String? {
-    val selectedPos = entryValues.lastIndexOf(value)
-    return if (selectedPos >= 0) {
-        entries[selectedPos].toString()
-    } else {
-        null
-    }
-}

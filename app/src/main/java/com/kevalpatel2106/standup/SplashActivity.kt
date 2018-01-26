@@ -36,7 +36,7 @@ import javax.inject.Inject
  * This is the launch activity for the application. It handles redirection logic for login, notifications
  * and dashboard screens.
  *
- * @author <a href="https://github.com/kevalpatel2106">Keval</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 class SplashActivity : BaseActivity() {
 

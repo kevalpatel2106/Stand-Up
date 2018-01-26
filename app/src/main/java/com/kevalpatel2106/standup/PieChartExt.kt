@@ -26,25 +26,27 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.utils.ViewUtils
 import com.kevalpatel2106.utils.getColorCompat
 
 /**
  * Created by Kevalpatel2106 on 22-Jan-18.
+ * Class that contains extension functions for different charts.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
 /**
- * Set up the efficiency card.
+ * Set the theme parameters and dimensions for [PieChart].
+ *
+ * @see PieChart
  */
 fun PieChart.setPieChart(context: Context) {
     /* Set the pie chart */
     setDrawCenterText(false) //Don't want to draw text on center
     description.isEnabled = false    //Don't want to display any description
     setUsePercentValues(true)    //All the values in %.
-    animateY(AppConfig.PIE_CHART_TIME, Easing.EasingOption.EaseInOutQuad)
+    animateY(context.resources.getInteger(R.integer.pie_chart_animation_duration), Easing.EasingOption.EaseInOutQuad)
     setDrawEntryLabels(false)
 
     //The hole in the middle
@@ -71,6 +73,14 @@ fun PieChart.setPieChart(context: Context) {
     l.textSize = ViewUtils.toPx(context, 5).toFloat()
 }
 
+/**
+ * Set the data for [PieChart] that will display [sittingDurationPercent] and [standingDurationPercent]
+ * with different colors. If the addition of [sittingDurationPercent] and [standingDurationPercent]
+ * is zero, [PieChart] will display third "Not Tracked" [PieEntry] with dark gray color.
+ *
+ * @see PieChart
+ * @see PieDataSet
+ */
 fun PieChart.setPieChartData(context: Context,
                              sittingDurationPercent: Float,
                              standingDurationPercent: Float) {

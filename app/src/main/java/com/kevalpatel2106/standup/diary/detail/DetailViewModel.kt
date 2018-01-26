@@ -29,6 +29,7 @@ import com.kevalpatel2106.standup.diary.di.DaggerDiaryComponent
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
 import com.kevalpatel2106.utils.TimeUtils
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.annotations.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -36,20 +37,35 @@ import javax.inject.Inject
 
 /**
  * Created by Keval on 22/01/18.
+ * [ViewModel] for the [DetailActivity].
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @ViewModel(DetailActivity::class)
 class DetailViewModel : BaseViewModel {
 
+    /**
+     * [DiaryRepo] for loading and processing the data from the database and network.
+     *
+     * @see DiaryRepo
+     */
     @Inject
     internal lateinit var diaryRepo: DiaryRepo
 
+    /**
+     * Private constructor to add the custom [DiaryRepo] for testing.
+     *
+     * @param diaryRepo Add custom [DiaryRepo].
+     */
     @VisibleForTesting
+    @OnlyForTesting
     constructor(diaryRepo: DiaryRepo) {
         this.diaryRepo = diaryRepo
     }
 
+    /**
+     * Zero parameter constructor.
+     */
     @Suppress("unused")
     constructor() {
         DaggerDiaryComponent.builder()
@@ -58,10 +74,40 @@ class DetailViewModel : BaseViewModel {
                 .inject(this@DetailViewModel)
     }
 
+    /**
+     * [MutableLiveData] for [DailyActivitySummary]. UI controller can observe this property to
+     * get daily summary for the given day.
+     *
+     * @see DailyActivitySummary
+     */
     internal val summary = MutableLiveData<DailyActivitySummary>()
 
+    /**
+     * [MutableLiveData] for [TimeLineItem] list. UI controller can observe this property to
+     * get notify whenever [TimeLineItem] list updates.
+     *
+     * @see TimeLineItem
+     */
     internal val timelineEventsList = MutableLiveData<ArrayList<TimeLineItem>>()
 
+    /**
+     * Fetch the [DailyActivitySummary] for the given date of [dayOfMonth]-[month]-[year]. This is
+     * an asynchronous method which reads database and process the data to generate stats on the
+     * background thread and deliver result to the main thread.
+     *
+     * UI controller can observe [summary] to  get notify whenever the summary gets updated.
+     * This summary contains sitting and standing time statistics based on the user activity from
+     * 12 am of the given [dayOfMonth].
+     *
+     * UI controller can observer [timelineEventsList] to get the list of [TimeLineItem] to display
+     * in [com.kevalpatel2106.standup.timelineview.TimeLineView].
+     *
+     * Whenever this method starts loading summary stats [blockUi] will be set to true.
+     * If any error occurs while execrating summary, [blockUi] will be called.
+     *
+     * @see DailyActivitySummary
+     * @see DiaryRepo.loadSummary
+     */
     fun fetchData(dayOfMonth: Int, month: Int, year: Int) {
         addDisposable(diaryRepo.loadSummary(dayOfMonth, month, year)
                 .observeOn(AndroidSchedulers.mainThread())

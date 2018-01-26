@@ -24,8 +24,15 @@ import com.philliphsu.bottomsheetpickers.time.grid.GridTimePickerDialog
 
 /**
  * Created by Keval on 25/01/18.
+ * List of all the extention methods for the [GridTimePickerDialog].
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ */
+
+/**
+ * Set the theme parameters and colors for [GridTimePickerDialog].
+ *
+ * @see GridTimePickerDialog
  */
 fun GridTimePickerDialog.setApplicationTheme(context: Context) {
     setAmPmTextColorSelected(context.getColorCompat(R.color.colorPrimaryText))

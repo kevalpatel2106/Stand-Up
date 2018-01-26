@@ -27,8 +27,8 @@
     android:layout_marginTop="@dimen/card_horizontal_margin"
     android:background="?selectableItemBackground"
     app:contentPaddingBottom="@dimen/spacing_small"
-    app:contentPaddingLeft="@dimen/spacing_micro"
-    app:contentPaddingRight="@dimen/spacing_micro"
+    app:contentPaddingLeft="@dimen/spacing_small"
+    app:contentPaddingRight="@dimen/spacing_small"
     app:contentPaddingTop="@dimen/spacing_small">
 
     <com.kevalpatel2106.common.view.BaseTextView
@@ -38,7 +38,6 @@
         android:layout_height="wrap_content"
         android:drawablePadding="@dimen/spacing_micro"
         android:drawableStart="@drawable/ic_arrow_forward"
-        android:drawableTint="@color/colorSecondaryText"
         android:text="@string/view_user_activity_list"
         tools:ignore="UnusedAttribute"/>
 </android.support.v7.widget.CardView>

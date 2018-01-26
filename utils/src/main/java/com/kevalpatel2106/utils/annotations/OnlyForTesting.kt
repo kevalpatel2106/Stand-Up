@@ -15,20 +15,16 @@
  *
  */
 
-package com.kevalpatel2106.standup
-
-import com.kevalpatel2106.common.ApplicationScope
-import com.kevalpatel2106.common.application.di.AppComponent
-import dagger.Component
+package com.kevalpatel2106.utils.annotations
 
 /**
- * Created by Keval on 10/01/18.
+ * Created by Keval on 25/01/18.
+ * Any method, class, property or parameter marked with this annotation indicates that that particular
+ * method, class, property or parameter is only for testing purpose. Production code should not be
+ * using that method, class, property or parameter.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author "https://github.com/kevalpatel2106"
  */
-@ApplicationScope
-@Component(dependencies = [AppComponent::class])
-interface SplashComponent {
-
-    fun inject(splashActivity: SplashActivity)
-}
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.PROPERTY)
+@Retention(AnnotationRetention.SOURCE)
+annotation class OnlyForTesting

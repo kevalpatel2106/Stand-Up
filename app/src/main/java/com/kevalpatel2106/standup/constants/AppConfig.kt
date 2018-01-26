@@ -38,10 +38,6 @@ internal object AppConfig {
      */
     const val SNACKBAR_TIME = 3300L //ms
 
-    /**
-     * Animation time for the Pie chart.
-     */
-    const val PIE_CHART_TIME = 1400 //ms
 
     //---- End of Validation ----//
 

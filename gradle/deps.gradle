@@ -21,7 +21,7 @@ ext {
     def archComponentVersion = '1.0.0'
     def butterKnifeVersion = "8.8.1"
 
-    def kotlinVersion = '1.2.20'
+    def kotlinVersion = '1.2.21'
     def ankoVersion = '0.10.4'
 
     def okHttpVersion = "3.9.1"

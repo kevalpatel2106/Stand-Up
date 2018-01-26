@@ -29,28 +29,40 @@ import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.dashboard.di.DaggerDashboardComponent
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
+import com.kevalpatel2106.utils.annotations.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
  * Created by Keval on 21/12/17.
+ * [ViewModel] for the [DashboardFragment].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @see DashboardFragment
  */
+@ViewModel(DashboardFragment::class)
 class DashboardViewModel : BaseViewModel {
 
-    @Inject lateinit var userActivityRepo: DashboardRepo
+    /**
+     * [DashboardRepo] for loading and processing the data from the database and network.
+     *
+     * @see DashboardRepo
+     */
+    @Inject
+    lateinit var dashboardRepo: DashboardRepo
 
     /**
      * Private constructor to add the custom [DashboardRepo] for testing.
      *
-     * @param dashboardRepo Add your own [DashboardRepo].
+     * @param dashboardRepo Add custom [DashboardRepo].
      */
     @Suppress("unused")
     @VisibleForTesting
+    @OnlyForTesting
     constructor(dashboardRepo: DashboardRepo) : super() {
-        this.userActivityRepo = dashboardRepo
+        this.dashboardRepo = dashboardRepo
     }
 
     /**
@@ -63,13 +75,57 @@ class DashboardViewModel : BaseViewModel {
                 .build().inject(this@DashboardViewModel)
     }
 
+    /**
+     * [MutableLiveData] for [DailyActivitySummary]. UI controller can observe this property to
+     * get daily summary for current day.
+     *
+     * @see DailyActivitySummary
+     */
     val todaySummary = MutableLiveData<DailyActivitySummary>()
+
+    /**
+     * [MutableLiveData] for [ErrorMessage]. UI controller can observe this property to
+     * get notify whenever any error occurs while loading the summary.
+     *
+     * @see ErrorMessage
+     */
     val todaySummaryErrorCallback = MutableLiveData<ErrorMessage>()
+
+    /**
+     * [CallbackEvent] to notify whenever summary loading starts .
+     *
+     * @see CallbackEvent
+     */
     val todaySummaryStartLoading = CallbackEvent()
+
+    /**
+     * [MutableLiveData] for [TimeLineItem] list. UI controller can observe this property to
+     * get notify whenever [TimeLineItem] list updates.
+     *
+     * @see TimeLineItem
+     */
     val timelineEventsList = MutableLiveData<ArrayList<TimeLineItem>>()
 
+    /**
+     * Get the summary off today's daily activity. This is an asynchronous method which reads database
+     * and process the data to generate stats on the background thread and deliver result to the
+     * main thread.
+     *
+     * UI controller can observe [todaySummary] to  get notify whenever the summary gets updated.
+     * This summary contains sitting and standing time statistics based on the user activity from
+     * 12 am of the current day.
+     *
+     * UI controller can observer [timelineEventsList] to get the list of [TimeLineItem] to display
+     * in [com.kevalpatel2106.standup.timelineview.TimeLineView].
+     *
+     * Whenever this method starts loading summary stats [todaySummaryStartLoading] will be set to true.
+     * If any error occurs while execrating summary, [todaySummaryErrorCallback] will be called.
+     *
+     * @see DailyActivitySummary
+     * @see DashboardRepo.getTodaySummary
+     */
     internal fun getTodaysSummary() {
-        userActivityRepo.getTodaySummary()
+        dashboardRepo.getTodaySummary()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {

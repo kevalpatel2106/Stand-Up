@@ -33,7 +33,7 @@ import com.kevalpatel2106.utils.Utils
 /**
  * Created by Keval on 17/12/17.
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 object SUUtils {
 

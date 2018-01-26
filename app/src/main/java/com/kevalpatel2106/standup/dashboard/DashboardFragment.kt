@@ -26,6 +26,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.setPieChart
@@ -37,7 +38,10 @@ import kotlinx.android.synthetic.main.layout_home_timeline_card.*
 
 
 /**
- * A simple [Fragment] subclass.
+ * A simple [Fragment] subclass tha will display the current summary and notify user about important
+ * events. This fragment is the "Home" screen for the application.
+ *
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 class DashboardFragment : Fragment() {
 
@@ -48,24 +52,49 @@ class DashboardFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
+    /**
+     * @see DashboardViewModel
+     */
     private lateinit var model: DashboardViewModel
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //Set time line view.
         today_time_line.timelineDuration = TimeLineLength.A_DAY
+
+        //Set pie chart
+        home_efficiency_card_pie_chart.setPieChart(context!!)
+        home_efficiency_card_pie_chart.setPieChartData(context!!, 0F, 0F)
 
         setModel()
 
+        if (savedInstanceState == null) {
+            //Play those animations
+            efficiency_card.startAnimation(AnimationUtils
+                    .loadAnimation(context, R.anim.slide_in_bottom))
+            time_line_card.startAnimation(AnimationUtils
+                    .loadAnimation(context, R.anim.slide_in_bottom))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
         //Load the today's summary
+        //Whenever activity comes into the foreground we need fresh data
         model.getTodaysSummary()
     }
 
+    /**
+     * Set up the [DashboardViewModel] and start observing the properties from [DashboardViewModel].
+     * This will update [home_efficiency_card_pie_chart] and [today_time_line] based on the updated
+     * summary.
+     *
+     * @see DashboardViewModel
+     */
     private fun setModel() {
         model = ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        home_efficiency_card_pie_chart.setPieChart(context!!)
-        home_efficiency_card_pie_chart.setPieChartData(context!!, 0F, 0F)
 
         //Observe error messages
         model.errorMessage.observe(this@DashboardFragment, Observer {

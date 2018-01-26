@@ -31,7 +31,7 @@ import javax.inject.Named
 /**
  * Created by Kevalpatel2106 on 09-Jan-18.
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @Module(includes = [DbModule::class])
 class DashboardModule {
