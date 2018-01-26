@@ -250,7 +250,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
         }
 
         //Add the new value to database.
-        coreRepo.insertNewAndTerminatePreviousActivity(userActivity)
+        coreRepo.insertNewUserActivity(userActivity)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe { compositeDisposable.add(it) }

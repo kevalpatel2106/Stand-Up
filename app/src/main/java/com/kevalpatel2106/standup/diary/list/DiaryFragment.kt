@@ -117,7 +117,7 @@ class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListen
     }
 
     override fun onPageComplete(lastItem: DailyActivitySummary) {
-        model.loadNext(lastItem.startTimeMills)
+        model.loadNext(lastItem.dayActivity.first().eventStartTimeMills)
     }
 
     override fun onItemSelected(pos: Int, item: DailyActivitySummary) {

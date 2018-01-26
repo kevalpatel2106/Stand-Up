@@ -45,7 +45,7 @@ internal object NotificationSchedulerHelper {
                                            userSettingsManager: UserSettingsManager): Boolean {
         return userSessionManager.isUserLoggedIn
                 && !userSettingsManager.isCurrentlyInSleepMode
-                && SleepModeMonitoringHelper.isCurrentlyInSleepMode(userSettingsManager)
+                && !SleepModeMonitoringHelper.isCurrentlyInSleepMode(userSettingsManager)
                 && !userSettingsManager.isCurrentlyDndEnable
     }
 

@@ -123,7 +123,7 @@ class DashboardFragment : Fragment() {
                         sittingDurationPercent = it.sittingPercent,
                         standingDurationPercent = it.standingPercent)
 
-                tracked_time_tv.text = it.durationTimeHours
+                tracked_time_tv.text = it.trackedDurationHours
                 total_standing_time_tv.text = it.standingTimeHours
                 total_sitting_time_tv.text = it.sittingTimeHours
             }

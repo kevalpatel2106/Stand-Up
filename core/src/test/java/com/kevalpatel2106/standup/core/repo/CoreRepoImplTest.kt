@@ -72,7 +72,7 @@ class CoreRepoImplTest {
         )
 
         val testObserver = TestObserver<Long>()
-        reminderRepo.insertNewAndTerminatePreviousActivity(userActivityToInsert)
+        reminderRepo.insertNewUserActivity(userActivityToInsert)
                 .subscribe(testObserver)
         testObserver.awaitTerminalEvent()
 
@@ -111,7 +111,7 @@ class CoreRepoImplTest {
         )
 
         val testObserver = TestObserver<Long>()
-        reminderRepo.insertNewAndTerminatePreviousActivity(userActivityToInsert)
+        reminderRepo.insertNewUserActivity(userActivityToInsert)
                 .subscribe(testObserver)
         testObserver.awaitTerminalEvent()
 
@@ -152,7 +152,7 @@ class CoreRepoImplTest {
         )
 
         val testObserver = TestObserver<Long>()
-        reminderRepo.insertNewAndTerminatePreviousActivity(userActivityToInsert)
+        reminderRepo.insertNewUserActivity(userActivityToInsert)
                 .subscribe(testObserver)
         testObserver.awaitTerminalEvent()
 

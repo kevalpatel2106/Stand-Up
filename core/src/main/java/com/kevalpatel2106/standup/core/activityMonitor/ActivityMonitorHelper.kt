@@ -152,7 +152,7 @@ internal object ActivityMonitorHelper {
      */
     internal fun shouldMonitoringActivity(userSessionManager: UserSessionManager,
                                           userSettingsManager: UserSettingsManager): Boolean {
-        return userSessionManager.isUserLoggedIn && userSettingsManager.isCurrentlyInSleepMode
+        return userSessionManager.isUserLoggedIn && !userSettingsManager.isCurrentlyInSleepMode
     }
 
     /**

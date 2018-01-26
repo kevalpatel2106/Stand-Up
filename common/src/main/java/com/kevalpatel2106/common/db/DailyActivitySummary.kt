@@ -23,7 +23,6 @@ import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -62,26 +61,6 @@ constructor(
     val monthInitials: String
 
     /**
-     * Starting time of the activity tracking.
-     */
-    val startTimeMills: Long
-    val startTimeHours: String
-
-    /**
-     * Ending time of the activity tracking.
-     */
-    val endTimeMills: Long
-    val endTimeHours: String
-
-    /**
-     * Total duration tracked in the milliseconds. This will be total milliseconds difference between
-     * [startTimeMills] and [endTimeMills].
-     */
-    val durationMills: Long
-    val durationTimeHours: String
-
-
-    /**
      * Total sitting activity time in milliseconds.
      */
     val sittingTimeMills: Long
@@ -96,56 +75,38 @@ constructor(
     val standingPercent: Float
     val standingTimeHours: String
 
-    /**
-     * Total milliseconds for which tracking data is not available.
-     */
-    val notTrackedTime: Long
+    val totalDuration: Long
+    val notTrackedDuration: Long
+    val trackedDuration: Long
+    val trackedDurationHours: String
 
     init {
-        if (!Validator.isValidDate(dayOfMonth)) {
-            throw IllegalArgumentException("Day of month must be between 1 to 31. Current: "
-                    .plus(dayOfMonth))
-        }
-
-        if (!Validator.isValidMonth(monthOfYear)) {
-            throw IllegalArgumentException("Month must be between 0 to 11. Current: ".plus(monthOfYear))
-        }
-
-        if (!Validator.isValidYear(year)) {
-            throw IllegalArgumentException("Year must be between 1900 to 2100. Current: ".plus(year))
-        }
-
-        //Process the user activity list for malfunctions
-        convertToValidUserActivityList(dayActivity)
+        validateInputs()
 
         monthInitials = TimeUtils.getMonthInitials(monthOfYear)
 
-        val simpleDateFormatter = SimpleDateFormat("hh:mm a", Locale.getDefault())
-
-
         //----------------//
-        // Calculate start and end time for the summary
+        // Calculate start and end time for the summary.
+        // The start time will always be 12 AM of the day of summary/
+        // The end time will be either the 23:59:59 of that day if the summary day is not current day
+        // or current time if the summary is for today.
         //----------------//
-        val tempCal = TimeUtils.getCalender12AM(dayOfMonth, monthOfYear, year)
+        val summaryDayCal = TimeUtils.getCalender12AM(dayOfMonth, monthOfYear, year)
         val todayCal = TimeUtils.getTodaysCalender12AM()
 
         //Calculate start time for the event.
-        startTimeMills = tempCal.timeInMillis
+        val startTimeMills = summaryDayCal.timeInMillis
 
         //Calculate the ending time
-        endTimeMills = when {
-            tempCal.after(todayCal) -> throw IllegalStateException("Future date.")
-            tempCal.before(todayCal) -> startTimeMills + TimeUtils.ONE_DAY_MILLISECONDS
+        val endTimeMills = when {
+            summaryDayCal.after(todayCal) -> throw IllegalStateException("Future date.")
+            summaryDayCal.before(todayCal) -> startTimeMills + TimeUtils.ONE_DAY_MILLISECONDS
             else -> System.currentTimeMillis()
         }
 
         if (endTimeMills < startTimeMills) {
             throw IllegalStateException("End time cannot be less than start time.")
         }
-
-        startTimeHours = simpleDateFormatter.format(startTimeMills)
-        endTimeHours = simpleDateFormatter.format(endTimeMills)
-
 
         //----------------//
         // Calculate Sitting, standing time
@@ -181,21 +142,16 @@ constructor(
         sittingTimeHours = TimeUtils.convertToHourMinutes(sittingTimeMills)
         standingTimeHours = TimeUtils.convertToHourMinutes(standingTimeMills)
 
-
         //----------------//
         // Calculate duration
         //----------------//
-        durationMills = endTimeMills - startTimeMills
-        if ((standingTimeMills + sittingTimeMills) > durationMills) {
+        totalDuration = endTimeMills - startTimeMills
+        if ((standingTimeMills + sittingTimeMills) > totalDuration) {
             throw IllegalStateException("Total of standing and sitting time is more than tracking duration.")
         }
-        durationTimeHours = TimeUtils.convertToHourMinutes(durationMills)
-
-
-        //----------------//
-        // Calculate non tracked time
-        //----------------//
-        notTrackedTime = durationMills - (sittingTimeMills + standingTimeMills)
+        trackedDuration = sittingTimeMills + standingTimeMills
+        trackedDurationHours = TimeUtils.convertToHourMinutes(trackedDuration)
+        notTrackedDuration = totalDuration - (sittingTimeMills + standingTimeMills)
 
 
         //----------------//
@@ -205,9 +161,28 @@ constructor(
             sittingPercent = 0F
             standingPercent = 0F
         } else {
-            sittingPercent = Utils.calculatePercent(sittingTimeMills, (sittingTimeMills + standingTimeMills)).toFloat()
-            standingPercent = Utils.calculatePercent(standingTimeMills, (sittingTimeMills + standingTimeMills)).toFloat()
+            sittingPercent = Utils.calculatePercent(sittingTimeMills, trackedDuration).toFloat()
+            standingPercent = Utils.calculatePercent(standingTimeMills, trackedDuration).toFloat()
         }
+
+    }
+
+    private fun validateInputs() {
+        if (!Validator.isValidDate(dayOfMonth)) {
+            throw IllegalArgumentException("Day of month must be between 1 to 31. Current: "
+                    .plus(dayOfMonth))
+        }
+
+        if (!Validator.isValidMonth(monthOfYear)) {
+            throw IllegalArgumentException("Month must be between 0 to 11. Current: ".plus(monthOfYear))
+        }
+
+        if (!Validator.isValidYear(year)) {
+            throw IllegalArgumentException("Year must be between 1900 to 2100. Current: ".plus(year))
+        }
+
+        //Process the user activity list for malfunctions
+        convertToValidUserActivityList(dayActivity)
     }
 
 
@@ -271,23 +246,15 @@ constructor(
 
 
                 //=============  Ending event time modifications ============= //
-                //If the event end time is 0, means event is not ended yet.
                 //If it is not last event and this event is not ended yet...it's invalid event
-                if (value.eventEndTimeMills <= 0L && iter.hasNext()) {
+                if (value.eventEndTimeMills <= 0L) {
                     iter.remove()
-                    continue
-                }
-
-                //If the last event is not ended still...
-                //Consider this event is ending currently.
-                if (value.eventEndTimeMills <= 0 && !iter.hasNext()) {
-                    value.eventEndTimeMills = System.currentTimeMillis()
                     continue
                 }
 
                 //If the event is ending next day...
                 val thisDayStartMills = TimeUtils.getCalender12AM(value.eventStartTimeMills).timeInMillis
-                val thisDayEndingMills = thisDayStartMills + TimeUtils.ONE_DAY_MILLISECONDS
+                val thisDayEndingMills = thisDayStartMills + TimeUtils.ONE_DAY_MILLISECONDS - 1_000L
                 if (value.eventEndTimeMills > thisDayEndingMills) {
                     //Consider it ending on this day 12 AM.
                     value.eventEndTimeMills = thisDayEndingMills

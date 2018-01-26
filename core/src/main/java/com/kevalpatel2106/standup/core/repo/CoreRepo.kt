@@ -34,8 +34,15 @@ internal interface CoreRepo {
      * This will store [newActivity] into the database and terminate the previous event with the
      * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
      * inert [newActivity].
+     *
+     * @see CoreRepoImpl.insertNewUserActivity for how it's implemented.
      */
-    fun insertNewAndTerminatePreviousActivity(newActivity: UserActivity): Single<Long>
+    fun insertNewUserActivity(newActivity: UserActivity): Single<Long>
 
+    /**
+     * This method will send the data of all the pending events to the server. This is going to run
+     * on asynchronous background thread. It will return [Completable] to notify whenever sync is
+     * completed or failed.
+     */
     fun sendPendingActivitiesToServer(): Completable
 }
