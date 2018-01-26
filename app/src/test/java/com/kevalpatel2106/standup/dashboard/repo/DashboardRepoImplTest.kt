@@ -82,12 +82,6 @@ class DashboardRepoImplTest {
         testSubscriber.assertNoErrors()
                 .assertValueCount(1)
                 .assertValueAt(0) {
-                    it.startTimeMills == TimeUtils.getTodaysCalender12AM().timeInMillis
-                }
-                .assertValueAt(0) {
-                    System.currentTimeMillis() - it.endTimeMills < 1000
-                }
-                .assertValueAt(0) {
                     it.year == Calendar.getInstance().get(Calendar.YEAR)
                 }
                 .assertValueAt(0) {

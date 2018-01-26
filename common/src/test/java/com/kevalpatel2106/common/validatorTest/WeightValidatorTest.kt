@@ -39,11 +39,11 @@ class WeightValidatorTest(private val input: Float, private val expected: Boolea
             return arrayListOf(
                     arrayOf(0F, false),
                     arrayOf(0.1F, false),
-                    arrayOf(AppConfig.MIN_WEIGHT, true),
-                    arrayOf(AppConfig.MAX_WEIGHT, true),
-                    arrayOf((AppConfig.MAX_WEIGHT + AppConfig.MIN_WEIGHT) / 2, true),
-                    arrayOf(AppConfig.MIN_WEIGHT - 2F, false),
-                    arrayOf(AppConfig.MAX_WEIGHT + 2F, false)
+                    arrayOf(Validator.MIN_WEIGHT, true),
+                    arrayOf(Validator.MAX_WEIGHT, true),
+                    arrayOf((Validator.MAX_WEIGHT + Validator.MIN_WEIGHT) / 2, true),
+                    arrayOf(Validator.MIN_WEIGHT - 2F, false),
+                    arrayOf(Validator.MAX_WEIGHT + 2F, false)
             )
         }
     }

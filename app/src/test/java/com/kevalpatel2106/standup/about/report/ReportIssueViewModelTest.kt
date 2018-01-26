@@ -25,6 +25,7 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.about.repo.AboutRepositoryImpl
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
+import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
 import org.junit.Before
@@ -34,6 +35,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
+import java.io.File
 import java.nio.file.Paths
 
 /**
@@ -51,6 +53,10 @@ class ReportIssueViewModelTest {
     @Rule
     @JvmField
     val rule = InstantTaskExecutorRule()
+
+    @Rule
+    @JvmField
+    val rule1 = RxSchedulersOverrideRule()
 
     private val mockServerManager = MockServerManager()
     private lateinit var model: ReportIssueViewModel
@@ -83,6 +89,44 @@ class ReportIssueViewModelTest {
         model.reportIssue("This is test issue title.", "", "test_device_id")
         Assert.assertFalse(model.blockUi.value!!)
         Assert.assertEquals(model.errorMessage.value!!.errorRes, R.string.error_invalid_issue_description)
+    }
+
+    @Test
+    fun testCheckForUpdatesWithUpdateAvailable() {
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_update_available.json"))
+
+        model.checkForUpdate()
+
+        Assert.assertFalse(model.blockUi.value!!)
+        Assert.assertNull(model.errorMessage.value)
+        Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionName, "1.0")
+        Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionCode, 5000)
+        Assert.assertTrue(model.versionUpdateResult.value!!.isUpdate)
+        Assert.assertEquals(model.versionUpdateResult.value!!.releaseNotes, "This is the release note for the version 3.")
+    }
+
+    @Test
+    fun testCheckForUpdatesWithUpdateNotAvailable() {
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_latest_available.json"))
+
+        model.checkForUpdate()
+
+        Assert.assertFalse(model.blockUi.value!!)
+        Assert.assertNull(model.errorMessage.value)
+        Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionName, "1.0")
+        Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionCode, 1)
+        Assert.assertFalse(model.versionUpdateResult.value!!.isUpdate)
+    }
+
+    @Test
+    fun testCheckForUpdatesFail() {
+        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+
+        model.checkForUpdate()
+
+        Assert.assertFalse(model.blockUi.value!!)
+        Assert.assertEquals(model.errorMessage.value!!.errorRes, R.string.check_update_error_message)
+        Assert.assertNull(model.versionUpdateResult.value)
     }
 
 

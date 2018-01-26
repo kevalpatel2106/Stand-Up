@@ -39,11 +39,11 @@ class HeightValidatorTest(private val input: Float, private val expected: Boolea
             return arrayListOf(
                     arrayOf(0F, false),
                     arrayOf(0.1F, false),
-                    arrayOf(AppConfig.MIN_HEIGHT, true),
-                    arrayOf(AppConfig.MAX_HEIGHT, true),
-                    arrayOf((AppConfig.MAX_HEIGHT + AppConfig.MIN_HEIGHT) / 2, true),
-                    arrayOf(AppConfig.MIN_HEIGHT - 2F, false),
-                    arrayOf(AppConfig.MAX_HEIGHT + 2F, false)
+                    arrayOf(Validator.MIN_HEIGHT, true),
+                    arrayOf(Validator.MAX_HEIGHT, true),
+                    arrayOf((Validator.MAX_HEIGHT + Validator.MIN_HEIGHT) / 2, true),
+                    arrayOf(Validator.MIN_HEIGHT - 2F, false),
+                    arrayOf(Validator.MAX_HEIGHT + 2F, false)
             )
         }
     }

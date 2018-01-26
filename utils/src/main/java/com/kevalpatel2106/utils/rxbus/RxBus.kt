@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.utils.rxbus
 
+import android.support.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.annotations.NonNull
@@ -31,7 +32,9 @@ import io.reactivex.subjects.PublishSubject
  */
 
 object RxBus {
-    private val sBus = PublishSubject.create<Event>()
+
+    @VisibleForTesting
+    internal val sBus = PublishSubject.create<Event>()
 
     /**
      * Post an event to the RxBus.

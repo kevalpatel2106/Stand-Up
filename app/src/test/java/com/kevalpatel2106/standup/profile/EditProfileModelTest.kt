@@ -21,6 +21,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.Validator
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AppConfig
@@ -175,7 +176,7 @@ class EditProfileModelTest {
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test User", photo = null, isMale = true,
-                weight = AppConfig.MIN_WEIGHT + 2, height = AppConfig.MAX_HEIGHT - 2)
+                weight = Validator.MIN_WEIGHT + 2, height = Validator.MAX_HEIGHT - 2)
 
         //There should be success.
         Assert.assertFalse(editProfileModel.blockUi.value!!)
@@ -201,7 +202,7 @@ class EditProfileModelTest {
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test User", photo = null, isMale = true,
-                weight = AppConfig.MIN_WEIGHT + 2, height = AppConfig.MAX_HEIGHT - 2)
+                weight = Validator.MIN_WEIGHT + 2, height = Validator.MAX_HEIGHT - 2)
 
         //There should be error
         Assert.assertFalse(editProfileModel.blockUi.value!!)
@@ -220,7 +221,7 @@ class EditProfileModelTest {
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test", photo = null, isMale = true,
-                weight = AppConfig.MIN_WEIGHT + 2, height = AppConfig.MAX_HEIGHT - 2)
+                weight = Validator.MIN_WEIGHT + 2, height = Validator.MAX_HEIGHT - 2)
 
         //There should be error
         Assert.assertFalse(editProfileModel.blockUi.value!!)
@@ -238,7 +239,7 @@ class EditProfileModelTest {
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test User", photo = null, isMale = true,
-                weight = AppConfig.MIN_WEIGHT - 2, height = AppConfig.MAX_HEIGHT - 2)
+                weight = Validator.MIN_WEIGHT - 2, height = Validator.MAX_HEIGHT - 2)
 
         //There should be error
         Assert.assertFalse(editProfileModel.blockUi.value!!)
@@ -256,7 +257,7 @@ class EditProfileModelTest {
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test User", photo = null, isMale = true,
-                weight = AppConfig.MIN_WEIGHT + 2, height = AppConfig.MAX_HEIGHT + 2)
+                weight = Validator.MIN_WEIGHT + 2, height = Validator.MAX_HEIGHT + 2)
 
         //There should be error
         Assert.assertFalse(editProfileModel.blockUi.value!!)

@@ -33,15 +33,16 @@ class SettingsItemTest {
     @Test
     @Throws(Exception::class)
     fun checkTitle() {
-        val data = SettingsItem("Title 1", 0)
+        val data = SettingsItem(SettingsId.NOTIFICATION, "Title 1", 0)
         Assert.assertEquals("Title 1", data.title)
+        Assert.assertEquals(SettingsId.NOTIFICATION, data.id)
     }
 
     @Test
     @Throws(Exception::class)
     fun checkEmptyTitle() {
         try {
-            SettingsItem("", 0)
+            SettingsItem(SettingsId.NOTIFICATION, "", 0)
             Assert.fail()
         } catch (e: IllegalArgumentException) {
             //Test passed
@@ -51,16 +52,28 @@ class SettingsItemTest {
     @Test
     @Throws(Exception::class)
     fun checkIcon() {
-        val data = SettingsItem("Title 1", 0)
+        val data = SettingsItem(SettingsId.NOTIFICATION,"Title 1", 0)
         Assert.assertEquals(0, data.icon)
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkEquals() {
-        val data1 = SettingsItem("Title 1", 0)
-        val data2 = SettingsItem("Title 1", 0)
-        val data3 = SettingsItem("Title 2", 0)
+    fun checkEqualsWithDifferentTitle() {
+        val data1 = SettingsItem(SettingsId.NOTIFICATION,"Title 1", 0)
+        val data2 = SettingsItem(SettingsId.NOTIFICATION,"Title 1", 0)
+        val data3 = SettingsItem(SettingsId.NOTIFICATION,"Title 2", 0)
+
+        Assert.assertEquals(data1, data2)
+        Assert.assertNotEquals(data1, data3)
+        Assert.assertNotEquals(data2, data3)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkEqualsWithDifferentId() {
+        val data1 = SettingsItem(SettingsId.NOTIFICATION,"Title 1", 0)
+        val data2 = SettingsItem(SettingsId.NOTIFICATION,"Title 1", 0)
+        val data3 = SettingsItem(SettingsId.DND,"Title 1", 0)
 
         Assert.assertEquals(data1, data2)
         Assert.assertNotEquals(data1, data3)
@@ -70,9 +83,9 @@ class SettingsItemTest {
     @Test
     @Throws(Exception::class)
     fun checkHashCodeEquals() {
-        val data1 = SettingsItem("Title 1", 0)
-        val data2 = SettingsItem("Title 1", 0)
-        val data3 = SettingsItem("Title 2", 0)
+        val data1 = SettingsItem(SettingsId.NOTIFICATION,"Title 1", 0)
+        val data2 = SettingsItem(SettingsId.NOTIFICATION,"Title 1", 0)
+        val data3 = SettingsItem(SettingsId.NOTIFICATION,"Title 2", 0)
 
         Assert.assertEquals(data1.hashCode(), data2.hashCode())
         Assert.assertNotEquals(data1.hashCode(), data3.hashCode())

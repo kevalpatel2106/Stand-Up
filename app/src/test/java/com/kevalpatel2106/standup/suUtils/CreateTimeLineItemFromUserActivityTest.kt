@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup.misc
+package com.kevalpatel2106.standup.suUtils
 
 import android.support.annotation.ColorInt
 import com.kevalpatel2106.common.db.userActivity.UserActivity

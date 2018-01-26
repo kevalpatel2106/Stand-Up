@@ -70,7 +70,7 @@ class FcmMessagingServiceTest {
         Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
 
         val hashMap = HashMap<String, String>()
-        hashMap.put("xyz", "abc")
+        hashMap["xyz"] = "abc"
         assertFalse(FcmMessagingService().shouldProcessNotification(hashMap, userSessionManager))
     }
 
@@ -80,7 +80,7 @@ class FcmMessagingServiceTest {
         Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
 
         val data = HashMap<String, String>()
-        data.put("type", "xyz")
+        data["type"] = "xyz"
         assertTrue(FcmMessagingService().shouldProcessNotification(data, userSessionManager))
     }
 }

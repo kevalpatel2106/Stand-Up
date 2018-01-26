@@ -22,4 +22,4 @@ package com.kevalpatel2106.utils.rxbus
  *
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
-data class Event(val tag: String?)
+data class Event(val tag: String)

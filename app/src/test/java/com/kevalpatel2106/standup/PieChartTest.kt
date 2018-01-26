@@ -15,9 +15,11 @@
  *
  */
 
-package com.kevalpatel2106.standup.dashboard
+package com.kevalpatel2106.standup
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -25,6 +27,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.standup.dashboard.DashboardViewModel
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepo
 import com.kevalpatel2106.standup.dashboard.repo.DashboardRepoImpl
 import com.kevalpatel2106.testutils.MockServerManager
@@ -34,6 +37,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -58,10 +63,16 @@ class PieChartTest {
     private val mockServerManager = MockServerManager()
     private lateinit var dashboardRepo: DashboardRepo
     private lateinit var model: DashboardViewModel
+    private lateinit var mockContext: Context
 
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
+
+        mockContext = Mockito.mock(Context::class.java)
+        val resource = Mockito.mock(Resources::class.java)
+        Mockito.`when`(mockContext.resources).thenReturn(resource)
+        Mockito.`when`(resource.getInteger(anyInt())).thenReturn(1000)
 
         dashboardRepo = DashboardRepoImpl(
                 userActivityDao,
@@ -75,7 +86,7 @@ class PieChartTest {
     fun checkSetPieChart() {
         val pieChart = PieChart(RuntimeEnvironment.application)
 
-        model.setPieChart(RuntimeEnvironment.application, pieChart)
+        pieChart.setPieChart(mockContext)
 
         Assert.assertFalse(pieChart.isDrawCenterTextEnabled)
         Assert.assertFalse(pieChart.description.isEnabled)
@@ -98,8 +109,8 @@ class PieChartTest {
     fun checkSettingPieChartDateWithData() {
         val pieChart = PieChart(RuntimeEnvironment.application)
 
-        model.setPieChart(RuntimeEnvironment.application, pieChart)
-        model.setPieChartData(RuntimeEnvironment.application, pieChart, 40F, 60F)
+        pieChart.setPieChart(mockContext)
+        pieChart.setPieChartData(mockContext, 40F, 60F)
 
         Assert.assertTrue(pieChart.isHighlightPerTapEnabled)
 
@@ -130,8 +141,8 @@ class PieChartTest {
     fun checkSettingPieChartDateWithNoData() {
         val pieChart = PieChart(RuntimeEnvironment.application)
 
-        model.setPieChart(RuntimeEnvironment.application, pieChart)
-        model.setPieChartData(RuntimeEnvironment.application, pieChart, 0F, 0F)
+        pieChart.setPieChart(RuntimeEnvironment.application)
+        pieChart.setPieChartData(RuntimeEnvironment.application, 0F, 0F)
 
         Assert.assertFalse(pieChart.isHighlightPerTapEnabled)
 

@@ -44,7 +44,7 @@ class ShouldMonitorActivityTest {
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
 
         Assert.assertFalse(ActivityMonitorHelper.shouldMonitoringActivity(
-                UserSessionManager(SharedPrefsProvider(sharedPref)))
+                UserSessionManager(SharedPrefsProvider(sharedPref)), )
         )
     }
 

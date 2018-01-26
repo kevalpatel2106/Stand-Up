@@ -15,9 +15,10 @@
  *
  */
 
-package com.kevalpatel2106.utils
+package com.kevalpatel2106.common
 
 import com.kevalpatel2106.testutils.MockSharedPreference
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

@@ -34,17 +34,14 @@ import java.io.IOException
 @RunWith(JUnit4::class)
 class SettingsListAdapterTest {
 
-    private lateinit var data: Array<SettingsItem>
+    private lateinit var data: ArrayList<SettingsItem>
     private lateinit var adapter: SettingsListAdapter
 
     @Before
     fun setUp() {
-        data = arrayOf(
-                SettingsItem("Title 1", 1),
-                SettingsItem("Title 2", 2),
-                SettingsItem("Title 3", 3),
-                SettingsItem("Title 4", 4),
-                SettingsItem("Title 5", 5)
+        data = arrayListOf(
+                SettingsItem(SettingsId.LOGOUT,"Title 1", 1),
+                SettingsItem(SettingsId.NOTIFICATION,"Title 2", 2)
         )
 
         val context = Mockito.mock(Context::class.java)
@@ -62,7 +59,5 @@ class SettingsListAdapterTest {
     fun checkGetItem() {
         Assert.assertEquals(data[0], adapter.getItem(0))
         Assert.assertEquals(data[1], adapter.getItem(1))
-        Assert.assertEquals(data[2], adapter.getItem(2))
-        Assert.assertEquals(data[3], adapter.getItem(3))
     }
 }

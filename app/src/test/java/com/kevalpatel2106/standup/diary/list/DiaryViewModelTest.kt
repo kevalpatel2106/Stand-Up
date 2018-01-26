@@ -19,7 +19,9 @@ package com.kevalpatel2106.standup.diary.list
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
 import com.kevalpatel2106.standup.diary.repo.DiaryRepoImpl
 import com.kevalpatel2106.testutils.MockServerManager
@@ -126,7 +128,7 @@ class DiaryViewModelTest {
         Assert.assertEquals(dairyViewModel.activities.value!!.size, 10 /* Summary */ + 10 /* Days header */)
 
         //Load the next page
-        val oldestTime = dairyViewModel.activities.value!!.last().startTimeMills
+        val oldestTime = dairyViewModel.activities.value!!.last().dayActivity.first().eventStartTimeMills
 
         dairyViewModel.loadNext(oldestTime)
         Assert.assertTrue(dairyViewModel.noMoreData.value!!)

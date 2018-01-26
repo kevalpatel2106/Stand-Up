@@ -90,9 +90,7 @@ class DashboardViewModelTest {
 
         model.getTodaysSummary()
 
-        model.todaySummary.value.let {
-            Assert.assertEquals(it!!.startTimeMills, TimeUtils.getTodaysCalender12AM().timeInMillis)
-            Assert.assertTrue(System.currentTimeMillis() - it.endTimeMills < 1000)
+        model.todaySummary.value?.let {
             Assert.assertEquals(it.year, Calendar.getInstance().get(Calendar.YEAR))
             Assert.assertEquals(it.monthOfYear, Calendar.getInstance().get(Calendar.MONTH))
             Assert.assertEquals(it.dayOfMonth, Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
