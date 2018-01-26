@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.standup.core.repo
 
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
@@ -38,6 +39,9 @@ import javax.inject.Named
 internal class CoreRepoImpl @Inject constructor(private val userActivityDao: UserActivityDao,
                                                 @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit)
     : CoreRepo {
+
+    @VisibleForTesting
+    internal val endTimeCorrectionValue = 10_000L
 
     /**
      * This method will send the data of all the pending events to the server. This is going to run
@@ -87,7 +91,7 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
 
         //Make correction into the end date.
         if (newActivity.eventEndTimeMills <= 0L)
-            newActivity.eventEndTimeMills = newActivity.eventStartTimeMills + 10_000L
+            newActivity.eventEndTimeMills = newActivity.eventStartTimeMills + endTimeCorrectionValue
 
         return Single.create({
             val lastActivity = userActivityDao.getLatestActivity()
@@ -124,7 +128,7 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
                     lastActivity.eventEndTimeMills = newActivity.eventEndTimeMills
                     userActivityDao.update(lastActivity)
 
-                    it.onSuccess(0)
+                    it.onSuccess(lastActivity.localId)
                 }
             }
         })

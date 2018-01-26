@@ -36,7 +36,7 @@ import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.common.notifications.addReminderNotificationChannel
 import com.kevalpatel2106.standup.core.R
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
-import com.kevalpatel2106.utils.ViewUtils
+import com.kevalpatel2106.utils.getColorCompat
 import com.kevalpatel2106.utils.vibrate
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
@@ -94,7 +94,7 @@ internal class ReminderNotification {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setTicker(context.getString(R.string.reminder_notification_message))
                 .setAutoCancel(true)
-                .setColor(ViewUtils.getPrimaryColor(context))
+                .setColor(context.getColorCompat(R.color.reminder_notification_color))
                 .setWhen(System.currentTimeMillis())
                 .setLights(lightColor, 100, 1000)
                 .setChannelId(NotificationChannelType.REMINDER_NOTIFICATION_CHANNEL)

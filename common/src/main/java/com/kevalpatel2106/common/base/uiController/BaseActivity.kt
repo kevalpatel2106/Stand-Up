@@ -21,6 +21,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.annotation.StringRes
+import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
@@ -68,9 +69,9 @@ abstract class BaseActivity : AppCompatActivity() {
      * @param title        title of the activity
      * @param showUpButton true if toolbar should display up indicator.
      */
-    protected fun setToolbar(toolbarId: Int,
-                             @StringRes title: Int,
-                             showUpButton: Boolean) {
+    fun setToolbar(toolbarId: Int,
+                   @StringRes title: Int,
+                   showUpButton: Boolean) {
         val toolbar = findViewById<Toolbar>(toolbarId)
         setSupportActionBar(toolbar)
         setToolbar(title, showUpButton)
@@ -82,9 +83,9 @@ abstract class BaseActivity : AppCompatActivity() {
      * @param title        title of the activity
      * @param showUpButton true if toolbar should display up indicator.
      */
-    protected fun setToolbar(toolbarId: Int,
-                             title: String,
-                             showUpButton: Boolean) {
+    fun setToolbar(toolbarId: Int,
+                   title: String,
+                   showUpButton: Boolean) {
         val toolbar = findViewById<Toolbar>(toolbarId)
         setSupportActionBar(toolbar)
         setToolbar(title, showUpButton)
@@ -135,7 +136,8 @@ abstract class BaseActivity : AppCompatActivity() {
      *
      * @param disposable [Disposable]
      */
-    protected fun addSubscription(disposable: Disposable?) {
+    @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE)
+    internal fun addSubscription(disposable: Disposable?) {
         if (disposable == null) return
         disposables.add(disposable)
     }

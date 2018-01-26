@@ -19,45 +19,33 @@ package com.kevalpatel2106.standup.core.activityMonitor
 
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
+import com.kevalpatel2106.standup.core.CoreTestUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mockito
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+
 
 /**
  * Created by Keval on 21/01/18.
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-@RunWith(JUnit4::class)
-class ActivityMonitorHelperTest {
+@RunWith(RobolectricTestRunner::class)
+@Config(manifest = Config.NONE)
+class IsActivityMonitorScheduledTest {
 
 
     @Test
     @Throws(Exception::class)
     fun checkIsAnyJobSchedulePositive() {
-        val jobManager = Mockito.mock(JobManager::class.java)
-        Mockito.`when`(JobManager.instance()).thenReturn(jobManager)
+        JobManager.create(CoreTestUtils.createMockContext())
 
-        val set = HashSet<JobRequest>()
-        set.add(Mockito.mock(JobRequest::class.java))
-
-        Mockito.`when`(jobManager.getAllJobRequestsForTag(anyString())).thenReturn(set)
-
+        val jobManager = JobManager.instance()
+        jobManager.schedule(JobRequest.Builder(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG)
+                .setPeriodic(1800_000L)
+                .build())
         Assert.assertTrue(ActivityMonitorHelper.isAnyJobScheduled())
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun checkIsAnyJobScheduleNegative() {
-        val jobManager = Mockito.mock(JobManager::class.java)
-        Mockito.`when`(JobManager.instance()).thenReturn(jobManager)
-
-        val set = HashSet<JobRequest>()
-        Mockito.`when`(jobManager.getAllJobRequestsForTag(anyString())).thenReturn(set)
-
-        Assert.assertFalse(ActivityMonitorHelper.isAnyJobScheduled())
     }
 }

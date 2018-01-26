@@ -21,8 +21,11 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.standup.core.R
+import com.kevalpatel2106.testutils.MockSharedPreference
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -56,7 +59,9 @@ class ReminderNotificationTest {
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(context.resources.getColor(anyInt())).thenReturn(Color.RED)
 
-        notification = ReminderNotification.buildNotification(context)
+        val userSettingsManager = UserSettingsManager(SharedPrefsProvider(MockSharedPreference()))
+
+        notification = ReminderNotification(userSettingsManager).buildNotification(context, 0)
     }
 
     @Test

@@ -33,8 +33,11 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
     }
 
     override fun insert(userActivity: UserActivity): Long {
+        userActivity.localId = tableItems.size.toLong()
         tableItems.add(userActivity)
+
         sortDescendingByStartTime()
+
         return tableItems.lastIndex.toLong()
     }
 

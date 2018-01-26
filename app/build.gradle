@@ -151,8 +151,11 @@ dependencies {
     implementation(otherLib.glide, excludeGrp)
     kapt(otherLib.glideAnnotation, excludeGrp)
 
-    //Other libs
+    //Network dependencies
     implementation retrofitLib.retrofit
+    implementation otherLib.gson
+
+    //Other libs
     implementation(kevalpatel2106.ringtonePicker, excludeGrp)
     implementation(otherLib.bottomsheet, excludeGrp)
     implementation(otherLib.circleImagView, excludeGrp)

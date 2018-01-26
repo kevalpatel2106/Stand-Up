@@ -18,8 +18,6 @@
 package com.kevalpatel2106.standup
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
@@ -37,8 +35,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
@@ -63,16 +59,10 @@ class PieChartTest {
     private val mockServerManager = MockServerManager()
     private lateinit var dashboardRepo: DashboardRepo
     private lateinit var model: DashboardViewModel
-    private lateinit var mockContext: Context
 
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
-
-        mockContext = Mockito.mock(Context::class.java)
-        val resource = Mockito.mock(Resources::class.java)
-        Mockito.`when`(mockContext.resources).thenReturn(resource)
-        Mockito.`when`(resource.getInteger(anyInt())).thenReturn(1000)
 
         dashboardRepo = DashboardRepoImpl(
                 userActivityDao,
@@ -86,7 +76,7 @@ class PieChartTest {
     fun checkSetPieChart() {
         val pieChart = PieChart(RuntimeEnvironment.application)
 
-        pieChart.setPieChart(mockContext)
+        pieChart.setPieChart(RuntimeEnvironment.application, 1000)
 
         Assert.assertFalse(pieChart.isDrawCenterTextEnabled)
         Assert.assertFalse(pieChart.description.isEnabled)
@@ -109,8 +99,8 @@ class PieChartTest {
     fun checkSettingPieChartDateWithData() {
         val pieChart = PieChart(RuntimeEnvironment.application)
 
-        pieChart.setPieChart(mockContext)
-        pieChart.setPieChartData(mockContext, 40F, 60F)
+        pieChart.setPieChart(RuntimeEnvironment.application, 1000)
+        pieChart.setPieChartData(RuntimeEnvironment.application, 40F, 60F)
 
         Assert.assertTrue(pieChart.isHighlightPerTapEnabled)
 
@@ -141,7 +131,7 @@ class PieChartTest {
     fun checkSettingPieChartDateWithNoData() {
         val pieChart = PieChart(RuntimeEnvironment.application)
 
-        pieChart.setPieChart(RuntimeEnvironment.application)
+        pieChart.setPieChart(RuntimeEnvironment.application, 1000)
         pieChart.setPieChartData(RuntimeEnvironment.application, 0F, 0F)
 
         Assert.assertFalse(pieChart.isHighlightPerTapEnabled)

@@ -17,17 +17,13 @@
 
 package com.kevalpatel2106.standup.core.reminder
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.kevalpatel2106.common.UserSessionManager
-import com.kevalpatel2106.standup.core.CoreConfig
-import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.common.UserSettingsManager
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.*
+import org.junit.runners.JUnit4
 import org.mockito.Mockito
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import java.io.IOException
 
@@ -36,43 +32,93 @@ import java.io.IOException
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-@RunWith(RobolectricTestRunner::class)
+@RunWith(JUnit4::class)
 @Config(manifest = Config.NONE)
 class NotificationSchedulerHelperTest {
 
+
     @Test
     @Throws(IOException::class)
-    fun checkShouldNotSyncSync() {
-        val sharedPref = Mockito.mock(SharedPreferences::class.java)
-        Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(0L)
-        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
+    fun checkShouldRemindWhenUserLoggedInDndDisableNoSleepMode() {
+        val userSessionManager = Mockito.mock(UserSessionManager::class.java)
+        Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
 
-        Assert.assertFalse(NotificationSchedulerHelper.shouldDisplayNotification(
-                UserSessionManager(SharedPrefsProvider(sharedPref))
-        ))
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.isCurrentlyInSleepMode).thenReturn(false)
+        Mockito.`when`(userSettingsManager.isCurrentlyDndEnable).thenReturn(false)
+        Mockito.`when`(userSettingsManager.sleepStartTime).thenReturn(Long.MAX_VALUE)
+        Mockito.`when`(userSettingsManager.sleepEndTime).thenReturn(0)
+
+        Assert.assertTrue(NotificationSchedulerHelper
+                .shouldDisplayNotification(userSessionManager, userSettingsManager))
     }
 
     @Test
     @Throws(IOException::class)
-    fun checkShouldSyncSync() {
-        val context = Mockito.mock(Context::class.java)
-        val sharedPref = Mockito.mock(SharedPreferences::class.java)
-        Mockito.`when`(context.getSharedPreferences(anyString(), anyInt())).thenReturn(sharedPref)
-        Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
-        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
+    fun checkShouldRemindWhenUserNotLoggedIn() {
+        val userSessionManager = Mockito.mock(UserSessionManager::class.java)
+        Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(false)
 
-        Assert.assertTrue(NotificationSchedulerHelper.shouldDisplayNotification(
-                UserSessionManager(SharedPrefsProvider(sharedPref))
-        ))
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.isCurrentlyInSleepMode).thenReturn(false)
+        Mockito.`when`(userSettingsManager.isCurrentlyDndEnable).thenReturn(false)
+        Mockito.`when`(userSettingsManager.sleepStartTime).thenReturn(0)
+        Mockito.`when`(userSettingsManager.sleepEndTime).thenReturn(Long.MAX_VALUE)
+
+        Assert.assertFalse(NotificationSchedulerHelper
+                .shouldDisplayNotification(userSessionManager, userSettingsManager))
     }
+
 
     @Test
     @Throws(IOException::class)
-    fun checkGetExecutionWindow() {
-        val executionWindow = NotificationSchedulerHelper.getExecutionWindow(3600)
-        Assert.assertEquals(executionWindow.windowStart,
-                3600 - CoreConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE)
-        Assert.assertEquals(executionWindow.windowEnd,
-                3600 + CoreConfig.NOTIFICATION_SERVICE_PERIOD_TOLERANCE)
+    fun checkShouldRemindWhenUserLoggedInDndEnableNoSleepMode() {
+        val userSessionManager = Mockito.mock(UserSessionManager::class.java)
+        Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.isCurrentlyInSleepMode).thenReturn(false)
+        Mockito.`when`(userSettingsManager.isCurrentlyDndEnable).thenReturn(true)
+        Mockito.`when`(userSettingsManager.sleepStartTime).thenReturn(0)
+        Mockito.`when`(userSettingsManager.sleepEndTime).thenReturn(Long.MAX_VALUE)
+
+        Assert.assertFalse(NotificationSchedulerHelper
+                .shouldDisplayNotification(userSessionManager, userSettingsManager))
     }
+
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldRemindWhenUserLoggedInDndDisableSleepModeOn1() {
+        val userSessionManager = Mockito.mock(UserSessionManager::class.java)
+        Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.isCurrentlyInSleepMode).thenReturn(true)
+        Mockito.`when`(userSettingsManager.isCurrentlyDndEnable).thenReturn(false)
+        Mockito.`when`(userSettingsManager.sleepStartTime).thenReturn(0)
+        Mockito.`when`(userSettingsManager.sleepEndTime).thenReturn(Long.MAX_VALUE)
+
+        Assert.assertFalse(NotificationSchedulerHelper
+                .shouldDisplayNotification(userSessionManager, userSettingsManager))
+    }
+
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldRemindWhenUserLoggedInDndDisableSleepModeOn2() {
+        val userSessionManager = Mockito.mock(UserSessionManager::class.java)
+        Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.isCurrentlyInSleepMode).thenReturn(false)
+        Mockito.`when`(userSettingsManager.isCurrentlyDndEnable).thenReturn(false)
+        Mockito.`when`(userSettingsManager.sleepEndTime).thenReturn(System.currentTimeMillis())
+        Mockito.`when`(userSettingsManager.sleepStartTime).thenReturn(0)
+
+        Assert.assertFalse(NotificationSchedulerHelper
+                .shouldDisplayNotification(userSessionManager, userSettingsManager))
+    }
+
+
 }

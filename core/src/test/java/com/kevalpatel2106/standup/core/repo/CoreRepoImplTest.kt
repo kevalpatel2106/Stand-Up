@@ -18,7 +18,10 @@
 package com.kevalpatel2106.standup.core.repo
 
 import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.testutils.MockServerManager
 import io.reactivex.observers.TestObserver
 import org.junit.After
@@ -61,7 +64,60 @@ class CoreRepoImplTest {
     }
 
     @Test
-    fun checkInsertNewAndTerminatePreviousActivityWithNoLatestActivity() {
+    fun checkInsertNewUserActivityWithInvalidStartTime() {
+        try {
+
+            val endTime = System.currentTimeMillis()
+            val userActivityToInsert = UserActivity(
+                    eventStartTimeMills = 0,
+                    eventEndTimeMills = endTime,
+                    isSynced = false,
+                    type = UserActivityType.MOVING.toString().toLowerCase()
+            )
+
+            val testObserver = TestObserver<Long>()
+            reminderRepo.insertNewUserActivity(userActivityToInsert).subscribe(testObserver)
+
+            Assert.fail()
+        } catch (e: IllegalArgumentException) {
+            //Test passed
+            //NO OP
+        }
+    }
+
+    @Test
+    fun checkInsertNewUserActivityWithInvalidEndTime() {
+        try {
+
+            val startTime = System.currentTimeMillis() - 300_000L
+            val userActivityToInsert = UserActivity(
+                    eventStartTimeMills = startTime,
+                    eventEndTimeMills = 0,
+                    isSynced = false,
+                    type = UserActivityType.MOVING.toString().toLowerCase()
+            )
+
+            val testObserver = TestObserver<Long>()
+            reminderRepo.insertNewUserActivity(userActivityToInsert).subscribe(testObserver)
+
+            testObserver.assertNoErrors()
+                    .assertValueCount(1)
+                    .assertValueAt(0) { it == 0L }
+                    .assertComplete()
+            Assert.assertEquals(userActivityDao.tableItems.size, 1)
+            Assert.assertEquals(userActivityDao.tableItems[0].eventStartTimeMills, startTime)
+            Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, startTime
+                    + reminderRepo.endTimeCorrectionValue)
+
+            Assert.assertEquals(userActivityDao.tableItems[0].userActivityType, UserActivityType.MOVING)
+        } catch (e: IllegalArgumentException) {
+            Assert.fail()
+        }
+    }
+
+
+    @Test
+    fun checkInsertNewUserActivityWithNoLatestActivity() {
         val startTime = System.currentTimeMillis() - 3600000
         val endTime = System.currentTimeMillis()
         val userActivityToInsert = UserActivity(
@@ -87,7 +143,7 @@ class CoreRepoImplTest {
     }
 
     @Test
-    fun checkInsertNewAndTerminatePreviousActivityWithLatestActivityOfSameType() {
+    fun checkInsertNewUserActivityWithLatestActivityOfSameType() {
         val startTime = System.currentTimeMillis() - 3600000
         //Set fake data.
         userActivityDao.insert(UserActivity(
@@ -98,7 +154,7 @@ class CoreRepoImplTest {
         )
         userActivityDao.insert(UserActivity(
                 eventStartTimeMills = startTime,
-                eventEndTimeMills = 0,
+                eventEndTimeMills = startTime + 10_000L,
                 isSynced = false,
                 type = UserActivityType.MOVING.toString().toLowerCase())
         )
@@ -117,29 +173,29 @@ class CoreRepoImplTest {
 
         testObserver.assertNoErrors()
                 .assertValueCount(1)
-                .assertValueAt(0) { it == 0L }
+                .assertValueAt(0) { it == userActivityDao.tableItems[0].localId }
                 .assertComplete()
         Assert.assertEquals(userActivityDao.tableItems.size, 2)
         Assert.assertEquals(userActivityDao.tableItems[0].eventStartTimeMills, startTime)
-        Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, 0 /* Event not ended yet */)
+        Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, userActivityToInsert.eventEndTimeMills)
         Assert.assertEquals(userActivityDao.tableItems[0].userActivityType, UserActivityType.MOVING)
     }
 
     @Test
-    fun checkInsertNewAndTerminatePreviousActivityWithLatestActivityOfDifferentType() {
+    fun checkInsertNewUserActivityWithLatestActivityOfDifferentType() {
         //Set fake data.
-        val startTime = System.currentTimeMillis() - 3600000
-        val startTimeOfNewEvent = System.currentTimeMillis() - 180000
         val endTimeOfNewEvent = System.currentTimeMillis()
+        val startTimeOfNewEvent = endTimeOfNewEvent - 180000
+
         userActivityDao.insert(UserActivity(
-                eventStartTimeMills = System.currentTimeMillis() - 4200000,
-                eventEndTimeMills = System.currentTimeMillis() - 3600000,
+                eventStartTimeMills = endTimeOfNewEvent - 4200000,
+                eventEndTimeMills = endTimeOfNewEvent - 3600000,
                 isSynced = false,
                 type = UserActivityType.MOVING.toString().toLowerCase())
         )
         userActivityDao.insert(UserActivity(
-                eventStartTimeMills = startTime,
-                eventEndTimeMills = 0,
+                eventStartTimeMills = endTimeOfNewEvent - 3600000,
+                eventEndTimeMills = startTimeOfNewEvent - CoreConfig.MONITOR_SERVICE_PERIOD,
                 isSynced = false,
                 type = UserActivityType.MOVING.toString().toLowerCase())
         )
@@ -163,9 +219,59 @@ class CoreRepoImplTest {
 
         Assert.assertEquals(userActivityDao.tableItems.size, 3)
 
-        Assert.assertEquals(userActivityDao.tableItems[1].eventStartTimeMills, startTime)
+        Assert.assertEquals(userActivityDao.tableItems[1].eventStartTimeMills, endTimeOfNewEvent - 3600000)
         Assert.assertEquals(userActivityDao.tableItems[1].eventEndTimeMills, startTimeOfNewEvent)
         Assert.assertEquals(userActivityDao.tableItems[1].userActivityType, UserActivityType.MOVING)
+
+        Assert.assertEquals(userActivityDao.tableItems[0].eventStartTimeMills, startTimeOfNewEvent)
+        Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, endTimeOfNewEvent)
+        Assert.assertEquals(userActivityDao.tableItems[0].userActivityType, UserActivityType.SITTING)
+    }
+
+    @Test
+    fun checkInsertNewUserActivityWithLatestActivityOfDifferentTypeAndNotTracked() {
+        //Set fake data.
+        val endTimeOfNewEvent = System.currentTimeMillis()
+        val startTimeOfNewEvent = endTimeOfNewEvent - 180000
+
+        userActivityDao.insert(UserActivity(
+                eventStartTimeMills = endTimeOfNewEvent - 4200000,
+                eventEndTimeMills = endTimeOfNewEvent - 3600000,
+                isSynced = false,
+                type = UserActivityType.MOVING.toString().toLowerCase())
+        )
+        userActivityDao.insert(UserActivity(
+                eventStartTimeMills = endTimeOfNewEvent - 3600000,
+                eventEndTimeMills = startTimeOfNewEvent - 3 * CoreConfig.MONITOR_SERVICE_PERIOD,
+                isSynced = false,
+                type = UserActivityType.MOVING.toString().toLowerCase())
+        )
+
+        val userActivityToInsert = UserActivity(
+                eventStartTimeMills = startTimeOfNewEvent,
+                eventEndTimeMills = endTimeOfNewEvent,
+                isSynced = false,
+                type = UserActivityType.SITTING.toString().toLowerCase()
+        )
+
+        val testObserver = TestObserver<Long>()
+        reminderRepo.insertNewUserActivity(userActivityToInsert)
+                .subscribe(testObserver)
+        testObserver.awaitTerminalEvent()
+
+        testObserver.assertNoErrors()
+                .assertValueCount(1)
+                .assertValueAt(0) { it == 2L }
+                .assertComplete()
+
+        Assert.assertEquals(userActivityDao.tableItems.size, 3)
+
+        Assert.assertEquals(userActivityDao.tableItems[1].eventStartTimeMills,
+                endTimeOfNewEvent - 3600000)
+        Assert.assertEquals(userActivityDao.tableItems[1].eventEndTimeMills,
+                startTimeOfNewEvent - 3 * CoreConfig.MONITOR_SERVICE_PERIOD)
+        Assert.assertEquals(userActivityDao.tableItems[1].userActivityType,
+                UserActivityType.MOVING)
 
         Assert.assertEquals(userActivityDao.tableItems[0].eventStartTimeMills, startTimeOfNewEvent)
         Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, endTimeOfNewEvent)

@@ -19,51 +19,53 @@ package com.kevalpatel2106.standup.core.sync
 
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
 
 /**
  * Created by Kevalpatel2106 on 05-Jan-18.
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-@RunWith(RobolectricTestRunner::class)
-@Config(manifest = Config.NONE)
+@RunWith(JUnit4::class)
 class SyncJobHelperTest {
 
     @Test
-    fun checkSyncNow() {
-        val builder = SyncJobHelper.prepareJob(RuntimeEnvironment.application)
-
-        Assert.assertTrue(builder.constraints.contains(Constraint.ON_ANY_NETWORK))
-        Assert.assertEquals(builder.constraints.size, 1)
-        Assert.assertFalse(builder.isRecurring)
-        Assert.assertEquals(builder.tag, SyncJobHelper.SYNC_JOB_TAG)
-        Assert.assertEquals(builder.retryStrategy, RetryStrategy.DEFAULT_LINEAR)
-        Assert.assertEquals(builder.lifetime, Lifetime.UNTIL_NEXT_BOOT)
-        Assert.assertEquals(builder.trigger, Trigger.NOW)
-    }
-
-    fun checkShouldNotSyncSync() {
+    fun checkShouldSyncSyncWithNotLoggedInSyncEnable() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
+        Mockito.`when`(sharedPref.getBoolean(anyString(), anyBoolean())).thenReturn(true)
 
-        Assert.assertFalse(SyncJobHelper.shouldRunJob(UserSessionManager(SharedPrefsProvider(sharedPref))))
+        Assert.assertFalse(SyncJobHelper.shouldRunJob(UserSessionManager(SharedPrefsProvider(sharedPref)),
+                UserSettingsManager(SharedPrefsProvider(sharedPref))))
     }
 
-    fun checkShouldSyncSync() {
+    @Test
+    fun checkShouldSyncSyncUserLoggedInSyncDisable() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
+        Mockito.`when`(sharedPref.getBoolean(anyString(), anyBoolean())).thenReturn(false)
 
-        Assert.assertTrue(SyncJobHelper.shouldRunJob(UserSessionManager(SharedPrefsProvider(sharedPref))))
+        Assert.assertFalse(SyncJobHelper.shouldRunJob(UserSessionManager(SharedPrefsProvider(sharedPref)),
+                UserSettingsManager(SharedPrefsProvider(sharedPref))))
+    }
+
+    @Test
+    fun checkShouldSyncSyncUserLoggedInSyncEnable() {
+        val sharedPref = Mockito.mock(SharedPreferences::class.java)
+        Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
+        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
+        Mockito.`when`(sharedPref.getBoolean(anyString(), anyBoolean())).thenReturn(true)
+
+        Assert.assertTrue(SyncJobHelper.shouldRunJob(UserSessionManager(SharedPrefsProvider(sharedPref)),
+                UserSettingsManager(SharedPrefsProvider(sharedPref))))
     }
 }

@@ -45,7 +45,7 @@
     <option name="ACTIVITY_CLASS" value="com.kevalpatel2106.rulerview.RulerDemoActivity" />
     <method>
       <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1516949706410" />
+      <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1516960651309" />
     </method>
   </configuration>
 </component>

@@ -65,7 +65,8 @@ class DashboardFragment : Fragment() {
         today_time_line.timelineDuration = TimeLineLength.A_DAY
 
         //Set pie chart
-        home_efficiency_card_pie_chart.setPieChart(context!!)
+        home_efficiency_card_pie_chart.setPieChart(context!!,
+                context!!.resources.getInteger(R.integer.pie_chart_animation_duration))
         home_efficiency_card_pie_chart.setPieChartData(context!!, 0F, 0F)
 
         setModel()

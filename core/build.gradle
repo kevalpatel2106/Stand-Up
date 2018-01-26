@@ -53,6 +53,7 @@ dependencies {
     implementation project(':utils')
     implementation project(':common')
     testImplementation project(':test-utils')
+    testImplementation project(':network')
     androidTestImplementation project(':test-utils')
     testImplementation(otherLib.roboElectric, excludeGrp)
 

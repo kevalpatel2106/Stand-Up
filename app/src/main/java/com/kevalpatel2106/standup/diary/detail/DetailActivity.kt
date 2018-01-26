@@ -57,7 +57,8 @@ class DetailActivity : BaseActivity() {
         setToolbar(R.id.toolbar, "$dayOfMonth ${TimeUtils.getMonthInitials(month)} $year", true)
 
         //Set the pie chart
-        detail_efficiency_card_pie_chart.setPieChart(this@DetailActivity)
+        detail_efficiency_card_pie_chart.setPieChart(this@DetailActivity,
+                resources.getInteger(R.integer.pie_chart_animation_duration))
         detail_efficiency_card_pie_chart.setPieChartData(this@DetailActivity, 0F, 0F)
 
         setViewModel()

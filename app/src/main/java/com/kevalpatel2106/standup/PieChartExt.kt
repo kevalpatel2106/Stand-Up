@@ -41,12 +41,12 @@ import com.kevalpatel2106.utils.getColorCompat
  *
  * @see PieChart
  */
-fun PieChart.setPieChart(context: Context) {
+fun PieChart.setPieChart(context: Context, animationDuration: Int) {
     /* Set the pie chart */
     setDrawCenterText(false) //Don't want to draw text on center
     description.isEnabled = false    //Don't want to display any description
     setUsePercentValues(true)    //All the values in %.
-    animateY(context.resources.getInteger(R.integer.pie_chart_animation_duration), Easing.EasingOption.EaseInOutQuad)
+    animateY(animationDuration, Easing.EasingOption.EaseInOutQuad)
     setDrawEntryLabels(false)
 
     //The hole in the middle

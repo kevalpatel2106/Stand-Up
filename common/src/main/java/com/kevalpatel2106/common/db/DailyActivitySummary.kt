@@ -18,11 +18,13 @@
 package com.kevalpatel2106.common.db
 
 import android.annotation.SuppressLint
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.Validator
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import java.util.*
 
 /**
@@ -80,6 +82,14 @@ constructor(
     val trackedDuration: Long
     val trackedDurationHours: String
 
+    @VisibleForTesting
+    @OnlyForTesting
+    val startTimeMills: Long
+
+    @VisibleForTesting
+    @OnlyForTesting
+    val endTimeMills: Long
+
     init {
         validateInputs()
 
@@ -95,10 +105,10 @@ constructor(
         val todayCal = TimeUtils.getTodaysCalender12AM()
 
         //Calculate start time for the event.
-        val startTimeMills = summaryDayCal.timeInMillis
+        startTimeMills = summaryDayCal.timeInMillis
 
         //Calculate the ending time
-        val endTimeMills = when {
+        endTimeMills = when {
             summaryDayCal.after(todayCal) -> throw IllegalStateException("Future date.")
             summaryDayCal.before(todayCal) -> startTimeMills + TimeUtils.ONE_DAY_MILLISECONDS
             else -> System.currentTimeMillis()
