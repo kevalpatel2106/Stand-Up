@@ -35,8 +35,8 @@ mv ./timeline-view/build/reports ./output/timeline-view/
 
 #utils module
 mv ./utils/build/reports ./output/utils/
-
-#Upload to artifacts to drop box
-tar cvf artifacts-$TRAVIS_BUILD_NUMBER-$TRAVIS_EVENT_TYPE.tar output
-chmod +x ./scripts/dropbox_uploader.sh
-bash ./scripts/dropbox_uploader.sh -p -h upload artifacts-$TRAVIS_BUILD_NUMBER-$TRAVIS_EVENT_TYPE.tar /Stand-Up/Artifacts/
+#
+##Upload to artifacts to drop box
+#tar cvf artifacts-$TRAVIS_BUILD_NUMBER-$TRAVIS_EVENT_TYPE.tar output
+#chmod +x ./scripts/dropbox_uploader.sh
+#bash ./scripts/dropbox_uploader.sh -p -h upload artifacts-$TRAVIS_BUILD_NUMBER-$TRAVIS_EVENT_TYPE.tar /Stand-Up/Artifacts/
