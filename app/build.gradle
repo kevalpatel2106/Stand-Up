@@ -115,7 +115,6 @@ dependencies {
     testImplementation(otherLib.roboElectric, excludeGrp)
 
     ide.each { add("implementation", it) }
-    anko.each { add("implementation", it) }
     rxLib.each { add("implementation", it) }
     debugLibs.each { add(it.configuration, it.dependency) }
 

@@ -29,8 +29,8 @@ import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.utils.Utils
+import com.kevalpatel2106.utils.alert
 import kotlinx.android.synthetic.main.activity_report_issue.*
-import org.jetbrains.anko.alert
 
 class ReportIssueActivity : BaseActivity() {
 
@@ -73,26 +73,28 @@ class ReportIssueActivity : BaseActivity() {
         model.versionUpdateResult.observe(this@ReportIssueActivity, Observer {
             it?.let {
                 //Display the dialog
-                val alertBuilder = alert(message = getString(R.string.report_issue_update_message),
-                        title = getString(R.string.report_issue_update_title))
-                alertBuilder.negativeButton(getString(R.string.report_issue_update_later_btn_title), {
-                    //Do nothing
-                })
-                alertBuilder.positiveButton(getString(R.string.report_issue_update_btn_title), {
-                    //Open the play store.
-                    SUUtils.openLink(this@ReportIssueActivity, getString(R.string.rate_app_url))
-                })
-                alertBuilder.show()
+                alert(messageResource = R.string.report_issue_update_message,
+                        titleResource = R.string.report_issue_update_title,
+                        func = {
+                            negativeButton(getString(R.string.report_issue_update_later_btn_title), {
+                                //Do nothing
+                            })
+                            positiveButton(getString(R.string.report_issue_update_btn_title), {
+                                //Open the play store.
+                                SUUtils.openLink(this@ReportIssueActivity, getString(R.string.rate_app_url))
+                            })
+                        })
             }
         })
         model.issueId.observe(this@ReportIssueActivity, Observer {
             it?.let {
-                val alertBuilder = alert(message = String.format(getString(R.string.issue_success_alert_message), it),
-                        title = getString(R.string.issue_success_alert_title))
-                alertBuilder.positiveButton(android.R.string.ok, {
-                    //Do nothing
-                })
-                alertBuilder.show()
+                alert(message = String.format(getString(R.string.issue_success_alert_message), it),
+                        title = getString(R.string.issue_success_alert_title),
+                        func = {
+                            positiveButton(android.R.string.ok, {
+                                //Do nothing
+                            })
+                        })
             }
         })
         model.blockUi.observe(this@ReportIssueActivity, Observer {

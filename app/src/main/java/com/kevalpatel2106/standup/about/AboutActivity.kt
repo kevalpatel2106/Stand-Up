@@ -36,7 +36,7 @@ import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.about.repo.CheckVersionResponse
 import com.kevalpatel2106.standup.constants.AnalyticsEvents
 import com.kevalpatel2106.standup.constants.logEvent
-import org.jetbrains.anko.alert
+import com.kevalpatel2106.utils.alert
 
 class AboutActivity : MaterialAboutActivity() {
 

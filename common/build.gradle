@@ -57,7 +57,6 @@ dependencies {
     androidTestImplementation project(':test-utils')
 
     ide.each { add("implementation", it) }
-    anko.each { add("implementation", it) }
     rxLib.each { add("implementation", it) }
     debugLibs.each { add(it.configuration, it.dependency) }
     dagger.each { add(it.configuration, it.dependency) }

@@ -34,8 +34,7 @@ import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsDet
 import com.kevalpatel2106.standup.settings.notifications.NotificationSettingsFragment
 import com.kevalpatel2106.standup.settings.syncing.SyncSettingsDetailActivity
 import com.kevalpatel2106.standup.settings.syncing.SyncSettingsFragment
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.cancelButton
+import com.kevalpatel2106.utils.alert
 import javax.inject.Inject
 
 /**
@@ -45,7 +44,8 @@ import javax.inject.Inject
  */
 class SettingsViewModel : BaseViewModel {
 
-    @Inject lateinit var logout: Logout
+    @Inject
+    lateinit var logout: Logout
 
     internal var detailFragment = MutableLiveData<Fragment>()
 
@@ -132,17 +132,17 @@ class SettingsViewModel : BaseViewModel {
                 }
             }
             SettingsId.LOGOUT -> {
-                val signOutWarningAlert = context.alert {
-                    message = context.getString(R.string.sign_out_warning_message)
-                    title = context.getString(R.string.sign_out_warning_title)
-                    isCancelable = true
-                }
-                signOutWarningAlert.positiveButton(R.string.sign_out_warning_positive_btn_title, {
-                    logoutInProgress.value = true
-                    logout.logout()
-                })
-                signOutWarningAlert.cancelButton({ /* NO OP */ })
-                signOutWarningAlert.show()
+                context.alert(
+                        messageResource = R.string.sign_out_warning_message,
+                        titleResource = R.string.sign_out_warning_title,
+                        func = {
+                            positiveButton(R.string.sign_out_warning_positive_btn_title, {
+                                logoutInProgress.value = true
+                                logout.logout()
+                            })
+                            negativeButton(android.R.string.cancel, { /* NO OP */ })
+                        }
+                )
                 return
             }
         }
