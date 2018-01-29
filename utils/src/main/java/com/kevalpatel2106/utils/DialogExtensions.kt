@@ -35,7 +35,7 @@ fun AlertDialogHelper.defaultDialogButton() {
     cancelable = false
 }
 
-inline fun Context.alert(title: CharSequence? = null,
+fun Context.alert(title: CharSequence? = null,
                          message: CharSequence? = null,
                          func: AlertDialogHelper.() -> Unit = { defaultDialogButton() }): AlertDialog {
     val alertDialog =  AlertDialogHelper(this, title, message).apply {
@@ -45,7 +45,7 @@ inline fun Context.alert(title: CharSequence? = null,
     return alertDialog
 }
 
-inline fun Context.alert(titleResource: Int = 0,
+fun Context.alert(titleResource: Int = 0,
                          messageResource: Int = 0,
                          func: AlertDialogHelper.() -> Unit = { defaultDialogButton() }): AlertDialog {
     val title = if (titleResource == 0) null else getString(titleResource)
@@ -57,7 +57,7 @@ inline fun Context.alert(titleResource: Int = 0,
     return alertDialog
 }
 
-inline fun Fragment.alert(title: CharSequence? = null,
+fun Fragment.alert(title: CharSequence? = null,
                           message: CharSequence? = null,
                           func: AlertDialogHelper.() -> Unit = { defaultDialogButton() }): AlertDialog {
     val alertDialog =  AlertDialogHelper(context!!, title, message).apply {
@@ -67,7 +67,7 @@ inline fun Fragment.alert(title: CharSequence? = null,
     return alertDialog
 }
 
-inline fun Fragment.alert(titleResource: Int = 0,
+fun Fragment.alert(titleResource: Int = 0,
                           messageResource: Int = 0,
                           func: AlertDialogHelper.() -> Unit = { defaultDialogButton() }): AlertDialog {
     val title = if (titleResource == 0) null else getString(titleResource)

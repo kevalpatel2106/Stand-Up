@@ -28,7 +28,7 @@ import retrofit2.Response
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class RetrofitNetworkRefresher<T>(private val call: Call<T>) : Refresher<T> {
+class RetrofitNetworkRefresher<out T>(private val call: Call<T>) : Refresher<T> {
 
     /**
      * Read from the cache. This is the internal method not part of the public api.
