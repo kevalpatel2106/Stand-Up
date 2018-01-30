@@ -70,5 +70,6 @@ dependencies {
     implementation(playServiceLib.awareness, excludeGrp)
 
     implementation(otherLib.evernoteJob, excludeGrp)
+    implementation otherLib.gson
     implementation retrofitLib.retrofit
 }

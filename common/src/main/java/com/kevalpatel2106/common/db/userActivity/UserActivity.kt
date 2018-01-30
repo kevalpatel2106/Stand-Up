@@ -44,7 +44,7 @@ data class UserActivity(
         val type: String,
 
         @ColumnInfo(name = IS_SYNCED)
-        val isSynced: Boolean
+        var isSynced: Boolean
 ) {
 
     init {

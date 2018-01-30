@@ -17,7 +17,6 @@
 
 package com.kevalpatel2106.standup.profile.repo
 
-import com.kevalpatel2106.standup.BuildConfig
 import com.kevalpatel2106.utils.annotations.Repository
 import retrofit2.Call
 import retrofit2.http.Body
@@ -31,9 +30,6 @@ import retrofit2.http.POST
  */
 @Repository
 interface ProfileApiService {
-    companion object {
-        fun baseUrl() = BuildConfig.BASE_URL
-    }
 
     @Headers("Add-Auth: true")
     @POST("getProfile")

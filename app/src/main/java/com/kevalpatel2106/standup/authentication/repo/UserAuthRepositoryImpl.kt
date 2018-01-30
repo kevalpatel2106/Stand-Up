@@ -19,7 +19,7 @@ package com.kevalpatel2106.standup.authentication.repo
 
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.repository.RepoBuilder
-import com.kevalpatel2106.common.repository.refresher.RetrofitNetworkRefresher
+import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
 import com.kevalpatel2106.utils.annotations.Repository
 import io.reactivex.Flowable
 import retrofit2.Retrofit

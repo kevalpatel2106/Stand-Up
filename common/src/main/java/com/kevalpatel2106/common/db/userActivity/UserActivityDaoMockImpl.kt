@@ -90,4 +90,12 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
         else if (diff > 0) return@sort 1
         return@sort 0
     }
+
+    override fun getPendingActivity(isPending: Boolean): List<UserActivity> {
+        val activityAfter = ArrayList<UserActivity>()
+
+        tableItems.filter { it -> it.isSynced == isPending }
+                .forEach { it -> activityAfter.add(it) }
+        return activityAfter
+    }
 }

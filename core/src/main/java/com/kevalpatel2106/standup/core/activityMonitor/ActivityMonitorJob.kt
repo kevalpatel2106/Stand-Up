@@ -20,16 +20,20 @@ package com.kevalpatel2106.standup.core.activityMonitor
 import android.annotation.SuppressLint
 import android.app.job.JobScheduler
 import android.app.job.JobService
+import android.os.Bundle
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.google.android.gms.awareness.Awareness
 import com.google.android.gms.awareness.snapshot.DetectedActivityResponse
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
+import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.CoreConfig
@@ -201,7 +205,17 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
                     .addOnSuccessListener(this@ActivityMonitorJob)
                     .addOnFailureListener {
                         //Error occurred
-                        Timber.e(it.message)
+                        if (it is ApiException) {
+                            //https://developers.google.com/android/reference/com/google/android/gms/common/api/CommonStatusCodes
+                            Timber.e("${it.statusCode} ${(it.statusMessage)}")
+                        } else {
+                            Timber.e(it.message)
+                        }
+
+                        //Log the event that activity monitoring is failing.
+                        context.logEvent(AnalyticsEvents.EVENT_ACTIVITY_RECOGNITION_ERROR, Bundle().apply {
+                            putString(AnalyticsEvents.KEY_MESSAGE, it.message)
+                        })
 
                         destroyAndScheduleNextJob()
                     }

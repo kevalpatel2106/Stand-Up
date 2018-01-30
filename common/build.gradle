@@ -65,6 +65,8 @@ dependencies {
     implementation(butterKnifeLib.butterKnife, excludeGrp)
     kapt(butterKnifeLib.annotationProcessor, excludeGrp)
 
+    implementation(firebaseLib.core, excludeGrp)
+
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4

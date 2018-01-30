@@ -15,22 +15,19 @@
  *
  */
 
-package com.kevalpatel2106.standup.core.repo
+package com.kevalpatel2106.standup.core.repo;
 
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import android.support.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * Created by Keval on 15/12/17.
- * List of the end points for communicating with the server for "Core" module.
+ * Created by Keval on 30/01/18.
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-internal interface CoreApiService {
-
-    @POST("/saveActivity")
-    @Headers("Add-Auth: true")
-    fun saveActivity(@Body saveActivityRequest: SaveActivityRequest): Call<SaveActivityResponse>
+@Retention(RetentionPolicy.SOURCE)
+@IntDef({0, 1})
+public @interface SupportedActivityType {
 }

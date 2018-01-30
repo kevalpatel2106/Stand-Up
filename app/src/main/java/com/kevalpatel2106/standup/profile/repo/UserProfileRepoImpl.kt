@@ -22,7 +22,7 @@ import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.repository.RepoBuilder
 import com.kevalpatel2106.common.repository.RepoData
 import com.kevalpatel2106.common.repository.cache.Cache
-import com.kevalpatel2106.common.repository.refresher.RetrofitNetworkRefresher
+import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.utils.annotations.Repository
 import com.kevalpatel2106.utils.toFloatSafe

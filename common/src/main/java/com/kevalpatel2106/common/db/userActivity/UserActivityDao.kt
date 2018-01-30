@@ -58,6 +58,10 @@ interface UserActivityDao {
             + " ORDER BY " + UserActivity.EVENT_START_TIME + " ASC LIMIT 1")
     fun getOldestActivity(): UserActivity?
 
+    @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE
+            + " WHERE " + UserActivity.IS_SYNCED + " = :isPending"
+            + " ORDER BY " + UserActivity.EVENT_START_TIME + " ASC")
+    fun getPendingActivity(isPending: Boolean): List<UserActivity>
 
     @Query("DELETE FROM " + UserActivity.USER_ACTIVITY_TABLE)
     fun nukeTable()

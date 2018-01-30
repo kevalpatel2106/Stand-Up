@@ -19,7 +19,7 @@ package com.kevalpatel2106.common.repository
 
 import com.kevalpatel2106.common.repository.cache.Cache
 import com.kevalpatel2106.common.repository.refresher.RefreshException
-import com.kevalpatel2106.common.repository.refresher.Refresher
+import com.kevalpatel2106.network.executor.refresher.Refresher
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableEmitter

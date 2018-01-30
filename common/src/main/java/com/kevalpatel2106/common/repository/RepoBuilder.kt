@@ -18,7 +18,7 @@
 package com.kevalpatel2106.common.repository
 
 import com.kevalpatel2106.common.repository.cache.Cache
-import com.kevalpatel2106.common.repository.refresher.Refresher
+import com.kevalpatel2106.network.executor.refresher.Refresher
 
 /**
  * Created by Keval on 28/11/17.

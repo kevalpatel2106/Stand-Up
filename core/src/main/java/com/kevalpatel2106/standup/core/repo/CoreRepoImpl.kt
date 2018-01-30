@@ -21,6 +21,9 @@ import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.repository.RepoBuilder
+import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.utils.annotations.Repository
 import io.reactivex.Completable
@@ -52,7 +55,39 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
      */
     override fun sendPendingActivitiesToServer(): Completable {
         return Completable.create {
-            Timber.d("Syncing pending events...")
+            //Get all the pending to sync activities.
+            val pendingActivities = userActivityDao.getPendingActivity(false)
+
+            if (pendingActivities.isEmpty()) {
+                //No item to sync
+                it.onComplete()
+                return@create
+            }
+
+            pendingActivities
+                    .filter { it.userActivityType == UserActivityType.SITTING || it.userActivityType == UserActivityType.MOVING }
+                    .forEach {
+                        val activityToSync = it
+
+                        //Execute the network call.
+                        val call = retrofit.create(CoreApiService::class.java)
+                                .saveActivity(SaveActivityRequest(it))
+
+                        RepoBuilder<SaveActivityResponse>()
+                                .addRefresher(RetrofitNetworkRefresher(call))
+                                .build()
+                                .fetch()
+                                .map { it.data!! }
+                                .subscribe({
+                                    activityToSync.remoteId = it.id                 //Add the remote id.
+                                    activityToSync.isSynced = true                  //Mark it as synced.
+                                    userActivityDao.update(activityToSync)          //Save it to the database
+                                }, {
+                                    //API call failed.
+                                    Timber.i("Save activity API call failed. Message: ${it.message}")
+                                })
+                    }
+
             it.onComplete()
         }
     }

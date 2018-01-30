@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.common.repository.refresher
+package com.kevalpatel2106.network.executor.refresher
 
 import com.kevalpatel2106.common.repository.RepoData
 import com.kevalpatel2106.common.repository.SourceType

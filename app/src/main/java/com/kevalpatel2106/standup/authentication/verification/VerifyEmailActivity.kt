@@ -27,15 +27,15 @@ import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.WindowManager
 import butterknife.OnClick
+import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
+import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
-import com.kevalpatel2106.standup.constants.AnalyticsEvents
-import com.kevalpatel2106.standup.constants.logEvent
 import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.utils.annotations.UIController
 import com.kevalpatel2106.utils.getColorCompat
