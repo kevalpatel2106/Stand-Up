@@ -28,12 +28,16 @@ import com.airbnb.lottie.LottieAnimationView
 fun LottieAnimationView.playAnotherAnimation(animationName: String) {
     repeatCount = 1
     setAnimation(animationName)
+
+    //https://github.com/airbnb/lottie-android/issues/287
     Handler().postDelayed({ playAnimation() }, 200)
 }
 
 fun LottieAnimationView.playAnotherRepeatAnimation(animationName: String) {
     setAnimation(animationName)
     repeatCount = Int.MAX_VALUE
+
+    //https://github.com/airbnb/lottie-android/issues/287
     Handler().postDelayed({ playAnimation() }, 200)
 }
 

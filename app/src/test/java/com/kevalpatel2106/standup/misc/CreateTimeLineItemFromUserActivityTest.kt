@@ -13,9 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- */
-
-package com.kevalpatel2106.standup.suUtils
+ */package com.kevalpatel2106.standup.suUtils
 
 import android.support.annotation.ColorInt
 import com.kevalpatel2106.common.db.userActivity.UserActivity

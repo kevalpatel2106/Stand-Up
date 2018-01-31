@@ -20,8 +20,8 @@ package com.kevalpatel2106.standup.authentication.verification
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.network.ApiProvider
-import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepositoryImpl
+import com.kevalpatel2106.standup.misc.LottieJson
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -101,7 +101,6 @@ class EmailLinkVerifyViewModelTest {
         Thread.sleep(1000)
         Assert.assertFalse(emailLinkVerifyViewModel.blockUi.value!!)
         Assert.assertFalse(userSessionManager.isUserVerified)
-        Assert.assertEquals(emailLinkVerifyViewModel.errorMessage.value!!.errorImage,
-                R.drawable.ic_warning)
+        Assert.assertEquals(emailLinkVerifyViewModel.errorMessage.value!!.errorImage, LottieJson.WARNING)
     }
 }

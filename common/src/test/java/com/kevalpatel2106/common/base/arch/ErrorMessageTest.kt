@@ -55,9 +55,9 @@ class ErrorMessageTest {
     @Throws(IOException::class)
     fun checkInitWithErrorImage() {
         val errorMessage = ErrorMessage(R.string.error_activity_not_found)
-        errorMessage.errorImage = 1234
+        errorMessage.errorImage = "test.json"
         Assert.assertEquals(errorMessage.errorMessageRes, R.string.error_activity_not_found)
-        Assert.assertEquals(errorMessage.errorImage, 1234)
+        Assert.assertEquals(errorMessage.errorImage, "test.json")
         Assert.assertNull(errorMessage.errorMessage)
     }
 
