@@ -22,7 +22,6 @@ import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.common.SharedPreferenceKeys
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.standup.core.CoreTestUtils
-import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
 import org.junit.Assert
@@ -82,7 +81,7 @@ class AutoDndMonitoringJobTest {
     fun checkCancelScheduleJob() {
         scheduleJob()
 
-        ActivityMonitorJob.cancel()
+        AutoDndMonitoringJob.cancelScheduledJob()
 
         var set = JobManager.instance().getAllJobRequestsForTag(AutoDndMonitoringJob.AUTO_DND_START_JOB_TAG)
         Assert.assertTrue(set.isEmpty())

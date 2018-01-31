@@ -21,7 +21,6 @@ import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.standup.core.CoreTestUtils
-import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
 import org.junit.Assert
@@ -81,7 +80,7 @@ class DailyReviewJobTest {
     @Test
     fun checkCancelScheduleJob() {
         scheduleJob()
-        ActivityMonitorJob.cancel()
+        DailyReviewJob.cancelScheduledJob()
 
         val set = JobManager.instance().getAllJobRequestsForTag(DailyReviewJob.DAILY_REVIEW_TAG)
         Assert.assertTrue(set.isEmpty())
