@@ -48,4 +48,13 @@ class IsActivityMonitorScheduledTest {
                 .build())
         Assert.assertTrue(ActivityMonitorHelper.isAnyJobScheduled())
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkIsAnyJobScheduleNegative() {
+        JobManager.create(CoreTestUtils.createMockContext())
+        val jobManager = JobManager.instance()
+        jobManager.cancelAll()
+        Assert.assertFalse(ActivityMonitorHelper.isAnyJobScheduled())
+    }
 }

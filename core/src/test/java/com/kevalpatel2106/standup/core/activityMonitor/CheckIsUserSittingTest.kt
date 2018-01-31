@@ -127,10 +127,45 @@ class CheckIsUserSittingTest {
         fun checkForEmptyArray() {
             try {
                 ActivityMonitorHelper.isUserSitting(ArrayList())
+                Assert.fail()
             } catch (e: IllegalStateException) {
                 //Test passed
             }
         }
-    }
 
+        @Test
+        @Throws(IOException::class)
+        fun checkForTiltingActivity() {
+            try {
+                ActivityMonitorHelper.isUserSitting(arrayListOf(
+                        DetectedActivity(DetectedActivity.IN_VEHICLE, 60),
+                        DetectedActivity(DetectedActivity.STILL, 12),
+                        DetectedActivity(DetectedActivity.ON_FOOT, 85),
+                        DetectedActivity(DetectedActivity.ON_BICYCLE, 70),
+                        DetectedActivity(DetectedActivity.RUNNING, 88),
+                        DetectedActivity(DetectedActivity.TILTING, 90)      /*Highest*/
+                ))
+                Assert.fail()
+            } catch (e: IllegalStateException) {
+                //Test passed
+            }
+        }
+
+        @Test
+        @Throws(IOException::class)
+        fun checkForUnknownActivity() {
+            try {
+                Assert.assertFalse(ActivityMonitorHelper.isUserSitting(arrayListOf(
+                        DetectedActivity(DetectedActivity.IN_VEHICLE, 60),
+                        DetectedActivity(DetectedActivity.STILL, 12),
+                        DetectedActivity(DetectedActivity.ON_FOOT, 85),
+                        DetectedActivity(DetectedActivity.ON_BICYCLE, 70),
+                        DetectedActivity(DetectedActivity.RUNNING, 88),
+                        DetectedActivity(DetectedActivity.UNKNOWN, 90)      /*Highest*/
+                )))
+            } catch (e: IllegalStateException) {
+                Assert.fail()
+            }
+        }
+    }
 }

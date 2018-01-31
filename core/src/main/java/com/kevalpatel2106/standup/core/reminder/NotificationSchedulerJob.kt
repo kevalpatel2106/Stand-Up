@@ -66,8 +66,8 @@ internal class NotificationSchedulerJob : Job() {
             synchronized(NotificationSchedulerJob::class) {
 
                 //Save the time of upcoming notification.
-                CorePrefsProvider(sharedPrefsProvider).saveNextNotificationTime(
-                        System.currentTimeMillis() + scheduleInterval)
+                CorePrefsProvider(sharedPrefsProvider)
+                        .saveNextNotificationTime(System.currentTimeMillis() + scheduleInterval)
 
                 //Schedule the job
                 val id = JobRequest.Builder(REMINDER_NOTIFICATION_JOB_TAG)

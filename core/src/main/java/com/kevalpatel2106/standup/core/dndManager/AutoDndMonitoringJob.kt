@@ -84,7 +84,6 @@ internal class AutoDndMonitoringJob : Job() {
                         .setExact(startDndJobTime - System.currentTimeMillis())
                         .build()
                         .schedule()
-
                 Timber.i("`Auto DND begin` monitoring job with id $startJobId scheduled at $startDndJobTime milliseconds.")
 
                 //Arrange the DND end job
@@ -94,7 +93,6 @@ internal class AutoDndMonitoringJob : Job() {
                         .setExact(endDndJobTime - System.currentTimeMillis())
                         .build()
                         .schedule()
-
                 Timber.i("`Auto DND end` monitoring job with id $endJobId scheduled at $endDndJobTime milliseconds.")
                 return@synchronized true
             }

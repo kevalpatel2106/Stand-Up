@@ -91,10 +91,10 @@ internal object AutoDndMonitoringHelper {
      * @return True if the DND should be enabled.
      */
     fun isCurrentlyInAutoDndMode(userSettingsManager: UserSettingsManager): Boolean {
-        val currentTimeFrom12Am = System.currentTimeMillis() - TimeUtils.getTodaysCalender12AM().timeInMillis
+        val currentTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis())
         return userSettingsManager.isAutoDndEnable
-                && (userSettingsManager.autoDndStartTime <= currentTimeFrom12Am)
-                && (userSettingsManager.autoDndEndTime >= currentTimeFrom12Am)
+                && (currentTimeFrom12Am >= userSettingsManager.autoDndStartTime)
+                && (currentTimeFrom12Am <= userSettingsManager.autoDndEndTime)
     }
 
     /**
@@ -108,6 +108,6 @@ internal object AutoDndMonitoringHelper {
      */
     fun shouldRunningThisJob(userSettingsManager: UserSettingsManager,
                              userSessionManager: UserSessionManager): Boolean {
-        return userSettingsManager.isAutoDndEnable && userSessionManager.isUserLoggedIn
+        return userSessionManager.isUserLoggedIn && userSettingsManager.isAutoDndEnable
     }
 }

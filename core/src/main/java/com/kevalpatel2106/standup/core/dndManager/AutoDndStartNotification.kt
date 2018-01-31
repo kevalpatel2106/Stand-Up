@@ -21,7 +21,6 @@ import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.common.notifications.NotificationChannelType
@@ -48,7 +47,6 @@ internal object AutoDndStartNotification {
                 .setContentTitle(context.getString(R.string.auto_dnd_notification_title))
                 .setContentText(context.getString(R.string.auto_dnd_notification_message))
                 .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_sleep_mode_notification))
                 .setTicker(context.getString(R.string.auto_dnd_notification_message))
                 .setChannelId(NotificationChannelType.OTHER_NOTIFICATION_CHANNEL)
                 .setAutoCancel(true)
