@@ -93,7 +93,7 @@ class LoginViewModelSignUpTest {
         Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
-        Assert.assertEquals(loginViewModel.mEmailError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
+        Assert.assertEquals(loginViewModel.mEmailError.value!!.errorMessageRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
         Assert.assertNull(loginViewModel.mPasswordError.value)
         Assert.assertNull(loginViewModel.mNameError.value)
     }
@@ -109,7 +109,7 @@ class LoginViewModelSignUpTest {
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertNull(loginViewModel.mPasswordError.value)
         Assert.assertNull(loginViewModel.mEmailError.value)
-        Assert.assertEquals(loginViewModel.mNameError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_name)
+        Assert.assertEquals(loginViewModel.mNameError.value!!.errorMessageRes, com.kevalpatel2106.standup.R.string.error_login_invalid_name)
     }
 
     @Test
@@ -122,7 +122,7 @@ class LoginViewModelSignUpTest {
         Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertNull(loginViewModel.mEmailError.value)
-        Assert.assertEquals(loginViewModel.mPasswordError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_password)
+        Assert.assertEquals(loginViewModel.mPasswordError.value!!.errorMessageRes, com.kevalpatel2106.standup.R.string.error_login_invalid_password)
         Assert.assertNull(loginViewModel.mNameError.value)
     }
 
@@ -136,7 +136,7 @@ class LoginViewModelSignUpTest {
         Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
         Assert.assertNull(loginViewModel.mEmailError.value)
-        Assert.assertEquals(loginViewModel.mPasswordError.value!!.errorRes, com.kevalpatel2106.standup.R.string.login_error_password_did_not_match)
+        Assert.assertEquals(loginViewModel.mPasswordError.value!!.errorMessageRes, com.kevalpatel2106.standup.R.string.login_error_password_did_not_match)
         Assert.assertNull(loginViewModel.mNameError.value)
     }
 

@@ -29,8 +29,8 @@ import com.kevalpatel2106.common.Validator
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.diary.userActivityList.UserActivityListActivity
-import com.kevalpatel2106.standup.setPieChart
-import com.kevalpatel2106.standup.setPieChartData
+import com.kevalpatel2106.standup.misc.setPieChart
+import com.kevalpatel2106.standup.misc.setPieChartData
 import com.kevalpatel2106.utils.TimeUtils
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*

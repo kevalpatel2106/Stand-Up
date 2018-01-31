@@ -78,7 +78,7 @@ class ForgotPasswordViewModelTest {
         forgotPasswordViewModel.forgotPasswordRequest("test@example")
 
         Assert.assertFalse(forgotPasswordViewModel.blockUi.value!!)
-        Assert.assertEquals(forgotPasswordViewModel.emailError.value!!.errorRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
+        Assert.assertEquals(forgotPasswordViewModel.emailError.value!!.errorMessageRes, com.kevalpatel2106.standup.R.string.error_login_invalid_email)
     }
 
     @Test

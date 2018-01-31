@@ -22,20 +22,19 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.VisibleForTesting
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.intro.IntroActivity
-import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.standup.misc.LottieJson
+import com.kevalpatel2106.standup.misc.playAnotherAnimation
+import com.kevalpatel2106.standup.misc.playRepeatAnimation
 import com.kevalpatel2106.utils.annotations.UIController
 import kotlinx.android.synthetic.main.activity_email_link_verification.*
 
@@ -69,11 +68,9 @@ class EmailLinkVerificationActivity : BaseActivity() {
             it?.let {
                 if (it) {
                     verify_email_link_description_tv.text = getString(R.string.verify_email_link_description_verifying)
-                    verify_email_link_logo.setImageResource(R.drawable.avd_nine_to_five)
-                    if (verify_email_link_logo.drawable is Animatable) {
-                        (verify_email_link_logo.drawable as Animatable).start()
-                    }
                     verify_email_link_progressbar.visibility = View.VISIBLE
+
+                    verify_email_link_logo.playRepeatAnimation(LottieJson.ANIMATING_CLOCK)
 
                     allowBackPress = false
                 } else {
@@ -84,28 +81,21 @@ class EmailLinkVerificationActivity : BaseActivity() {
 
         model.errorMessage.observe(this@EmailLinkVerificationActivity, Observer {
             //Error
-            setError(it)
+            Handler().postDelayed({ setError(it) }, 1000)
         })
-
         model.emailVerified.observe(this@EmailLinkVerificationActivity, Observer {
             //Success
-            setSuccess()
+            Handler().postDelayed({ setSuccess() }, 1000)
         })
     }
 
     private fun setSuccess() {
         verify_email_link_description_tv.text = getString(R.string.verify_email_link_success)
+        verify_email_link_progressbar.visibility = View.INVISIBLE
 
         //Change the verify logo
-        verify_email_link_logo.setImageResource(R.drawable.ic_authentication_success)
-        verify_email_link_logo.scaleX = 0.6f
-        verify_email_link_logo.scaleY = 0.6f
-        verify_email_link_logo.animate()
-                .setDuration(500)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .scaleX(1.2f)
-                .scaleY(1.2f)
-                .start()
+        verify_email_link_logo.playAnotherAnimation(LottieJson.CORRECT_TICK_INSIDE_GREEN_CIRCLE)
+
 
         //Go to the email link activity
         Handler().postDelayed({
@@ -121,15 +111,7 @@ class EmailLinkVerificationActivity : BaseActivity() {
         }
 
         //Change the verify logo
-        verify_email_link_logo.setImageResource(it?.errorImage ?: R.drawable.ic_warning)
-        verify_email_link_logo.scaleX = 0.6f
-        verify_email_link_logo.scaleY = 0.6f
-        verify_email_link_logo.animate()
-                .setDuration(500)
-                .setInterpolator(AccelerateDecelerateInterpolator())
-                .scaleX(1.0f)
-                .scaleY(1.0f)
-                .start()
+        verify_email_link_logo.playAnotherAnimation(it?.errorImage ?: LottieJson.WARNING)
 
         allowBackPress = true
     }
@@ -155,15 +137,15 @@ class EmailLinkVerificationActivity : BaseActivity() {
 
             //Validate the url
             if (url.pathSegments.size != 3) {
-                Toast.makeText(context, "Invalid verification link.", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.error_invalid_verification_link, Toast.LENGTH_LONG).show()
                 return false
             }
 
-            //Check if the user is verified
-            if (UserSessionManager(SharedPrefsProvider(context)).isUserVerified) {
-                Toast.makeText(context, "User already verified.", Toast.LENGTH_LONG).show()
-                return false
-            }
+//            //Check if the user is verified
+//            if (UserSessionManager(SharedPrefsProvider(context)).isUserVerified) {
+//                Toast.makeText(context, R.string.error_user_already_verified, Toast.LENGTH_LONG).show()
+//                return false
+//            }
 
             val launchIntent = Intent(context, EmailLinkVerificationActivity::class.java)
             launchIntent.putExtra(ARG_URL, url.toString())

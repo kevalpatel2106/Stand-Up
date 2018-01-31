@@ -20,8 +20,8 @@ package com.kevalpatel2106.standup.suUtils
 import android.support.annotation.ColorInt
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
-import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.constants.AppConfig
+import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.TimeUtils
 import org.junit.Assert.assertEquals
 import org.junit.Test

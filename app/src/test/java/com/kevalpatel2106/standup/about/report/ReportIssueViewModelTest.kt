@@ -81,14 +81,14 @@ class ReportIssueViewModelTest {
     fun checkReportIssueWithInvalidTitle() {
         model.reportIssue("", "This is test issue description.", "test_device_id")
         Assert.assertFalse(model.blockUi.value!!)
-        Assert.assertEquals(model.errorMessage.value!!.errorRes, R.string.error_invalid_issue_title)
+        Assert.assertEquals(model.errorMessage.value!!.errorMessageRes, R.string.error_invalid_issue_title)
     }
 
     @Test
     fun checkReportIssueWithInvalidDescription() {
         model.reportIssue("This is test issue title.", "", "test_device_id")
         Assert.assertFalse(model.blockUi.value!!)
-        Assert.assertEquals(model.errorMessage.value!!.errorRes, R.string.error_invalid_issue_description)
+        Assert.assertEquals(model.errorMessage.value!!.errorMessageRes, R.string.error_invalid_issue_description)
     }
 
     @Test
@@ -125,7 +125,7 @@ class ReportIssueViewModelTest {
         model.checkForUpdate()
 
         Assert.assertFalse(model.blockUi.value!!)
-        Assert.assertEquals(model.errorMessage.value!!.errorRes, R.string.check_update_error_message)
+        Assert.assertEquals(model.errorMessage.value!!.errorMessageRes, R.string.check_update_error_message)
         Assert.assertNull(model.versionUpdateResult.value)
     }
 

@@ -119,6 +119,6 @@ class AboutViewModelTest{
         viewModel.checkForUpdate()
 
         Assert.assertFalse(viewModel.isCheckingUpdate.value!!)
-        Assert.assertEquals(viewModel.errorMessage.value!!.errorRes, R.string.check_update_error_message)
+        Assert.assertEquals(viewModel.errorMessage.value!!.errorMessageRes, R.string.check_update_error_message)
     }
 }

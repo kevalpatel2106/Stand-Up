@@ -80,7 +80,7 @@ class DashboardViewModelTest {
 
         Assert.assertNull(model.todaySummary.value)
         Assert.assertNull(model.timelineEventsList.value)
-        Assert.assertEquals(model.todaySummaryErrorCallback.value!!.errorRes,
+        Assert.assertEquals(model.todaySummaryErrorCallback.value!!.errorMessageRes,
                 R.string.dashboard_today_summary_not_fount)
     }
 

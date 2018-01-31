@@ -23,9 +23,9 @@ import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.CallbackEvent
 import com.kevalpatel2106.common.base.arch.ErrorMessage
-import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
+import com.kevalpatel2106.standup.misc.LottieJson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -36,9 +36,11 @@ class EmailLinkVerifyViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */
-    @Inject lateinit var userAuthRepo: UserAuthRepository
+    @Inject
+    lateinit var userAuthRepo: UserAuthRepository
 
-    @Inject lateinit var userSessionManager: UserSessionManager
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
 
 
     /**
@@ -57,6 +59,7 @@ class EmailLinkVerifyViewModel : BaseViewModel {
     /**
      * Zero parameter constructor.
      */
+    @Suppress("unused")
     constructor() {
         DaggerUserAuthComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
@@ -83,7 +86,7 @@ class EmailLinkVerifyViewModel : BaseViewModel {
                     userSessionManager.isUserVerified = true
                 }, {
                     val errorMsg = ErrorMessage(it.message)
-                    errorMsg.errorImage = R.drawable.ic_warning
+                    errorMsg.errorImage = LottieJson.WARNING
                     this.errorMessage.value = errorMsg
                 }))
     }

@@ -27,6 +27,7 @@ import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.diary.di.DaggerDiaryComponent
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
+import com.kevalpatel2106.standup.misc.LottieJson
 import com.kevalpatel2106.utils.annotations.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -109,6 +110,7 @@ class DiaryViewModel : BaseViewModel {
                         //Display no data found view
                         if (it.isEmpty()) {
                             val message = ErrorMessage("No data available!!")
+                            message.errorImage = LottieJson.EMPTY_LIST
                             errorMessage.value = message
                             noMoreData.value = true
                         } else if (it.size.rem(DiaryRepo.PAGE_SIZE) != 0) {
@@ -150,6 +152,7 @@ class DiaryViewModel : BaseViewModel {
                     blockUi.value = false
 
                     val message = ErrorMessage(it.message)
+                    message.errorImage = LottieJson.PERSON_FALLING_FROM_UFO
                     message.setErrorBtn(R.string.btn_title_retry, {
 
                         //Call this function again

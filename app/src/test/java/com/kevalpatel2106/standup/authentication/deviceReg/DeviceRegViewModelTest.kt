@@ -101,7 +101,7 @@ class DeviceRegViewModelTest {
     fun checkInvalidDeviceId() {
         deviceRegViewModel.register("", "test-firebase-id")
 
-        Assert.assertEquals(deviceRegViewModel.errorMessage.value!!.errorRes,
+        Assert.assertEquals(deviceRegViewModel.errorMessage.value!!.errorMessageRes,
                 R.string.device_reg_error_invalid_device_id)
     }
 
@@ -110,7 +110,7 @@ class DeviceRegViewModelTest {
     fun checkInvalidFcmId() {
         deviceRegViewModel.register("test-device-id", null)
 
-        Assert.assertEquals(deviceRegViewModel.errorMessage.value!!.errorRes, R.string.device_reg_error_invalid_fcm_id)
+        Assert.assertEquals(deviceRegViewModel.errorMessage.value!!.errorMessageRes, R.string.device_reg_error_invalid_fcm_id)
     }
 
     @Test

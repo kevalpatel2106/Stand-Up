@@ -160,6 +160,7 @@ dependencies {
     implementation(otherLib.circleImagView, excludeGrp)
     implementation(otherLib.aboutlibraries, excludeGrp)
     implementation(otherLib.chartLayout, excludeGrp)
+    implementation(otherLib.lottie, excludeGrp)
     implementation(otherLib.openSourceLibraries) { transitive = true }
     releaseImplementation(otherLib.crashalytics) { transitive = true }
 

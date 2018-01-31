@@ -31,7 +31,7 @@ import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.SUUtils
+import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 

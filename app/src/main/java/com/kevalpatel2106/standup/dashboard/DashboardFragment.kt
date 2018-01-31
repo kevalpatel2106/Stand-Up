@@ -29,8 +29,8 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.setPieChart
-import com.kevalpatel2106.standup.setPieChartData
+import com.kevalpatel2106.standup.misc.setPieChart
+import com.kevalpatel2106.standup.misc.setPieChartData
 import com.kevalpatel2106.standup.timelineview.TimeLineLength
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*

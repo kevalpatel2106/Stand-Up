@@ -15,16 +15,18 @@
  *
  */
 
-package com.kevalpatel2106.common.view
+package com.kevalpatel2106.standup.misc
 
 import android.content.Context
-import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
-import com.kevalpatel2106.common.R
+import com.airbnb.lottie.LottieAnimationView
 import com.kevalpatel2106.common.base.arch.ErrorMessage
+import com.kevalpatel2106.common.view.BaseButton
+import com.kevalpatel2106.common.view.BaseTextView
+import com.kevalpatel2106.standup.R
 
 /**
  * Created by Keval on 24/12/17.
@@ -36,7 +38,7 @@ class ErrorView @JvmOverloads constructor(context: Context,
                                           defStyleAttr: Int = 0)
     : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val errorImageView: BaseImageView
+    private val errorImageView: LottieAnimationView
 
     private val errorTextView: BaseTextView
 
@@ -58,18 +60,19 @@ class ErrorView @JvmOverloads constructor(context: Context,
                 errorMessage.getOnErrorClick())
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun setError(errorMessage: String,
-                 @DrawableRes errorImage: Int = 0,
+                 errorImage: String? = null,
                  @StringRes errorBtnTitle: Int = 0,
                  errorClick: (() -> Unit)? = null) {
         errorTextView.text = errorMessage
 
         //set error image
-        if (errorImage == 0) {
+        if (errorImage == null) {
             errorImageView.visibility = View.GONE
         } else {
             errorImageView.visibility = View.VISIBLE
-            errorImageView.setImageResource(errorImage)
+            errorImageView.playRepeatAnimation(errorImage)
         }
 
         if (errorClick == null || errorBtnTitle == 0) {

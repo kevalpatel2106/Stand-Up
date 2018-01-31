@@ -40,14 +40,14 @@ class ErrorMessageTest {
     fun checkInitWithStringMessage() {
         val errorMessage = ErrorMessage("This is test.")
         Assert.assertEquals(errorMessage.errorMessage, "This is test.")
-        Assert.assertEquals(errorMessage.errorRes, 0)
+        Assert.assertEquals(errorMessage.errorMessageRes, 0)
     }
 
     @Test
     @Throws(IOException::class)
     fun checkInitWithStringRes() {
         val errorMessage = ErrorMessage(R.string.error_activity_not_found)
-        Assert.assertEquals(errorMessage.errorRes, R.string.error_activity_not_found)
+        Assert.assertEquals(errorMessage.errorMessageRes, R.string.error_activity_not_found)
         Assert.assertNull(errorMessage.errorMessage)
     }
 
@@ -56,7 +56,7 @@ class ErrorMessageTest {
     fun checkInitWithErrorImage() {
         val errorMessage = ErrorMessage(R.string.error_activity_not_found)
         errorMessage.errorImage = 1234
-        Assert.assertEquals(errorMessage.errorRes, R.string.error_activity_not_found)
+        Assert.assertEquals(errorMessage.errorMessageRes, R.string.error_activity_not_found)
         Assert.assertEquals(errorMessage.errorImage, 1234)
         Assert.assertNull(errorMessage.errorMessage)
     }

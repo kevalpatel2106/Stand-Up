@@ -225,7 +225,7 @@ class EditProfileModelTest {
 
         //There should be error
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertEquals(editProfileModel.errorMessage.value!!.errorRes, R.string.error_login_invalid_name)
+        Assert.assertEquals(editProfileModel.errorMessage.value!!.errorMessageRes, R.string.error_login_invalid_name)
     }
 
     @Test
@@ -243,7 +243,7 @@ class EditProfileModelTest {
 
         //There should be error
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertEquals(editProfileModel.errorMessage.value!!.errorRes, R.string.error_invalid_weight)
+        Assert.assertEquals(editProfileModel.errorMessage.value!!.errorMessageRes, R.string.error_invalid_weight)
     }
 
     @Test
@@ -261,6 +261,6 @@ class EditProfileModelTest {
 
         //There should be error
         Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertEquals(editProfileModel.errorMessage.value!!.errorRes, R.string.error_invalid_height)
+        Assert.assertEquals(editProfileModel.errorMessage.value!!.errorMessageRes, R.string.error_invalid_height)
     }
 }

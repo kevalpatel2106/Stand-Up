@@ -142,7 +142,7 @@ class IntroViewModelTest {
         introViewModel.authenticateSocialUser(googleAuthUser)
 
         //There should be success.
-        Assert.assertEquals(introViewModel.errorMessage.value!!.errorRes, R.string.error_google_login_email_not_found)
+        Assert.assertEquals(introViewModel.errorMessage.value!!.errorMessageRes, R.string.error_google_login_email_not_found)
         Assert.assertFalse(introViewModel.blockUi.value!!)
     }
 
@@ -153,7 +153,7 @@ class IntroViewModelTest {
         introViewModel.authenticateSocialUser(fbUser)
 
         //There should be success.
-        Assert.assertEquals(introViewModel.errorMessage.value!!.errorRes, R.string.error_fb_login_email_not_found)
+        Assert.assertEquals(introViewModel.errorMessage.value!!.errorMessageRes, R.string.error_fb_login_email_not_found)
         Assert.assertFalse(introViewModel.blockUi.value!!)
     }
 }

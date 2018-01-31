@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.misc
 
 import android.app.Activity
 import android.content.Context
@@ -25,6 +25,7 @@ import android.support.v4.content.ContextCompat
 import com.cocosw.bottomsheet.BottomSheet
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
 import com.kevalpatel2106.utils.TimeUtils

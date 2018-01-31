@@ -49,7 +49,7 @@
         <include layout="@layout/layout_loader"/>
 
         <!--2. Error view-->
-        <com.kevalpatel2106.common.view.ErrorView
+        <com.kevalpatel2106.standup.misc.ErrorView
             android:id="@+id/detail_error_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.misc
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.graphics.Color

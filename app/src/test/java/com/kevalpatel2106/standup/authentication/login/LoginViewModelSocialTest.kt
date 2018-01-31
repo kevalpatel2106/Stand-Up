@@ -100,7 +100,7 @@ class LoginViewModelSocialTest {
         Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
-        Assert.assertEquals(loginViewModel.errorMessage.value!!.errorRes, R.string.error_google_login_email_not_found)
+        Assert.assertEquals(loginViewModel.errorMessage.value!!.errorMessageRes, R.string.error_google_login_email_not_found)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
     }
 
@@ -114,7 +114,7 @@ class LoginViewModelSocialTest {
         Assert.assertFalse(loginViewModel.isEmailLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.isGoogleLoginProgress.value!!)
         Assert.assertFalse(loginViewModel.isFacebookLoginProgress.value!!)
-        Assert.assertEquals(loginViewModel.errorMessage.value!!.errorRes, R.string.error_fb_login_email_not_found)
+        Assert.assertEquals(loginViewModel.errorMessage.value!!.errorMessageRes, R.string.error_fb_login_email_not_found)
         Assert.assertFalse(loginViewModel.blockUi.value!!)
     }
 

@@ -24,9 +24,10 @@ import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.SUUtils
 import com.kevalpatel2106.standup.diary.di.DaggerDiaryComponent
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
+import com.kevalpatel2106.standup.misc.LottieJson
+import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
@@ -121,7 +122,7 @@ class DetailViewModel : BaseViewModel {
                     if (summary.value == null) {
                         val errorMsg = ErrorMessage("No user activities found for $dayOfMonth ${TimeUtils.getMonthInitials(month)} $year")
                         errorMsg.setErrorBtn(R.string.btn_title_retry, { fetchData(dayOfMonth, month, year) })
-                        errorMsg.errorImage = R.drawable.bg_no_item_city
+                        errorMsg.errorImage = LottieJson.CLOUD_FLOATING
                         errorMessage.value = errorMsg
                     }
                 }
@@ -135,7 +136,7 @@ class DetailViewModel : BaseViewModel {
                 }, {
                     val errorMsg = ErrorMessage(it.message)
                     errorMsg.setErrorBtn(R.string.btn_title_retry, { fetchData(dayOfMonth, month, year) })
-                    errorMsg.errorImage = R.drawable.img_no_internet_satellite
+                    errorMsg.errorImage = LottieJson.UFO_FLOATING
                     errorMessage.value = errorMsg
                 }))
     }

@@ -13,9 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- */
-
-package com.kevalpatel2106.common.repository
+ */package com.kevalpatel2106.common.repository
 
 /**
  * Created by Kevalpatel2106 on 29-Nov-17.

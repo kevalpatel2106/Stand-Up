@@ -27,6 +27,7 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.diary.detail.DetailActivity
 import com.kevalpatel2106.standup.diary.di.DaggerDiaryComponent
 import com.kevalpatel2106.standup.diary.repo.DiaryRepo
+import com.kevalpatel2106.standup.misc.LottieJson
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.annotations.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -82,7 +83,7 @@ class UserActivityListModel : BaseViewModel {
                         errorMsg.setErrorBtn(R.string.btn_title_retry, {
                             fetchData(dayOfMonth, month, year)
                         })
-                        errorMsg.errorImage = R.drawable.bg_no_item_cactus
+                        errorMsg.errorImage = LottieJson.CLOUD_FLOATING
                         errorMessage.value = errorMsg
                     } else {
                         userActivities.value?.clear()
@@ -94,7 +95,7 @@ class UserActivityListModel : BaseViewModel {
                     errorMsg.setErrorBtn(R.string.btn_title_retry, {
                         fetchData(dayOfMonth, month, year)
                     })
-                    errorMsg.errorImage = R.drawable.img_no_internet_satellite
+                    errorMsg.errorImage = LottieJson.UFO_FLOATING
                     errorMessage.value = errorMsg
                 }))
     }

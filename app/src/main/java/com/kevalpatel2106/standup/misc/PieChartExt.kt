@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.standup
+package com.kevalpatel2106.standup.misc
 
 import android.content.Context
 import android.graphics.Color
