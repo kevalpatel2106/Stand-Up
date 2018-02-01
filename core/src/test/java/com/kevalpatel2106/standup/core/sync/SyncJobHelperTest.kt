@@ -37,7 +37,7 @@ import org.mockito.Mockito
 class SyncJobHelperTest {
 
     @Test
-    fun checkShouldSyncSyncWithNotLoggedInSyncEnable() {
+    fun checkShouldSyncSync_WithNotLoggedInSyncEnable() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
@@ -48,7 +48,7 @@ class SyncJobHelperTest {
     }
 
     @Test
-    fun checkShouldSyncSyncUserLoggedInSyncDisable() {
+    fun checkShouldSyncSync_UserLoggedInSyncDisable() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
@@ -59,7 +59,7 @@ class SyncJobHelperTest {
     }
 
     @Test
-    fun checkShouldSyncSyncUserLoggedInSyncEnable() {
+    fun checkShouldSyncSync_UserLoggedInSyncEnable() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")

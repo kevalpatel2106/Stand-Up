@@ -28,6 +28,7 @@ import com.kevalpatel2106.utils.TimeUtils
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
+@Suppress("MemberVisibilityCanBePrivate")
 data class SaveActivityRequest(
 
         @SerializedName("id")
@@ -48,6 +49,14 @@ data class SaveActivityRequest(
         val type: Int
 ) {
 
+    init {
+        if (id < 0) throw IllegalArgumentException("id Cannot be less than 0.")
+        if (startTime < 0) throw IllegalArgumentException("startTime Cannot be less than 0.")
+        if (endTime < 0) throw IllegalArgumentException("endTime Cannot be less than 0.")
+        if (type !in 0..1) throw IllegalArgumentException("type Cannot be other than 0 and 1.")
+    }
+
+
     constructor(userActivity: UserActivity) : this(id = userActivity.remoteId,
             startTime = TimeUtils.convertToNano(userActivity.eventStartTimeMills),
             endTime = TimeUtils.convertToNano(userActivity.eventEndTimeMills),
@@ -56,6 +65,4 @@ data class SaveActivityRequest(
                 UserActivityType.MOVING -> 1
                 else -> throw IllegalStateException("Unsupported user activity type.")
             })
-
-
 }

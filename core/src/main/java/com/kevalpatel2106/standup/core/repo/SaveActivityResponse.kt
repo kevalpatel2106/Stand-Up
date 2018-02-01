@@ -47,4 +47,21 @@ data class SaveActivityResponse(
         @SerializedName("uid")
         @Expose
         val userId: Long
-)
+) {
+
+    init {
+        if (id < 0) throw IllegalArgumentException("id Cannot be less than 0.")
+        if (startTime < 0) throw IllegalArgumentException("startTime Cannot be less than 0.")
+        if (endTime < 0) throw IllegalArgumentException("endTime Cannot be less than 0.")
+        if (type !in 0..1) throw IllegalArgumentException("type Cannot be other than 0 and 1.")
+        if (userId < 0) throw IllegalArgumentException("userId Cannot be less than 0.")
+    }
+
+    override fun equals(other: Any?): Boolean {
+        other?.let { if (other is SaveActivityResponse) return other.id == id }
+        return false
+    }
+
+    override fun hashCode(): Int = id.hashCode()
+
+}
