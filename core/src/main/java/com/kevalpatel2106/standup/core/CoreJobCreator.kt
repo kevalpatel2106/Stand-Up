@@ -73,15 +73,15 @@ internal class CoreJobCreator : JobCreator {
      */
     override fun create(tag: String): Job? {
         return when (tag) {
-            ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG -> ActivityMonitorJob()
-            SyncJob.SYNC_JOB_TAG -> SyncJob()
-            SyncJob.SYNC_NOW_JOB_TAG -> SyncJob()
-            NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG -> NotificationSchedulerJob()
-            AutoDndMonitoringJob.AUTO_DND_START_JOB_TAG -> AutoDndMonitoringJob()
-            AutoDndMonitoringJob.AUTO_DND_END_JOB_TAG -> AutoDndMonitoringJob()
-            SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG -> SleepModeMonitoringJob()
-            SleepModeMonitoringJob.SLEEP_MODE_END_JOB_TAG -> SleepModeMonitoringJob()
-            DailyReviewJob.DAILY_REVIEW_TAG -> DailyReviewJob()
+            ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG -> ActivityMonitorJob.getInstance()
+            SyncJob.SYNC_JOB_TAG -> SyncJob.getInstance()
+            SyncJob.SYNC_NOW_JOB_TAG -> SyncJob.getInstance()
+            NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG -> NotificationSchedulerJob.getInstance()
+            AutoDndMonitoringJob.AUTO_DND_START_JOB_TAG -> AutoDndMonitoringJob.getInstance()
+            AutoDndMonitoringJob.AUTO_DND_END_JOB_TAG -> AutoDndMonitoringJob.getInstance()
+            SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG -> SleepModeMonitoringJob.getInstance()
+            SleepModeMonitoringJob.SLEEP_MODE_END_JOB_TAG -> SleepModeMonitoringJob.getInstance()
+            DailyReviewJob.DAILY_REVIEW_TAG -> DailyReviewJob.getInstance()
             else -> throw IllegalStateException("Did you forget to add job for $tag in CoreJobCreator?")
         }
     }

@@ -46,11 +46,7 @@ object CoreConfig {
      * Interval between two "Stand up now" notifications in seconds.
      * Value: 1 Hour
      */
-    internal val STAND_UP_REMINDER_INTERVAL = if (BuildConfig.DEBUG) {
-        TimeUnit.MINUTES.toMillis(60)    /* 15 min */
-    } else {
-        TimeUnit.MINUTES.toMillis(60)   /* 60 min */
-    }
+    internal val STAND_UP_REMINDER_INTERVAL = TimeUnit.MINUTES.toMillis(60)   /* 60 min */
 
     /**
      * Flex timing/tolerance for [STAND_UP_REMINDER_INTERVAL].

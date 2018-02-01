@@ -20,8 +20,17 @@ package com.kevalpatel2106.standup.core.sync
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.standup.core.CoreConfig
+import com.kevalpatel2106.standup.core.CorePrefsProvider
+import com.kevalpatel2106.testutils.MockSharedPreference
+import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.rxbus.Event
+import com.kevalpatel2106.utils.rxbus.RxBus
+import io.reactivex.observers.TestObserver
+import org.junit.After
 import org.junit.Assert
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -35,6 +44,15 @@ import org.mockito.Mockito
  */
 @RunWith(JUnit4::class)
 class SyncJobHelperTest {
+
+    @Rule
+    @JvmField
+    val rule = RxSchedulersOverrideRule()
+
+    @After
+    fun tearDown() {
+        SyncJob.isSyncing = false
+    }
 
     @Test
     fun checkShouldSyncSync_WithNotLoggedInSyncEnable() {
@@ -67,5 +85,63 @@ class SyncJobHelperTest {
 
         Assert.assertTrue(SyncJobHelper.shouldRunJob(UserSessionManager(SharedPrefsProvider(sharedPref)),
                 UserSettingsManager(SharedPrefsProvider(sharedPref))))
+    }
+
+    @Test
+    fun checkNotifySyncStarted_IsSyncingFlag() {
+        SyncJobHelper.notifySyncStarted()
+        Assert.assertTrue(SyncJob.isSyncing)
+    }
+
+    @Test
+    fun checkNotifySyncStarted_BroadcastEvent() {
+        val startSyncTestObserver = TestObserver<Event>()
+        RxBus.register(CoreConfig.TAG_RX_SYNC_STARTED).subscribe(startSyncTestObserver)
+
+        val endSyncTestObserver = TestObserver<Event>()
+        RxBus.register(CoreConfig.TAG_RX_SYNC_ENDED).subscribe(endSyncTestObserver)
+
+        SyncJobHelper.notifySyncStarted()
+
+        startSyncTestObserver.assertValueCount(1)
+                .assertValueAt(0, { it.tag == CoreConfig.TAG_RX_SYNC_STARTED })
+                .assertNotComplete()
+
+        endSyncTestObserver.assertValueCount(0).assertNotComplete()
+    }
+
+    @Test
+    fun checkNotifySyncTerminated_IsSyncingFlag() {
+        val mockCorePrefsProvider = CorePrefsProvider(SharedPrefsProvider(MockSharedPreference()))
+
+        SyncJobHelper.notifySyncTerminated(mockCorePrefsProvider)
+        Assert.assertFalse(SyncJob.isSyncing)
+    }
+
+    @Test
+    fun checkNotifySyncTerminated_LastSyncTime() {
+        val mockCorePrefsProvider = CorePrefsProvider(SharedPrefsProvider(MockSharedPreference()))
+
+        SyncJobHelper.notifySyncTerminated(mockCorePrefsProvider)
+        Assert.assertTrue(Math.abs(mockCorePrefsProvider.lastSyncTime - System.currentTimeMillis()) in 1_000L..2_000L)
+    }
+
+    @Test
+    fun checkNotifySyncTerminated_BroadcastEvent() {
+        val mockCorePrefsProvider = CorePrefsProvider(SharedPrefsProvider(MockSharedPreference()))
+
+        val startSyncTestObserver = TestObserver<Event>()
+        RxBus.register(CoreConfig.TAG_RX_SYNC_STARTED).subscribe(startSyncTestObserver)
+
+        val endSyncTestObserver = TestObserver<Event>()
+        RxBus.register(CoreConfig.TAG_RX_SYNC_ENDED).subscribe(endSyncTestObserver)
+
+        SyncJobHelper.notifySyncTerminated(mockCorePrefsProvider)
+
+        endSyncTestObserver.assertValueCount(1)
+                .assertValueAt(0, { it.tag == CoreConfig.TAG_RX_SYNC_ENDED })
+                .assertNotComplete()
+
+        startSyncTestObserver.assertValueCount(0).assertNotComplete()
     }
 }

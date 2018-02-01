@@ -40,6 +40,7 @@ import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
 import com.kevalpatel2106.standup.core.repo.CoreRepo
+import com.kevalpatel2106.standup.core.sync.SyncJob
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -135,6 +136,11 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
             JobManager.instance().cancelAllForTag(ACTIVITY_MONITOR_JOB_TAG)
             Timber.i("Canceling activity monitoring job.")
         }
+
+        /**
+         * Get new instance of [ActivityMonitorJob].
+         */
+        internal fun getInstance() = ActivityMonitorJob()
     }
 
     /**
@@ -207,6 +213,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
                         //Error occurred
                         if (it is ApiException) {
                             //https://developers.google.com/android/reference/com/google/android/gms/common/api/CommonStatusCodes
+                            @Suppress("DEPRECATION")
                             Timber.e("${it.statusCode} ${(it.statusMessage)}")
                         } else {
                             Timber.e(it.message)

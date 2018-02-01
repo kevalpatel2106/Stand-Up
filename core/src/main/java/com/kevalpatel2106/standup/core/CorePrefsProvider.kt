@@ -32,18 +32,18 @@ class CorePrefsProvider @Inject constructor(private val sharedPrefsProvider: Sha
         /**
          * This key holds the time of the last sync time.
          */
-        private val PREF_KEY_LAST_SYNC_TIME = "last_sync_time_mills"
+        internal const val PREF_KEY_LAST_SYNC_TIME = "last_sync_time_mills"
 
         /**
          * This ket holds the time of the next standing notification in milliseconds.
          */
-        val PREF_KEY_NEXT_NOTIFICATION_TIME = "next_notification_time"
+        internal const val PREF_KEY_NEXT_NOTIFICATION_TIME = "next_notification_time"
     }
 
     val lastSyncTime: Long
         get() = sharedPrefsProvider.getLongFromPreference(PREF_KEY_LAST_SYNC_TIME, 0)
 
-    val nextNotififcationTime: Long
+    val nextNotificationTime: Long
         get() = sharedPrefsProvider.getLongFromPreference(PREF_KEY_NEXT_NOTIFICATION_TIME, 0)
 
     internal fun saveLastSyncTime(timeInMills: Long) {

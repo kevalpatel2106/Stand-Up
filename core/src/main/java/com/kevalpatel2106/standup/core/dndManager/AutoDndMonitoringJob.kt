@@ -27,6 +27,7 @@ import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
+import com.kevalpatel2106.standup.core.sync.SyncJob
 import dagger.Lazy
 import timber.log.Timber
 import javax.inject.Inject
@@ -106,6 +107,12 @@ internal class AutoDndMonitoringJob : Job() {
             JobManager.instance().cancelAllForTag(AUTO_DND_START_JOB_TAG)
             JobManager.instance().cancelAllForTag(AUTO_DND_END_JOB_TAG)
         }
+
+        /**
+         * Get new instance of [AutoDndMonitoringJob].
+         */
+        internal fun getInstance() = AutoDndMonitoringJob()
+
     }
 
     @Inject

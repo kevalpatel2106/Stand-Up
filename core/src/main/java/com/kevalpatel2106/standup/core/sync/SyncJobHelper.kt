@@ -17,9 +17,15 @@
 
 package com.kevalpatel2106.standup.core.sync
 
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.standup.core.CoreConfig
+import com.kevalpatel2106.standup.core.CorePrefsProvider
+import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.isSyncing
 import com.kevalpatel2106.utils.annotations.Helper
+import com.kevalpatel2106.utils.rxbus.Event
+import com.kevalpatel2106.utils.rxbus.RxBus
 
 /**
  * Created by Keval on 05/01/18.
@@ -42,5 +48,36 @@ internal object SyncJobHelper {
     internal fun shouldRunJob(userSessionManager: UserSessionManager,
                               userSettingsManager: UserSettingsManager): Boolean {
         return userSessionManager.isUserLoggedIn && userSettingsManager.enableBackgroundSync
+    }
+
+
+    /**
+     * Broadcast that sync is started using [RxBus] event with tag [CoreConfig.TAG_RX_SYNC_STARTED].
+     * This will also set the value of [isSyncing].
+     *
+     * @see RxBus
+     */
+    @VisibleForTesting
+    internal fun notifySyncStarted() {
+        SyncJob.isSyncing = true
+        RxBus.post(Event(CoreConfig.TAG_RX_SYNC_STARTED))
+    }
+
+    /**
+     * Broadcast that sync is completed using [RxBus] event with tag [CoreConfig.TAG_RX_SYNC_ENDED].
+     * This will also reset the value of [isSyncing] and save the last sync time in [CorePrefsProvider].
+     *
+     * @see RxBus
+     * @see CorePrefsProvider
+     */
+    @VisibleForTesting
+    internal fun notifySyncTerminated(corePrefsProvider: CorePrefsProvider) {
+        //Save the last syncing time
+        corePrefsProvider.saveLastSyncTime(System.currentTimeMillis()
+                - 1_000L /* Remove one second to prevent displaying 0 seconds in sync settings. */)
+
+        //Syncing stopped.
+        isSyncing = false
+        RxBus.post(Event(CoreConfig.TAG_RX_SYNC_ENDED))
     }
 }

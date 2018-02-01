@@ -59,7 +59,7 @@ ext {
     ]
 
     gradlePlugins = [
-            android       : "com.android.tools.build:gradle:3.0.1",
+            android       : "com.android.tools.build:gradle:3.1.0-beta1",
             jacoco        : "com.vanniktech:gradle-android-junit-jacoco-plugin:0.11.0",
             dexcount      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2",
             kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:" + kotlinVersion,
@@ -189,6 +189,6 @@ ext {
             [configuration: "implementation", dependency: 'com.google.dagger:dagger-android-support:' + daggerVersion],
             [configuration: "kapt", dependency: 'com.google.dagger:dagger-android-processor:' + daggerVersion],
             [configuration: "kapt", dependency: 'com.google.dagger:dagger-compiler:' + daggerVersion],
-            [configuration: "provided", dependency: 'javax.annotation:jsr250-api:1.0'],
+            [configuration: "compileOnly", dependency: 'javax.annotation:jsr250-api:1.0'],
     ]
 }

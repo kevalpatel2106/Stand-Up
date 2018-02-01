@@ -15,6 +15,7 @@
  *
  */package com.kevalpatel2106.standup.core
 
+import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
 import com.evernote.android.job.Job
 import timber.log.Timber
@@ -36,14 +37,16 @@ internal abstract class AsyncJob : Job() {
      *
      * @see CountDownLatch.await
      */
-    private val countDownLatch = CountDownLatch(1)
+    @VisibleForTesting
+    internal val countDownLatch = CountDownLatch(1)
 
     /**
      * Final [com.evernote.android.job.Job.Result] to return from the [onRunJob]
      *
      * @see com.evernote.android.job.Job.Result
      */
-    private var result: Result? = null
+    @VisibleForTesting
+    internal var result: Result? = null
 
     /**
      * @see Job.onRunJob

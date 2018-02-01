@@ -27,11 +27,14 @@ import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.AsyncJob
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.CorePrefsProvider
+import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.repo.CoreRepo
 import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.cancelScheduledSync
+import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.isSyncing
 import com.kevalpatel2106.standup.core.sync.SyncJob.Companion.syncNow
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.rxbus.Event
 import com.kevalpatel2106.utils.rxbus.RxBus
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -42,17 +45,17 @@ import javax.inject.Inject
 
 /**
  * Created by Keval on 31/12/17.
- * This service is responsible for syncing the [com.kevalpatel2106.standup.db.userActivity.UserActivity]
+ * This service is responsible for syncing the [com.kevalpatel2106.common.db.userActivity.UserActivity]
  * with the server.
  *
  * Periodic Syncing:
  * - This [AsyncJob] is scheduled to run periodically (until the next boot) at the interval of
- * [com.kevalpatel2106.standup.misc.UserSettingsManager.syncInterval] milliseconds. User can change this
- * sync interval form the [com.kevalpatel2106.standup.settings.syncing.SyncSettingsFragment].
+ * [com.kevalpatel2106.common.UserSettingsManager.syncInterval] milliseconds. User can change this
+ * sync interval form the SyncSettingsFragment.
  *
  * - This [AsyncJob] will only run if internet connection is available.
  *
- * - Periodic syncing should only work if [com.kevalpatel2106.standup.misc.UserSettingsManager.enableBackgroundSync]
+ * - Periodic syncing should only work if [com.kevalpatel2106.common.UserSettingsManager.enableBackgroundSync]
  * is true.
  *
  * - If you want to cancelJob all scheduled sync jobs, call [cancelScheduledSync].
@@ -71,17 +74,17 @@ import javax.inject.Inject
  * get callback when syncing completes. This event will broadcast event if the synicng with the server
  * fails.
  *
- * - Any component can query [isSyncingCurrently] to check if the [SyncJob] is syncing the activities
+ * - Any component can query [isSyncing] to check if the [SyncJob] is syncing the activities
  * currently or not?
  *
  * Getting the last sync time:
  * - Time of the last sync job is stored in the [SharedPrefsProvider] with key
- * [com.kevalpatel2106.standup.constants.SharedPreferenceKeys.PREF_KEY_LAST_SYNC_TIME]. This time is
+ * [com.kevalpatel2106.standup.core.CorePrefsProvider.Companion.PREF_KEY_LAST_SYNC_TIME]. This time is
  * in unix milliseconds.
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-internal class SyncJob : AsyncJob() {
+internal class SyncJob : AsyncJob {
 
     /**
      * [CompositeDisposable] for collecting all [io.reactivex.disposables.Disposable]. It will get
@@ -110,7 +113,7 @@ internal class SyncJob : AsyncJob() {
         internal const val SYNC_NOW_JOB_TAG = "sync_now_job"
 
         /**
-         * Forcefully start syncing all the pending [com.kevalpatel2106.standup.db.userActivity.UserActivity]
+         * Forcefully start syncing all the pending [com.kevalpatel2106.common.db.userActivity.UserActivity]
          * with the server. This will ignore all the scheduled [SyncJob] jobs and runs instantaneously.
          *
          * If the [SyncJob] is already running while this method get invoke, call will be discarded.
@@ -121,7 +124,7 @@ internal class SyncJob : AsyncJob() {
             synchronized(SyncJob::class) {
 
                 //Schedule the job
-                val id = JobRequest.Builder(SYNC_JOB_TAG)
+                val id = JobRequest.Builder(SYNC_NOW_JOB_TAG)
                         .setUpdateCurrent(true)
                         .startNow()
                         .build()
@@ -176,6 +179,11 @@ internal class SyncJob : AsyncJob() {
          * is modified internally from [SyncJob] itself.
          */
         internal var isSyncing = false
+
+        /**
+         * Get new instance of [SyncJob].
+         */
+        internal fun getInstance() = SyncJob()
     }
 
     /**
@@ -196,14 +204,31 @@ internal class SyncJob : AsyncJob() {
     @Inject
     internal lateinit var corePrefsProvider: CorePrefsProvider
 
-    override fun onRunJobAsync(params: Params) {
-
+    /**
+     * Zero parameter constructor to initiate by [JobManager].
+     */
+    constructor() {
         //Inject dependencies
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SyncJob)
+    }
 
+    @VisibleForTesting
+    @OnlyForTesting
+    internal constructor(userSettingsManager: UserSettingsManager,
+                         userSessionManager: UserSessionManager,
+                         coreRepo: CoreRepo,
+                         corePrefsProvider: CorePrefsProvider) {
+        this.userSessionManager = userSessionManager
+        this.userSettingsManager = userSettingsManager
+        this.coreRepo = coreRepo
+        this.corePrefsProvider = corePrefsProvider
+    }
+
+    @SuppressLint("VisibleForTests")
+    override fun onRunJobAsync(params: Params) {
         if (SyncJobHelper.shouldRunJob(userSessionManager, userSettingsManager)) {
 
             //Add the new value to database.
@@ -214,11 +239,11 @@ internal class SyncJob : AsyncJob() {
                         compositeDisposable.add(it)
 
                         //Let others know sync started.
-                        notifySyncStarted()
+                        SyncJobHelper.notifySyncStarted()
                     }
                     .doAfterTerminate {
                         //Let others know sync stopped.
-                        notifySyncTerminated()
+                        SyncJobHelper.notifySyncTerminated(corePrefsProvider)
 
                         destroyJob()
                     }
@@ -234,36 +259,6 @@ internal class SyncJob : AsyncJob() {
             cancelScheduledSync()
             destroyJob()
         }
-    }
-
-    /**
-     * Broadcast that sync is completed using [RxBus] event with tag [CoreConfig.TAG_RX_SYNC_ENDED].
-     * This will also reset the value of [isSyncing] and save the last sync time in [CorePrefsProvider].
-     *
-     * @see RxBus
-     * @see CorePrefsProvider
-     */
-    private fun notifySyncTerminated() {
-        //Save the last syncing time
-        corePrefsProvider.saveLastSyncTime(System.currentTimeMillis()
-                - 1000L /* Remove one second to prevent displaying 0 seconds in sync settings. */)
-
-        //Syncing stopped.
-        isSyncing = false
-        RxBus.post(Event(CoreConfig.TAG_RX_SYNC_ENDED))
-        Timber.i("Syncing completed...")
-    }
-
-    /**
-     * Broadcast that sync is started using [RxBus] event with tag [CoreConfig.TAG_RX_SYNC_STARTED].
-     * This will also set the value of [isSyncing].
-     *
-     * @see RxBus
-     */
-    private fun notifySyncStarted() {
-        isSyncing = true
-        RxBus.post(Event(CoreConfig.TAG_RX_SYNC_STARTED))
-        Timber.i("Syncing started...")
     }
 
     /**

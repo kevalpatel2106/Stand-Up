@@ -27,6 +27,7 @@ import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.CoreConfig
 import com.kevalpatel2106.standup.core.CorePrefsProvider
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
+import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import timber.log.Timber
 import javax.inject.Inject
@@ -97,6 +98,12 @@ internal class NotificationSchedulerJob : Job() {
 
             Timber.i("All the notification job canceled.")
         }
+
+        /**
+         * Get new instance of [NotificationSchedulerJob].
+         */
+        internal fun getInstance() = NotificationSchedulerJob()
+
     }
 
     /**

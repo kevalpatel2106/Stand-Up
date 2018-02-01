@@ -27,6 +27,7 @@ import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
 import com.kevalpatel2106.standup.core.reminder.NotificationSchedulerJob
+import com.kevalpatel2106.standup.core.sync.SyncJob
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import dagger.Lazy
 import timber.log.Timber
@@ -113,6 +114,12 @@ internal class SleepModeMonitoringJob : Job() {
             JobManager.instance().cancelAllForTag(SLEEP_MODE_END_JOB_TAG)
             JobManager.instance().cancelAllForTag(SLEEP_MODE_START_JOB_TAG)
         }
+
+        /**
+         * Get new instance of [SleepModeMonitoringJob].
+         */
+        internal fun getInstance() = SleepModeMonitoringJob()
+
     }
 
     @Inject

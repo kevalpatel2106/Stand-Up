@@ -25,6 +25,7 @@ import com.evernote.android.job.JobManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -57,10 +58,10 @@ class SystemEventReceiver : BroadcastReceiver {
     }
 
     @VisibleForTesting
+    @OnlyForTesting
     constructor(core: Core) {
         this.core = core
     }
-
 
     @Inject
     lateinit var core: Core

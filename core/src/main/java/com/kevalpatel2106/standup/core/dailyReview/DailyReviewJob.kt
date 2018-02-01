@@ -24,6 +24,7 @@ import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob
 import com.kevalpatel2106.standup.core.di.DaggerCoreComponent
+import com.kevalpatel2106.standup.core.sync.SyncJob
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -84,6 +85,12 @@ internal class DailyReviewJob : Job() {
         internal fun cancelScheduledJob() {
             JobManager.instance().cancelAllForTag(DAILY_REVIEW_TAG)
         }
+
+        /**
+         * Get new instance of [DailyReviewJob].
+         */
+        internal fun getInstance() = DailyReviewJob()
+
     }
 
     /**
