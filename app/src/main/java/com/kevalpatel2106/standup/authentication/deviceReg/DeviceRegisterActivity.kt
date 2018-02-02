@@ -25,33 +25,43 @@ import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
-import android.support.v7.app.AppCompatActivity
 import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.common.AnalyticsEvents
+import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
-import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.main.MainActivity
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.Utils
-import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_device_register.*
 import javax.inject.Inject
 
 
-class DeviceRegisterActivity : AppCompatActivity() {
+/**
+ * This [BaseActivity] is responsible for registering the user device to the server.
+ */
+class DeviceRegisterActivity : BaseActivity() {
 
     @VisibleForTesting
     internal lateinit var model: DeviceRegViewModel
 
     @Inject
-    internal lateinit var core: Lazy<Core>
+    internal lateinit var userSessionManager: UserSessionManager
 
     @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Inject
+        DaggerUserAuthComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@DeviceRegisterActivity)
 
         setContentView(R.layout.activity_device_register)
         if (device_reg_iv.drawable is Animatable) {
@@ -76,10 +86,22 @@ class DeviceRegisterActivity : AppCompatActivity() {
         })
 
         model.errorMessage.observe(this@DeviceRegisterActivity, Observer {
-            it!!.getMessage(this@DeviceRegisterActivity)?.let { showSnack(it) }
+            it!!.getMessage(this@DeviceRegisterActivity)?.let {
+                showSnack(it)
+                this.logEvent(AnalyticsEvents.EVENT_DEVICE_REGISTER_FAIL, android.os.Bundle().apply {
+                    putString(AnalyticsEvents.KEY_MESSAGE, it)
+                })
+            }
         })
     }
 
+    /**
+     * Decide which screen should come next?
+     *
+     * - If the user is not verified (i.e. [ARG_IS_VERIFIED] is false) navigate to [VerifyEmailActivity].
+     * - If the user is new (i.e. [ARG_IS_NEW_USER] is true), navigate to [EditProfileActivity].
+     * - If the user is old user and email is verified, navigate to [MainActivity].
+     */
     @VisibleForTesting
     internal fun navigateToNextScreen() {
         when {
@@ -87,15 +109,12 @@ class DeviceRegisterActivity : AppCompatActivity() {
                 VerifyEmailActivity.launch(this@DeviceRegisterActivity)
             }
             intent.getBooleanExtra(ARG_IS_NEW_USER, false) -> {
-                EditProfileActivity.launch(this@DeviceRegisterActivity)
+                EditProfileActivity.launch(this@DeviceRegisterActivity, userSessionManager)
             }
             else -> {
                 MainActivity.launch(this@DeviceRegisterActivity)
             }
         }
-
-        //Start the core with jobs
-        core.get().refresh()
 
         //Kill
         finish()
@@ -103,26 +122,40 @@ class DeviceRegisterActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         //Do nothing
+        //We are not allowing user to go back
     }
 
     companion object {
 
+        /**
+         * Key for the boolean argument. The value of this key wil be true if the user is new user else
+         * it will be false.
+         */
         @VisibleForTesting
         const val ARG_IS_NEW_USER = "arg_is_new_user"
 
+        /**
+         * Key for the boolean argument. The value of this key wil be true if the user has not
+         * verified his email address else it will be false.
+         */
         @VisibleForTesting
         const val ARG_IS_VERIFIED = "arg_is_verified"
 
         /**
-         * Launch the [DeviceRegisterActivity].
+         * Launch the [DeviceRegisterActivity]. If the user is newly registered, [isNewUser] will be
+         * true. If the user has verified his email address [isVerified] will be true.
          *
          * @param context Instance of the caller.
+         * @see ARG_IS_NEW_USER
+         * @see ARG_IS_VERIFIED
          */
         @JvmStatic
         fun launch(context: Context, isNewUser: Boolean, isVerified: Boolean) {
-            val launchIntent = Intent(context, DeviceRegisterActivity::class.java)
-            launchIntent.putExtra(ARG_IS_NEW_USER, isNewUser)
-            launchIntent.putExtra(ARG_IS_VERIFIED, isVerified)
+            val launchIntent = Intent(context, DeviceRegisterActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                putExtra(ARG_IS_NEW_USER, isNewUser)
+                putExtra(ARG_IS_VERIFIED, isVerified)
+            }
             context.startActivity(launchIntent)
         }
     }

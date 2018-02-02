@@ -186,7 +186,6 @@ class EditProfileModel : BaseViewModel {
                     profileUpdateStatus.value = it
                 }, {
                     //Error occurred.
-                    profileUpdateStatus.value = null
                     errorMessage.value = ErrorMessage(it.message)
                 })
     }

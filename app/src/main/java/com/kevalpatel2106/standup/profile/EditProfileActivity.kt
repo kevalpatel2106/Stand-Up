@@ -28,6 +28,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ProgressBar
 import com.kevalpatel2106.common.AnalyticsEvents
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.Validator
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
@@ -59,9 +60,18 @@ class EditProfileActivity : BaseActivity() {
          * @param context Instance of the caller.
          */
         @JvmStatic
-        fun launch(context: Context) {
-            val launchIntent = Intent(context, EditProfileActivity::class.java)
-            context.startActivity(launchIntent)
+        fun launch(context: Context, userSessionManager: UserSessionManager): Boolean {
+            return if (userSessionManager.isUserVerified) {
+                val launchIntent = Intent(context, EditProfileActivity::class.java)
+                context.startActivity(launchIntent)
+
+                true
+            } else {
+                context.logEvent(AnalyticsEvents.EVENT_OPENING_PROFILE_WITHOUT_VERIFING_EMAIL)
+
+                //TODO Open verify email screen
+                false
+            }
         }
     }
 
@@ -97,6 +107,7 @@ class EditProfileActivity : BaseActivity() {
                 edit_profile_height_picker.scrollToValue(it.heightFloat())
                 edit_profile_weight_picker.scrollToValue(it.weightFloat())
                 edit_profile_name_et.setText(it.name)
+
                 profile_gender_radio_male.isChecked = it.gender == AppConfig.GENDER_MALE
                 profile_gender_radio_female.isChecked = it.gender == AppConfig.GENDER_FEMALE
             }
@@ -104,22 +115,30 @@ class EditProfileActivity : BaseActivity() {
 
         //Monitor save profile api call.
         model.profileUpdateStatus.observe(this@EditProfileActivity, Observer<SaveProfileResponse> {
-            showSnack(R.string.message_profile_updated)
-            Handler().postDelayed({
+            it?.let {
+                showSnack(R.string.message_profile_updated)
+                Handler().postDelayed({
 
-                //Open the dashboard if nothing in the back stack
-                if (isTaskRoot) MainActivity.launch(this@EditProfileActivity)
+                    //Open the dashboard if nothing in the back stack
+                    if (isTaskRoot) MainActivity.launch(this@EditProfileActivity)
 
-                finish()
-            }, AppConfig.SNACKBAR_TIME)
+                    finish()
+                }, AppConfig.SNACKBAR_TIME)
 
-            //Log the event
-            logEvent(AnalyticsEvents.EVENT_PROFILE_UPDATED)
+                //Log the event
+                logEvent(AnalyticsEvents.EVENT_PROFILE_UPDATED)
+            }
         })
 
         //Monitor all error messages.
         model.errorMessage.observe(this@EditProfileActivity, Observer {
-            it!!.getMessage(this@EditProfileActivity)?.let { showSnack(it) }
+            it!!.getMessage(this@EditProfileActivity)?.let {
+                showSnack(it)
+
+                logEvent(AnalyticsEvents.EVENT_PROFILE_UPDATE_ERROR, Bundle().apply {
+                    putString(AnalyticsEvents.KEY_MESSAGE, it)
+                })
+            }
         })
 
         //Monitor if the current user profile loaded or not.

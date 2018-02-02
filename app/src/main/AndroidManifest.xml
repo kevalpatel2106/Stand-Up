@@ -73,7 +73,7 @@
 
         <!-- Splash screen for the redirection. This is the single entry point to the application. -->
         <activity
-            android:name=".SplashActivity"
+            android:name=".splash.SplashActivity"
             android:configChanges="orientation|screenLayout|screenSize"
             android:launchMode="singleInstance"
             android:noHistory="true"

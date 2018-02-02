@@ -112,21 +112,28 @@ class VerifyEmailActivity : BaseActivity() {
     @OnClick(R.id.verify_btn_skip)
     fun onSkip() {
         MainActivity.launch(this@VerifyEmailActivity)
+
+        logEvent(AnalyticsEvents.EVENT_VERIFICATION_MAIL_SKIPPED, Bundle().apply {
+            putString(AnalyticsEvents.KEY_EMAIL, userSessionManager.email)
+        })
+
         finish()
     }
 
 
     @OnClick(R.id.verify_btn_resend)
     fun onResendEmail() {
-        logEvent(AnalyticsEvents.EVENT_RESEND_VERIFICATION_MAIL)
+        logEvent(AnalyticsEvents.EVENT_RESEND_VERIFICATION_MAIL, Bundle().apply {
+            putString(AnalyticsEvents.KEY_EMAIL, userSessionManager.email)
+        })
         model.resendEmail()
     }
 
     @OnClick(R.id.verify_btn_open_mail_btn)
     fun onOpenEmail() {
+        logEvent(AnalyticsEvents.EVENT_OPEN_MAIL_BUTTON_FEATURE_USED)
         SUUtils.openEmailDialog(this@VerifyEmailActivity)
     }
-
 
     companion object {
         /**

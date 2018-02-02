@@ -15,8 +15,7 @@
   ~
   -->
 
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -45,7 +44,7 @@
                 android:layout_marginTop="@dimen/spacing_large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/home_card_title_tv"/>
+                app:layout_constraintTop_toBottomOf="@+id/home_card_title_tv" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -66,43 +65,25 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/card_horizontal_margin"
-                android:layout_marginStart="@dimen/card_horizontal_margin"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/spacing_large"
                 android:paddingTop="@dimen/spacing_large">
 
-                <include layout="@layout/layout_home_efficiency_card"/>
+                <include layout="@layout/layout_home_efficiency_card" />
 
                 <!--Today's time line-->
-                <include layout="@layout/layout_home_timeline_card"/>
-
-                <android.support.v7.widget.CardView
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    style="@style/CardViewStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:showIn="@layout/fragment_dashboard">
-
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                    </android.support.constraint.ConstraintLayout>
-                </android.support.v7.widget.CardView>
+                <include layout="@layout/layout_home_timeline_card" />
             </LinearLayout>
 
             <!--1. loader-->
-            <include layout="@layout/layout_loader"/>
+            <include layout="@layout/layout_loader" />
 
             <!--2. Error view-->
             <com.kevalpatel2106.standup.misc.ErrorView
                 android:id="@+id/efficiency_card_error_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"/>
+                android:layout_marginTop="100dp" />
         </ViewFlipper>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

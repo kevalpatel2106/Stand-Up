@@ -22,4 +22,5 @@
     <dimen name="list_loading_progressbar_dimen">80dp</dimen>
     <dimen name="md_button_height">60dp</dimen>
     <dimen name="intro_screen_logo_dimen">200dp</dimen>
+    <dimen name="card_horizontal_margin">@dimen/spacing_xxlarge</dimen>
 </resources>

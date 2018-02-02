@@ -53,7 +53,7 @@ class SettingsListActivity : BaseActivity(), SettingsClickListener {
                 if (!model.isTwoPane) return@let
 
                 supportFragmentManager.beginTransaction()
-                        .add(R.id.settings_detail_frame_layout, it)
+                        .replace(R.id.settings_detail_frame_layout, it)
                         .commit()
             }
         })

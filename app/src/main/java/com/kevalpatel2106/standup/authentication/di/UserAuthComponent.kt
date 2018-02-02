@@ -21,6 +21,7 @@ import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.standup.authentication.UnauthorizedReceiver
 import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegViewModel
+import com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity
 import com.kevalpatel2106.standup.authentication.forgotPwd.ForgotPasswordViewModel
 import com.kevalpatel2106.standup.authentication.intro.IntroViewModel
 import com.kevalpatel2106.standup.authentication.login.LoginViewModel
@@ -53,4 +54,6 @@ interface UserAuthComponent {
     fun inject(unauthorizedReceiver: UnauthorizedReceiver)
 
     fun inject(verifyEmailActivity: VerifyEmailActivity)
+
+    fun inject(deviceRegisterActivity: DeviceRegisterActivity)
 }

@@ -91,7 +91,7 @@ ext {
         teamCityIntegration = false
         teamCitySlug = null
         runOnEachPackage = true
-        maxMethodCount = 100000
+        maxMethodCount = 1_10_000
     }
 
     libDefaultConfig = {

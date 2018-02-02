@@ -25,11 +25,11 @@ import com.kevalpatel2106.common.SharedPreferenceKeys
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.common.logEvent
-import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.deviceReg.RegisterDeviceService
 import com.kevalpatel2106.standup.authentication.repo.LogoutRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
 import com.kevalpatel2106.standup.core.Core
+import com.kevalpatel2106.standup.splash.SplashActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import io.reactivex.Completable
@@ -82,7 +82,7 @@ class Logout constructor(private val application: Application,
         application.startActivity(splashIntent)
 
         //Log analytics
-        application.logEvent(AnalyticsEvents.EVENT_LOGOUT)
+        application.logEvent(AnalyticsEvents.EVENT_LOGOUT_SUCCESS)
     }
 
     /**

@@ -31,21 +31,39 @@ import com.kevalpatel2106.utils.Utils
  */
 object AnalyticsEvents {
 
-    //Registration flow events
-    const val EVENT_LOGOUT = "logout"
+    //------------------Authentication flow events------------------//
     const val EVENT_LOGIN = FirebaseAnalytics.Event.LOGIN
+
     const val EVENT_SIGN_UP = FirebaseAnalytics.Event.SIGN_UP
+
     const val EVENT_SOCIAL_SIGN_UP = "social_sign_up"
+
+    //Device registration process
     const val EVENT_DEVICE_REGISTERED = "device_registered"
+    const val EVENT_DEVICE_REGISTER_FAIL = "device_register_fail"
+
+    //Verify your email screen
+    const val EVENT_VERIFICATION_MAIL_SKIPPED = "verification_mail_skipped"
     const val EVENT_RESEND_VERIFICATION_MAIL = "resend_verification_mail"
+    const val EVENT_OPEN_MAIL_BUTTON_FEATURE_USED = "open_mail_button_feature_used"
+
+    //Forgot password screen
     const val EVENT_FORGOT_PASSWORD = "forgot_password_req"
-    const val EVENT_OPEN_MAIL_BUTTON_FEATURE = "open_mail_button_feature"
+
+    //Token failed.
     const val EVENT_UNAUTHORIZED_FORCE_LOGOUT = "unauthorized_force_logout"
 
-    //Profile events
-    const val EVENT_PROFILE_UPDATED = "profile_updated"
+    //Log out success.
+    const val EVENT_LOGOUT_SUCCESS = "logout_success"
 
-    //About page actions
+
+    //------------------Profile events------------------//
+    const val EVENT_PROFILE_UPDATED = "profile_updated"
+    const val EVENT_OPENING_PROFILE_WITHOUT_VERIFING_EMAIL = "event_opening_profile_without_verifing_email"
+    const val EVENT_PROFILE_UPDATE_ERROR = "profile_updated_error"
+
+
+    //------------------About page actions------------------//
     const val EVENT_APP_FORK_ON_GITHUB = "app_fork_on_github"
     const val EVENT_JOIN_SLACK_CHANNEL = "join_slack_channel"
     const val EVENT_OPEN_GITHUB_PAGE = "open_github_page"
@@ -54,10 +72,12 @@ object AnalyticsEvents {
     const val EVENT_APP_INVITE_SUCCESS = "app_invite_success"
     const val EVENT_APP_INVITE_CANCEL = "app_invite_cancel"
 
-    //Core module events
+
+    //------------------Core module events------------------//
     const val EVENT_ACTIVITY_RECOGNITION_ERROR = "activity_recognition_error"
 
-    //Bundle keys
+
+    //------------------Bundle keys------------------//
     internal const val KEY_USER_ID = "user_id"
     internal const val KEY_DEVICE_ID = "device_id"
     const val KEY_EMAIL = "email"

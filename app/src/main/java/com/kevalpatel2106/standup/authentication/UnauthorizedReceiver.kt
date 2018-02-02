@@ -25,9 +25,9 @@ import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.SplashActivity
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.logout.Logout
+import com.kevalpatel2106.standup.splash.SplashActivity
 import javax.inject.Inject
 
 /**

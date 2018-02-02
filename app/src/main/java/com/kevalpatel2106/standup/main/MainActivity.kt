@@ -37,11 +37,13 @@ import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.about.AboutActivity
+import com.kevalpatel2106.standup.core.Core
 import com.kevalpatel2106.standup.main.di.DaggerMainComponent
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.standup.settings.list.SettingsListActivity
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector
+import dagger.Lazy
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
@@ -67,9 +69,14 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    @Inject lateinit var sharedPrefsProvider: SharedPrefsProvider
+    @Inject
+    lateinit var sharedPrefsProvider: SharedPrefsProvider
 
-    @Inject lateinit var userSessionMananger: UserSessionManager
+    @Inject
+    lateinit var userSessionMananger: UserSessionManager
+
+    @Inject
+    internal lateinit var core: Lazy<Core>
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var model: MainViewModel
@@ -92,6 +99,12 @@ class MainActivity : BaseActivity() {
         supportActionBar!!.setHomeButtonEnabled(true)
 
         setUpDrawer(savedInstanceState == null)
+
+        if (savedInstanceState == null) {
+
+            //Refresh the core.
+            core.get().refresh()
+        }
     }
 
     /**
@@ -213,7 +226,7 @@ class MainActivity : BaseActivity() {
             }
             DrawerItem.PROFILE -> {
                 //Open the edit profile
-                EditProfileActivity.launch(this@MainActivity)
+                EditProfileActivity.launch(this@MainActivity, userSessionMananger)
                 false
             }
             DrawerItem.SETTING -> {
