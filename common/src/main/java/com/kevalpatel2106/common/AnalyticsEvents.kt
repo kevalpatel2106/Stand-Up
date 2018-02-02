@@ -34,9 +34,10 @@ object AnalyticsEvents {
     //------------------Authentication flow events------------------//
     const val EVENT_LOGIN = FirebaseAnalytics.Event.LOGIN
 
-    const val EVENT_SIGN_UP = FirebaseAnalytics.Event.SIGN_UP
+    const val EVENT_EMAIL_SIGN_UP = "email_sign_up"
 
-    const val EVENT_SOCIAL_SIGN_UP = "social_sign_up"
+    const val EVENT_GOOGLE_SIGN_UP = "google_sign_up"
+    const val EVENT_FACEBOOK_SIGN_UP = "facebook_sign_up"
 
     //Device registration process
     const val EVENT_DEVICE_REGISTERED = "device_registered"
@@ -80,6 +81,7 @@ object AnalyticsEvents {
     //------------------Bundle keys------------------//
     internal const val KEY_USER_ID = "user_id"
     internal const val KEY_DEVICE_ID = "device_id"
+    const val KEY_FCM_ID = "fcm_id"
     const val KEY_EMAIL = "email"
     const val KEY_MESSAGE = "message"
 }

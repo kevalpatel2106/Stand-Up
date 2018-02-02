@@ -30,6 +30,7 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.repo.DeviceRegisterRequest
 import com.kevalpatel2106.standup.authentication.repo.UserAuthRepository
+import com.kevalpatel2106.standup.misc.LottieJson
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -42,9 +43,12 @@ import javax.inject.Inject
  */
 class DeviceRegViewModel : BaseViewModel {
 
-    @Inject lateinit var userAuthRepo: UserAuthRepository
-    @Inject lateinit var sharedPrefsProvider: SharedPrefsProvider
-    @Inject lateinit var userSessionManager: UserSessionManager
+    @Inject
+    lateinit var userAuthRepo: UserAuthRepository
+    @Inject
+    lateinit var sharedPrefsProvider: SharedPrefsProvider
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
 
     constructor() {
         DaggerUserAuthComponent.builder()
@@ -120,7 +124,10 @@ class DeviceRegViewModel : BaseViewModel {
 
                 }, {
                     sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
-                    errorMessage.value = ErrorMessage(it.message)
+
+                    val errorMessage = ErrorMessage(it.message)
+                    errorMessage.setErrorBtn(R.string.error_retry_try_again, { sendDeviceDataToServer(regId, deviceId) })
+                    errorMessage.errorImage = LottieJson.WARNING
                 }))
     }
 

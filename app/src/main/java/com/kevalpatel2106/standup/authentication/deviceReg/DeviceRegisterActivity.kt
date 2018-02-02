@@ -22,9 +22,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.os.Handler
 import android.support.annotation.VisibleForTesting
+import android.view.View
 import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.UserSessionManager
@@ -36,6 +37,9 @@ import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.authentication.di.DaggerUserAuthComponent
 import com.kevalpatel2106.standup.authentication.verification.VerifyEmailActivity
 import com.kevalpatel2106.standup.main.MainActivity
+import com.kevalpatel2106.standup.misc.LottieJson
+import com.kevalpatel2106.standup.misc.playAnotherAnimation
+import com.kevalpatel2106.standup.misc.playAnotherRepeatAnimation
 import com.kevalpatel2106.standup.profile.EditProfileActivity
 import com.kevalpatel2106.utils.Utils
 import kotlinx.android.synthetic.main.activity_device_register.*
@@ -64,32 +68,54 @@ class DeviceRegisterActivity : BaseActivity() {
                 .inject(this@DeviceRegisterActivity)
 
         setContentView(R.layout.activity_device_register)
-        if (device_reg_iv.drawable is Animatable) {
-            (device_reg_iv.drawable as Animatable).start()
-        }
+
 
         setModel()
         model.register(Utils.getDeviceId(this@DeviceRegisterActivity), FirebaseInstanceId.getInstance().token)
     }
 
+    @Suppress("ObjectLiteralToLambda")
     @SuppressLint("VisibleForTests")
     private fun setModel() {
         model = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
         model.reposeToken.observe(this@DeviceRegisterActivity, Observer {
             it?.let {
+                device_reg_tv.text = getString(R.string.set_up_complete)
+                device_reg_iv.playAnotherAnimation(LottieJson.CORRECT_TICK_INSIDE_GREEN_CIRCLE)
+                Handler().postDelayed({ navigateToNextScreen() }, 2_000L /* 2 seconds delay */)
 
                 //Log the analytics event
                 this.logEvent(AnalyticsEvents.EVENT_DEVICE_REGISTERED)
-
-                navigateToNextScreen()
             }
         })
-
+        model.blockUi.observe(this@DeviceRegisterActivity, Observer {
+            it?.let {
+                if (it) {
+                    //Registration is progress
+                    device_reg_iv.playAnotherRepeatAnimation(LottieJson.ANIMATING_CLOCK)
+                    device_reg_tv.text = getString(R.string.setting_up_your_device)
+                }
+            }
+        })
         model.errorMessage.observe(this@DeviceRegisterActivity, Observer {
-            it!!.getMessage(this@DeviceRegisterActivity)?.let {
-                showSnack(it)
+            it?.let {
+
+                //Set error view
+                device_reg_iv.playAnotherAnimation(LottieJson.WARNING)
+                device_reg_tv.text = getString(R.string.set_up_failed)
+                showSnack(
+                        message = it.getMessage(this@DeviceRegisterActivity)!!,
+                        actionName = it.getErrorBtnText(),
+                        actionListener = object : View.OnClickListener {
+                            override fun onClick(v: View?) {
+                                it.getOnErrorClick()?.invoke()
+                            }
+                        }
+                )
+
                 this.logEvent(AnalyticsEvents.EVENT_DEVICE_REGISTER_FAIL, android.os.Bundle().apply {
-                    putString(AnalyticsEvents.KEY_MESSAGE, it)
+                    putString(AnalyticsEvents.KEY_MESSAGE, it.getMessage(this@DeviceRegisterActivity))
+                    putString(AnalyticsEvents.KEY_FCM_ID, FirebaseInstanceId.getInstance().token)
                 })
             }
         })

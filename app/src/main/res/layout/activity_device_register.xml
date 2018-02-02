@@ -23,7 +23,7 @@
     tools:context="com.kevalpatel2106.standup.authentication.deviceReg.DeviceRegisterActivity"
     tools:layout_editor_absoluteY="25dp">
 
-    <com.kevalpatel2106.common.view.BaseImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/device_reg_iv"
         android:layout_width="@dimen/device_reg_screen_clock_iv_dimen"
         android:layout_height="@dimen/device_reg_screen_clock_iv_dimen"
@@ -34,8 +34,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/red_tone_iv"
-        app:srcCompat="@drawable/avd_nine_to_five" />
+        app:layout_constraintTop_toBottomOf="@+id/red_tone_iv"/>
 
     <com.kevalpatel2106.common.view.BaseImageView
         android:id="@+id/red_tone_iv"
@@ -48,7 +47,7 @@
         app:srcCompat="@drawable/bg_splash" />
 
     <com.kevalpatel2106.common.view.BaseTextView
-        android:id="@+id/textView"
+        android:id="@+id/device_reg_tv"
         style="@style/LargeText.Primary"
         android:layout_width="328dp"
         android:layout_height="wrap_content"
@@ -56,8 +55,8 @@
         android:layout_marginEnd="@dimen/spacing_small"
         android:layout_marginStart="@dimen/spacing_small"
         android:elevation="16dp"
-        android:text="@string/setting_up_your_device"
         app:layout_constraintBottom_toBottomOf="@+id/red_tone_iv"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/setting_up_your_device"/>
 </android.support.constraint.ConstraintLayout>

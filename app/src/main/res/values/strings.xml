@@ -140,6 +140,8 @@
     <string name="title_activity_user_activity_list">User activities</string>
     <string name="error_invalid_verification_link">Invalid verification link.</string>
     <string name="error_user_already_verified">User already verified.</string>
+    <string name="set_up_complete">Setup complete.</string>
+    <string name="set_up_failed">Setup failed.</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>
