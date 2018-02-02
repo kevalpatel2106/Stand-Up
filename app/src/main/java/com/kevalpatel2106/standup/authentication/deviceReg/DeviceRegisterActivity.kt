@@ -80,8 +80,12 @@ class DeviceRegisterActivity : BaseActivity() {
         model = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
         model.reposeToken.observe(this@DeviceRegisterActivity, Observer {
             it?.let {
+                //Recreate the app component to use all the new session tokens
+                (application as BaseApplication).recreateAppComponent()
+
                 device_reg_tv.text = getString(R.string.set_up_complete)
                 device_reg_iv.playAnotherAnimation(LottieJson.CORRECT_TICK_INSIDE_GREEN_CIRCLE)
+
                 Handler().postDelayed({ navigateToNextScreen() }, 2_000L /* 2 seconds delay */)
 
                 //Log the analytics event

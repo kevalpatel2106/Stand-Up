@@ -31,22 +31,39 @@ abstract class BaseApplication : Application() {
 
 
     companion object {
-        private lateinit var appComponent: AppComponent
+        private var appComponent: AppComponent? = null
 
         @JvmStatic
         fun getApplicationComponent(): AppComponent {
-            return appComponent
+            return appComponent!!
         }
     }
 
     override fun onCreate() {
         super.onCreate()
 
+        createAppComponent()
+
         //Inject dagger
+        appComponent!!.inject(this@BaseApplication)
+    }
+
+    private fun createAppComponent() {
         appComponent = DaggerAppComponent.builder()
                 .appModule(AppModule(this@BaseApplication, baseUrl()))
                 .build()
-        appComponent.inject(this@BaseApplication)
+    }
+
+    /**
+     * Clear and recreate [appComponent]. This is particularity useful when the application session
+     * detail changes.
+     *
+     * @see createAppComponent
+     * @see appComponent
+     */
+    fun recreateAppComponent() {
+        appComponent = null
+        createAppComponent()
     }
 
     abstract fun isReleaseBuild(): Boolean

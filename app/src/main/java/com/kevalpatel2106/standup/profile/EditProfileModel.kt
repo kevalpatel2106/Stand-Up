@@ -44,15 +44,6 @@ import javax.inject.Inject
 class EditProfileModel : BaseViewModel {
 
     /**
-     * Repository to provide user profile information.
-     *
-     * @see UserProfileRepo
-     */
-    @Inject lateinit var userProfileRepo: UserProfileRepo
-
-    @Inject lateinit var userSessionManager: UserSessionManager
-
-    /**
      * Private constructor to add the custom [UserProfileRepo] for testing.
      *
      * @param userProfileRepo Add your own [UserProfileRepo].
@@ -78,6 +69,20 @@ class EditProfileModel : BaseViewModel {
 
         init()
     }
+
+    /**
+     * Repository to provide user profile information.
+     *
+     * @see UserProfileRepo
+     */
+    @Inject
+    lateinit var userProfileRepo: UserProfileRepo
+
+    /**
+     * [UserSessionManager] to get the session information.
+     */
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
 
     /**
      * Current user profile information. This information will be loaded while initiating this
