@@ -37,7 +37,9 @@ object AnalyticsEvents {
     const val EVENT_EMAIL_SIGN_UP = "email_sign_up"
 
     const val EVENT_GOOGLE_SIGN_UP = "google_sign_up"
+    const val EVENT_GOOGLE_SIGN_UP_FAILED = "google_sign_up_failed"
     const val EVENT_FACEBOOK_SIGN_UP = "facebook_sign_up"
+    const val EVENT_FACEBOOK_SIGN_UP_FAILED = "facebook_sign_up_failed"
 
     //Device registration process
     const val EVENT_DEVICE_REGISTERED = "device_registered"

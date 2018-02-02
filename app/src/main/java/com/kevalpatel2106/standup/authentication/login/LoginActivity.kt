@@ -34,8 +34,10 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import butterknife.OnClick
 import butterknife.Optional
+import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
+import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.facebookauth.FacebookHelper
 import com.kevalpatel2106.facebookauth.FacebookResponse
 import com.kevalpatel2106.facebookauth.FacebookUser
@@ -306,9 +308,12 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                     login_password_et.getTrimmedText(),
                     login_name_et.getTrimmedText(),
                     login_confirm_password_et.getTrimmedText())
+
+            logEvent(AnalyticsEvents.EVENT_EMAIL_SIGN_UP)
         } else {
             //Perform the sign in  action.
             model.performSignIn(login_email_et.getTrimmedText(), login_password_et.getTrimmedText())
+            logEvent(AnalyticsEvents.EVENT_LOGIN)
         }
     }
 

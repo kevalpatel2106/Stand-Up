@@ -45,17 +45,27 @@ data class SignUpRequest(
 
         @SerializedName("photo")
         @Expose
-        var photo: String? = null
+        var photo: String? = null,
+
+        @SerializedName("fb_id")
+        @Expose
+        var facebookId: String? = null,
+
+        @SerializedName("google_id")
+        @Expose
+        var googleId: String? = null
 ) {
 
     constructor(fbUser: FacebookUser) : this(email = fbUser.email!!,
             displayName = fbUser.name!!,
             password = null,
-            photo = fbUser.profilePic)
+            photo = fbUser.profilePic,
+            facebookId = fbUser.facebookID)
 
 
     constructor(googleUser: GoogleAuthUser) : this(email = googleUser.email,
             displayName = googleUser.name,
             password = null,
-            photo = googleUser.photoUrl?.toString())
+            photo = googleUser.photoUrl?.toString(),
+            googleId = googleUser.id)
 }

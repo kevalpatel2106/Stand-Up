@@ -33,8 +33,10 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import butterknife.OnClick
 import butterknife.Optional
+import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
+import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.facebookauth.FacebookHelper
 import com.kevalpatel2106.facebookauth.FacebookResponse
 import com.kevalpatel2106.facebookauth.FacebookUser
@@ -153,6 +155,8 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
                 == PackageManager.PERMISSION_GRANTED) {
             mGoogleSignInHelper.performSignIn(this)
+
+            logEvent(AnalyticsEvents.EVENT_GOOGLE_SIGN_UP)
         } else {
             //Permission is not available
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.GET_ACCOUNTS),
@@ -170,6 +174,8 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
                 == PackageManager.PERMISSION_GRANTED) {
             mFacebookSignInHelper.performSignIn(this)
+
+            logEvent(AnalyticsEvents.EVENT_FACEBOOK_SIGN_UP)
         } else {
             //Permission is not available
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.GET_ACCOUNTS),
@@ -219,6 +225,7 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
     override fun onGoogleAuthSignIn(user: GoogleAuthUser) = model.authenticateSocialUser(user)
 
     override fun onGoogleAuthSignInFailed() {
+        logEvent(AnalyticsEvents.EVENT_GOOGLE_SIGN_UP_FAILED)
         showSnack(getString(R.string.error_google_signin_fail),
                 getString(R.string.error_retry_try_again), View.OnClickListener { googleSignIn() })
     }
@@ -230,6 +237,7 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      * This callback will be available when facebook sign in call fails.
      */
     override fun onFbSignInFail() {
+        logEvent(AnalyticsEvents.EVENT_FACEBOOK_SIGN_UP_FAILED)
         showSnack(getString(R.string.error_facebook_signin_fail),
                 getString(R.string.error_retry_try_again), View.OnClickListener { facebookSignIn() })
     }

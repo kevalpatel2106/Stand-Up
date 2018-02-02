@@ -94,7 +94,7 @@ class EmailLinkVerificationActivity : BaseActivity() {
         verify_email_link_progressbar.visibility = View.INVISIBLE
 
         //Change the verify logo
-        verify_email_link_logo.playAnotherAnimation(LottieJson.CORRECT_TICK_INSIDE_GREEN_CIRCLE)
+        verify_email_link_logo.playAnotherAnimation(LottieJson.VERIFIED_BADGE)
 
 
         //Go to the email link activity
@@ -119,7 +119,6 @@ class EmailLinkVerificationActivity : BaseActivity() {
     override fun onBackPressed() {
         if (allowBackPress) super.onBackPressed()
     }
-
 
     companion object {
 

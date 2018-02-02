@@ -75,14 +75,18 @@ class DeviceRegViewModel : BaseViewModel {
         //Validate device id.
         if (!Validator.isValidDeviceId(deviceId)) {
             sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
-            errorMessage.value = ErrorMessage(R.string.device_reg_error_invalid_device_id)
+            val errorMsg = ErrorMessage(R.string.device_reg_error_invalid_device_id)
+            errorMsg.errorImage = LottieJson.WARNING
+            errorMessage.value = errorMsg
             return
         }
 
         //Validate the FCM Id.
         if (!Validator.isValidFcmId(fcmId)) {
             sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
-            errorMessage.value = ErrorMessage(R.string.device_reg_error_invalid_fcm_id)
+            val errorMsg = ErrorMessage(R.string.device_reg_error_invalid_fcm_id)
+            errorMsg.errorImage = LottieJson.WARNING
+            errorMessage.value = errorMsg
             return
         }
 

@@ -31,6 +31,7 @@ import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.standup.R
+import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.ViewUtils
 import kotlinx.android.synthetic.main.activity_forgot_password.*
@@ -42,9 +43,18 @@ class ForgotPasswordActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        model = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
         setContentView(R.layout.activity_forgot_password)
 
+        setToolbar(R.id.include, getString(R.string.title_activity_forgot_password), true)
+
+        setModel()
+
+        //Set the email
+        forgot_password_email_et.setText(intent.getStringExtra(ARG_EMAIL))
+    }
+
+    private fun setModel() {
+        model = ViewModelProviders.of(this).get(ForgotPasswordViewModel::class.java)
         model.isRequesting.observe(this@ForgotPasswordActivity, Observer<Boolean> {
             it?.let { forgot_password_submit_btn.displayLoader(it) }
         })
@@ -64,14 +74,14 @@ class ForgotPasswordActivity : BaseActivity() {
             it?.let {
                 if (it) {
                     showSnack(getString(R.string.forgot_password_successful),
-                            getString(R.string.btn_title_open_mail), View.OnClickListener { SUUtils.openEmailDialog(this@ForgotPasswordActivity) })
+                            getString(R.string.btn_title_open_mail),
+                            View.OnClickListener { SUUtils.openEmailDialog(this@ForgotPasswordActivity) })
 
                     //Finish after snack bar complete
-                    Handler().postDelayed({ finish() }, 3500)
+                    Handler().postDelayed({ finish() }, AppConfig.SNACKBAR_TIME)
                 }
             }
         })
-        setToolbar(R.id.include, getString(R.string.title_activity_forgot_password), true)
     }
 
     @OnClick(R.id.forgot_password_submit_btn)
@@ -90,12 +100,19 @@ class ForgotPasswordActivity : BaseActivity() {
     companion object {
 
         /**
-         * Launch the [ForgotPasswordActivity].
+         * Email address to pre-fill in the forgot password field.
+         */
+        const val ARG_EMAIL: String = "arg_email"
+
+        /**
+         * Launch the [ForgotPasswordActivity]. Pass the [email] to set pre-filled email address.
          *
          * @param context Instance of the caller.
          */
-        fun launch(context: Context) {
-            context.startActivity(Intent(context, ForgotPasswordActivity::class.java))
+        fun launch(context: Context, email: String? = null) {
+            context.startActivity(Intent(context, ForgotPasswordActivity::class.java).apply {
+                putExtra(ARG_EMAIL, email)
+            })
         }
     }
 }

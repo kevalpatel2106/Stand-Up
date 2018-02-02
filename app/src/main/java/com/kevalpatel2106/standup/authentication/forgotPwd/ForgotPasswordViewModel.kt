@@ -41,7 +41,8 @@ import javax.inject.Inject
 @ViewModel(ForgotPasswordActivity::class)
 class ForgotPasswordViewModel : BaseViewModel {
 
-    @Inject lateinit var userAuthRepo: UserAuthRepository
+    @Inject
+    lateinit var userAuthRepo: UserAuthRepository
 
     /**
      * Zero parameter constructor.

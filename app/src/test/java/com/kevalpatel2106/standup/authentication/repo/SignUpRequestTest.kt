@@ -48,6 +48,8 @@ class SignUpRequestTest {
         assertEquals(signUpRequest.password, "123456789")
         assertEquals(signUpRequest.displayName, "Test User")
         assertEquals(signUpRequest.photo, "http://google.com")
+        assertNull(signUpRequest.facebookId)
+        assertNull(signUpRequest.googleId)
     }
 
     @Test
@@ -63,6 +65,7 @@ class SignUpRequestTest {
         facebookUser.email = "test@example.com"
 
         var signUpRequest = SignUpRequest(fbUser = facebookUser)
+        assertEquals(signUpRequest.facebookId, "123456789")
         assertEquals(signUpRequest.email, "test@example.com")
         assertNull(signUpRequest.password)
         assertEquals(signUpRequest.displayName, "Test User")
@@ -85,6 +88,7 @@ class SignUpRequestTest {
         googleUser.email = "test@example.com"
 
         var signUpRequest = SignUpRequest(googleUser = googleUser)
+        assertEquals(signUpRequest.googleId, "123456789")
         assertEquals(signUpRequest.email, "test@example.com")
         assertNull(signUpRequest.password)
         assertEquals(signUpRequest.displayName, "Test User")
