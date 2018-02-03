@@ -71,7 +71,7 @@ class UserSessionManager(private val sharedPrefProvider: SharedPrefsProvider) {
         get() = userId > 0 && token != null
 
     val isMale: Boolean
-        get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.USER_IS_MALE)
+        get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.USER_IS_MALE, true)
 
     val height: Float
         get() = if (sharedPrefProvider.getStringFromPreferences(SharedPreferenceKeys.USER_HEIGHT) != null) {
