@@ -56,17 +56,27 @@ class ReportIssueActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_report_issue)
+
         setToolbar(R.id.toolbar, "", true)
+
+        //Se the view model
         setModel()
 
         if (savedInstanceState == null) {
             //Check for the update automatically
             model.checkForUpdate()
         }
+    }
+
+    @OnClick(R.id.btn_prefer_emailing_us)
+    fun shootAnEmail() {
+        SUUtils.sendEmail(this@ReportIssueActivity,
+                report_issue_title_et.getTrimmedText(),
+                report_issue_description_et.getTrimmedText(),
+                getString(R.string.support_email))
     }
 
     private fun setModel() {

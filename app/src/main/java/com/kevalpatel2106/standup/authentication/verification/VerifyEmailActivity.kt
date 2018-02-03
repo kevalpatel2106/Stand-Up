@@ -132,7 +132,7 @@ class VerifyEmailActivity : BaseActivity() {
     @OnClick(R.id.verify_btn_open_mail_btn)
     fun onOpenEmail() {
         logEvent(AnalyticsEvents.EVENT_OPEN_MAIL_BUTTON_FEATURE_USED)
-        SUUtils.openEmailDialog(this@VerifyEmailActivity)
+        SUUtils.openEmailClientDialog(this@VerifyEmailActivity)
     }
 
     companion object {

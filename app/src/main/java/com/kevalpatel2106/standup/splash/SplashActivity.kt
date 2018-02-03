@@ -48,13 +48,21 @@ class SplashActivity : BaseActivity() {
     companion object {
 
         /**
-         * Launch the application in the new task.
+         * Get the launch intent the application in the new task.
          */
         fun getLaunchIntent(context: Context): Intent {
             val launchIntent = Intent(context, SplashActivity::class.java)
             launchIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent
                     .FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
             return launchIntent
+        }
+
+
+        /**
+         * Launch the application in the new task.
+         */
+        fun launch(context: Context) {
+            context.startActivity(getLaunchIntent(context))
         }
     }
 

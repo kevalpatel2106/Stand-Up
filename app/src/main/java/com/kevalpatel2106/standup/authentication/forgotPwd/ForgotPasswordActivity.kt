@@ -75,7 +75,7 @@ class ForgotPasswordActivity : BaseActivity() {
                 if (it) {
                     showSnack(getString(R.string.forgot_password_successful),
                             getString(R.string.btn_title_open_mail),
-                            View.OnClickListener { SUUtils.openEmailDialog(this@ForgotPasswordActivity) })
+                            View.OnClickListener { SUUtils.openEmailClientDialog(this@ForgotPasswordActivity) })
 
                     //Finish after snack bar complete
                     Handler().postDelayed({ finish() }, AppConfig.SNACKBAR_TIME)

@@ -254,7 +254,7 @@ class AboutActivity : MaterialAboutActivity() {
                 .icon(R.drawable.ic_email_white)
                 .setIconGravity(Gravity.START)
                 .text("Send an Email")
-                .subText("kevalpatel2106@gmail.com")
+                .subText(getString(R.string.support_email))
                 .setOnClickAction({ model.handleAuthorEmail(this@AboutActivity) })
                 .build()
 

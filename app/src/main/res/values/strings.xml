@@ -143,6 +143,8 @@
     <string name="set_up_complete">Setup complete.</string>
     <string name="set_up_failed">Setup failed.</string>
     <string name="copied_to_clip_board">Copied to clipboard.</string>
+    <string name="prefer_old_school_email"><u>Prefer old school email?</u></string>
+    <string name="open_email_bottom_dialog_title">Select application</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

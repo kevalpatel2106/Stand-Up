@@ -172,6 +172,6 @@ class AboutViewModel : BaseViewModel {
     }
 
     fun handleAuthorEmail(activity: Activity) {
-        SUUtils.openEmailDialog(activity)
+        SUUtils.openEmailClientDialog(activity)
     }
 }

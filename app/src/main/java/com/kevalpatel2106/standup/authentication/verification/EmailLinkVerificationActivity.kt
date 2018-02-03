@@ -28,13 +28,15 @@ import android.os.Handler
 import android.support.annotation.VisibleForTesting
 import android.view.View
 import android.widget.Toast
+import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.standup.R
-import com.kevalpatel2106.standup.authentication.intro.IntroActivity
 import com.kevalpatel2106.standup.misc.LottieJson
 import com.kevalpatel2106.standup.misc.playAnotherAnimation
 import com.kevalpatel2106.standup.misc.playRepeatAnimation
+import com.kevalpatel2106.standup.splash.SplashActivity
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.annotations.UIController
 import kotlinx.android.synthetic.main.activity_email_link_verification.*
 
@@ -99,7 +101,7 @@ class EmailLinkVerificationActivity : BaseActivity() {
 
         //Go to the email link activity
         Handler().postDelayed({
-            IntroActivity.launch(this@EmailLinkVerificationActivity, true)
+            SplashActivity.launch(this@EmailLinkVerificationActivity)
         }, 2000)
     }
 
@@ -140,11 +142,11 @@ class EmailLinkVerificationActivity : BaseActivity() {
                 return false
             }
 
-//            //Check if the user is verified
-//            if (UserSessionManager(SharedPrefsProvider(context)).isUserVerified) {
-//                Toast.makeText(context, R.string.error_user_already_verified, Toast.LENGTH_LONG).show()
-//                return false
-//            }
+            //Check if the user is verified
+            if (UserSessionManager(SharedPrefsProvider(context)).isUserVerified) {
+                Toast.makeText(context, R.string.error_user_already_verified, Toast.LENGTH_LONG).show()
+                return false
+            }
 
             val launchIntent = Intent(context, EmailLinkVerificationActivity::class.java)
             launchIntent.putExtra(ARG_URL, url.toString())

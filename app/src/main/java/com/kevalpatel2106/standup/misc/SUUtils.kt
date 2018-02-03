@@ -18,7 +18,9 @@
 package com.kevalpatel2106.standup.misc
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
@@ -30,6 +32,7 @@ import com.kevalpatel2106.standup.constants.AppConfig
 import com.kevalpatel2106.standup.timelineview.TimeLineItem
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
+
 
 /**
  * Created by Keval on 17/12/17.
@@ -47,24 +50,54 @@ object SUUtils {
                 .launchUrl(context, Uri.parse(url))
     }
 
-    fun openEmailDialog(context: Activity) {
-        val bottomSheet = BottomSheet.Builder(context).title("Open mail")
+    fun openEmailClientDialog(activity: Activity) {
+        val bottomSheet = BottomSheet.Builder(activity).title(activity.getString(R.string.open_email_bottom_dialog_title))
 
         //Get the list of email clients.
-        val emailAppsList = Utils.getEmailApplications(context.packageManager)
+        val emailAppsList = Utils.getEmailApplications(activity.packageManager)
 
         //Add each items to the bottom sheet
         for (i in 0 until emailAppsList.size) {
             val s = emailAppsList[i]
-            Utils.getApplicationName(s.activityInfo.packageName, context.packageManager)?.let {
-                bottomSheet.sheet(i, s.loadIcon(context.packageManager), it)
+            Utils.getApplicationName(s.activityInfo.packageName, activity.packageManager)?.let {
+                bottomSheet.sheet(i, s.loadIcon(activity.packageManager), it)
             }
         }
 
         //On clicking any item, open the email application
         bottomSheet.listener { _, pos ->
-            context.startActivity(context.packageManager
+            activity.startActivity(activity.packageManager
                     .getLaunchIntentForPackage(emailAppsList[pos].activityInfo.packageName))
+        }
+        bottomSheet.build()
+        bottomSheet.show()
+    }
+
+    fun sendEmail(activity: Activity, title: String? = null, mesaage: String? = null, to: String) {
+        val bottomSheet = BottomSheet.Builder(activity).title(activity.getString(R.string.open_email_bottom_dialog_title))
+
+        //Get the list of email clients.
+        val emailAppsList = Utils.getEmailApplications(activity.packageManager)
+
+        //Add each items to the bottom sheet
+        for (i in 0 until emailAppsList.size) {
+            val s = emailAppsList[i]
+            Utils.getApplicationName(s.activityInfo.packageName, activity.packageManager)?.let {
+                bottomSheet.sheet(i, s.loadIcon(activity.packageManager), it)
+            }
+        }
+
+        //On clicking any item, open the email application
+        bottomSheet.listener { _, pos ->
+            val intent = Intent().apply {
+                component = ComponentName(emailAppsList[pos].activityInfo.packageName, emailAppsList[pos].activityInfo.name)
+                action = Intent.ACTION_SEND
+                type = "message/rfc822"
+                putExtra(Intent.EXTRA_EMAIL, to)
+                title?.let { putExtra(Intent.EXTRA_SUBJECT, title) }
+                mesaage?.let { putExtra(Intent.EXTRA_TEXT, mesaage) }
+            }
+            activity.startActivity(intent)
         }
         bottomSheet.build()
         bottomSheet.show()

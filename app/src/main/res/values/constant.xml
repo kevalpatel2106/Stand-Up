@@ -25,6 +25,8 @@
     a 48,48 0 1,0 96,0
     a 48,48 0 1,0 -96,0
   </string>
+    <string name="support_email">kevalpatel2106@gmail.com</string>
+
     <string name="chrome_stable_package_name">com.android.chrome</string>
 
     <string name="play_store_app_url">https://r3pqj.app.goo.gl/jdF1</string>
