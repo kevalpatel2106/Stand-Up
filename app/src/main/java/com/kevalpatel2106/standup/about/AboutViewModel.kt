@@ -54,7 +54,8 @@ class AboutViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */
-    @Inject lateinit var authRepository: AboutRepository
+    @Inject
+    lateinit var authRepository: AboutRepository
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
@@ -147,31 +148,27 @@ class AboutViewModel : BaseViewModel {
                 .start(context)
     }
 
-    fun handleOpenGitHubProject(context: Context) {
-        SUUtils.openLink(context, context.getString(R.string.github_project_link))
-    }
-
     fun handleJoinSlack(context: Context) {
         SUUtils.openLink(context, context.getString(R.string.join_slack_url))
+    }
+
+    fun handleSupportEmail(activity: Activity) {
+        SUUtils.sendEmail(activity = activity, to = activity.getString(R.string.support_email))
     }
 
     fun handleFollowProjectTwitter(context: Context) {
         SUUtils.openLink(context, context.getString(R.string.join_stand_up_twitter))
     }
 
-    fun handleForkOnGitHub(context: Context) {
-        SUUtils.openLink(context, context.getString(R.string.fork_repo_url))
+    fun handleFollowAuthorTwitter(context: Context) {
+        SUUtils.openLink(context, context.getString(R.string.author_twitter_profile_link))
     }
 
     fun handleAuthorProfile(context: Context) {
-        SUUtils.openLink(context, context.getString(R.string.author_profile_link))
+        SUUtils.openLink(context, context.getString(R.string.author_twitter_profile_link))
     }
 
     fun handelFollowAuthorOnGitHub(context: Context) {
         SUUtils.openLink(context, context.getString(R.string.author_github))
-    }
-
-    fun handleAuthorEmail(activity: Activity) {
-        SUUtils.openEmailClientDialog(activity)
     }
 }

@@ -128,7 +128,7 @@ class AboutActivity : MaterialAboutActivity() {
         val rateUsItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_star_orange)
                 .setIconGravity(Gravity.START)
-                .text("Rate this app")
+                .text(getString(R.string.about_rate_this_app))
                 .setOnClickAction({
                     logEvent(AnalyticsEvents.EVENT_RATE_APP_ON_PLAY_STORE)
                     model.handleRateUs(this@AboutActivity)
@@ -139,8 +139,8 @@ class AboutActivity : MaterialAboutActivity() {
         val reportIssueItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_bug_report_brown)
                 .setIconGravity(Gravity.START)
-                .text("Report an issue")
-                .subText("Are you facing any issue? Report it here.")
+                .text(getString(R.string.about_report_issue_title))
+                .subText(getString(R.string.about_report_issue_subtitle))
                 .setOnClickAction({ model.handleReportIssue(this@AboutActivity) })
                 .build()
 
@@ -148,7 +148,7 @@ class AboutActivity : MaterialAboutActivity() {
         val donateItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_heart_fill_red)
                 .setIconGravity(Gravity.START)
-                .text("Support Development")
+                .text(getString(R.string.about_support_developement_title))
                 .setOnClickAction({ model.handleSupportDevelopment(this@AboutActivity) })
                 .build()
 
@@ -156,12 +156,12 @@ class AboutActivity : MaterialAboutActivity() {
         val shareItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_share_blue)
                 .setIconGravity(Gravity.START)
-                .text("Share with friends")
+                .text(getString(R.string.about_share_with_friends_title))
                 .setOnClickAction({ model.handleShareWithFriends(this@AboutActivity) })
                 .build()
 
         return MaterialAboutCard.Builder()
-                .title("Support Us")
+                .title(getString(R.string.about_suppet_us_card_title))
                 .addItem(rateUsItem)
                 .addItem(reportIssueItem)
                 .addItem(donateItem)
@@ -175,7 +175,7 @@ class AboutActivity : MaterialAboutActivity() {
         versionItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_version_white)
                 .setIconGravity(Gravity.START)
-                .text("Check version")
+                .text(getString(R.string.about_check_version_title))
                 .subText(BuildConfig.VERSION_NAME)
                 .setOnClickAction({
                     logEvent(AnalyticsEvents.EVENT_CHECK_UPDATE_MANUALLY)
@@ -187,20 +187,9 @@ class AboutActivity : MaterialAboutActivity() {
         val openSourceLibsItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_logo_opensource)
                 .setIconGravity(Gravity.START)
-                .text("Open source libraries")
+                .text(getString(R.string.about_open_source_libs_title))
                 .setOnClickAction({
                     model.handleOpenSourceLibs(this@AboutActivity)
-                })
-                .build()
-
-        //open source libs
-        val visitOnGithubItem = MaterialAboutActionItem.Builder()
-                .icon(R.drawable.ic_github_white)
-                .setIconGravity(Gravity.START)
-                .text("View on GitHub")
-                .setOnClickAction({
-                    logEvent(AnalyticsEvents.EVENT_OPEN_GITHUB_PAGE)
-                    model.handleOpenGitHubProject(this@AboutActivity)
                 })
                 .build()
 
@@ -218,7 +207,6 @@ class AboutActivity : MaterialAboutActivity() {
         return MaterialAboutCard.Builder()
                 .title("About")
                 .addItem(versionItem)
-                .addItem(visitOnGithubItem)
                 .addItem(openSourceLibsItem)
 //                .addItem(changelogItem)
                 .build()
@@ -230,8 +218,8 @@ class AboutActivity : MaterialAboutActivity() {
         val authName = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_person_white)
                 .setIconGravity(Gravity.START)
-                .text("Keval Patel")
-                .subText("kevalpatel2106")
+                .text(getString(R.string.about_author_name_title))
+                .subText(getString(R.string.about_author_name_subtitle))
                 .setOnClickAction({
                     model.handleAuthorProfile(this@AboutActivity)
                 })
@@ -241,21 +229,21 @@ class AboutActivity : MaterialAboutActivity() {
         val githubItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_github_white)
                 .setIconGravity(Gravity.START)
-                .text("Follow on GitHub")
-                .subText("github.com/kevalpatel2106")
+                .text(getString(R.string.about_author_github_title))
+                .subText(getString(R.string.about_author_github_subtitle))
                 .setOnClickAction({
                     model.handelFollowAuthorOnGitHub(this@AboutActivity)
                 })
                 .build()
 
 
-        //Email
-        val emailItem = MaterialAboutActionItem.Builder()
-                .icon(R.drawable.ic_email_white)
+        //Twitter
+        val twitterItem = MaterialAboutActionItem.Builder()
+                .icon(R.drawable.ic_twitter)
                 .setIconGravity(Gravity.START)
-                .text("Send an Email")
-                .subText(getString(R.string.support_email))
-                .setOnClickAction({ model.handleAuthorEmail(this@AboutActivity) })
+                .text(getString(R.string.about_author_twitter_title))
+                .subText(getString(R.string.about_author_twitter_subtitle))
+                .setOnClickAction({ model.handleFollowAuthorTwitter(this@AboutActivity) })
                 .build()
 
 
@@ -263,16 +251,27 @@ class AboutActivity : MaterialAboutActivity() {
                 .title("Author")
                 .addItem(authName)
                 .addItem(githubItem)
-                .addItem(emailItem)
+                .addItem(twitterItem)
                 .build()
     }
 
     private fun getJoinUsCard(): MaterialAboutCard {
+
+        //Email
+        val emailItem = MaterialAboutActionItem.Builder()
+                .icon(R.drawable.ic_email_white)
+                .setIconGravity(Gravity.START)
+                .text(getString(R.string.about_app_send_email_title))
+                .subText(getString(R.string.support_email))
+                .setOnClickAction({ model.handleSupportEmail(this@AboutActivity) })
+                .build()
+
+
         //Slack
         val slackItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_slack)
                 .setIconGravity(Gravity.START)
-                .text("Join Slack")
+                .text(getString(R.string.about_author_join_slack_title))
                 .subText(getString(R.string.slack_channel_url))
                 .setOnClickAction({
                     logEvent(AnalyticsEvents.EVENT_JOIN_SLACK_CHANNEL)
@@ -284,27 +283,16 @@ class AboutActivity : MaterialAboutActivity() {
         val twitterItem = MaterialAboutActionItem.Builder()
                 .icon(R.drawable.ic_twitter)
                 .setIconGravity(Gravity.START)
-                .text("Follow on Twitter")
-                .subText("@kevalpatel2106")
+                .text(getString(R.string.about_app_twitter_title))
+                .subText(getString(R.string.about_app_twitter_subtitle))
                 .setOnClickAction({ model.handleFollowProjectTwitter(this@AboutActivity) })
                 .build()
 
-        //Fork on GitHub
-        val githubItem = MaterialAboutActionItem.Builder()
-                .icon(R.drawable.ic_fork)
-                .setIconGravity(Gravity.START)
-                .text("Fork on GitHub")
-                .setOnClickAction({
-                    logEvent(AnalyticsEvents.EVENT_APP_FORK_ON_GITHUB)
-                    model.handleForkOnGitHub(this@AboutActivity)
-                })
-                .build()
-
         return MaterialAboutCard.Builder()
-                .title("Connect with us")
-                .addItem(slackItem)
+                .title(getString(R.string.about_app_connect_with_us_title))
+                .addItem(emailItem)
                 .addItem(twitterItem)
-                .addItem(githubItem)
+                .addItem(slackItem)
                 .build()
     }
 

@@ -25,23 +25,34 @@
     a 48,48 0 1,0 96,0
     a 48,48 0 1,0 -96,0
   </string>
-    <string name="support_email">kevalpatel2106@gmail.com</string>
 
     <string name="chrome_stable_package_name">com.android.chrome</string>
 
-    <string name="play_store_app_url">https://r3pqj.app.goo.gl/jdF1</string>
-
-    <string name="rate_app_url">https://r3pqj.app.goo.gl/jdF1</string>
-    <string name="author_profile_link">https://r3pqj.app.goo.gl/GZGa</string>
-    <string name="author_github">https://r3pqj.app.goo.gl/TYCN</string>
-    <string name="join_slack_url">https://r3pqj.app.goo.gl/EawQ</string>
-    <string name="github_project_link">https://r3pqj.app.goo.gl/Dw5YQ</string>
-    <string name="join_stand_up_twitter">https://r3pqj.app.goo.gl/GZGa</string>
-    <string name="fork_repo_url">https://r3pqj.app.goo.gl/gs5e</string>
+    <!--Application support parameters-->
+    <string name="support_email">standupsupport@gmail.com</string>
     <string name="invitation_deep_link">https://r3pqj.app.goo.gl/KPoa</string>
+
+    <!--Author social detail-->
+    <string name="about_author_github_subtitle">github.com/kevalpatel2106</string>
+    <string name="about_author_twitter_subtitle">\@kevalpatel2106</string>
+    <string name="about_author_name_subtitle">kevalpatel2106</string>
+    <string name="author_twitter_profile_link">https://r3pqj.app.goo.gl/GZGa</string>
+    <string name="author_github">https://r3pqj.app.goo.gl/TYCN</string>
+
+
+    <!--Application social details-->
+    <string name="about_app_twitter_subtitle">\@standupapp</string>
     <string name="slack_channel_url">https://stand-up-opensource.slack.com</string>
+    <string name="play_store_app_url">https://r3pqj.app.goo.gl/jdF1</string>
+    <string name="rate_app_url">https://r3pqj.app.goo.gl/jdF1</string>
+    <string name="join_slack_url">https://r3pqj.app.goo.gl/EawQ</string>
+    <string name="join_stand_up_twitter">https://r3pqj.app.goo.gl/7pFR</string>
+
+    <!--Paypal me links-->
     <string name="donate_2_dollar_link">https://r3pqj.app.goo.gl/d9HP</string>
     <string name="donate_5_dollar_link">https://r3pqj.app.goo.gl/Y5G9</string>
     <string name="donate_10_dollar_link">https://r3pqj.app.goo.gl/wTxk</string>
     <string name="donate_20_dollar_link">https://r3pqj.app.goo.gl/9tGa</string>
+
+
 </resources>
