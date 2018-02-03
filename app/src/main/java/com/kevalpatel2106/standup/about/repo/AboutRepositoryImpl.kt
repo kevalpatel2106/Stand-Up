@@ -70,7 +70,7 @@ class AboutRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Ret
      * @see ReportIssueResponse
      */
     override fun reportIssue(title: String, message: String, deviceId: String): Flowable<ReportIssueResponse> {
-        val reportIssueRequest = ReportIssueRequest(userSessionManager.userId, title, message, deviceId)
+        val reportIssueRequest = ReportIssueRequest(title, message, deviceId)
         val call = retrofit.create(AboutApiService::class.java).reportIssue(reportIssueRequest)
 
         return RepoBuilder<ReportIssueResponse>()

@@ -142,6 +142,7 @@
     <string name="error_user_already_verified">User already verified.</string>
     <string name="set_up_complete">Setup complete.</string>
     <string name="set_up_failed">Setup failed.</string>
+    <string name="copied_to_clip_board">Copied to clipboard.</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

@@ -19,6 +19,8 @@ package com.kevalpatel2106.standup.about.report
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -26,11 +28,13 @@ import android.support.design.widget.Snackbar
 import butterknife.OnClick
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
+import com.kevalpatel2106.common.base.uiController.showToast
 import com.kevalpatel2106.standup.R
 import com.kevalpatel2106.standup.misc.SUUtils
 import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.alert
 import kotlinx.android.synthetic.main.activity_report_issue.*
+
 
 class ReportIssueActivity : BaseActivity() {
 
@@ -93,6 +97,17 @@ class ReportIssueActivity : BaseActivity() {
                         func = {
                             positiveButton(android.R.string.ok, {
                                 //Do nothing
+
+                                finish()
+                            })
+                            negativeButton(android.R.string.copy, {
+                                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                val clip = ClipData.newPlainText("Issue id:", it.toString())
+                                clipboard.primaryClip = clip
+
+                                showToast(R.string.copied_to_clip_board)
+
+                                finish()
                             })
                         })
             }

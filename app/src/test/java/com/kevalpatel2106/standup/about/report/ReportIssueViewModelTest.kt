@@ -113,9 +113,7 @@ class ReportIssueViewModelTest {
 
         Assert.assertFalse(model.blockUi.value!!)
         Assert.assertNull(model.errorMessage.value)
-        Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionName, "1.0")
-        Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionCode, 1)
-        Assert.assertFalse(model.versionUpdateResult.value!!.isUpdate)
+        Assert.assertNull(model.versionUpdateResult.value)
     }
 
     @Test

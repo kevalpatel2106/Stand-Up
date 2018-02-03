@@ -129,9 +129,10 @@ class DeviceRegViewModel : BaseViewModel {
                 }, {
                     sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
 
-                    val errorMessage = ErrorMessage(it.message)
-                    errorMessage.setErrorBtn(R.string.error_retry_try_again, { sendDeviceDataToServer(regId, deviceId) })
-                    errorMessage.errorImage = LottieJson.WARNING
+                    val errorMsg = ErrorMessage(it.message)
+                    errorMsg.setErrorBtn(R.string.error_retry_try_again, { sendDeviceDataToServer(regId, deviceId) })
+                    errorMsg.errorImage = LottieJson.WARNING
+                    errorMessage.value = errorMsg
                 }))
     }
 

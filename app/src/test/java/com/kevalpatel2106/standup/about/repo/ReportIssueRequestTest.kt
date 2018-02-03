@@ -17,18 +17,11 @@
 
 package com.kevalpatel2106.standup.about.repo
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.kevalpatel2106.utils.Utils
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.ArgumentMatchers
-import org.mockito.ArgumentMatchers.anyLong
-import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mockito
 
 /**
  * Created by Kevalpatel2106 on 01-Jan-18.
@@ -38,24 +31,13 @@ import org.mockito.Mockito
 @RunWith(JUnit4::class)
 class ReportIssueRequestTest {
 
-    private val TEST_USER_ID = 12345678L
     private val TEST_TITLE = "test_title"
     private val TEST_DESCRIPTION = "test_description"
     private val TEST_DEVICE_ID = "test_device_id"
 
-    @Before
-    fun setUp() {
-        val context = Mockito.mock(Context::class.java)
-        val mockSharedPref = Mockito.mock(SharedPreferences::class.java)
-
-        Mockito.`when`(mockSharedPref.getLong(anyString(), anyLong())).thenReturn(TEST_USER_ID)
-        Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt()))
-                .thenReturn(mockSharedPref)
-    }
-
     @Test
     fun checkConstructor() {
-        val reportIssue = ReportIssueRequest(TEST_USER_ID, TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
+        val reportIssue = ReportIssueRequest(TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
 
         Assert.assertEquals(reportIssue.message, TEST_DESCRIPTION)
         Assert.assertEquals(reportIssue.title, TEST_TITLE)
@@ -64,13 +46,7 @@ class ReportIssueRequestTest {
 
     @Test
     fun checkDeviceId() {
-        val reportIssue = ReportIssueRequest(TEST_USER_ID, TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
+        val reportIssue = ReportIssueRequest(TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
         Assert.assertEquals(reportIssue.deviceName, Utils.getDeviceName())
-    }
-
-    @Test
-    fun checkUserId() {
-        val reportIssue = ReportIssueRequest(TEST_USER_ID, TEST_TITLE, TEST_DESCRIPTION, TEST_DEVICE_ID)
-        Assert.assertEquals(reportIssue.userId, TEST_USER_ID)
     }
 }

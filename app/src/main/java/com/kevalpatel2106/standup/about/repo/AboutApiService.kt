@@ -19,6 +19,7 @@ package com.kevalpatel2106.standup.about.repo
 
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 /**
@@ -43,7 +44,7 @@ interface AboutApiService {
      *
      * @see ReportIssueRequest
      */
-    //TODO Create api from the server side
+    @Headers("Add-Auth: true")
     @POST("/reportIssue")
     fun reportIssue(@Body issue: ReportIssueRequest): Call<ReportIssueResponse>
 }

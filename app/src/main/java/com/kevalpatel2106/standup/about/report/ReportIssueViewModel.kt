@@ -41,7 +41,8 @@ class ReportIssueViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */
-    @Inject lateinit var aboutRepository: AboutRepository
+    @Inject
+    lateinit var aboutRepository: AboutRepository
 
     /**
      * Private constructor to add the custom [UserAuthRepository] for testing.
@@ -79,14 +80,16 @@ class ReportIssueViewModel : BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    it?.let { versionUpdateResult.value = it }
+                    it?.let {
+                        if (it.isUpdate) versionUpdateResult.value = it
+                    }
                 }, {
                     versionUpdateResult.value = null
                     errorMessage.value = ErrorMessage(R.string.check_update_error_message)
                 }))
     }
 
-    fun reportIssue(title: String, message: String, deviceId : String) {
+    fun reportIssue(title: String, message: String, deviceId: String) {
         blockUi.value = true
 
         //Check title
@@ -105,7 +108,7 @@ class ReportIssueViewModel : BaseViewModel {
 
         //Check device id
         if (!Validator.isValidDeviceId(deviceId)) {
-           throw IllegalArgumentException("Invalid device id.")
+            throw IllegalArgumentException("Invalid device id.")
         }
 
         //Report the issue
