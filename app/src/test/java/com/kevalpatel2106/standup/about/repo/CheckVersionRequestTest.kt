@@ -34,21 +34,23 @@ class CheckVersionRequestTest {
     @Test
     @Throws(IOException::class)
     fun checkInit() {
-        val request = CheckVersionRequest(1)
-
+        val request = CheckVersionRequest()
         Assert.assertEquals(request.platform, CheckVersionRequest.PLATFORM_NAME_ANDROID)
-        Assert.assertEquals(request.versionCode, 1)
     }
 
     @Test
     @Throws(IOException::class)
-    fun checkInitWithInvalidVersionCode() {
-        try {
-            CheckVersionRequest(0)
-            Assert.fail()
-        } catch (e: IllegalArgumentException) {
-            //Test Passed
-            //NO OP
-        }
+    fun checkEquals() {
+        val request = CheckVersionRequest()
+        val request1 = CheckVersionRequest()
+        Assert.assertEquals(request, request1)
+        Assert.assertEquals(request, CheckVersionRequest.PLATFORM_NAME_ANDROID)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkHashCode() {
+        val request = CheckVersionRequest()
+        Assert.assertEquals(request.hashCode(), CheckVersionRequest.PLATFORM_NAME_ANDROID.hashCode())
     }
 }

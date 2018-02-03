@@ -21,7 +21,6 @@ import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.repository.RepoBuilder
 import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
-import com.kevalpatel2106.standup.BuildConfig
 import io.reactivex.Flowable
 import retrofit2.Retrofit
 import javax.inject.Named
@@ -47,7 +46,7 @@ class AboutRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Ret
      * @see CheckVersionResponse
      */
     override fun getLatestVersion(): Flowable<CheckVersionResponse> {
-        val checkVersionRequest = CheckVersionRequest(BuildConfig.VERSION_CODE)
+        val checkVersionRequest = CheckVersionRequest()
         val call = retrofit.create(AboutApiService::class.java).getLatestVersion(checkVersionRequest)
 
         return RepoBuilder<CheckVersionResponse>()

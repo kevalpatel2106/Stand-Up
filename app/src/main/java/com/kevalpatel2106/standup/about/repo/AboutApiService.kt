@@ -34,7 +34,6 @@ interface AboutApiService {
      *
      * @see checkVersionRequest
      */
-    //TODO Create api from the server side
     @POST("/checkVersion")
     fun getLatestVersion(@Body checkVersionRequest: CheckVersionRequest): Call<CheckVersionResponse>
 

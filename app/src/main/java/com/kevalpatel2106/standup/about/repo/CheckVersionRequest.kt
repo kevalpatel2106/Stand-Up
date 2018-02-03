@@ -18,7 +18,6 @@
 package com.kevalpatel2106.standup.about.repo
 
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.common.Validator
 import com.kevalpatel2106.utils.annotations.Model
 
 /**
@@ -29,17 +28,7 @@ import com.kevalpatel2106.utils.annotations.Model
  * @see AboutApiService.getLatestVersion
  */
 @Model
-data class CheckVersionRequest(
-
-        /**
-         * Current version code of the application. It must be positive, non-zero integer value.
-         * Check [com.kevalpatel2106.standup.misc.Validator.isValidVersionCode] for validation.
-         *
-         * @see com.kevalpatel2106.standup.misc.Validator.isValidVersionCode
-         */
-        @SerializedName("version")
-        val versionCode: Int
-) {
+class CheckVersionRequest {
 
     companion object {
 
@@ -55,12 +44,16 @@ data class CheckVersionRequest(
     @SerializedName("platform")
     val platform = PLATFORM_NAME_ANDROID
 
-    init {
-
-        //Check if the version code is valid.
-        if (!Validator.isValidVersionCode(versionCode)) {
-            throw IllegalArgumentException("Version name must be positive non-zero number. Current: "
-                    .plus(versionCode))
+    override fun equals(other: Any?): Boolean {
+        other?.let {
+            if (other is CheckVersionRequest) {
+                return other.platform == platform
+            } else if (other is String) {
+                return other == platform
+            }
         }
+        return false
     }
+
+    override fun hashCode(): Int = platform.hashCode()
 }
