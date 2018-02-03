@@ -238,6 +238,7 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         //check fot the get account permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
                 == PackageManager.PERMISSION_GRANTED) {
+            logEvent(AnalyticsEvents.EVENT_GOOGLE_SIGN_UP)
             mGoogleSignInHelper.performSignIn(this)
         } else {
             //Permission is not available
@@ -257,6 +258,7 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         //check fot the get account permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
                 == PackageManager.PERMISSION_GRANTED) {
+            logEvent(AnalyticsEvents.EVENT_FACEBOOK_SIGN_UP)
             mFacebookSignInHelper.performSignIn(this)
         } else {
             //Permission is not available
@@ -494,19 +496,26 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         animationSet.start()
     }
 
-    override fun onGoogleAuthSignIn(user: GoogleAuthUser) = model.authenticateSocialUser(user)
+    override fun onGoogleAuthSignIn(user: GoogleAuthUser) {
+        model.authenticateSocialUser(user)
+        mGoogleSignInHelper.performSignOut()
+    }
 
     override fun onGoogleAuthSignInFailed() {
+        logEvent(AnalyticsEvents.EVENT_GOOGLE_SIGN_UP_FAILED)
         showSnack(getString(R.string.error_google_signin_fail),
                 getString(R.string.error_retry_try_again), View.OnClickListener { googleSignIn() })
     }
 
-    override fun onGoogleAuthSignOut(isSuccess: Boolean) = throw IllegalStateException("This method should never call.")
+    override fun onGoogleAuthSignOut(isSuccess: Boolean) {
+        //Do nothing
+    }
 
     /**
      * This callback will be available when facebook sign in call fails.
      */
     override fun onFbSignInFail() {
+        logEvent(AnalyticsEvents.EVENT_FACEBOOK_SIGN_UP_FAILED)
         showSnack(getString(R.string.error_facebook_signin_fail),
                 getString(R.string.error_retry_try_again), View.OnClickListener { facebookSignIn() })
     }
@@ -517,11 +526,16 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      *
      * @param facebookUser [FacebookUser].
      */
-    override fun onFbProfileReceived(facebookUser: FacebookUser) = model.authenticateSocialUser(facebookUser)
+    override fun onFbProfileReceived(facebookUser: FacebookUser) {
+        model.authenticateSocialUser(facebookUser)
+        mFacebookSignInHelper.performSignOut()
+    }
 
     /**
      * This callback will be available whenever facebook sign out call completes. No matter success of
      * failure.
      */
-    override fun onFBSignOut() = throw IllegalStateException("This method should never call.")
+    override fun onFBSignOut() {
+        //Do nothing
+    }
 }

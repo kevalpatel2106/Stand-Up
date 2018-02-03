@@ -63,7 +63,6 @@ class Logout constructor(private val application: Application,
 
         //Clear user session
         userSessionManager.clearUserSession()
-        userSessionManager.clearToken()
 
         //Nuke the table
         Completable.create({ userActivityDao.nukeTable() })

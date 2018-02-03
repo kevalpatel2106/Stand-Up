@@ -163,12 +163,6 @@ class UserSessionManager(private val sharedPrefProvider: SharedPrefsProvider) {
      * Clear user data.
      */
     fun clearUserSession() {
-        sharedPrefProvider.removePreferences(SharedPreferenceKeys.USER_ID)
-        sharedPrefProvider.removePreferences(SharedPreferenceKeys.USER_DISPLAY_NAME)
-        sharedPrefProvider.removePreferences(SharedPreferenceKeys.USER_EMAIL)
-        sharedPrefProvider.removePreferences(SharedPreferenceKeys.USER_PHOTO)
-        sharedPrefProvider.removePreferences(SharedPreferenceKeys.USER_IS_VERIFIED)
-
-        clearToken()
+        sharedPrefProvider.nukePrefrance()
     }
 }

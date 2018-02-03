@@ -222,7 +222,10 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onGoogleAuthSignIn(user: GoogleAuthUser) = model.authenticateSocialUser(user)
+    override fun onGoogleAuthSignIn(user: GoogleAuthUser) {
+        model.authenticateSocialUser(user)
+        mGoogleSignInHelper.performSignOut()
+    }
 
     override fun onGoogleAuthSignInFailed() {
         logEvent(AnalyticsEvents.EVENT_GOOGLE_SIGN_UP_FAILED)
@@ -230,8 +233,9 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 getString(R.string.error_retry_try_again), View.OnClickListener { googleSignIn() })
     }
 
-    override fun onGoogleAuthSignOut(isSuccess: Boolean) =
-            throw IllegalStateException("This method should never call.")
+    override fun onGoogleAuthSignOut(isSuccess: Boolean) {
+        //Do nothing
+    }
 
     /**
      * This callback will be available when facebook sign in call fails.
@@ -248,11 +252,16 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      *
      * @param facebookUser [FacebookUser].
      */
-    override fun onFbProfileReceived(facebookUser: FacebookUser) = model.authenticateSocialUser(facebookUser)
+    override fun onFbProfileReceived(facebookUser: FacebookUser) {
+        model.authenticateSocialUser(facebookUser)
+        mFacebookSignInHelper.performSignOut()
+    }
 
     /**
      * This callback will be available whenever facebook sign out call completes. No matter success of
      * failure.
      */
-    override fun onFBSignOut() = throw IllegalStateException("This method should never call.")
+    override fun onFBSignOut() {
+        //Do nothing
+    }
 }

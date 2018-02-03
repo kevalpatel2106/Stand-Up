@@ -94,7 +94,7 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         //Set the toolbar
-        setToolbar(R.id.toolbar, "Dashboard", true)
+        setToolbar(R.id.toolbar, R.string.application_name, true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
 
@@ -208,6 +208,7 @@ class MainActivity : BaseActivity() {
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.dashboard_container, model.homeFragment)
                         .commit()
+                setToolbar(R.id.toolbar, R.string.nav_header_home, true)
                 false
             }
             DrawerItem.DIARY -> {
@@ -215,6 +216,7 @@ class MainActivity : BaseActivity() {
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.dashboard_container, model.diaryFragment)
                         .commit()
+                setToolbar(R.id.toolbar, R.string.nav_header_dairy, true)
                 false
             }
             DrawerItem.STATS -> {
@@ -222,6 +224,7 @@ class MainActivity : BaseActivity() {
                 supportFragmentManager.beginTransaction()
                         .replace(R.id.dashboard_container, model.statsFragment)
                         .commit()
+                setToolbar(R.id.toolbar, R.string.nav_header_stats, true)
                 false
             }
             DrawerItem.PROFILE -> {
