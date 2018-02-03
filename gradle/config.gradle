@@ -21,7 +21,7 @@ ext {
             target          : 26,
             compile         : 26,
             buildToolVersion: '27.0.2',
-            applicationId   : 'com.kevalpatel2106.standup'
+            applicationId   : 'com.standup'
     ]
 
     versionConfig = [

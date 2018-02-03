@@ -18,3 +18,5 @@
 /projectFilesBackup1/
 /ajcore.*.txt
 /output/
+/app/src/release/google-services.json
+/app/src/debug/google-services.json
