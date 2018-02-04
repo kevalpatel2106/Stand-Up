@@ -20,7 +20,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kevalpatel2106.standup.dashboard.DashboardFragment">
+    tools:context="com.standup.app.dashboard.DashboardFragment">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -79,7 +79,7 @@
             <include layout="@layout/layout_loader" />
 
             <!--2. Error view-->
-            <com.kevalpatel2106.standup.misc.ErrorView
+            <com.standup.app.misc.ErrorView
                 android:id="@+id/efficiency_card_error_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

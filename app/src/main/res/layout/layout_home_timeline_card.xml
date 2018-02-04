@@ -37,7 +37,7 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5"/>
 
-        <com.kevalpatel2106.standup.timelineview.TimeLineView
+        <com.standup.timelineview.TimeLineView
             android:id="@+id/today_time_line"
             android:layout_width="match_parent"
             android:layout_height="130dp"

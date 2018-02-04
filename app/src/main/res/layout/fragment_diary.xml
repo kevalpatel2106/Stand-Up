@@ -20,7 +20,7 @@
     android:id="@+id/sleep_diary_view_flipper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kevalpatel2106.standup.diary.list.DiaryFragment">
+    tools:context="com.standup.app.diary.list.DiaryFragment">
 
     <!--0. List-->
     <android.support.v7.widget.RecyclerView
@@ -33,7 +33,7 @@
     <include layout="@layout/layout_loader" />
 
     <!--2. Error view-->
-    <com.kevalpatel2106.standup.misc.ErrorView
+    <com.standup.app.misc.ErrorView
         android:id="@+id/dairy_error_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

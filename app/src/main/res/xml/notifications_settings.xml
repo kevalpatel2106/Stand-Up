@@ -18,18 +18,18 @@
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory android:title="Reminder notifications">
+    <com.standup.app.settings.widget.BasePreferenceCategory android:title="Reminder notifications">
 
-        <com.kevalpatel2106.standup.settings.widget.HintPreference android:summary="Modify the hourly stand up reminder notifications." />
+        <com.standup.app.settings.widget.HintPreference android:summary="Modify the hourly stand up reminder notifications." />
 
         <!--Select the notification sound-->
-        <com.kevalpatel2106.standup.settings.widget.BasePreference
+        <com.standup.app.settings.widget.BasePreference
             android:key="@string/pref_key_reminder_notifications_tone"
             android:title="Notification Sound"
             tools:summary="Default" />
 
         <!--Select weather to vibrate or not?-->
-        <com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
+        <com.standup.app.settings.widget.BaseSwitchPreference
             android:key="@string/pref_key_reminder_notifications_vibrate"
             android:switchTextOff="@string/switch_off"
             android:switchTextOn="@string/switch_on"
@@ -50,27 +50,27 @@
             android:title="Sound in silent mode" />
 
         <!--Test the notifications-->
-        <com.kevalpatel2106.standup.settings.widget.BasePreference
+        <com.standup.app.settings.widget.BasePreference
             android:key="@string/pref_key_reminder_notifications_test"
             android:title="Test reminder notification" />
-    </com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory>
+    </com.standup.app.settings.widget.BasePreferenceCategory>
 
-    <com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory android:title="Reminder popups">
+    <com.standup.app.settings.widget.BasePreferenceCategory android:title="Reminder popups">
 
         <!--Select weather to display popups or not?-->
-        <com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
+        <com.standup.app.settings.widget.BaseSwitchPreference
             android:key="@string/pref_key_reminder_pop_up_enable"
             android:summaryOff="No popup."
             android:summaryOn="Reminder popup will appear when screen is on."
             android:switchTextOff="@string/switch_off"
             android:switchTextOn="@string/switch_on"
             android:title="Display popup reminder" />
-    </com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory>
+    </com.standup.app.settings.widget.BasePreferenceCategory>
 
-    <com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory android:title="Other notifications">
+    <com.standup.app.settings.widget.BasePreferenceCategory android:title="Other notifications">
 
         <!--Select weather to display update or not?-->
-        <com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
+        <com.standup.app.settings.widget.BaseSwitchPreference
             android:key="@string/pref_key_update_notifications_enable"
             android:summaryOff="You can check for update manually from About -> Check for update."
             android:summaryOn="We will remind you when new update is available."
@@ -79,10 +79,10 @@
             android:title="Update notifications" />
 
         <!--Select weather to display promotional notifications or not?-->
-        <com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
+        <com.standup.app.settings.widget.BaseSwitchPreference
             android:key="@string/pref_key_promotional_notifications_enable"
             android:switchTextOff="@string/switch_off"
             android:switchTextOn="@string/switch_on"
             android:title="Promotional notifications" />
-    </com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory>
+    </com.standup.app.settings.widget.BasePreferenceCategory>
 </android.support.v7.preference.PreferenceScreen>

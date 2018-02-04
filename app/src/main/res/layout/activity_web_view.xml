@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.kevalpatel2106.standup.deeplink.WebViewActivity">
+    tools:context=".app.deeplink.WebViewActivity">
 
     <include layout="@layout/layout_simple_toolbar" />
 

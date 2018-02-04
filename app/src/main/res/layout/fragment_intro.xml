@@ -21,7 +21,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="@drawable/bg_splash"
-    tools:context=".authentication.intro.IntroFragment">
+    tools:context="com.standup.app.authentication.intro.IntroFragment">
 
     <com.kevalpatel2106.common.view.BaseImageView
         android:id="@+id/intro_iv"

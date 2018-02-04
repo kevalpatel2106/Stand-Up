@@ -15,4 +15,4 @@
   ~
   -->
 
-<manifest package="com.kevalpatel2106.standup.timelineview"/>
+<manifest package="com.standup.timelineview" />

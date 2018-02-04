@@ -19,12 +19,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--Select weather to display popups or not?-->
-    <com.kevalpatel2106.standup.settings.widget.BaseTopSwitchPreference android:key="@string/pref_key_daily_review_enable" />
+    <com.standup.app.settings.widget.BaseTopSwitchPreference android:key="@string/pref_key_daily_review_enable" />
 
-    <com.kevalpatel2106.standup.settings.widget.BasePreference
+    <com.standup.app.settings.widget.BasePreference
         android:key="@string/pref_key_daily_review_time"
         android:title="Send notification at..."
         tools:summary="9:00 AM" />
 
-    <com.kevalpatel2106.standup.settings.widget.HintPreference android:summary="Get daily summary of your previous day activities. Hope this will motivated you!!!" />
+    <com.standup.app.settings.widget.HintPreference android:summary="Get daily summary of your previous day activities. Hope this will motivated you!!!" />
 </android.support.v7.preference.PreferenceScreen>

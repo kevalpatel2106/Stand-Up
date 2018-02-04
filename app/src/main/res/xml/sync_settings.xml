@@ -18,20 +18,20 @@
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory
+    <com.standup.app.settings.widget.BasePreferenceCategory
         android:key="@string/pref_key_sync_category_title"
         tools:title="@string/pref_title_logged_in_as">
 
         <!--Sync now-->
-        <com.kevalpatel2106.standup.settings.widget.BasePreference
+        <com.standup.app.settings.widget.BasePreference
             android:key="@string/pref_key_sync_now"
             android:title="@string/pref_title_sync_now"
             tools:summary="@string/pref_summary_sync_now" />
-    </com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory>
+    </com.standup.app.settings.widget.BasePreferenceCategory>
 
-    <com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory android:title="Background sync">
+    <com.standup.app.settings.widget.BasePreferenceCategory android:title="Background sync">
 
-        <com.kevalpatel2106.standup.settings.widget.BaseSwitchPreference
+        <com.standup.app.settings.widget.BaseSwitchPreference
             android:defaultValue="true"
             android:key="@string/pref_key_background_sync"
             android:summaryOff="@string/pref_title_sync_in_background_summary_off"
@@ -46,5 +46,5 @@
             android:entryValues="@array/sync_interval_duration_value_list"
             android:key="@string/pref_key_sync_interval"
             android:title="Sync interval" />
-    </com.kevalpatel2106.standup.settings.widget.BasePreferenceCategory>
+    </com.standup.app.settings.widget.BasePreferenceCategory>
 </android.support.v7.preference.PreferenceScreen>

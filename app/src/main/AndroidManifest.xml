@@ -16,13 +16,12 @@
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.kevalpatel2106.standup">
+    package="com.standup">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
-        android:name=".SUApplication"
+        android:name=".app.SUApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/application_name"
@@ -47,7 +46,7 @@
 
         <!-- Activity to handle deep links. -->
         <activity
-            android:name=".deeplink.DeepLinkActivity"
+            android:name="com.standup.app.deeplink.DeepLinkActivity"
             android:configChanges="orientation|screenSize|keyboard"
             android:launchMode="singleInstance"
             android:noHistory="true"
@@ -73,7 +72,7 @@
 
         <!-- Splash screen for the redirection. This is the single entry point to the application. -->
         <activity
-            android:name=".splash.SplashActivity"
+            android:name="com.standup.app.splash.SplashActivity"
             android:configChanges="orientation|screenLayout|screenSize"
             android:launchMode="singleInstance"
             android:noHistory="true"
@@ -91,7 +90,7 @@
 
         <!-- Application intro screen -->
         <activity
-            android:name=".authentication.intro.IntroActivity"
+            android:name="com.standup.app.authentication.intro.IntroActivity"
             android:launchMode="singleInstance"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.RedBg"
@@ -100,7 +99,7 @@
 
         <!-- Login/Sign Up the user screen -->
         <activity
-            android:name=".authentication.login.LoginActivity"
+            android:name="com.standup.app.authentication.login.LoginActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
@@ -108,7 +107,7 @@
 
         <!-- Forgot password request screen -->
         <activity
-            android:name=".authentication.forgotPwd.ForgotPasswordActivity"
+            android:name="com.standup.app.authentication.forgotPwd.ForgotPasswordActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
@@ -116,7 +115,7 @@
 
         <!-- Verify your email reminder screen. -->
         <activity
-            android:name=".authentication.verification.VerifyEmailActivity"
+            android:name="com.standup.app.authentication.verification.VerifyEmailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
@@ -124,14 +123,14 @@
 
         <!-- Verify the user email with the deep link. -->
         <activity
-            android:name=".authentication.verification.EmailLinkVerificationActivity"
+            android:name="com.standup.app.authentication.verification.EmailLinkVerificationActivity"
             android:configChanges="orientation|screenSize|keyboard"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".authentication.deviceReg.DeviceRegisterActivity"
+            android:name="com.standup.app.authentication.deviceReg.DeviceRegisterActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
@@ -139,7 +138,7 @@
 
         <!-- Dashboard Activity -->
         <activity
-            android:name=".main.MainActivity"
+            android:name="com.standup.app.main.MainActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
@@ -147,7 +146,7 @@
 
         <!-- Web view activity -->
         <activity
-            android:name=".deeplink.WebViewActivity"
+            android:name="com.standup.app.deeplink.WebViewActivity"
             android:configChanges="orientation|screenSize|keyboard"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
@@ -156,7 +155,7 @@
 
         <!-- User profile edit screen -->
         <activity
-            android:name=".profile.EditProfileActivity"
+            android:name="com.standup.app.profile.EditProfileActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
@@ -164,62 +163,62 @@
 
         <!-- Support development screen. -->
         <activity
-            android:name=".about.donate.SupportDevelopmentActivity"
+            android:name="com.standup.app.about.donate.SupportDevelopmentActivity"
             android:configChanges="orientation|screenSize|keyboard"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".about.AboutActivity"
+            android:name="com.standup.app.about.AboutActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.MaterialAboutActivity"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".about.report.ReportIssueActivity"
+            android:name="com.standup.app.about.report.ReportIssueActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.list.SettingsListActivity"
+            android:name="com.standup.app.settings.list.SettingsListActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".diary.detail.DetailActivity"
+            android:name="com.standup.app.diary.detail.DetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".diary.userActivityList.UserActivityListActivity"
+            android:name="com.standup.app.diary.userActivityList.UserActivityListActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
         <activity
-            android:name=".settings.syncing.SyncSettingsDetailActivity"
+            android:name="com.standup.app.settings.syncing.SyncSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.dnd.DndSettingsDetailActivity"
+            android:name="com.standup.app.settings.dnd.DndSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.dailyReview.DailyReviewSettingsDetailActivity"
+            android:name="com.standup.app.settings.dailyReview.DailyReviewSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
         <activity
-            android:name=".settings.notifications.NotificationSettingsDetailActivity"
+            android:name="com.standup.app.settings.notifications.NotificationSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
@@ -228,7 +227,7 @@
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->
         <receiver
-            android:name=".authentication.UnauthorizedReceiver"
+            android:name="com.standup.app.authentication.UnauthorizedReceiver"
             android:enabled="false"
             android:exported="false">
             <intent-filter>
@@ -239,14 +238,14 @@
         <!-- =============================== SERVICE ================================ -->
         <!-- Begin: Firebase service -->
         <service
-            android:name=".fcm.FcmMessagingService"
+            android:name="com.standup.app.fcm.FcmMessagingService"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".fcm.InstanceIdService"
+            android:name="com.standup.app.fcm.InstanceIdService"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -257,7 +256,7 @@
 
         <!-- Service to register the device firebase token and other detail -->
         <service
-            android:name=".authentication.deviceReg.RegisterDeviceService"
+            android:name="com.standup.app.authentication.deviceReg.RegisterDeviceService"
             tools:ignore="ExportedService" />
     </application>
 

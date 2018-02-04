@@ -17,14 +17,14 @@
 
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kevalpatel2106.standup.timelineview">
+    package="com.standup.timelineview">
 
     <application>
         <activity
             android:name=".DemoActivity"
             android:icon="@mipmap/ic_timeline_launcher"
             android:label="Timeline View Demo"
-            android:taskAffinity="com.kevalpatel2106.standup.${applicationId}"
+            android:taskAffinity="com.standup.${applicationId}"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
