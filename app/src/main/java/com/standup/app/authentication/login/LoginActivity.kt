@@ -17,17 +17,13 @@
 
 package com.standup.app.authentication.login
 
-import android.Manifest
 import android.animation.Animator
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -74,9 +70,6 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
             context.startActivity(launchIntent)
         }
     }
-
-    private val REQ_CODE_GET_ACCOUNTS_GOOGLE = 38947
-    private val REQ_CODE_GET_ACCOUNTS_FACEBOOK = 3456
 
     private val KEY_EMAIL_TEXT = "email_text"
     private val KEY_PASSWORD_TEXT = "password_text"
@@ -235,16 +228,8 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
     fun googleSignIn() {
         ViewUtils.hideKeyboard(login_email_et)
 
-        //check fot the get account permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
-                == PackageManager.PERMISSION_GRANTED) {
-            logEvent(AnalyticsEvents.EVENT_GOOGLE_SIGN_UP)
-            mGoogleSignInHelper.performSignIn(this)
-        } else {
-            //Permission is not available
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.GET_ACCOUNTS),
-                    REQ_CODE_GET_ACCOUNTS_GOOGLE)
-        }
+        logEvent(AnalyticsEvents.EVENT_GOOGLE_SIGN_UP)
+        mGoogleSignInHelper.performSignIn(this)
     }
 
     /**
@@ -255,40 +240,8 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
     fun facebookSignIn() {
         ViewUtils.hideKeyboard(login_email_et)
 
-        //check fot the get account permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
-                == PackageManager.PERMISSION_GRANTED) {
-            logEvent(AnalyticsEvents.EVENT_FACEBOOK_SIGN_UP)
-            mFacebookSignInHelper.performSignIn(this)
-        } else {
-            //Permission is not available
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.GET_ACCOUNTS),
-                    REQ_CODE_GET_ACCOUNTS_FACEBOOK)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>,
-                                            grantResults: IntArray) {
-        when (requestCode) {
-            REQ_CODE_GET_ACCOUNTS_GOOGLE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //Permission Available
-                googleSignIn()
-            } else {
-                showSnack(getString(R.string.error_google_signin_fail),
-                        getString(R.string.error_retry_try_again),
-                        View.OnClickListener { googleSignIn() })
-            }
-            REQ_CODE_GET_ACCOUNTS_FACEBOOK -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //Permission Available
-                facebookSignIn()
-            } else {
-                showSnack(getString(R.string.error_facebook_signin_fail),
-                        getString(R.string.error_retry_try_again),
-                        View.OnClickListener { facebookSignIn() })
-            }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
+        logEvent(AnalyticsEvents.EVENT_FACEBOOK_SIGN_UP)
+        mFacebookSignInHelper.performSignIn(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {

@@ -19,17 +19,13 @@
 
 package com.standup.app.authentication.intro
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.view.View
 import butterknife.OnClick
 import butterknife.Optional
@@ -57,9 +53,6 @@ import kotlinx.android.synthetic.main.activity_intro.*
  */
 @UIController
 class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
-    private val REQ_CODE_GET_ACCOUNTS_GOOGLE = 38947
-    private val REQ_CODE_GET_ACCOUNTS_FACEBOOK = 3456
-
     companion object {
 
         /**
@@ -151,17 +144,8 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
      */
     @OnClick(R.id.btn_login_google_signin)
     fun googleSignIn() {
-        //check fot the get account permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
-                == PackageManager.PERMISSION_GRANTED) {
-            mGoogleSignInHelper.performSignIn(this)
-
-            logEvent(AnalyticsEvents.EVENT_GOOGLE_SIGN_UP)
-        } else {
-            //Permission is not available
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.GET_ACCOUNTS),
-                    REQ_CODE_GET_ACCOUNTS_GOOGLE)
-        }
+        mGoogleSignInHelper.performSignIn(this)
+        logEvent(AnalyticsEvents.EVENT_GOOGLE_SIGN_UP)
     }
 
     /**
@@ -170,17 +154,8 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
     @Optional
     @OnClick(R.id.btn_login_fb_signin)
     fun facebookSignIn() {
-        //check fot the get account permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS)
-                == PackageManager.PERMISSION_GRANTED) {
-            mFacebookSignInHelper.performSignIn(this)
-
-            logEvent(AnalyticsEvents.EVENT_FACEBOOK_SIGN_UP)
-        } else {
-            //Permission is not available
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.GET_ACCOUNTS),
-                    REQ_CODE_GET_ACCOUNTS_FACEBOOK)
-        }
+        mFacebookSignInHelper.performSignIn(this)
+        logEvent(AnalyticsEvents.EVENT_FACEBOOK_SIGN_UP)
     }
 
     /**
@@ -191,30 +166,6 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
 
     @OnClick(R.id.btn_create_account)
     fun createAccount() = LoginActivity.launch(this@IntroActivity, true)
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>,
-                                            grantResults: IntArray) {
-        when (requestCode) {
-            REQ_CODE_GET_ACCOUNTS_GOOGLE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //Permission Available
-                googleSignIn()
-            } else {
-                showSnack(getString(R.string.error_google_signin_fail),
-                        getString(R.string.error_retry_try_again),
-                        View.OnClickListener { googleSignIn() })
-            }
-            REQ_CODE_GET_ACCOUNTS_FACEBOOK -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //Permission Available
-                facebookSignIn()
-            } else {
-                showSnack(getString(R.string.error_facebook_signin_fail),
-                        getString(R.string.error_retry_try_again),
-                        View.OnClickListener { facebookSignIn() })
-            }
-            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         mGoogleSignInHelper.onActivityResult(requestCode, resultCode, data)
