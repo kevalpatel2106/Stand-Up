@@ -118,6 +118,8 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
             return
         }
 
+        JobManager.instance().cancelAll()
+
         setUpSleepMode(userSessionManager, userSettingsManager)
         setUpAutoDnd(userSessionManager, userSettingsManager)
         setUpActivityMonitoring(userSessionManager, userSettingsManager)
@@ -270,7 +272,7 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      */
     private fun setUpSleepMode(userSessionManager: UserSessionManager,
                                userSettingsManager: UserSettingsManager) {
-        //Check if the auto dnd is enabled?
+        //Check if the sleep mode is enabled?
         if (!SleepModeMonitoringHelper.shouldRunningJob(userSessionManager)) {
             SleepModeMonitoringJob.cancelScheduledJob()
             return
