@@ -162,9 +162,9 @@ dependencies {
     implementation(otherLib.aboutlibraries, excludeGrp)
     implementation(otherLib.chartLayout, excludeGrp)
     implementation(otherLib.lottie, excludeGrp)
+    implementation(otherLib.iap, excludeGrp)
+    implementation(otherLib.bottomsheetPicker, excludeGrp)
     implementation(otherLib.openSourceLibraries) { transitive = true }
     releaseImplementation(otherLib.crashalytics) { transitive = true }
-
-    implementation('com.philliphsu:bottomsheetpickers:2.3.2')
 }
 apply plugin: 'com.google.gms.google-services'
