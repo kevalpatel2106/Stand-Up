@@ -16,12 +16,19 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.standup.core">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.standup.core">
 
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application>
+        <activity
+            android:name=".reminder.PopUpActivity"
+            android:resizeableActivity="false"
+            android:theme="@style/Theme.Transparent"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute"/>
 
         <!-- Receive the broadcast if the user is unauthorised. -->
         <receiver

@@ -15,7 +15,7 @@
  *
  */
 
-package com.standup.core
+package com.standup.core.misc
 
 import android.app.Application
 import com.evernote.android.job.Job

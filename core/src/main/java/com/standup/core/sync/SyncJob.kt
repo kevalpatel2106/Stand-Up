@@ -28,10 +28,10 @@ import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.rxbus.Event
 import com.kevalpatel2106.utils.rxbus.RxBus
-import com.standup.core.AsyncJob
 import com.standup.core.CoreConfig
 import com.standup.core.CorePrefsProvider
 import com.standup.core.di.DaggerCoreComponent
+import com.standup.core.misc.AsyncJob
 import com.standup.core.repo.CoreRepo
 import com.standup.core.sync.SyncJob.Companion.cancelScheduledSync
 import com.standup.core.sync.SyncJob.Companion.isSyncing

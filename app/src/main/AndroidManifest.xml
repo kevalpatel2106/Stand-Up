@@ -223,12 +223,7 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
-        <activity
-            android:name=".app.popup.PopUpActivity"
-            android:resizeableActivity="false"
-            android:theme="@style/AppTheme.Transparent"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+
 
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->
@@ -264,15 +259,6 @@
         <service
             android:name=".app.authentication.deviceReg.RegisterDeviceService"
             tools:ignore="ExportedService" />
-
-        <receiver
-            android:name=".app.popup.PopUpDisplayReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.standup.app.display.popup" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

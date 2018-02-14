@@ -142,7 +142,8 @@ object TimeUtils {
 
 
     /**
-     * Converts [timeMills] into (hour)h (minutes)m format. Here hour will be in 24 hours format.
+     * Converts [timeMills] into (hour)h (minutes)m format. Here hour will be in 24 hours format. If
+     * the hour is 0, it will display (minutes)m (seconds)s format.
      */
     @JvmStatic
     fun convertToHourMinutes(timeMills: Long): String {
@@ -153,10 +154,10 @@ object TimeUtils {
         val hours = (totalMins.div(ONE_HOUR_MINS)).toInt()
         val mins = totalMins - (hours * ONE_HOUR_MINS)
 
-        return if (hours > 0 && mins > 0) {
+        return if (hours > 0) {
             "${hours}h ${mins}m"
         } else {
-            val seconds = timeMills - (totalMins * ONE_MIN_MILLS)
+            val seconds: Int = ((timeMills - totalMins * ONE_MIN_MILLS) / 1000).toInt()
             "${mins}m ${seconds}s"
         }
 

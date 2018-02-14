@@ -32,6 +32,6 @@ class ReminderMessageProvider {
 
     @DrawableRes
     fun getReminderImage(): Int {
-        return R.drawable.ic_plusone_standard_off_client
+        return R.drawable.ic_close_white
     }
 }

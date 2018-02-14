@@ -15,7 +15,7 @@
  *
  */
 
-package com.standup.app.popup
+package com.standup.core.reminder
 
 import android.content.Context
 import android.content.Intent
@@ -23,37 +23,51 @@ import android.os.Bundle
 import com.kevalpatel2106.common.ReminderMessageProvider
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
-import com.standup.R
-import com.standup.app.settings.di.DaggerSettingsComponent
+import com.standup.core.R
+import com.standup.core.di.DaggerCoreComponent
 import kotlinx.android.synthetic.main.activity_pop_up.*
 import javax.inject.Inject
 
 class PopUpActivity : BaseActivity() {
 
+    /**
+     * [ReminderMessageProvider] to get the reminder message.
+     */
     @Inject
     internal lateinit var reminderMessageProvider: ReminderMessageProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        DaggerSettingsComponent.builder()
+        //Inject dependencies
+        DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@PopUpActivity)
 
         setContentView(R.layout.activity_pop_up)
 
-
+        //Set text
         reminder_pop_up_message_tv.text = reminderMessageProvider.getReminderMessage()
         reminder_pop_up_iv.setImageResource(reminderMessageProvider.getReminderImage())
 
+        //Ok button
         reminder_pop_up_ok_btn.setOnClickListener { finish() }
+    }
+
+    override fun onBackPressed() {
+        //No OP
     }
 
     companion object {
 
+        /**
+         * Launch [PopUpActivity].
+         */
         fun launch(context: Context) {
-            context.startActivity(Intent(context, PopUpActivity.javaClass))
+            context.startActivity(Intent(context, PopUpActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
         }
     }
 }

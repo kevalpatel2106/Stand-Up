@@ -17,6 +17,7 @@
 
 package com.standup.core
 
+import com.standup.core.misc.CoreJobCreator
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

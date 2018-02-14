@@ -21,6 +21,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
+import com.kevalpatel2106.common.ReminderMessageProvider
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.testutils.MockSharedPreference
@@ -54,14 +55,14 @@ class ReminderNotificationTest {
         val context = Mockito.mock(Context::class.java)
         val resources = Mockito.mock(Resources::class.java)
         Mockito.`when`(context.getString(R.string.reminder_notification_title)).thenReturn(TEST_TITLE_STRING)
-        Mockito.`when`(context.getString(R.string.reminder_notification_message)).thenReturn(TEST_MESSAGE_STRING)
         Mockito.`when`(context.getColor(anyInt())).thenReturn(Color.RED)
         Mockito.`when`(context.resources).thenReturn(resources)
         Mockito.`when`(context.resources.getColor(anyInt())).thenReturn(Color.RED)
 
         val userSettingsManager = UserSettingsManager(SharedPrefsProvider(MockSharedPreference()))
 
-        notification = ReminderNotification(userSettingsManager).buildNotification(context, 0)
+        notification = ReminderNotification(userSettingsManager, ReminderMessageProvider())
+                .buildNotification(context, 0)
     }
 
     @Test

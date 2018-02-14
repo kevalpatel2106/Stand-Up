@@ -227,7 +227,7 @@ class DailyActivitySummaryTest {
                     dayActivity = getMockUserActivityList())
 
             Assert.assertEquals(summary.standingTimeMills, STANDING_EVENT_POS.size * DIFF_BETWEEN_END_AND_START)
-            Assert.assertEquals(summary.standingTimeHours, "0h ".plus(STANDING_EVENT_POS.size).plus("m"))
+            Assert.assertEquals(summary.standingTimeHours, STANDING_EVENT_POS.size.toString().plus("m").plus(" 0s"))
             Assert.assertEquals(summary.standingPercent,
                     Utils.calculatePercent(STANDING_EVENT_POS.size.toLong(),
                             (STANDING_EVENT_POS.size + SITTING_EVENT_POS.size).toLong()).toFloat())
@@ -284,7 +284,7 @@ class DailyActivitySummaryTest {
                     dayActivity = getMockUserActivityList())
 
             Assert.assertEquals(summary.sittingTimeMills, SITTING_EVENT_POS.size * DIFF_BETWEEN_END_AND_START)
-            Assert.assertEquals(summary.sittingTimeHours, "0h ".plus(SITTING_EVENT_POS.size).plus("m"))
+            Assert.assertEquals(summary.sittingTimeHours, SITTING_EVENT_POS.size.toString().plus("m").plus(" 0s"))
             Assert.assertEquals(summary.sittingPercent,
                     Utils.calculatePercent(SITTING_EVENT_POS.size.toLong(),
                             (STANDING_EVENT_POS.size + SITTING_EVENT_POS.size).toLong()).toFloat())
@@ -409,12 +409,12 @@ class DailyActivitySummaryTest {
         //Check standing time
         val expectedStandingTime = DIFF_BETWEEN_END_AND_START * STANDING_EVENT_POS.size
         Assert.assertTrue(Math.abs(expectedStandingTime - summary.standingTimeMills) < 1000L /* Allow 1 second difference*/)
-        Assert.assertEquals("0h ".plus(STANDING_EVENT_POS.size).plus("m"), summary.standingTimeHours)
+        Assert.assertEquals(STANDING_EVENT_POS.size.toString().plus("m").plus(" 0s"), summary.standingTimeHours)
 
         //Check sitting time
         val expectedSittingTime = DIFF_BETWEEN_END_AND_START * SITTING_EVENT_POS.size
         Assert.assertTrue(Math.abs(expectedSittingTime - summary.sittingTimeMills) < 1000L /* Allow 1 second difference*/)
-        Assert.assertEquals("0h ".plus(SITTING_EVENT_POS.size).plus("m"), summary.sittingTimeHours)
+        Assert.assertEquals(SITTING_EVENT_POS.size.toString().plus("m").plus(" 0s"), summary.sittingTimeHours)
     }
 
 

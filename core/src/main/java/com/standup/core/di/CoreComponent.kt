@@ -25,6 +25,7 @@ import com.standup.core.activityMonitor.ActivityMonitorJob
 import com.standup.core.dailyReview.DailyReviewJob
 import com.standup.core.dndManager.AutoDndMonitoringJob
 import com.standup.core.reminder.NotificationSchedulerJob
+import com.standup.core.reminder.PopUpActivity
 import com.standup.core.reminder.ReminderNotification
 import com.standup.core.sleepManager.SleepModeMonitoringJob
 import com.standup.core.sync.SyncJob
@@ -57,4 +58,6 @@ internal interface CoreComponent {
     fun inject(dailyReviewJob: DailyReviewJob)
 
     fun inject(corePrefsProvider: CorePrefsProvider)
+
+    fun inject(popUpActivity: PopUpActivity)
 }

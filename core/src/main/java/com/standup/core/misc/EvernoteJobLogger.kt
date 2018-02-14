@@ -15,7 +15,7 @@
  *
  */
 
-package com.standup.core
+package com.standup.core.misc
 
 import com.evernote.android.job.util.JobLogger
 import timber.log.Timber

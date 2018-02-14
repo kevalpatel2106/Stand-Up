@@ -18,8 +18,6 @@
 package com.standup.core.reminder
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.support.v4.content.LocalBroadcastManager
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
@@ -55,10 +53,10 @@ internal class NotificationSchedulerJob : Job() {
          * This will override all the previous scheduled [NotificationSchedulerJob] job. This job is
          * recurring and having interval of [scheduleInterval].
          *
-         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpReminderNotification]
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.standup.core.Core.setUpReminderNotification]
          * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
          *
-         * @see com.kevalpatel2106.standup.core.Core.setUpReminderNotification
+         * @see com.standup.core.Core.setUpReminderNotification
          */
         @SuppressLint("VisibleForTests")
         @JvmStatic
@@ -86,7 +84,7 @@ internal class NotificationSchedulerJob : Job() {
          * Cancel all the [NotificationSchedulerJob] jobs if any job is scheduled with
          * [REMINDER_NOTIFICATION_JOB_TAG].
          *
-         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpReminderNotification]
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.standup.core.Core.setUpReminderNotification]
          * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
          */
         @JvmStatic
@@ -138,14 +136,12 @@ internal class NotificationSchedulerJob : Job() {
                 .build()
                 .inject(this@NotificationSchedulerJob)
 
-        if (NotificationSchedulerHelper
-                        .shouldDisplayNotification(userSessionManager, userSettingsManager)) {
+        if (NotificationSchedulerHelper.shouldDisplayNotification(userSessionManager, userSettingsManager)) {
 
-            //Fire reminder notification
-            if (userSettingsManager.shouldDisplayPopUp) {
-                LocalBroadcastManager.getInstance(context)
-                        .sendBroadcast(Intent(CoreConfig.POP_UP_BROADCAST))
+            if (NotificationSchedulerHelper.shouldDisplayPopUp(userSettingsManager, context)) {
+                PopUpActivity.launch(context)
             } else {
+                //Fire reminder notification
                 ReminderNotification().notify(context)
             }
             Timber.i("Reminder notification fired. Check your status bar.")

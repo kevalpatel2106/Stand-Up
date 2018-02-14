@@ -54,12 +54,6 @@ object CoreConfig {
      */
     internal val NOTIFICATION_SERVICE_PERIOD_TOLERANCE = TimeUnit.MINUTES.toMillis(5)  //5 min
 
-    /**
-     * Broadcast to tell other module to display the pop up instead of notification.
-     */
-    const val POP_UP_BROADCAST = "com.standup.app.display.popup"
-
-
     //******* Syncing
     /**
      * Flex timing/tolerance for sync job.

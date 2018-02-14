@@ -34,10 +34,10 @@ import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.common.logEvent
-import com.standup.core.AsyncJob
 import com.standup.core.Core
 import com.standup.core.CoreConfig
 import com.standup.core.di.DaggerCoreComponent
+import com.standup.core.misc.AsyncJob
 import com.standup.core.reminder.NotificationSchedulerJob
 import com.standup.core.repo.CoreRepo
 import io.reactivex.android.schedulers.AndroidSchedulers

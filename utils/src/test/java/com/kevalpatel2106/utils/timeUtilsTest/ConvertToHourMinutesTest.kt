@@ -44,9 +44,9 @@ class ConvertToHourMinutesTest {
             @Parameterized.Parameters
             fun data(): ArrayList<Array<out Any?>> {
                 return arrayListOf(
-                        arrayOf(0, "0h 0m"),
-                        arrayOf(60000, "0h 1m"),
-                        arrayOf(60100, "0h 1m"),
+                        arrayOf(0, "0m 0s"),
+                        arrayOf(60000, "1m 0s"),
+                        arrayOf(61000, "1m 1s"),
                         arrayOf(3600000, "1h 0m"),
                         arrayOf(4200000, "1h 10m"),
                         arrayOf(86400000, "24h 0m"),
@@ -57,7 +57,7 @@ class ConvertToHourMinutesTest {
 
         @Test
         @Throws(IOException::class)
-        fun testConvertToTwoDecimal() {
+        fun testConvertToHHmma() {
             Assert.assertEquals(expected, TimeUtils.convertToHourMinutes(value))
         }
     }

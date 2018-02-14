@@ -22,6 +22,7 @@ import android.content.Context
 import android.os.Handler
 import com.evernote.android.job.JobConfig
 import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
@@ -32,6 +33,8 @@ import com.standup.core.dailyReview.DailyReviewHelper
 import com.standup.core.dailyReview.DailyReviewJob
 import com.standup.core.dndManager.AutoDndMonitoringHelper
 import com.standup.core.dndManager.AutoDndMonitoringJob
+import com.standup.core.misc.CoreJobCreator
+import com.standup.core.misc.EvernoteJobLogger
 import com.standup.core.reminder.NotificationSchedulerHelper
 import com.standup.core.reminder.NotificationSchedulerJob
 import com.standup.core.reminder.ReminderNotification
@@ -52,7 +55,6 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
                                private val prefsProvider: SharedPrefsProvider) {
 
     companion object {
-
         /**
          * Shut down the code by unregister all the jobs and stop the core.
          */
@@ -78,8 +80,14 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
          * 10 seconds.
          */
         fun fireTestReminder(context: Context) {
-            ReminderNotification().notify(context)
+//            ReminderNotification().notify(context)
 
+            //Schedule the job
+            val id = JobRequest.Builder(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
+                    .setUpdateCurrent(true)
+                    .startNow()
+                    .build()
+                    .schedule()
             //Cancel the notification after some time.
             Handler().postDelayed({ ReminderNotification().cancel(context) }, 10_000L /* 10 Seconds */)
         }

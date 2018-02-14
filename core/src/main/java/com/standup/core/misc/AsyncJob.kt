@@ -13,7 +13,7 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- */package com.standup.core
+ */package com.standup.core.misc
 
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
