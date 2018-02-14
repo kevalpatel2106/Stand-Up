@@ -30,6 +30,7 @@ import android.os.Build
 import android.support.annotation.ColorInt
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
+import com.kevalpatel2106.common.ReminderMessageProvider
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.notifications.NotificationChannelType
@@ -49,9 +50,14 @@ internal class ReminderNotification {
     @Inject
     internal lateinit var userSettingsManager: UserSettingsManager
 
+    @Inject
+    internal lateinit var reminderProvider: ReminderMessageProvider
+
     @VisibleForTesting
-    constructor(userSettingsManager: UserSettingsManager) {
+    constructor(userSettingsManager: UserSettingsManager,
+                reminderMessageProvider: ReminderMessageProvider) {
         this.userSettingsManager = userSettingsManager
+        this.reminderProvider = reminderMessageProvider
     }
 
     constructor() {
@@ -90,9 +96,9 @@ internal class ReminderNotification {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.ic_reminder_notification_small)
                 .setContentTitle(context.getString(R.string.reminder_notification_title))
-                .setContentText(context.getString(R.string.reminder_notification_message))
+                .setContentText(reminderProvider.getReminderMessage())
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setTicker(context.getString(R.string.reminder_notification_message))
+                .setTicker(reminderProvider.getReminderMessage())
                 .setAutoCancel(true)
                 .setColor(context.getColorCompat(R.color.reminder_notification_color))
                 .setWhen(System.currentTimeMillis())
@@ -100,7 +106,7 @@ internal class ReminderNotification {
                 .setChannelId(NotificationChannelType.REMINDER_NOTIFICATION_CHANNEL)
                 .setStyle(NotificationCompat.BigTextStyle()
                         .setBigContentTitle(context.getString(R.string.reminder_notification_title))
-                        .bigText(context.getString(R.string.reminder_notification_message)))
+                        .bigText(reminderProvider.getReminderMessage()))
     }
 
     private fun playSound(context: Context, uri: Uri) {

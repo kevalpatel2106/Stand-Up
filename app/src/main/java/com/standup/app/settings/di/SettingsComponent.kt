@@ -20,6 +20,7 @@ package com.standup.app.settings.di
 import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.standup.app.authentication.di.UserAuthModule
+import com.standup.app.popup.PopUpActivity
 import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
 import com.standup.app.settings.dailyReview.DailyReviewSettingsViewModel
 import com.standup.app.settings.dnd.DndSettingsViewModel
@@ -55,4 +56,6 @@ interface SettingsComponent {
     fun inject(dailyReviewSettingsViewModel: DailyReviewSettingsViewModel)
 
     fun inject(dndSettingsViewModel: DndSettingsViewModel)
+
+    fun inject(popUpActivity: PopUpActivity)
 }

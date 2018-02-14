@@ -19,6 +19,7 @@ package com.kevalpatel2106.common.application.di
 
 import android.app.Application
 import android.content.Context
+import com.kevalpatel2106.common.ReminderMessageProvider
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
@@ -55,4 +56,6 @@ interface AppComponent {
     fun getUserSettingsManagerProvider(): UserSettingsManager
 
     fun getSharedPrefsProvider(): SharedPrefsProvider
+
+    fun getReminderMessageProvider(): ReminderMessageProvider
 }

@@ -18,6 +18,8 @@
 package com.standup.core.reminder
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.support.v4.content.LocalBroadcastManager
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
@@ -140,7 +142,12 @@ internal class NotificationSchedulerJob : Job() {
                         .shouldDisplayNotification(userSessionManager, userSettingsManager)) {
 
             //Fire reminder notification
-            ReminderNotification().notify(context)
+            if (userSettingsManager.shouldDisplayPopUp) {
+                LocalBroadcastManager.getInstance(context)
+                        .sendBroadcast(Intent(CoreConfig.POP_UP_BROADCAST))
+            } else {
+                ReminderNotification().notify(context)
+            }
             Timber.i("Reminder notification fired. Check your status bar.")
 
             //Schedule the next notification

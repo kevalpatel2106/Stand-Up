@@ -19,6 +19,7 @@ package com.kevalpatel2106.common.application.di
 
 import android.app.Application
 import android.content.Context
+import com.kevalpatel2106.common.ReminderMessageProvider
 import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.network.ApiProvider
@@ -77,4 +78,8 @@ class AppModule(private val appContext: Application, private val baseUrl: String
     @Singleton
     @Named(WITHOUT_TOKEN)
     fun provideRetrofitClientWithoutToken(): Retrofit = ApiProvider().getRetrofitClient(baseUrl)
+
+    @Provides
+    @Singleton
+    fun provideReminderMessages(): ReminderMessageProvider = ReminderMessageProvider()
 }
