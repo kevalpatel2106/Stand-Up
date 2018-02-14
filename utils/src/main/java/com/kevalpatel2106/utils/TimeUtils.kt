@@ -149,8 +149,17 @@ object TimeUtils {
         if (timeMills < 0) throw IllegalArgumentException("Time cannot be negative.")
 
         val totalMins = timeMills / ONE_MIN_MILLS
+
         val hours = (totalMins.div(ONE_HOUR_MINS)).toInt()
-        return "${hours}h ${totalMins - (hours * ONE_HOUR_MINS)}m"
+        val mins = totalMins - (hours * ONE_HOUR_MINS)
+
+        return if (hours > 0 && mins > 0) {
+            "${hours}h ${mins}m"
+        } else {
+            val seconds = timeMills - (totalMins * ONE_MIN_MILLS)
+            "${mins}m ${seconds}s"
+        }
+
     }
 
     fun convertToHHmmaFrom12Am(millsFrom12Am: Long): String {
