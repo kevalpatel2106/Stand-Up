@@ -25,15 +25,8 @@ import android.graphics.Color
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 internal object TimeLineConfig {
-
     val DEFAULT_DURATION = TimeLineLength.A_DAY
-
-    const val DEFAULT_LABEL_COLOR = Color.BLACK
     const val DEFAULT_INDICATOR_COLOR = Color.BLACK
-    const val DEFAULT_LABEL_TEXT_COLOR = 12
-    const val DEFAULT_BLOCK_BG_COLOR = Color.BLACK
 
-
-    const val INDICATOR_DARK_COLOR = Color.GRAY
-    const val INDICATOR_LIGHT_COLOR = Color.LTGRAY
+    const val LABLE_AREA_HEIGHT = 80
 }

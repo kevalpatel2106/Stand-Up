@@ -50,8 +50,6 @@ dokka dokkaConfig
 kotlin kotlinOption
 
 dependencies {
-    implementation project(':utils')
-   
 	//Test dependency
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')

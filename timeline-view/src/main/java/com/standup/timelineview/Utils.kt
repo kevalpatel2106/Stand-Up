@@ -19,7 +19,6 @@ package com.standup.timelineview
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.support.annotation.VisibleForTesting
 import android.util.TypedValue
 
@@ -31,18 +30,6 @@ import android.util.TypedValue
 internal object Utils {
 
     @VisibleForTesting
-    internal fun convertTimeLineLengthToSeconds(timeLineLength: TimeLineLength): Long {
-
-        return when (timeLineLength) {
-            TimeLineLength.AN_HOUR -> 3600
-            TimeLineLength.SIX_HOUR -> 6 * 3600
-            TimeLineLength.TWELVE_HOUR -> 12 * 3600
-            TimeLineLength.SIXTEEN_HOURS -> 16 * 3600
-            TimeLineLength.A_DAY -> 24 * 3600
-        }
-    }
-
-    @VisibleForTesting
     internal fun getNumberOfIndicatorBlocks(timeLineLength: TimeLineLength): Int = when (timeLineLength) {
         TimeLineLength.AN_HOUR -> 6
         TimeLineLength.SIX_HOUR -> 6
@@ -52,55 +39,28 @@ internal object Utils {
     }
 
     @SuppressLint("VisibleForTests")
-    internal fun getIndicatorBlockList(timeLineLength: TimeLineLength): ArrayList<TimeLineItem> {
-        val timeLineItems: ArrayList<TimeLineItem>
+    internal fun prepareLabels(viewWidth: Int, timeLineLength: TimeLineLength): ArrayList<Label> {
+
+        val labelsCount = getNumberOfIndicatorBlocks(timeLineLength)
+        val singleLabelBlockWidth: Float = (viewWidth / labelsCount).toFloat()
+        val labels = ArrayList<Label>(labelsCount)
 
         return when (timeLineLength) {
             TimeLineLength.AN_HOUR -> {
-                timeLineItems = ArrayList(6 /*60 / 6 = 10 mins of block*/)
-                with(timeLineItems) {
-                    (0 until 6).mapTo(this) {
-
-                        TimeLineItem(
-                                startTimeMillsFrom12Am = it * 360L,
-                                endTimeMillsFrom12Am = (it + 1) * 360L
-                        )
-                    }
+                (1 until labelsCount).forEach {
+                    labels.add(Label("${it.times(10)}", (it * singleLabelBlockWidth) - 10))
                 }
+
+                labels
             }
             TimeLineLength.SIX_HOUR, TimeLineLength.TWELVE_HOUR, TimeLineLength.SIXTEEN_HOURS, TimeLineLength.A_DAY -> {
-
-                val capacity: Int = Utils.getNumberOfIndicatorBlocks(timeLineLength)
-                timeLineItems = ArrayList(capacity)
-                with(timeLineItems) {
-                    (0 until capacity).mapTo(this) {
-
-                        TimeLineItem(
-                                startTimeMillsFrom12Am = it * 3600L,
-                                endTimeMillsFrom12Am = (it + 1) * 3600L
-                        )
-                    }
+                (1 until labelsCount).forEach {
+                    labels.add(Label("$it".plus(":00"), (it * singleLabelBlockWidth) - 10))
                 }
+                labels
             }
         }
     }
-
-    @SuppressLint("VisibleForTests")
-    internal fun calculateBlockCoordinates(viewWidth: Int,
-                                           items: ArrayList<TimeLineItem>,
-                                           timelineDuration: TimeLineLength): ArrayList<TimeLineItem> {
-
-        val timeLineLengthSec = Utils.convertTimeLineLengthToSeconds(timelineDuration)
-        val eachSecondWidth = viewWidth.toFloat() / timeLineLengthSec
-
-        items.forEach {
-            it.startX = it.startTimeMillsFrom12Am.div(1000) * eachSecondWidth
-            it.endX = it.endTimeMillsFrom12Am.div(1000) * eachSecondWidth
-        }
-
-        return items
-    }
-
 
     @JvmStatic
     internal fun toPx(context: Context, dp: Int): Int = TypedValue

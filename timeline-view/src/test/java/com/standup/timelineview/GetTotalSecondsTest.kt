@@ -28,8 +28,8 @@ import org.junit.runners.Parameterized
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(Parameterized::class)
-class ConvertTimeLineLengthToSecondsTest(private val timeLineLength: TimeLineLength,
-                                         private val timeSeconds: Long) {
+class GetTotalSecondsTest(private val timeLineLength: TimeLineLength,
+                          private val timeSeconds: Long) {
 
 
     companion object {
@@ -48,7 +48,7 @@ class ConvertTimeLineLengthToSecondsTest(private val timeLineLength: TimeLineLen
     }
 
     @Test
-    fun checkConvertTimeLineLengthToSeconds() {
-        Assert.assertEquals(Utils.convertTimeLineLengthToSeconds(timeLineLength), timeSeconds)
+    fun checkGetTotalSeconds() {
+        Assert.assertEquals(getTotalSeconds(timeLineLength), timeSeconds)
     }
 }

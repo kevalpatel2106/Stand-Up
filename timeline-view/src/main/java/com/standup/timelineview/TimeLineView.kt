@@ -20,10 +20,8 @@ package com.standup.timelineview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
-import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.annotation.RequiresApi
 import android.support.annotation.VisibleForTesting
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -36,10 +34,10 @@ import android.view.View
  */
 @SuppressLint("ViewConstructor")
 class TimeLineView @JvmOverloads constructor(context: Context,
-                                             private val attrs: AttributeSet? = null,
+                                             attrs: AttributeSet? = null,
                                              defStyleAttr: Int = 0,
-                                             defStyleRes: Int = 0) : View(context, attrs, defStyleAttr, defStyleRes) {
-
+                                             defStyleRes: Int = 0)
+    : View(context, attrs, defStyleAttr, defStyleRes) {
 
     /**
      * Height of the view.
@@ -51,6 +49,9 @@ class TimeLineView @JvmOverloads constructor(context: Context,
      */
     private var viewWidth: Int = 0
 
+    @VisibleForTesting
+    internal var labels = listOf<Label>()
+
     /**
      * Duration of the timeline.
      *
@@ -60,37 +61,15 @@ class TimeLineView @JvmOverloads constructor(context: Context,
         set(value) {
             field = value
 
-            //Update the timeline indicators blocks coordinates.
-            timelineIndicatorBlock = Utils.getIndicatorBlockList(value)
-            Utils.calculateBlockCoordinates(viewWidth, timelineIndicatorBlock, value)
+            //Precess the input data and calculate the start and end coordinates.
+            timelineData.forEach {
+                //calculate the start and end coordinates.
+                it.calculateXBound(viewWidth, value)
+                it.calculateYBound(viewWidth)
+            }
 
-            invalidate()
-        }
-
-    /**
-     * Color to display the axis labels.
-     */
-    @ColorInt
-    var labelColor: Int = TimeLineConfig.DEFAULT_LABEL_COLOR
-        set(value) {
-            field = value
-
-            //Refresh the paint object
-            labelTextPaint.color = value
-
-            invalidate()
-        }
-
-    /**
-     * Color to display the axis labels.
-     */
-    @ColorInt
-    var blockIndicatorColor: Int = TimeLineConfig.DEFAULT_INDICATOR_COLOR
-        set(value) {
-            field = value
-
-            //Refresh the paint object
-            timeLineBlockPaint.color = value
+            //Generate labels
+            labels = Utils.prepareLabels(viewWidth, value)
 
             invalidate()
         }
@@ -98,41 +77,39 @@ class TimeLineView @JvmOverloads constructor(context: Context,
     /**
      * Time line items to display.
      */
-    var timelineItems = ArrayList<TimeLineItem>()
+    var timelineData = listOf<TimeLineData>()
         set(value) {
-            field = Utils.calculateBlockCoordinates(viewWidth, value, timelineDuration)
+
+            //Precess the input data and calculate the start and end coordinates.
+            value.filter {
+                it.timelineItems.isNotEmpty()
+            }.forEach {
+                        //calculate the start and end coordinates.
+                        it.calculateXBound(viewWidth, timelineDuration)
+                        it.calculateYBound(viewWidth)
+                    }
+
+            field = value
 
             //Refresh the list
             invalidate()
         }
 
-    /**
-     * List of the blocks on the timeline to display as background. The size and values of this list
-     * depends on [timelineDuration].
-     *
-     * @see timelineDuration
-     */
-    private var timelineIndicatorBlock = ArrayList<TimeLineItem>()
-
-    /**
-     * [TextPaint] to display the axis labels.
-     */
-    @VisibleForTesting
-    internal var labelTextPaint: TextPaint
-
-    private var timeLineBlockPaint: Paint
+    private var timeLineDataPaint: Paint
+    private var labelPaint: Paint
 
     init {
         attrs?.let {
             //TODO Parse the attribute
         }
 
-        //Prepare the label text
-        labelTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        labelTextPaint.textSize = Utils.toPx(context, TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR).toFloat()
-
         //Prepare block color
-        timeLineBlockPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        timeLineDataPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        //Prepare the label pain
+        labelPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+        labelPaint.textSize = 30F
+        labelPaint.color = Color.WHITE
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -144,21 +121,58 @@ class TimeLineView @JvmOverloads constructor(context: Context,
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
         //Update the list coordinates
-        Utils.calculateBlockCoordinates(viewWidth, timelineItems, timelineDuration)
-        Utils.calculateBlockCoordinates(viewWidth, timelineIndicatorBlock, timelineDuration)
+        timelineData.forEach {
+            it.calculateXBound(viewWidth, timelineDuration)
+            it.calculateYBound(viewHeight)
+        }
+
+        //Generate labels
+        labels = Utils.prepareLabels(viewWidth, timelineDuration)
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        //Change the hour colors
-        timelineIndicatorBlock.forEach {
-            canvas.drawRect(it.startX, y, it.endX, y + viewHeight, timeLineBlockPaint)
+        //Draw x axes
+        canvas.drawLine(
+                x,
+                y + viewHeight - TimeLineConfig.LABLE_AREA_HEIGHT - 2,
+                x + viewWidth,
+                y + viewHeight - TimeLineConfig.LABLE_AREA_HEIGHT + 2,
+                labelPaint
+        )
+
+        //Draw labels
+        labels.forEach {
+            canvas.save()
+            canvas.rotate(-45F,
+                    it.x,
+                    viewHeight.toFloat())
+
+            canvas.drawText(it.title,
+                    it.x,
+                    viewHeight.toFloat(),
+                    labelPaint)
+
+            canvas.restore()
+
+            canvas.drawLine(
+                    it.x - 1,
+                    y,
+                    it.x + 1,
+                    y + viewHeight - TimeLineConfig.LABLE_AREA_HEIGHT,
+                    labelPaint
+            )
         }
 
-        //Display the blocks
-        timelineItems.forEach {
-            canvas.drawRect(it.startX, y + 70, it.endX, y + +viewHeight, timeLineBlockPaint)
+        //Draw the timeline data
+        for (data in timelineData) {
+            timeLineDataPaint.color = data.color
+
+            //Draw timeline item for the data.
+            data.timelineItems.forEach {
+                canvas.drawRect(x + it.startX, y + data.startY, x + it.endX, y + data.endY, timeLineDataPaint)
+            }
         }
     }
 }

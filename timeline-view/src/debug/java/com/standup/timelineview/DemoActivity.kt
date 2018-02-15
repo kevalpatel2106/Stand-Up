@@ -30,9 +30,10 @@ class DemoActivity : AppCompatActivity() {
         //Timeline view
         val timeline = findViewById<TimeLineView>(R.id.timeline_view_demo)
         timeline.timelineDuration = TimeLineLength.A_DAY
-        timeline.blockIndicatorColor = Color.WHITE
 
-        val timelineItems = ArrayList<TimeLineItem>()
+        val timelineData = ArrayList<TimeLineData>()
+
+        var timelineItems = ArrayList<TimeLineItem>()
         timelineItems.add(TimeLineItem(
                 startTimeMillsFrom12Am = 3600_000,
                 endTimeMillsFrom12Am = 2 * 3600_000
@@ -41,6 +42,9 @@ class DemoActivity : AppCompatActivity() {
                 startTimeMillsFrom12Am = (2.5 * 3600_000).toLong(),
                 endTimeMillsFrom12Am = 3 * 3600_000
         ))
+        timelineData.add(TimeLineData(Color.RED, 60, timelineItems))
+
+        timelineItems = ArrayList()
         timelineItems.add(TimeLineItem(
                 startTimeMillsFrom12Am = 3 * 3600_000,
                 endTimeMillsFrom12Am = (3.25 * 3600_000).toLong()
@@ -49,6 +53,9 @@ class DemoActivity : AppCompatActivity() {
                 startTimeMillsFrom12Am = 6 * 3600_000,
                 endTimeMillsFrom12Am = 8 * 3600_000
         ))
+        timelineData.add(TimeLineData(Color.GREEN, 30, timelineItems))
+
+        timelineItems = ArrayList()
         timelineItems.add(TimeLineItem(
                 startTimeMillsFrom12Am = 5 * 3600_000,
                 endTimeMillsFrom12Am = (5.90 * 3600_000).toLong()
@@ -57,6 +64,8 @@ class DemoActivity : AppCompatActivity() {
                 startTimeMillsFrom12Am = 12 * 3600_000,
                 endTimeMillsFrom12Am = 23 * 3600_000
         ))
-        timeline.timelineItems = timelineItems
+        timelineData.add(TimeLineData(Color.GRAY, 80, timelineItems))
+
+        timeline.timelineData = timelineData
     }
 }

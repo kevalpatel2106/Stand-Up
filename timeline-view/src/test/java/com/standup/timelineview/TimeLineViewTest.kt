@@ -17,7 +17,6 @@
 
 package com.standup.timelineview
 
-import android.graphics.Color
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,15 +32,6 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
 class TimeLineViewTest {
-
-    @Test
-    fun checkSettingTimelineItems() {
-        val timeline = TimeLineView(RuntimeEnvironment.application)
-        timeline.labelColor = Color.GREEN
-
-        Assert.assertEquals(Color.GREEN, timeline.labelColor)
-        Assert.assertEquals(Color.GREEN, timeline.labelTextPaint.color)
-    }
 
     @Test
     fun checkSettingDefaultTimelineDuration() {

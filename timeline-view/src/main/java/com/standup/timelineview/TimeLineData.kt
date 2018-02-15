@@ -17,13 +17,29 @@
 
 package com.standup.timelineview
 
+import android.support.annotation.ColorInt
+
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 data class TimeLineData(
-        val timeLineItemType: TimeLineItemType,
+        @ColorInt
+        val color: Int,
+
+        val heightPercentage: Int,
 
         val timelineItems: ArrayList<TimeLineItem>
-)
+) {
+
+    init {
+        if (heightPercentage !in 0..100) {
+            throw IllegalArgumentException("heightPercentage must be between 0 to 100.")
+        }
+    }
+
+    internal var startY: Float = 0F
+
+    internal var endY: Float = 0F
+}

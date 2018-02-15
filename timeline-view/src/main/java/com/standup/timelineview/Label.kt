@@ -17,14 +17,14 @@
 
 package com.standup.timelineview
 
-import android.support.annotation.ColorInt
-
 /**
- * Created by Kevalpatel2106 on 18-Dec-17.
+ * Created by Kevalpatel2106 on 15-Feb-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class TimeLineItemType(
-        @ColorInt
-        val color: Int
+data class Label(
+
+        val title: String,
+
+        val x: Float
 )

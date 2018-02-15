@@ -21,6 +21,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.util.*
 
 /**
  * Created by Kevalpatel2106 on 04-Jan-18.
@@ -134,6 +135,46 @@ class TimeLineItemTest {
             Assert.assertEquals(0F, timelineItem.startX)
         } catch (e: Exception) {
             Assert.fail(e.message)
+        }
+    }
+
+    @Test
+    fun checkCreate() {
+        try {
+            val currentTime = TimeLineItem.getMilliSecFrom12AM(System.currentTimeMillis())
+            val timelineItem = TimeLineItem(currentTime, currentTime + 1_000L)
+
+            Assert.assertEquals(currentTime, timelineItem.startTimeMillsFrom12Am)
+            Assert.assertEquals(currentTime + 1_000L, timelineItem.endTimeMillsFrom12Am)
+            Assert.assertEquals(0F, timelineItem.endX)
+            Assert.assertEquals(0F, timelineItem.startX)
+        } catch (e: Exception) {
+            Assert.fail(e.message)
+        }
+    }
+
+
+    @Test
+    @Throws(Exception::class)
+    fun checkGetMilliSecFrom12AM() {
+        val today12AmCal = Calendar.getInstance()
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
+        today12AmCal.set(Calendar.MINUTE, 0)
+        today12AmCal.set(Calendar.SECOND, 0)
+        today12AmCal.set(Calendar.MILLISECOND, 0)
+        today12AmCal.add(Calendar.HOUR, 2)
+        Assert.assertEquals(TimeLineItem.getMilliSecFrom12AM(today12AmCal.timeInMillis),
+                2L.times(3600L).times(1000L))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkGetMilliSecFrom12AMWithZeroTime() {
+        try {
+            TimeLineItem.getMilliSecFrom12AM(0)
+            Assert.fail()
+        } catch (e: IllegalArgumentException) {
+            //Test Passed
         }
     }
 }

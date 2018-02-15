@@ -17,7 +17,7 @@
 
 package com.standup.timelineview
 
-import org.junit.Assert
+import android.graphics.Color
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,9 +29,9 @@ import org.junit.runners.Parameterized
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(Parameterized::class)
-class CalculateBlockCoordinatesTest(private val viewWidth: Int,
-                                    private val timeLineLength: TimeLineLength,
-                                    private val oneSecWidth: Float) {
+class CalculateXBoundTest(private val viewWidth: Int,
+                          private val timeLineLength: TimeLineLength,
+                          private val oneSecWidth: Float) {
 
 
     companion object {
@@ -57,12 +57,10 @@ class CalculateBlockCoordinatesTest(private val viewWidth: Int,
 
     @Test
     fun checkCalculateBlockCoordinates() {
-        val list = TestingUtils.getTestTimelineItems()
-        val blocks = Utils.calculateBlockCoordinates(viewWidth, list, timeLineLength)
+        val list = TimeLineData(Color.RED, 30, TestingUtils.getTestTimelineItems())
+        list.calculateXBound(viewWidth, timeLineLength)
 
-        Assert.assertEquals(list.size, blocks.size)
-
-        blocks.forEach { it ->
+        list.timelineItems.forEach { it ->
             assertEquals(it.startX, it.startTimeMillsFrom12Am.div(1000).times(oneSecWidth))
             assertEquals(it.endX, it.endTimeMillsFrom12Am.div(1000).times(oneSecWidth))
         }

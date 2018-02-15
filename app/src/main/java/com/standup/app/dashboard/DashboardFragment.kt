@@ -134,7 +134,9 @@ class DashboardFragment : Fragment() {
         model.timelineEventsList.observe(this@DashboardFragment, Observer {
             it?.let {
                 time_line_card.visibility = View.VISIBLE
-                today_time_line.timelineItems = it
+
+                //TODO set the timeline items
+//                today_time_line.timelineData = it
             }
         })
     }
