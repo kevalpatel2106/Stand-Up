@@ -20,5 +20,5 @@
     <integer name="password_max_length">16</integer>
     <integer name="name_max_length">30</integer>
 
-    <integer name="pie_chart_animation_duration">1000</integer>
+    <integer name="pie_chart_animation_duration">600</integer>
 </resources>

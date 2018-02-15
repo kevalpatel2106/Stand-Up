@@ -17,7 +17,7 @@
 
 package com.standup.timelineview
 
-import android.support.annotation.ColorInt
+import java.util.*
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.
@@ -25,18 +25,41 @@ import android.support.annotation.ColorInt
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 data class TimeLineItem(
-
-        val startTimeMills: Long,    //Mills
-
-        val endTimeMills: Long,      //Mills
-
-        @ColorInt
-        val color: Int
+        val startTimeMillsFrom12Am: Long,    //Mills
+        val endTimeMillsFrom12Am: Long      //Mills
 ) {
 
     init {
-        if (endTimeMills < startTimeMills)
+        //Validate
+        if (endTimeMillsFrom12Am < startTimeMillsFrom12Am)
             throw IllegalArgumentException("End time cannot be less than start time.")
+
+        val oneDayMills = 8_64_00_000L
+
+        if (endTimeMillsFrom12Am !in 0..oneDayMills)
+            throw IllegalArgumentException("End time cannot more than a day.")
+
+        if (startTimeMillsFrom12Am !in 0..oneDayMills)
+            throw IllegalArgumentException("Start time cannot more than a day.")
+    }
+
+    companion object {
+
+        fun create(startTimeUnixMills: Long, endTimeUnixMills: Long) =
+                TimeLineItem(getMilliSecFrom12AM(startTimeUnixMills), getMilliSecFrom12AM(endTimeUnixMills))
+
+        internal fun getMilliSecFrom12AM(unixMills: Long): Long {
+            if (unixMills <= 0)
+                throw IllegalArgumentException("Invalid unix time: ".plus(unixMills))
+
+            val today12AmCal = Calendar.getInstance()
+            today12AmCal.timeInMillis = unixMills
+            today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
+            today12AmCal.set(Calendar.MINUTE, 0)
+            today12AmCal.set(Calendar.SECOND, 0)
+            today12AmCal.set(Calendar.MILLISECOND, 0)
+            return unixMills - today12AmCal.timeInMillis
+        }
     }
 
     internal var startX: Float = 0F

@@ -21,8 +21,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.common.ReminderMessageProvider
+import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.utils.vibrate
 import com.standup.core.R
 import com.standup.core.di.DaggerCoreComponent
 import kotlinx.android.synthetic.main.activity_pop_up.*
@@ -35,6 +37,9 @@ class PopUpActivity : BaseActivity() {
      */
     @Inject
     internal lateinit var reminderMessageProvider: ReminderMessageProvider
+
+    @Inject
+    internal lateinit var userSettingsManager: UserSettingsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +58,15 @@ class PopUpActivity : BaseActivity() {
 
         //Ok button
         reminder_pop_up_ok_btn.setOnClickListener { finish() }
+
+        if (NotificationSchedulerHelper.shouldVibrate(this@PopUpActivity, userSettingsManager)) {
+            vibrate(200)
+        }
+
+        if (NotificationSchedulerHelper.shouldPlaySound(this@PopUpActivity, userSettingsManager)) {
+            NotificationSchedulerHelper.playSound(this@PopUpActivity,
+                    userSettingsManager.getReminderToneUri)
+        }
     }
 
     override fun onBackPressed() {

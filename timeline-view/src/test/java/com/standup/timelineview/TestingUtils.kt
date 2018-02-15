@@ -17,8 +17,6 @@
 
 package com.standup.timelineview
 
-import android.graphics.Color
-
 /**
  * Created by Kevalpatel2106 on 05-Jan-18.
  *
@@ -31,29 +29,24 @@ internal object TestingUtils {
     fun getTestTimelineItems(): ArrayList<TimeLineItem> {
         val timelineItems = ArrayList<TimeLineItem>()
         timelineItems.add(TimeLineItem(
-                startTimeMills = ONE_HOUR_MILLS,
-                endTimeMills = 2 * ONE_HOUR_MILLS,
-                color = Color.GREEN
+                startTimeMillsFrom12Am = ONE_HOUR_MILLS,
+                endTimeMillsFrom12Am = 2 * ONE_HOUR_MILLS
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = (2.5 * ONE_HOUR_MILLS).toLong(),
-                endTimeMills = 3 * ONE_HOUR_MILLS,
-                color = Color.YELLOW
+                startTimeMillsFrom12Am = (2.5 * ONE_HOUR_MILLS).toLong(),
+                endTimeMillsFrom12Am = 3 * ONE_HOUR_MILLS
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 3 * ONE_HOUR_MILLS,
-                endTimeMills = (3.25 * ONE_HOUR_MILLS).toLong(),
-                color = Color.BLUE
+                startTimeMillsFrom12Am = 3 * ONE_HOUR_MILLS,
+                endTimeMillsFrom12Am = (3.25 * ONE_HOUR_MILLS).toLong()
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 6 * ONE_HOUR_MILLS,
-                endTimeMills = 8 * ONE_HOUR_MILLS,
-                color = Color.GREEN
+                startTimeMillsFrom12Am = 6 * ONE_HOUR_MILLS,
+                endTimeMillsFrom12Am = 8 * ONE_HOUR_MILLS
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 5 * ONE_HOUR_MILLS,
-                endTimeMills = (5.90 * ONE_HOUR_MILLS).toLong(),
-                color = Color.YELLOW
+                startTimeMillsFrom12Am = 5 * ONE_HOUR_MILLS,
+                endTimeMillsFrom12Am = (5.90 * ONE_HOUR_MILLS).toLong()
         ))
         return timelineItems
     }

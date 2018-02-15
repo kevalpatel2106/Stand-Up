@@ -110,15 +110,15 @@ class DashboardViewModelTest {
             Assert.assertEquals(it!!.size, userActivityDao.tableItems.size)
 
             //Check 0th item
-            Assert.assertEquals(it[0].startTimeMills,
+            Assert.assertEquals(it[0].startTimeMillsFrom12Am,
                     model.todaySummary.value!!.dayActivity[0].eventStartTimeMills - today12AmMills)
-            Assert.assertEquals(it[0].endTimeMills,
+            Assert.assertEquals(it[0].endTimeMillsFrom12Am,
                     model.todaySummary.value!!.dayActivity[0].eventEndTimeMills - today12AmMills)
 
             //Check 1st item
-            Assert.assertEquals(it[1].startTimeMills,
+            Assert.assertEquals(it[1].startTimeMillsFrom12Am,
                     model.todaySummary.value!!.dayActivity[1].eventStartTimeMills - today12AmMills)
-            Assert.assertEquals(it[1].endTimeMills,
+            Assert.assertEquals(it[1].endTimeMillsFrom12Am,
                     model.todaySummary.value!!.dayActivity[1].eventEndTimeMills - today12AmMills)
         }
     }

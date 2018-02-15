@@ -25,6 +25,7 @@
     <com.standup.timelineview.TimeLineView
         android:id="@+id/timeline_view_demo"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:background="#333333"
+        android:layout_height="150dp" />
 
 </RelativeLayout>

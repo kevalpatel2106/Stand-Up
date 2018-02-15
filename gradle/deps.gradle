@@ -75,9 +75,9 @@ ext {
     //Testing dependency
     testLib = [
             [configuration: "api", dependency: 'junit:junit:4.12'],
-            [configuration: "api", dependency: 'com.android.support.test:rules:1.0'],
+            [configuration: "api", dependency: 'com.android.support.test:rules:1.0.2-alpha1'],
             [configuration: "api", dependency: 'android.arch.core:core-testing:' + archComponentVersion],
-            [configuration: "api", dependency: 'com.android.support.test:runner:1.0.1'],
+            [configuration: "api", dependency: 'com.android.support.test:runner:1.0.2-alpha1'],
             [configuration: "api", dependency: 'com.android.support.test.espresso:espresso-core:' + espressoVersion],
             [configuration: "api", dependency: 'com.android.support.test.espresso:espresso-intents:' + espressoVersion],
             [configuration: "api", dependency: 'com.android.support.test.espresso:espresso-contrib:' + espressoVersion],

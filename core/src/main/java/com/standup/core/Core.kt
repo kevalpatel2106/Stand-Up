@@ -80,16 +80,19 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
          * 10 seconds.
          */
         fun fireTestReminder(context: Context) {
-//            ReminderNotification().notify(context)
+            ReminderNotification().notify(context)
 
-            //Schedule the job
-            val id = JobRequest.Builder(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
+            //Cancel the notification after some time.
+            Handler().postDelayed({ ReminderNotification().cancel(context) }, 10_000L /* 10 Seconds */)
+        }
+
+        fun runNotificationJob() {
+            //Run the job
+            JobRequest.Builder(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
                     .setUpdateCurrent(true)
                     .startNow()
                     .build()
                     .schedule()
-            //Cancel the notification after some time.
-            Handler().postDelayed({ ReminderNotification().cancel(context) }, 10_000L /* 10 Seconds */)
         }
     }
 

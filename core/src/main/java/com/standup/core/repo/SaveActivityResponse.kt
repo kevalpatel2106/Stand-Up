@@ -25,7 +25,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-data class SaveActivityResponse(
+internal data class SaveActivityResponse(
 
         @SerializedName("id")
         @Expose

@@ -71,9 +71,8 @@ class CreateTimeLineItemFromUserActivityTest(private val userActivityType: UserA
                 isSynced = true)
 
         val timelineItem = SUUtils.createTimeLineItemFromUserActivity(userActivity)
-        assertEquals(timelineItem.startTimeMills, 2.times(3600).times(1000))
-        assertEquals(timelineItem.endTimeMills, 3.times(3600).times(1000))
-        assertEquals(timelineItem.color, color)
+        assertEquals(timelineItem.startTimeMillsFrom12Am, 2.times(3600).times(1000))
+        assertEquals(timelineItem.endTimeMillsFrom12Am, 3.times(3600).times(1000))
     }
 
 
@@ -96,9 +95,8 @@ class CreateTimeLineItemFromUserActivityTest(private val userActivityType: UserA
                 isSynced = true)
 
         val timelineItem = SUUtils.createTimeLineItemFromUserActivity(userActivity)
-        assertEquals(timelineItem.startTimeMills, 11.times(3600).times(1000))
-        assertEquals(timelineItem.endTimeMills, 22.times(3600).times(1000))
-        assertEquals(timelineItem.color, color)
+        assertEquals(timelineItem.startTimeMillsFrom12Am, 11.times(3600).times(1000))
+        assertEquals(timelineItem.endTimeMillsFrom12Am, 22.times(3600).times(1000))
     }
 
     @Test
@@ -120,8 +118,7 @@ class CreateTimeLineItemFromUserActivityTest(private val userActivityType: UserA
                 isSynced = true)
 
         val timelineItem = SUUtils.createTimeLineItemFromUserActivity(userActivity)
-        assertEquals(timelineItem.startTimeMills, 11.times(3600).times(1000))
-        assertEquals(timelineItem.endTimeMills, 26.times(3600).times(1000))  //The new end time should not change the date.
-        assertEquals(timelineItem.color, color)
+        assertEquals(timelineItem.startTimeMillsFrom12Am, 11.times(3600).times(1000))
+        assertEquals(timelineItem.endTimeMillsFrom12Am, 26.times(3600).times(1000))  //The new end time should not change the date.
     }
 }

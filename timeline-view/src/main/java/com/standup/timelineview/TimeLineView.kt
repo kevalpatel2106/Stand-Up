@@ -17,6 +17,7 @@
 
 package com.standup.timelineview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -33,38 +34,12 @@ import android.view.View
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
+@SuppressLint("ViewConstructor")
+class TimeLineView @JvmOverloads constructor(context: Context,
+                                             private val attrs: AttributeSet? = null,
+                                             defStyleAttr: Int = 0,
+                                             defStyleRes: Int = 0) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-class TimeLineView : View {
-
-    constructor(context: Context) : super(context) {
-        this.ctx = context
-        init()
-    }
-
-    constructor(context: Context,
-                attrs: AttributeSet?) : super(context, attrs) {
-        this.ctx = context
-        init(attrs)
-    }
-
-    constructor(context: Context,
-                attrs: AttributeSet?,
-                defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        this.ctx = context
-        init(attrs)
-    }
-
-    @Suppress("unused")
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context,
-                attrs: AttributeSet?,
-                defStyleAttr: Int,
-                defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        this.ctx = context
-        init(attrs)
-    }
-
-    private val ctx: Context
 
     /**
      * Height of the view.
@@ -107,6 +82,20 @@ class TimeLineView : View {
         }
 
     /**
+     * Color to display the axis labels.
+     */
+    @ColorInt
+    var blockIndicatorColor: Int = TimeLineConfig.DEFAULT_INDICATOR_COLOR
+        set(value) {
+            field = value
+
+            //Refresh the paint object
+            timeLineBlockPaint.color = value
+
+            invalidate()
+        }
+
+    /**
      * Time line items to display.
      */
     var timelineItems = ArrayList<TimeLineItem>()
@@ -129,18 +118,18 @@ class TimeLineView : View {
      * [TextPaint] to display the axis labels.
      */
     @VisibleForTesting
-    internal lateinit var labelTextPaint: TextPaint
+    internal var labelTextPaint: TextPaint
 
-    private lateinit var timeLineBlockPaint: Paint
+    private var timeLineBlockPaint: Paint
 
-    private fun init(attrs: AttributeSet? = null) {
+    init {
         attrs?.let {
             //TODO Parse the attribute
         }
 
         //Prepare the label text
         labelTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        labelTextPaint.textSize = Utils.toPx(ctx, TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR).toFloat()
+        labelTextPaint.textSize = Utils.toPx(context, TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR).toFloat()
 
         //Prepare block color
         timeLineBlockPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -164,13 +153,11 @@ class TimeLineView : View {
 
         //Change the hour colors
         timelineIndicatorBlock.forEach {
-            timeLineBlockPaint.color = it.color
             canvas.drawRect(it.startX, y, it.endX, y + viewHeight, timeLineBlockPaint)
         }
 
         //Display the blocks
         timelineItems.forEach {
-            timeLineBlockPaint.color = it.color
             canvas.drawRect(it.startX, y + 70, it.endX, y + +viewHeight, timeLineBlockPaint)
         }
     }

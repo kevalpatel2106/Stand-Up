@@ -63,8 +63,8 @@ class CalculateBlockCoordinatesTest(private val viewWidth: Int,
         Assert.assertEquals(list.size, blocks.size)
 
         blocks.forEach { it ->
-            assertEquals(it.startX, it.startTimeMills.div(1000).times(oneSecWidth))
-            assertEquals(it.endX, it.endTimeMills.div(1000).times(oneSecWidth))
+            assertEquals(it.startX, it.startTimeMillsFrom12Am.div(1000).times(oneSecWidth))
+            assertEquals(it.endX, it.endTimeMillsFrom12Am.div(1000).times(oneSecWidth))
         }
     }
 }

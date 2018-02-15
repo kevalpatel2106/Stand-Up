@@ -52,7 +52,7 @@ internal object Utils {
     }
 
     @SuppressLint("VisibleForTests")
-    fun getIndicatorBlockList(timeLineLength: TimeLineLength): ArrayList<TimeLineItem> {
+    internal fun getIndicatorBlockList(timeLineLength: TimeLineLength): ArrayList<TimeLineItem> {
         val timeLineItems: ArrayList<TimeLineItem>
 
         return when (timeLineLength) {
@@ -60,9 +60,10 @@ internal object Utils {
                 timeLineItems = ArrayList(6 /*60 / 6 = 10 mins of block*/)
                 with(timeLineItems) {
                     (0 until 6).mapTo(this) {
-                        TimeLineItem(startTimeMills = it * 360L,
-                                endTimeMills = (it + 1) * 360L,
-                                color = if (it % 2 == 0) Color.GRAY else Color.LTGRAY
+
+                        TimeLineItem(
+                                startTimeMillsFrom12Am = it * 360L,
+                                endTimeMillsFrom12Am = (it + 1) * 360L
                         )
                     }
                 }
@@ -73,10 +74,10 @@ internal object Utils {
                 timeLineItems = ArrayList(capacity)
                 with(timeLineItems) {
                     (0 until capacity).mapTo(this) {
-                        TimeLineItem(startTimeMills = it * 3600L,
-                                endTimeMills = (it + 1) * 3600L,
-                                color = if (it % 2 == 0) (TimeLineConfig.INDICATOR_DARK_COLOR)
-                                else (TimeLineConfig.INDICATOR_LIGHT_COLOR)
+
+                        TimeLineItem(
+                                startTimeMillsFrom12Am = it * 3600L,
+                                endTimeMillsFrom12Am = (it + 1) * 3600L
                         )
                     }
                 }
@@ -85,16 +86,16 @@ internal object Utils {
     }
 
     @SuppressLint("VisibleForTests")
-    fun calculateBlockCoordinates(viewWidth: Int,
-                                  items: ArrayList<TimeLineItem>,
-                                  timelineDuration: TimeLineLength): ArrayList<TimeLineItem> {
+    internal fun calculateBlockCoordinates(viewWidth: Int,
+                                           items: ArrayList<TimeLineItem>,
+                                           timelineDuration: TimeLineLength): ArrayList<TimeLineItem> {
 
         val timeLineLengthSec = Utils.convertTimeLineLengthToSeconds(timelineDuration)
         val eachSecondWidth = viewWidth.toFloat() / timeLineLengthSec
 
         items.forEach {
-            it.startX = it.startTimeMills.div(1000) * eachSecondWidth
-            it.endX = it.endTimeMills.div(1000) * eachSecondWidth
+            it.startX = it.startTimeMillsFrom12Am.div(1000) * eachSecondWidth
+            it.endX = it.endTimeMillsFrom12Am.div(1000) * eachSecondWidth
         }
 
         return items
@@ -102,7 +103,7 @@ internal object Utils {
 
 
     @JvmStatic
-    fun toPx(context: Context, dp: Int): Int = TypedValue
+    internal fun toPx(context: Context, dp: Int): Int = TypedValue
             .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), context.resources.displayMetrics)
             .toInt()
 }

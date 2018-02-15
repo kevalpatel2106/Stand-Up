@@ -58,7 +58,7 @@ class GetIndicatorBlockCoordinatesTest(private val timeLineLength: TimeLineLengt
     @Test
     fun checkGetIndicatorBlockCoordinatesCheckDifference() {
         val indicators = Utils.getIndicatorBlockList(timeLineLength)
-        indicators.forEach { it -> assertEquals(it.endTimeMills - it.startTimeMills, startEndDiff) }
+        indicators.forEach { it -> assertEquals(it.endTimeMillsFrom12Am - it.startTimeMillsFrom12Am, startEndDiff) }
     }
 
     @Test

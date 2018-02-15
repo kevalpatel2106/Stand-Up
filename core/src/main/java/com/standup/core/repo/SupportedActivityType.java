@@ -29,5 +29,5 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.SOURCE)
 @IntDef({0, 1})
-public @interface SupportedActivityType {
+@interface SupportedActivityType {
 }

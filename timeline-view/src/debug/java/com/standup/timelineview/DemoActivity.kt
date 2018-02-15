@@ -30,37 +30,32 @@ class DemoActivity : AppCompatActivity() {
         //Timeline view
         val timeline = findViewById<TimeLineView>(R.id.timeline_view_demo)
         timeline.timelineDuration = TimeLineLength.A_DAY
+        timeline.blockIndicatorColor = Color.WHITE
 
         val timelineItems = ArrayList<TimeLineItem>()
         timelineItems.add(TimeLineItem(
-                startTimeMills = 3600,
-                endTimeMills = 2 * 3600,
-                color = Color.GREEN
+                startTimeMillsFrom12Am = 3600_000,
+                endTimeMillsFrom12Am = 2 * 3600_000
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = (2.5 * 3600).toLong(),
-                endTimeMills = 3 * 3600,
-                color = Color.YELLOW
+                startTimeMillsFrom12Am = (2.5 * 3600_000).toLong(),
+                endTimeMillsFrom12Am = 3 * 3600_000
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 3 * 3600,
-                endTimeMills = (3.25 * 3600).toLong(),
-                color = Color.BLUE
+                startTimeMillsFrom12Am = 3 * 3600_000,
+                endTimeMillsFrom12Am = (3.25 * 3600_000).toLong()
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 6 * 3600,
-                endTimeMills = 8 * 3600,
-                color = Color.GREEN
+                startTimeMillsFrom12Am = 6 * 3600_000,
+                endTimeMillsFrom12Am = 8 * 3600_000
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 5 * 3600,
-                endTimeMills = (5.90 * 3600).toLong(),
-                color = Color.YELLOW
+                startTimeMillsFrom12Am = 5 * 3600_000,
+                endTimeMillsFrom12Am = (5.90 * 3600_000).toLong()
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMills = 12 * 3600,
-                endTimeMills = 23 * 3600,
-                color = Color.GREEN
+                startTimeMillsFrom12Am = 12 * 3600_000,
+                endTimeMillsFrom12Am = 23 * 3600_000
         ))
         timeline.timelineItems = timelineItems
     }

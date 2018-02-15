@@ -17,5 +17,5 @@
 
 <translate xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="@integer/pie_chart_animation_duration"
-    android:fromYDelta="100%p"
+    android:fromYDelta="50%p"
     android:interpolator="@android:anim/accelerate_decelerate_interpolator" />

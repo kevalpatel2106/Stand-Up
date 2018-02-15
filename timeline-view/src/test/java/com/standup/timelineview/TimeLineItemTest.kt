@@ -29,16 +29,17 @@ import org.junit.runners.JUnit4
  */
 @RunWith(JUnit4::class)
 class TimeLineItemTest {
+    private val oneDayMills = 8_64_00_000L
 
     @Test
     fun checkInitWithValidParams() {
         try {
-            val currentTime = System.currentTimeMillis()
-            val timelineItem = TimeLineItem(currentTime, currentTime + 1000, 123)
+            val startTime = 1800_000L
+            val endTime = 3600_000L
+            val timelineItem = TimeLineItem(startTime, endTime )
 
-            Assert.assertEquals(currentTime, timelineItem.startTimeMills)
-            Assert.assertEquals(currentTime + 1000, timelineItem.endTimeMills)
-            Assert.assertEquals(123, timelineItem.color)
+            Assert.assertEquals(startTime, timelineItem.startTimeMillsFrom12Am)
+            Assert.assertEquals(endTime, timelineItem.endTimeMillsFrom12Am)
             Assert.assertEquals(0F, timelineItem.endX)
             Assert.assertEquals(0F, timelineItem.startX)
         } catch (e: Exception) {
@@ -49,8 +50,8 @@ class TimeLineItemTest {
     @Test
     fun checkInitWithEndTimeLessThanStartTime() {
         try {
-            val currentTime = System.currentTimeMillis()
-            TimeLineItem(currentTime, currentTime - 1000, 123)
+            val currentTime = 1000L
+            TimeLineItem(currentTime, currentTime - 1000)
 
             Assert.fail()
         } catch (e: IllegalArgumentException) {
@@ -60,14 +61,75 @@ class TimeLineItemTest {
     }
 
     @Test
-    fun checkInitWithEndTimeEqualsThanStartTime() {
+    fun checkInitWithEndTimeMoreThanOneDayMills() {
         try {
-            val currentTime = System.currentTimeMillis()
-            val timelineItem = TimeLineItem(currentTime, currentTime, 123)
+            TimeLineItem(1000L, oneDayMills + 1)
 
-            Assert.assertEquals(currentTime, timelineItem.startTimeMills)
-            Assert.assertEquals(currentTime, timelineItem.endTimeMills)
-            Assert.assertEquals(123, timelineItem.color)
+            Assert.fail()
+        } catch (e: IllegalArgumentException) {
+            //Test Passed
+            //NO OP
+        }
+    }
+
+    @Test
+    fun checkInitWithStartTimeMoreThanOneDayMills() {
+        try {
+            TimeLineItem(oneDayMills + 1000, oneDayMills + 2000)
+
+            Assert.fail()
+        } catch (e: IllegalArgumentException) {
+            //Test Passed
+            //NO OP
+        }
+    }
+
+    @Test
+    fun checkInitWithEndTimeLessThanZero() {
+        try {
+            TimeLineItem(1000L, - 10000L)
+
+            Assert.fail()
+        } catch (e: IllegalArgumentException) {
+            //Test Passed
+            //NO OP
+        }
+    }
+
+    @Test
+    fun checkInitWithStartTimeLessThanZero() {
+        try {
+            TimeLineItem(-1000, 2000)
+
+            Assert.fail()
+        } catch (e: IllegalArgumentException) {
+            //Test Passed
+            //NO OP
+        }
+    }
+
+    @Test
+    fun checkInitWithStartEndTimeEqualsOneDay() {
+        try {
+            val timelineItem = TimeLineItem(oneDayMills, oneDayMills)
+
+            Assert.assertEquals(oneDayMills, timelineItem.startTimeMillsFrom12Am)
+            Assert.assertEquals(oneDayMills, timelineItem.endTimeMillsFrom12Am)
+            Assert.assertEquals(0F, timelineItem.endX)
+            Assert.assertEquals(0F, timelineItem.startX)
+        } catch (e: Exception) {
+            Assert.fail(e.message)
+        }
+    }
+
+    @Test
+    fun checkInitWithEndTimeEqualsStartTime() {
+        try {
+            val currentTime = 1000L
+            val timelineItem = TimeLineItem(currentTime, currentTime)
+
+            Assert.assertEquals(currentTime, timelineItem.startTimeMillsFrom12Am)
+            Assert.assertEquals(currentTime, timelineItem.endTimeMillsFrom12Am)
             Assert.assertEquals(0F, timelineItem.endX)
             Assert.assertEquals(0F, timelineItem.startX)
         } catch (e: Exception) {
