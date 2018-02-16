@@ -18,6 +18,7 @@
 
 package com.standup.timelineview
 
+import android.content.Context
 import android.support.annotation.VisibleForTesting
 import java.util.concurrent.TimeUnit
 
@@ -52,11 +53,11 @@ internal fun TimeLineData.calculateXBound(viewWidth: Int,
 /**
  * Calculate the start and end bounds based on the [TimeLineData.heightPercentage] and the [viewHeight].
  */
-internal fun TimeLineData.calculateYBound(viewHeight: Int) {
+internal fun TimeLineData.calculateYBound(context: Context, viewHeight: Int) {
     val heightPx = viewHeight * (1 - heightPercentage.toFloat() / 100)
     startY = heightPx
 
-    endY = viewHeight.toFloat() - TimeLineConfig.LABEL_AREA_HEIGHT
+    endY = viewHeight.toFloat() - TimeLineConfig.getLabelAreaHeight(context)
 }
 
 @VisibleForTesting

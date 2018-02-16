@@ -17,7 +17,9 @@
 
 package com.standup.timelineview
 
+import android.content.Context
 import android.graphics.Color
+import android.support.annotation.Dimension
 
 /**
  * Created by Kevalpatel2106 on 15-Dec-17.
@@ -32,8 +34,13 @@ internal object TimeLineConfig {
     const val DEFAULT_LABEL_TEXT_COLOR = Color.WHITE
     const val DEFAULT_AXIS_COLOR = Color.WHITE
 
-    const val LABEL_AREA_HEIGHT = 105
+    @Dimension
+    const val INDICATOR_WIDTH = 1F  //Px
 
-    const val INDICATOR_WIDTH = 1F
-    const val AXIS_WIDTH = 4F
+    @Dimension
+    const val AXIS_WIDTH = 4F   //Px
+
+    fun getLabelTextHeight(context: Context): Float = Utils.toPx(context, 10).toFloat()
+
+    fun getLabelAreaHeight(context: Context): Float = Utils.toPx(context, 40).toFloat()
 }

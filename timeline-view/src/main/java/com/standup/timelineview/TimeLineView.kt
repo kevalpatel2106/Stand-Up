@@ -40,6 +40,8 @@ class TimeLineView @JvmOverloads constructor(context: Context,
                                              defStyleRes: Int = 0)
     : View(context, attrs, defStyleAttr, defStyleRes) {
 
+    private val labelAreaHeight = TimeLineConfig.getLabelAreaHeight(context)
+
     /**
      * Height of the view.
      */
@@ -66,7 +68,7 @@ class TimeLineView @JvmOverloads constructor(context: Context,
             timelineData.forEach {
                 //calculate the start and end coordinates.
                 it.calculateXBound(viewWidth, value)
-                it.calculateYBound(viewWidth)
+                it.calculateYBound(context, viewWidth)
             }
 
             //Generate labels
@@ -87,7 +89,7 @@ class TimeLineView @JvmOverloads constructor(context: Context,
             }.forEach {
                         //calculate the start and end coordinates.
                         it.calculateXBound(viewWidth, timelineDuration)
-                        it.calculateYBound(viewWidth)
+                        it.calculateYBound(context, viewWidth)
                     }
 
             Collections.sort(value) { p0, p1 -> p1.heightPercentage - p0.heightPercentage }
@@ -113,7 +115,7 @@ class TimeLineView @JvmOverloads constructor(context: Context,
 
         //Prepare the label pain
         labelPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
-        labelPaint.textSize = 30F
+        labelPaint.textSize = TimeLineConfig.getLabelTextHeight(context)
         labelPaint.color = TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR
 
         //Prepare the axis pain
@@ -136,7 +138,7 @@ class TimeLineView @JvmOverloads constructor(context: Context,
         //Update the list coordinates
         timelineData.forEach {
             it.calculateXBound(viewWidth, timelineDuration)
-            it.calculateYBound(viewHeight)
+            it.calculateYBound(context, viewHeight)
         }
 
         //Generate labels
@@ -171,7 +173,7 @@ class TimeLineView @JvmOverloads constructor(context: Context,
 
             //Draw the label
             canvas.drawText(it.title,
-                    it.x + (TimeLineConfig.LABEL_AREA_HEIGHT - labelPaint.measureText(it.title)) / 2,
+                    it.x + (labelAreaHeight - labelPaint.measureText(it.title)) / 2,
                     viewHeight.toFloat() + 15F,
                     labelPaint)
 
@@ -182,7 +184,7 @@ class TimeLineView @JvmOverloads constructor(context: Context,
                     it.x - TimeLineConfig.INDICATOR_WIDTH / 2,
                     y,
                     it.x + TimeLineConfig.INDICATOR_WIDTH / 2,
-                    y + viewHeight - TimeLineConfig.LABEL_AREA_HEIGHT,
+                    y + viewHeight - labelAreaHeight,
                     indicatorPaint
             )
         }
@@ -190,10 +192,11 @@ class TimeLineView @JvmOverloads constructor(context: Context,
         //Draw x axes
         canvas.drawLine(
                 x,
-                y + viewHeight - TimeLineConfig.LABEL_AREA_HEIGHT - TimeLineConfig.AXIS_WIDTH / 2,
+                y + viewHeight - labelAreaHeight - TimeLineConfig.AXIS_WIDTH / 2,
                 x + viewWidth,
-                y + viewHeight - TimeLineConfig.LABEL_AREA_HEIGHT + TimeLineConfig.AXIS_WIDTH / 2,
+                y + viewHeight - labelAreaHeight + TimeLineConfig.AXIS_WIDTH / 2,
                 axesPaint
         )
     }
+
 }
