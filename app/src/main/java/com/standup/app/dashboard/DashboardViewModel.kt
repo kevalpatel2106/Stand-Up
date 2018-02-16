@@ -29,9 +29,6 @@ import com.kevalpatel2106.utils.annotations.ViewModel
 import com.standup.R
 import com.standup.app.dashboard.di.DaggerDashboardComponent
 import com.standup.app.dashboard.repo.DashboardRepo
-import com.standup.app.misc.SUUtils
-import com.standup.timelineview.TimeLineData
-import com.standup.timelineview.TimeLineItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -100,14 +97,6 @@ class DashboardViewModel : BaseViewModel {
     val todaySummaryStartLoading = CallbackEvent()
 
     /**
-     * [MutableLiveData] for [TimeLineData] list. UI controller can observe this property to
-     * get notify whenever [TimeLineData] list updates.
-     *
-     * @see TimeLineItem
-     */
-    val timelineEventsList = MutableLiveData<ArrayList<TimeLineData>>()
-
-    /**
      * Get the summary off today's daily activity. This is an asynchronous method which reads database
      * and process the data to generate stats on the background thread and deliver result to the
      * main thread.
@@ -115,9 +104,6 @@ class DashboardViewModel : BaseViewModel {
      * UI controller can observe [todaySummary] to  get notify whenever the summary gets updated.
      * This summary contains sitting and standing time statistics based on the user activity from
      * 12 am of the current day.
-     *
-     * UI controller can observer [timelineEventsList] to get the list of [TimeLineItem] to display
-     * in [com.kevalpatel2106.standup.timelineview.TimeLineView].
      *
      * Whenever this method starts loading summary stats [todaySummaryStartLoading] will be set to true.
      * If any error occurs while execrating summary, [todaySummaryErrorCallback] will be called.
@@ -134,14 +120,11 @@ class DashboardViewModel : BaseViewModel {
                     todaySummaryErrorCallback.value = null
                 }
                 .doOnComplete {
-                    if (timelineEventsList.value == null)
+                    if (todaySummary.value == null)
                         todaySummaryErrorCallback.value = ErrorMessage(R.string.dashboard_today_summary_not_fount)
                 }
                 .subscribe({
                     todaySummary.value = it
-
-                    //Prepare the timeline data
-                    timelineEventsList.value = SUUtils.createTimeLineItemFromUserActivity(it.dayActivity)
                 }, {
                     //Error message
                     todaySummaryErrorCallback.value = ErrorMessage(it.message)

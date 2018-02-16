@@ -31,6 +31,7 @@ import com.kevalpatel2106.common.base.uiController.showSnack
 import com.standup.R
 import com.standup.app.misc.setPieChart
 import com.standup.app.misc.setPieChartData
+import com.standup.app.misc.setUserActivities
 import com.standup.timelineview.TimeLineLength
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
@@ -127,14 +128,8 @@ class DashboardFragment : Fragment() {
                 tracked_time_tv.text = it.trackedDurationHours
                 total_standing_time_tv.text = it.standingTimeHours
                 total_sitting_time_tv.text = it.sittingTimeHours
-            }
-        })
 
-        //Observe events for time line card
-        model.timelineEventsList.observe(this@DashboardFragment, Observer {
-            it?.let {
-                time_line_card.visibility = View.VISIBLE
-                today_time_line.timelineData = it
+                today_time_line.setUserActivities(it.dayActivity)
             }
         })
     }

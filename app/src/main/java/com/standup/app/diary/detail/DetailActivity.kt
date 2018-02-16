@@ -22,7 +22,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.animation.AnimationUtils
 import butterknife.OnClick
 import com.kevalpatel2106.common.Validator
@@ -32,6 +31,7 @@ import com.standup.R
 import com.standup.app.diary.userActivityList.UserActivityListActivity
 import com.standup.app.misc.setPieChart
 import com.standup.app.misc.setPieChartData
+import com.standup.app.misc.setUserActivities
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
 import kotlinx.android.synthetic.main.layout_home_timeline_card.*
@@ -109,14 +109,8 @@ class DetailActivity : BaseActivity() {
                 tracked_time_tv.text = it.trackedDurationHours
                 total_standing_time_tv.text = it.standingTimeHours
                 total_sitting_time_tv.text = it.sittingTimeHours
-            }
-        })
 
-        //Observe events for time line card
-        model.timelineEventsList.observe(this@DetailActivity, Observer {
-            it?.let {
-                time_line_card.visibility = View.VISIBLE
-                today_time_line.timelineData = it
+                today_time_line.setUserActivities(it.dayActivity)
             }
         })
     }

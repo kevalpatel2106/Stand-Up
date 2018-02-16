@@ -30,9 +30,6 @@ import com.standup.R
 import com.standup.app.diary.di.DaggerDiaryComponent
 import com.standup.app.diary.repo.DiaryRepo
 import com.standup.app.misc.LottieJson
-import com.standup.app.misc.SUUtils
-import com.standup.timelineview.TimeLineData
-import com.standup.timelineview.TimeLineItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -85,14 +82,6 @@ class DetailViewModel : BaseViewModel {
     internal val summary = MutableLiveData<DailyActivitySummary>()
 
     /**
-     * [MutableLiveData] for [TimeLineData] list. UI controller can observe this property to
-     * get notify whenever [TimeLineData] list updates.
-     *
-     * @see TimeLineItem
-     */
-    internal val timelineEventsList = MutableLiveData<ArrayList<TimeLineData>>()
-
-    /**
      * Fetch the [DailyActivitySummary] for the given date of [dayOfMonth]-[month]-[year]. This is
      * an asynchronous method which reads database and process the data to generate stats on the
      * background thread and deliver result to the main thread.
@@ -100,9 +89,6 @@ class DetailViewModel : BaseViewModel {
      * UI controller can observe [summary] to  get notify whenever the summary gets updated.
      * This summary contains sitting and standing time statistics based on the user activity from
      * 12 am of the given [dayOfMonth].
-     *
-     * UI controller can observer [timelineEventsList] to get the list of [TimeLineItem] to display
-     * in [com.kevalpatel2106.standup.timelineview.TimeLineView].
      *
      * Whenever this method starts loading summary stats [blockUi] will be set to true.
      * If any error occurs while execrating summary, [blockUi] will be called.
@@ -129,9 +115,6 @@ class DetailViewModel : BaseViewModel {
                 }
                 .subscribe({
                     summary.value = it
-
-                    //Prepare the timeline data
-                    timelineEventsList.value = SUUtils.createTimeLineItemFromUserActivity(it.dayActivity)
                 }, {
                     val errorMsg = ErrorMessage(it.message)
                     errorMsg.setErrorBtn(R.string.btn_title_retry, { fetchData(dayOfMonth, month, year) })
