@@ -21,6 +21,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.util.TypedValue
+import java.util.*
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.
@@ -66,4 +67,33 @@ internal object Utils {
     internal fun toPx(context: Context, dp: Int): Int = TypedValue
             .applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), context.resources.displayMetrics)
             .toInt()
+
+    internal fun getTouchLabel(touchX: Float, viewWidth: Int, timeLineLength: TimeLineLength): String {
+        val totalSec = touchX / getWidthForEachSecond(viewWidth, timeLineLength)
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        calendar.timeInMillis = (totalSec * 1000L).toLong()
+        return "${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}"
+    }
+
+    internal fun isTouchable(
+            touchX: Float,
+            touchY: Float,
+            viewX: Float,
+            viewY: Float,
+            viewWidth: Int,
+            viewHeight: Int,
+            labelAreaHeight: Float
+    ): Boolean {
+
+        //Check for the x coordinate
+        if (touchX in viewX..(viewX + viewWidth)) {
+
+            //Check for the y coordinate
+            if (touchY in viewY..(viewY + viewHeight - labelAreaHeight)) {
+                return true
+            }
+        }
+        return false
+    }
 }

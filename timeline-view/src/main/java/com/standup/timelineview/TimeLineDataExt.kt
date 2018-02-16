@@ -18,6 +18,7 @@
 
 package com.standup.timelineview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import java.util.concurrent.TimeUnit
@@ -60,7 +61,7 @@ internal fun TimeLineData.calculateYBound(context: Context, viewHeight: Int) {
     endY = viewHeight.toFloat() - TimeLineConfig.getLabelAreaHeight(context)
 }
 
-@VisibleForTesting
+@SuppressLint("VisibleForTests")
 internal fun getWidthForEachSecond(viewWidth: Int, timeLineLength: TimeLineLength): Float {
     if (viewWidth < 0) throw IllegalArgumentException("View width cannot be negative.")
     return viewWidth.toFloat() / getTotalSeconds(timeLineLength)

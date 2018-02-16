@@ -40,7 +40,7 @@
         <com.standup.timelineview.TimeLineView
             android:id="@+id/today_time_line"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="@dimen/timeline_card_graph_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>

@@ -27,8 +27,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import butterknife.OnClick
+import com.kevalpatel2106.common.base.uiController.BaseFragment
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.standup.R
+import com.standup.app.misc.TimeLineFullActivity
 import com.standup.app.misc.setPieChart
 import com.standup.app.misc.setPieChartData
 import com.standup.app.misc.setUserActivities
@@ -44,7 +47,7 @@ import kotlinx.android.synthetic.main.layout_home_timeline_card.*
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-class DashboardFragment : Fragment() {
+class DashboardFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -64,6 +67,7 @@ class DashboardFragment : Fragment() {
 
         //Set time line view.
         today_time_line.timelineDuration = TimeLineLength.A_DAY
+        today_time_line.enableTouch = false
 
         //Set pie chart
         home_efficiency_card_pie_chart.setPieChart(context!!,
@@ -133,6 +137,14 @@ class DashboardFragment : Fragment() {
             }
         })
     }
+
+    @OnClick(R.id.time_line_card)
+    internal fun openFullScreenTimeLine() {
+        model.todaySummary.value?.let {
+            TimeLineFullActivity.launch(context!!, it)
+        }
+    }
+
 
     companion object {
 

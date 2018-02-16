@@ -25,6 +25,7 @@ import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
+import java.io.Serializable
 import java.util.*
 
 /**
@@ -55,7 +56,7 @@ constructor(
          * List od the [UserActivity] for given day.
          */
         val dayActivity: ArrayList<UserActivity>
-) {
+) : Serializable {
 
     /**
      * 3 days initials of the month from [monthOfYear].

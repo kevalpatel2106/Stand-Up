@@ -17,6 +17,7 @@
 
 package com.standup.timelineview
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
@@ -24,6 +25,7 @@ import android.graphics.Paint
 import android.support.annotation.VisibleForTesting
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.View
 import java.util.*
 
@@ -51,6 +53,20 @@ class TimeLineView @JvmOverloads constructor(context: Context,
      * Width of the view.
      */
     private var viewWidth: Int = 0
+
+    /**
+     * Boolean to set true to enable touch events on the view.
+     *
+     * @see [onTouchEvent]
+     */
+    var enableTouch: Boolean = true
+
+    private var touchBubbleX: Float = 0F
+    private var touchTime: String? = null
+
+    //Animations
+    private var valueAnimator: ValueAnimator? = null
+    private var heightAnimationFactor: Float = 0F
 
     @VisibleForTesting
     internal var labels = listOf<Label>()
@@ -93,17 +109,34 @@ class TimeLineView @JvmOverloads constructor(context: Context,
                     }
 
             Collections.sort(value) { p0, p1 -> p1.heightPercentage - p0.heightPercentage }
+
             field = value
 
             //Refresh the list
+            startAnimation()
+
             invalidate()
         }
+
+    private fun startAnimation() {
+        valueAnimator?.cancel()
+
+        valueAnimator = ValueAnimator.ofFloat(0F, 1F)
+        valueAnimator!!.duration = 1000L
+        valueAnimator!!.startDelay = 800L
+        valueAnimator!!.addUpdateListener {
+            heightAnimationFactor = it.animatedFraction
+            requestLayout()
+        }
+        valueAnimator!!.start()
+    }
 
     //Paints
     private var timeLineDataPaint: Paint
     private var labelPaint: Paint
     private var axesPaint: Paint
     private var indicatorPaint: Paint
+    private var touchLabelPaint: Paint
 
     init {
         attrs?.let {
@@ -117,6 +150,11 @@ class TimeLineView @JvmOverloads constructor(context: Context,
         labelPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
         labelPaint.textSize = TimeLineConfig.getLabelTextHeight(context)
         labelPaint.color = TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR
+
+        //Prepare the label pain
+        touchLabelPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+        touchLabelPaint.textSize = TimeLineConfig.getBubbleLabelTextHeight(context)
+        touchLabelPaint.color = TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR
 
         //Prepare the axis pain
         axesPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -148,19 +186,28 @@ class TimeLineView @JvmOverloads constructor(context: Context,
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        var isBubbleDisplayed = false
+
         //Draw the timeline data
         for (data in timelineData) {
             timeLineDataPaint.color = data.color
 
             //Draw timeline item for the data.
+            val topY = y + data.startY
+            val endY = y + data.endY
             data.timelineItems.forEach {
                 canvas.drawRect(
                         x + it.startX,
-                        y + data.startY,
+                        topY,
                         x + it.endX,
-                        y + data.endY,
+                        endY,
                         timeLineDataPaint
                 )
+
+                if (touchBubbleX in x + it.startX..x + it.endX) {
+                    drawTouchBubbleWithLabel(canvas, y + data.startY)
+                    isBubbleDisplayed = true
+                }
             }
         }
 
@@ -190,13 +237,84 @@ class TimeLineView @JvmOverloads constructor(context: Context,
         }
 
         //Draw x axes
-        canvas.drawLine(
-                x,
+        canvas.drawLine(x,
                 y + viewHeight - labelAreaHeight - TimeLineConfig.AXIS_WIDTH / 2,
                 x + viewWidth,
                 y + viewHeight - labelAreaHeight + TimeLineConfig.AXIS_WIDTH / 2,
                 axesPaint
         )
+        if (!isBubbleDisplayed) {
+            drawTouchBubbleWithLabel(canvas, y + viewHeight - labelAreaHeight)
+        }
     }
 
+    private fun drawTouchBubbleWithLabel(canvas: Canvas, touchBubbleY: Float) {
+        if (enableTouch && touchBubbleX > 0F) {
+            canvas.drawCircle(touchBubbleX, touchBubbleY, TimeLineConfig.TOUCH_BUBBLE_RADIUS, labelPaint)
+
+            with(labelPaint.measureText(touchTime) + TimeLineConfig.TOUCH_BUBBLE_LABEL_X_OFFSET) {
+                if (this + touchBubbleX > x + viewWidth) {
+                    canvas.drawText("$touchTime",
+                            touchBubbleX - this - TimeLineConfig.TOUCH_BUBBLE_LABEL_X_OFFSET,
+                            touchBubbleY - TimeLineConfig.TOUCH_BUBBLE_LABEL_Y_OFFSET,
+                            touchLabelPaint)
+                } else {
+                    canvas.drawText("$touchTime",
+                            touchBubbleX + TimeLineConfig.TOUCH_BUBBLE_LABEL_X_OFFSET,
+                            touchBubbleY - TimeLineConfig.TOUCH_BUBBLE_LABEL_Y_OFFSET,
+                            touchLabelPaint)
+                }
+            }
+        }
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_UP -> {
+                //If touch is not in touchable region...
+                //If the touch bubble is visible, remove it.
+                hideTouchBubble()
+            }
+            MotionEvent.ACTION_DOWN -> {
+                //Check if the user touched in valid area.
+                if (handleBubbleMove(event)) return true
+            }
+            MotionEvent.ACTION_MOVE -> {
+                //Check if the user touched in valid area.
+                if (handleBubbleMove(event)) return true
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+
+    private fun handleBubbleMove(event: MotionEvent): Boolean {
+        if (enableTouch && Utils.isTouchable(touchX = event.x,
+                        touchY = event.y,
+                        viewX = x,
+                        viewY = x,
+                        viewWidth = viewWidth,
+                        viewHeight = viewHeight,
+                        labelAreaHeight = labelAreaHeight)) {
+
+            touchBubbleX = event.x
+            touchTime = Utils.getTouchLabel(event.x, viewWidth, timelineDuration)
+            invalidate()
+            return true /* Event handled */
+        } else {
+
+            //If touch is not in touchable region...
+            //If the touch bubble is visible, remove it.
+            hideTouchBubble()
+        }
+        return false
+    }
+
+    private fun hideTouchBubble() {
+        if (touchBubbleX > 0) {
+            touchBubbleX = 0F
+            invalidate()
+        }
+    }
 }

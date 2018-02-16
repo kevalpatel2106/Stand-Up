@@ -29,9 +29,11 @@ import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.R
 import com.standup.app.diary.userActivityList.UserActivityListActivity
+import com.standup.app.misc.TimeLineFullActivity
 import com.standup.app.misc.setPieChart
 import com.standup.app.misc.setPieChartData
 import com.standup.app.misc.setUserActivities
+import com.standup.timelineview.TimeLineLength
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
 import kotlinx.android.synthetic.main.layout_home_timeline_card.*
@@ -52,6 +54,9 @@ class DetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         parseArguments()
+
+        today_time_line.timelineDuration = TimeLineLength.A_DAY
+        today_time_line.enableTouch = false
 
         setContentView(R.layout.activity_detail)
         setToolbar(R.id.toolbar, "$dayOfMonth ${TimeUtils.getMonthInitials(month)} $year", true)
@@ -156,6 +161,13 @@ class DetailActivity : BaseActivity() {
     @OnClick(R.id.view_user_activity_card)
     internal fun showUserActivityList() {
         UserActivityListActivity.launch(this@DetailActivity, dayOfMonth, month, year)
+    }
+
+    @OnClick(R.id.time_line_card)
+    internal fun openFullScreenTimeLine() {
+        model.summary.value?.let {
+            TimeLineFullActivity.launch(this@DetailActivity, it)
+        }
     }
 
     companion object {

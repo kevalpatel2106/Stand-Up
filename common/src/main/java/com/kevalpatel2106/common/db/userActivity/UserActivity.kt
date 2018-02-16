@@ -22,6 +22,7 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import com.kevalpatel2106.utils.annotations.Model
+import java.io.Serializable
 
 /**
  * Created by Kevalpatel2106 on 13-Dec-17.
@@ -45,7 +46,7 @@ data class UserActivity(
 
         @ColumnInfo(name = IS_SYNCED)
         var isSynced: Boolean
-) {
+) : Serializable {
 
     init {
         if (eventEndTimeMills != 0L && eventEndTimeMills < eventStartTimeMills) {

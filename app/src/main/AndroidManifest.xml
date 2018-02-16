@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~  Copyright 2018 Keval Patel.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +16,10 @@
   ~
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.standup">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.standup">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".app.SUApplication"
@@ -34,13 +35,13 @@
         <!-- =============================== META-DATA ================================ -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
+            android:value="@string/facebook_app_id"/>
         <meta-data
             android:name="com.facebook.sdk.AutoLogAppEventsEnabled"
-            android:value="false" />
+            android:value="false"/>
         <meta-data
             android:name="com.google.android.awareness.API_KEY"
-            android:value="@string/android_api_key" />
+            android:value="@string/android_api_key"/>
         <!-- =============================== ACTIVITIES ================================ -->
 
 
@@ -55,18 +56,18 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="@string/api_host"
-                    android:scheme="https" />
+                    android:scheme="https"/>
                 <data
                     android:host="@string/invitation_deep_link"
                     android:scheme="https"
-                    tools:ignore="AppLinkUrlError" />
+                    tools:ignore="AppLinkUrlError"/>
             </intent-filter>
         </activity>
 
@@ -81,10 +82,10 @@
             android:theme="@style/AppTheme.Splash"
             tools:ignore="UnusedAttribute">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
 
@@ -95,7 +96,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!-- Login/Sign Up the user screen -->
         <activity
@@ -103,7 +104,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!-- Forgot password request screen -->
         <activity
@@ -111,7 +112,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!-- Verify your email reminder screen. -->
         <activity
@@ -119,7 +120,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!-- Verify the user email with the deep link. -->
         <activity
@@ -128,13 +129,13 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar.RedBg"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.authentication.deviceReg.DeviceRegisterActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!-- Dashboard Activity -->
         <activity
@@ -142,7 +143,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!-- Web view activity -->
         <activity
@@ -151,7 +152,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!-- User profile edit screen -->
         <activity
@@ -159,7 +160,7 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
 
         <!-- Support development screen. -->
         <activity
@@ -168,62 +169,67 @@
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.about.AboutActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.MaterialAboutActivity"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.about.report.ReportIssueActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.settings.list.SettingsListActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.diary.detail.DetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.diary.userActivityList.UserActivityListActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.settings.syncing.SyncSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.settings.dnd.DndSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.settings.dailyReview.DailyReviewSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.settings.notifications.NotificationSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute" />
-
+            tools:ignore="UnusedAttribute"/>
+        <activity
+            android:name=".app.misc.TimeLineFullActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.TimeLine"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute"/>
 
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->
@@ -232,7 +238,7 @@
             android:enabled="false"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.kevalpatel2106.network.unauthorized" />
+                <action android:name="com.kevalpatel2106.network.unauthorized"/>
             </intent-filter>
         </receiver>
 
@@ -242,14 +248,14 @@
             android:name=".app.fcm.FcmMessagingService"
             tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
         <service
             android:name=".app.fcm.InstanceIdService"
             tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
         <!-- End: Firebase service -->
@@ -258,7 +264,7 @@
         <!-- Service to register the device firebase token and other detail -->
         <service
             android:name=".app.authentication.deviceReg.RegisterDeviceService"
-            tools:ignore="ExportedService" />
+            tools:ignore="ExportedService"/>
     </application>
 
 </manifest>

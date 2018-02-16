@@ -40,7 +40,13 @@ internal object TimeLineConfig {
     @Dimension
     const val AXIS_WIDTH = 4F   //Px
 
+    const val TOUCH_BUBBLE_RADIUS = 10F
+    const val TOUCH_BUBBLE_LABEL_X_OFFSET = 25F
+    const val TOUCH_BUBBLE_LABEL_Y_OFFSET = 10F
+
     fun getLabelTextHeight(context: Context): Float = Utils.toPx(context, 10).toFloat()
+
+    fun getBubbleLabelTextHeight(context: Context): Float = Utils.toPx(context, 14).toFloat()
 
     fun getLabelAreaHeight(context: Context): Float = Utils.toPx(context, 40).toFloat()
 }
