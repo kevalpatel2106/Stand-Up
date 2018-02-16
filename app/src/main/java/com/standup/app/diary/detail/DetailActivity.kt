@@ -116,8 +116,7 @@ class DetailActivity : BaseActivity() {
         model.timelineEventsList.observe(this@DetailActivity, Observer {
             it?.let {
                 time_line_card.visibility = View.VISIBLE
-                //TODO set the timeline items
-//                today_time_line.timelineData = it
+                today_time_line.timelineData = it
             }
         })
     }

@@ -27,10 +27,10 @@ import android.support.v4.content.ContextCompat
 import com.cocosw.bottomsheet.BottomSheet
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
-import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
 import com.standup.R
 import com.standup.app.constants.AppConfig
+import com.standup.timelineview.TimeLineData
 import com.standup.timelineview.TimeLineItem
 
 
@@ -103,18 +103,41 @@ object SUUtils {
         bottomSheet.show()
     }
 
-    fun createTimeLineItemFromUserActivity(userActivity: UserActivity): TimeLineItem {
-        val timeLineStartTime = TimeUtils.getMilliSecFrom12AM(userActivity.eventStartTimeMills)
-        val timelineEndTime = timeLineStartTime + (userActivity.eventEndTimeMills - userActivity.eventStartTimeMills)
-        return TimeLineItem(
-                startTimeMillsFrom12Am = timeLineStartTime,
-                endTimeMillsFrom12Am = timelineEndTime
-//                color = when (userActivity.userActivityType) {
-//                    UserActivityType.MOVING -> AppConfig.COLOR_STANDING
-//                    UserActivityType.SITTING -> AppConfig.COLOR_SITTING
-//                    UserActivityType.NOT_TRACKED -> AppConfig.COLOR_NOT_TRACKED
-//                }
-        )
+    fun createTimeLineItemFromUserActivity(userActivity: ArrayList<UserActivity>): ArrayList<TimeLineData> {
+        val standingItems = ArrayList<TimeLineItem>()
+        val sittingItems = ArrayList<TimeLineItem>()
+        userActivity.forEach {
+
+            val timelineItem = TimeLineItem.create(
+                    startTimeUnixMills = it.eventStartTimeMills,
+                    endTimeUnixMills = it.eventEndTimeMills
+            )
+            when (it.userActivityType) {
+                UserActivityType.MOVING -> {
+                    standingItems.add(timelineItem)
+                }
+                UserActivityType.SITTING -> {
+                    sittingItems.add(timelineItem)
+                }
+                else -> {
+                    //NO OP
+                }
+            }
+        }
+
+        val timeLineData = ArrayList<TimeLineData>(2)
+        timeLineData.add(TimeLineData(
+                AppConfig.COLOR_STANDING,
+                AppConfig.STANDING_HEIGHT,
+                standingItems
+        ))
+        timeLineData.add(TimeLineData(
+                AppConfig.COLOR_SITTING,
+                AppConfig.SITTING_HEIGHT,
+                sittingItems
+        ))
+
+        return timeLineData
     }
 
 }

@@ -31,6 +31,7 @@ import com.standup.app.diary.di.DaggerDiaryComponent
 import com.standup.app.diary.repo.DiaryRepo
 import com.standup.app.misc.LottieJson
 import com.standup.app.misc.SUUtils
+import com.standup.timelineview.TimeLineData
 import com.standup.timelineview.TimeLineItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -84,12 +85,12 @@ class DetailViewModel : BaseViewModel {
     internal val summary = MutableLiveData<DailyActivitySummary>()
 
     /**
-     * [MutableLiveData] for [TimeLineItem] list. UI controller can observe this property to
-     * get notify whenever [TimeLineItem] list updates.
+     * [MutableLiveData] for [TimeLineData] list. UI controller can observe this property to
+     * get notify whenever [TimeLineData] list updates.
      *
      * @see TimeLineItem
      */
-    internal val timelineEventsList = MutableLiveData<ArrayList<TimeLineItem>>()
+    internal val timelineEventsList = MutableLiveData<ArrayList<TimeLineData>>()
 
     /**
      * Fetch the [DailyActivitySummary] for the given date of [dayOfMonth]-[month]-[year]. This is
@@ -130,9 +131,7 @@ class DetailViewModel : BaseViewModel {
                     summary.value = it
 
                     //Prepare the timeline data
-                    val timelineItems = ArrayList<TimeLineItem>(it.dayActivity.size)
-                    it.dayActivity.forEach { timelineItems.add(SUUtils.createTimeLineItemFromUserActivity(it)) }
-                    timelineEventsList.value = timelineItems
+                    timelineEventsList.value = SUUtils.createTimeLineItemFromUserActivity(it.dayActivity)
                 }, {
                     val errorMsg = ErrorMessage(it.message)
                     errorMsg.setErrorBtn(R.string.btn_title_retry, { fetchData(dayOfMonth, month, year) })

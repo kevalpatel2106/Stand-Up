@@ -20,15 +20,16 @@ package com.standup.timelineview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.support.annotation.VisibleForTesting
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import java.util.*
 
 /**
  * Created by Kevalpatel2106 on 15-Dec-17.
+ * TODO Add touch listener.
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
@@ -77,7 +78,7 @@ class TimeLineView @JvmOverloads constructor(context: Context,
     /**
      * Time line items to display.
      */
-    var timelineData = listOf<TimeLineData>()
+    var timelineData = arrayListOf<TimeLineData>()
         set(value) {
 
             //Precess the input data and calculate the start and end coordinates.
@@ -89,14 +90,18 @@ class TimeLineView @JvmOverloads constructor(context: Context,
                         it.calculateYBound(viewWidth)
                     }
 
+            Collections.sort(value) { p0, p1 -> p1.heightPercentage - p0.heightPercentage }
             field = value
 
             //Refresh the list
             invalidate()
         }
 
+    //Paints
     private var timeLineDataPaint: Paint
     private var labelPaint: Paint
+    private var axesPaint: Paint
+    private var indicatorPaint: Paint
 
     init {
         attrs?.let {
@@ -109,7 +114,15 @@ class TimeLineView @JvmOverloads constructor(context: Context,
         //Prepare the label pain
         labelPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
         labelPaint.textSize = 30F
-        labelPaint.color = Color.WHITE
+        labelPaint.color = TimeLineConfig.DEFAULT_LABEL_TEXT_COLOR
+
+        //Prepare the axis pain
+        axesPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        axesPaint.color = TimeLineConfig.DEFAULT_AXIS_COLOR
+
+        //Prepare the milestone indicator pain
+        indicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        indicatorPaint.color = TimeLineConfig.DEFAULT_INDICATOR_COLOR
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -133,46 +146,54 @@ class TimeLineView @JvmOverloads constructor(context: Context,
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        //Draw x axes
-        canvas.drawLine(
-                x,
-                y + viewHeight - TimeLineConfig.LABLE_AREA_HEIGHT - 2,
-                x + viewWidth,
-                y + viewHeight - TimeLineConfig.LABLE_AREA_HEIGHT + 2,
-                labelPaint
-        )
-
-        //Draw labels
-        labels.forEach {
-            canvas.save()
-            canvas.rotate(-45F,
-                    it.x,
-                    viewHeight.toFloat())
-
-            canvas.drawText(it.title,
-                    it.x,
-                    viewHeight.toFloat(),
-                    labelPaint)
-
-            canvas.restore()
-
-            canvas.drawLine(
-                    it.x - 1,
-                    y,
-                    it.x + 1,
-                    y + viewHeight - TimeLineConfig.LABLE_AREA_HEIGHT,
-                    labelPaint
-            )
-        }
-
         //Draw the timeline data
         for (data in timelineData) {
             timeLineDataPaint.color = data.color
 
             //Draw timeline item for the data.
             data.timelineItems.forEach {
-                canvas.drawRect(x + it.startX, y + data.startY, x + it.endX, y + data.endY, timeLineDataPaint)
+                canvas.drawRect(
+                        x + it.startX,
+                        y + data.startY,
+                        x + it.endX,
+                        y + data.endY,
+                        timeLineDataPaint
+                )
             }
         }
+
+        //Draw labels
+        labels.forEach {
+            canvas.save()
+            canvas.rotate(-90F,
+                    it.x,
+                    viewHeight.toFloat())
+
+            //Draw the label
+            canvas.drawText(it.title,
+                    it.x + (TimeLineConfig.LABEL_AREA_HEIGHT - labelPaint.measureText(it.title)) / 2,
+                    viewHeight.toFloat() + 15F,
+                    labelPaint)
+
+            canvas.restore()
+
+            //Draw the indicator.
+            canvas.drawLine(
+                    it.x - TimeLineConfig.INDICATOR_WIDTH / 2,
+                    y,
+                    it.x + TimeLineConfig.INDICATOR_WIDTH / 2,
+                    y + viewHeight - TimeLineConfig.LABEL_AREA_HEIGHT,
+                    indicatorPaint
+            )
+        }
+
+        //Draw x axes
+        canvas.drawLine(
+                x,
+                y + viewHeight - TimeLineConfig.LABEL_AREA_HEIGHT - TimeLineConfig.AXIS_WIDTH / 2,
+                x + viewWidth,
+                y + viewHeight - TimeLineConfig.LABEL_AREA_HEIGHT + TimeLineConfig.AXIS_WIDTH / 2,
+                axesPaint
+        )
     }
 }

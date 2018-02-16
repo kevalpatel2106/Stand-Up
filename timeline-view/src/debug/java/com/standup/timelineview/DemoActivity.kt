@@ -50,7 +50,7 @@ class DemoActivity : AppCompatActivity() {
                 endTimeMillsFrom12Am = (3.25 * 3600_000).toLong()
         ))
         timelineItems.add(TimeLineItem(
-                startTimeMillsFrom12Am = 6 * 3600_000,
+                startTimeMillsFrom12Am = 5 * 3600_000,
                 endTimeMillsFrom12Am = 8 * 3600_000
         ))
         timelineData.add(TimeLineData(Color.GREEN, 30, timelineItems))

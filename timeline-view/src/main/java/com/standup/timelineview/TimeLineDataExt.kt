@@ -56,7 +56,7 @@ internal fun TimeLineData.calculateYBound(viewHeight: Int) {
     val heightPx = viewHeight * (1 - heightPercentage.toFloat() / 100)
     startY = heightPx
 
-    endY = viewHeight.toFloat() - TimeLineConfig.LABLE_AREA_HEIGHT
+    endY = viewHeight.toFloat() - TimeLineConfig.LABEL_AREA_HEIGHT
 }
 
 @VisibleForTesting

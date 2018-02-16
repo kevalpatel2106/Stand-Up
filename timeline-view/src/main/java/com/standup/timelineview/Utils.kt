@@ -48,14 +48,14 @@ internal object Utils {
         return when (timeLineLength) {
             TimeLineLength.AN_HOUR -> {
                 (1 until labelsCount).forEach {
-                    labels.add(Label("${it.times(10)}", (it * singleLabelBlockWidth) - 10))
+                    labels.add(Label("${it.times(10)}", (it * singleLabelBlockWidth) + 10))
                 }
 
                 labels
             }
             TimeLineLength.SIX_HOUR, TimeLineLength.TWELVE_HOUR, TimeLineLength.SIXTEEN_HOURS, TimeLineLength.A_DAY -> {
                 (1 until labelsCount).forEach {
-                    labels.add(Label("$it".plus(":00"), (it * singleLabelBlockWidth) - 10))
+                    labels.add(Label("$it".plus(":00"), (it * singleLabelBlockWidth) + 10))
                 }
                 labels
             }

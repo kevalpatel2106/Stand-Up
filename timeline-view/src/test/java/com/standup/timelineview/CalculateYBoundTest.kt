@@ -59,6 +59,6 @@ class CalculateYBoundTest(private val viewWidth: Int,
         list.calculateYBound(viewWidth)
 
         assertEquals(startY, list.startY, 0.1F)
-        assertEquals(endY, list.endY - TimeLineConfig.LABLE_AREA_HEIGHT, 0.1F)
+        assertEquals(endY, list.endY - TimeLineConfig.LABEL_AREA_HEIGHT, 0.1F)
     }
 }

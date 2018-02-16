@@ -30,6 +30,7 @@ import com.standup.R
 import com.standup.app.dashboard.di.DaggerDashboardComponent
 import com.standup.app.dashboard.repo.DashboardRepo
 import com.standup.app.misc.SUUtils
+import com.standup.timelineview.TimeLineData
 import com.standup.timelineview.TimeLineItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -99,12 +100,12 @@ class DashboardViewModel : BaseViewModel {
     val todaySummaryStartLoading = CallbackEvent()
 
     /**
-     * [MutableLiveData] for [TimeLineItem] list. UI controller can observe this property to
-     * get notify whenever [TimeLineItem] list updates.
+     * [MutableLiveData] for [TimeLineData] list. UI controller can observe this property to
+     * get notify whenever [TimeLineData] list updates.
      *
      * @see TimeLineItem
      */
-    val timelineEventsList = MutableLiveData<ArrayList<TimeLineItem>>()
+    val timelineEventsList = MutableLiveData<ArrayList<TimeLineData>>()
 
     /**
      * Get the summary off today's daily activity. This is an asynchronous method which reads database
@@ -140,9 +141,7 @@ class DashboardViewModel : BaseViewModel {
                     todaySummary.value = it
 
                     //Prepare the timeline data
-                    val timelineItems = ArrayList<TimeLineItem>(it.dayActivity.size)
-                    it.dayActivity.forEach { timelineItems.add(SUUtils.createTimeLineItemFromUserActivity(it)) }
-                    timelineEventsList.value = timelineItems
+                    timelineEventsList.value = SUUtils.createTimeLineItemFromUserActivity(it.dayActivity)
                 }, {
                     //Error message
                     todaySummaryErrorCallback.value = ErrorMessage(it.message)

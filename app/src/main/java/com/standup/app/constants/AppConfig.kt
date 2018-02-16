@@ -48,6 +48,8 @@ internal object AppConfig {
     const val COLOR_STANDING = Color.GREEN
     @ColorInt
     const val COLOR_NOT_TRACKED = Color.TRANSPARENT
+    const val STANDING_HEIGHT = 90
+    const val SITTING_HEIGHT = 80
     //---- End of Timeline config ----//
 
     const val GENDER_MALE = "male"
