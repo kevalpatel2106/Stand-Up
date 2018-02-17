@@ -55,11 +55,12 @@ class DetailActivity : BaseActivity() {
 
         parseArguments()
 
-        today_time_line.timelineDuration = TimeLineLength.A_DAY
-        today_time_line.enableTouch = false
-
         setContentView(R.layout.activity_detail)
         setToolbar(R.id.toolbar, "$dayOfMonth ${TimeUtils.getMonthInitials(month)} $year", true)
+
+        //Set the timeline
+        today_time_line.timelineDuration = TimeLineLength.A_DAY
+        today_time_line.enableTouch = false
 
         //Set the pie chart
         detail_efficiency_card_pie_chart.setPieChart(this@DetailActivity,
