@@ -45,11 +45,11 @@ internal object PromotionalNotification {
     internal fun buildNotification(context: Context, title: String, message: String): NotificationCompat.Builder {
         return NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(R.drawable.ic_notififcation_launcher)
+                .setSmallIcon(R.drawable.ic_notification_launcher)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_notififcation_launcher))
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_notification_launcher))
                 .setTicker(message)
                 .setChannelId(NotificationChannelType.OTHER_NOTIFICATION_CHANNEL)
                 .setAutoCancel(true)

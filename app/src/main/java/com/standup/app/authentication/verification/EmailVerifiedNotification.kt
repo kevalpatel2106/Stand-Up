@@ -47,7 +47,7 @@ internal object EmailVerifiedNotification {
 
         return NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(R.drawable.ic_notififcation_launcher)
+                .setSmallIcon(R.drawable.ic_notification_launcher)
                 .setContentTitle(context.getString(R.string.application_name))
                 .setContentText(message ?: context.getString(R.string.application_name))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

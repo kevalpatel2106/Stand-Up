@@ -5,6 +5,8 @@
 
 Sitting is next cancer.
 
+[![Logo](/assets/stretching.png)]
+
 ## Want to contribute?
 > Make sure you check out 👉[CONTRIBUTING.md](https://github.com/kevalpatel2106/Stand-Up/blob/master/.github/CONTRIBUTING.md)
 

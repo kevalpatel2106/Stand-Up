@@ -46,7 +46,7 @@ internal object DeviceRegisterNotification {
     internal fun buildNotification(context: Context): NotificationCompat.Builder {
         return NotificationCompat.Builder(context)
                 .setContentTitle(context.getString(R.string.application_name))
-                .setSmallIcon(R.drawable.ic_notififcation_launcher)
+                .setSmallIcon(R.drawable.ic_notification_launcher)
                 .setContentText(context.getString(R.string.register_device_service_notification_message))
                 .setAutoCancel(false)
                 .setTicker(context.getString(R.string.register_device_service_notification_message))

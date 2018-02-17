@@ -48,11 +48,11 @@ internal object UpdateNotification {
     internal fun buildNotification(context: Context, message: String): NotificationCompat.Builder {
         return NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setSmallIcon(R.drawable.ic_notififcation_launcher)
+                .setSmallIcon(R.drawable.ic_notification_launcher)
                 .setContentTitle(context.getString(R.string.notification_update_title))
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_notififcation_launcher))
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_notification_launcher))
                 .setTicker(message)
                 .setChannelId(NotificationChannelType.OTHER_NOTIFICATION_CHANNEL)
                 .setAutoCancel(true)
