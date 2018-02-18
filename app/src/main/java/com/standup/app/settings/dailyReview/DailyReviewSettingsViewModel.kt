@@ -97,6 +97,8 @@ class DailyReviewSettingsViewModel : BaseViewModel {
     @SuppressLint("VisibleForTests")
     internal fun displayDateDialog(context: Context, fragmentManager: FragmentManager) {
         val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        cal.timeInMillis = settingsManager.dailyReviewTimeFrom12Am
+
         val dialog = GridTimePickerDialog.newInstance({ _, hourOfDay, minute ->
             //Save new time
             settingsManager.dailyReviewTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(hourOfDay, minute)
