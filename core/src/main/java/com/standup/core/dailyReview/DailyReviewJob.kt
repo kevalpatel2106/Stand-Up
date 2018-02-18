@@ -24,6 +24,10 @@ import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.standup.core.activityMonitor.ActivityMonitorJob
 import com.standup.core.di.DaggerCoreComponent
+import com.standup.core.misc.AsyncJob
+import com.standup.core.repo.CoreRepo
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -36,7 +40,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class DailyReviewJob : Job() {
+internal class DailyReviewJob : AsyncJob() {
 
     companion object {
 
@@ -98,13 +102,16 @@ internal class DailyReviewJob : Job() {
     @Inject
     internal lateinit var userSettingsManager: UserSettingsManager
 
+    @Inject
+    internal lateinit var coreRepo: CoreRepo
+
     /**
      * Run the task to perform. This will display the [DailyReviewNotification] with the previous
      * day summary.
      *
      * @see Job.onRunJob
      */
-    override fun onRunJob(params: Params): Result {
+    override fun onRunJobAsync(params: Params) {
         //Inject dependency
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
@@ -113,12 +120,19 @@ internal class DailyReviewJob : Job() {
 
 
         if (!userSettingsManager.isDailyReviewEnable) {
-            return Result.SUCCESS
+            stopJob(Result.SUCCESS)
+            return
         }
 
-        //TODO Display daily review.
-        DailyReviewNotification.notify(context)
-
-        return Result.SUCCESS
+        coreRepo.loadYesterdaySummary()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnTerminate { stopJob(Result.SUCCESS) }
+                .subscribe({
+                    //Fire notification
+                    DailyReviewNotification.notify(context, it)
+                }, {
+                    Timber.e(it)
+                })
     }
 }

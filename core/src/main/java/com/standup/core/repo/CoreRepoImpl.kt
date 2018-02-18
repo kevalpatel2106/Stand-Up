@@ -19,17 +19,19 @@ package com.standup.core.repo
 
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.application.di.AppModule
+import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.common.repository.RepoBuilder
 import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
+import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.annotations.Repository
 import com.standup.core.CoreConfig
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.*
 import retrofit2.Retrofit
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -167,5 +169,37 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
                 }
             }
         })
+    }
+
+
+    /**
+     * Load user activity summary for the previous day.
+     *
+     * @see DailyActivitySummary
+     */
+    override fun loadYesterdaySummary(): Flowable<DailyActivitySummary> {
+        //Get the calender for 12 AM of that day
+        var dayCal = Calendar.getInstance()
+        dayCal.add(Calendar.DAY_OF_MONTH, -2)       //Previous day
+        dayCal = TimeUtils.getCalender12AM(dayCal.timeInMillis)
+
+        val startTimeMills = dayCal.timeInMillis
+
+        dayCal.set(Calendar.HOUR_OF_DAY, 24)
+        val endTimeMills = dayCal.timeInMillis
+
+        return Flowable.create(FlowableOnSubscribe<List<UserActivity>> {
+            val item = userActivityDao.getActivityBetweenDuration(startTimeMills, endTimeMills)
+
+            it.onNext(item)
+            it.onComplete()
+        }, BackpressureStrategy.DROP)
+                .filter { t -> t.isNotEmpty() }
+                .map { t -> ArrayList(t) }
+                .map { arrayList ->
+                    //Generate the summary
+                    DailyActivitySummary.convertToValidUserActivityList(arrayList)
+                    DailyActivitySummary.fromDayActivityList(arrayList)
+                }
     }
 }

@@ -17,9 +17,11 @@
 
 package com.standup.core.repo
 
+import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.utils.annotations.Repository
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 /**
@@ -45,4 +47,11 @@ internal interface CoreRepo {
      * completed or failed.
      */
     fun sendPendingActivitiesToServer(): Completable
+
+    /**
+     * Load user activity summary for the previous day.
+     *
+     * @see DailyActivitySummary
+     */
+    fun loadYesterdaySummary(): Flowable<DailyActivitySummary>
 }
