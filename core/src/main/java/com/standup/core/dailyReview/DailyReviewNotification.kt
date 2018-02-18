@@ -24,6 +24,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
+import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.common.notifications.addDailySummaryNotificationChannel
 import com.standup.core.R
@@ -49,10 +50,11 @@ internal object DailyReviewNotification {
      * @see NotificationManager.addDailySummaryNotificationChannel
      */
     @SuppressLint("VisibleForTests")
-    internal fun notify(context: Context) {
+    internal fun notify(context: Context,
+                        dailyActivitySummary: DailyActivitySummary) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.addDailySummaryNotificationChannel(context.applicationContext)
-        nm.notify(NOTIFICATION_ID, buildNotification(context).build())
+        nm.notify(NOTIFICATION_ID, buildNotification(context, dailyActivitySummary).build())
     }
 
     /**
@@ -61,21 +63,26 @@ internal object DailyReviewNotification {
      * @see NotificationCompat.Builder
      */
     @VisibleForTesting
-    internal fun buildNotification(context: Context): NotificationCompat.Builder {
+    internal fun buildNotification(context: Context,
+                                   dailyActivitySummary: DailyActivitySummary): NotificationCompat.Builder {
+
+        //Prepare the message summary
+        val message = prepareSummaryMessage(context, dailyActivitySummary)
+
         return NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.ic_daily_review_notification)
                 .setContentTitle(context.getString(R.string.daily_review_notification_title))
-                .setContentText(context.getString(R.string.daily_review_notification_message))
+                .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_daily_review_notification))
-                .setTicker(context.getString(R.string.daily_review_notification_message))
+                .setTicker(message)
                 .setChannelId(NotificationChannelType.DAILY_SUMMARY_NOTIFICATION_CHANNEL)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setStyle(NotificationCompat.BigTextStyle()
-                        .bigText(context.getString(R.string.daily_review_notification_message))
+                        .bigText(message)
                         .setBigContentTitle(context.getString(R.string.daily_review_notification_title)))
     }
 
@@ -87,5 +94,14 @@ internal object DailyReviewNotification {
     internal fun cancel(context: Context) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.cancel(NOTIFICATION_ID)
+    }
+
+    /**
+     * Prepare summary message to display in the notification.
+     */
+    @VisibleForTesting
+    internal fun prepareSummaryMessage(context: Context,
+                                       dailyActivitySummary: DailyActivitySummary): String {
+        return String.format(context.getString(R.string.daily_review_notification_message), dailyActivitySummary.sittingTimeHours, dailyActivitySummary.sittingPercent)
     }
 }
