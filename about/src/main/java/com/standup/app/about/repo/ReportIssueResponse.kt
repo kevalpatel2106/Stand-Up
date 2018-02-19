@@ -15,20 +15,17 @@
  *
  */
 
-include ':app', ':core', ':diary', ':about'
+package com.standup.app.about.repo
 
-// Base layer modules.
-include ':common'
-include ':test-utils'
-include ':utils'
-include ':network'
+import com.google.gson.annotations.SerializedName
 
-//Social login
-include ':facebook-auth'
-include ':google-auth'
+/**
+ * Created by Keval on 29/12/17.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ */
+data class ReportIssueResponse(
 
-//Custom views
-include ':timeline-view'
-include ':ruler-view'
-include ':progress-button'
-include ':spinner-time-picker'
+        @SerializedName("issue_id")
+        val issueId: Long
+)

@@ -16,12 +16,6 @@
   -->
 
 <resources>
-    <style name="AppTheme.MaterialAboutActivity" parent="Theme.Mal.Dark">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
     <style name="AppTheme.Splash" parent="AppTheme.NoActionbar">
         <item name="android:windowBackground">@drawable/bg_splash</item>
         <item name="android:windowTranslucentNavigation">true</item>

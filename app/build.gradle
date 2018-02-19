@@ -101,6 +101,7 @@ kotlin kotlinOption
 dependencies {
     implementation project(':common')
     implementation project(':diary')
+    implementation project(':about')
     implementation project(':utils')
     implementation project(':core')
     implementation project(':facebook-auth')
@@ -137,7 +138,6 @@ dependencies {
     implementation supportLib.prefrance
     implementation supportLib.prefrancev14
     implementation supportLib.gridLayout
-    implementation(supportLib.customtabs, excludeGrp)
 
     //Arch component
     implementation archComponent.lifecycle
@@ -147,7 +147,6 @@ dependencies {
     implementation(firebaseLib.preformance, excludeGrp)
     implementation(firebaseLib.core, excludeGrp)
     implementation(firebaseLib.fcm, excludeGrp)
-    implementation(firebaseLib.invites, excludeGrp)
 
     //Glide
     implementation(otherLib.glide, excludeGrp)
@@ -159,14 +158,11 @@ dependencies {
 
     //Other libs
     implementation(kevalpatel2106.ringtonePicker, excludeGrp)
-    implementation(otherLib.bottomsheet, excludeGrp)
     implementation(otherLib.circleImagView, excludeGrp)
-    implementation(otherLib.aboutlibraries, excludeGrp)
     implementation(otherLib.chartLayout, excludeGrp)
     implementation(otherLib.lottie, excludeGrp)
     implementation(otherLib.iap, excludeGrp)
     implementation(otherLib.bottomsheetPicker, excludeGrp)
-    implementation(otherLib.openSourceLibraries) { transitive = true }
     releaseImplementation(otherLib.crashalytics) { transitive = true }
 }
 apply plugin: 'com.google.gms.google-services'

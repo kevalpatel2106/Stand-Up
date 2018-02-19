@@ -17,6 +17,7 @@
 
 <resources>
     <string name="test">Test</string>
+    <string name="open_email_bottom_dialog_title">Select application</string>
 
     <!--Summary card-->
     <string name="summary_card_heading_since_today_midnight">Since today midnight…</string>

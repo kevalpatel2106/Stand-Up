@@ -28,12 +28,12 @@ import android.view.View
 import butterknife.OnClick
 import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.AppConfig
+import com.kevalpatel2106.common.CommonUtils
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.utils.ViewUtils
 import com.standup.R
-import com.standup.app.SUUtils
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 
 class ForgotPasswordActivity : BaseActivity() {
@@ -75,7 +75,7 @@ class ForgotPasswordActivity : BaseActivity() {
                 if (it) {
                     showSnack(getString(R.string.forgot_password_successful),
                             getString(R.string.btn_title_open_mail),
-                            View.OnClickListener { SUUtils.openEmailClientDialog(this@ForgotPasswordActivity) })
+                            View.OnClickListener { CommonUtils.openEmailClientDialog(this@ForgotPasswordActivity) })
 
                     //Finish after snack bar complete
                     Handler().postDelayed({ finish() }, AppConfig.SNACKBAR_TIME)

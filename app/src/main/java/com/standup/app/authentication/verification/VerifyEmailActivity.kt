@@ -28,6 +28,7 @@ import android.view.View
 import android.view.WindowManager
 import butterknife.OnClick
 import com.kevalpatel2106.common.AnalyticsEvents
+import com.kevalpatel2106.common.CommonUtils
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
@@ -36,7 +37,6 @@ import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.annotations.UIController
 import com.kevalpatel2106.utils.getColorCompat
 import com.standup.R
-import com.standup.app.SUUtils
 import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.main.MainActivity
 import kotlinx.android.synthetic.main.activity_verify_email.*
@@ -133,7 +133,7 @@ class VerifyEmailActivity : BaseActivity() {
     @OnClick(R.id.verify_btn_open_mail_btn)
     fun onOpenEmail() {
         logEvent(AnalyticsEvents.EVENT_OPEN_MAIL_BUTTON_FEATURE_USED)
-        SUUtils.openEmailClientDialog(this@VerifyEmailActivity)
+        CommonUtils.openEmailClientDialog(this@VerifyEmailActivity)
     }
 
     companion object {

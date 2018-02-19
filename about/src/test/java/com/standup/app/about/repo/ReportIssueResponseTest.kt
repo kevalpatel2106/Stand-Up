@@ -15,20 +15,24 @@
  *
  */
 
-include ':app', ':core', ':diary', ':about'
+package com.standup.app.about.repo
 
-// Base layer modules.
-include ':common'
-include ':test-utils'
-include ':utils'
-include ':network'
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
-//Social login
-include ':facebook-auth'
-include ':google-auth'
+/**
+ * Created by Kevalpatel2106 on 01-Jan-18.
+ *
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ */
+@RunWith(JUnit4::class)
+class ReportIssueResponseTest {
 
-//Custom views
-include ':timeline-view'
-include ':ruler-view'
-include ':progress-button'
-include ':spinner-time-picker'
+    @Test
+    fun checkConstructor() {
+        val reportIssueResponse = ReportIssueResponse(1234567)
+        Assert.assertEquals(reportIssueResponse.issueId, 1234567)
+    }
+}

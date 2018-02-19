@@ -29,11 +29,13 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.playStore
+            resValue "string", "application_name", DEBUG_APPLICATION_NAME
         }
         debug {
             crunchPngs false
             testCoverageEnabled true
             signingConfig signingConfigs.debugKey
+            resValue "string", "application_name", RELEASE_APPLICATION_NAME
         }
     }
 
@@ -51,9 +53,9 @@ kotlin kotlinOption
 
 dependencies {
     implementation project(':utils')
+    implementation project(':common')
     implementation project(':network')
     implementation project(':progress-button')
-    implementation project(':timeline-view')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -62,27 +64,19 @@ dependencies {
     debugLibs.each { add(it.configuration, it.dependency) }
     dagger.each { add(it.configuration, it.dependency) }
 
-    //Butter knife
-    implementation(butterKnifeLib.butterKnife, excludeGrp)
-    kapt(butterKnifeLib.annotationProcessor, excludeGrp)
-
-    implementation(firebaseLib.core, excludeGrp)
-    implementation(otherLib.bottomsheet, excludeGrp)
-
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
-    implementation(supportLib.recyclerView, excludeGrp)
-    implementation(supportLib.cardView, excludeGrp)
     implementation supportLib.design
+    implementation(supportLib.cardView, excludeGrp)
+    implementation(supportLib.customtabs, excludeGrp)
 
     //Room & Arch components
     implementation archComponent.lifecycle
-    implementation archComponent.roomRx
-    kapt archComponent.roomAnnotation
 
     implementation retrofitLib.retrofit
-
-    implementation(otherLib.lottie, excludeGrp)
-    implementation(otherLib.chartLayout, excludeGrp)
+    implementation(otherLib.gson, excludeGrp)
+    implementation(otherLib.aboutlibraries, excludeGrp)
+    implementation(otherLib.openSourceLibraries) { transitive = true }
+    implementation(firebaseLib.invites, excludeGrp)
 }

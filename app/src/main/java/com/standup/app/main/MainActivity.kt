@@ -73,7 +73,7 @@ class MainActivity : BaseActivity() {
     lateinit var sharedPrefsProvider: SharedPrefsProvider
 
     @Inject
-    lateinit var userSessionMananger: UserSessionManager
+    lateinit var userSessionManager: UserSessionManager
 
     @Inject
     internal lateinit var core: Lazy<Core>
@@ -114,15 +114,15 @@ class MainActivity : BaseActivity() {
     private fun setUpDrawer(isFirstRun: Boolean) {
         //Set up the header
         val header = dashboard_navigation_view.getHeaderView(0)
-        header.findViewById<BaseTextView>(R.id.nav_email_tv).text = userSessionMananger.email ?: ""
-        header.findViewById<BaseTextView>(R.id.nav_name_tv).text = userSessionMananger.displayName ?: "Hi there!"
+        header.findViewById<BaseTextView>(R.id.nav_email_tv).text = userSessionManager.email ?: ""
+        header.findViewById<BaseTextView>(R.id.nav_name_tv).text = userSessionManager.displayName ?: "Hi there!"
 
         val headerProfileIv = header.findViewById<CircleImageView>(R.id.nav_profile_iv)
-        if (userSessionMananger.photo.isNullOrEmpty()) {
+        if (userSessionManager.photo.isNullOrEmpty()) {
             headerProfileIv.setImageResource(R.drawable.ic_user_profile_default)
         } else {
             Glide.with(this@MainActivity)
-                    .load(userSessionMananger.photo)
+                    .load(userSessionManager.photo)
                     .thumbnail(0.1f)
                     .into(headerProfileIv)
         }
@@ -229,7 +229,7 @@ class MainActivity : BaseActivity() {
             }
             DrawerItem.PROFILE -> {
                 //Open the edit profile
-                EditProfileActivity.launch(this@MainActivity, userSessionMananger)
+                EditProfileActivity.launch(this@MainActivity, userSessionManager)
                 false
             }
             DrawerItem.SETTING -> {

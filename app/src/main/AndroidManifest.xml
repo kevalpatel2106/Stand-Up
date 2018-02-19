@@ -161,27 +161,6 @@
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
-
-        <!-- Support development screen. -->
-        <activity
-            android:name=".app.about.donate.SupportDevelopmentActivity"
-            android:configChanges="orientation|screenSize|keyboard"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
-            android:name=".app.about.AboutActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.MaterialAboutActivity"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
-            android:name=".app.about.report.ReportIssueActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
         <activity
             android:name=".app.settings.list.SettingsListActivity"
             android:resizeableActivity="true"

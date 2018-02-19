@@ -1,0 +1,62 @@
+<!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<resources>
+    <string name="about_check_for_update">Checking for the update…</string>
+    <string name="check_update_error_message">Cannot check for updates.</string>
+    <string name="check_update_new_update_available">New version is available.</string>
+    <string name="alert_title_whats_new">What\'s new?</string>
+    <string name="support_with_2_00">Support with $2.00</string>
+    <string name="support_with_5_00">Support with $5.00</string>
+    <string name="support_with_10_00">Support with $10.00</string>
+    <string name="support_with_20_00">Support with $20.00</string>
+    <string name="title_activity_support_development">Support Development</string>
+    <string name="title_activity_report_issue">Report Issue</string>
+    <string name="report_issue_description_hint">Description</string>
+    <string name="report_issue_title_hint">Title</string>
+    <string name="report_issue_update_message">New version of the application is available on the play store with improvements and bug fixes. Please update the application.</string>
+    <string name="report_issue_update_title">Update Available</string>
+    <string name="report_issue_update_later_btn_title">Later</string>
+    <string name="report_issue_update_btn_title">Update</string>
+    <string name="error_invalid_issue_title">Provide title to your issue.</string>
+    <string name="error_invalid_issue_description">Please describe the issue.</string>
+    <string name="error_message_report_issue">Cannot report the issue.</string>
+    <string name="issue_success_alert_title">Issue reported.</string>
+    <string name="issue_success_alert_message">Your issue id: %d</string>
+    <string name="report_issue_reporting_message">Reporting issue</string>
+    <string name="copied_to_clip_board">Copied to clipboard.</string>
+    <string name="prefer_old_school_email"><u>Prefer old school email?</u></string>
+    <string name="about_rate_this_app">Rate this app</string>
+    <string name="about_report_issue_title">Report an issue</string>
+    <string name="about_report_issue_subtitle">Are you facing any issue? Report it here.</string>
+    <string name="about_support_developement_title">Support Development</string>
+    <string name="about_share_with_friends_title">Share with friends</string>
+    <string name="about_suppet_us_card_title">Support Us</string>
+    <string name="about_check_version_title">Check version</string>
+    <string name="about_open_source_libs_title">Open source libraries</string>
+    <string name="about_author_name_title">Keval Patel</string>
+    <string name="about_author_github_title">Follow on GitHub</string>
+    <string name="about_author_twitter_title">Follow on Twitter</string>
+    <string name="about_author_join_slack_title">Join Slack</string>
+    <string name="about_app_twitter_title">Follow on Twitter</string>
+    <string name="about_app_connect_with_us_title">Connect with us</string>
+    <string name="about_app_send_email_title">Send an Email</string>
+    <string name="invitation_title">Checkout this awesome \"Stand Up\" app</string>
+    <string name="invitation_message">I am using this Stand Up app. <!--TODO Add some marketing stuff!!!-->
+        Check this out.</string>
+    <string name="invitation_cta">Invite</string>
+</resources>

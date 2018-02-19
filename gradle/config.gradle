@@ -102,6 +102,10 @@ ext {
         //strip other than english resources
         resConfigs "en"
 
+        //CheckVersionResponse config
+        versionName String.format('%d.%d', versionConfig.versionMajor, versionConfig.versionMinor)
+        versionCode versionConfig.versionCode
+
         consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
 
         testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
