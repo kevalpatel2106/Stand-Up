@@ -41,7 +41,7 @@ import javax.inject.Inject
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @ViewModel(DetailActivity::class)
-class DetailViewModel : BaseViewModel {
+internal class DetailViewModel : BaseViewModel {
 
     /**
      * [DiaryRepo] for loading and processing the data from the database and network.

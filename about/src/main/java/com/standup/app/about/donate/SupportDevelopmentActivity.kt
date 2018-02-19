@@ -22,8 +22,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.utils.annotations.UIController
+import com.standup.app.about.AboutUtils
 import com.standup.app.about.R
-import com.standup.app.about.SUUtils
 import kotlinx.android.synthetic.main.activity_support_developement.*
 
 /**
@@ -57,22 +57,22 @@ class SupportDevelopmentActivity : BaseActivity() {
 
         donate_two_dollar_card.setOnClickListener {
             //Open the PayPal link
-            SUUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(2)))
+            AboutUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(2)))
         }
 
         donate_five_dollar_card.setOnClickListener {
             //Open the PayPal link
-            SUUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(5)))
+            AboutUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(5)))
         }
 
         donate_ten_dollar_card.setOnClickListener {
             //Open the PayPal link
-            SUUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(10)))
+            AboutUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(10)))
         }
 
         donate_twenty_dollar_card.setOnClickListener {
             //Open the PayPal link
-            SUUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(20)))
+            AboutUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(20)))
         }
     }
 

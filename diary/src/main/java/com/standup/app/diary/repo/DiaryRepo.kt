@@ -26,7 +26,7 @@ import io.reactivex.Flowable
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-interface DiaryRepo {
+internal interface DiaryRepo {
 
     companion object {
         const val PAGE_SIZE = 10

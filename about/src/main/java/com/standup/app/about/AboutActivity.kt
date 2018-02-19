@@ -114,7 +114,7 @@ class AboutActivity : MaterialAboutActivity() {
                         }
                         .setOnClickAction({
                             //Open the play store.
-                            SUUtils.openLink(this@AboutActivity, getString(R.string.rate_app_url))
+                            AboutUtils.openLink(this@AboutActivity, getString(R.string.rate_app_url))
                         })
                         .build())
                 .build()

@@ -40,7 +40,7 @@ import javax.inject.Inject
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @ViewModel(DetailActivity::class)
-class UserActivityListModel : BaseViewModel {
+internal class UserActivityListModel : BaseViewModel {
 
     @Inject
     internal lateinit var diaryRepo: DiaryRepo

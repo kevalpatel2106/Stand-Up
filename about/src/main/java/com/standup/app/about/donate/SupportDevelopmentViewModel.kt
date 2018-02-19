@@ -30,7 +30,7 @@ import com.standup.app.about.R
  * @see SupportDevelopmentActivity
  */
 @ViewModel(SupportDevelopmentActivity::class)
-class SupportDevelopmentViewModel {
+internal class SupportDevelopmentViewModel {
 
     /**
      * Get the link for the PayPal.me donation base on the donation [amount]. Donation [amount] must

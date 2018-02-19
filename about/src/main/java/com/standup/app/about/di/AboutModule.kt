@@ -34,7 +34,7 @@ import javax.inject.Named
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Module
-class AboutModule {
+internal class AboutModule {
 
     /**
      * Get the instance of [com.kevalpatel2106.standup.authentication.repo.UserAuthRepository].

@@ -27,8 +27,8 @@ import com.kevalpatel2106.common.db.userActivity.UserActivity
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class UserActivityAdapter(private val context: Context,
-                          private val userActivities: ArrayList<UserActivity>)
+internal class UserActivityAdapter(private val context: Context,
+                                   private val userActivities: ArrayList<UserActivity>)
     : RecyclerView.Adapter<UserActivityViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): UserActivityViewHolder {

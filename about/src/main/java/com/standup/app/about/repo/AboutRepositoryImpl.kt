@@ -30,8 +30,8 @@ import javax.inject.Named
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class AboutRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit,
-                          private val userSessionManager: UserSessionManager) : AboutRepository {
+internal class AboutRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit,
+                                   private val userSessionManager: UserSessionManager) : AboutRepository {
 
     /**
      * Get the latest version of the android application.

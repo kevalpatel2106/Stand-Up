@@ -36,7 +36,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class ReportIssueViewModel : BaseViewModel {
+internal class ReportIssueViewModel : BaseViewModel {
     /**
      * Repository to provide user authentications.
      */

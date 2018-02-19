@@ -27,7 +27,7 @@ import com.kevalpatel2106.common.R
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
-object SUUtils {
+internal object AboutUtils {
 
     fun openLink(context: Context, url: String) {
         CustomTabsIntent.Builder()

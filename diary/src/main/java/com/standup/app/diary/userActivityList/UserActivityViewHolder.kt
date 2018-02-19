@@ -37,7 +37,7 @@ import java.util.*
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class UserActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+internal class UserActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
 
     @SuppressLint("VisibleForTests")

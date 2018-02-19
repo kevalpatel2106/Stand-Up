@@ -32,7 +32,7 @@ import dagger.Component
  */
 @ApplicationScope
 @Component(dependencies = [AppComponent::class], modules = [AboutModule::class])
-interface AboutComponent {
+internal interface AboutComponent {
 
     fun inject(aboutViewModel: AboutViewModel)
 

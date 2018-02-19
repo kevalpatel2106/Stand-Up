@@ -31,7 +31,7 @@ import dagger.Component
  */
 @ApplicationScope
 @Component(dependencies = [AppComponent::class], modules = [DiaryModule::class])
-interface DiaryComponent {
+internal interface DiaryComponent {
 
     fun inject(diaryViewModel: DiaryViewModel)
 

@@ -28,7 +28,7 @@ import com.kevalpatel2106.utils.annotations.Model
  * @see AboutApiService.getLatestVersion
  */
 @Model
-class CheckVersionRequest {
+internal class CheckVersionRequest {
 
     companion object {
 

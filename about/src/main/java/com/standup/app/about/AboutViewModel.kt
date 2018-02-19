@@ -46,7 +46,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class AboutViewModel : BaseViewModel {
+internal class AboutViewModel : BaseViewModel {
     val REQUEST_CODE_INVITE = 6123
 
     /**
@@ -99,7 +99,7 @@ class AboutViewModel : BaseViewModel {
                     Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
             context.startActivity(goToMarket)
         } catch (e: ActivityNotFoundException) {
-            SUUtils.openLink(context, context.getString(R.string.rate_app_url))
+            AboutUtils.openLink(context, context.getString(R.string.rate_app_url))
         }
     }
 
@@ -147,7 +147,7 @@ class AboutViewModel : BaseViewModel {
     }
 
     fun handleJoinSlack(context: Context) {
-        SUUtils.openLink(context, context.getString(R.string.join_slack_url))
+        AboutUtils.openLink(context, context.getString(R.string.join_slack_url))
     }
 
     fun handleSupportEmail(activity: Activity) {
@@ -155,18 +155,18 @@ class AboutViewModel : BaseViewModel {
     }
 
     fun handleFollowProjectTwitter(context: Context) {
-        SUUtils.openLink(context, context.getString(R.string.join_stand_up_twitter))
+        AboutUtils.openLink(context, context.getString(R.string.join_stand_up_twitter))
     }
 
     fun handleFollowAuthorTwitter(context: Context) {
-        SUUtils.openLink(context, context.getString(R.string.author_twitter_profile_link))
+        AboutUtils.openLink(context, context.getString(R.string.author_twitter_profile_link))
     }
 
     fun handleAuthorProfile(context: Context) {
-        SUUtils.openLink(context, context.getString(R.string.author_twitter_profile_link))
+        AboutUtils.openLink(context, context.getString(R.string.author_twitter_profile_link))
     }
 
     fun handelFollowAuthorOnGitHub(context: Context) {
-        SUUtils.openLink(context, context.getString(R.string.author_github))
+        AboutUtils.openLink(context, context.getString(R.string.author_github))
     }
 }

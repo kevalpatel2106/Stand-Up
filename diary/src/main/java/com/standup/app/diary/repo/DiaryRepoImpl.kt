@@ -39,8 +39,8 @@ import kotlin.collections.ArrayList
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit,
-                                        private val userActivityDao: UserActivityDao) : DiaryRepo {
+internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit,
+                                                 private val userActivityDao: UserActivityDao) : DiaryRepo {
 
     /**
      * Calling this function will load maximum [PAGE_SIZE] number of days summary which is [beforeMills]

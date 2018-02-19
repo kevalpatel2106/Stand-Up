@@ -24,7 +24,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class ReportIssueResponse(
+internal data class ReportIssueResponse(
 
         @SerializedName("issue_id")
         val issueId: Long

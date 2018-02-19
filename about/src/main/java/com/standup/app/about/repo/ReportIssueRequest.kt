@@ -25,7 +25,7 @@ import com.kevalpatel2106.utils.Utils
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class ReportIssueRequest(
+internal data class ReportIssueRequest(
         @SerializedName("title")
         val title: String,
 

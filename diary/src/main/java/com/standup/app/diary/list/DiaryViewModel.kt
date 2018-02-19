@@ -40,7 +40,7 @@ import javax.inject.Inject
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(DiaryFragment::class)
-class DiaryViewModel : BaseViewModel {
+internal class DiaryViewModel : BaseViewModel {
 
     @Inject
     lateinit var userActivityRepo: DiaryRepo

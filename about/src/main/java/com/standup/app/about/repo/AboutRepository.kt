@@ -27,7 +27,7 @@ import io.reactivex.Flowable
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-interface AboutRepository {
+internal interface AboutRepository {
 
     /**
      * Get the latest version of the android application.

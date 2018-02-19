@@ -30,7 +30,7 @@ import com.standup.app.about.BuildConfig
  * @see AboutApiService.getLatestVersion
  */
 @Model
-data class CheckVersionResponse(
+internal data class CheckVersionResponse(
 
         /**
          * Name of the latest version of available application. (e.g. 1.1.0)

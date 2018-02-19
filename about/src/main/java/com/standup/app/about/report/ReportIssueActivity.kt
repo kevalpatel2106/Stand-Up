@@ -32,8 +32,8 @@ import com.kevalpatel2106.common.base.uiController.showToast
 import com.kevalpatel2106.common.view.BaseButton
 import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.alert
+import com.standup.app.about.AboutUtils
 import com.standup.app.about.R
-import com.standup.app.about.SUUtils
 import kotlinx.android.synthetic.main.activity_report_issue.*
 
 
@@ -101,7 +101,7 @@ class ReportIssueActivity : BaseActivity() {
                             })
                             positiveButton(getString(R.string.report_issue_update_btn_title), {
                                 //Open the play store.
-                                SUUtils.openLink(this@ReportIssueActivity, getString(R.string.rate_app_url))
+                                AboutUtils.openLink(this@ReportIssueActivity, getString(R.string.rate_app_url))
                             })
                         })
             }

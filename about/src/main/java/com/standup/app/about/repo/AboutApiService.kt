@@ -28,7 +28,7 @@ import retrofit2.http.POST
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-interface AboutApiService {
+internal interface AboutApiService {
 
     /**
      * Get the latest version of the android application available.
