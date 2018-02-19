@@ -25,7 +25,6 @@ import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.standup.R
 import com.standup.app.profile.di.DaggerProfileComponent
 import com.standup.app.profile.repo.GetProfileResponse
 import com.standup.app.profile.repo.SaveProfileResponse
@@ -41,7 +40,7 @@ import javax.inject.Inject
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @com.kevalpatel2106.utils.annotations.ViewModel(EditProfileActivity::class)
-class EditProfileModel : BaseViewModel {
+internal class EditProfileModel : BaseViewModel {
 
     /**
      * Private constructor to add the custom [UserProfileRepo] for testing.

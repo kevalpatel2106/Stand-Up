@@ -18,15 +18,13 @@
 package com.standup.app.profile.repo
 
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.common.AppConfig
-import com.kevalpatel2106.utils.toFloatSafe
 
 /**
  * Created by Keval on 28/11/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class GetProfileResponse(
+internal data class SaveProfileResponse(
 
         @SerializedName("uid")
         val userId: Long,
@@ -38,7 +36,7 @@ data class GetProfileResponse(
         val email: String,
 
         @SerializedName("photo")
-        val photo: String?,
+        val photo: String,
 
         @SerializedName("height")
         val height: String,
@@ -47,13 +45,8 @@ data class GetProfileResponse(
         val weight: String,
 
         @SerializedName("gender")
-        var gender: String = AppConfig.GENDER_MALE,
+        val gender: String,
 
         @SerializedName("isVerified")
         val isVerified: Boolean
-) {
-
-    fun heightFloat() = height.toFloatSafe()
-
-    fun weightFloat() = weight.toFloatSafe()
-}
+)

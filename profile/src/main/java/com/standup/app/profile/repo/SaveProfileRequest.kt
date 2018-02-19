@@ -24,7 +24,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class SaveProfileResponse(
+internal data class SaveProfileRequest(
 
         @SerializedName("uid")
         val userId: Long,
@@ -36,7 +36,7 @@ data class SaveProfileResponse(
         val email: String,
 
         @SerializedName("photo")
-        val photo: String,
+        var photo: String? = null,
 
         @SerializedName("height")
         val height: String,
@@ -45,8 +45,5 @@ data class SaveProfileResponse(
         val weight: String,
 
         @SerializedName("gender")
-        val gender: String,
-
-        @SerializedName("isVerified")
-        val isVerified: Boolean
+        val gender: String
 )

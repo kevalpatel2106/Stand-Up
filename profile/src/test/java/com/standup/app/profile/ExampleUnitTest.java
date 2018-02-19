@@ -15,24 +15,20 @@
  *
  */
 
-package com.standup.app.profile.repo
+package com.standup.app.profile;
 
-import com.kevalpatel2106.utils.annotations.Repository
-import io.reactivex.Flowable
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Keval on 28/11/17.
+ * Example local unit test, which will execute on the development machine (host).
  *
- * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-@Repository
-interface UserProfileRepo {
-
-    fun getUserProfile(userId: Long): Flowable<GetProfileResponse>
-
-    fun saveUserProfile(name: String,
-                        photo: String?,
-                        height: Float,
-                        weight: Float,
-                        isMale: Boolean): Flowable<SaveProfileResponse>
+public class ExampleUnitTest {
+    @Test
+    public void addition_isCorrect() throws Exception {
+        assertEquals(4, 2 + 2);
+    }
 }

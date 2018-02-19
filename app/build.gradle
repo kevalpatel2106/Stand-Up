@@ -102,17 +102,16 @@ dependencies {
     implementation project(':common')
     implementation project(':diary')
     implementation project(':about')
+    implementation project(':profile')
     implementation project(':utils')
     implementation project(':core')
     implementation project(':facebook-auth')
     implementation project(':progress-button')
     implementation project(':google-auth')
-    implementation project(':ruler-view')
     implementation project(':timeline-view')
     implementation project(':spinner-time-picker')
 
     //Test dependency
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation project(':test-utils')
     testImplementation project(':network')
     androidTestImplementation project(':test-utils')

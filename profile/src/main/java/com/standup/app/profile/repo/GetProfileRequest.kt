@@ -24,7 +24,7 @@ import com.google.gson.annotations.SerializedName
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class GetProfileRequest(
+internal data class GetProfileRequest(
 
         @SerializedName("uid")
         val userId: Long

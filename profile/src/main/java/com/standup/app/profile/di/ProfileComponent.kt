@@ -29,7 +29,7 @@ import dagger.Component
  */
 @ApplicationScope
 @Component(dependencies = [AppComponent::class], modules = [ProfileModule::class])
-interface ProfileComponent {
+internal interface ProfileComponent {
 
     fun inject(editProfileModel: EditProfileModel)
 }

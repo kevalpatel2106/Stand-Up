@@ -15,13 +15,19 @@
  *
  */
 
-include ':app', ':core', ':diary', ':about'
+include ':app'
+
+//Features
+include ':diary'
+include ':about'
+include ':profile'
 
 // Base layer modules.
 include ':common'
 include ':test-utils'
 include ':utils'
 include ':network'
+include ':core'
 
 //Social login
 include ':facebook-auth'

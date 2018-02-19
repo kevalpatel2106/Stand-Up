@@ -156,12 +156,6 @@
 
         <!-- User profile edit screen -->
         <activity
-            android:name=".app.profile.EditProfileActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
             android:name=".app.settings.list.SettingsListActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme.NoActionbar"

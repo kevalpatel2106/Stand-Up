@@ -29,7 +29,7 @@ import retrofit2.http.POST
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-interface ProfileApiService {
+internal interface ProfileApiService {
 
     @Headers("Add-Auth: true")
     @POST("getProfile")

@@ -36,8 +36,6 @@ import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.rulerview.ObservableHorizontalScrollView
 import com.kevalpatel2106.utils.annotations.UIController
-import com.standup.R
-import com.standup.app.main.MainActivity
 import com.standup.app.profile.repo.GetProfileResponse
 import com.standup.app.profile.repo.SaveProfileResponse
 import kotlinx.android.synthetic.main.activity_edit_profile.*
@@ -120,7 +118,7 @@ class EditProfileActivity : BaseActivity() {
                 Handler().postDelayed({
 
                     //Open the dashboard if nothing in the back stack
-                    if (isTaskRoot) MainActivity.launch(this@EditProfileActivity)
+//                    if (isTaskRoot) MainActivity.launch(this@EditProfileActivity)
 
                     finish()
                 }, AppConfig.SNACKBAR_TIME)

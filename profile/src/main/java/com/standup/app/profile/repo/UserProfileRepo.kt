@@ -17,33 +17,22 @@
 
 package com.standup.app.profile.repo
 
-import com.google.gson.annotations.SerializedName
+import com.kevalpatel2106.utils.annotations.Repository
+import io.reactivex.Flowable
 
 /**
  * Created by Keval on 28/11/17.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class SaveProfileRequest(
+@Repository
+internal interface UserProfileRepo {
 
-        @SerializedName("uid")
-        val userId: Long,
+    fun getUserProfile(userId: Long): Flowable<GetProfileResponse>
 
-        @SerializedName("name")
-        val name: String,
-
-        @SerializedName("email")
-        val email: String,
-
-        @SerializedName("photo")
-        var photo: String? = null,
-
-        @SerializedName("height")
-        val height: String,
-
-        @SerializedName("weight")
-        val weight: String,
-
-        @SerializedName("gender")
-        val gender: String
-)
+    fun saveUserProfile(name: String,
+                        photo: String?,
+                        height: Float,
+                        weight: Float,
+                        isMale: Boolean): Flowable<SaveProfileResponse>
+}

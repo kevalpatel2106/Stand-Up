@@ -37,11 +37,9 @@
     <string name="login_already_account">Already have account?</string>
     <string name="login_with_email_sign_in">Login</string>
     <string name="error_login_invalid_email">Enter valid email address.</string>
-    <string name="error_invalid_height">Invalid height.</string>
-    <string name="error_invalid_weight">Invalid weight.</string>
+
     <string name="login_error_password_did_not_match">Password did not match.</string>
     <string name="login_with_email_create_account">Create account</string>
-    <string name="error_login_invalid_name">Enter valid name.</string>
     <string name="error_login_invalid_password">Enter valid password.</string>
     <string name="register_device_service_notification_message">Registering your device.</string>
     <string name="btn_title_forgot_password">Forgot Password?</string>
@@ -58,15 +56,6 @@
     <string name="verify_email_link_success">Your email verified successfully.</string>
     <string name="verify_email_link_fail">Verification failed.</string>
     <string name="logout_successful_message">Logout successful.</string>
-    <string name="gender_male">Male</string>
-    <string name="gender_female">Female</string>
-    <string name="gender_heading">Gender:</string>
-    <string name="profile_weight_picker_title">Weight:</string>
-    <string name="profile_height_picker_title">Height:</string>
-    <string name="profile_name_hint">Name</string>
-    <string name="title_activity_user_profile">Profile</string>
-    <string name="message_profile_updated">Profile updated successfully.</string>
-    <string name="menu_save">Save</string>
     <string name="forgot_password_successful">Password reset link sent to you on email. Please check your email</string>
     <string name="btn_title_open_mail">Open Mail</string>
     <string name="nav_header_home">Home</string>
