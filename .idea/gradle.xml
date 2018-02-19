@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/diary" />
             <option value="$PROJECT_DIR$/facebook-auth" />
             <option value="$PROJECT_DIR$/google-auth" />
             <option value="$PROJECT_DIR$/network" />

@@ -20,11 +20,11 @@ package com.standup.app.profile
 import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.Validator
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.standup.R
 import com.standup.app.profile.di.DaggerProfileComponent
 import com.standup.app.profile.repo.GetProfileResponse

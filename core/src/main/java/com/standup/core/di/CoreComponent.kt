@@ -17,8 +17,8 @@
 
 package com.standup.core.di
 
-import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.common.application.di.AppComponent
+import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.standup.core.CorePrefsProvider
 import com.standup.core.SystemEventReceiver
 import com.standup.core.activityMonitor.ActivityMonitorJob

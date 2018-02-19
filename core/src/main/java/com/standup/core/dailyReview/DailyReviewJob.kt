@@ -20,8 +20,8 @@ package com.standup.core.dailyReview
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.standup.core.activityMonitor.ActivityMonitorJob
 import com.standup.core.di.DaggerCoreComponent
 import com.standup.core.misc.AsyncJob

@@ -17,8 +17,8 @@
 
 package com.standup.app.fcm
 
-import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.common.application.di.AppComponent
+import com.kevalpatel2106.common.application.di.ApplicationScope
 import dagger.Component
 
 /**

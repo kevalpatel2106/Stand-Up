@@ -28,17 +28,17 @@ import android.view.View
 import android.view.WindowManager
 import butterknife.OnClick
 import com.kevalpatel2106.common.AnalyticsEvents
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.annotations.UIController
 import com.kevalpatel2106.utils.getColorCompat
 import com.standup.R
+import com.standup.app.SUUtils
 import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.main.MainActivity
-import com.standup.app.misc.SUUtils
 import kotlinx.android.synthetic.main.activity_verify_email.*
 import javax.inject.Inject
 

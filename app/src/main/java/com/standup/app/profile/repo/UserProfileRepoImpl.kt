@@ -17,15 +17,15 @@
 
 package com.standup.app.profile.repo
 
-import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.AppConfig
 import com.kevalpatel2106.common.application.di.AppModule
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.repository.RepoBuilder
 import com.kevalpatel2106.common.repository.RepoData
 import com.kevalpatel2106.common.repository.cache.Cache
 import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
 import com.kevalpatel2106.utils.annotations.Repository
 import com.kevalpatel2106.utils.toFloatSafe
-import com.standup.app.constants.AppConfig
 import io.reactivex.Flowable
 import retrofit2.Retrofit
 import javax.inject.Inject

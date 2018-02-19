@@ -18,11 +18,11 @@
 package com.standup.app.authentication.di
 
 import android.app.Application
-import com.kevalpatel2106.common.ApplicationScope
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.di.AppModule
+import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.kevalpatel2106.common.db.DbModule
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.app.authentication.logout.Logout
 import com.standup.app.authentication.repo.UserAuthRepository

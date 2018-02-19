@@ -35,8 +35,8 @@ import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.utils.alert
 import com.standup.BuildConfig
 import com.standup.R
+import com.standup.app.SUUtils
 import com.standup.app.about.repo.CheckVersionResponse
-import com.standup.app.misc.SUUtils
 
 class AboutActivity : MaterialAboutActivity() {
 

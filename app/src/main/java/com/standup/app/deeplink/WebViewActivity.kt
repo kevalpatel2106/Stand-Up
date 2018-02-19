@@ -29,7 +29,6 @@ import android.view.View
 import android.webkit.WebViewClient
 import com.standup.R
 import kotlinx.android.synthetic.main.activity_web_view.*
-import kotlinx.android.synthetic.main.layout_simple_toolbar.*
 
 
 class WebViewActivity : AppCompatActivity() {
@@ -65,7 +64,9 @@ class WebViewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_web_view)
 
         //Set toolbar
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+
         //set the title
         supportActionBar!!.title = "Browser"
         //Set the up indicator

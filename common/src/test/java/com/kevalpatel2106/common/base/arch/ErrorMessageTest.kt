@@ -65,9 +65,9 @@ class ErrorMessageTest {
     @Throws(IOException::class)
     fun checkErrorBtn() {
         val errorMessage = ErrorMessage(R.string.error_activity_not_found)
-        errorMessage.setErrorBtn(R.string.btn_title_retry, {})
+        errorMessage.setErrorBtn(R.string.error_view_btn_title_retry, {})
 
-        Assert.assertEquals(errorMessage.getErrorBtnText(), R.string.btn_title_retry)
+        Assert.assertEquals(errorMessage.getErrorBtnText(), R.string.error_view_btn_title_retry)
         Assert.assertNotNull(errorMessage.getOnErrorClick())
     }
 

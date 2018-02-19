@@ -51,6 +51,6 @@ class BasePreference : Preference {
 
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-        holder.itemView.background = context.getDrawable(R.drawable.bg_settings_list_preference)
+        holder.itemView.background = context.getDrawable(R.drawable.bg_list_item_ripple)
     }
 }

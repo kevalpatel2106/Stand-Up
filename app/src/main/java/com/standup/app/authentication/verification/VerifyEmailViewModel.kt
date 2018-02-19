@@ -19,11 +19,11 @@ package com.standup.app.authentication.verification
 
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.base.arch.SingleLiveEvent
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.authentication.repo.ResendVerificationRequest
 import com.standup.app.authentication.repo.UserAuthRepository

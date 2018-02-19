@@ -24,8 +24,8 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import com.evernote.android.job.JobManager
-import com.kevalpatel2106.common.UserSessionManager
-import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.annotations.Helper
 import com.kevalpatel2106.utils.isScreenOn
 import com.standup.core.sleepManager.SleepModeMonitoringHelper

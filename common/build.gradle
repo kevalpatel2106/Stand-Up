@@ -53,6 +53,7 @@ dependencies {
     implementation project(':utils')
     implementation project(':network')
     implementation project(':progress-button')
+    implementation project(':timeline-view')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
@@ -70,7 +71,8 @@ dependencies {
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
-    implementation supportLib.recyclerView
+    implementation(supportLib.recyclerView, excludeGrp)
+    implementation(supportLib.cardView, excludeGrp)
     implementation supportLib.design
 
     //Room & Arch components
@@ -79,4 +81,7 @@ dependencies {
     kapt archComponent.roomAnnotation
 
     implementation retrofitLib.retrofit
+
+    implementation(otherLib.lottie, excludeGrp)
+    implementation(otherLib.chartLayout, excludeGrp)
 }

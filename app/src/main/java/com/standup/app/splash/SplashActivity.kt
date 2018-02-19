@@ -21,9 +21,9 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.standup.app.authentication.deviceReg.DeviceRegisterActivity
 import com.standup.app.authentication.intro.IntroActivity
 import com.standup.app.authentication.verification.VerifyEmailActivity

@@ -23,6 +23,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.CardView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,16 +31,15 @@ import android.view.animation.AnimationUtils
 import butterknife.OnClick
 import com.kevalpatel2106.common.base.uiController.BaseFragment
 import com.kevalpatel2106.common.base.uiController.showSnack
+import com.kevalpatel2106.common.misc.TimeLineFullActivity
+import com.kevalpatel2106.common.misc.setPieChart
+import com.kevalpatel2106.common.misc.setPieChartData
+import com.kevalpatel2106.common.misc.setUserActivities
+import com.kevalpatel2106.common.view.BaseTextView
 import com.standup.R
-import com.standup.app.misc.TimeLineFullActivity
-import com.standup.app.misc.setPieChart
-import com.standup.app.misc.setPieChartData
-import com.standup.app.misc.setUserActivities
 import com.standup.timelineview.TimeLineLength
+import com.standup.timelineview.TimeLineView
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import kotlinx.android.synthetic.main.layout_home_efficiency_card.*
-import kotlinx.android.synthetic.main.layout_home_timeline_card.*
-
 
 /**
  * A simple [Fragment] subclass tha will display the current summary and notify user about important
@@ -56,6 +56,13 @@ class DashboardFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
+    private lateinit var today_time_line: TimeLineView
+    private lateinit var efficiency_card: CardView
+    private lateinit var time_line_card: CardView
+    private lateinit var tracked_time_tv: BaseTextView
+    private lateinit var total_standing_time_tv: BaseTextView
+    private lateinit var total_sitting_time_tv: BaseTextView
+
     /**
      * @see DashboardViewModel
      */
@@ -64,6 +71,14 @@ class DashboardFragment : BaseFragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Initialize views
+        today_time_line = view.findViewById(R.id.today_time_line)
+        efficiency_card = view.findViewById(R.id.efficiency_card)
+        time_line_card = view.findViewById(R.id.time_line_card)
+        tracked_time_tv = view.findViewById(R.id.tracked_time_tv)
+        total_standing_time_tv = view.findViewById(R.id.total_standing_time_tv)
+        total_sitting_time_tv = view.findViewById(R.id.total_sitting_time_tv)
 
         //Set time line view.
         today_time_line.timelineDuration = TimeLineLength.A_DAY

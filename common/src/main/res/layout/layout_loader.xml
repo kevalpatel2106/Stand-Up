@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright 2018 Keval Patel.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +16,6 @@
   -->
 
 <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/list_loading_progressbar_dimen"
-    android:layout_gravity="center"/>
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/list_loading_progressbar_dimen"
+             android:layout_gravity="center"/>

@@ -18,8 +18,8 @@
 package com.standup.app.fcm
 
 import com.google.firebase.iid.FirebaseInstanceIdService
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.standup.app.authentication.deviceReg.RegisterDeviceService
 import javax.inject.Inject
 

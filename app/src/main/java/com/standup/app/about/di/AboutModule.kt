@@ -17,9 +17,9 @@
 
 package com.standup.app.about.di
 
-import com.kevalpatel2106.common.ApplicationScope
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.di.AppModule
+import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.standup.app.about.repo.AboutRepository
 import com.standup.app.about.repo.AboutRepositoryImpl
 import dagger.Module

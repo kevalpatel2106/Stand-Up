@@ -25,10 +25,10 @@ import android.os.Bundle
 import android.support.v7.preference.ListPreference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.view.View
-import com.kevalpatel2106.common.UserSessionManager
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.notifications.addReminderNotificationChannel
+import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.vibrate
 import com.standup.R
 import com.standup.app.settings.di.DaggerSettingsComponent

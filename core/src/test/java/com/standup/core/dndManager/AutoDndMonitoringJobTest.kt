@@ -19,8 +19,8 @@ package com.standup.core.dndManager
 
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.common.SharedPreferenceKeys
-import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.core.CoreTestUtils

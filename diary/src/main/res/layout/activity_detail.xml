@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.standup.app.diary.detail.DetailActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:expandedTitleMarginTop="@dimen/spacing_large"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
+
+            <!--Efficiency percentage-->
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/detail_efficiency_card_pie_chart"
+                style="@style/LargeText.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="@dimen/spacing_anti"
+                android:layout_marginTop="?actionBarSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ToolbarColoredBackArrow"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/Base.Theme.AppCompat.Light"
+                app:subtitleTextColor="?android:attr/textColorSecondary"
+                app:titleTextColor="@color/colorToolbarText"
+                tools:ignore="Overdraw,UnusedAttribute" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        app:behavior_overlapTop="80dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ViewFlipper
+            android:id="@+id/detail_view_flipper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- 0. Summary view-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/card_horizontal_margin"
+                android:layout_marginStart="@dimen/card_horizontal_margin"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/spacing_large"
+                android:paddingTop="@dimen/spacing_large">
+
+                <include layout="@layout/layout_home_efficiency_card" />
+
+                <!--Today's time line-->
+                <include layout="@layout/layout_home_timeline_card" />
+
+                <include layout="@layout/layout_open_user_activity_card"/>
+            </LinearLayout>
+
+            <!--1. loader-->
+            <include layout="@layout/layout_loader" />
+
+            <!--2. Error view-->
+            <com.kevalpatel2106.common.misc.ErrorView
+                android:id="@+id/detail_error_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp" />
+        </ViewFlipper>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

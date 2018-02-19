@@ -18,8 +18,8 @@
 package com.standup.core.sync
 
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.UserSessionManager
-import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.annotations.Helper
 import com.kevalpatel2106.utils.rxbus.Event
 import com.kevalpatel2106.utils.rxbus.RxBus

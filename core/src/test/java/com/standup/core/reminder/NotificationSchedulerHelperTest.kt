@@ -17,8 +17,8 @@
 
 package com.standup.core.reminder
 
-import com.kevalpatel2106.common.UserSessionManager
-import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

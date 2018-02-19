@@ -24,7 +24,7 @@ import butterknife.OnClick
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.utils.annotations.UIController
 import com.standup.R
-import com.standup.app.misc.SUUtils
+import com.standup.app.SUUtils
 
 /**
  * Created by Kevalpatel2106 on 18-Dec-17.

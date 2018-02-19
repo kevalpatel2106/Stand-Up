@@ -20,8 +20,8 @@ package com.standup.app.deeplink
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.BuildConfig
 import com.standup.R

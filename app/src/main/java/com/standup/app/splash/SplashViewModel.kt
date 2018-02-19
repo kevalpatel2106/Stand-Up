@@ -18,8 +18,8 @@
 package com.standup.app.splash
 
 import android.arch.lifecycle.MutableLiveData
-import com.kevalpatel2106.common.SharedPreferenceKeys
-import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.annotations.ViewModel
 import javax.inject.Inject

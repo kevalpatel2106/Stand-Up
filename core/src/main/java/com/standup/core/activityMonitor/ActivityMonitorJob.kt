@@ -29,11 +29,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
 import com.kevalpatel2106.common.AnalyticsEvents
-import com.kevalpatel2106.common.UserSessionManager
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.standup.core.Core
 import com.standup.core.CoreConfig
 import com.standup.core.di.DaggerCoreComponent

@@ -21,11 +21,11 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import com.kevalpatel2106.common.AnalyticsEvents
-import com.kevalpatel2106.common.SharedPreferenceKeys
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import com.standup.app.authentication.deviceReg.RegisterDeviceService

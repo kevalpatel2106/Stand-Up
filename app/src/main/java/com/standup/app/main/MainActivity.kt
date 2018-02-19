@@ -30,10 +30,10 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import com.bumptech.glide.Glide
-import com.kevalpatel2106.common.SharedPreferenceKeys
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector

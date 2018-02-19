@@ -22,8 +22,8 @@ import android.content.Context
 import android.content.Intent
 import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.standup.core.di.DaggerCoreComponent
 import timber.log.Timber

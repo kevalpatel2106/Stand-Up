@@ -18,7 +18,7 @@
 package com.standup.app.authentication.login
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.network.ApiProvider

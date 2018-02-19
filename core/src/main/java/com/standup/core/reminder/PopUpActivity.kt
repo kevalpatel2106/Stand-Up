@@ -21,9 +21,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.common.ReminderMessageProvider
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.vibrate
 import com.standup.core.R
 import com.standup.core.di.DaggerCoreComponent

@@ -18,8 +18,8 @@
 package com.standup.app.profile.repo
 
 import com.google.gson.annotations.SerializedName
+import com.kevalpatel2106.common.AppConfig
 import com.kevalpatel2106.utils.toFloatSafe
-import com.standup.app.constants.AppConfig
 
 /**
  * Created by Keval on 28/11/17.

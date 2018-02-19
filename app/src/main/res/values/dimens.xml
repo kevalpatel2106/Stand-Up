@@ -16,22 +16,8 @@
   -->
 
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="md_activity_horizontal_margin">16dp</dimen>
-    <dimen name="md_activity_vertical_margin">16dp</dimen>
-    <dimen name="md_button_height">50dp</dimen>
-    <dimen name="md_button_elevation">6dp</dimen>
-    <dimen name="md_divider_height">1px</dimen>
-    <dimen name="md_row_horizontal_padding">@dimen/spacing_micro</dimen>
-    <dimen name="md_row_vertical_padding">@dimen/spacing_nano</dimen>
-    <dimen name="md_navigation_drawer_width">320dp</dimen>
-
     <!--Design dimen-->
-    <dimen name="card_horizontal_margin">@dimen/spacing_micro</dimen>
-    <dimen name="list_loading_progressbar_dimen">60dp</dimen>
     <dimen name="intro_screen_logo_dimen">100dp</dimen>
     <dimen name="forgot_password_logo_size">160dp</dimen>
-    <dimen name="nav_drawer_header_height">180dp</dimen>
     <dimen name="device_reg_screen_clock_iv_dimen">200dp</dimen>
-    <dimen name="timeline_card_graph_height">130dp</dimen>
 </resources>

@@ -19,7 +19,7 @@ package com.standup.app.about
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
-import com.kevalpatel2106.common.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule

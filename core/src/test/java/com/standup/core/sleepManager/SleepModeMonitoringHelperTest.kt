@@ -17,9 +17,9 @@
 
 package com.standup.core.sleepManager
 
-import com.kevalpatel2106.common.SharedPreferenceKeys
-import com.kevalpatel2106.common.UserSessionManager
-import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
+import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
 import org.junit.Assert

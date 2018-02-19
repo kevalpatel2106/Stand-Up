@@ -189,18 +189,6 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
         <activity
-            android:name=".app.diary.detail.DetailActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
-            android:name=".app.diary.userActivityList.UserActivityListActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
             android:name=".app.settings.syncing.SyncSettingsDetailActivity"
             android:resizeableActivity="true"
             android:theme="@style/AppTheme"
@@ -224,12 +212,7 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
-        <activity
-            android:name=".app.misc.TimeLineFullActivity"
-            android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.TimeLine"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
+
 
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->

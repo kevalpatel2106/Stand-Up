@@ -32,7 +32,7 @@ import com.kevalpatel2106.common.base.uiController.showToast
 import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.alert
 import com.standup.R
-import com.standup.app.misc.SUUtils
+import com.standup.app.SUUtils
 import kotlinx.android.synthetic.main.activity_report_issue.*
 
 

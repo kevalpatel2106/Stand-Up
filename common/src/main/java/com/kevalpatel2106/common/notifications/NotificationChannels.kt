@@ -25,7 +25,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import com.kevalpatel2106.common.R
-import com.kevalpatel2106.common.UserSettingsManager
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 
 /**
  * Created by Kevalpatel2106 on 04-Dec-17.

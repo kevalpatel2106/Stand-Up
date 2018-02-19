@@ -18,7 +18,7 @@
 package com.kevalpatel2106.common.db
 
 import android.app.Application
-import com.kevalpatel2106.common.ApplicationScope
+import com.kevalpatel2106.common.application.di.ApplicationScope
 import dagger.Module
 import dagger.Provides
 

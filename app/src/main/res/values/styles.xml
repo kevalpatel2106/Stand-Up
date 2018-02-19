@@ -16,64 +16,6 @@
   -->
 
 <resources>
-
-    <style name="ErrorTextViewStyle" parent="Base.TextAppearance.AppCompat.Medium">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-    </style>
-
-    <style name="LargeText.Primary" parent="Base.TextAppearance.AppCompat.Large">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-    </style>
-
-    <style name="MediumText.Primary" parent="Base.TextAppearance.AppCompat.Medium">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:textColorHint">?android:attr/textColorSecondary</item>
-    </style>
-
-    <style name="SmallText.Primary" parent="Base.TextAppearance.AppCompat.Small">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-    </style>
-
-    <style name="NanoText.Primary" parent="Base.TextAppearance.AppCompat.Small">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="LargeText.Black" parent="Base.TextAppearance.AppCompat.Large">
-        <item name="android:textColor">@color/colorBlackText</item>
-    </style>
-
-    <style name="MediumText.Black" parent="Base.TextAppearance.AppCompat.Medium">
-        <item name="android:textColor">@color/colorBlackText</item>
-        <item name="android:textColorHint">?android:attr/textColorSecondary</item>
-    </style>
-
-    <style name="SmallText.Black" parent="Base.TextAppearance.AppCompat.Small">
-        <item name="android:textColor">@color/colorBlackText</item>
-    </style>
-
-    <style name="NanoText.Black" parent="Base.TextAppearance.AppCompat.Small">
-        <item name="android:textColor">@color/colorBlackText</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="LargeText.Secondary" parent="Base.TextAppearance.AppCompat.Large">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-    </style>
-
-    <style name="MediumText.Secondary" parent="Base.TextAppearance.AppCompat.Medium">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-    </style>
-
-    <style name="SmallText.Secondary" parent="Base.TextAppearance.AppCompat.Small">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-    </style>
-
-    <style name="NanoText.Secondary" parent="Base.TextAppearance.AppCompat.Small">
-        <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
     <!--Intro logo-->
     <style name="IntroLogoStyle">
         <item name="android:alpha">0.2</item>
@@ -109,19 +51,6 @@
         <item name="android:textAlignment">center</item>
         <item name="android:text">@string/sign_in_with_facebook</item>
         <item name="android:textColor">@android:color/white</item>
-    </style>
-
-    <style name="CardViewStyle" parent="CardView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/spacing_small</item>
-        <item name="android:layout_marginEnd">@dimen/card_horizontal_margin</item>
-        <item name="android:layout_marginStart">@dimen/card_horizontal_margin</item>
-        <item name="cardCornerRadius">0dp</item>
-        <item name="cardElevation">4dp</item>
-        <item name="cardUseCompatPadding">false</item>
-        <item name="cardBackgroundColor">@color/cardview_dark_background</item>
-        <item name="contentPadding">@dimen/spacing_small</item>
     </style>
 
     <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">

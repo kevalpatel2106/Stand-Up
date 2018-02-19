@@ -31,13 +31,13 @@ import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.standup.R
+import com.standup.app.SUUtils
 import com.standup.app.about.di.DaggerAboutComponent
 import com.standup.app.about.donate.SupportDevelopmentActivity
 import com.standup.app.about.repo.AboutRepository
 import com.standup.app.about.repo.CheckVersionResponse
 import com.standup.app.about.report.ReportIssueActivity
 import com.standup.app.authentication.repo.UserAuthRepository
-import com.standup.app.misc.SUUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

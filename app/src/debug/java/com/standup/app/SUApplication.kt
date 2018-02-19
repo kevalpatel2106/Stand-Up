@@ -21,13 +21,13 @@ import android.os.StrictMode
 import com.facebook.FacebookSdk
 import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
-import com.kevalpatel2106.common.UserSessionManager
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
-import com.standup.core.Core
+import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.squareup.leakcanary.LeakCanary
 import com.standup.BuildConfig
+import com.standup.core.Core
 import timber.log.Timber
 
 

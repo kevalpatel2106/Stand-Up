@@ -1,0 +1,29 @@
+<!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="20dp"
+        android:height="20dp"
+        android:viewportHeight="92.008"
+        android:viewportWidth="92.008">
+    <path
+        android:fillColor="#FFF"
+        android:pathData="M46,21.67c5.97,0 10.84,-4.86 10.84,-10.84S51.98,0 46,0c-5.97,0 -10.84,4.86 -10.84,10.84S40.03,21.67 46,21.67z"/>
+    <path
+        android:fillColor="#FFF"
+        android:pathData="M68.07,54.01L59.3,26.81c-0.47,-1.46 -2.04,-2.6 -3.57,-2.6h-1.31H53.48H38.53h-0.94h-1.31c-1.53,0 -3.1,1.14 -3.57,2.6l-8.78,27.2c-0.26,0.81 -0.15,1.62 0.3,2.24s1.19,0.97 2.04,0.97h2.25c1.53,0 3.1,-1.14 3.57,-2.6l2.5,-7.75v10.47v0.5v29.17c0,2.76 2.24,5 5,5h0.35c2.76,0 5,-2.24 5,-5V60.84h2.13v26.17c0,2.76 2.24,5 5,5h0.35c2.76,0 5,-2.24 5,-5V57.84v-0.5v-10.47l2.5,7.75c0.47,1.46 2.04,2.6 3.57,2.6h2.25c0.85,0 1.59,-0.35 2.04,-0.97S68.33,54.81 68.07,54.01z"/>
+</vector>

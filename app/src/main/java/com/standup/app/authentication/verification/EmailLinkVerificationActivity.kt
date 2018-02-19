@@ -28,15 +28,15 @@ import android.os.Handler
 import android.support.annotation.VisibleForTesting
 import android.view.View
 import android.widget.Toast
-import com.kevalpatel2106.common.UserSessionManager
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.common.misc.LottieJson
+import com.kevalpatel2106.common.misc.playAnotherAnimation
+import com.kevalpatel2106.common.misc.playRepeatAnimation
+import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.annotations.UIController
 import com.standup.R
-import com.standup.app.misc.LottieJson
-import com.standup.app.misc.playAnotherAnimation
-import com.standup.app.misc.playRepeatAnimation
 import com.standup.app.splash.SplashActivity
 import kotlinx.android.synthetic.main.activity_email_link_verification.*
 

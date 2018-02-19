@@ -24,8 +24,8 @@ import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceManager
 import android.view.View
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.standup.R
 import com.standup.app.settings.di.DaggerSettingsComponent
 import com.standup.app.settings.findPrefrance

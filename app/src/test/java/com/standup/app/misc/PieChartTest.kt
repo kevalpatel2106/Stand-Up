@@ -24,6 +24,8 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
+import com.kevalpatel2106.common.misc.setPieChart
+import com.kevalpatel2106.common.misc.setPieChartData
 import com.kevalpatel2106.network.ApiProvider
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule

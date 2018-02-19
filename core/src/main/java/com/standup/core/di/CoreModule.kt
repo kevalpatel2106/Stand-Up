@@ -17,8 +17,8 @@
 
 package com.standup.core.di
 
-import com.kevalpatel2106.common.ApplicationScope
 import com.kevalpatel2106.common.application.di.AppModule
+import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.kevalpatel2106.common.db.DbModule
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.standup.core.repo.CoreRepo

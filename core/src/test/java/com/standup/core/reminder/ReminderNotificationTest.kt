@@ -22,8 +22,8 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.common.ReminderMessageProvider
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.notifications.NotificationChannelType
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.core.R

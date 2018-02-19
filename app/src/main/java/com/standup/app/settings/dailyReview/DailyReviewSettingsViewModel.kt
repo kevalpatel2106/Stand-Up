@@ -22,9 +22,9 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.FragmentManager
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
 import com.philliphsu.bottomsheetpickers.time.grid.GridTimePickerDialog
 import com.standup.app.settings.di.DaggerSettingsComponent

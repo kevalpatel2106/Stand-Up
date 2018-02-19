@@ -21,9 +21,9 @@ import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.kevalpatel2106.common.UserSessionManager
-import com.kevalpatel2106.common.UserSettingsManager
 import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.standup.app.authentication.verification.EmailVerifiedNotification
 import dagger.Lazy
 import timber.log.Timber

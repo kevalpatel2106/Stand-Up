@@ -16,12 +16,12 @@
   -->
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_view"
-    android:layout_width="match_parent"
-    android:layout_height="?listPreferredItemHeight"
-    android:background="@drawable/bg_settings_list_preference">
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:id="@+id/root_view"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="?listPreferredItemHeight"
+                                             android:background="@drawable/bg_list_item_ripple">
 
     <com.kevalpatel2106.common.view.BaseImageView
         android:id="@+id/setting_row_icon_iv"
