@@ -25,7 +25,7 @@ import io.reactivex.Flowable
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-interface DashboardRepo {
+internal interface DashboardRepo {
 
     fun getTodaySummary(): Flowable<DailyActivitySummary>
 }

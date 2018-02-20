@@ -30,8 +30,8 @@ import javax.inject.Inject
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @ViewModel(SplashActivity::class)
-class SplashViewModel @Inject constructor(private val userSessionManager: UserSessionManager,
-                                          private val sharedPrefProvider: SharedPrefsProvider) {
+internal class SplashViewModel @Inject constructor(private val userSessionManager: UserSessionManager,
+                                                   private val sharedPrefProvider: SharedPrefsProvider) {
 
     internal val openIntro = MutableLiveData<Boolean>()
 

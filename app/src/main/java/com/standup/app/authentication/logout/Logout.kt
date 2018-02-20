@@ -37,6 +37,7 @@ import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 27-Nov-17.
@@ -44,11 +45,11 @@ import io.reactivex.schedulers.Schedulers
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class Logout constructor(private val application: Application,
-                         private val sharedPrefsProvider: SharedPrefsProvider,
-                         private val userSessionManager: UserSessionManager,
-                         private val userAuthRepository: UserAuthRepository,
-                         private val userActivityDao: UserActivityDao) {
+class Logout @Inject constructor(private val application: Application,
+                                 private val sharedPrefsProvider: SharedPrefsProvider,
+                                 private val userSessionManager: UserSessionManager,
+                                 private val userAuthRepository: UserAuthRepository,
+                                 private val userActivityDao: UserActivityDao) {
 
     /**
      * Clear the shared preference and jobs

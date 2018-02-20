@@ -41,7 +41,7 @@ import javax.inject.Inject
  * @see DashboardFragment
  */
 @ViewModel(DashboardFragment::class)
-class DashboardViewModel : BaseViewModel {
+internal class DashboardViewModel : BaseViewModel {
 
     /**
      * [DashboardRepo] for loading and processing the data from the database and network.

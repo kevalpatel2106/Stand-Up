@@ -28,7 +28,7 @@ import dagger.Component
  */
 @ApplicationScope
 @Component(dependencies = [AppComponent::class])
-interface FcmComponent {
+internal interface FcmComponent {
 
     fun inject(fcmMessagingService: FcmMessagingService)
 

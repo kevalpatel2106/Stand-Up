@@ -34,7 +34,7 @@ import javax.inject.Named
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @Module(includes = [DbModule::class])
-class DashboardModule {
+internal class DashboardModule {
 
     @Provides
     @ApplicationScope

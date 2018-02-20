@@ -35,8 +35,8 @@ import kotlin.collections.ArrayList
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-class DashboardRepoImpl constructor(private val userActivityDao: UserActivityDao,
-                                    @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit) : DashboardRepo {
+internal class DashboardRepoImpl constructor(private val userActivityDao: UserActivityDao,
+                                             @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit) : DashboardRepo {
 
     override fun getTodaySummary(): Flowable<DailyActivitySummary> {
         val calendar = TimeUtils.getTodaysCalender12AM()

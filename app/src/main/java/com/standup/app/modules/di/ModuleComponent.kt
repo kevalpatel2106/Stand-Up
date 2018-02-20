@@ -19,7 +19,8 @@ package com.standup.app.modules.di
 
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.common.application.di.ApplicationScope
-import com.standup.app.settings.SettingsHook
+import com.standup.app.authentication.di.UserAuthModule
+import com.standup.app.modules.SettingsHookImpl
 import dagger.Component
 
 /**
@@ -28,8 +29,8 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [ModulesModule::class])
+@Component(dependencies = [AppComponent::class], modules = [ModulesModule::class, UserAuthModule::class])
 internal interface ModuleComponent {
 
-    fun inject(settingsHook: SettingsHook)
+    fun inject(settingsHook: SettingsHookImpl)
 }

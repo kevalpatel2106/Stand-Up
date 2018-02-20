@@ -40,7 +40,7 @@ import javax.inject.Inject
 class SplashActivity : BaseActivity() {
 
     @Inject
-    lateinit var model: SplashViewModel
+    internal lateinit var model: SplashViewModel
 
     @Inject
     lateinit var userSessionManager: UserSessionManager
@@ -50,7 +50,7 @@ class SplashActivity : BaseActivity() {
         /**
          * Get the launch intent the application in the new task.
          */
-        fun getLaunchIntent(context: Context): Intent {
+        internal fun getLaunchIntent(context: Context): Intent {
             val launchIntent = Intent(context, SplashActivity::class.java)
             launchIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent
                     .FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -61,7 +61,7 @@ class SplashActivity : BaseActivity() {
         /**
          * Launch the application in the new task.
          */
-        fun launch(context: Context) {
+        internal fun launch(context: Context) {
             context.startActivity(getLaunchIntent(context))
         }
     }

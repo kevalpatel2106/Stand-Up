@@ -29,7 +29,7 @@ import dagger.Component
  */
 @ApplicationScope
 @Component(dependencies = [AppComponent::class], modules = [DashboardModule::class])
-interface DashboardComponent {
+internal interface DashboardComponent {
 
     fun inject(dashboardViewModel: DashboardViewModel)
 }
