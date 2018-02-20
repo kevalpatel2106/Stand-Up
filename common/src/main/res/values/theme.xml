@@ -30,7 +30,6 @@
 
         <item name="android:listDivider">@color/divider</item>
         <item name="android:windowBackground">@color/colorWindowBackground</item>
-        <!--<item name="preferenceTheme">@style/PreferenceTheme</item>-->
     </style>
 
     <!-- Base application theme with no background. -->

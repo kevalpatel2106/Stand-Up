@@ -103,13 +103,13 @@ dependencies {
     implementation project(':diary')
     implementation project(':about')
     implementation project(':profile')
+    implementation project(':settings')
     implementation project(':utils')
     implementation project(':core')
     implementation project(':facebook-auth')
     implementation project(':progress-button')
     implementation project(':google-auth')
     implementation project(':timeline-view')
-    implementation project(':spinner-time-picker')
 
     //Test dependency
     testImplementation project(':test-utils')
@@ -134,8 +134,6 @@ dependencies {
     implementation(supportLib.cardView, excludeGrp)
     implementation supportLib.multidex
     implementation supportLib.design
-    implementation supportLib.prefrance
-    implementation supportLib.prefrancev14
     implementation supportLib.gridLayout
 
     //Arch component
@@ -156,12 +154,10 @@ dependencies {
     implementation otherLib.gson
 
     //Other libs
-    implementation(kevalpatel2106.ringtonePicker, excludeGrp)
     implementation(otherLib.circleImagView, excludeGrp)
     implementation(otherLib.chartLayout, excludeGrp)
     implementation(otherLib.lottie, excludeGrp)
     implementation(otherLib.iap, excludeGrp)
-    implementation(otherLib.bottomsheetPicker, excludeGrp)
     releaseImplementation(otherLib.crashalytics) { transitive = true }
 }
 apply plugin: 'com.google.gms.google-services'

@@ -154,38 +154,6 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
 
-        <!-- User profile edit screen -->
-        <activity
-            android:name=".app.settings.list.SettingsListActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
-            android:name=".app.settings.syncing.SyncSettingsDetailActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
-            android:name=".app.settings.dnd.DndSettingsDetailActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
-            android:name=".app.settings.dailyReview.DailyReviewSettingsDetailActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
-            android:name=".app.settings.notifications.NotificationSettingsDetailActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-
 
         <!-- =============================== RECEIVER ================================ -->
         <!-- Receive the broadcast if the user is unauthorised. -->

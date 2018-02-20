@@ -1,0 +1,44 @@
+<!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<resources>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="title_activity_sync_settings">Sync Settings</string>
+    <string name="title_activity_dnd_settings">DND Settings</string>
+    <string name="title_activity_notification_settings">Notifications Settings</string>
+    <string name="title_activity_daily_review_settings">Daily Review Settings</string>
+    <string name="pref_title_sync_now">Sync now</string>
+    <string name="switch_on">On</string>
+    <string name="switch_off">Off</string>
+    <string name="pref_summary_sync_now">You last synced %s ago, tap here to force manual sync.</string>
+    <string name="pref_summary_sync_now_never_synced">Never synced before, tap here to force manual sync.</string>
+    <string name="pref_title_logged_in_as">Logged in as %s</string>
+    <string name="pref_title_sync_in_background">Sync your activities in background</string>
+    <string name="pref_title_sync_in_background_summary_on">Application will periodically sync your activities with the server.</string>
+    <string name="pref_title_sync_in_background_summary_off">Application won\'t sync your activities with the server when application is in the background.</string>
+    <string name="pref_syncing">Syncing…</string>
+    <string name="sign_out_warning_positive_btn_title">Sign out</string>
+    <string name="sign_out_warning_title">Sign out</string>
+    <string name="sign_out_warning_message">Are you sure you want to sign out from the application?</string>
+    <string name="reminder_ringtone_picker_dialog_title">Pick notification tone</string>
+    <string name="dnd_pref_auto_dnd_switch_summary_on">Application will turn into DND mode automatically between %s.</string>
+    <string name="dnd_pref_auto_dnd_switch_summary_off">Do not disturb mode won\'t start automatically. You can turn it on on/off manually though.</string>
+    <string name="dnd_pref_auto_dnd_switch_title_off">Disable</string>
+    <string name="dnd_pref_auto_dnd_switch_title_on">Enable</string>
+
+</resources>

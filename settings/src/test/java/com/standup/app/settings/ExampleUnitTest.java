@@ -15,26 +15,20 @@
  *
  */
 
-include ':app', ':settings'
+package com.standup.app.settings;
 
-//Features
-include ':diary'
-include ':about'
-include ':profile'
+import org.junit.Test;
 
-// Base layer modules.
-include ':common'
-include ':test-utils'
-include ':utils'
-include ':network'
-include ':core'
+import static org.junit.Assert.assertEquals;
 
-//Social login
-include ':facebook-auth'
-include ':google-auth'
-
-//Custom views
-include ':timeline-view'
-include ':ruler-view'
-include ':progress-button'
-include ':spinner-time-picker'
+/**
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ */
+public class ExampleUnitTest {
+    @Test
+    public void addition_isCorrect() throws Exception {
+        assertEquals(4, 2 + 2);
+    }
+}
