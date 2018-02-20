@@ -1,0 +1,68 @@
+<!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<resources>
+    <string name="login_using_email">Login using email</string>
+    <string name="tag_line">Sitting is next cancer.</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="create_account">Create account</string>
+    <string name="error_google_signin_fail">Cannot login with Google account.</string>
+    <string name="error_facebook_signin_fail">Cannot login with Facebook account.</string>
+    <string name="error_retry_try_again">Try Again</string>
+    <string name="error_google_login_email_not_found">Cannot authenticate you with Google. Try creating new account or logging with email.</string>
+    <string name="error_fb_login_email_not_found">Cannot authenticate you with Facebook. Try creating new account or logging with email.</string>
+    <string name="email">Email</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="login">Login</string>
+    <string name="login_create_account">Create account</string>
+    <string name="login_already_account">Already have account?</string>
+    <string name="login_with_email_sign_in">Login</string>
+    <string name="error_login_invalid_email">Enter valid email address.</string>
+    <string name="login_error_password_did_not_match">Password did not match.</string>
+    <string name="login_with_email_create_account">Create account</string>
+    <string name="error_login_invalid_password">Enter valid password.</string>
+    <string name="register_device_service_notification_message">Registering your device.</string>
+    <string name="btn_title_forgot_password">Forgot Password?</string>
+    <string name="verify_email_send_screen_title">Check your mail</string>
+    <string name="message_verification_email_sent">Verification email sent successfully.</string>
+    <string name="open_mail">Open mail</string>
+    <string name="resend_mail">Resend Mail</string>
+    <string name="skip">Skip</string>
+    <string name="verify_email_screen_message">We sent an email to you at %s. It has a link that will verify your email address.</string>
+    <string name="title_activity_forgot_password">Forgot Password</string>
+    <string name="submit">Submit</string>
+    <string name="error_unauthorised_response">Looks like your session has been expired. Please login again.</string>
+    <string name="verify_email_link_description_verifying">Verifying your email…</string>
+    <string name="verify_email_link_success">Your email verified successfully.</string>
+    <string name="verify_email_link_fail">Verification failed.</string>
+    <string name="logout_successful_message">Logout successful.</string>
+    <string name="forgot_password_successful">Password reset link sent to you on email. Please check your email</string>
+    <string name="btn_title_open_mail">Open Mail</string>
+    <string name="setting_up_your_device">Setting up your device…</string>
+    <string name="device_reg_error_invalid_device_id">Invalid device id.</string>
+    <string name="device_reg_error_invalid_fcm_id">Invalid id.</string>
+    <string name="message_resending_verification_email">Resending the verification email…</string>
+    <string name="error_user_already_verified">User already verified.</string>
+    <string name="set_up_complete">Setup complete.</string>
+    <string name="set_up_failed">Setup failed.</string>
+    <string name="error_login_invalid_name">Enter valid name.</string>
+    <string name="error_invalid_verification_link">Invalid verification link.</string>
+
+</resources>

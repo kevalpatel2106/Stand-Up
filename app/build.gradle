@@ -60,8 +60,6 @@ android {
             resValue "string", "application_name", DEBUG_APPLICATION_NAME
             resValue "string", "package_name", DEBUG_PACKAGE_ID
             resValue "string", "api_host", "\"" + SERVER_BASE_URL.replace("https://", "") + "\""
-            resValue "string", "server_client_id", SERVER_CLIENT_ID
-            resValue "string", "facebook_app_id", FACEBOOK_APP_ID
             resValue "string", "android_api_key", ANDROID_API_KEY
         }
         release {
@@ -79,8 +77,6 @@ android {
             resValue "string", "application_name", RELEASE_APPLICATION_NAME
             resValue "string", "package_name", RELEASE_PACKAGE_ID
             resValue "string", "api_host", "\"" + RELEASE_SERVER_BASE_URL.replace("https://", "") + "\""
-            resValue "string", "server_client_id", RELEASE_SERVER_CLIENT_ID
-            resValue "string", "facebook_app_id", RELEASE_FACEBOOK_APP_ID
             resValue "string", "android_api_key", RELEASE_ANDROID_API_KEY
         }
     }
@@ -100,6 +96,7 @@ kotlin kotlinOption
 
 dependencies {
     implementation project(':common')
+    implementation project(':feature-authentication')
     implementation project(':feature-diary')
     implementation project(':feature-about')
     implementation project(':feature-profile')
@@ -107,9 +104,7 @@ dependencies {
     implementation project(':feature-stats')
     implementation project(':utils')
     implementation project(':core')
-    implementation project(':facebook-auth')
     implementation project(':progress-button')
-    implementation project(':google-auth')
     implementation project(':timeline-view')
 
     //Test dependency
@@ -159,9 +154,7 @@ dependencies {
     implementation(otherLib.chartLayout, excludeGrp)
     implementation(otherLib.lottie, excludeGrp)
     implementation(otherLib.iap, excludeGrp)
+    implementation(otherLib.facebook, excludeGrp)
     releaseImplementation(otherLib.crashalytics) { transitive = true }
 }
 apply plugin: 'com.google.gms.google-services'
-
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'

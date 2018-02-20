@@ -15,7 +15,7 @@
  *
  */
 
-include ':app'
+include ':app', ':feature-authentication'
 
 //Features
 include ':feature-diary'

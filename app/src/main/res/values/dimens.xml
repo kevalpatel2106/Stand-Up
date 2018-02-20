@@ -16,8 +16,5 @@
   -->
 
 <resources>
-    <!--Design dimen-->
-    <dimen name="intro_screen_logo_dimen">100dp</dimen>
-    <dimen name="forgot_password_logo_size">160dp</dimen>
-    <dimen name="device_reg_screen_clock_iv_dimen">200dp</dimen>
+
 </resources>

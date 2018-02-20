@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<resources>
+    <!--Intro logo-->
+    <style name="IntroLogoStyle">
+        <item name="android:alpha">0.2</item>
+    </style>
+
+    <style name="LoginTextInputsCounterAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="GoogleSignInBtn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/md_button_height</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:backgroundTint">?attr/colorAccent</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="LoginBtn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/md_button_height</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:paddingEnd">@dimen/spacing_large</item>
+        <item name="android:paddingStart">@dimen/spacing_large</item>
+        <item name="android:backgroundTint">?attr/colorAccent</item>
+    </style>
+
+
+    <style name="FbSignInBtn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/md_button_height</item>
+        <item name="android:backgroundTint">@color/fb</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:text">@string/sign_in_with_facebook</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+</resources>

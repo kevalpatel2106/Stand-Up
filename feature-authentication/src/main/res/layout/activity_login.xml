@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_intro"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:background="@color/colorPrimaryDark">
+
+    <!--Toolbar of the activity-->
+    <com.kevalpatel2106.common.view.BaseButton
+        android:id="@+id/btn_login_toggle"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_gravity="end"
+        android:background="?selectableItemBackground"
+        android:paddingEnd="@dimen/md_activity_horizontal_margin"
+        android:paddingStart="@dimen/md_activity_horizontal_margin"
+        android:textAllCaps="false"
+        android:textAppearance="@style/MediumText.Primary"
+        android:textColor="@android:color/white"
+        tools:text="Create Account" />
+
+    <ScrollView
+        android:id="@+id/login_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/md_activity_vertical_margin"
+            android:paddingLeft="@dimen/md_activity_horizontal_margin"
+            android:paddingRight="@dimen/md_activity_horizontal_margin"
+            android:paddingTop="@dimen/md_activity_vertical_margin"
+            tools:ignore="UnknownIdInLayout">
+
+            <!--Main logo-->
+            <com.kevalpatel2106.common.view.BaseImageView
+                android:id="@+id/login_logo_iv"
+                style="@style/IntroLogoStyle"
+                android:layout_width="@dimen/intro_screen_logo_dimen"
+                android:layout_height="@dimen/intro_screen_logo_dimen"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo" />
+
+            <!--Enter email-->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColorHint="@color/white_60">
+
+                <com.kevalpatel2106.common.view.BaseEditText
+                    android:id="@+id/login_email_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/white_60"
+                    tools:text="test@example.com" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <!--Enter name of the user-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tiv_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:textColorHint="@color/white_60">
+
+                <com.kevalpatel2106.common.view.BaseEditText
+                    android:id="@+id/login_name_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/name"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/white_60"
+                    tools:text="@tools:sample/full_names" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--Enter password-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tiv_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:textColorHint="@color/white_60"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/password_max_length"
+                app:counterTextAppearance="@style/LoginTextInputsCounterAppearance"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/white_60">
+
+                <com.kevalpatel2106.common.view.BaseEditText
+                    android:id="@+id/login_password_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:maxLength="@integer/password_max_length"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/white_60"
+                    tools:text="@tools:sample/full_names" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <com.kevalpatel2106.common.view.BaseButton
+                android:id="@+id/btn_forgot_password"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_gravity="end"
+                android:text="@string/btn_title_forgot_password"
+                android:textAppearance="@style/SmallText.Primary"
+                android:textColor="@android:color/white" />
+
+            <!--Enter confirm password-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tiv_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:textColorHint="@color/white_60"
+                app:counterEnabled="true"
+                app:counterMaxLength="@integer/password_max_length"
+                app:counterTextAppearance="@style/LoginTextInputsCounterAppearance"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/white_60">
+
+                <com.kevalpatel2106.common.view.BaseEditText
+                    android:id="@+id/login_confirm_password_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/confirm_password"
+                    android:inputType="textPassword"
+                    android:maxLength="@integer/password_max_length"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/white_60"
+                    tools:text="@tools:sample/full_names" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/container_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!--Perform login button-->
+                <com.kevalpatel2106.common.view.BaseButton
+                    android:id="@+id/btn_login"
+                    style="@style/LoginBtn"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/create_account"
+                    tools:text="@string/login" />
+
+                <!--Sign in with Google button-->
+                <com.kevalpatel2106.common.view.BaseButton
+                    android:id="@+id/btn_login_google_signin"
+                    style="@style/GoogleSignInBtn"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/sign_in_with_google" />
+
+                <!--Sign in with Fb button-->
+                <com.kevalpatel2106.common.view.BaseButton
+                    android:id="@+id/btn_login_fb_signin"
+                    style="@style/FbSignInBtn"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

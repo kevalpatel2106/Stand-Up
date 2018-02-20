@@ -20,6 +20,7 @@ package com.standup.app.modules.di
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.standup.app.authentication.di.UserAuthModule
+import com.standup.app.modules.AuthenticationHookImpl
 import com.standup.app.modules.SettingsHookImpl
 import dagger.Component
 
@@ -33,4 +34,6 @@ import dagger.Component
 internal interface ModuleComponent {
 
     fun inject(settingsHook: SettingsHookImpl)
+
+    fun inject(authenticationHookImpl: AuthenticationHookImpl)
 }

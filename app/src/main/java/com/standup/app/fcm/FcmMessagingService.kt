@@ -24,7 +24,6 @@ import com.google.firebase.messaging.RemoteMessage
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
-import com.standup.app.authentication.verification.EmailVerifiedNotification
 import dagger.Lazy
 import timber.log.Timber
 import javax.inject.Inject
@@ -76,7 +75,8 @@ class FcmMessagingService : FirebaseMessagingService() {
                 userSessionManager.isUserVerified = true
 
                 //Fire the notification
-                EmailVerifiedNotification.notify(this.applicationContext, data["message"])
+                        //TODO
+//                EmailVerifiedNotification.notify(this.applicationContext, data["message"])
             }
             NotificationType.TYPE_PROMOTIONAL -> {
                 if (userSettingsManager.get().shouldDisplayPromotionalNotification
@@ -95,7 +95,8 @@ class FcmMessagingService : FirebaseMessagingService() {
                 userSessionManager.isUserVerified = true
 
                 //Fire the notification
-                EmailVerifiedNotification.notify(this.applicationContext, data["message"])
+                //TODO
+//                EmailVerifiedNotification.notify(this.applicationContext, data["message"])
             }
         }
     }

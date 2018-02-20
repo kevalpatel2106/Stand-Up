@@ -89,54 +89,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Application intro screen -->
-        <activity
-            android:name=".app.authentication.intro.IntroActivity"
-            android:launchMode="singleInstance"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.RedBg"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-
-        <!-- Login/Sign Up the user screen -->
-        <activity
-            android:name=".app.authentication.login.LoginActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.RedBg"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-
-        <!-- Forgot password request screen -->
-        <activity
-            android:name=".app.authentication.forgotPwd.ForgotPasswordActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.RedBg"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-
-        <!-- Verify your email reminder screen. -->
-        <activity
-            android:name=".app.authentication.verification.VerifyEmailActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-
-        <!-- Verify the user email with the deep link. -->
-        <activity
-            android:name=".app.authentication.verification.EmailLinkVerificationActivity"
-            android:configChanges="orientation|screenSize|keyboard"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar.RedBg"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-        <activity
-            android:name=".app.authentication.deviceReg.DeviceRegisterActivity"
-            android:resizeableActivity="true"
-            android:theme="@style/AppTheme.NoActionbar"
-            android:windowSoftInputMode="stateHidden"
-            tools:ignore="UnusedAttribute"/>
-
         <!-- Dashboard Activity -->
         <activity
             android:name=".app.main.MainActivity"
