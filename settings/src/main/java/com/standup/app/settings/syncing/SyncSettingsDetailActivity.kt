@@ -42,7 +42,7 @@ class SyncSettingsDetailActivity : BaseSettingsDetailActivity() {
 
     companion object {
 
-        fun launch(context: Context) {
+        internal  fun launch(context: Context) {
             context.startActivity(Intent(context, SyncSettingsDetailActivity::class.java))
         }
     }

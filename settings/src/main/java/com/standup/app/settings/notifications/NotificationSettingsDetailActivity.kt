@@ -42,7 +42,7 @@ class NotificationSettingsDetailActivity : BaseSettingsDetailActivity() {
 
     companion object {
 
-        fun launch(context: Context) {
+        internal  fun launch(context: Context) {
             context.startActivity(Intent(context, NotificationSettingsDetailActivity::class.java))
         }
     }

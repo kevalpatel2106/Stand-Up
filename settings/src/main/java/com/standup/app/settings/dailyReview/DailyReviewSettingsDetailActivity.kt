@@ -46,7 +46,7 @@ class DailyReviewSettingsDetailActivity : BaseSettingsDetailActivity() {
         /**
          * Launch [DailyReviewSettingsDetailActivity] on the [context] provided.
          */
-        fun launch(context: Context) {
+        internal fun launch(context: Context) {
             context.startActivity(Intent(context, DailyReviewSettingsDetailActivity::class.java))
         }
     }

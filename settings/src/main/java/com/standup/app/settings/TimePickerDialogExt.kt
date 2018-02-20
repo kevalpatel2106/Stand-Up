@@ -33,7 +33,7 @@ import com.philliphsu.bottomsheetpickers.time.grid.GridTimePickerDialog
  *
  * @see GridTimePickerDialog
  */
-fun GridTimePickerDialog.setApplicationTheme(context: Context) {
+internal fun GridTimePickerDialog.setApplicationTheme(context: Context) {
     setAmPmTextColorSelected(context.getColorCompat(R.color.colorPrimaryText))
     setAmPmTextColorUnselected(context.getColorCompat(R.color.colorPrimaryLight))
     setHeaderTextColorSelected(context.getColorCompat(R.color.colorPrimaryText))

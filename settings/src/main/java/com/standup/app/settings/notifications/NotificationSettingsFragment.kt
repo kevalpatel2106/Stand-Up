@@ -119,7 +119,7 @@ class NotificationSettingsFragment : PreferenceFragmentCompat() {
     }
 
     companion object {
-        fun getNewInstance(): NotificationSettingsFragment {
+        internal  fun getNewInstance(): NotificationSettingsFragment {
             return NotificationSettingsFragment()
         }
     }

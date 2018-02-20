@@ -13,9 +13,7 @@
   ~   See the License for the specific language governing permissions and
   ~   limitations under the License.
   ~
-  -->
-
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+  --><android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--Select weather to display popups or not?-->

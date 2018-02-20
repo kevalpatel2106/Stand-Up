@@ -47,7 +47,7 @@ class DndSettingsDetailActivity : BaseSettingsDetailActivity() {
         /**
          * Launch [DndSettingsDetailActivity] on the [context] provided.
          */
-        fun launch(context: Context) {
+        internal fun launch(context: Context) {
             context.startActivity(Intent(context, DndSettingsDetailActivity::class.java))
         }
     }

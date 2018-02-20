@@ -158,7 +158,7 @@ class DndSettingsFragment : PreferenceFragmentCompat() {
          * Get the new instance of [DndSettingsFragment].  Use this method to get new instance
          * of this fragment instead of creating using constructor.
          */
-        fun getNewInstance(): DndSettingsFragment {
+        internal  fun getNewInstance(): DndSettingsFragment {
             return DndSettingsFragment()
         }
     }

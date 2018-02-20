@@ -22,7 +22,7 @@ package com.standup.app.settings.list
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-enum class SettingsId {
+ enum class SettingsId {
     SYNC,
     DND,
     DAILY_REVIEW,

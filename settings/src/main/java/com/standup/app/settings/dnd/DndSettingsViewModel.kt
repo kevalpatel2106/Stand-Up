@@ -38,7 +38,7 @@ import javax.inject.Inject
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(DailyReviewSettingsFragment::class)
-class DndSettingsViewModel : BaseViewModel {
+internal class DndSettingsViewModel : BaseViewModel {
 
     @Inject
     lateinit var userSettingsManager: UserSettingsManager

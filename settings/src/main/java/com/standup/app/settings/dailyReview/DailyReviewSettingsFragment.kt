@@ -118,7 +118,7 @@ class DailyReviewSettingsFragment : PreferenceFragmentCompat() {
          * Get the new instance of [DailyReviewSettingsFragment]. Use this method to get new instance
          * of this fragment instead of creating using constructor.
          */
-        fun getNewInstance(): DailyReviewSettingsFragment {
+        internal  fun getNewInstance(): DailyReviewSettingsFragment {
             return DailyReviewSettingsFragment()
         }
     }

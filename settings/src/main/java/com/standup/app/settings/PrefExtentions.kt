@@ -27,4 +27,4 @@ import android.support.v7.preference.PreferenceFragmentCompat
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-fun PreferenceFragmentCompat.findPrefrance(@StringRes keyRes: Int): Preference = findPreference(context?.getString(keyRes))
+internal fun PreferenceFragmentCompat.findPrefrance(@StringRes keyRes: Int): Preference = findPreference(context?.getString(keyRes))

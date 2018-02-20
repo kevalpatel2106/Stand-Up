@@ -118,7 +118,7 @@ class SyncSettingsFragment : PreferenceFragmentCompat() {
     }
 
     companion object {
-        fun getNewInstance(): SyncSettingsFragment {
+        internal  fun getNewInstance(): SyncSettingsFragment {
             return SyncSettingsFragment()
         }
     }

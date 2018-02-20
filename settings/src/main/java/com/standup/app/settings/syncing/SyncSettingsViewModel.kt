@@ -39,7 +39,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class SyncSettingsViewModel : BaseViewModel {
+internal class SyncSettingsViewModel : BaseViewModel {
 
     @Inject
     lateinit var sharedPrefsProvider: SharedPrefsProvider
@@ -88,7 +88,7 @@ class SyncSettingsViewModel : BaseViewModel {
     /**
      * Start syncing the database with the server right now if the network is available.
      */
-    fun manualSync() {
+    internal fun manualSync() {
         if (!Core.isSyncingCurrently()) Core.forceSync()
         isSyncing.value = true
     }

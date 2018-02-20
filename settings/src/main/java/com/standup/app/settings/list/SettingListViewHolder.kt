@@ -31,7 +31,7 @@ import com.standup.app.settings.R
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class SettingListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+internal class SettingListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val iconIv: BaseImageView = itemView.findViewById(R.id.setting_row_icon_iv)
     private val titleTv: BaseTextView = itemView.findViewById(R.id.setting_row_title_tv)

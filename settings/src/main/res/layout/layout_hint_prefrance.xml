@@ -13,9 +13,7 @@
   ~   See the License for the specific language governing permissions and
   ~   limitations under the License.
   ~
-  -->
-
-<!--Created by Keval Patel. Author: 'https://github.com/kevalpatel2106' --><!--http://stackoverflow.com/a/42320389/4690731 Provide negative margin to fit ads-->
+  --><!--Created by Keval Patel. Author: 'https://github.com/kevalpatel2106' --><!--http://stackoverflow.com/a/42320389/4690731 Provide negative margin to fit ads-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

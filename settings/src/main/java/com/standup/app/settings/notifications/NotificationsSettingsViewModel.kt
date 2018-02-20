@@ -19,12 +19,14 @@ package com.standup.app.settings.notifications
 
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.FragmentManager
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.standup.app.settings.R
 import com.standup.app.settings.di.DaggerSettingsComponent
 import javax.inject.Inject
@@ -34,7 +36,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class NotificationsSettingsViewModel : BaseViewModel {
+internal class NotificationsSettingsViewModel : BaseViewModel {
 
     @Inject
     internal lateinit var sharedPrefsProvider: SharedPrefsProvider
@@ -43,11 +45,14 @@ class NotificationsSettingsViewModel : BaseViewModel {
 
     internal val reminderToneName = MutableLiveData<String>()
 
+    @VisibleForTesting
+    @OnlyForTesting
     constructor(sharedPrefsProvider: SharedPrefsProvider) {
         this.sharedPrefsProvider = sharedPrefsProvider
         init()
     }
 
+    @Suppress("unused")
     constructor() {
         DaggerSettingsComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())

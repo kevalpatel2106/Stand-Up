@@ -40,7 +40,7 @@ import javax.inject.Inject
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 
-class DailyReviewSettingsViewModel : BaseViewModel {
+internal class DailyReviewSettingsViewModel : BaseViewModel {
 
     /**
      * [UserSettingsManager] for getting the settings.

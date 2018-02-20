@@ -37,7 +37,7 @@ import dagger.Component
  */
 @ApplicationScope
 @Component(dependencies = [AppComponent::class])
-interface SettingsComponent {
+internal interface SettingsComponent {
 
     fun inject(syncSettingsViewModel: SyncSettingsViewModel)
 

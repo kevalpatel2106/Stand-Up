@@ -39,7 +39,7 @@ import com.standup.app.settings.syncing.SyncSettingsFragment
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class SettingsViewModel : BaseViewModel {
+internal class SettingsViewModel : BaseViewModel {
 
     internal var detailFragment = MutableLiveData<Fragment>()
 
