@@ -22,7 +22,7 @@ package com.standup.app.main
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-enum class DrawerItem {
+internal enum class DrawerItem {
 
     HOME,
     DIARY,

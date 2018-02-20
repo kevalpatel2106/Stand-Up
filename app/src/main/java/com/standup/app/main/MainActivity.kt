@@ -38,10 +38,10 @@ import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector
 import com.standup.R
-import com.standup.app.about.AboutActivity
+import com.standup.app.about.AboutModule
 import com.standup.app.main.di.DaggerMainComponent
-import com.standup.app.profile.EditProfileActivity
-import com.standup.app.settings.list.SettingsListActivity
+import com.standup.app.profile.ProfileModule
+import com.standup.app.settings.SettingsModule
 import com.standup.core.Core
 import dagger.Lazy
 import de.hdodenhof.circleimageview.CircleImageView
@@ -77,6 +77,15 @@ class MainActivity : BaseActivity() {
 
     @Inject
     internal lateinit var core: Lazy<Core>
+
+    @Inject
+    internal lateinit var profileModule: ProfileModule
+
+    @Inject
+    internal lateinit var settingsModule: SettingsModule
+
+    @Inject
+    internal lateinit var aboutModule: AboutModule
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var model: MainViewModel
@@ -229,17 +238,17 @@ class MainActivity : BaseActivity() {
             }
             DrawerItem.PROFILE -> {
                 //Open the edit profile
-                EditProfileActivity.launch(this@MainActivity, userSessionManager)
+                profileModule.openProfile(this@MainActivity, userSessionManager)
                 false
             }
             DrawerItem.SETTING -> {
                 //Open the edit profile
-                SettingsListActivity.launch(this@MainActivity)
+                settingsModule.openSettings(this@MainActivity)
                 false
             }
             DrawerItem.ABOUT -> {
                 //Launch the about screen
-                AboutActivity.launch(this@MainActivity)
+                aboutModule.openAbout(this@MainActivity)
                 false
             }
         }

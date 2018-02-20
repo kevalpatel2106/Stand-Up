@@ -42,6 +42,7 @@ import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.authentication.verification.VerifyEmailActivity
 import com.standup.app.main.MainActivity
 import com.standup.app.profile.EditProfileActivity
+import com.standup.app.profile.ProfileModule
 import kotlinx.android.synthetic.main.activity_device_register.*
 import javax.inject.Inject
 
@@ -139,7 +140,8 @@ class DeviceRegisterActivity : BaseActivity() {
                 VerifyEmailActivity.launch(this@DeviceRegisterActivity)
             }
             intent.getBooleanExtra(ARG_IS_NEW_USER, false) -> {
-                EditProfileActivity.launch(this@DeviceRegisterActivity, userSessionManager)
+                //TODO need to change to the hook
+                ProfileModule.openProfile(this@DeviceRegisterActivity, userSessionManager)
             }
             else -> {
                 MainActivity.launch(this@DeviceRegisterActivity)

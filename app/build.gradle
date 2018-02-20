@@ -100,10 +100,11 @@ kotlin kotlinOption
 
 dependencies {
     implementation project(':common')
-    implementation project(':diary')
-    implementation project(':about')
-    implementation project(':profile')
-    implementation project(':settings')
+    implementation project(':feature-diary')
+    implementation project(':feature-about')
+    implementation project(':feature-profile')
+    implementation project(':feature-settings')
+    implementation project(':feature-stats')
     implementation project(':utils')
     implementation project(':core')
     implementation project(':facebook-auth')

@@ -17,10 +17,15 @@
 
 package com.standup.app.main
 
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.standup.app.dashboard.DashboardFragment
+import com.standup.app.diary.DiaryModule
 import com.standup.app.diary.list.DiaryFragment
+import com.standup.app.main.di.DaggerMainComponent
 import com.standup.app.stats.StatsFragment
+import com.standup.app.stats.StatsModule
+import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 12-Dec-17.
@@ -28,6 +33,19 @@ import com.standup.app.stats.StatsFragment
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 internal class MainViewModel : BaseViewModel() {
+
+    init {
+        DaggerMainComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@MainViewModel)
+    }
+
+    @Inject
+    internal lateinit var dairyModule: DiaryModule
+
+    @Inject
+    internal lateinit var statsModule: StatsModule
 
     /**
      * [DashboardFragment] instance to display in the [MainActivity].
@@ -37,10 +55,10 @@ internal class MainViewModel : BaseViewModel() {
     /**
      * [DiaryFragment] instance to display in the [MainActivity].
      */
-    val diaryFragment = DiaryFragment.getNewInstance()
+    val diaryFragment = dairyModule.getDiary()
 
     /**
      * [StatsFragment] instance to display in the [MainActivity].
      */
-    val statsFragment = StatsFragment.getNewInstance()
+    val statsFragment = statsModule.getStatsFragment()
 }

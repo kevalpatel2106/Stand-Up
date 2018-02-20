@@ -41,7 +41,7 @@
         android:paddingStart="@dimen/spacing_small"
         android:paddingTop="@dimen/spacing_small">
 
-        <!--Profile image layout-->
+        ProfileModulefile image layout-->
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/nav_profile_iv"
             android:layout_width="60dp"

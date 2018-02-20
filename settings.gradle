@@ -15,12 +15,14 @@
  *
  */
 
-include ':app', ':settings'
+include ':app'
 
 //Features
-include ':diary'
-include ':about'
-include ':profile'
+include ':feature-diary'
+include ':feature-about'
+include ':feature-profile'
+include ':feature-settings'
+include ':feature-stats'
 
 // Base layer modules.
 include ':common'

@@ -20,6 +20,8 @@ package com.standup.app.main.di
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.standup.app.main.MainActivity
+import com.standup.app.main.MainViewModel
+import com.standup.app.modules.di.ModulesModule
 import dagger.Component
 
 /**
@@ -28,8 +30,10 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class])
-interface MainComponent {
+@Component(dependencies = [AppComponent::class], modules = [ModulesModule::class])
+internal interface MainComponent {
 
     fun inject(mainActivity: MainActivity)
+
+    fun inject(mainViewModel: MainViewModel)
 }

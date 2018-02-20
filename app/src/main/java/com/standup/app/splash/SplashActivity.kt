@@ -28,7 +28,7 @@ import com.standup.app.authentication.deviceReg.DeviceRegisterActivity
 import com.standup.app.authentication.intro.IntroActivity
 import com.standup.app.authentication.verification.VerifyEmailActivity
 import com.standup.app.main.MainActivity
-import com.standup.app.profile.EditProfileActivity
+import com.standup.app.profile.ProfileModule
 import javax.inject.Inject
 
 /**
@@ -115,7 +115,7 @@ class SplashActivity : BaseActivity() {
         model.openProfile.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {
-                    EditProfileActivity.launch(this@SplashActivity, userSessionManager)
+                    ProfileModule.openProfile(this@SplashActivity, userSessionManager)
                     finish()
                 }
             }
