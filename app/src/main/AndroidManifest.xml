@@ -106,18 +106,6 @@
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
 
-
-        <!-- =============================== RECEIVER ================================ -->
-        <!-- Receive the broadcast if the user is unauthorised. -->
-        <receiver
-            android:name=".app.authentication.UnauthorizedReceiver"
-            android:enabled="false"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.kevalpatel2106.network.unauthorized"/>
-            </intent-filter>
-        </receiver>
-
         <!-- =============================== SERVICE ================================ -->
         <!-- Begin: Firebase service -->
         <service
@@ -135,12 +123,6 @@
             </intent-filter>
         </service>
         <!-- End: Firebase service -->
-
-
-        <!-- Service to register the device firebase token and other detail -->
-        <service
-            android:name=".app.authentication.deviceReg.RegisterDeviceService"
-            tools:ignore="ExportedService"/>
     </application>
 
 </manifest>

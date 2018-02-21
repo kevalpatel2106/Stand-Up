@@ -32,7 +32,14 @@ import javax.inject.Singleton
 
 /**
  * Created by Kevalpatel2106 on 08-Jan-18.
+ * This application module provides the building blocks classes of this application. Such as the
+ * database manager, prefrance manager, session manager etc. This all the classes are available
+ * in this module.
  *
+ * Other dagger modules([Module]) can add dependency of [AppComponent] to provide the building block
+ * classes instances using this module.
+ *
+ * @see AppComponent
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Module

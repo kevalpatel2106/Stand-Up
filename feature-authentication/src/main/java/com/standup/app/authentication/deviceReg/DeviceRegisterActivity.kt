@@ -182,7 +182,7 @@ class DeviceRegisterActivity : BaseActivity() {
          * @see ARG_IS_VERIFIED
          */
         @JvmStatic
-        fun launch(context: Context, isNewUser: Boolean, isVerified: Boolean) {
+        internal fun launch(context: Context, isNewUser: Boolean, isVerified: Boolean) {
             val launchIntent = Intent(context, DeviceRegisterActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 putExtra(ARG_IS_NEW_USER, isNewUser)

@@ -25,6 +25,7 @@ import com.standup.app.authentication.deviceReg.DeviceRegisterActivity
 import com.standup.app.authentication.forgotPwd.ForgotPasswordViewModel
 import com.standup.app.authentication.intro.IntroViewModel
 import com.standup.app.authentication.login.LoginViewModel
+import com.standup.app.authentication.logout.Logout
 import com.standup.app.authentication.verification.EmailLinkVerificationActivity
 import com.standup.app.authentication.verification.EmailLinkVerifyViewModel
 import com.standup.app.authentication.verification.VerifyEmailActivity
@@ -38,7 +39,7 @@ import dagger.Component
  */
 @ApplicationScope
 @Component(dependencies = [AppComponent::class], modules = [UserAuthModule::class])
-interface UserAuthComponent {
+internal interface UserAuthComponent {
 
     fun inject(deviceRegViewModel: DeviceRegViewModel)
 
@@ -59,4 +60,6 @@ interface UserAuthComponent {
     fun inject(deviceRegisterActivity: DeviceRegisterActivity)
 
     fun inject(emailLinkVerificationActivity: EmailLinkVerificationActivity)
+
+    fun inject(logout: Logout)
 }

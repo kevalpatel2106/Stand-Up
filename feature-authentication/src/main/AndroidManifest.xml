@@ -67,5 +67,23 @@
             android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
+
+
+        <!-- Service to register the device firebase token and other detail -->
+        <service
+            android:name=".deviceReg.RegisterDeviceService"
+            tools:ignore="ExportedService" />
+
+        <!-- =============================== RECEIVER ================================ -->
+        <!-- Receive the broadcast if the user is unauthorised. -->
+        <receiver
+            android:name=".UnauthorizedReceiver"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.kevalpatel2106.network.unauthorized" />
+            </intent-filter>
+        </receiver>
+
     </application>
 </manifest>

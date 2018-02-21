@@ -47,7 +47,7 @@ class RegisterDeviceService : Service() {
          *
          * @param context Instance of caller.
          */
-        fun start(context: Context) {
+        internal fun start(context: Context) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                 context.startService(Intent(context, RegisterDeviceService::class.java))
             } else {
@@ -60,7 +60,7 @@ class RegisterDeviceService : Service() {
          *
          * @param context Instance of caller.
          */
-        fun stop(context: Context) {
+        internal fun stop(context: Context) {
             val launchIntent = Intent(context, RegisterDeviceService::class.java)
             launchIntent.putExtra(ARG_STOP_SERVICE, true)
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {

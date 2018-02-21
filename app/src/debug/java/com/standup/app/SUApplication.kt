@@ -27,7 +27,7 @@ import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.squareup.leakcanary.LeakCanary
 import com.standup.BuildConfig
-import com.standup.app.modules.initModules
+import com.standup.app.features.initFeatures
 import com.standup.core.Core
 import timber.log.Timber
 
@@ -85,6 +85,6 @@ class SUApplication : BaseApplication() {
         Core(UserSessionManager(prefProvider), UserSettingsManager(prefProvider), prefProvider)
                 .turnOn(this@SUApplication)
 
-        initModules()
+        initFeatures()
     }
 }

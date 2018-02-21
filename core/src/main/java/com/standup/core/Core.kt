@@ -52,7 +52,7 @@ import javax.inject.Inject
  */
 class Core @Inject constructor(private val userSessionManager: UserSessionManager,
                                private val userSettingsManager: UserSettingsManager,
-                               private val prefsProvider: SharedPrefsProvider) {
+                               private val sharedPrefsProvider: SharedPrefsProvider) {
 
     companion object {
         /**
@@ -135,7 +135,7 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
         setUpAutoDnd(userSessionManager, userSettingsManager)
         setUpActivityMonitoring(userSessionManager, userSettingsManager)
         setUpDailyReview(userSessionManager, userSettingsManager)
-        setUpReminderNotification(userSessionManager, userSettingsManager, prefsProvider)
+        setUpReminderNotification(userSessionManager, userSettingsManager, sharedPrefsProvider)
         setUpSync(userSessionManager, userSettingsManager)
     }
 
@@ -174,7 +174,7 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
     }
 
     fun setUpReminderNotification() {
-        setUpReminderNotification(userSessionManager, userSettingsManager, prefsProvider)
+        setUpReminderNotification(userSessionManager, userSettingsManager, sharedPrefsProvider)
     }
 
     /**

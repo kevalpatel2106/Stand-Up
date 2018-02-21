@@ -41,7 +41,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class DeviceRegViewModel : BaseViewModel {
+internal class DeviceRegViewModel : BaseViewModel {
 
     @Inject
     lateinit var userAuthRepo: UserAuthRepository

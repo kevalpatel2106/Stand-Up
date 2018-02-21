@@ -32,7 +32,7 @@ import javax.inject.Named
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-class UserAuthRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit) : UserAuthRepository {
+internal class UserAuthRepositoryImpl(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit) : UserAuthRepository {
 
     override fun logout(logoutRequest: LogoutRequest): Flowable<LogoutResponse> {
         val call = retrofit.create(UserApiService::class.java).logout(logoutRequest)

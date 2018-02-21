@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.common.misc
+package com.kevalpatel2106.common.view
 
 import android.content.Context
 import android.support.annotation.StringRes
@@ -25,8 +25,7 @@ import android.widget.LinearLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.kevalpatel2106.common.R
 import com.kevalpatel2106.common.base.arch.ErrorMessage
-import com.kevalpatel2106.common.view.BaseButton
-import com.kevalpatel2106.common.view.BaseTextView
+import com.kevalpatel2106.common.misc.playRepeatAnimation
 
 /**
  * Created by Keval on 24/12/17.

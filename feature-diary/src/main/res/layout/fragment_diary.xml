@@ -33,7 +33,7 @@
     <include layout="@layout/layout_loader" />
 
     <!--2. Error view-->
-    <com.kevalpatel2106.common.misc.ErrorView
+    <com.kevalpatel2106.common.view.ErrorView
         android:id="@+id/dairy_error_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

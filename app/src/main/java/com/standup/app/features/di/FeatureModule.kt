@@ -15,10 +15,11 @@
  *
  */
 
-package com.standup.app.modules.di
+package com.standup.app.features.di
 
 import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.standup.app.about.AboutModule
+import com.standup.app.authentication.AuthenticationModule
 import com.standup.app.diary.DiaryModule
 import com.standup.app.profile.ProfileModule
 import com.standup.app.settings.SettingsModule
@@ -32,7 +33,7 @@ import dagger.Provides
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Module
-internal class ModulesModule {
+internal class FeatureModule {
 
     @Provides
     @ApplicationScope
@@ -53,4 +54,8 @@ internal class ModulesModule {
     @Provides
     @ApplicationScope
     fun provideStatsModule(): StatsModule = StatsModule
+
+    @Provides
+    @ApplicationScope
+    fun provideAuthenticationModule(): AuthenticationModule = AuthenticationModule
 }

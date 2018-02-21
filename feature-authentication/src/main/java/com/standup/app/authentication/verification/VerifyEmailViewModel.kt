@@ -32,7 +32,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @com.kevalpatel2106.utils.annotations.ViewModel(VerifyEmailActivity::class)
-class VerifyEmailViewModel : BaseViewModel {
+internal class VerifyEmailViewModel : BaseViewModel {
 
     /**
      * Repository to provide user authentications.

@@ -43,7 +43,7 @@ import javax.inject.Inject
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(IntroActivity::class)
-class IntroViewModel : BaseViewModel {
+internal class IntroViewModel : BaseViewModel {
 
     @Inject
     lateinit var userAuthRepo: UserAuthRepository

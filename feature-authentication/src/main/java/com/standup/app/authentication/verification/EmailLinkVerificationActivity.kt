@@ -137,7 +137,7 @@ class EmailLinkVerificationActivity : BaseActivity() {
     companion object {
 
         @VisibleForTesting
-        const val ARG_URL = "arg_url"
+        internal const val ARG_URL = "arg_url"
 
         /**
          * Launch the [EmailLinkVerificationActivity].
@@ -146,7 +146,7 @@ class EmailLinkVerificationActivity : BaseActivity() {
          * @param url [Uri] received in the deep link
          * @return True if the activity opened.
          */
-        fun launch(context: Context, url: Uri): Boolean {
+        internal fun launch(context: Context, url: Uri): Boolean {
 
             //Validate the url
             if (url.pathSegments.size != 3) {

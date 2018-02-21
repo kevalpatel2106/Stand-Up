@@ -15,20 +15,24 @@
  *
  */
 
-package com.standup.app.modules
+package com.standup.app.features.di
 
-import android.content.Context
-import com.standup.app.main.MainActivity
-import com.standup.app.profile.ProfileHook
+import com.kevalpatel2106.common.application.di.AppComponent
+import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.standup.app.features.AuthenticationHookImpl
+import com.standup.app.features.SettingsHookImpl
+import dagger.Component
 
 /**
- * Created by Kevalpatel2106 on 20-Feb-18.
+ * Created by Kevalpatel2106 on 09-Jan-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class ProfileHookImpl : ProfileHook {
+@ApplicationScope
+@Component(dependencies = [AppComponent::class], modules = [FeatureModule::class])
+internal interface FeatureComponent {
 
-    override fun openMainScreen(context: Context) {
-        MainActivity.launch(context)
-    }
+    fun inject(settingsHook: SettingsHookImpl)
+
+    fun inject(authenticationHookImpl: AuthenticationHookImpl)
 }

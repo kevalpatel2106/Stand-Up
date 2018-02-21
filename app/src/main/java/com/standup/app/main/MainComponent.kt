@@ -15,33 +15,23 @@
  *
  */
 
-package com.standup.app.authentication.repo
+package com.standup.app.main
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.utils.Utils
-import com.kevalpatel2106.utils.annotations.Model
+import com.kevalpatel2106.common.application.di.AppComponent
+import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.standup.app.features.di.FeatureModule
+import dagger.Component
 
 /**
- * Created by Keval on 02-Jan-17.
+ * Created by Keval on 10/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Model
-internal data class DeviceRegisterRequest(
-        @SerializedName("uid")
-        @Expose
-        val userId: Long,
+@ApplicationScope
+@Component(dependencies = [AppComponent::class], modules = [FeatureModule::class])
+internal interface MainComponent {
 
-        @SerializedName("deviceId")
-        @Expose
-        val deviceId: String,
+    fun inject(mainActivity: MainActivity)
 
-        @SerializedName("gcmKey")
-        @Expose
-        var gcmKey: String?) {
-
-    @SerializedName("deviceName")
-    @Expose
-    val deviceName: String = Utils.getDeviceName()
+    fun inject(mainViewModel: MainViewModel)
 }

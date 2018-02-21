@@ -24,9 +24,7 @@ import android.os.Bundle
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.standup.app.authentication.deviceReg.DeviceRegisterActivity
-import com.standup.app.authentication.intro.IntroActivity
-import com.standup.app.authentication.verification.VerifyEmailActivity
+import com.standup.app.authentication.AuthenticationModule
 import com.standup.app.main.MainActivity
 import com.standup.app.profile.ProfileModule
 import javax.inject.Inject
@@ -44,6 +42,9 @@ class SplashActivity : BaseActivity() {
 
     @Inject
     lateinit var userSessionManager: UserSessionManager
+
+    @Inject
+    lateinit var authenticationModule: AuthenticationModule
 
     companion object {
 
@@ -86,7 +87,7 @@ class SplashActivity : BaseActivity() {
         model.openIntro.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {
-                    IntroActivity.launch(this@SplashActivity)
+                    authenticationModule.openIntroScreen(this@SplashActivity)
                     finish()
                 }
             }
@@ -95,7 +96,7 @@ class SplashActivity : BaseActivity() {
         model.openDeviceRegister.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {
-                    DeviceRegisterActivity.launch(context = this@SplashActivity,
+                    authenticationModule.registerDevice(context = this@SplashActivity,
                             isNewUser = false,
                             isVerified = userSessionManager.isUserVerified)
                     finish()
@@ -106,7 +107,7 @@ class SplashActivity : BaseActivity() {
         model.openVerifyEmail.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {
-                    VerifyEmailActivity.launch(this@SplashActivity)
+                    authenticationModule.openVerifyEmailScreen(this@SplashActivity)
                     finish()
                 }
             }

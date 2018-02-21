@@ -29,7 +29,7 @@ import retrofit2.http.*
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Repository
-interface UserApiService {
+internal interface UserApiService {
 
     companion object {
         fun baseUrl() = BuildConfig.BASE_URL

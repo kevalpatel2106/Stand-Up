@@ -62,7 +62,7 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
          *
          * @param context Instance of the caller.
          */
-        fun launch(context: Context, openInSignUpMode: Boolean) {
+        internal fun launch(context: Context, openInSignUpMode: Boolean) {
             val launchIntent = Intent(context, LoginActivity::class.java)
             launchIntent.putExtra(ARG_IS_SIGN_UP, openInSignUpMode)
             context.startActivity(launchIntent)

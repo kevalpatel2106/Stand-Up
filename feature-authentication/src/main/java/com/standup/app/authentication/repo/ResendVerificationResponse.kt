@@ -25,4 +25,4 @@ import com.kevalpatel2106.utils.annotations.Model
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Model
-class ResendVerificationResponse
+internal class ResendVerificationResponse

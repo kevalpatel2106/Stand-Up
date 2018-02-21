@@ -15,13 +15,11 @@
  *
  */
 
-package com.standup.app.modules.di
+package com.standup.app.deeplink
 
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.common.application.di.ApplicationScope
-import com.standup.app.authentication.di.UserAuthModule
-import com.standup.app.modules.AuthenticationHookImpl
-import com.standup.app.modules.SettingsHookImpl
+import com.standup.app.features.di.FeatureModule
 import dagger.Component
 
 /**
@@ -30,10 +28,9 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [ModulesModule::class, UserAuthModule::class])
-internal interface ModuleComponent {
+@Component(dependencies = [AppComponent::class], modules = [FeatureModule::class])
+internal interface DeepLinkComponent {
 
-    fun inject(settingsHook: SettingsHookImpl)
+    fun inject(deepLinkActivity: DeepLinkActivity)
 
-    fun inject(authenticationHookImpl: AuthenticationHookImpl)
 }

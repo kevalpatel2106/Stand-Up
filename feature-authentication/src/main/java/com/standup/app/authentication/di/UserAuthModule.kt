@@ -17,16 +17,11 @@
 
 package com.standup.app.authentication.di
 
-import android.app.Application
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.kevalpatel2106.common.db.DbModule
-import com.kevalpatel2106.common.db.userActivity.UserActivityDao
-import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.app.authentication.AuthenticationHook
 import com.standup.app.authentication.AuthenticationModule
-import com.standup.app.authentication.logout.Logout
 import com.standup.app.authentication.repo.UserAuthRepository
 import com.standup.app.authentication.repo.UserAuthRepositoryImpl
 import dagger.Module
@@ -40,7 +35,7 @@ import javax.inject.Named
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Module(includes = [DbModule::class])
-class UserAuthModule {
+internal class UserAuthModule {
 
     @Provides
     @ApplicationScope
@@ -49,13 +44,4 @@ class UserAuthModule {
     @Provides
     @ApplicationScope
     fun provideAuthenticationHook(): AuthenticationHook = AuthenticationModule.authenticationHook
-
-    @Provides
-    @ApplicationScope
-    fun provideLogout(context: Application,
-                      sharedPrefsProvider: SharedPrefsProvider,
-                      userSessionManager: UserSessionManager,
-                      userAuthRepository: UserAuthRepository,
-                      userActivityDao: UserActivityDao,
-                      authenticationHook: AuthenticationHook): Logout = Logout(context, sharedPrefsProvider, userSessionManager, userAuthRepository, userActivityDao, authenticationHook)
 }

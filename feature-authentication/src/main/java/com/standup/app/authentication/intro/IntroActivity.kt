@@ -60,7 +60,7 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
          */
         @JvmStatic
         @JvmOverloads
-        fun launch(context: Context, isNewTask: Boolean = false) {
+        internal fun launch(context: Context, isNewTask: Boolean = false) {
             val launchIntent = Intent(context, IntroActivity::class.java)
             if (isNewTask)
                 launchIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK

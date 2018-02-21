@@ -104,14 +104,14 @@ class ForgotPasswordActivity : BaseActivity() {
         /**
          * Email address to pre-fill in the forgot password field.
          */
-        const val ARG_EMAIL: String = "arg_email"
+        internal const val ARG_EMAIL: String = "arg_email"
 
         /**
          * Launch the [ForgotPasswordActivity]. Pass the [email] to set pre-filled email address.
          *
          * @param context Instance of the caller.
          */
-        fun launch(context: Context, email: String? = null) {
+        internal fun launch(context: Context, email: String? = null) {
             context.startActivity(Intent(context, ForgotPasswordActivity::class.java).apply {
                 putExtra(ARG_EMAIL, email)
             })

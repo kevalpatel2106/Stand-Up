@@ -39,7 +39,7 @@ import javax.inject.Inject
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(ForgotPasswordActivity::class)
-class ForgotPasswordViewModel : BaseViewModel {
+internal class ForgotPasswordViewModel : BaseViewModel {
 
     @Inject
     lateinit var userAuthRepo: UserAuthRepository

@@ -26,7 +26,7 @@ import com.kevalpatel2106.utils.annotations.Model
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Model
-data class ForgotPasswordRequest(
+internal data class ForgotPasswordRequest(
 
         @SerializedName("email")
         val email: String

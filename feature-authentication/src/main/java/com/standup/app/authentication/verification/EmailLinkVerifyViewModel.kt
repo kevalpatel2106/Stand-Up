@@ -31,7 +31,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @com.kevalpatel2106.utils.annotations.ViewModel(VerifyEmailActivity::class)
-class EmailLinkVerifyViewModel : BaseViewModel {
+internal class EmailLinkVerifyViewModel : BaseViewModel {
 
     /**
      * Repository to provide user authentications.

@@ -20,13 +20,15 @@ package com.standup.app.deeplink
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.BuildConfig
 import com.standup.R
-import com.standup.app.authentication.verification.EmailLinkVerificationActivity
+import com.standup.app.authentication.AuthenticationModule
 import com.standup.app.splash.SplashActivity
+import dagger.Lazy
+import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 27-Nov-17.
@@ -35,8 +37,20 @@ import com.standup.app.splash.SplashActivity
  */
 class DeepLinkActivity : BaseActivity() {
 
+    @Inject
+    internal lateinit var authenticationModule: Lazy<AuthenticationModule>
+
+    @Inject
+    internal lateinit var userSessionManager: UserSessionManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        DaggerDeepLinkComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@DeepLinkActivity)
+
         onNewIntent(intent)
     }
 
@@ -45,7 +59,7 @@ class DeepLinkActivity : BaseActivity() {
         super.onNewIntent(intent)
 
         //Check if the user is logged in?
-        if (!UserSessionManager(SharedPrefsProvider(this@DeepLinkActivity)).isUserLoggedIn) {
+        if (!userSessionManager.isUserLoggedIn) {
             startActivity(SplashActivity.getLaunchIntent(this@DeepLinkActivity))
             return
         }
@@ -64,7 +78,8 @@ class DeepLinkActivity : BaseActivity() {
                 //This link is from our servers only
                 when (uri.pathSegments[0]) {
                     "verifyEmailLink" -> {  //Verify the email link
-                        EmailLinkVerificationActivity.launch(context = this@DeepLinkActivity, url = uri)
+                        authenticationModule.get()
+                                .verifyEmailLink(context = this@DeepLinkActivity, verificationLink = uri)
                     }
                     "forgotPasswordLink" -> { //The password reset link
                         openLink(uri.toString())

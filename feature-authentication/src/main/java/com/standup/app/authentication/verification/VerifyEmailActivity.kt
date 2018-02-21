@@ -142,7 +142,7 @@ class VerifyEmailActivity : BaseActivity() {
          *
          * @param context Instance of the caller.
          */
-        fun launch(context: Context) {
+        internal fun launch(context: Context) {
             val launchIntent = Intent(context, VerifyEmailActivity::class.java)
             context.startActivity(launchIntent)
         }

@@ -22,7 +22,6 @@ import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.standup.app.dashboard.DashboardFragment
 import com.standup.app.diary.DiaryModule
 import com.standup.app.diary.list.DiaryFragment
-import com.standup.app.main.di.DaggerMainComponent
 import com.standup.app.stats.StatsFragment
 import com.standup.app.stats.StatsModule
 import javax.inject.Inject

@@ -27,7 +27,7 @@ import com.kevalpatel2106.utils.annotations.Model
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Model
-data class SignUpResponse(
+internal data class SignUpResponse(
         @SerializedName("uid")
         @Expose
         val uid: Long,

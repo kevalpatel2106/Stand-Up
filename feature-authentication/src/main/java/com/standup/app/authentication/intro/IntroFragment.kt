@@ -51,7 +51,7 @@ class IntroFragment : BaseFragment() {
          * @param image Drawable resource for the image to display.
          * @return [IntroFragment]
          */
-        fun newInstance(@StringRes caption: Int, @DrawableRes image: Int): IntroFragment {
+        internal fun newInstance(@StringRes caption: Int, @DrawableRes image: Int): IntroFragment {
             val introFragment = IntroFragment()
 
             val bundle = Bundle()

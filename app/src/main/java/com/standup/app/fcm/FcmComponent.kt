@@ -19,6 +19,7 @@ package com.standup.app.fcm
 
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.standup.app.features.di.FeatureModule
 import dagger.Component
 
 /**
@@ -27,7 +28,7 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class])
+@Component(dependencies = [AppComponent::class], modules = [FeatureModule::class])
 internal interface FcmComponent {
 
     fun inject(fcmMessagingService: FcmMessagingService)

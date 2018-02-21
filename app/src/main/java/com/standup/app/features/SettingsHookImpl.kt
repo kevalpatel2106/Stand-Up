@@ -15,20 +15,34 @@
  *
  */
 
-package com.standup.app.modules
+package com.standup.app.features
 
-import android.app.Application
+import com.kevalpatel2106.common.application.BaseApplication
 import com.standup.app.authentication.AuthenticationModule
-import com.standup.app.profile.ProfileModule
-import com.standup.app.settings.SettingsModule
+import com.standup.app.features.di.DaggerFeatureComponent
+import com.standup.app.settings.SettingsHook
+import dagger.Lazy
+import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 20-Feb-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal fun Application.initModules() {
-    SettingsModule.init(SettingsHookImpl())
-    ProfileModule.init(ProfileHookImpl())
-    AuthenticationModule.init(AuthenticationHookImpl())
+internal class SettingsHookImpl : SettingsHook {
+
+    @Inject
+    lateinit var authenticationModule: Lazy<AuthenticationModule>
+
+    init {
+        DaggerFeatureComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@SettingsHookImpl)
+    }
+
+    override fun logout() {
+        authenticationModule.get().logout()
+    }
+
 }

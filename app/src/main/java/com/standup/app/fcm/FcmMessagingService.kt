@@ -24,6 +24,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
+import com.standup.app.authentication.AuthenticationModule
 import dagger.Lazy
 import timber.log.Timber
 import javax.inject.Inject
@@ -44,6 +45,9 @@ class FcmMessagingService : FirebaseMessagingService() {
 
     @Inject
     lateinit var userSettingsManager: Lazy<UserSettingsManager>
+
+    @Inject
+    lateinit var authenticationModule: Lazy<AuthenticationModule>
 
     override fun onCreate() {
         super.onCreate()
@@ -75,8 +79,8 @@ class FcmMessagingService : FirebaseMessagingService() {
                 userSessionManager.isUserVerified = true
 
                 //Fire the notification
-                        //TODO
-//                EmailVerifiedNotification.notify(this.applicationContext, data["message"])
+                authenticationModule.get()
+                        .fireEmailVerifiedNotification(this.applicationContext, data["message"])
             }
             NotificationType.TYPE_PROMOTIONAL -> {
                 if (userSettingsManager.get().shouldDisplayPromotionalNotification
@@ -95,8 +99,7 @@ class FcmMessagingService : FirebaseMessagingService() {
                 userSessionManager.isUserVerified = true
 
                 //Fire the notification
-                //TODO
-//                EmailVerifiedNotification.notify(this.applicationContext, data["message"])
+                data["message"]?.let { UpdateNotification.notify(this.applicationContext, it) }
             }
         }
     }

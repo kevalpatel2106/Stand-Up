@@ -15,14 +15,14 @@
  *
  */
 
-package com.standup.app.modules
+package com.standup.app.features
 
 import android.content.Context
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.standup.app.authentication.AuthenticationHook
+import com.standup.app.features.di.DaggerFeatureComponent
 import com.standup.app.main.MainActivity
-import com.standup.app.modules.di.DaggerModuleComponent
 import com.standup.app.profile.ProfileModule
 import com.standup.app.splash.SplashActivity
 import dagger.Lazy
@@ -39,7 +39,7 @@ internal class AuthenticationHookImpl : AuthenticationHook {
     internal lateinit var profileModule: Lazy<ProfileModule>
 
     init {
-        DaggerModuleComponent.builder()
+        DaggerFeatureComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@AuthenticationHookImpl)

@@ -15,25 +15,20 @@
  *
  */
 
-package com.standup.app.main.di
+package com.standup.app.features
 
-import com.kevalpatel2106.common.application.di.AppComponent
-import com.kevalpatel2106.common.application.di.ApplicationScope
-import com.standup.app.main.MainActivity
-import com.standup.app.main.MainViewModel
-import com.standup.app.modules.di.ModulesModule
-import dagger.Component
+import android.app.Application
+import com.standup.app.authentication.AuthenticationModule
+import com.standup.app.profile.ProfileModule
+import com.standup.app.settings.SettingsModule
 
 /**
- * Created by Keval on 10/01/18.
+ * Created by Kevalpatel2106 on 20-Feb-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [ModulesModule::class])
-internal interface MainComponent {
-
-    fun inject(mainActivity: MainActivity)
-
-    fun inject(mainViewModel: MainViewModel)
+internal fun Application.initFeatures() {
+    SettingsModule.init(SettingsHookImpl())
+    ProfileModule.init(ProfileHookImpl())
+    AuthenticationModule.init(AuthenticationHookImpl())
 }

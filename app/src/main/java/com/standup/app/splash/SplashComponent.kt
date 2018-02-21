@@ -19,6 +19,7 @@ package com.standup.app.splash
 
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.standup.app.features.di.FeatureModule
 import dagger.Component
 
 /**
@@ -27,7 +28,7 @@ import dagger.Component
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class])
+@Component(dependencies = [AppComponent::class], modules = [FeatureModule::class])
 internal interface SplashComponent {
 
     fun inject(splashActivity: SplashActivity)

@@ -25,8 +25,6 @@ import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.logEvent
 import com.standup.app.authentication.di.DaggerUserAuthComponent
-import com.standup.app.authentication.logout.Logout
-import javax.inject.Inject
 
 /**
  * This receiver will listen for the action "com.kevalpatel2106.network.unauthorized" action broadcast
@@ -36,9 +34,9 @@ import javax.inject.Inject
  * @author <a href="https://github.com/kevalpatel2106">Keval</a>
  */
 class UnauthorizedReceiver : BroadcastReceiver() {
-
-    @Inject
-    lateinit var logout: Logout
+//
+//    @Inject
+//    lateinit var logout: Logout
 
     override fun onReceive(context: Context, intent: Intent) {
         context.logEvent(AnalyticsEvents.EVENT_UNAUTHORIZED_FORCE_LOGOUT)
@@ -53,8 +51,8 @@ class UnauthorizedReceiver : BroadcastReceiver() {
                 .build()
                 .inject(this@UnauthorizedReceiver)
 
-        //Clear the session
-        logout.clearSession()
+//        //Clear the session
+//        logout.clearSession()
 
         //Launch the splash screen
         //TODO

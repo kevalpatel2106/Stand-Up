@@ -27,7 +27,7 @@ import com.kevalpatel2106.utils.annotations.Model
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
 @Model
-data class DeviceRegisterResponse(
+internal data class DeviceRegisterResponse(
         @SerializedName("token")
         @Expose
         val token: String? = null,

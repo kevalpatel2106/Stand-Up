@@ -20,6 +20,7 @@ package com.standup.app.authentication.logout
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
@@ -30,6 +31,7 @@ import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import com.standup.app.authentication.AuthenticationHook
 import com.standup.app.authentication.deviceReg.RegisterDeviceService
+import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.authentication.repo.LogoutRequest
 import com.standup.app.authentication.repo.UserAuthRepository
 import com.standup.core.Core
@@ -45,16 +47,49 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class Logout @Inject constructor(private val application: Application,
-                                 private val sharedPrefsProvider: SharedPrefsProvider,
-                                 private val userSessionManager: UserSessionManager,
-                                 private val userAuthRepository: UserAuthRepository,
-                                 private val userActivityDao: UserActivityDao,
-                                 private val authenticationHook: AuthenticationHook) {
+internal class Logout {
+
+    @Inject
+    internal lateinit var application: Application
+
+    @Inject
+    internal lateinit var sharedPrefsProvider: SharedPrefsProvider
+
+    @Inject
+    internal lateinit var userSessionManager: UserSessionManager
+
+    @Inject
+    internal lateinit var userAuthRepository: UserAuthRepository
+
+    @Inject
+    internal lateinit var userActivityDao: UserActivityDao
+
+    @Inject
+    internal lateinit var authenticationHook: AuthenticationHook
+
+    constructor(application: Application,
+                sharedPrefsProvider: SharedPrefsProvider,
+                userSessionManager: UserSessionManager,
+                userAuthRepository: UserAuthRepository,
+                userActivityDao: UserActivityDao) {
+        this.application = application
+        this.sharedPrefsProvider = sharedPrefsProvider
+        this.userSessionManager = userSessionManager
+        this.userAuthRepository = userAuthRepository
+        this.userActivityDao = userActivityDao
+    }
+
+    constructor() {
+        DaggerUserAuthComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@Logout)
+    }
 
     /**
      * Clear the shared preference and jobs
      */
+    @VisibleForTesting
     internal fun clearSession() {
         //Stop the device registration service.
         RegisterDeviceService.stop(application)
@@ -95,7 +130,7 @@ class Logout @Inject constructor(private val application: Application,
      *
      * @return Disposable of the api call.
      */
-    fun logout(): Disposable {
+    internal fun logout(): Disposable {
         return userAuthRepository
                 .logout(LogoutRequest(userSessionManager.userId, Utils.getDeviceId(application)))
                 .subscribeOn(Schedulers.io())

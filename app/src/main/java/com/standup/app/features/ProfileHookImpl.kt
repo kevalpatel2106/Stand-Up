@@ -15,34 +15,20 @@
  *
  */
 
-package com.standup.app.modules
+package com.standup.app.features
 
-import com.kevalpatel2106.common.application.BaseApplication
-import com.standup.app.authentication.logout.Logout
-import com.standup.app.modules.di.DaggerModuleComponent
-import com.standup.app.settings.SettingsHook
-import dagger.Lazy
-import javax.inject.Inject
+import android.content.Context
+import com.standup.app.main.MainActivity
+import com.standup.app.profile.ProfileHook
 
 /**
  * Created by Kevalpatel2106 on 20-Feb-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class SettingsHookImpl : SettingsHook {
+internal class ProfileHookImpl : ProfileHook {
 
-    @Inject
-    lateinit var logout: Lazy<Logout>
-
-    init {
-        DaggerModuleComponent.builder()
-                .appComponent(BaseApplication.getApplicationComponent())
-                .build()
-                .inject(this@SettingsHookImpl)
+    override fun openMainScreen(context: Context) {
+        MainActivity.launch(context)
     }
-
-    override fun logout() {
-        logout.get().logout()
-    }
-
 }

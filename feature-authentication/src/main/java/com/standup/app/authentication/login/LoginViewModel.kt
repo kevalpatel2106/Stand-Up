@@ -46,7 +46,7 @@ import javax.inject.Inject
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ViewModel(LoginActivity::class)
-class LoginViewModel : BaseViewModel {
+internal class LoginViewModel : BaseViewModel {
 
     @Inject
     lateinit var userAuthRepo: UserAuthRepository

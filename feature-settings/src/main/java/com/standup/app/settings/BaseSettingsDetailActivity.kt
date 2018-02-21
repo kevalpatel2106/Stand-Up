@@ -25,6 +25,7 @@ import com.kevalpatel2106.common.base.uiController.BaseActivity
 
 /**
  * Created by Keval on 13/01/18.
+ * This is the internal class. Do not use in other modules.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */

@@ -24,6 +24,8 @@ import javax.inject.Scope;
 
 /**
  * Created by Kevalpatel2106 on 09-Jan-18.
+ * This scope is defines the instance of the variable should be available throughout the application.
+ * Yeah!!! That means single instance.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
