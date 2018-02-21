@@ -55,6 +55,8 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
                                private val sharedPrefsProvider: SharedPrefsProvider) {
 
     companion object {
+        internal lateinit var coreHook: CoreHook
+
         /**
          * Shut down the code by unregister all the jobs and stop the core.
          */
@@ -84,6 +86,10 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
 
             //Cancel the notification after some time.
             Handler().postDelayed({ ReminderNotification().cancel(context) }, 10_000L /* 10 Seconds */)
+        }
+
+        fun init(coreHook: CoreHook) {
+            this.coreHook = coreHook
         }
 
         fun runNotificationJob() {

@@ -15,29 +15,17 @@
  *
  */
 
-package com.standup.app.diary
+package com.standup.core
 
-import android.content.Context
 import android.content.Intent
-import com.standup.app.diary.detail.DetailActivity
-import com.standup.app.diary.list.DiaryFragment
+import java.util.*
 
 /**
- * Created by Kevalpatel2106 on 20-Feb-18.
+ * Created by Kevalpatel2106 on 21-Feb-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object DiaryModule {
+interface CoreHook {
 
-    fun getDiary(): DiaryFragment {
-        return DiaryFragment.getNewInstance()
-    }
-
-    fun getDiaryDetailIntent(context: Context,
-                             dayOfMonth: Int,
-                             month: Int,
-                             year: Int
-    ): Intent {
-        return DetailActivity.launchIntent(context, dayOfMonth, month, year)
-    }
+    fun onDailyReviewNotificationClick(calendar: Calendar): Intent
 }

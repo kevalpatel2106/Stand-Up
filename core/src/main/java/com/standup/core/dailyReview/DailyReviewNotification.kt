@@ -20,6 +20,7 @@ package com.standup.core.dailyReview
 import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.support.annotation.VisibleForTesting
@@ -27,7 +28,9 @@ import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.common.notifications.addDailySummaryNotificationChannel
+import com.standup.core.Core
 import com.standup.core.R
+import java.util.*
 
 /**
  * Class to manage [Notification] with previous day summary.
@@ -81,6 +84,7 @@ internal object DailyReviewNotification {
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
+                .setContentIntent(getPendingIntent(context))
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(message)
                         .setBigContentTitle(context.getString(R.string.daily_review_notification_title)))
@@ -102,6 +106,21 @@ internal object DailyReviewNotification {
     @VisibleForTesting
     internal fun prepareSummaryMessage(context: Context,
                                        dailyActivitySummary: DailyActivitySummary): String {
-        return String.format(context.getString(R.string.daily_review_notification_message), dailyActivitySummary.sittingTimeHours, dailyActivitySummary.sittingPercent)
+        return String.format(context.getString(R.string.daily_review_notification_message),
+                dailyActivitySummary.sittingTimeHours,
+                dailyActivitySummary.sittingPercent)
+    }
+
+    @VisibleForTesting
+    internal fun getPendingIntent(context: Context): PendingIntent {
+        val calender = Calendar.getInstance()
+        calender.add(Calendar.DAY_OF_MONTH, -1)
+
+        return PendingIntent.getActivity(
+                context,
+                2374,
+                Core.coreHook.onDailyReviewNotificationClick(calender),
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 }

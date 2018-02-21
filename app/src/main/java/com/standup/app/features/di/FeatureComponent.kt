@@ -20,6 +20,7 @@ package com.standup.app.features.di
 import com.kevalpatel2106.common.application.di.AppComponent
 import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.standup.app.features.AuthenticationHookImpl
+import com.standup.app.features.CoreHookImpl
 import com.standup.app.features.SettingsHookImpl
 import dagger.Component
 
@@ -35,4 +36,6 @@ internal interface FeatureComponent {
     fun inject(settingsHook: SettingsHookImpl)
 
     fun inject(authenticationHookImpl: AuthenticationHookImpl)
+
+    fun inject(coreHookImpl: CoreHookImpl)
 }

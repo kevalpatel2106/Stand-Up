@@ -17,51 +17,52 @@
 
 package com.standup.app.features
 
-import android.content.Context
+import android.app.Application
+import android.content.Intent
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.application.BaseApplication
-import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
-import com.standup.app.authentication.AuthenticationHook
+import com.standup.app.diary.DiaryModule
 import com.standup.app.features.di.DaggerFeatureComponent
-import com.standup.app.main.MainActivity
-import com.standup.app.profile.ProfileModule
-import com.standup.app.splash.SplashActivity
+import com.standup.core.CoreHook
+import java.util.*
 import javax.inject.Inject
 
 /**
- * Created by Kevalpatel2106 on 20-Feb-18.
+ * Created by Kevalpatel2106 on 21-Feb-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class AuthenticationHookImpl : AuthenticationHook {
+internal class CoreHookImpl : CoreHook {
 
     @OnlyForTesting
     @VisibleForTesting
-    constructor(profileModule: ProfileModule) {
-        this.profileModule = profileModule
+    constructor(application: Application,
+                diaryModule: DiaryModule) {
+        this.application = application
+        this.diaryModule = diaryModule
     }
 
     constructor() {
         DaggerFeatureComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
-                .inject(this@AuthenticationHookImpl)
+                .inject(this@CoreHookImpl)
     }
 
     @Inject
-    internal lateinit var profileModule: ProfileModule
+    internal lateinit var application: Application
 
-    override fun openEditUserProfile(context: Context, userSessionManager: UserSessionManager) {
-        profileModule.openProfile(context, userSessionManager)
-    }
+    @Inject
+    internal lateinit var diaryModule: DiaryModule
 
-    override fun openMainScreen(context: Context) {
-        MainActivity.launch(context)
-    }
-
-    override fun openSplashScreen(context: Context) {
-        SplashActivity.launch(context)
+    override fun onDailyReviewNotificationClick(calendar: Calendar): Intent {
+        return diaryModule.getDiaryDetailIntent(
+                application,
+                calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.YEAR)
+        )
     }
 
 }

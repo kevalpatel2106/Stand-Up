@@ -21,6 +21,8 @@ import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.kevalpatel2106.common.db.DbModule
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.standup.core.Core
+import com.standup.core.CoreHook
 import com.standup.core.repo.CoreRepo
 import com.standup.core.repo.CoreRepoImpl
 import dagger.Module
@@ -46,4 +48,8 @@ internal class CoreModule {
     @ApplicationScope
     fun provideReminderRepo(userActivityDao: UserActivityDao,
                             @Named(AppModule.WITH_TOKEN) retrofit: Retrofit): CoreRepo = CoreRepoImpl(userActivityDao, retrofit)
+
+    @Provides
+    @ApplicationScope
+    fun provideCoreHook(): CoreHook = Core.coreHook
 }

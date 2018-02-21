@@ -191,16 +191,34 @@ class DetailActivity : BaseActivity() {
          *
          * @see DetailActivity
          */
-        fun launch(context: Context,
-                   dayOfMonth: Int,
-                   monthOfYear: Int,
-                   year: Int) {
+        internal fun launch(context: Context,
+                            dayOfMonth: Int,
+                            monthOfYear: Int,
+                            year: Int) {
 
-            context.startActivity(Intent(context, DetailActivity::class.java).apply {
+            context.startActivity(launchIntent(context, dayOfMonth, monthOfYear, year))
+        }
+
+        /**
+         * Launch the [DetailActivity] with the [context]. This [DetailActivity] will display
+         * detailed summary for [dayOfMonth]-[month]-[year].
+         *
+         * - [dayOfMonth] must be in [1,31].
+         * - [month] must be in [0,11].
+         * - [year] must be in [1900, 2100].
+         *
+         * @see DetailActivity
+         */
+        internal fun launchIntent(context: Context,
+                                  dayOfMonth: Int,
+                                  monthOfYear: Int,
+                                  year: Int): Intent {
+
+            return Intent(context, DetailActivity::class.java).apply {
                 putExtra(ARG_DAY_OF_MONTH, dayOfMonth)
                 putExtra(ARG_MONTH, monthOfYear)
                 putExtra(ARG_YEAR, year)
-            })
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ import android.app.Application
 import com.standup.app.authentication.AuthenticationModule
 import com.standup.app.profile.ProfileModule
 import com.standup.app.settings.SettingsModule
+import com.standup.core.Core
 
 /**
  * Created by Kevalpatel2106 on 20-Feb-18.
@@ -31,4 +32,5 @@ internal fun Application.initFeatures() {
     SettingsModule.init(SettingsHookImpl())
     ProfileModule.init(ProfileHookImpl())
     AuthenticationModule.init(AuthenticationHookImpl())
+    Core.init(CoreHookImpl())
 }
