@@ -52,9 +52,11 @@ class PopUpActivity : BaseActivity() {
 
         setContentView(R.layout.activity_pop_up)
 
+        setToolbar(R.id.include, R.string.application_name, false)
+        supportActionBar?.setLogo(com.kevalpatel2106.common.R.drawable.logo)
+
         //Set text
         reminder_pop_up_message_tv.text = reminderMessageProvider.getReminderMessage()
-        reminder_pop_up_iv.setImageResource(reminderMessageProvider.getReminderImage())
 
         //Ok button
         reminder_pop_up_ok_btn.setOnClickListener { finish() }
