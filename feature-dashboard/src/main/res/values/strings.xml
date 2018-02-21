@@ -16,19 +16,5 @@
   -->
 
 <resources>
-    <string name="sample_text">Sample text.</string>
-
-    <string name="nav_header_home">Home</string>
-    <string name="nav_header_dairy">Dairy</string>
-    <string name="nav_header_stats">Statistics</string>
-    <string name="nav_header_settings">Setting</string>
-    <string name="nav_header_profile">Profile</string>
-    <string name="nav_header_logout">Logout</string>
-    <string name="nav_header_about">About</string>
-
-    <string name="btn_title_retry">Retry</string>
-
-    <string name="notification_update_title">New update is available.</string>
-
-    <!-- TODO: remove this placeholder text -->
+    <string name="dashboard_today_summary_not_fount">No activity found today.</string>
 </resources>

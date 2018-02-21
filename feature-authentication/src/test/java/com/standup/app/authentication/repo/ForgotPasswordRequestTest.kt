@@ -15,28 +15,26 @@
  *
  */
 
-include ':app', ':feature-authentication', ':feature-dashboard'
+package com.standup.app.authentication.repo
 
-//Features
-include ':feature-diary'
-include ':feature-about'
-include ':feature-profile'
-include ':feature-settings'
-include ':feature-stats'
+import org.junit.Assert.assertEquals
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import java.io.IOException
 
-// Base layer modules.
-include ':common'
-include ':test-utils'
-include ':utils'
-include ':network'
-include ':core'
+/**
+ * Created by Kevalpatel2106 on 04-Dec-17.
+ *
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ */
+@RunWith(JUnit4::class)
+class ForgotPasswordRequestTest {
 
-//Social login
-include ':facebook-auth'
-include ':google-auth'
-
-//Custom views
-include ':timeline-view'
-include ':ruler-view'
-include ':progress-button'
-include ':spinner-time-picker'
+    @Test
+    @Throws(IOException::class)
+    fun checkInit() {
+        val forgotPasswordRequest = ForgotPasswordRequest(email = "test@example.com")
+        assertEquals(forgotPasswordRequest.email, "test@example.com")
+    }
+}

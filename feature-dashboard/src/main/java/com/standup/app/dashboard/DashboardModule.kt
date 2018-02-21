@@ -15,28 +15,16 @@
  *
  */
 
-include ':app', ':feature-authentication', ':feature-dashboard'
+package com.standup.app.dashboard
 
-//Features
-include ':feature-diary'
-include ':feature-about'
-include ':feature-profile'
-include ':feature-settings'
-include ':feature-stats'
+/**
+ * Created by Kevalpatel2106 on 21-Feb-18.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ */
+object DashboardModule {
 
-// Base layer modules.
-include ':common'
-include ':test-utils'
-include ':utils'
-include ':network'
-include ':core'
-
-//Social login
-include ':facebook-auth'
-include ':google-auth'
-
-//Custom views
-include ':timeline-view'
-include ':ruler-view'
-include ':progress-button'
-include ':spinner-time-picker'
+    fun getDashboard(): DashboardFragment {
+        return DashboardFragment.getNewInstance()
+    }
+}

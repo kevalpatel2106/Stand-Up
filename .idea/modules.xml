@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/facebook-auth/facebook-auth.iml" filepath="$PROJECT_DIR$/facebook-auth/facebook-auth.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature-about/feature-about.iml" filepath="$PROJECT_DIR$/feature-about/feature-about.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature-authentication/feature-authentication.iml" filepath="$PROJECT_DIR$/feature-authentication/feature-authentication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/feature-dashboard/feature-dashboard.iml" filepath="$PROJECT_DIR$/feature-dashboard/feature-dashboard.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature-diary/feature-diary.iml" filepath="$PROJECT_DIR$/feature-diary/feature-diary.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature-profile/feature-profile.iml" filepath="$PROJECT_DIR$/feature-profile/feature-profile.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature-settings/feature-settings.iml" filepath="$PROJECT_DIR$/feature-settings/feature-settings.iml" />

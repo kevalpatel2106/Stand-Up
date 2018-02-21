@@ -20,6 +20,7 @@ package com.standup.app.main
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.standup.app.dashboard.DashboardFragment
+import com.standup.app.dashboard.DashboardModule
 import com.standup.app.diary.DiaryModule
 import com.standup.app.diary.list.DiaryFragment
 import com.standup.app.stats.StatsFragment
@@ -46,10 +47,13 @@ internal class MainViewModel : BaseViewModel() {
     @Inject
     internal lateinit var statsModule: StatsModule
 
+    @Inject
+    internal lateinit var dashboardModule: DashboardModule
+
     /**
      * [DashboardFragment] instance to display in the [MainActivity].
      */
-    val homeFragment = DashboardFragment.getNewInstance()
+    val homeFragment = dashboardModule.getDashboard()
 
     /**
      * [DiaryFragment] instance to display in the [MainActivity].

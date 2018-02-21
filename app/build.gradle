@@ -97,6 +97,7 @@ kotlin kotlinOption
 dependencies {
     implementation project(':common')
     implementation project(':feature-authentication')
+    implementation project(':feature-dashboard')
     implementation project(':feature-diary')
     implementation project(':feature-about')
     implementation project(':feature-profile')

@@ -20,6 +20,7 @@ package com.standup.app.features.di
 import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.standup.app.about.AboutModule
 import com.standup.app.authentication.AuthenticationModule
+import com.standup.app.dashboard.DashboardModule
 import com.standup.app.diary.DiaryModule
 import com.standup.app.profile.ProfileModule
 import com.standup.app.settings.SettingsModule
@@ -58,4 +59,8 @@ internal class FeatureModule {
     @Provides
     @ApplicationScope
     fun provideAuthenticationModule(): AuthenticationModule = AuthenticationModule
+
+    @Provides
+    @ApplicationScope
+    fun provideDashboardModule(): DashboardModule = DashboardModule
 }
