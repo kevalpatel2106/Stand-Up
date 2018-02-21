@@ -15,25 +15,22 @@
   ~
   -->
 
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
+    android:layout_margin="@dimen/spacing_small"
     android:background="#333"
+    android:orientation="vertical"
     tools:context="com.standup.core.reminder.PopUpActivity">
 
     <include
         android:id="@+id/include"
         layout="@layout/layout_simple_toolbar"
-        app:layout_constraintBottom_toTopOf="@+id/reminder_pop_up_message_tv"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <com.kevalpatel2106.common.view.BaseTextView
         android:id="@+id/reminder_pop_up_message_tv"
@@ -41,11 +38,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/spacing_small"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toTopOf="@+id/reminder_pop_up_ok_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
         tools:maxLines="3"
         tools:text="@tools:sample/lorem/random"/>
 
@@ -54,14 +46,11 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/spacing_small"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:background="@android:color/holo_red_dark"
         android:text="@android:string/ok"
-        android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reminder_pop_up_message_tv"/>
-
-</android.support.constraint.ConstraintLayout>
+        android:textColor="@android:color/white"/>
+</LinearLayout>

@@ -53,7 +53,7 @@ class PopUpActivity : BaseActivity() {
         setContentView(R.layout.activity_pop_up)
 
         setToolbar(R.id.include, R.string.application_name, false)
-        supportActionBar?.setLogo(com.kevalpatel2106.common.R.drawable.logo)
+//        supportActionBar?.setLogo(com.kevalpatel2106.common.R.drawable.logo)
 
         //Set text
         reminder_pop_up_message_tv.text = reminderMessageProvider.getReminderMessage()
@@ -74,7 +74,6 @@ class PopUpActivity : BaseActivity() {
     override fun onBackPressed() {
         //No OP
     }
-
     companion object {
 
         /**
