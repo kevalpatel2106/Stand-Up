@@ -25,6 +25,8 @@
     <application>
         <activity
             android:name=".reminder.PopUpActivity"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
             android:resizeableActivity="false"
             android:theme="@style/Theme.Transparent"
             android:windowSoftInputMode="stateHidden"
