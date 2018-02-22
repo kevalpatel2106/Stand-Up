@@ -118,20 +118,14 @@ dependencies {
     rxLib.each { add("implementation", it) }
     debugLibs.each { add(it.configuration, it.dependency) }
 
-    //Butter knife
-    implementation(butterKnifeLib.butterKnife, excludeGrp)
-    kapt(butterKnifeLib.annotationProcessor, excludeGrp)
-
     dagger.each { add(it.configuration, it.dependency) }
 
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
-    implementation(supportLib.recyclerView, excludeGrp)
     implementation(supportLib.cardView, excludeGrp)
     implementation supportLib.multidex
     implementation supportLib.design
-    implementation supportLib.gridLayout
 
     //Arch component
     implementation archComponent.lifecycle
@@ -152,8 +146,6 @@ dependencies {
 
     //Other libs
     implementation(otherLib.circleImagView, excludeGrp)
-    implementation(otherLib.chartLayout, excludeGrp)
-    implementation(otherLib.lottie, excludeGrp)
     implementation(otherLib.iap, excludeGrp)
     implementation(otherLib.facebook, excludeGrp)
     releaseImplementation(otherLib.crashalytics) { transitive = true }

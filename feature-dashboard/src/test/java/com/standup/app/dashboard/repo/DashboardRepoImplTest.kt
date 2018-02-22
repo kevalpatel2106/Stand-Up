@@ -21,7 +21,7 @@ import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
-import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.subscribers.TestSubscriber
@@ -52,7 +52,7 @@ class DashboardRepoImplTest {
         userActivityDao = UserActivityDaoMockImpl(ArrayList())
         dashboardRepo = DashboardRepoImpl(
                 userActivityDao,
-                ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())
+                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())
         )
     }
 

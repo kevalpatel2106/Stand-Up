@@ -33,9 +33,9 @@ import java.util.concurrent.TimeUnit
  *
  * @author 'https://github.com/kevalpatel2106'
  */
-class ApiProvider(context: Context? = null,
-                  private val userId: String? = null,
-                  private val token: String? = null) {
+class NetworkApi(context: Context? = null,
+                 private val userId: String? = null,
+                 private val token: String? = null) {
 
     /**
      * Constructor with zero params. This will ignore all user authentication and won't broadcast for

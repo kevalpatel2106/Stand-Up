@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     tools:context=".ProgressButtonDemoActivity">
 
-    <com.kevalpatel2106.progressButton.customViews.ProgressButton
+    <com.kevalpatel2106.progressButton.ProgressButton
         android:id="@+id/progress_button_demo_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

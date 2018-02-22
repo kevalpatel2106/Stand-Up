@@ -20,7 +20,6 @@ package com.kevalpatel2106.progressButton
 import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
-import com.kevalpatel2106.progressButton.customViews.ProgressButton
 
 /**
  * Created by Keval on 07/01/18.

@@ -20,7 +20,7 @@ package com.standup.core.repo
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
-import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.standup.core.CoreConfig
 import io.reactivex.observers.TestObserver
@@ -54,7 +54,7 @@ class CoreRepoImplTest {
 
         reminderRepo = CoreRepoImpl(
                 userActivityDao,
-                ApiProvider().getRetrofitClient(mockWebServerManager.getBaseUrl())
+                NetworkApi().getRetrofitClient(mockWebServerManager.getBaseUrl())
         )
     }
 

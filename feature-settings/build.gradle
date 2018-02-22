@@ -70,6 +70,7 @@ dependencies {
     implementation supportLib.design
     implementation supportLib.prefrance
     implementation supportLib.prefrancev14
+    implementation supportLib.gridLayout
 
     //Room & Arch components
     implementation archComponent.lifecycle

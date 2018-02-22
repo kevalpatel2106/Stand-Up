@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.progressButton.customViews;
+package com.kevalpatel2106.progressButton;
 
 interface CustomizableByCode {
     void setSpinningBarColor(int color);

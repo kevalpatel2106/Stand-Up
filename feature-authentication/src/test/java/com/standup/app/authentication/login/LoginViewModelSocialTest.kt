@@ -21,7 +21,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
-import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -67,7 +67,7 @@ class LoginViewModelSocialTest {
         //Set the repo
         mockServerManager.startMockWebServer()
         loginViewModel = LoginViewModel(
-                UserAuthRepositoryImpl(ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())),
+                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
                 userSessionManager
         )
     }

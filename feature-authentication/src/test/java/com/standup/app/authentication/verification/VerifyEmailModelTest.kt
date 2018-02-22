@@ -20,7 +20,7 @@ package com.standup.app.authentication.verification
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -71,7 +71,7 @@ class VerifyEmailModelTest {
         //Set the repo
         mockServerManager.startMockWebServer()
         verifyEmailViewModel = VerifyEmailViewModel(
-                UserAuthRepositoryImpl(ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())),
+                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))
         )
     }

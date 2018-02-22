@@ -21,7 +21,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -78,7 +78,7 @@ class DeviceRegViewModelTest {
         sharedPrefProvider = SharedPrefsProvider(sharedPrefs)
         userSessionManager = UserSessionManager(sharedPrefProvider)
         deviceRegViewModel = DeviceRegViewModel(
-                UserAuthRepositoryImpl(ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl())),
+                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
                 sharedPrefProvider,
                 userSessionManager
         )

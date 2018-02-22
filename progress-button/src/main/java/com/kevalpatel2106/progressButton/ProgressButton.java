@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.progressButton.customViews;
+package com.kevalpatel2106.progressButton;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -26,9 +26,6 @@ import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
-
-import com.kevalpatel2106.progressButton.R;
-import com.kevalpatel2106.progressButton.animatedDrawables.CircularAnimatedDrawable;
 
 
 /**

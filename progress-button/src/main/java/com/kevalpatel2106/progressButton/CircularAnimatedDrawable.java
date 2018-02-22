@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.progressButton.animatedDrawables;
+package com.kevalpatel2106.progressButton;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -38,7 +38,7 @@ import android.view.animation.LinearInterpolator;
 /**
  * Created by leandro on 5/31/16.
  */
-public class CircularAnimatedDrawable extends Drawable implements Animatable {
+class CircularAnimatedDrawable extends Drawable implements Animatable {
     private static final Interpolator ANGLE_INTERPOLATOR = new LinearInterpolator();
     private static final Interpolator SWEEP_INTERPOLATOR = new AccelerateDecelerateInterpolator();
     private static final int ANGLE_ANIMATOR_DURATION = 2000;

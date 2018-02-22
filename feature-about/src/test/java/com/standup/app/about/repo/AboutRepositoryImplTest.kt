@@ -19,7 +19,7 @@ package com.standup.app.about.repo
 
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.ApiProvider
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.reactivex.subscribers.TestSubscriber
@@ -59,7 +59,7 @@ class AboutRepositoryImplTest {
 
         mockServerManager.startMockWebServer()
         aboutRepository = AboutRepositoryImpl(
-                ApiProvider().getRetrofitClient(mockServerManager.getBaseUrl()),
+                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))
         )
     }

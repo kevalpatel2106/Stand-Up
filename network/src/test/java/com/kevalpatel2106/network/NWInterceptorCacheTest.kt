@@ -46,12 +46,12 @@ class NWInterceptorCacheTest {
     private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", path)
 
     private val mockWebServer = MockServerManager()
-    private lateinit var apiProvider: ApiProvider
+    private lateinit var mNetworkApi: NetworkApi
 
     @Before
     fun setUp() {
         mockWebServer.startMockWebServer()
-        apiProvider = ApiProvider()
+        mNetworkApi = NetworkApi()
     }
 
     @After
@@ -85,7 +85,7 @@ class NWInterceptorCacheTest {
     fun checkNoCacheHeader() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
-        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = mNetworkApi.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithoutCache()
                 .execute()
@@ -99,7 +99,7 @@ class NWInterceptorCacheTest {
     fun checkCacheHeader() {
         mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
 
-        val response = apiProvider.getRetrofitClient(mockWebServer.getBaseUrl())
+        val response = mNetworkApi.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseWithCache()
                 .execute()
