@@ -112,11 +112,11 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
      * enter the [newActivity] into the database.
      * - To make correction into the end time of the previous activity (previous activity will have the
      * end time set in the last run of the
-     * [com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob].) we will check if the
+     * [com.standup.core.activityMonitor.ActivityMonitorJob].) we will check if the
      * difference between start time of new activity and end time of the previous activity are less
      * than 2 times of the [CoreConfig.MONITOR_SERVICE_PERIOD]? If the difference is small, update
      * the last [UserActivity] with start time of [newActivity]. If the difference is more, than
-     * we are assuming that the [com.kevalpatel2106.standup.core.activityMonitor.ActivityMonitorJob]
+     * we are assuming that the [com.standup.core.activityMonitor.ActivityMonitorJob]
      * stopped and the user's activity was not tracked in those duration.
      *
      * @return Id of the newly inserted or updated record.

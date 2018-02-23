@@ -157,15 +157,12 @@ internal class SleepModeMonitoringJob : Job() {
     }
 
     private fun sleepModeStarted() {
-        if (userSettingsManager.isAutoDndEnable) {
+        //Turn on sleep mode
+        userSettingsManager.isCurrentlyInSleepMode = true
 
-            //Turn on sleep mode
-            userSettingsManager.isCurrentlyInSleepMode = true
+        core.get().refresh()
 
-            core.get().refresh()
-
-            SleepModeStartNotification.notify(context)
-        }
+        SleepModeStartNotification.notify(context)
     }
 
     private fun sleepModeEnded() {
