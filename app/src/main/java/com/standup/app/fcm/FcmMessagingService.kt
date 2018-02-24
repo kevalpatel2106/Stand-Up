@@ -95,11 +95,13 @@ class FcmMessagingService : FirebaseMessagingService() {
             }
             NotificationType.TYPE_APP_UPDATE -> {
 
-                //Change the flag to true.
-                userSessionManager.isUserVerified = true
+                if (userSettingsManager.get().shouldDisplayUpdateNotification) {
 
-                //Fire the notification
-                data["message"]?.let { UpdateNotification.notify(this.applicationContext, it) }
+                    //Fire the notification
+                    data["message"]?.let { UpdateNotification.notify(this.applicationContext, it) }
+                } else {
+                    Timber.i("Update notifications are turned off.")
+                }
             }
         }
     }

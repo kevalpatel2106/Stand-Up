@@ -110,6 +110,18 @@ class NotificationSettingsFragment : PreferenceFragmentCompat() {
             return@setOnPreferenceClickListener true
         }
 
+        //Set the update notification
+        (findPrefrance(R.string.pref_key_update_notifications_enable) as BaseSwitchPreference)
+                .isChecked = settingsManager.shouldDisplayUpdateNotification
+
+        //Set the promotional notification
+        (findPrefrance(R.string.pref_key_promotional_notifications_enable) as BaseSwitchPreference)
+                .isChecked = settingsManager.shouldDisplayPopUp
+
+        //Set the pop up display switch
+        (findPrefrance(R.string.pref_key_reminder_pop_up_enable) as BaseSwitchPreference)
+                .isChecked = settingsManager.shouldDisplayPopUp
+
     }
 
     override fun onStop() {
