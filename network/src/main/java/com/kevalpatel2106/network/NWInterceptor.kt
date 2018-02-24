@@ -139,7 +139,7 @@ internal class NWInterceptor(private val context: Context?,
 
     private fun processJsonResponse(response: Response, context: Context?): Response {
         //Read the response.
-        val responseStr = response.body()!!.string()
+        val responseStr = response.body()?.string() ?: return createEmptyResponse(response)
         val baseResponse = gson.fromJson(responseStr, BaseResponse::class.java)
 
         when {
@@ -149,9 +149,7 @@ internal class NWInterceptor(private val context: Context?,
                 //We consumed the response body once so we need to build it again.
                 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
                 return if (baseResponse.d.isNullOrEmpty())
-                    response.newBuilder()
-                            .body(ResponseBody.create(MediaType.parse("application/json"), "{}"))
-                            .build()
+                    createEmptyResponse(response)
                 else
                     response.newBuilder()
                             .body(ResponseBody.create(MediaType.parse("application/json"), baseResponse.d))
@@ -184,11 +182,18 @@ internal class NWInterceptor(private val context: Context?,
                 //Some recoverable error occurred on the server
                 return response.newBuilder()
                         .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
-                        .message(baseResponse.status.message ?: NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
+                        .message(baseResponse.status.message
+                                ?: NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
                         .code(baseResponse.status.statusCode)
                         .build()
             }
         }
+    }
+
+    private fun createEmptyResponse(response: Response): Response {
+        return response.newBuilder()
+                .body(ResponseBody.create(MediaType.parse("application/json"), "{}"))
+                .build()
     }
 
     /**

@@ -73,6 +73,8 @@
 
                 <!--Today's time line-->
                 <include layout="@layout/layout_home_timeline_card" />
+
+                <include layout="@layout/layout_next_notification_card"/>
             </LinearLayout>
 
             <!--1. loader-->

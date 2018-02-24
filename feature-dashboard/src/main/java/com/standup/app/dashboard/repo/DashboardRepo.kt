@@ -28,4 +28,6 @@ import io.reactivex.Flowable
 internal interface DashboardRepo {
 
     fun getTodaySummary(): Flowable<DailyActivitySummary>
+
+    fun getNextReminderStatus(): String
 }

@@ -37,6 +37,7 @@ import com.kevalpatel2106.common.misc.setUserActivities
 import com.kevalpatel2106.common.view.BaseTextView
 import com.standup.timelineview.TimeLineView
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import kotlinx.android.synthetic.main.layout_next_notification_card.*
 
 /**
  * A simple [Fragment] subclass tha will display the current summary and notify user about important
@@ -93,6 +94,10 @@ class DashboardFragment : BaseFragment() {
                     .loadAnimation(context, R.anim.slide_in_bottom))
             time_line_card.startAnimation(AnimationUtils
                     .loadAnimation(context, R.anim.slide_in_bottom))
+            time_line_card.startAnimation(AnimationUtils
+                    .loadAnimation(context, R.anim.slide_in_bottom))
+            next_reminder_card.startAnimation(AnimationUtils
+                    .loadAnimation(context, R.anim.slide_in_bottom))
         }
 
         time_line_card.setOnClickListener {
@@ -107,6 +112,7 @@ class DashboardFragment : BaseFragment() {
         //Load the today's summary
         //Whenever activity comes into the foreground we need fresh data
         model.getTodaysSummary()
+        model.loadNextNotificationTime()
     }
 
     /**
@@ -151,6 +157,11 @@ class DashboardFragment : BaseFragment() {
                 total_sitting_time_tv.text = it.sittingTimeHours
 
                 today_time_line.setUserActivities(it.dayActivity)
+            }
+        })
+        model.nextReminderStatus.observe(this@DashboardFragment, Observer {
+            it?.let {
+                next_notification_tv.text = it
             }
         })
     }

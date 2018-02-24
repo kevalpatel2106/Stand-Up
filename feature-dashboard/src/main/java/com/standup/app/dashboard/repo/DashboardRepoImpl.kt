@@ -17,11 +17,14 @@
 
 package com.standup.app.dashboard.repo
 
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.utils.TimeUtils
+import com.standup.app.dashboard.R
+import com.standup.core.CorePrefsProvider
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
@@ -35,8 +38,15 @@ import kotlin.collections.ArrayList
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-internal class DashboardRepoImpl constructor(private val userActivityDao: UserActivityDao,
+internal class DashboardRepoImpl constructor(private val application: BaseApplication,
+                                             private val userActivityDao: UserActivityDao,
+                                             private val corePrefsProvider: CorePrefsProvider,
                                              @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit) : DashboardRepo {
+
+    override fun getNextReminderStatus(): String {
+        return String.format(application.getString(R.string.next_notification_time),
+                corePrefsProvider.nextNotificationTime.toString())
+    }
 
     override fun getTodaySummary(): Flowable<DailyActivitySummary> {
         val calendar = TimeUtils.getTodaysCalender12AM()

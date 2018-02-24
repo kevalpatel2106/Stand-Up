@@ -74,4 +74,9 @@ object CoreConfig {
      * @see com.kevalpatel2106.standup.core.sync.SyncJob.notifySyncTerminated
      */
     const val TAG_RX_SYNC_ENDED = "rx_sync_ended"
+
+    /**
+     * Tag for the rx event. This event will broadcast when new notification job registers.
+     */
+    const val TAG_RX_NOTIFICATION_TIME_UPDATED = "rx_sync_notification_scheduled"
 }

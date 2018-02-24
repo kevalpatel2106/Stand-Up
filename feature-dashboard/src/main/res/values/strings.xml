@@ -17,4 +17,5 @@
 
 <resources>
     <string name="dashboard_today_summary_not_fount">No activity found today.</string>
+    <string name="next_notification_time">Next reminder will be at %1$s.</string>
 </resources>

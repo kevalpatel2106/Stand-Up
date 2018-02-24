@@ -23,10 +23,13 @@ import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
+import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.app.dashboard.repo.DashboardRepo
 import com.standup.app.dashboard.repo.DashboardRepoImpl
+import com.standup.core.CorePrefsProvider
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
@@ -52,6 +55,7 @@ class DashboardViewModelTest {
 
     private lateinit var userActivityDao: UserActivityDaoMockImpl
     private val mockServerManager = MockServerManager()
+    private val sharedPrefsProvider = SharedPrefsProvider(MockSharedPreference())
     private lateinit var dashboardRepo: DashboardRepo
     private lateinit var model: DashboardViewModel
 
@@ -62,6 +66,7 @@ class DashboardViewModelTest {
 
         dashboardRepo = DashboardRepoImpl(
                 userActivityDao,
+                CorePrefsProvider(sharedPrefsProvider),
                 NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())
         )
 

@@ -22,6 +22,7 @@ import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.annotations.ViewModel
+import com.standup.core.Core
 import javax.inject.Inject
 
 /**
@@ -31,7 +32,8 @@ import javax.inject.Inject
  */
 @ViewModel(SplashActivity::class)
 internal class SplashViewModel @Inject constructor(private val userSessionManager: UserSessionManager,
-                                                   private val sharedPrefProvider: SharedPrefsProvider) {
+                                                   private val sharedPrefProvider: SharedPrefsProvider,
+                                                   private var core: Core) {
 
     internal val openIntro = MutableLiveData<Boolean>()
 
@@ -49,6 +51,9 @@ internal class SplashViewModel @Inject constructor(private val userSessionManage
         openVerifyEmail.value = false
         openProfile.value = false
         openDashboard.value = false
+
+        //Refresh the core
+        core.refresh()
     }
 
     fun initiateFlow() {

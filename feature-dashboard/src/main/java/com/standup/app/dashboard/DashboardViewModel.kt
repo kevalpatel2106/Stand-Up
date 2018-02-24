@@ -26,9 +26,12 @@ import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.annotations.ViewModel
+import com.kevalpatel2106.utils.rxbus.RxBus
 import com.standup.app.dashboard.di.DaggerDashboardComponent
 import com.standup.app.dashboard.repo.DashboardRepo
+import com.standup.core.CoreConfig
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -41,6 +44,7 @@ import javax.inject.Inject
  */
 @ViewModel(DashboardFragment::class)
 internal class DashboardViewModel : BaseViewModel {
+    private lateinit var notificationEvenDisposable: Disposable
 
     /**
      * [DashboardRepo] for loading and processing the data from the database and network.
@@ -60,6 +64,8 @@ internal class DashboardViewModel : BaseViewModel {
     @OnlyForTesting
     constructor(dashboardRepo: DashboardRepo) : super() {
         this.dashboardRepo = dashboardRepo
+
+        init()
     }
 
     /**
@@ -69,7 +75,21 @@ internal class DashboardViewModel : BaseViewModel {
     constructor() {
         DaggerDashboardComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
-                .build().inject(this@DashboardViewModel)
+                .build()
+                .inject(this@DashboardViewModel)
+
+        init()
+    }
+
+    private fun init() {
+        //Register to listen notification schedule events
+        notificationEvenDisposable = RxBus.register(CoreConfig.TAG_RX_NOTIFICATION_TIME_UPDATED)
+                .subscribe({ loadNextNotificationTime() })
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        notificationEvenDisposable.dispose()
     }
 
     /**
@@ -94,6 +114,15 @@ internal class DashboardViewModel : BaseViewModel {
      * @see CallbackEvent
      */
     val todaySummaryStartLoading = CallbackEvent()
+
+    /**
+     * [MutableLiveData] to store the text to display for the next reminder.
+     */
+    val nextReminderStatus = MutableLiveData<String>()
+
+    internal fun loadNextNotificationTime() {
+        nextReminderStatus.value = dashboardRepo.getNextReminderStatus()
+    }
 
     /**
      * Get the summary off today's daily activity. This is an asynchronous method which reads database

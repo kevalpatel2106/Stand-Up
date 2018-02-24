@@ -18,6 +18,8 @@
 package com.standup.core
 
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.rxbus.Event
+import com.kevalpatel2106.utils.rxbus.RxBus
 import javax.inject.Inject
 
 /**
@@ -52,5 +54,6 @@ class CorePrefsProvider @Inject constructor(private val sharedPrefsProvider: Sha
 
     internal fun saveNextNotificationTime(timeInMills: Long) {
         sharedPrefsProvider.savePreferences(PREF_KEY_NEXT_NOTIFICATION_TIME, timeInMills)
+        RxBus.post(Event(CoreConfig.TAG_RX_NOTIFICATION_TIME_UPDATED))
     }
 }
