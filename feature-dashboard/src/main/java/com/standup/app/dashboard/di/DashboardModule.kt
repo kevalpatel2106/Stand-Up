@@ -17,11 +17,12 @@
 
 package com.standup.app.dashboard.di
 
-import com.kevalpatel2106.common.application.BaseApplication
+import android.app.Application
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.kevalpatel2106.common.db.DbModule
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.app.dashboard.repo.DashboardRepo
 import com.standup.app.dashboard.repo.DashboardRepoImpl
@@ -41,9 +42,14 @@ internal class DashboardModule {
 
     @Provides
     @ApplicationScope
-    fun provideDashboardRepo(application: BaseApplication,
-                             @Named(AppModule.WITH_TOKEN) retrofit: Retrofit,
+    fun provideDashboardRepo(application: Application,
+                             userActivityDao: UserActivityDao,
+                             userSettingsManager: UserSettingsManager,
                              sharedPrefsProvider: SharedPrefsProvider,
-                             userActivityDao: UserActivityDao)
-            : DashboardRepo = DashboardRepoImpl(application, userActivityDao, CorePrefsProvider(sharedPrefsProvider), retrofit)
+                             @Named(AppModule.WITH_TOKEN) retrofit: Retrofit): DashboardRepo = DashboardRepoImpl(application,
+            userSettingsManager,
+            userActivityDao,
+            CorePrefsProvider(sharedPrefsProvider),
+            retrofit
+    )
 }

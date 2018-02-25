@@ -17,11 +17,12 @@
 
 package com.standup.app.dashboard.repo
 
-import com.kevalpatel2106.common.application.BaseApplication
+import android.app.Application
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.app.dashboard.R
 import com.standup.core.CorePrefsProvider
@@ -29,6 +30,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
 import retrofit2.Retrofit
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Named
 import kotlin.collections.ArrayList
@@ -38,14 +40,26 @@ import kotlin.collections.ArrayList
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-internal class DashboardRepoImpl constructor(private val application: BaseApplication,
+internal class DashboardRepoImpl constructor(private val application: Application,
+                                             private val userSettingsManager: UserSettingsManager,
                                              private val userActivityDao: UserActivityDao,
                                              private val corePrefsProvider: CorePrefsProvider,
                                              @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit) : DashboardRepo {
 
     override fun getNextReminderStatus(): String {
-        return String.format(application.getString(R.string.next_notification_time),
-                corePrefsProvider.nextNotificationTime.toString())
+        return when {
+            userSettingsManager.isCurrentlyInSleepMode -> {
+                application.getString(R.string.sleep_mode_is_enabled)
+            }
+            userSettingsManager.isCurrentlyDndEnable -> {
+                application.getString(R.string.dnd_mode_is_enabled)
+            }
+            else -> {
+                val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+                String.format(application.getString(R.string.next_notification_time),
+                        sdf.format(corePrefsProvider.nextNotificationTime))
+            }
+        }
     }
 
     override fun getTodaySummary(): Flowable<DailyActivitySummary> {
