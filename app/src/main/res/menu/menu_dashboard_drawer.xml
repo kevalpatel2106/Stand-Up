@@ -36,7 +36,8 @@
             android:id="@+id/nav_stats"
             android:checkable="true"
             android:icon="@drawable/ic_daily_review_notification"
-            android:title="@string/nav_header_stats" />
+            android:title="@string/nav_header_stats"
+            android:visible="false" />
     </group>
 
     <group

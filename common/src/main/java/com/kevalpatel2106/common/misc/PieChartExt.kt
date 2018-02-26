@@ -49,8 +49,8 @@ fun PieChart.setPieChart(context: Context, animationDuration: Int) {
 
     //The hole in the middle
     isDrawHoleEnabled = true //Display the hole in the middle
-    holeRadius = 50F //Keep the hole radius 40% of total chart radius
-    transparentCircleRadius = holeRadius  //Keep the transparent radius 40% of total chart radius
+    holeRadius = 45F //Keep the hole radius 45% of total chart radius
+    transparentCircleRadius = holeRadius  //Keep the transparent radius 45% of total chart radius
     setHoleColor(Color.TRANSPARENT)  //Keep hole transparent.
 
     //Set rotation
@@ -93,6 +93,11 @@ fun PieChart.setPieChartData(context: Context,
     val colors = ArrayList<Int>()
     colors.add(context.getColorCompat(android.R.color.holo_green_dark))  //Chart color for sitting segment
     colors.add(context.getColorCompat(android.R.color.holo_orange_dark)) //Chart color for standing segment
+
+    if (sittingDurationPercent >= 100F || standingDurationPercent >= 100F) {
+        holeRadius = 40F //Keep the hole radius 40% of total chart radius
+        transparentCircleRadius = holeRadius  //Keep the transparent radius 40% of total chart radius
+    }
 
     if (isValueToDisplay) {
         entries.add(PieEntry(100F, "Not tracked"))  //Standing time percentage
