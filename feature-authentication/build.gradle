@@ -29,19 +29,20 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.playStore
-            resValue "string", "application_name", DEBUG_APPLICATION_NAME
-            resValue "string", "server_client_id", SERVER_CLIENT_ID
-            resValue "string", "facebook_app_id", FACEBOOK_APP_ID
-            buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
-        }
-        debug {
-            crunchPngs false
-            testCoverageEnabled true
-            signingConfig signingConfigs.debugKey
             resValue "string", "server_client_id", RELEASE_SERVER_CLIENT_ID
             resValue "string", "facebook_app_id", RELEASE_FACEBOOK_APP_ID
             resValue "string", "application_name", RELEASE_APPLICATION_NAME
             buildConfigField "String", "BASE_URL", "\"" + RELEASE_SERVER_BASE_URL + "\""
+        }
+        debug {
+            crunchPngs false
+            testCoverageEnabled true
+
+            signingConfig signingConfigs.debugKey
+            resValue "string", "application_name", DEBUG_APPLICATION_NAME
+            resValue "string", "server_client_id", SERVER_CLIENT_ID
+            resValue "string", "facebook_app_id", FACEBOOK_APP_ID
+            buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
         }
     }
 

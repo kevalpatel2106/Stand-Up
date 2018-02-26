@@ -37,7 +37,7 @@ import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector
-import com.standup.R
+import com.standup.app.R
 import com.standup.app.about.AboutModule
 import com.standup.app.profile.ProfileModule
 import com.standup.app.settings.SettingsModule

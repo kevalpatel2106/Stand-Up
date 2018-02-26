@@ -27,7 +27,7 @@ import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.standup.BuildConfig
+import com.standup.app.BuildConfig
 import com.standup.app.features.initFeatures
 import com.standup.core.Core
 import io.fabric.sdk.android.Fabric

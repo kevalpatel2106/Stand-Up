@@ -23,8 +23,8 @@ import android.os.Bundle
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.standup.BuildConfig
-import com.standup.R
+import com.standup.app.BuildConfig
+import com.standup.app.R
 import com.standup.app.authentication.AuthenticationModule
 import com.standup.app.splash.SplashActivity
 import dagger.Lazy

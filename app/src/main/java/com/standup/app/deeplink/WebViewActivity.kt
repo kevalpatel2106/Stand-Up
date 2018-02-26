@@ -27,7 +27,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.View
 import android.webkit.WebViewClient
-import com.standup.R
+import com.standup.app.R
 import kotlinx.android.synthetic.main.activity_web_view.*
 
 

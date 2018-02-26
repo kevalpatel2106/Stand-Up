@@ -29,7 +29,7 @@ import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.common.notifications.addOtherNotificationChannel
-import com.standup.R
+import com.standup.app.R
 
 @Suppress("DEPRECATION")
 internal object UpdateNotification {
