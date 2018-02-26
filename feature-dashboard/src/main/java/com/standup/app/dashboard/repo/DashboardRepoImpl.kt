@@ -48,11 +48,11 @@ internal class DashboardRepoImpl constructor(private val application: Applicatio
 
     override fun getNextReminderStatus(): String {
         return when {
-            userSettingsManager.isCurrentlyInSleepMode -> {
-                application.getString(R.string.sleep_mode_is_enabled)
-            }
             userSettingsManager.isCurrentlyDndEnable -> {
                 application.getString(R.string.dnd_mode_is_enabled)
+            }
+            userSettingsManager.isCurrentlyInSleepMode -> {
+                application.getString(R.string.sleep_mode_is_enabled)
             }
             else -> {
                 val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
