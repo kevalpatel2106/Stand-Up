@@ -36,7 +36,7 @@ object AppConfig {
     /**
      * Snackbar display duration.
      */
-    const val SNACKBAR_TIME = 3300L //ms
+    const val SNACKBAR_TIME = 2_800L //ms
 
 
     //---- End of Validation ----//

@@ -120,8 +120,8 @@ class EditProfileActivity : BaseActivity() {
                 edit_profile_weight_picker.scrollToValue(it.weightFloat())
                 edit_profile_name_et.setText(it.name)
 
-                profile_gender_radio_male.isChecked = it.gender == AppConfig.GENDER_MALE
                 profile_gender_radio_female.isChecked = it.gender == AppConfig.GENDER_FEMALE
+                profile_gender_radio_male.isChecked = !profile_gender_radio_female.isChecked
             }
         })
 
