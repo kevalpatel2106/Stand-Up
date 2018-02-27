@@ -101,7 +101,7 @@ class ReminderNotificationTest {
         //notification message
         val message = notification.javaClass.getDeclaredField("mContentText")
         message.isAccessible = true
-        Assert.assertEquals(message.get(notification) as String, TEST_MESSAGE_STRING)
+        Assert.assertEquals(message.get(notification) as String, "It's time to stretch your legs. Go ahead and take a walk.")
     }
 
     @Test

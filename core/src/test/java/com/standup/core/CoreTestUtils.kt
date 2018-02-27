@@ -45,7 +45,7 @@ internal object CoreTestUtils {
      */
     fun createMockContext(): Context {
         // otherwise the JobScheduler isn't supported we check if the service is enable
-        // Robolectric doesn't parse services from the manifest, see https://github.com/robolectric/robolectric/issues/416
+        // Roboelctric doesn't parse services from the manifest, see https://github.com/robolectric/robolectric/issues/416
         val packageManager = Mockito.mock(PackageManager::class.java)
         Mockito.`when`<List<ResolveInfo>>(packageManager
                 .queryBroadcastReceivers(ArgumentMatchers.any(Intent::class.java), ArgumentMatchers.anyInt()))

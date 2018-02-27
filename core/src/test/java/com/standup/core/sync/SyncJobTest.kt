@@ -17,11 +17,12 @@
 
 package com.standup.core.sync
 
-import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobManagerRule
 import com.evernote.android.job.JobRequest
 import com.standup.core.CoreTestUtils
+import com.standup.core.misc.CoreJobCreator
 import org.junit.Assert
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -36,18 +37,16 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class SyncJobTest {
 
-
-    @Before
-    fun setUpTest() {
-        JobManager.create(CoreTestUtils.createMockContext())
-        JobManager.instance().cancelAll()
-    }
+    @Rule
+    @JvmField
+    var jobManagerRule: JobManagerRule = JobManagerRule(CoreJobCreator(),
+            CoreTestUtils.createMockContext().applicationContext)
 
     @Test
     fun checkSyncNow() {
         SyncJob.syncNow()
 
-        val set = JobManager.instance().getAllJobRequestsForTag(SyncJob.SYNC_NOW_JOB_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(SyncJob.SYNC_NOW_JOB_TAG)
         Assert.assertEquals(1, set.size)
 
         val request = set.iterator().next()
@@ -71,7 +70,7 @@ class SyncJobTest {
         val intervalMills = 1800_000L //30 mins
         SyncJob.scheduleSync(intervalMills)
 
-        val set = JobManager.instance().getAllJobRequestsForTag(SyncJob.SYNC_JOB_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(SyncJob.SYNC_JOB_TAG)
         Assert.assertEquals(1, set.size)
 
         val request = set.iterator().next()
@@ -94,7 +93,7 @@ class SyncJobTest {
         SyncJob.scheduleSync(intervalMills)
         SyncJob.cancelScheduledSync()
 
-        val set = JobManager.instance().getAllJobRequestsForTag(SyncJob.SYNC_JOB_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(SyncJob.SYNC_JOB_TAG)
         Assert.assertTrue(set.isEmpty())
     }
 
@@ -105,10 +104,10 @@ class SyncJobTest {
         SyncJob.syncNow()
         SyncJob.cancelScheduledSync()
 
-        var set = JobManager.instance().getAllJobRequestsForTag(SyncJob.SYNC_JOB_TAG)
+        var set = jobManagerRule.jobManager.getAllJobRequestsForTag(SyncJob.SYNC_JOB_TAG)
         Assert.assertTrue(set.isEmpty())
 
-        set = JobManager.instance().getAllJobRequestsForTag(SyncJob.SYNC_NOW_JOB_TAG)
+        set = jobManagerRule.jobManager.getAllJobRequestsForTag(SyncJob.SYNC_NOW_JOB_TAG)
         Assert.assertEquals(1, set.size)
     }
 }

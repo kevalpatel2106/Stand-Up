@@ -17,20 +17,22 @@
 
 package com.standup.core.dailyReview
 
-import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobManagerRule
 import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.core.CoreTestUtils
+import com.standup.core.misc.CoreJobCreator
 import org.junit.Assert
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+
 
 /**
  * Created by Kevalpatel2106 on 31-Jan-18.
@@ -41,11 +43,10 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class DailyReviewJobTest {
 
-    @Before
-    fun setUpTest() {
-        JobManager.create(CoreTestUtils.createMockContext())
-        JobManager.instance().cancelAll()
-    }
+    @Rule
+    @JvmField
+    var jobManagerRule: JobManagerRule = JobManagerRule(CoreJobCreator(),
+            CoreTestUtils.createMockContext().applicationContext)
 
     @Test
     fun checkScheduleJob_DailyReviewNotEnable() {
@@ -58,7 +59,6 @@ class DailyReviewJobTest {
         Mockito.`when`(sharedPrefsProvider.getBoolFromPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean()))
                 .thenReturn(false)
 
-
         Assert.assertFalse(DailyReviewJob.scheduleJob(UserSettingsManager(sharedPrefsProvider)))
     }
 
@@ -66,7 +66,7 @@ class DailyReviewJobTest {
     fun checkScheduleJob_DailyReviewEnable() {
         scheduleJob()
 
-        val set = JobManager.instance().getAllJobRequestsForTag(DailyReviewJob.DAILY_REVIEW_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(DailyReviewJob.DAILY_REVIEW_TAG)
         Assert.assertEquals(set.size, 1)
 
         val request = set.iterator().next()
@@ -82,7 +82,7 @@ class DailyReviewJobTest {
         scheduleJob()
         DailyReviewJob.cancelScheduledJob()
 
-        val set = JobManager.instance().getAllJobRequestsForTag(DailyReviewJob.DAILY_REVIEW_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(DailyReviewJob.DAILY_REVIEW_TAG)
         Assert.assertTrue(set.isEmpty())
     }
 

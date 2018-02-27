@@ -34,6 +34,7 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.collections.ArrayList
 
 /**
  * Created by Keval on 14/12/17.
@@ -91,6 +92,37 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
                     }
 
             it.onComplete()
+        }
+    }
+
+    override fun getActivitiesToServer(): Completable {
+        return Completable.create {
+            //Get all the pending to sync activities.
+            val oldestTimeStamp = userActivityDao.getOldestTimestamp()
+
+            //Execute the network call.
+            val call = retrofit.create(CoreApiService::class.java)
+                    .getActivities(GetActivityRequest(oldestTimeStamp))
+
+            RepoBuilder<GetActivityResponse>()
+                    .addRefresher(RetrofitNetworkRefresher(call))
+                    .build()
+                    .fetch()
+                    .doOnTerminate { it.onComplete() }
+                    .map { it.data!!.activities }
+                    .subscribe({
+
+                        //Save every thing into the database.
+                        it.filter { it.remoteId != 0L }
+                                .map {
+                                    it.isSynced = true
+                                    return@map it
+                                }
+                                .forEach { userActivityDao.update(it) }
+                    }, {
+                        //API call failed.
+                        Timber.i("Get activity API call failed. Message: ${it.message}")
+                    })
         }
     }
 

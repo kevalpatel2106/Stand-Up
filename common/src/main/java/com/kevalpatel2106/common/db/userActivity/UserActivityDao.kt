@@ -63,6 +63,10 @@ interface UserActivityDao {
             + " ORDER BY " + UserActivity.EVENT_START_TIME + " ASC")
     fun getPendingActivity(isPending: Boolean): List<UserActivity>
 
+    @Query("SELECT MIN(" + UserActivity.EVENT_START_TIME + ") FROM "
+            + UserActivity.USER_ACTIVITY_TABLE)
+    fun getOldestTimestamp(): Long
+
     @Query("DELETE FROM " + UserActivity.USER_ACTIVITY_TABLE)
     fun nukeTable()
 }

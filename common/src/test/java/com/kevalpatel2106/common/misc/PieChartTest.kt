@@ -58,7 +58,7 @@ class PieChartTest {
         Assert.assertFalse(pieChart.description.isEnabled)
         Assert.assertTrue(pieChart.isUsePercentValuesEnabled)
         Assert.assertTrue(pieChart.isDrawHoleEnabled)
-        Assert.assertEquals(pieChart.holeRadius, 50F)
+        Assert.assertEquals(pieChart.holeRadius, 45F)
         Assert.assertTrue(pieChart.isRotationEnabled)
         Assert.assertEquals(pieChart.rotationAngle, 0F)
         Assert.assertEquals(pieChart.dragDecelerationFrictionCoef, 0.95F)

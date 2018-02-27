@@ -18,9 +18,12 @@
 package com.standup.core.activityMonitor
 
 import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobManagerRule
 import com.evernote.android.job.JobRequest
 import com.standup.core.CoreTestUtils
+import com.standup.core.misc.CoreJobCreator
 import org.junit.Assert
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -36,14 +39,15 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class IsActivityMonitorScheduledTest {
 
+    @Rule
+    @JvmField
+    var jobManagerRule: JobManagerRule = JobManagerRule(CoreJobCreator(),
+            CoreTestUtils.createMockContext().applicationContext)
 
     @Test
     @Throws(Exception::class)
     fun checkIsAnyJobSchedulePositive() {
-        JobManager.create(CoreTestUtils.createMockContext())
-
-        val jobManager = JobManager.instance()
-        jobManager.schedule(JobRequest.Builder(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG)
+        jobManagerRule.jobManager.schedule(JobRequest.Builder(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG)
                 .setPeriodic(1800_000L)
                 .build())
         Assert.assertTrue(ActivityMonitorHelper.isAnyJobScheduled())

@@ -54,4 +54,6 @@ internal interface CoreRepo {
      * @see DailyActivitySummary
      */
     fun loadYesterdaySummary(): Flowable<DailyActivitySummary>
+
+    fun getActivitiesToServer(): Completable
 }

@@ -17,10 +17,12 @@
 
 package com.standup.app.dashboard
 
+import android.app.Application
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
@@ -33,6 +35,7 @@ import com.standup.core.CorePrefsProvider
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.Mockito
 import java.util.*
 
 /**
@@ -61,10 +64,13 @@ class DashboardViewModelTest {
 
     @Before
     fun setUp() {
+        val context = Mockito.mock(Application::class.java)
         mockServerManager.startMockWebServer()
-        userActivityDao = UserActivityDaoMockImpl(ArrayList())
 
+        userActivityDao = UserActivityDaoMockImpl(ArrayList())
         dashboardRepo = DashboardRepoImpl(
+                context,
+                UserSettingsManager(sharedPrefsProvider),
                 userActivityDao,
                 CorePrefsProvider(sharedPrefsProvider),
                 NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())

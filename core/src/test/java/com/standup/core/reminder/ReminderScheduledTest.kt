@@ -17,15 +17,16 @@
 
 package com.standup.core.reminder
 
-import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobManagerRule
 import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.core.CoreConfig
 import com.standup.core.CorePrefsProvider
 import com.standup.core.CoreTestUtils
+import com.standup.core.misc.CoreJobCreator
 import org.junit.Assert
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -39,17 +40,16 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
 class ReminderScheduledTest {
-    @Before
-    fun setUpTest() {
-        JobManager.create(CoreTestUtils.createMockContext())
-        JobManager.instance().cancelAll()
-    }
+    @Rule
+    @JvmField
+    var jobManagerRule: JobManagerRule = JobManagerRule(CoreJobCreator(),
+            CoreTestUtils.createMockContext().applicationContext)
 
     @Test
     fun checkScheduleJobDefaultInterval() {
         NotificationSchedulerJob.scheduleNotification(SharedPrefsProvider(MockSharedPreference()))
 
-        val set = JobManager.instance().getAllJobRequestsForTag(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
         Assert.assertEquals(set.size, 1)
 
         val request = set.iterator().next()
@@ -65,7 +65,7 @@ class ReminderScheduledTest {
     fun checkScheduleJobDefault5SecInterval() {
         NotificationSchedulerJob.scheduleNotification(SharedPrefsProvider(MockSharedPreference()), 900_000L)
 
-        val set = JobManager.instance().getAllJobRequestsForTag(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
         Assert.assertEquals(set.size, 1)
 
         val request = set.iterator().next()
@@ -102,7 +102,7 @@ class ReminderScheduledTest {
 
         NotificationSchedulerJob.cancelJob(SharedPrefsProvider(MockSharedPreference()))
 
-        val set = JobManager.instance().getAllJobRequestsForTag(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
         Assert.assertTrue(set.isEmpty())
     }
 }

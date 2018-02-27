@@ -27,13 +27,19 @@ import javax.inject.Inject
 
 /**
  * Created by Keval on 02/02/18.
+ * A [ViewModel] class for the [SplashActivity].
  *
+ * This view model is responsible for
+ * - Initializing the navigation from the splash screen by calling [initiateFlow].
+ * - Refreshing the [Core] by calling [setUpCore].
+ *
+ * @constructor that provides [UserSessionManager], [SharedPrefsProvider] and [Core].
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @ViewModel(SplashActivity::class)
 internal class SplashViewModel @Inject constructor(private val userSessionManager: UserSessionManager,
                                                    private val sharedPrefProvider: SharedPrefsProvider,
-                                                   private var core: Core) {
+                                                   private val core: Core) {
 
     internal val openIntro = MutableLiveData<Boolean>()
 
@@ -51,9 +57,17 @@ internal class SplashViewModel @Inject constructor(private val userSessionManage
         openVerifyEmail.value = false
         openProfile.value = false
         openDashboard.value = false
+    }
 
-        //Refresh the core
+    /**
+     * Refresh the [Core] and start syncing the user activity if the background sync is enabled.
+     *
+     * @see Core.refresh
+     * @see Core.forceSync
+     */
+    fun setUpCore() {
         core.refresh()
+        Core.forceSync()
     }
 
     fun initiateFlow() {

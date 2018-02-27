@@ -17,25 +17,16 @@
 
 package com.standup.core.repo
 
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import com.google.gson.annotations.SerializedName
+import com.kevalpatel2106.common.db.userActivity.UserActivity
 
 /**
- * Created by Keval on 15/12/17.
- * List of the end points for communicating with the server for "Core" module.
+ * Created by Kevalpatel2106 on 27-Feb-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal interface CoreApiService {
+data class GetActivityResponse(
 
-    @POST("/saveActivity")
-    @Headers("Add-Auth: true")
-    fun saveActivity(@Body saveActivityRequest: SaveActivityRequest): Call<SaveActivityResponse>
-
-
-    @POST("/getActivity")
-    @Headers("Add-Auth: true")
-    fun getActivities(@Body getActivityRequest: GetActivityRequest): Call<GetActivityResponse>
-}
+        @SerializedName("activities")
+        val activities: ArrayList<UserActivity>
+)

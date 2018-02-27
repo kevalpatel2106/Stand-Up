@@ -79,11 +79,11 @@ class SplashActivity : BaseActivity() {
         setModel()
 
         model.initiateFlow()
+        model.setUpCore()
     }
 
 
     private fun setModel() {
-
         model.openIntro.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {

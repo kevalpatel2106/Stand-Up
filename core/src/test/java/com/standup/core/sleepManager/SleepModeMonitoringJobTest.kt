@@ -17,16 +17,17 @@
 
 package com.standup.core.sleepManager
 
-import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobManagerRule
 import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.core.CoreTestUtils
+import com.standup.core.misc.CoreJobCreator
 import org.junit.Assert
 import org.junit.Assert.assertTrue
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyLong
@@ -44,18 +45,17 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class SleepModeMonitoringJobTest {
 
-    @Before
-    fun setUpTest() {
-        JobManager.create(CoreTestUtils.createMockContext())
-        JobManager.instance().cancelAll()
-    }
+    @Rule
+    @JvmField
+    var jobManagerRule: JobManagerRule = JobManagerRule(CoreJobCreator(),
+            CoreTestUtils.createMockContext().applicationContext)
 
     @Test
     fun checkScheduleJob() {
         scheduleJob()
 
         //Check start job
-        val startJobSet = JobManager.instance().getAllJobRequestsForTag(SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG)
+        val startJobSet = jobManagerRule.jobManager.getAllJobRequestsForTag(SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG)
         Assert.assertEquals(startJobSet.size, 1)
 
         var request = startJobSet.iterator().next()
@@ -66,7 +66,7 @@ class SleepModeMonitoringJobTest {
         Assert.assertTrue(request.isExact)
 
         //Check end job
-        val endJobSet = JobManager.instance().getAllJobRequestsForTag(SleepModeMonitoringJob.SLEEP_MODE_END_JOB_TAG)
+        val endJobSet = jobManagerRule.jobManager.getAllJobRequestsForTag(SleepModeMonitoringJob.SLEEP_MODE_END_JOB_TAG)
         Assert.assertEquals(startJobSet.size, 1)
 
         request = endJobSet.iterator().next()
@@ -83,10 +83,10 @@ class SleepModeMonitoringJobTest {
 
         SleepModeMonitoringJob.cancelScheduledJob()
 
-        var set = JobManager.instance().getAllJobRequestsForTag(SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG)
+        var set = jobManagerRule.jobManager.getAllJobRequestsForTag(SleepModeMonitoringJob.SLEEP_MODE_START_JOB_TAG)
         Assert.assertTrue(set.isEmpty())
 
-        set = JobManager.instance().getAllJobRequestsForTag(SleepModeMonitoringJob.SLEEP_MODE_END_JOB_TAG)
+        set = jobManagerRule.jobManager.getAllJobRequestsForTag(SleepModeMonitoringJob.SLEEP_MODE_END_JOB_TAG)
         Assert.assertTrue(set.isEmpty())
     }
 

@@ -17,12 +17,13 @@
 
 package com.standup.core.activityMonitor
 
-import com.evernote.android.job.JobManager
+import com.evernote.android.job.JobManagerRule
 import com.evernote.android.job.JobRequest
 import com.standup.core.CoreConfig
 import com.standup.core.CoreTestUtils
+import com.standup.core.misc.CoreJobCreator
 import org.junit.Assert
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -37,17 +38,17 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE)
 class ActivityMonitorJobTest {
 
-    @Before
-    fun setUpTest() {
-        JobManager.create(CoreTestUtils.createMockContext())
-        JobManager.instance().cancelAll()
-    }
+    @Rule
+    @JvmField
+    var jobManagerRule: JobManagerRule = JobManagerRule(CoreJobCreator(),
+            CoreTestUtils.createMockContext().applicationContext)
+
 
     @Test
     fun checkScheduleJob() {
         Assert.assertTrue(ActivityMonitorJob.scheduleNextJob())
 
-        val set = JobManager.instance().getAllJobRequestsForTag(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG)
         Assert.assertEquals(set.size, 1)
 
         val request = set.iterator().next()
@@ -66,7 +67,7 @@ class ActivityMonitorJobTest {
 
         ActivityMonitorJob.cancel()
 
-        val set = JobManager.instance().getAllJobRequestsForTag(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG)
+        val set = jobManagerRule.jobManager.getAllJobRequestsForTag(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG)
         Assert.assertTrue(set.isEmpty())
     }
 

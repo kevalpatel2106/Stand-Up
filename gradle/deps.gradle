@@ -171,7 +171,7 @@ ext {
             openSourceLibraries: 'com.mikepenz:aboutlibraries:6.0.5@aar',
             aboutlibraries     : 'com.github.daniel-stoneuk:material-about-library:2.2.3-support26.1.0',
             chartLayout        : 'com.github.PhilJay:MPAndroidChart:v3.0.3',
-            roboElectric       : 'org.robolectric:robolectric:3.7',
+            roboElectric       : 'org.robolectric:robolectric:3.7.1',
             evernoteJob        : 'com.evernote:android-job:1.2.4',
             lottie             : 'com.airbnb.android:lottie:2.5.0-rc1',
             iap                : 'com.android.billingclient:billing:1.0',

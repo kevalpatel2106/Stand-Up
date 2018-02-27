@@ -17,19 +17,25 @@
 
 package com.standup.app.dashboard.repo
 
+import android.app.Application
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
+import com.kevalpatel2106.testutils.MockSharedPreference
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
+import com.standup.core.CorePrefsProvider
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.Mockito
 import java.util.*
 
 /**
@@ -47,11 +53,16 @@ class DashboardRepoImplTest {
 
     @Before
     fun setUp() {
+        val context = Mockito.mock(Application::class.java)
+        val sharedPrefsProvider = SharedPrefsProvider(MockSharedPreference())
         mockServerManager.startMockWebServer()
 
         userActivityDao = UserActivityDaoMockImpl(ArrayList())
         dashboardRepo = DashboardRepoImpl(
+                context,
+                UserSettingsManager(sharedPrefsProvider),
                 userActivityDao,
+                CorePrefsProvider(sharedPrefsProvider),
                 NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())
         )
     }
