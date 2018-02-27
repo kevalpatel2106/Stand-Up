@@ -41,10 +41,10 @@ internal data class GetProfileResponse(
         val photo: String?,
 
         @SerializedName("height")
-        val height: String,
+        var height: String,
 
         @SerializedName("weight")
-        val weight: String,
+        var weight: String,
 
         @SerializedName("gender")
         var gender: String = AppConfig.GENDER_MALE,

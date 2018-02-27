@@ -73,7 +73,8 @@ class Repository<T> internal constructor() {
                 } else {
                     //We hit the cache.
                     //Pass the result.
-                    freshData.source = SourceType.CACHE
+                    freshData.source = SourceType.NETWORK
+
                     emitter.onNext(freshData)
 
                     //Write the data to all the cache

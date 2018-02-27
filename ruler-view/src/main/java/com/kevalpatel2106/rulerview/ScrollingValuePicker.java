@@ -29,7 +29,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -50,8 +49,6 @@ public class ScrollingValuePicker extends FrameLayout {
 
     private float maxValue = 0;
     private float minValue = 0;
-
-    private float initValue = 0f;
 
     private int valueMultiple = 1;
     private Paint mPathPaint;
@@ -100,10 +97,6 @@ public class ScrollingValuePicker extends FrameLayout {
         lineRulerView.setMultipleTypeValue(valueTypeMultiple);
     }
 
-    public void setInitValue(float initValue) {
-        this.initValue = initValue;
-    }
-
     public float getViewMultipleSize() {
         return this.viewMultipleSize;
     }
@@ -125,16 +118,6 @@ public class ScrollingValuePicker extends FrameLayout {
         mPathPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         mRulerStrokePath = new Path();
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (getWidth() != 0) {
-                    scrollToValue(initValue);
-                    getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }
-            }
-        });
-
     }
 
     private void calculateRulerStrokePath() {
@@ -214,7 +197,7 @@ public class ScrollingValuePicker extends FrameLayout {
      */
     public int getCurrentValue(int l) {
         float oneValue = (float) mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
-        int value = (int) (l / oneValue) + (int) minValue;
+        int value = Math.round(l / oneValue) + (int) minValue;
 
         if (value > maxValue) value = (int) maxValue;
         else if (value < minValue) value = (int) minValue;
@@ -230,16 +213,14 @@ public class ScrollingValuePicker extends FrameLayout {
      */
     public int getValueAndScrollItemToCenter(int l) {
         float oneValue = (float) mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
-        int value = (int) (l / oneValue) + (int) minValue;
+        int value = Math.round(l / oneValue) + (int) minValue;
 
         //Calculate and adjust the offset
-        int offset = (int) (l % oneValue);
+        float offset = (l % oneValue);
         if (offset > oneValue / 2) {
-            value += 1;
-            mHorizontalScrollView.smoothScrollBy((int) oneValue - offset, 0);
-
+            mHorizontalScrollView.smoothScrollBy(Math.round(oneValue - offset), 0);
         } else {
-            mHorizontalScrollView.smoothScrollBy(-offset, 0);
+            mHorizontalScrollView.smoothScrollBy(Math.round(-offset), 0);
         }
 
         if (value > maxValue) value = (int) maxValue;
@@ -250,14 +231,12 @@ public class ScrollingValuePicker extends FrameLayout {
     /**
      * Scroll the ruler to the given value.
      */
-    public void scrollToValue(float value) {
-        mHorizontalScrollView.postDelayed(() ->{
-            synchronized (ScrollingValuePicker.class) {
-                float oneValue = (float) mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
-                float valueWidth = oneValue * (value - minValue);
+    public synchronized void scrollToValue(float value) {
+        mHorizontalScrollView.postDelayed(() -> {
+            float oneValue = mHorizontalScrollView.getWidth() * viewMultipleSize / (maxValue - minValue);
+            float valueWidth = oneValue * (value - minValue);
 
-                mHorizontalScrollView.smoothScrollBy((int) valueWidth, 0);
-            }
-        }, 200);
+            mHorizontalScrollView.smoothScrollBy(Math.round(valueWidth), 0);
+        }, 400);
     }
 }

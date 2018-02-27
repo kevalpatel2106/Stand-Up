@@ -129,6 +129,19 @@ internal class EditProfileModel : BaseViewModel {
                 .doAfterTerminate({
                     isLoadingProfile.value = false
                 })
+                .map {
+                    //Validate height
+                    with(it.heightFloat()) {
+                        if (this <= Validator.MIN_HEIGHT) it.height = (Validator.MIN_HEIGHT + 60).toString()
+                    }
+
+                    //Validate weight
+                    with(it.weightFloat()) {
+                        if (this <= Validator.MIN_WEIGHT) it.weight = (Validator.MIN_WEIGHT + 30).toString()
+                    }
+
+                    return@map it
+                }
                 .subscribe({
                     isLoadingProfile.value = false
                     userProfile.value = it

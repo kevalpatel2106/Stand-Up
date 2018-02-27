@@ -27,7 +27,7 @@ import java.util.regex.Pattern
 object Validator {
 
     //---- Start of Validation ----//
-    const val MIN_WEIGHT = 29.9f
+    const val MIN_WEIGHT = 30f
     const val MAX_WEIGHT = 204f
 
     const val MIN_HEIGHT = 116f
