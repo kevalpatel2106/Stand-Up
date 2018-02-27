@@ -18,6 +18,7 @@
 package com.kevalpatel2106.utils
 
 import android.annotation.SuppressLint
+import android.app.KeyguardManager
 import android.content.Context
 import android.content.Context.POWER_SERVICE
 import android.hardware.display.DisplayManager
@@ -60,4 +61,11 @@ fun Context.isScreenOn(): Boolean {
         val powerManager = getSystemService(POWER_SERVICE) as PowerManager
         powerManager.isScreenOn
     }
+}
+
+@Suppress("DEPRECATION")
+@SuppressLint("ObsoleteSdkInt")
+fun Context.isDeviceLocked(): Boolean {
+    val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    return keyguardManager.inKeyguardRestrictedInputMode()
 }

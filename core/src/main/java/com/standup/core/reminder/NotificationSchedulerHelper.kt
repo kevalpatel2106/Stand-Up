@@ -27,6 +27,7 @@ import com.evernote.android.job.JobManager
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.annotations.Helper
+import com.kevalpatel2106.utils.isDeviceLocked
 import com.kevalpatel2106.utils.isScreenOn
 import com.standup.core.sleepManager.SleepModeMonitoringHelper
 import io.reactivex.Completable
@@ -70,7 +71,7 @@ internal object NotificationSchedulerHelper {
      */
     internal fun shouldDisplayPopUp(userSettingsManager: UserSettingsManager,
                                     context: Context): Boolean {
-        return userSettingsManager.shouldDisplayPopUp && context.isScreenOn()
+        return userSettingsManager.shouldDisplayPopUp && context.isScreenOn() && !context.isDeviceLocked()
     }
 
     /**
