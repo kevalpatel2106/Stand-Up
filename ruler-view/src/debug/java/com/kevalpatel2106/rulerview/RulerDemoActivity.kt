@@ -18,6 +18,7 @@
 package com.kevalpatel2106.rulerview
 
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 
@@ -36,7 +37,6 @@ class RulerDemoActivity : AppCompatActivity() {
         val valuePicker = findViewById<ScrollingValuePicker>(R.id.ruler_view_demo)
 
         valuePicker.setMinMaxValue(125F, 350F)
-        valuePicker.setInitValue(150F)
         valuePicker.viewMultipleSize = 10F
         valuePicker.setOnScrollChangedListener(object : ObservableHorizontalScrollView.OnScrollChangedListener {
             override fun onScrollChanged(view: ObservableHorizontalScrollView?, l: Int, t: Int) {
@@ -45,10 +45,14 @@ class RulerDemoActivity : AppCompatActivity() {
             }
 
             override fun onScrollStopped(l: Int, t: Int) {
-                valueTv.text = String.format("%d Kgs\nScroll Stopped.", valuePicker.getCurrentValue(l))
+                valueTv.text = String.format("%d Kgs\nScroll Stopped.", valuePicker.getValueAndScrollItemToCenter(l))
             }
 
         })
+
+        Handler().postDelayed({
+            valuePicker.scrollToValue(200F)
+        }, 1000)
     }
 
 }

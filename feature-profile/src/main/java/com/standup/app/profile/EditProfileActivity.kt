@@ -116,12 +116,17 @@ class EditProfileActivity : BaseActivity() {
         //Observe user profile
         model.userProfile.observe(this@EditProfileActivity, Observer<GetProfileResponse> {
             it?.let {
-                edit_profile_height_picker.scrollToValue(it.heightFloat())
-                edit_profile_weight_picker.scrollToValue(it.weightFloat())
+                selectedHeight = it.heightFloat()
+                selectedWeight = it.weightFloat()
+
+                edit_profile_height_picker.scrollToValue(selectedHeight)
+                edit_profile_weight_picker.scrollToValue(selectedWeight)
+
                 edit_profile_name_et.setText(it.name)
 
-                profile_gender_radio_male.isChecked = it.gender == AppConfig.GENDER_MALE
                 profile_gender_radio_female.isChecked = it.gender == AppConfig.GENDER_FEMALE
+                profile_gender_radio_male.isChecked = !profile_gender_radio_female.isChecked
+
             }
         })
 
@@ -208,18 +213,6 @@ class EditProfileActivity : BaseActivity() {
         }
     }
 
-    /**
-     * This method will be called whenever activity is created for the first time and view is still
-     * not inflated.
-     */
-    override fun runItForFirstCreation() {
-        super.runItForFirstCreation()
-
-        //These are the initial values of the height and weight pickers./
-        selectedWeight = Validator.MIN_WEIGHT + 30
-        selectedHeight = Validator.MIN_HEIGHT + 60
-    }
-
     override fun onSaveInstanceState(outState: Bundle?) {
         outState?.let {
             //Save the state of pickers
@@ -236,10 +229,10 @@ class EditProfileActivity : BaseActivity() {
 
             //Restore the state of pickers.
             selectedHeight = savedInstanceState.getFloat(KEY_SELECTED_HEIGHT)
-            edit_profile_height_picker.setInitValue(selectedHeight)
+            edit_profile_height_picker.scrollToValue(selectedHeight)
 
             selectedWeight = savedInstanceState.getFloat(KEY_SELECTED_WEIGHT)
-            edit_profile_weight_picker.setInitValue(selectedWeight)
+            edit_profile_weight_picker.scrollToValue(selectedWeight)
         }
     }
 
