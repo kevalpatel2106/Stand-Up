@@ -140,6 +140,7 @@ ext {
         unitTests.all {
             // set heap size for the test JVM(s)
             minHeapSize = "1024m"
+            maxParallelForks 1
             maxHeapSize = "1596m"
             testLogging {
                 events 'passed', 'skipped', 'failed'
