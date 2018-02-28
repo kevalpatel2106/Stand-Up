@@ -18,6 +18,7 @@
 package com.standup.app.splash
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -27,6 +28,7 @@ import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.standup.app.authentication.AuthenticationModule
 import com.standup.app.main.MainActivity
 import com.standup.app.profile.ProfileModule
+import com.standup.core.Core
 import javax.inject.Inject
 
 /**
@@ -37,7 +39,6 @@ import javax.inject.Inject
  */
 class SplashActivity : BaseActivity() {
 
-    @Inject
     internal lateinit var model: SplashViewModel
 
     @Inject
@@ -45,6 +46,9 @@ class SplashActivity : BaseActivity() {
 
     @Inject
     lateinit var authenticationModule: AuthenticationModule
+
+    @Inject
+    lateinit var core: Core
 
     companion object {
 
@@ -79,11 +83,15 @@ class SplashActivity : BaseActivity() {
         setModel()
 
         model.initiateFlow()
-        model.setUpCore()
+
+        //Set core
+        core.refresh()
+        Core.forceSync()
     }
 
 
     private fun setModel() {
+        model = ViewModelProviders.of(this@SplashActivity).get(SplashViewModel::class.java)
         model.openIntro.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {

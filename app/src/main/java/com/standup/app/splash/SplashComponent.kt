@@ -32,4 +32,6 @@ import dagger.Component
 internal interface SplashComponent {
 
     fun inject(splashActivity: SplashActivity)
+
+    fun inject(splashViewModel: SplashViewModel)
 }
