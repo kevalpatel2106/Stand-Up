@@ -17,12 +17,14 @@
 
 package com.kevalpatel2106.network
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import org.apache.commons.codec.binary.Base64
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -210,13 +212,17 @@ internal class NWInterceptor(private val context: Context?,
         return response1
     }
 
-    /**
+    @SuppressLint("BinaryOperationInTimber")
+            /**
      * Adds the auth header if the username and passwords are provided for the authentication and
      * there is no "No-Authorization" header.
      */
     fun addAuthHeader(request: Request): Request {
         var request1 = request
         if (request1.header("Add-Auth") != null && userId != null && token != null) {
+
+            Timber.i("Authorization: Basic " + String(
+                    Base64.encodeBase64((userId + ":" + token).toByteArray())))
             request1 = request1
                     .newBuilder()
                     .header("Authorization", "Basic " + String(

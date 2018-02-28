@@ -38,6 +38,7 @@
   <component name="SuppressABINotification">
     <option name="modulesWithSuppressedNotConfigured">
       <set>
+        <option value="core" />
         <option value="timeline-view" />
         <option value="utils" />
       </set>

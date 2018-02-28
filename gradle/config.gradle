@@ -26,8 +26,8 @@ ext {
 
     versionConfig = [
             versionMajor: 0,
-            versionMinor: 1,
-            versionCode : 1
+            versionMinor: 2,
+            versionCode : 2
     ]
 
     proguardConfig = [

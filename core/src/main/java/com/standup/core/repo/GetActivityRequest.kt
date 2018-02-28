@@ -28,7 +28,7 @@ import com.google.gson.annotations.SerializedName
 @Suppress("MemberVisibilityCanBePrivate")
 data class GetActivityRequest(
 
-        @SerializedName("id")
+        @SerializedName("oldestTime")
         @Expose
         val oldestTimeStamp: Long
 )

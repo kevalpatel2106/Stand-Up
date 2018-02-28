@@ -232,7 +232,7 @@ internal class SyncJob : AsyncJob {
 
             //Add the new value to database.
             coreRepo.sendPendingActivitiesToServer()
-                    .concatWith(coreRepo.getActivitiesToServer())
+//                    .concatWith(coreRepo.getActivitiesToServer())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe {
