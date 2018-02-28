@@ -22,6 +22,7 @@ import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
 import com.standup.app.settings.dailyReview.DailyReviewSettingsViewModel
 import com.standup.app.settings.dnd.DndSettingsViewModel
+import com.standup.app.settings.list.SettingsListActivity
 import com.standup.app.settings.list.SettingsViewModel
 import com.standup.app.settings.notifications.NotificationSettingsFragment
 import com.standup.app.settings.notifications.NotificationsSettingsViewModel
@@ -54,4 +55,6 @@ internal interface SettingsComponent {
     fun inject(dailyReviewSettingsViewModel: DailyReviewSettingsViewModel)
 
     fun inject(dndSettingsViewModel: DndSettingsViewModel)
+
+    fun inject(settingsListActivity: SettingsListActivity)
 }

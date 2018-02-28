@@ -174,6 +174,46 @@ class DailyActivitySummaryTest {
 
     @Test
     @Throws(IOException::class)
+    fun checkForTotalDuration_PastDate() {
+        try {
+            val summary = DailyActivitySummary(dayOfMonth = 1,
+                    monthOfYear = 11,
+                    year = 2017,
+                    dayActivity = getMockUserActivityList())
+
+            Assert.assertEquals(TimeUtils.ONE_DAY_MILLISECONDS, summary.totalDuration)
+        } catch (e: Exception) {
+            Assert.fail(e.message)
+        }
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkForTotalDuration_Today() {
+        try {
+            val timeMills = System.currentTimeMillis()
+
+            val userActivities = ArrayList<UserActivity>(1)
+            userActivities.add(UserActivity(eventStartTimeMills = timeMills,
+                    eventEndTimeMills = timeMills - 60000,
+                    isSynced = true,
+                    type = UserActivityType.MOVING.name.toLowerCase()))
+
+            val nowCal = Calendar.getInstance()
+            val summary = DailyActivitySummary(dayOfMonth = nowCal.get(Calendar.DAY_OF_MONTH),
+                    monthOfYear = nowCal.get(Calendar.MONTH),
+                    year = nowCal.get(Calendar.YEAR),
+                    dayActivity = userActivities)
+
+            Assert.assertEquals(TimeUtils.getMilliSecFrom12AM(timeMills), summary.totalDuration)
+        } catch (e: IllegalArgumentException) {
+            //Test passed.
+            //NO OP
+        }
+    }
+
+    @Test
+    @Throws(IOException::class)
     fun checkDurationForToday() {
         try {
             val nowCal = Calendar.getInstance()

@@ -17,70 +17,48 @@
 
 package com.standup.app.settings.list
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
-import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
-import com.kevalpatel2106.utils.alert
-import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.standup.app.settings.R
-import com.standup.app.settings.SettingsHook
 import com.standup.app.settings.dailyReview.DailyReviewSettingsDetailActivity
 import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
-import com.standup.app.settings.di.DaggerSettingsComponent
 import com.standup.app.settings.dnd.DndSettingsDetailActivity
 import com.standup.app.settings.dnd.DndSettingsFragment
 import com.standup.app.settings.notifications.NotificationSettingsDetailActivity
 import com.standup.app.settings.notifications.NotificationSettingsFragment
 import com.standup.app.settings.syncing.SyncSettingsDetailActivity
 import com.standup.app.settings.syncing.SyncSettingsFragment
-import javax.inject.Inject
 
 /**
  * Created by Keval on 11/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class SettingsViewModel : BaseViewModel {
+@SuppressLint("VisibleForTests")
+internal class SettingsViewModel : BaseViewModel() {
 
     internal var detailFragment = MutableLiveData<Fragment>()
 
-    internal var logoutInProgress = MutableLiveData<Boolean>()
+    internal var showLogoutConformation = MutableLiveData<Boolean>()
 
     internal var settingsItems = MutableLiveData<ArrayList<SettingsItem>>()
 
-    internal var isTwoPane = false
-
-    @Suppress("unused")
-    constructor() {
-        DaggerSettingsComponent.builder()
-                .appComponent(BaseApplication.getApplicationComponent())
-                .build()
-                .inject(this@SettingsViewModel)
-
-        init()
-    }
-
-    @VisibleForTesting
-    @OnlyForTesting
-    constructor(settingsHook: SettingsHook) {
-        this.settingsHook = settingsHook
-    }
-
-    @Inject
-    lateinit var settingsHook: SettingsHook
-
-    fun init() {
+    init {
         settingsItems.value = ArrayList()
-        logoutInProgress.value = false
+        showLogoutConformation.value = false
 
         prepareSettingsList()
     }
 
-    private fun prepareSettingsList() {
+    @VisibleForTesting
+    internal fun prepareSettingsList() {
         settingsItems.value?.let {
+            it.clear()
+
             //Add sync
             it.add(SettingsItem(SettingsId.SYNC, "Sync", R.drawable.ic_sync))
 
@@ -101,7 +79,7 @@ internal class SettingsViewModel : BaseViewModel {
         }
     }
 
-    fun onSettingsClicked(context: Context, settingsItem: SettingsItem) {
+    fun onSettingsClicked(context: Context, settingsItem: SettingsItem, isTwoPane: Boolean) {
         when (settingsItem.id) {
             SettingsId.SYNC -> {
                 if (isTwoPane) {
@@ -132,18 +110,7 @@ internal class SettingsViewModel : BaseViewModel {
                 }
             }
             SettingsId.LOGOUT -> {
-                context.alert(
-                        messageResource = R.string.sign_out_warning_message,
-                        titleResource = R.string.sign_out_warning_title,
-                        func = {
-                            positiveButton(R.string.sign_out_warning_positive_btn_title, {
-                                logoutInProgress.value = true
-
-                                settingsHook.logout()
-                            })
-                            negativeButton(android.R.string.cancel, { /* NO OP */ })
-                        }
-                )
+                showLogoutConformation.value = true
                 return
             }
         }
