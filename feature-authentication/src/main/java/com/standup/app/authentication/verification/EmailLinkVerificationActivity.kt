@@ -22,20 +22,16 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.VisibleForTesting
 import android.view.View
-import android.widget.Toast
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.misc.LottieJson
 import com.kevalpatel2106.common.misc.playAnotherAnimation
 import com.kevalpatel2106.common.misc.playRepeatAnimation
-import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.annotations.UIController
 import com.standup.app.authentication.AuthenticationHook
 import com.standup.app.authentication.R
@@ -143,25 +139,12 @@ class EmailLinkVerificationActivity : BaseActivity() {
          * Launch the [EmailLinkVerificationActivity].
          *
          * @param context Instance of the caller.
-         * @param url [Uri] received in the deep link
+         * @param url Url received in the verification email
          * @return True if the activity opened.
          */
-        internal fun launch(context: Context, url: Uri): Boolean {
-
-            //Validate the url
-            if (url.pathSegments.size != 3) {
-                Toast.makeText(context, R.string.error_invalid_verification_link, Toast.LENGTH_LONG).show()
-                return false
-            }
-
-            //Check if the user is verified
-            if (UserSessionManager(SharedPrefsProvider(context)).isUserVerified) {
-                Toast.makeText(context, R.string.error_user_already_verified, Toast.LENGTH_LONG).show()
-                return false
-            }
-
+        internal fun launch(context: Context, url: String): Boolean {
             val launchIntent = Intent(context, EmailLinkVerificationActivity::class.java)
-            launchIntent.putExtra(ARG_URL, url.toString())
+            launchIntent.putExtra(ARG_URL, url)
             context.startActivity(launchIntent)
             return true
         }

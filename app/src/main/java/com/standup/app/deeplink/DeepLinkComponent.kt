@@ -33,4 +33,6 @@ internal interface DeepLinkComponent {
 
     fun inject(deepLinkActivity: DeepLinkActivity)
 
+    fun inject(deepLinkViewModel: DeepLinkViewModel)
+
 }

@@ -18,13 +18,13 @@
 package com.standup.app.deeplink
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
-import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.standup.app.BuildConfig
-import com.standup.app.R
+import com.kevalpatel2106.common.base.uiController.showToast
 import com.standup.app.authentication.AuthenticationModule
 import com.standup.app.splash.SplashActivity
 import dagger.Lazy
@@ -40,8 +40,7 @@ class DeepLinkActivity : BaseActivity() {
     @Inject
     internal lateinit var authenticationModule: Lazy<AuthenticationModule>
 
-    @Inject
-    internal lateinit var userSessionManager: UserSessionManager
+    internal lateinit var model: DeepLinkViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,50 +50,60 @@ class DeepLinkActivity : BaseActivity() {
                 .build()
                 .inject(this@DeepLinkActivity)
 
+        setViewModel()
         onNewIntent(intent)
     }
 
-    @SuppressLint("VisibleForTests")
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
+    private fun setViewModel() {
+        model = ViewModelProviders.of(this@DeepLinkActivity).get(DeepLinkViewModel::class.java)
 
-        //Check if the user is logged in?
-        if (!userSessionManager.isUserLoggedIn) {
-            startActivity(SplashActivity.getLaunchIntent(this@DeepLinkActivity))
-            return
-        }
+        model.errorMessage.observe(this@DeepLinkActivity, Observer {
+            it?.let { showToast(it.getMessage(this@DeepLinkActivity)!!) }
+        })
 
-        val uri = intent.data
-
-        when {
-            uri.toString() == getString(R.string.invitation_deep_link) -> {
+        model.fromInvitationLink.observe(this@DeepLinkActivity, Observer {
+            it?.let {
+                if (!it) return@let
 
                 //Firebase app invite link
                 //Open the splash
                 startActivity(SplashActivity.getLaunchIntent(this@DeepLinkActivity))
                 finish()
             }
-            uri.toString().startsWith(prefix = BuildConfig.BASE_URL, ignoreCase = false) -> {
-                //This link is from our servers only
-                when (uri.pathSegments[0]) {
-                    "verifyEmailLink" -> {  //Verify the email link
-                        authenticationModule.get()
-                                .verifyEmailLink(context = this@DeepLinkActivity, verificationLink = uri)
-                    }
-                    "forgotPasswordLink" -> { //The password reset link
-                        openLink(uri.toString())
-                    }
-                    else -> {
-                        openLink(uri.toString())
-                    }
-                }
+        })
+
+        model.verifyEmailLink.observe(this@DeepLinkActivity, Observer<String> {
+            it?.let {
+                authenticationModule.get().verifyEmailLink(this@DeepLinkActivity, it)
+                finish()
             }
-            else -> {
-                //Don't know what's the link for
-                openLink(intent.data.toString())
+        })
+
+        model.forgotPasswordLink.observe(this@DeepLinkActivity, Observer<String> {
+            it?.let {
+                openLink(it)
+                finish()
             }
+        })
+
+        model.otherLink.observe(this@DeepLinkActivity, Observer<String> {
+            it?.let {
+                openLink(it)
+                finish()
+            }
+        })
+    }
+
+    @SuppressLint("VisibleForTests")
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        //Check if the user is logged in?
+        if (!model.checkIfDeepLinkAllowed()) {
+            startActivity(SplashActivity.getLaunchIntent(this@DeepLinkActivity))
+            return
         }
-        finish()
+
+        model.processIncomingLink(this@DeepLinkActivity, intent.data.toString())
     }
 
     private fun openLink(linkToOpen: String) {

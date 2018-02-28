@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.common
 
+import java.net.URL
 import java.util.regex.Pattern
 
 /**
@@ -117,4 +118,10 @@ object Validator {
     fun isValidYear(year: Int) = year in 1900..2100
 
     fun isValidVersionCode(versionCode: Int) = versionCode > 0
+
+    fun isValidVerificationLink(url: String) = url.isNotEmpty()
+            && URL(url)                                 //https://raspberry-pi-home-169503.appspot.com/verifyEmailLink/756732562934569238465/53f85f43-7cab-449d-9ee2-6691adf6b208
+            .path                                           // /verifyEmailLink/756732562934569238465/53f85f43-7cab-449d-9ee2-6691adf6b208
+            .replaceFirst("/", "")         // verifyEmailLink/756732562934569238465/53f85f43-7cab-449d-9ee2-6691adf6b208
+            .split("/").size == 3
 }

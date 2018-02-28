@@ -18,7 +18,6 @@
 package com.standup.app.authentication
 
 import android.content.Context
-import android.net.Uri
 import com.standup.app.authentication.deviceReg.DeviceRegisterActivity
 import com.standup.app.authentication.deviceReg.RegisterDeviceService
 import com.standup.app.authentication.intro.IntroActivity
@@ -56,7 +55,7 @@ object AuthenticationModule {
         VerifyEmailActivity.launch(context)
     }
 
-    fun verifyEmailLink(context: Context, verificationLink: Uri) {
+    fun verifyEmailLink(context: Context, verificationLink: String) {
         EmailLinkVerificationActivity.launch(context, verificationLink)
     }
 

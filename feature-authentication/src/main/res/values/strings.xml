@@ -59,10 +59,8 @@
     <string name="device_reg_error_invalid_device_id">Invalid device id.</string>
     <string name="device_reg_error_invalid_fcm_id">Invalid id.</string>
     <string name="message_resending_verification_email">Resending the verification email…</string>
-    <string name="error_user_already_verified">User already verified.</string>
     <string name="set_up_complete">Setup complete.</string>
     <string name="set_up_failed">Setup failed.</string>
     <string name="error_login_invalid_name">Enter valid name.</string>
-    <string name="error_invalid_verification_link">Invalid verification link.</string>
 
 </resources>
