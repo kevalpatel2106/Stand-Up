@@ -34,6 +34,6 @@ internal class SettingsModule {
     @Provides
     @ApplicationScope
     fun provideSettingHook(): SettingsHook {
-        return SettingsModule.settingsHook
+        return SettingsModule.settingsHook!!
     }
 }

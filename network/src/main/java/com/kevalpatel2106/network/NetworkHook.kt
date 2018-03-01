@@ -15,22 +15,18 @@
  *
  */
 
-package com.standup.app.features
+package com.kevalpatel2106.network
 
-import android.app.Application
-import com.standup.app.authentication.AuthenticationModule
-import com.standup.app.profile.ProfileModule
-import com.standup.app.settings.SettingsModule
-import com.standup.core.Core
+import android.content.Context
 
 /**
- * Created by Kevalpatel2106 on 20-Feb-18.
+ * Created by Kevalpatel2106 on 01-Mar-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal fun Application.initFeatures() {
-    SettingsModule.init(SettingsHookImpl())
-    ProfileModule.init(ProfileHookImpl())
-    AuthenticationModule.init(AuthenticationHookImpl())
-    Core.init(CoreHookImpl())
+interface NetworkHook {
+
+    fun onAuthenticationFailed()
+
+    fun getContext(): Context
 }

@@ -24,7 +24,7 @@ import android.content.Context
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object AboutModule {
+class AboutModule {
 
     fun openAbout(context: Context) {
         AboutActivity.launch(context)

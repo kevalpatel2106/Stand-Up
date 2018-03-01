@@ -48,6 +48,9 @@ class SplashActivity : BaseActivity() {
     lateinit var authenticationModule: AuthenticationModule
 
     @Inject
+    lateinit var profileModule: ProfileModule
+
+    @Inject
     lateinit var core: Core
 
     companion object {
@@ -124,7 +127,7 @@ class SplashActivity : BaseActivity() {
         model.openProfile.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {
-                    ProfileModule.openProfile(this@SplashActivity, userSessionManager)
+                    profileModule.openProfile(this@SplashActivity, userSessionManager)
                     finish()
                 }
             }

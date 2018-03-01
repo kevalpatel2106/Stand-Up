@@ -104,15 +104,14 @@ dependencies {
     implementation project(':feature-settings')
     implementation project(':feature-stats')
     implementation project(':utils')
+    implementation project(':network')
     implementation project(':core')
     implementation project(':progress-button')
     implementation project(':timeline-view')
 
     //Test dependency
     testImplementation project(':test-utils')
-    testImplementation project(':network')
     androidTestImplementation project(':test-utils')
-    testImplementation(otherLib.roboElectric, excludeGrp)
 
     ide.each { add("implementation", it) }
     rxLib.each { add("implementation", it) }
@@ -123,13 +122,11 @@ dependencies {
     //Support
     implementation supportLib.appCompat
     implementation supportLib.supportv4
-    implementation(supportLib.cardView, excludeGrp)
     implementation supportLib.multidex
     implementation supportLib.design
 
     //Arch component
     implementation archComponent.lifecycle
-    kapt archComponent.lifecycleAnotations
 
     //Firebase
     implementation(firebaseLib.preformance, excludeGrp)

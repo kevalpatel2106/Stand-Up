@@ -18,7 +18,7 @@
 package com.standup.app.authentication.forgotPwd
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.network.NetworkApi
+import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.standup.app.authentication.R
@@ -56,7 +56,7 @@ class ForgotPasswordViewModelTest {
         //Set the repo
         mockServerManager.startMockWebServer()
         forgotPasswordViewModel = ForgotPasswordViewModel(
-                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()))
+                UserAuthRepositoryImpl(NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()))
         )
     }
 

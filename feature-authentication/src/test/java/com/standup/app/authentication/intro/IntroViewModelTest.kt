@@ -21,7 +21,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.facebookauth.FacebookUser
 import com.kevalpatel2106.googleauth.GoogleAuthUser
-import com.kevalpatel2106.network.NetworkApi
+import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -68,7 +68,7 @@ class IntroViewModelTest {
         //Set the repo
         mockServerManager.startMockWebServer()
         introViewModel = IntroViewModel(
-                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
+                UserAuthRepositoryImpl(NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())),
                 userSessionManager
         )
     }

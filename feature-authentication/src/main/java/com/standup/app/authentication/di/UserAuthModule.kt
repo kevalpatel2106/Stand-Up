@@ -43,5 +43,5 @@ internal class UserAuthModule {
 
     @Provides
     @ApplicationScope
-    fun provideAuthenticationHook(): AuthenticationHook = AuthenticationModule.authenticationHook
+    fun provideAuthenticationHook(): AuthenticationHook = AuthenticationModule.authenticationHook!!
 }

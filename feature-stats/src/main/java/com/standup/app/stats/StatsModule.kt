@@ -22,7 +22,7 @@ package com.standup.app.stats
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object StatsModule {
+class StatsModule {
 
     fun getStatsFragment(): StatsFragment {
         return StatsFragment.getNewInstance()

@@ -23,7 +23,7 @@ import android.content.SharedPreferences
 import com.kevalpatel2106.common.AppConfig
 import com.kevalpatel2106.common.Validator
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkApi
+import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -75,7 +75,7 @@ class EditProfileModelTest {
         mockServerManager.startMockWebServer()
         editProfileModel = EditProfileModel(
                 UserProfileRepoImpl(
-                        NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
+                        NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),
                         UserSessionManager(SharedPrefsProvider(sharedPrefs))
                 ),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))

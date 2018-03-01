@@ -39,7 +39,14 @@ object TimeUtils {
     fun getMilliSecFrom12AM(unixMills: Long): Long {
         if (unixMills <= 0)
             throw IllegalArgumentException("Invalid unix time: ".plus(unixMills))
-        return unixMills % ONE_DAY_MILLISECONDS
+
+        val today12AmCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        today12AmCal.timeInMillis = unixMills
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
+        today12AmCal.set(Calendar.MINUTE, 0)
+        today12AmCal.set(Calendar.SECOND, 0)
+        today12AmCal.set(Calendar.MILLISECOND, 0)
+        return unixMills - today12AmCal.timeInMillis
     }
 
     fun getMilliSecFrom12AM(hourOfTheDay: Int, minutes: Int): Long {

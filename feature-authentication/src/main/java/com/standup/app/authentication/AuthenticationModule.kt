@@ -31,12 +31,14 @@ import com.standup.app.authentication.verification.VerifyEmailActivity
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object AuthenticationModule {
+class AuthenticationModule(hook: AuthenticationHook) {
 
-    internal lateinit var authenticationHook: AuthenticationHook
+    companion object {
+        internal var authenticationHook: AuthenticationHook? = null
+    }
 
-    fun init(authenticationHook: AuthenticationHook) {
-        this.authenticationHook = authenticationHook
+    init {
+        authenticationHook = hook
     }
 
     fun openIntroScreen(context: Context, isNewTask: Boolean = false) {

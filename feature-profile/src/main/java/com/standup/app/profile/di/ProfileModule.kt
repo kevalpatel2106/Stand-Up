@@ -44,5 +44,5 @@ internal class ProfileModule {
 
     @Provides
     @ApplicationScope
-    fun provideProfileHook(): ProfileHook = ProfileModule.profileHook
+    fun provideProfileHook(): ProfileHook = ProfileModule.profileHook!!
 }

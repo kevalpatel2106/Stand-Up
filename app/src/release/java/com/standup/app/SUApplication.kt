@@ -28,7 +28,6 @@ import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.app.BuildConfig
-import com.standup.app.features.initFeatures
 import com.standup.core.Core
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
@@ -72,8 +71,6 @@ class SUApplication : BaseApplication() {
         val prefProvider = SharedPrefsProvider(this@SUApplication)
         Core(UserSessionManager(prefProvider), UserSettingsManager(prefProvider), prefProvider)
                 .turnOn(this@SUApplication)
-
-        initFeatures()
     }
 
 }

@@ -25,12 +25,14 @@ import com.kevalpatel2106.common.prefs.UserSessionManager
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object ProfileModule {
+class ProfileModule(hook: ProfileHook) {
 
-    internal lateinit var profileHook: ProfileHook
+    companion object {
+        internal var profileHook: ProfileHook? = null
+    }
 
-    fun init(profileHook: ProfileHook) {
-        this.profileHook = profileHook
+    init {
+        profileHook = hook
     }
 
     fun openProfile(context: Context, userSessionManager: UserSessionManager): Boolean {

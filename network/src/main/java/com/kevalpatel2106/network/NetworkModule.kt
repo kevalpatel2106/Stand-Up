@@ -17,7 +17,6 @@
 
 package com.kevalpatel2106.network
 
-import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -33,15 +32,16 @@ import java.util.concurrent.TimeUnit
  *
  * @author 'https://github.com/kevalpatel2106'
  */
-class NetworkApi(context: Context? = null,
-                 private val userId: String? = null,
-                 private val token: String? = null) {
+class NetworkModule(private val userId: String? = null,
+                    private val token: String? = null) {
 
-    /**
-     * Constructor with zero params. This will ignore all user authentication and won't broadcast for
-     * unauthorized access.
-     */
-    constructor() : this(null, null)
+    companion object {
+        private var networkHook: NetworkHook? = null
+
+        fun init(networkHook: NetworkHook) {
+            this.networkHook = networkHook
+        }
+    }
 
     /**
      * OkHttp instance. New instances will be shallow copy of this instance.
@@ -57,7 +57,7 @@ class NetworkApi(context: Context? = null,
             .setLenient()
             .create()
 
-    internal fun getOkHttpClient(context: Context?): OkHttpClient {
+    internal fun getOkHttpClient(networkHook: NetworkHook?): OkHttpClient {
         val httpClientBuilder = OkHttpClient.Builder()
                 .readTimeout(NetworkConfig.READ_TIMEOUT, TimeUnit.MINUTES)
                 .writeTimeout(NetworkConfig.WRITE_TIMEOUT, TimeUnit.MINUTES)
@@ -72,20 +72,20 @@ class NetworkApi(context: Context? = null,
                     .addInterceptor(loggingInterceptor)
         }
 
-        return if (context == null) {
+        return if (networkHook == null) {
             httpClientBuilder
                     .addInterceptor(NWInterceptor(null, userId, token))  /* Add the interceptor. */
                     .build()
         } else {
             httpClientBuilder
-                    .cache(NWInterceptor.getCache(context)) /* Add caching */
-                    .addInterceptor(NWInterceptor(context, userId, token))  /* Add the interceptor. */
+                    .cache(NWInterceptor.getCache(networkHook.getContext())) /* Add caching */
+                    .addInterceptor(NWInterceptor(networkHook, userId, token))  /* Add the interceptor. */
                     .build()
         }
     }
 
     init {
-        okHttpClient = getOkHttpClient(context)
+        okHttpClient = getOkHttpClient(networkHook)
     }
 
     /**
@@ -98,6 +98,4 @@ class NetworkApi(context: Context? = null,
             .client(okHttpClient)
             .addConverterFactory(NWResponseConverter.create(sGson))
             .build()
-
-
 }
