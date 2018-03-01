@@ -25,6 +25,13 @@ package com.kevalpatel2106.utils.annotations
  *
  * @author "https://github.com/kevalpatel2106"
  */
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.PROPERTY)
+@Target(
+        AnnotationTarget.CLASS,
+        AnnotationTarget.FUNCTION,
+        AnnotationTarget.TYPE_PARAMETER,
+        AnnotationTarget.VALUE_PARAMETER,
+        AnnotationTarget.CONSTRUCTOR,
+        AnnotationTarget.PROPERTY
+)
 @Retention(AnnotationRetention.SOURCE)
 annotation class OnlyForTesting
