@@ -29,12 +29,18 @@
     android:paddingTop="@dimen/md_activity_vertical_margin"
     tools:background="?attr/colorPrimaryDark">
 
+    <com.kevalpatel2106.common.view.BaseButton
+        android:id="@+id/btn_login_fb_signin"
+        style="@style/FbSignInBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        app:spinning_bar_color="@color/colorAccent"/>
+
     <!--Sign in with Google button-->
     <com.kevalpatel2106.common.view.BaseButton
         android:id="@+id/btn_login_google_signin"
         style="@style/GoogleSignInBtn"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+        android:layout_above="@id/btn_login_fb_signin"
         android:text="@string/sign_in_with_google"
         app:spinning_bar_color="?attr/colorPrimary" />
 
