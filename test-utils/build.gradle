@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -53,12 +53,24 @@ tasks.withType(Test) {
 }
 
 dependencies {
-    testLib.each { add(it.configuration, it.dependency) }
+
+    api Deps.junit
+    api Deps.testRule
+    api Deps.archTesting
+    api Deps.testRunner
+    api Deps.espressoCore
+    api Deps.espressoIntents
+    api Deps.espressoContrib
+    api Deps.espressoIdlingResource
+    api Deps.uiAutomator
+    api Deps.mockWebServer
+    api Deps.mockito
+
     ide.each { add("implementation", it) }
     rxLib.each { add("implementation", it) }
     debugLibs.each { add(it.configuration, it.dependency) }
 
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation supportLib.design
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation Deps.design
 }

@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -63,10 +63,10 @@ dependencies {
     dagger.each { add(it.configuration, it.dependency) }
 
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation supportLib.design
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation Deps.design
 
     //Room & Arch components
-    implementation archComponent.lifecycle
+    implementation Deps.lifecycle
 }

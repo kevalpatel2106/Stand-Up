@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -51,11 +51,11 @@ dependencies {
     //Test dependency
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
-    testImplementation(otherLib.roboElectric, excludeGrp)
+    testImplementation(Deps.roboElectric, excludeGrp)
 
     ide.each { add("implementation", it) }
     debugLibs.each { add(it.configuration, it.dependency) }
 
     //Support lib
-    debugImplementation supportLib.appCompat
+    debugImplementation Deps.appCompat
 }

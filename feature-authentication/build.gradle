@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -74,22 +74,18 @@ dependencies {
     debugLibs.each { add(it.configuration, it.dependency) }
     dagger.each { add(it.configuration, it.dependency) }
 
-    //Butter knife
-    implementation(butterKnifeLib.butterKnife, excludeGrp)
-    kapt(butterKnifeLib.annotationProcessor, excludeGrp)
-
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation supportLib.design
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation Deps.design
 
     //Room & Arch components
-    implementation archComponent.lifecycle
+    implementation Deps.lifecycle
 
-    implementation retrofitLib.retrofit
-    implementation(otherLib.gson, excludeGrp)
+    implementation Deps.retrofit
+    implementation(Deps.gson, excludeGrp)
 
-    implementation(firebaseLib.core, excludeGrp)
-    implementation(firebaseLib.fcm, excludeGrp)
-    implementation(otherLib.lottie, excludeGrp)
+    implementation(Deps.firebaseCore, excludeGrp)
+    implementation(Deps.fcm, excludeGrp)
+    implementation(Deps.lottie, excludeGrp)
 }

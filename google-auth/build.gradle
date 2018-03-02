@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 
 android {
@@ -49,13 +49,13 @@ dependencies {
     //Test dependency
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
-    testImplementation(otherLib.roboElectric, excludeGrp)
+    testImplementation(Deps.roboElectric, excludeGrp)
 
     ide.each { add("implementation", it) }
     debugLibs.each { add(it.configuration, it.dependency) }
 
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
+    implementation Deps.appCompat
+    implementation Deps.supportv4
 
     api(playServiceLib.auth, excludeGrp)
 }

@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -63,15 +63,15 @@ dependencies {
     dagger.each { add(it.configuration, it.dependency) }
 
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation supportLib.recyclerView
-    implementation supportLib.design
-    implementation(supportLib.cardView, excludeGrp)
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation Deps.recyclerView
+    implementation Deps.design
+    implementation(Deps.cardView, excludeGrp)
 
     //Room & Arch components
-    implementation archComponent.lifecycle
+    implementation Deps.lifecycle
 
-    implementation retrofitLib.retrofit
-    implementation(otherLib.chartLayout, excludeGrp)
+    implementation Deps.retrofit
+    implementation(Deps.chartLayout, excludeGrp)
 }

@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -56,34 +56,30 @@ dependencies {
     implementation project(':timeline-view')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
-    testImplementation(otherLib.roboElectric, excludeGrp)
+    testImplementation(Deps.roboElectric, excludeGrp)
 
     ide.each { add("implementation", it) }
     rxLib.each { add("implementation", it) }
     debugLibs.each { add(it.configuration, it.dependency) }
     dagger.each { add(it.configuration, it.dependency) }
 
-    //Butter knife
-    implementation(butterKnifeLib.butterKnife, excludeGrp)
-    kapt(butterKnifeLib.annotationProcessor, excludeGrp)
-
-    implementation(firebaseLib.core, excludeGrp)
-    implementation(otherLib.bottomsheet, excludeGrp)
+    implementation(Deps.firebaseCore, excludeGrp)
+    implementation(Deps.bottomsheet, excludeGrp)
 
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation(supportLib.recyclerView, excludeGrp)
-    implementation(supportLib.cardView, excludeGrp)
-    implementation supportLib.design
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation(Deps.recyclerView, excludeGrp)
+    implementation(Deps.cardView, excludeGrp)
+    implementation Deps.design
 
     //Room & Arch components
-    implementation archComponent.lifecycle
-    implementation archComponent.roomRx
-    kapt archComponent.roomAnnotation
+    implementation Deps.lifecycle
+    implementation Deps.roomRx
+    kapt Deps.roomAnnotation
 
-    implementation retrofitLib.retrofit
+    implementation Deps.retrofit
 
-    implementation(otherLib.lottie, excludeGrp)
-    implementation(otherLib.chartLayout, excludeGrp)
+    implementation(Deps.lottie, excludeGrp)
+    implementation(Deps.chartLayout, excludeGrp)
 }

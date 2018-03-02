@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -65,16 +65,16 @@ dependencies {
     dagger.each { add(it.configuration, it.dependency) }
 
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation supportLib.design
-    implementation supportLib.prefrance
-    implementation supportLib.prefrancev14
-    implementation supportLib.gridLayout
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation Deps.design
+    implementation Deps.prefrance
+    implementation Deps.prefrancev14
+    implementation Deps.gridLayout
 
     //Room & Arch components
-    implementation archComponent.lifecycle
+    implementation Deps.lifecycle
 
     implementation(kevalpatel2106.ringtonePicker, excludeGrp)
-    implementation(otherLib.bottomsheetPicker, excludeGrp)
+    implementation(Deps.bottomsheetPicker, excludeGrp)
 }

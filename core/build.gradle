@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -57,7 +57,7 @@ dependencies {
     testImplementation project(':test-utils')
     testImplementation project(':network')
     androidTestImplementation project(':test-utils')
-    testImplementation(otherLib.roboElectric, excludeGrp)
+    testImplementation(Deps.roboElectric, excludeGrp)
 
     ide.each { add("implementation", it) }
     rxLib.each { add("implementation", it) }
@@ -65,13 +65,13 @@ dependencies {
     dagger.each { add(it.configuration, it.dependency) }
 
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
+    implementation Deps.appCompat
+    implementation Deps.supportv4
 
     implementation(playServiceLib.location, excludeGrp)
     implementation(playServiceLib.awareness, excludeGrp)
 
-    implementation(otherLib.evernoteJob, excludeGrp)
-    implementation otherLib.gson
-    implementation retrofitLib.retrofit
+    implementation(Deps.evernoteJob, excludeGrp)
+    implementation Deps.gson
+    implementation Deps.retrofit
 }

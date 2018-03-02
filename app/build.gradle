@@ -17,7 +17,7 @@
 
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 //https://stackoverflow.com/a/47050632/4690731
 //apply plugin: 'com.google.firebase.firebase-perf'
 
@@ -120,31 +120,31 @@ dependencies {
     dagger.each { add(it.configuration, it.dependency) }
 
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation supportLib.multidex
-    implementation supportLib.design
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation Deps.multidex
+    implementation Deps.design
 
     //Arch component
-    implementation archComponent.lifecycle
+    implementation Deps.lifecycle
 
     //Firebase
-    implementation(firebaseLib.preformance, excludeGrp)
-    implementation(firebaseLib.core, excludeGrp)
-    implementation(firebaseLib.fcm, excludeGrp)
+    implementation(Deps.firebasePreformance, excludeGrp)
+    implementation(Deps.firebaseCore, excludeGrp)
+    implementation(Deps.fcm, excludeGrp)
 
     //Glide
-    implementation(otherLib.glide, excludeGrp)
-    kapt(otherLib.glideAnnotation, excludeGrp)
+    implementation(Deps.glide, excludeGrp)
+    kapt(Deps.glideAnnotation, excludeGrp)
 
     //Network dependencies
-    implementation retrofitLib.retrofit
-    implementation otherLib.gson
+    implementation Deps.retrofit
+    implementation Deps.gson
 
     //Other libs
-    implementation(otherLib.circleImagView, excludeGrp)
-    implementation(otherLib.iap, excludeGrp)
-    implementation(otherLib.facebook, excludeGrp)
-    releaseImplementation(otherLib.crashalytics) { transitive = true }
+    implementation(Deps.circleImagView, excludeGrp)
+    implementation(Deps.iap, excludeGrp)
+    implementation(Deps.facebook, excludeGrp)
+    releaseImplementation(Deps.crashalytics) { transitive = true }
 }
 apply plugin: 'com.google.gms.google-services'

@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -59,6 +59,6 @@ dependencies {
     rxLib.each { add("implementation", it) }
 
     //Support
-    implementation supportLib.supportv4
-    implementation supportLib.annotations
+    implementation Deps.supportv4
+    implementation Deps.annotations
 }

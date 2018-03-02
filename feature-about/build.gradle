@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
@@ -65,18 +65,18 @@ dependencies {
     dagger.each { add(it.configuration, it.dependency) }
 
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation supportLib.design
-    implementation(supportLib.cardView, excludeGrp)
-    implementation(supportLib.customtabs, excludeGrp)
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation Deps.design
+    implementation(Deps.cardView, excludeGrp)
+    implementation(Deps.customtabs, excludeGrp)
 
     //Room & Arch components
-    implementation archComponent.lifecycle
+    implementation Deps.lifecycle
 
-    implementation retrofitLib.retrofit
-    implementation(otherLib.gson, excludeGrp)
-    implementation(otherLib.aboutlibraries, excludeGrp)
-    implementation(otherLib.openSourceLibraries) { transitive = true }
-    implementation(firebaseLib.invites, excludeGrp)
+    implementation Deps.retrofit
+    implementation(Deps.gson, excludeGrp)
+    implementation(Deps.aboutlibraries, excludeGrp)
+    implementation(Deps.openSourceLibraries) { transitive = true }
+    implementation(Deps.firebaseInvites, excludeGrp)
 }
