@@ -59,10 +59,21 @@ dependencies {
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
-    ide.each { add("implementation", it) }
-    rxLib.each { add("implementation", it) }
-    debugLibs.each { add(it.configuration, it.dependency) }
-    dagger.each { add(it.configuration, it.dependency) }
+    implementation(Deps.kotlinRefflect)
+    implementation(Deps.kotlinStdLib)
+    implementation(Deps.constraintLayout)
+
+    implementation(Deps.rxJava)
+    implementation(Deps.rxAndroid)
+
+    implementation(Deps.timber)
+
+    //Dagger
+    implementation(Deps.daggerAndroid)
+    implementation(Deps.daggerAndroidSupport)
+    kapt(Deps.daggerAnnotations)
+    kapt(Deps.daggerCompiler)
+    compileOnly(Deps.jsr250)
 
     //Support
     implementation Deps.appCompat
@@ -75,6 +86,6 @@ dependencies {
     //Room & Arch components
     implementation Deps.lifecycle
 
-    implementation(kevalpatel2106.ringtonePicker, excludeGrp)
+    implementation(Deps.ringtonePicker, excludeGrp)
     implementation(Deps.bottomsheetPicker, excludeGrp)
 }

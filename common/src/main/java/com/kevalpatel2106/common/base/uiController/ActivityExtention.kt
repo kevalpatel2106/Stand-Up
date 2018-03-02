@@ -23,7 +23,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.kevalpatel2106.utils.ViewUtils
+import com.kevalpatel2106.common.R
+import com.kevalpatel2106.utils.getColorCompat
 
 
 /**
@@ -45,7 +46,7 @@ fun AppCompatActivity.showSnack(message: String,
 
     actionName?.let {
         snackbar.setAction(actionName, actionListener)
-        snackbar.setActionTextColor(ViewUtils.getAccentColor(this))
+        snackbar.setActionTextColor(getColorCompat(R.color.colorAccent))
     }
 
     snackbar.show()
@@ -71,7 +72,7 @@ fun AppCompatActivity.showSnack(@StringRes message: Int,
             message, duration)
     if (actionName > 0) {
         snackbar.setAction(actionName, actionListener)
-        snackbar.setActionTextColor(ViewUtils.getAccentColor(this))
+        snackbar.setActionTextColor(getColorCompat(R.color.colorAccent))
     }
 
     snackbar.show()

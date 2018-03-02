@@ -17,7 +17,6 @@
 
 package com.kevalpatel2106.network
 
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -65,11 +64,11 @@ class NetworkModule(private val userId: String? = null,
 
         //Add debug interceptors
         if (BuildConfig.DEBUG) {
-            val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-
-            httpClientBuilder.addInterceptor(StethoInterceptor())
-                    .addInterceptor(loggingInterceptor)
+            httpClientBuilder.addInterceptor(HttpLoggingInterceptor()
+                    .apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+            )
         }
 
         return if (networkHook == null) {

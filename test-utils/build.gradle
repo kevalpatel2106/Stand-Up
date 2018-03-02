@@ -66,9 +66,13 @@ dependencies {
     api Deps.mockWebServer
     api Deps.mockito
 
-    ide.each { add("implementation", it) }
-    rxLib.each { add("implementation", it) }
-    debugLibs.each { add(it.configuration, it.dependency) }
+    implementation(Deps.kotlinRefflect)
+    implementation(Deps.kotlinStdLib)
+
+    implementation(Deps.rxJava)
+    implementation(Deps.rxAndroid)
+
+    implementation(Deps.timber)
 
     implementation Deps.appCompat
     implementation Deps.supportv4

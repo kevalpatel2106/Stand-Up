@@ -59,17 +59,27 @@ dependencies {
     androidTestImplementation project(':test-utils')
     testImplementation(Deps.roboElectric, excludeGrp)
 
-    ide.each { add("implementation", it) }
-    rxLib.each { add("implementation", it) }
-    debugLibs.each { add(it.configuration, it.dependency) }
-    dagger.each { add(it.configuration, it.dependency) }
+    implementation(Deps.kotlinRefflect)
+    implementation(Deps.kotlinStdLib)
+
+    implementation(Deps.rxJava)
+    implementation(Deps.rxAndroid)
+
+    implementation(Deps.timber)
+
+    //Dagger
+    implementation(Deps.daggerAndroid)
+    implementation(Deps.daggerAndroidSupport)
+    kapt(Deps.daggerAnnotations)
+    kapt(Deps.daggerCompiler)
+    compileOnly(Deps.jsr250)
 
     //Support
     implementation Deps.appCompat
     implementation Deps.supportv4
 
-    implementation(playServiceLib.location, excludeGrp)
-    implementation(playServiceLib.awareness, excludeGrp)
+    implementation(Deps.location, excludeGrp)
+    implementation(Deps.awareness, excludeGrp)
 
     implementation(Deps.evernoteJob, excludeGrp)
     implementation Deps.gson

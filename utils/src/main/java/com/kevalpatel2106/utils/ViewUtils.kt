@@ -18,8 +18,6 @@
 package com.kevalpatel2106.utils
 
 import android.content.Context
-import android.graphics.Color
-import android.support.annotation.ColorInt
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -33,14 +31,6 @@ import android.view.inputmethod.InputMethodManager
  */
 
 object ViewUtils {
-
-
-    @ColorInt
-    fun getAccentColor(context: Context): Int = getColorAttr(context, R.attr.colorAccent)
-
-    @ColorInt
-    fun getPrimaryColor(context: Context): Int = getColorAttr(context, R.attr.colorPrimary)
-
 
     @JvmStatic
     fun toPx(context: Context, dp: Int): Int = TypedValue
@@ -64,16 +54,5 @@ object ViewUtils {
             inputManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
-
-    @JvmStatic
-    @ColorInt
-    private fun getColorAttr(context: Context, attr: Int): Int {
-        val theme = context.theme
-        val typedArray = theme.obtainStyledAttributes(intArrayOf(attr))
-        val color = typedArray.getColor(0, Color.LTGRAY)
-        typedArray.recycle()
-        return color
-    }
-
 }
 

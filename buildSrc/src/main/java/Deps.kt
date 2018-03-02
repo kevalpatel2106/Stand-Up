@@ -16,6 +16,23 @@
  */
 
 /*
+ *  Copyright 2018 Keval Patel.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
+
+/*
  *  Copyright 2018 Keconst val Patel.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,18 +110,21 @@ object Deps {
     //Firebase
     const val firebaseCore = "com.google.firebase:firebase-core:${Versions.playService}"
     const val fcm = "com.google.firebase:firebase-messaging:${Versions.playService}"
-    const val firebaseAuth = "com.google.firebase:firebase-auth:${Versions.playService}"
     const val firebasePreformance = "com.google.firebase:firebase-perf:${Versions.playService}"
     const val remoteConfig = "com.google.firebase:firebase-config:${Versions.playService}"
     const val firebaseInvites = "com.google.firebase:firebase-invites:${Versions.playService}"
 
+    //Play service
+    const val googleAuth = "com.google.android.gms:play-services-auth:${Versions.playService}"
+    const val location = "com.google.android.gms:play-services-location:${Versions.playService}"
+    const val awareness = "com.google.android.gms:play-services-awareness:${Versions.playService}"
 
     //Other libs
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
     const val glideAnnotation = "com.github.bumptech.glide:compiler:${Versions.glide}"
     const val circleImagView = "de.hdodenhof:circleimageview:2.2.0"
-    const val facebook = "com.facebook.android:facebook-android-sdk:4.30.0"
+    const val facebook = "com.facebook.android:facebook-android-sdk:${Versions.facebook}"
     const val bottomsheet = "com.cocosw:bottomsheet:1.3.1"
     const val commonsCodec = "commons-codec:commons-codec:1.11"
     const val crashalytics = "com.crashlytics.sdk.android:crashlytics:2.9.0@aar"
@@ -116,10 +136,31 @@ object Deps {
     const val lottie = "com.airbnb.android:lottie:2.5.0-rc1"
     const val iap = "com.android.billingclient:billing:1.0"
     const val bottomsheetPicker = "com.philliphsu:bottomsheetpickers:2.4.1"
+    const val ringtonePicker = "com.kevalpatel2106:ringtonepicker:1.1"
+    const val constraintLayout = "com.android.support.constraint:constraint-layout:${Versions.constrainLayout}"
+
+    //Kotlin libs
+    const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
+    const val kotlinRefflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
 
     //Retrofit + OkHttp
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     const val retrofitGsonPlugin = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
     const val httpLogger = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttp}"
 
+    //RxJava
+    const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
+    const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
+
+    //Libs for debug puropose
+    const val debugDb = "com.amitshekhar.android:debug-db:1.0.3"
+    const val timber = "com.jakewharton.timber:timber:4.6.1"
+    const val leakCanary = "com.squareup.leakcanary:leakcanary-android:1.5.4"
+
+    //Dagger dependencies
+    const val daggerAndroid = "com.google.dagger:dagger-android:${Versions.daggerVersion}"
+    const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:${Versions.daggerVersion}"
+    const val daggerAnnotations = "com.google.dagger:dagger-android-processor:${Versions.daggerVersion}"
+    const val daggerCompiler = "com.google.dagger:dagger-compiler:${Versions.daggerVersion}"
+    const val jsr250 = "javax.annotation:jsr250-api:1.0"
 }

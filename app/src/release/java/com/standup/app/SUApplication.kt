@@ -20,7 +20,6 @@ package com.standup.app
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.facebook.FacebookSdk
-import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.kevalpatel2106.common.application.BaseApplication
@@ -49,9 +48,6 @@ class SUApplication : BaseApplication() {
 
         //Enable timber
         Timber.plant(ReleaseTree())
-
-        //Init shetho
-        Stetho.initializeWithDefaults(this)
 
         // Initializes Fabric for builds that don't use the debug build type.
         Fabric.with(this, Crashlytics.Builder()

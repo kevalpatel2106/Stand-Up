@@ -19,7 +19,6 @@ package com.standup.app
 
 import android.os.StrictMode
 import com.facebook.FacebookSdk
-import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
@@ -68,9 +67,6 @@ class SUApplication : BaseApplication() {
         //Initialize the leak canary
         if (LeakCanary.isInAnalyzerProcess(this@SUApplication)) return
         LeakCanary.install(this@SUApplication)
-
-        //Init shetho
-        Stetho.initializeWithDefaults(this@SUApplication)
 
         //Initialize firebase.
         FirebaseApp.initializeApp(this@SUApplication)
