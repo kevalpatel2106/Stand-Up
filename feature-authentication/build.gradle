@@ -21,28 +21,34 @@ Plugins.modulePlugins.each { plugins.apply(it) }
 android {
     signingConfigs signingConfig
 
-    compileSdkVersion buidlConfig.compile
-    buildToolsVersion buidlConfig.buildToolVersion
+    compileSdkVersion DefaultConfig.compile
+    buildToolsVersion DefaultConfig.buildToolVersion
 
     defaultConfig libDefaultConfig
 
     buildTypes {
         release {
             signingConfig signingConfigs.playStore
-            resValue "string", "server_client_id", RELEASE_SERVER_CLIENT_ID
-            resValue "string", "facebook_app_id", RELEASE_FACEBOOK_APP_ID
-            resValue "string", "application_name", RELEASE_APPLICATION_NAME
-            buildConfigField "String", "BASE_URL", "\"" + RELEASE_SERVER_BASE_URL + "\""
+
+            buildConfigField "String", "BASE_URL", "\"" + ReleaseConfig.RELEASE_SERVER_BASE_URL + "\""
+            resValue "string", "application_name", ReleaseConfig.RELEASE_APPLICATION_NAME
+            resValue "string", "package_name", ReleaseConfig.RELEASE_PACKAGE_ID
+            resValue "string", "api_host", "\"" + ReleaseConfig.RELEASE_SERVER_BASE_URL.replace("https://", "") + "\""
+            resValue "string", "server_client_id", ReleaseConfig.RELEASE_SERVER_CLIENT_ID
+            resValue "string", "android_api_key", ReleaseConfig.RELEASE_ANDROID_API_KEY
         }
         debug {
             crunchPngs false
             testCoverageEnabled true
 
             signingConfig signingConfigs.debugKey
-            resValue "string", "application_name", DEBUG_APPLICATION_NAME
-            resValue "string", "server_client_id", SERVER_CLIENT_ID
-            resValue "string", "facebook_app_id", FACEBOOK_APP_ID
-            buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
+
+            buildConfigField "String", "BASE_URL", "\"" + DebugConfig.SERVER_BASE_URL + "\""
+            resValue "string", "application_name", DebugConfig.APPLICATION_NAME
+            resValue "string", "package_name", DebugConfig.PACKAGE_NAME
+            resValue "string", "api_host", "\"" + DebugConfig.SERVER_BASE_URL.replace("https://", "") + "\""
+            resValue "string", "server_client_id", DebugConfig.SERVER_CLIENT_ID
+            resValue "string", "android_api_key", DebugConfig.ANDROID_API_KEY
         }
     }
 

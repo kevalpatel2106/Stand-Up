@@ -21,8 +21,8 @@ Plugins.modulePlugins.each { plugins.apply(it) }
 android {
     signingConfigs signingConfig
 
-    compileSdkVersion buidlConfig.compile
-    buildToolsVersion buidlConfig.buildToolVersion
+    compileSdkVersion DefaultConfig.compile
+    buildToolsVersion DefaultConfig.buildToolVersion
 
     defaultConfig libDefaultConfig
     buildTypes {

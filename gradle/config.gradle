@@ -16,24 +16,56 @@
  */
 
 ext {
-    buidlConfig = [
-            min             : 21,
-            target          : 26,
-            compile         : 26,
-            buildToolVersion: '27.0.2',
-            applicationId   : 'com.standup.app'
-    ]
+    signingConfig = {
+        //This are th play store signing config.
+        playStore {
+            keyAlias ReleaseConfig.RELEASE_KEYSTORE_ALIAS
+            keyPassword ReleaseConfig.RELEASE_KEYSTORE_PASSWORD
+            storeFile file(ReleaseConfig.RELEASE_KEYSTORE_FILE)
+            storePassword ReleaseConfig.RELEASE_KEYSTORE_ALIASPASSWORD
+        }
+        debugKey {
+            keyAlias DebugConfig.KEYSTORE_ALIAS
+            keyPassword DebugConfig.KEYSTORE_PASSWORD
+            storeFile file(DebugConfig.KEYSTORE_FILE)
+            storePassword DebugConfig.KEYSTORE_ALIASPASSWORD
+        }
+    }
 
-    versionConfig = [
-            versionMajor: 0,
-            versionMinor: 2,
-            versionCode : 2
-    ]
+    defaultAppConfig = {
+        applicationId DefaultConfig.applicationId
+        multiDexEnabled true
 
-    proguardConfig = [
-            proguardPath: '../misc/proguard-rules.pro',
-            removeLogs  : '../misc/proguard-rules-remove-logs.pro',
-    ]
+        //sdks
+        minSdkVersion DefaultConfig.min
+        targetSdkVersion DefaultConfig.target
+
+        //CheckVersionResponse config
+        versionName String.format('%d.%d', AppVersion.versionMajor, AppVersion.versionMinor)
+        versionCode AppVersion.versionCode
+
+        //strip other than english resources
+        resConfigs "en"
+
+        testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
+    }
+
+    libDefaultConfig = {
+        //sdks
+        minSdkVersion DefaultConfig.min
+        targetSdkVersion DefaultConfig.target
+
+        //strip other than english resources
+        resConfigs "en"
+
+        //CheckVersionResponse config
+        versionName String.format('%d.%d', AppVersion.versionMajor, AppVersion.versionMinor)
+        versionCode AppVersion.versionCode
+
+        consumerProguardFiles ProguardFiles.proguard, ProguardFiles.removeLogs
+
+        testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
+    }
 
     packageExcludes = {
         exclude 'LICENSE.txt'
@@ -93,42 +125,8 @@ ext {
         runOnEachPackage = true
         maxMethodCount = 1_10_000
     }
-
-    libDefaultConfig = {
-        //sdks
-        minSdkVersion buidlConfig.min
-        targetSdkVersion buidlConfig.target
-
-        //strip other than english resources
-        resConfigs "en"
-
-        //CheckVersionResponse config
-        versionName String.format('%d.%d', versionConfig.versionMajor, versionConfig.versionMinor)
-        versionCode versionConfig.versionCode
-
-        consumerProguardFiles proguardConfig.proguardPath, proguardConfig.removeLogs
-
-        testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
-    }
-
     adbOption = {
         timeOutInMs 10 * 60 * 1000  // 10 minutes
-    }
-
-    signingConfig = {
-        //This are th play store signing config.
-        playStore {
-            keyAlias RELEASE_KEYSTORE_ALIAS
-            keyPassword RELEASE_KEYSTORE_PASSWORD
-            storeFile file(RELEASE_KEYSTORE_FILE)
-            storePassword RELEASE_KEYSTORE_ALIASPASSWORD
-        }
-        debugKey {
-            keyAlias KEYSTORE_ALIAS
-            keyPassword KEYSTORE_PASSWORD
-            storeFile file(KEYSTORE_FILE)
-            storePassword KEYSTORE_ALIASPASSWORD
-        }
     }
 
     dexOption = {

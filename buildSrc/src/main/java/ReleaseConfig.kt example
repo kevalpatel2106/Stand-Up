@@ -1,0 +1,26 @@
+object ReleaseConfig {
+
+
+    const val RELEASE_APPLICATION_NAME = "Stand Up"
+    const val RELEASE_PACKAGE_ID = "com.standup.app"
+
+    // Key store config
+    const val RELEASE_KEYSTORE_FILE = "..."
+    const val RELEASE_KEYSTORE_ALIAS = "..."
+    const val RELEASE_KEYSTORE_ALIASPASSWORD = "..."
+    const val RELEASE_KEYSTORE_PASSWORD = "..."
+
+    // Google keys
+    // See: https://console.developers.google.com/apis/credentials
+    const val RELEASE_SERVER_CLIENT_ID = "..."
+    const val RELEASE_ANDROID_API_KEY = "..."
+
+    // Facebook credentials (For facebook login)
+    // See: https://developers.facebook.com/docs/facebook-login/android/
+    const val RELEASE_FACEBOOK_APP_ID = "..."
+    const val RELEASE_FB_LOGIN_PROTOCOL_SCHEME = "..."
+
+    // Server config
+    const val RELEASE_SERVER_BASE_URL = "https://..."
+
+}
