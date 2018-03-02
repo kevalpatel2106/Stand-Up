@@ -58,20 +58,6 @@ ext {
             'com.adarshr.test-logger'
     ]
 
-    gradlePlugins = [
-            android       : "com.android.tools.build:gradle:3.0.1",
-            jacoco        : "com.vanniktech:gradle-android-junit-jacoco-plugin:0.11.0",
-            dexcount      : "com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.8.2",
-            kotlin        : "org.jetbrains.kotlin:kotlin-gradle-plugin:" + kotlinVersion,
-            dokka         : "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.15",
-            versionScan   : "com.github.ben-manes:gradle-versions-plugin:0.17.0",
-            buildScan     : "com.gradle:build-scan-plugin:1.11",
-            googleServices: "com.google.gms:google-services:3.2.0",
-            firbase       : "com.google.firebase:firebase-plugins:1.1.5",
-            fabric        : "io.fabric.tools:gradle:1.25.1",
-            testLogger    : "com.adarshr:gradle-test-logger-plugin:1.1.2",
-    ]
-
     //Testing dependency
     testLib = [
             [configuration: "api", dependency: 'junit:junit:4.12'],
