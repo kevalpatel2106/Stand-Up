@@ -75,20 +75,23 @@ class GoogleSignInHelper(private val context: FragmentActivity,
         activity.startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    fun onActivityResult(requestCode: Int, @Suppress("UNUSED_PARAMETER") resultCode: Int, data: Intent) {
+    fun onActivityResult(requestCode: Int, @Suppress("UNUSED_PARAMETER") resultCode: Int, data: Intent?) {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
 
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (result.isSuccess) {
+            data?.let {
+                val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
 
-                // Signed in successfully, show authenticated UI.
-                result.signInAccount?.let {
-                    listener.onGoogleAuthSignIn(parseToGoogleUser(it))
+                if (result.isSuccess) {
+
+                    // Signed in successfully, show authenticated UI.
+                    result.signInAccount?.let {
+                        listener.onGoogleAuthSignIn(parseToGoogleUser(it))
+                        return
+                    }
                 }
-            } else {
-                listener.onGoogleAuthSignInFailed()
             }
+            listener.onGoogleAuthSignInFailed()
         }
     }
 

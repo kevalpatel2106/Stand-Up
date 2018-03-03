@@ -128,7 +128,7 @@ class FacebookHelper(private val listener: FacebookResponse,
      * @param resultCode  result code received.
      * @param data        Data intent.
      */
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 

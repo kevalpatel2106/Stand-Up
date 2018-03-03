@@ -235,7 +235,7 @@ class LoginActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
                 .start()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mGoogleSignInHelper.onActivityResult(requestCode, resultCode, data)
         mFacebookSignInHelper.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)

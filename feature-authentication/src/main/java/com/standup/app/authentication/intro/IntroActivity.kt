@@ -155,7 +155,7 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
         btn_login_using_email.isEnabled = enableAllViews
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mGoogleSignInHelper.onActivityResult(requestCode, resultCode, data)
         mFacebookSignInHelper.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
