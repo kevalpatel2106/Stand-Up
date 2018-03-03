@@ -34,20 +34,20 @@ ext {
 
     defaultAppConfig = {
         applicationId DefaultConfig.applicationId
-        multiDexEnabled true
+        multiDexEnabled CompilerCofig.IS_MULTIDEX_ENABLED
 
         //sdks
         minSdkVersion DefaultConfig.min
         targetSdkVersion DefaultConfig.target
 
         //CheckVersionResponse config
-        versionName String.format('%d.%d', AppVersion.versionMajor, AppVersion.versionMinor)
+        versionName AppVersion.versionName
         versionCode AppVersion.versionCode
 
         //strip other than english resources
-        resConfigs "en"
+        resConfigs DefaultConfig.supportedResConfig
 
-        testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
+        testInstrumentationRunner DefaultConfig.testRunnerClass
     }
 
     libDefaultConfig = {
@@ -56,15 +56,21 @@ ext {
         targetSdkVersion DefaultConfig.target
 
         //strip other than english resources
-        resConfigs "en"
+        resConfigs DefaultConfig.supportedResConfig
 
         //CheckVersionResponse config
-        versionName String.format('%d.%d', AppVersion.versionMajor, AppVersion.versionMinor)
+        versionName AppVersion.versionName
         versionCode AppVersion.versionCode
 
         consumerProguardFiles ProguardFiles.proguard, ProguardFiles.removeLogs
 
-        testInstrumentationRunner "com.kevalpatel2106.testutils.CustomTestRunner"
+        testInstrumentationRunner DefaultConfig.testRunnerClass
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     packageExcludes = {
@@ -77,8 +83,25 @@ ext {
         exclude 'protobuf.meta'
     }
 
+    //Exclude group for dependency
+    excludeGrp = {
+        exclude group: 'com.android.support.test.espresso', module: 'espresso-core'
+        exclude group: 'com.android.support.test.espresso', module: 'espresso-idling-resource'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-compat'
+        exclude group: 'com.android.support', module: 'support-fragment'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'android.arch.lifecycle', module: 'common'
+        exclude group: 'android.arch.core', module: 'common'
+        exclude group: 'android.arch.core', module: 'common'
+        exclude group: 'android.arch.lifecycle', module: 'runtime'
+        exclude group: 'com.jakewharton.timber', module: 'timber'
+        exclude group: 'io.reactivex.rxjava2', module: 'rxjava'
+    }
+
     lintOption = {
-        abortOnError false
+        abortOnError CompilerCofig.LINT_ABORT_ON_ERROR
         htmlReport true
         xmlReport true
         textReport true
@@ -86,7 +109,7 @@ ext {
     }
 
     aaptOption = {
-        cruncherProcesses 4
+        cruncherProcesses CompilerCofig.CRUNCHER_PROCESS_COUNT
     }
 
     compileOption = {
@@ -123,23 +146,25 @@ ext {
         teamCityIntegration = false
         teamCitySlug = null
         runOnEachPackage = true
-        maxMethodCount = 1_10_000
+        maxMethodCount = CompilerCofig.MAX_METHOD_COUNT
     }
     adbOption = {
-        timeOutInMs 10 * 60 * 1000  // 10 minutes
+        timeOutInMs CompilerCofig.ADB_TIMEOUT
     }
 
     dexOption = {
-        preDexLibraries true
-        maxProcessCount 6
+        preDexLibraries CompilerCofig.PREDEX_LIBRARIES
+        maxProcessCount CompilerCofig.MAX_DEX_PROCESS_COUNT
     }
 
     testOption = {
         unitTests.all {
-            // set heap size for the test JVM(s)
             minHeapSize = "1024m"
+
+            // set heap size for the test JVM(s)
             maxParallelForks 1
             maxHeapSize = "1596m"
+
             testLogging {
                 events 'passed', 'skipped', 'failed'
             }
@@ -148,8 +173,5 @@ ext {
 
     kotlinOption = {
         jvmTarget = "1.8"
-        experimental {
-            coroutines 'enable'
-        }
     }
 }
