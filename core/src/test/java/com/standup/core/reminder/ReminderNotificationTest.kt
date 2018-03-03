@@ -46,8 +46,6 @@ import java.io.IOException
 @RunWith(JUnit4::class)
 class ReminderNotificationTest {
     private val TEST_TITLE_STRING = "This is test notification title."
-    private val TEST_MESSAGE_STRING = "This is test notification message."
-
     private lateinit var notification: NotificationCompat.Builder
 
     @Before

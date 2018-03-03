@@ -21,14 +21,12 @@ import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
 import android.content.Context.POWER_SERVICE
-import android.hardware.display.DisplayManager
 import android.os.Build
 import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
-import android.view.Display
 
 
 /**
@@ -39,28 +37,26 @@ import android.view.Display
 fun Context.getColorCompat(@ColorRes color: Int) = ContextCompat.getColor(this, color)
 
 @SuppressLint("MissingPermission")
-fun Context.vibrate(mills: Long) {
+fun Context.vibrate(mills: Long): Boolean {
     val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     if (vibrator.hasVibrator()) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vibrator.vibrate(VibrationEffect.createOneShot(mills, VibrationEffect.DEFAULT_AMPLITUDE))
+            true
         } else {
             @Suppress("DEPRECATION")
             vibrator.vibrate(mills)
+            true
         }
     }
+    return false
 }
 
 @Suppress("DEPRECATION")
 @SuppressLint("ObsoleteSdkInt")
 fun Context.isScreenOn(): Boolean {
-    return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-        val dm = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
-        dm.displays.any { it.state != Display.STATE_OFF }
-    } else {
-        val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-        powerManager.isScreenOn
-    }
+    val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+    return powerManager.isScreenOn
 }
 
 @Suppress("DEPRECATION")

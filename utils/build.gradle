@@ -51,6 +51,7 @@ kotlin kotlinOption
 dependencies {
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
+    testImplementation(Deps.roboElectric, excludeGrp)
 
     implementation(Deps.kotlinRefflect)
     implementation(Deps.kotlinStdLib)

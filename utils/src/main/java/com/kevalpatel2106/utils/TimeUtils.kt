@@ -64,7 +64,7 @@ object TimeUtils {
     }
 
     fun getCalender12AM(unixMills: Long): Calendar {
-        val calender12Am = Calendar.getInstance()
+        val calender12Am = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         calender12Am.timeInMillis = unixMills
         calender12Am.set(Calendar.HOUR_OF_DAY, 0)
         calender12Am.set(Calendar.MINUTE, 0)

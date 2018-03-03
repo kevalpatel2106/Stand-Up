@@ -22,6 +22,7 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
@@ -57,7 +58,11 @@ internal object DailyReviewNotification {
                         dailyActivitySummary: DailyActivitySummary) {
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.addDailySummaryNotificationChannel(context.applicationContext)
-        nm.notify(NOTIFICATION_ID, buildNotification(context, dailyActivitySummary).build())
+        nm.notify(NOTIFICATION_ID, buildNotification(context,
+                dailyActivitySummary,
+                BitmapFactory.decodeResource(context.resources, R.drawable.ic_daily_review_notification),
+                getPendingIntent(context))
+                .build())
     }
 
     /**
@@ -67,7 +72,9 @@ internal object DailyReviewNotification {
      */
     @VisibleForTesting
     internal fun buildNotification(context: Context,
-                                   dailyActivitySummary: DailyActivitySummary): NotificationCompat.Builder {
+                                   dailyActivitySummary: DailyActivitySummary,
+                                   largeIcon: Bitmap? = null,
+                                   pendingIntent: PendingIntent? = null): NotificationCompat.Builder {
 
         //Prepare the message summary
         val message = prepareSummaryMessage(context, dailyActivitySummary)
@@ -78,13 +85,13 @@ internal object DailyReviewNotification {
                 .setContentTitle(context.getString(R.string.daily_review_notification_title))
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_daily_review_notification))
+                .setLargeIcon(largeIcon)
                 .setTicker(message)
                 .setChannelId(NotificationChannelType.DAILY_SUMMARY_NOTIFICATION_CHANNEL)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setContentIntent(getPendingIntent(context))
+                .setContentIntent(pendingIntent)
                 .setStyle(NotificationCompat.BigTextStyle()
                         .bigText(message)
                         .setBigContentTitle(context.getString(R.string.daily_review_notification_title)))

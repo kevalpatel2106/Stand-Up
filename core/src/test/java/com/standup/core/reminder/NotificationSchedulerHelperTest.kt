@@ -17,6 +17,10 @@
 
 package com.standup.core.reminder
 
+import android.app.KeyguardManager
+import android.content.Context
+import android.media.AudioManager
+import android.os.PowerManager
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import org.junit.Assert
@@ -33,6 +37,23 @@ import java.io.IOException
  */
 @RunWith(JUnit4::class)
 class NotificationSchedulerHelperTest {
+
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldRemind_Positive() {
+        val userSessionManager = Mockito.mock(UserSessionManager::class.java)
+        Mockito.`when`(userSessionManager.isUserLoggedIn).thenReturn(true)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.isCurrentlyInSleepMode).thenReturn(false)
+        Mockito.`when`(userSettingsManager.isCurrentlyDndEnable).thenReturn(false)
+        Mockito.`when`(userSettingsManager.sleepStartTime).thenReturn(0)
+        Mockito.`when`(userSettingsManager.sleepEndTime).thenReturn(10_000)
+
+        Assert.assertTrue(NotificationSchedulerHelper
+                .shouldDisplayNotification(userSessionManager, userSettingsManager))
+    }
 
     @Test
     @Throws(IOException::class)
@@ -117,4 +138,131 @@ class NotificationSchedulerHelperTest {
     }
 
 
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldDisplayPopUp_PopUpDisable() {
+        val mockContext = Mockito.mock(Context::class.java)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.shouldDisplayPopUp).thenReturn(false)
+
+        Assert.assertFalse(NotificationSchedulerHelper.shouldDisplayPopUp(userSettingsManager, mockContext))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldDisplayPopUp_PopUpEnable_ScreenOff() {
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.shouldDisplayPopUp).thenReturn(true)
+
+        val context = Mockito.mock(Context::class.java)
+        val powerManager = Mockito.mock(PowerManager::class.java)
+        Mockito.`when`(powerManager.isScreenOn).thenReturn(false)
+        Mockito.`when`(context.getSystemService(Context.POWER_SERVICE)).thenReturn(powerManager)
+
+        val keyguardManager = Mockito.mock(KeyguardManager::class.java)
+        Mockito.`when`(keyguardManager.inKeyguardRestrictedInputMode()).thenReturn(false)
+        Mockito.`when`(context.getSystemService(Context.KEYGUARD_SERVICE)).thenReturn(keyguardManager)
+
+        Assert.assertFalse(NotificationSchedulerHelper.shouldDisplayPopUp(userSettingsManager,
+                context))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldDisplayPopUp_PopUpEnable_ScreenOn_DeviceLock() {
+        val context = Mockito.mock(Context::class.java)
+
+        val powerManager = Mockito.mock(PowerManager::class.java)
+        Mockito.`when`(powerManager.isScreenOn).thenReturn(true)
+        Mockito.`when`(context.getSystemService(Context.POWER_SERVICE)).thenReturn(powerManager)
+
+        val keyguardManager = Mockito.mock(KeyguardManager::class.java)
+        Mockito.`when`(keyguardManager.inKeyguardRestrictedInputMode()).thenReturn(true)
+        Mockito.`when`(context.getSystemService(Context.KEYGUARD_SERVICE)).thenReturn(keyguardManager)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.shouldDisplayPopUp).thenReturn(true)
+
+        Assert.assertFalse(NotificationSchedulerHelper.shouldDisplayPopUp(userSettingsManager, context))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldDisplayPopUp_Positive() {
+        val context = Mockito.mock(Context::class.java)
+
+        val powerManager = Mockito.mock(PowerManager::class.java)
+        Mockito.`when`(powerManager.isScreenOn).thenReturn(true)
+        Mockito.`when`(context.getSystemService(Context.POWER_SERVICE)).thenReturn(powerManager)
+
+        val keyguardManager = Mockito.mock(KeyguardManager::class.java)
+        Mockito.`when`(keyguardManager.inKeyguardRestrictedInputMode()).thenReturn(false)
+        Mockito.`when`(context.getSystemService(Context.KEYGUARD_SERVICE)).thenReturn(keyguardManager)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.shouldDisplayPopUp).thenReturn(true)
+
+        Assert.assertTrue(NotificationSchedulerHelper.shouldDisplayPopUp(userSettingsManager, context))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldVibrate_VibrateOff() {
+        val context = Mockito.mock(Context::class.java)
+
+        val audioManager = Mockito.mock(AudioManager::class.java)
+        Mockito.`when`(audioManager.ringerMode).thenReturn(AudioManager.RINGER_MODE_SILENT)
+        Mockito.`when`(context.getSystemService(Context.AUDIO_SERVICE)).thenReturn(audioManager)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.shouldVibrate).thenReturn(false)
+
+        Assert.assertFalse(NotificationSchedulerHelper.shouldVibrate(context, userSettingsManager))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldVibrate_VibrateOn_RingerSilent() {
+        val context = Mockito.mock(Context::class.java)
+
+        val audioManager = Mockito.mock(AudioManager::class.java)
+        Mockito.`when`(audioManager.ringerMode).thenReturn(AudioManager.RINGER_MODE_SILENT)
+        Mockito.`when`(context.getSystemService(Context.AUDIO_SERVICE)).thenReturn(audioManager)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.shouldVibrate).thenReturn(true)
+
+        Assert.assertFalse(NotificationSchedulerHelper.shouldVibrate(context, userSettingsManager))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldVibrate_VibrateOn_RingerNormal() {
+        val context = Mockito.mock(Context::class.java)
+
+        val audioManager = Mockito.mock(AudioManager::class.java)
+        Mockito.`when`(audioManager.ringerMode).thenReturn(AudioManager.RINGER_MODE_NORMAL)
+        Mockito.`when`(context.getSystemService(Context.AUDIO_SERVICE)).thenReturn(audioManager)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.shouldVibrate).thenReturn(true)
+
+        Assert.assertTrue(NotificationSchedulerHelper.shouldVibrate(context, userSettingsManager))
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkShouldVibrate_VibrateOn_RingerVibrate() {
+        val context = Mockito.mock(Context::class.java)
+
+        val audioManager = Mockito.mock(AudioManager::class.java)
+        Mockito.`when`(audioManager.ringerMode).thenReturn(AudioManager.RINGER_MODE_VIBRATE)
+        Mockito.`when`(context.getSystemService(Context.AUDIO_SERVICE)).thenReturn(audioManager)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.shouldVibrate).thenReturn(true)
+
+        Assert.assertTrue(NotificationSchedulerHelper.shouldVibrate(context, userSettingsManager))
+    }
 }
