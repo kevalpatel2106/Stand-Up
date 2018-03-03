@@ -18,15 +18,16 @@
 
 package com.standup.core
 
+import android.app.Application
 import android.content.Context
 import android.os.Handler
 import com.evernote.android.job.JobConfig
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.standup.core.activityMonitor.ActivityMonitorHelper
 import com.standup.core.activityMonitor.ActivityMonitorJob
 import com.standup.core.dailyReview.DailyReviewHelper
@@ -88,10 +89,16 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
             Handler().postDelayed({ ReminderNotification().cancel(context) }, 10_000L /* 10 Seconds */)
         }
 
-        fun init(coreHook: CoreHook) {
+        fun init(coreHook: CoreHook, application: Application) {
+            JobConfig.addLogger(EvernoteJobLogger())
+
+            //Initialize the core creator
+            CoreJobCreator.init(application)
+
             this.coreHook = coreHook
         }
 
+        @OnlyForTesting
         fun runNotificationJob() {
             //Run the job
             JobRequest.Builder(NotificationSchedulerJob.REMINDER_NOTIFICATION_JOB_TAG)
@@ -100,22 +107,6 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
                     .build()
                     .schedule()
         }
-    }
-
-    /**
-     * Start the core module. This will initialize [CoreJobCreator] and also schedules all the jobs
-     * based on the [userSettingsManager] values.
-     *
-     * @see refresh
-     * @see meltdown
-     */
-    fun turnOn(application: BaseApplication) {
-        JobConfig.addLogger(EvernoteJobLogger())
-
-        //Initialize the core creator
-        CoreJobCreator.init(application)
-
-        refresh()
     }
 
     /**
@@ -158,8 +149,8 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
      * @see ActivityMonitorJob.cancel
      * @see ActivityMonitorHelper.isAnyJobScheduled
      */
-    internal fun setUpActivityMonitoring(userSessionManager: UserSessionManager,
-                                         userSettingsManager: UserSettingsManager) {
+    private fun setUpActivityMonitoring(userSessionManager: UserSessionManager,
+                                        userSettingsManager: UserSettingsManager) {
 
         //Check if the sleep mode is running?
         //Don't start monitoring.
@@ -177,10 +168,6 @@ class Core @Inject constructor(private val userSessionManager: UserSessionManage
 
         //Go ahead. Schedule.
         ActivityMonitorJob.scheduleNextJob()
-    }
-
-    fun setUpReminderNotification() {
-        setUpReminderNotification(userSessionManager, userSettingsManager, sharedPrefsProvider)
     }
 
     /**

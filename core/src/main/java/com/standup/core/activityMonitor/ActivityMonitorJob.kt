@@ -34,12 +34,14 @@ import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
+import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.core.Core
 import com.standup.core.CoreConfig
 import com.standup.core.di.DaggerCoreComponent
 import com.standup.core.misc.AsyncJob
 import com.standup.core.reminder.NotificationSchedulerJob
 import com.standup.core.repo.CoreRepo
+import dagger.Lazy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -159,6 +161,14 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
     lateinit var coreRepo: CoreRepo
 
     /**
+     * Shared preferences
+     *
+     * @see SharedPrefsProvider
+     */
+    @Inject
+    lateinit var sharedPrefsProvider: Lazy<SharedPrefsProvider>
+
+    /**
      * User session information.
      *
      * @see UserSessionManager
@@ -266,7 +276,12 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
         //Check if the user is moving/standing?
         if (userActivity.userActivityType == UserActivityType.MOVING) {
             Timber.i("Pushing the reminder back.")
-            core.get().setUpReminderNotification()
+
+            //Cancel the current notification job so that we can schedule the next job.
+            NotificationSchedulerJob.cancelJob(sharedPrefsProvider.get())
+
+            //Schedule next reminder
+            core.get().setUpReminderNotification(userSessionManager, userSettingsManager, sharedPrefsProvider.get())
         }
 
         //Add the new value to database.
