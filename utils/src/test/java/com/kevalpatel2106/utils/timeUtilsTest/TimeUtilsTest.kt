@@ -33,29 +33,43 @@ class TimeUtilsTest {
 
     @Test
     @Throws(Exception::class)
-    fun convertToNano() {
+    fun checkConvertToNano() {
         val timeMills = System.currentTimeMillis()
-        assertTrue(TimeUtils.convertToNano(timeMills) == timeMills * 1000000)
+        assertEquals(TimeUtils.convertToNano(timeMills), timeMills * 10_00_000)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkConvertToNano_ZeroMills() {
+        assertEquals(TimeUtils.convertToNano(0), 0)
+    }
+
+
+    @Test
+    @Throws(Exception::class)
+    fun checkConvertToNano_NegativeMills() {
+        assertEquals(TimeUtils.convertToNano(-1000), -1000 * 10_00_000)
     }
 
     @Test
     @Throws(Exception::class)
     fun convertToMilli() {
         val timeNano = System.currentTimeMillis() * 1000000
-        assertTrue(TimeUtils.convertToMilli(timeNano) == timeNano / 1000000)
+        assertTrue(TimeUtils.convertToMilli(timeNano) == timeNano / 10_00_000)
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkGetMilliSecFrom12AM() {
-        val today12AmCal = Calendar.getInstance()
-        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
-        today12AmCal.set(Calendar.MINUTE, 0)
-        today12AmCal.set(Calendar.SECOND, 0)
-        today12AmCal.set(Calendar.MILLISECOND, 0)
-        today12AmCal.add(Calendar.HOUR, 2)
-        assertEquals(TimeUtils.getMilliSecFrom12AM(today12AmCal.timeInMillis),
-                2L.times(3600L).times(1000L))
+    fun checkConvertToMilli_ZeroMills() {
+        assertEquals(TimeUtils.convertToMilli(0), 0)
+    }
+
+
+    @Test
+    @Throws(Exception::class)
+    fun checkConvertToMilli_NegativeMills() {
+        val timeNano = System.currentTimeMillis() * 1000000
+        assertEquals(TimeUtils.convertToMilli(-timeNano), -timeNano / 10_00_000)
     }
 
     @Test
@@ -67,7 +81,8 @@ class TimeUtilsTest {
         today12AmCal.set(Calendar.SECOND, 0)
         today12AmCal.set(Calendar.MILLISECOND, 0)
 
-        assertEquals(TimeUtils.getCalender12AM(System.currentTimeMillis()).timeInMillis, today12AmCal.timeInMillis)
+        assertEquals(TimeUtils.getCalender12AM(System.currentTimeMillis()).timeInMillis,
+                today12AmCal.timeInMillis)
     }
 
     @Test
@@ -84,7 +99,7 @@ class TimeUtilsTest {
 
     @Test
     @Throws(Exception::class)
-    fun checkGetCalender12AMWithDate() {
+    fun checkGetCalender12AM_WithDate() {
         val today12AmCal = Calendar.getInstance()
         today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
         today12AmCal.set(Calendar.MINUTE, 0)
@@ -99,7 +114,7 @@ class TimeUtilsTest {
 
     @Test
     @Throws(Exception::class)
-    fun checkGetMilliSecFrom12AMWithZeroTime() {
+    fun checkGetMilliSecFrom12AM_WithZeroTime() {
         try {
             TimeUtils.getMilliSecFrom12AM(0)
             Assert.fail()

@@ -18,9 +18,14 @@
 package com.standup.app.splash
 
 import android.arch.lifecycle.MutableLiveData
+import android.support.annotation.VisibleForTesting
+import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.common.base.arch.SingleLiveEvent
 import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.annotations.ViewModel
 import com.standup.core.Core
 import javax.inject.Inject
@@ -37,13 +42,11 @@ import javax.inject.Inject
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @ViewModel(SplashActivity::class)
-internal class SplashViewModel @Inject constructor(private val userSessionManager: UserSessionManager,
-                                                   private val sharedPrefProvider: SharedPrefsProvider,
-                                                   private val core: Core) {
+internal class SplashViewModel : BaseViewModel {
 
     internal val openIntro = MutableLiveData<Boolean>()
 
-    internal val openDeviceRegister = MutableLiveData<Boolean>()
+    internal val openDeviceRegister = SingleLiveEvent<Boolean>()
 
     internal val openVerifyEmail = MutableLiveData<Boolean>()
 
@@ -51,23 +54,37 @@ internal class SplashViewModel @Inject constructor(private val userSessionManage
 
     internal val openDashboard = MutableLiveData<Boolean>()
 
-    init {
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
+
+    @Inject
+    lateinit var sharedPrefProvider: SharedPrefsProvider
+
+    @Suppress("unused")
+    constructor() {
+        DaggerSplashComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@SplashViewModel)
+        init()
+    }
+
+    @OnlyForTesting
+    @VisibleForTesting
+    constructor(userSessionManager: UserSessionManager,
+                sharedPrefProvider: SharedPrefsProvider) {
+        this.userSessionManager = userSessionManager
+        this.sharedPrefProvider = sharedPrefProvider
+
+        init()
+    }
+
+    private fun init() {
         openIntro.value = false
         openDeviceRegister.value = false
         openVerifyEmail.value = false
         openProfile.value = false
         openDashboard.value = false
-    }
-
-    /**
-     * Refresh the [Core] and start syncing the user activity if the background sync is enabled.
-     *
-     * @see Core.refresh
-     * @see Core.forceSync
-     */
-    fun setUpCore() {
-        core.refresh()
-        Core.forceSync()
     }
 
     fun initiateFlow() {

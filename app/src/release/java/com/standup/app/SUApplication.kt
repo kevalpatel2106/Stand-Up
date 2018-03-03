@@ -20,7 +20,6 @@ package com.standup.app
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.facebook.FacebookSdk
-import com.facebook.stetho.Stetho
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.kevalpatel2106.common.application.BaseApplication
@@ -28,7 +27,6 @@ import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.app.BuildConfig
-import com.standup.app.features.initFeatures
 import com.standup.core.Core
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
@@ -51,9 +49,6 @@ class SUApplication : BaseApplication() {
         //Enable timber
         Timber.plant(ReleaseTree())
 
-        //Init shetho
-        Stetho.initializeWithDefaults(this)
-
         // Initializes Fabric for builds that don't use the debug build type.
         Fabric.with(this, Crashlytics.Builder()
                 .core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
@@ -72,8 +67,6 @@ class SUApplication : BaseApplication() {
         val prefProvider = SharedPrefsProvider(this@SUApplication)
         Core(UserSessionManager(prefProvider), UserSettingsManager(prefProvider), prefProvider)
                 .turnOn(this@SUApplication)
-
-        initFeatures()
     }
 
 }

@@ -22,6 +22,9 @@ import com.standup.app.about.AboutModule
 import com.standup.app.authentication.AuthenticationModule
 import com.standup.app.dashboard.DashboardModule
 import com.standup.app.diary.DiaryModule
+import com.standup.app.features.AuthenticationHookImpl
+import com.standup.app.features.ProfileHookImpl
+import com.standup.app.features.SettingsHookImpl
 import com.standup.app.profile.ProfileModule
 import com.standup.app.settings.SettingsModule
 import com.standup.app.stats.StatsModule
@@ -38,29 +41,29 @@ internal class FeatureModule {
 
     @Provides
     @ApplicationScope
-    fun provideSettingsModule(): SettingsModule = SettingsModule
+    fun provideSettingsModule(): SettingsModule = SettingsModule(SettingsHookImpl())
 
     @Provides
     @ApplicationScope
-    fun provideProfileModule(): ProfileModule = ProfileModule
+    fun provideProfileModule(): ProfileModule = ProfileModule(ProfileHookImpl())
 
     @Provides
     @ApplicationScope
-    fun provideDiaryModule(): DiaryModule = DiaryModule
+    fun provideDiaryModule(): DiaryModule = DiaryModule()
 
     @Provides
     @ApplicationScope
-    fun provideAboutModule(): AboutModule = AboutModule
+    fun provideAboutModule(): AboutModule = AboutModule()
 
     @Provides
     @ApplicationScope
-    fun provideStatsModule(): StatsModule = StatsModule
+    fun provideStatsModule(): StatsModule = StatsModule()
 
     @Provides
     @ApplicationScope
-    fun provideAuthenticationModule(): AuthenticationModule = AuthenticationModule
+    fun provideAuthenticationModule(): AuthenticationModule = AuthenticationModule(AuthenticationHookImpl())
 
     @Provides
     @ApplicationScope
-    fun provideDashboardModule(): DashboardModule = DashboardModule
+    fun provideDashboardModule(): DashboardModule = DashboardModule()
 }

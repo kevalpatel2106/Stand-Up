@@ -27,7 +27,7 @@ import com.standup.app.diary.list.DiaryFragment
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object DiaryModule {
+class DiaryModule {
 
     fun getDiary(): DiaryFragment {
         return DiaryFragment.getNewInstance()

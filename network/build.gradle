@@ -16,13 +16,13 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
 
-    compileSdkVersion buidlConfig.compile
-    buildToolsVersion buidlConfig.buildToolVersion
+    compileSdkVersion DefaultConfig.compile
+    buildToolsVersion DefaultConfig.buildToolVersion
 
     defaultConfig libDefaultConfig
     buildTypes {
@@ -55,19 +55,23 @@ dependencies {
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
-    ide.each { add("implementation", it) }
-    rxLib.each { add("implementation", it) }
-    debugLibs.each { add(it.configuration, it.dependency) }
+    implementation(Deps.kotlinRefflect)
+    implementation(Deps.kotlinStdLib)
+
+    implementation(Deps.rxJava)
+    implementation(Deps.rxAndroid)
+
+    implementation(Deps.timber)
 
     //Support
-    implementation supportLib.supportv4
-    implementation otherLib.commonsCodec
+    implementation Deps.supportv4
+    implementation Deps.commonsCodec
 
     //GSON
-    api otherLib.gson
+    api Deps.gson
 
     //Retrofit
-    implementation retrofitLib.retrofit
-    implementation retrofitLib.gsonPlugin
-    implementation retrofitLib.logger       //TODO Make it debug only
+    implementation Deps.retrofit
+    implementation Deps.retrofitGsonPlugin
+    implementation Deps.httpLogger       //TODO Make it debug only
 }

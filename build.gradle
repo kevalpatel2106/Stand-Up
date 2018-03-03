@@ -16,8 +16,6 @@
  */
 
 buildscript {
-    apply from: './gradle/deps.gradle'
-
     repositories {
         google()
         jcenter()
@@ -30,27 +28,27 @@ buildscript {
     }
 
     dependencies {
-        classpath gradlePlugins.android
-        classpath gradlePlugins.jacoco
-        classpath gradlePlugins.dexcount
-        classpath gradlePlugins.versionScan
-        classpath gradlePlugins.googleServices
-        classpath gradlePlugins.firbase
-        classpath gradlePlugins.fabric
-        classpath gradlePlugins.kotlin
-        classpath gradlePlugins.dokka
-        classpath gradlePlugins.testLogger
+        classpath(Plugins.buildTools)
+        classpath(Plugins.jacoco)
+        classpath(Plugins.dexcount)
+        classpath(Plugins.versionScan)
+        classpath(Plugins.googleServices)
+        classpath(Plugins.firbase)
+        classpath(Plugins.fabric)
+        classpath(Plugins.kotlin)
+        classpath(Plugins.dokka)
+        classpath(Plugins.testLogger)
 
-        if (System.getenv('CI') == "true"){
-            classpath gradlePlugins.buildScan
+        if (System.getenv('CI') == "true") {
+            classpath(Plugins.buildScan)
         }
     }
+
 }
 
 apply from: './gradle/config.gradle'
-apply from: './gradle/deps.gradle'
-
 apply plugin: 'com.github.ben-manes.versions'
+
 if (System.getenv('CI') == "true") {
     apply plugin: "com.gradle.build-scan"
 

@@ -25,15 +25,19 @@ import com.standup.app.settings.list.SettingsListActivity
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object SettingsModule {
+class SettingsModule(hook: SettingsHook) {
 
-    internal lateinit var settingsHook: SettingsHook
-
-    fun init(settingsHook: SettingsHook) {
-        this.settingsHook = settingsHook
+    companion object {
+        internal var settingsHook: SettingsHook? = null
     }
+
+    init {
+        settingsHook = hook
+    }
+
 
     fun openSettings(context: Context) {
         SettingsListActivity.launch(context)
     }
 }
+

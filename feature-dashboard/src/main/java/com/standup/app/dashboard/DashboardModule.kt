@@ -22,7 +22,7 @@ package com.standup.app.dashboard
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object DashboardModule {
+class DashboardModule {
 
     fun getDashboard(): DashboardFragment {
         return DashboardFragment.getNewInstance()

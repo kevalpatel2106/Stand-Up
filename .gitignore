@@ -11,12 +11,11 @@
 /captures
 .externalNativeBuild
 /misc/keystore.jks
-/app/google-services.json
-/gradle.properties
 /responses/
 /projectFilesBackup/
 /projectFilesBackup1/
 /ajcore.*.txt
 /output/
+/app/google-services.json
 /app/src/release/google-services.json
-/app/src/debug/google-services.json
+/buildSrc/src/main/java/ReleaseConfig.kt

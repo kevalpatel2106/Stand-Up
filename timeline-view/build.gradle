@@ -16,13 +16,13 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
 
-    compileSdkVersion buidlConfig.compile
-    buildToolsVersion buidlConfig.buildToolVersion
+    compileSdkVersion DefaultConfig.compile
+    buildToolsVersion DefaultConfig.buildToolVersion
 
     defaultConfig libDefaultConfig
 
@@ -53,13 +53,15 @@ dependencies {
 	//Test dependency
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
-    testImplementation(otherLib.roboElectric, excludeGrp)
+    testImplementation(Deps.roboElectric, excludeGrp)
 
-    ide.each { add("implementation", it) }
-    debugLibs.each { add(it.configuration, it.dependency) }
+    implementation(Deps.kotlinRefflect)
+    implementation(Deps.kotlinStdLib)
+
+    implementation(Deps.timber)
 
     //Support
-    implementation supportLib.annotations
-    debugImplementation supportLib.supportv4
-    debugImplementation supportLib.appCompat
+    implementation Deps.annotations
+    debugImplementation Deps.supportv4
+    debugImplementation Deps.appCompat
 }

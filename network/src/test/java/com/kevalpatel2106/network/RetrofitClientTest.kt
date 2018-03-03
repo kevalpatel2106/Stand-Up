@@ -34,14 +34,14 @@ class RetrofitClientTest {
     @Test
     @Throws(IOException::class)
     fun checkBaseUrl() {
-        val retrofit = NetworkApi().getRetrofitClient("http://google.com")
+        val retrofit = NetworkModule().getRetrofitClient("http://google.com")
         Assert.assertEquals(retrofit.baseUrl().toString(), "http://google.com/")
     }
 
     @Test
     @Throws(IOException::class)
     fun checkGsonAdapter() {
-        val retrofit = NetworkApi().getRetrofitClient("http://google.com")
+        val retrofit = NetworkModule().getRetrofitClient("http://google.com")
         Assert.assertEquals(retrofit.converterFactories().size, 2)  //This should be custom converter
     }
 }

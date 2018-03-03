@@ -16,12 +16,12 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
-    compileSdkVersion buidlConfig.compile
+    compileSdkVersion DefaultConfig.compile
 
-    buildToolsVersion buidlConfig.buildToolVersion
+    buildToolsVersion DefaultConfig.buildToolVersion
     signingConfigs signingConfig
 
     defaultConfig libDefaultConfig
@@ -29,13 +29,13 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.playStore
-            resValue "string", "fb_login_protocol_scheme", RELEASE_FB_LOGIN_PROTOCOL_SCHEME
+            resValue "string", "fb_login_protocol_scheme", ReleaseConfig.RELEASE_FB_LOGIN_PROTOCOL_SCHEME
         }
         debug {
             crunchPngs false
             testCoverageEnabled true
             signingConfig signingConfigs.debugKey
-            resValue "string", "fb_login_protocol_scheme", FB_LOGIN_PROTOCOL_SCHEME
+            resValue "string", "fb_login_protocol_scheme", DebugConfig.FB_LOGIN_PROTOCOL_SCHEME
         }
     }
 
@@ -56,13 +56,15 @@ dependencies {
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
-    ide.each { add("implementation", it) }
-    debugLibs.each { add(it.configuration, it.dependency) }
+    implementation(Deps.kotlinRefflect)
+    implementation(Deps.kotlinStdLib)
+
+    implementation(Deps.timber)
 
     //Facebook Lib
-    api(otherLib.facebook, excludeGrp)
+    api(Deps.facebook, excludeGrp)
 
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
+    implementation Deps.appCompat
+    implementation Deps.supportv4
 }

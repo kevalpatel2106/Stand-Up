@@ -19,7 +19,7 @@ package com.standup.app.about.repo
 
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkApi
+import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.reactivex.subscribers.TestSubscriber
@@ -41,7 +41,7 @@ import java.nio.file.Paths
 @RunWith(JUnit4::class)
 class AboutRepositoryImplTest {
     private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-about")) it else it.plus("feature-/about")
+        return@let if (it.endsWith("feature-about")) it else it.plus("/feature-about")
     }
     private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/about/repo", path)
 
@@ -59,7 +59,7 @@ class AboutRepositoryImplTest {
 
         mockServerManager.startMockWebServer()
         aboutRepository = AboutRepositoryImpl(
-                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
+                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))
         )
     }

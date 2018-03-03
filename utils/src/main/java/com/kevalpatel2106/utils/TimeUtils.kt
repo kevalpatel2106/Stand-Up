@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.utils
 
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -39,7 +40,7 @@ object TimeUtils {
         if (unixMills <= 0)
             throw IllegalArgumentException("Invalid unix time: ".plus(unixMills))
 
-        val today12AmCal = Calendar.getInstance()
+        val today12AmCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         today12AmCal.timeInMillis = unixMills
         today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
         today12AmCal.set(Calendar.MINUTE, 0)
@@ -49,6 +50,8 @@ object TimeUtils {
     }
 
     fun getMilliSecFrom12AM(hourOfTheDay: Int, minutes: Int): Long {
+        if (hourOfTheDay !in 0..23 || minutes !in 0..59)
+            throw IllegalArgumentException("Invalid hours: $hourOfTheDay:$minutes")
         return hourOfTheDay.times(TimeUtils.ONE_HOUR_MILLS) + minutes.times(TimeUtils.ONE_MIN_MILLS)
     }
 
@@ -114,8 +117,12 @@ object TimeUtils {
 
     //*********** Human readable time formats *********//
 
-    fun calculateHumanReadableDurationFromNow(timeToCalculate: Long): String {
-        var diff = (System.currentTimeMillis() - timeToCalculate)
+    fun calculateHumanReadableDurationFromNow(timeToCalculate: Long,
+                                              @OnlyForTesting currentTime: Long = System.currentTimeMillis()): String {
+        if (timeToCalculate < 0)
+            throw IllegalArgumentException("Invalid negative time: $timeToCalculate")
+
+        var diff = (currentTime - timeToCalculate)
         if (diff < 0) throw IllegalArgumentException("Cannot pass future time in argument.")
 
         val hours = diff.div(ONE_HOUR_MILLS).toInt()
@@ -137,7 +144,7 @@ object TimeUtils {
         if (secs != 0) {
             result = result.plus(secs).plus(" seconds ")
         }
-        return result
+        return result.trim()
     }
 
 
@@ -164,9 +171,11 @@ object TimeUtils {
     }
 
     fun convertToHHmmaFrom12Am(millsFrom12Am: Long): String {
+        if (millsFrom12Am !in 0 until TimeUtils.ONE_DAY_MILLISECONDS)
+            throw IllegalArgumentException("Time is invalid: $millsFrom12Am")
+
         val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         cal.timeInMillis = millsFrom12Am
-
 
         return String.format("%s:%s %s",
                 if (cal.get(Calendar.HOUR) < 10) "0${cal.get(Calendar.HOUR)}" else "${cal.get(Calendar.HOUR)}",

@@ -18,12 +18,10 @@
 package com.standup.app.fcm
 
 import android.annotation.SuppressLint
-import android.support.annotation.VisibleForTesting
+import android.arch.lifecycle.Observer
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.kevalpatel2106.common.application.BaseApplication
-import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.standup.app.authentication.AuthenticationModule
 import dagger.Lazy
 import timber.log.Timber
@@ -41,13 +39,22 @@ import javax.inject.Inject
 class FcmMessagingService : FirebaseMessagingService() {
 
     @Inject
-    lateinit var userSessionManager: UserSessionManager
-
-    @Inject
-    lateinit var userSettingsManager: Lazy<UserSettingsManager>
+    lateinit var firebaseServiceHelper: FcmMessagingServiceHelper
 
     @Inject
     lateinit var authenticationModule: Lazy<AuthenticationModule>
+
+    private val updateNotificationListener = Observer<String> {
+        it?.let { UpdateNotification.notify(this.applicationContext, it) }
+    }
+
+    private val promotionalNotificationListener = Observer<Array<String>> {
+        it?.let { PromotionalNotification.notify(this.applicationContext, it[0], it[1]) }
+    }
+
+    private val authenticationNotificationListener = Observer<String> {
+        it?.let { authenticationModule.get().fireEmailVerifiedNotification(this.applicationContext, it) }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -56,76 +63,27 @@ class FcmMessagingService : FirebaseMessagingService() {
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@FcmMessagingService)
+
+        firebaseServiceHelper.fireUpdateNotification.observeForever(updateNotificationListener)
+        firebaseServiceHelper.firePromotionalNotification.observeForever(promotionalNotificationListener)
+        firebaseServiceHelper.fireAuthenticationNotification.observeForever(authenticationNotificationListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        firebaseServiceHelper.fireUpdateNotification.removeObserver(updateNotificationListener)
+        firebaseServiceHelper.firePromotionalNotification.removeObserver(promotionalNotificationListener)
+        firebaseServiceHelper.fireAuthenticationNotification.removeObserver(authenticationNotificationListener)
     }
 
     @SuppressLint("BinaryOperationInTimber", "VisibleForTests")
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         super.onMessageReceived(remoteMessage)
 
-        if (!shouldProcessNotification(remoteMessage?.data, userSessionManager)) return
-
+        if (!firebaseServiceHelper.shouldProcessNotification(remoteMessage?.data)) return
         Timber.d("onMessageReceived: " + remoteMessage!!.data.toString())
 
         //Handle based on type
-        handleMessage(remoteMessage.data)
-    }
-
-    @VisibleForTesting
-    internal fun handleMessage(data: Map<String, String>) {
-        when (data["type"]) {
-            NotificationType.TYPE_EMAIL_VERIFIED -> {
-
-                //Change the flag to true.
-                userSessionManager.isUserVerified = true
-
-                //Fire the notification
-                authenticationModule.get()
-                        .fireEmailVerifiedNotification(this.applicationContext, data["message"])
-            }
-            NotificationType.TYPE_PROMOTIONAL -> {
-                if (userSettingsManager.get().shouldDisplayPromotionalNotification
-                        && data["title"] != null
-                        && data["message"] != null) {
-
-                    //Fire the notification
-                    PromotionalNotification.notify(this.applicationContext, data["title"]!!, data["message"]!!)
-                } else {
-                    Timber.i("Promotional notifications are turned off.")
-                }
-            }
-            NotificationType.TYPE_APP_UPDATE -> {
-
-                if (userSettingsManager.get().shouldDisplayUpdateNotification) {
-
-                    //Fire the notification
-                    data["message"]?.let { UpdateNotification.notify(this.applicationContext, it) }
-                } else {
-                    Timber.i("Update notifications are turned off.")
-                }
-            }
-        }
-    }
-
-    @VisibleForTesting
-    internal fun shouldProcessNotification(data: Map<String, String>?,
-                                           userSessionManager: UserSessionManager): Boolean {
-        if (data == null || data.isEmpty()) {
-            Timber.w("No message received in the FCM payload.")
-            return false
-        }
-
-        //Check for the user logged in
-        if (!userSessionManager.isUserLoggedIn) {
-            Timber.w("User is not registered. Skipping the message.")
-            return false
-        }
-
-        //Handle for the type.
-        if (!data.containsKey("type")) {
-            Timber.w("Notification doesn't contain the type.")
-            return false
-        }
-
-        return true
+        firebaseServiceHelper.handleMessage(remoteMessage.data)
     }
 }

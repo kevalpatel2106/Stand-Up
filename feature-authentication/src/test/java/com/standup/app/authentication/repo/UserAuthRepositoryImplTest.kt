@@ -17,7 +17,7 @@
 
 package com.standup.app.authentication.repo
 
-import com.kevalpatel2106.network.NetworkApi
+import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
@@ -48,7 +48,7 @@ class UserAuthRepositoryImplTest {
     fun setUp() {
         mockServerManager.startMockWebServer()
         userAuthRepositoryImpl = UserAuthRepositoryImpl(
-                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())
+                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())
         )
     }
 

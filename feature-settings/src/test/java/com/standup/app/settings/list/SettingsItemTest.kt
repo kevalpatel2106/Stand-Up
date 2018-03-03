@@ -28,7 +28,7 @@ import org.junit.runners.JUnit4
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(JUnit4::class)
-class SettingsHookItemTest {
+class SettingsItemTest {
 
     @Test
     @Throws(Exception::class)
@@ -36,6 +36,18 @@ class SettingsHookItemTest {
         val data = SettingsItem(SettingsId.NOTIFICATION, "Title 1", 0)
         Assert.assertEquals("Title 1", data.title)
         Assert.assertEquals(SettingsId.NOTIFICATION, data.id)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkIsSelected() {
+        val data = SettingsItem(SettingsId.NOTIFICATION, "Title 1", 0)
+
+        data.isSelected = true
+        Assert.assertTrue(data.isSelected)
+
+        data.isSelected = false
+        Assert.assertFalse(data.isSelected)
     }
 
     @Test

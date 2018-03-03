@@ -18,7 +18,6 @@
 package com.standup.app.authentication
 
 import android.content.Context
-import android.net.Uri
 import com.standup.app.authentication.deviceReg.DeviceRegisterActivity
 import com.standup.app.authentication.deviceReg.RegisterDeviceService
 import com.standup.app.authentication.intro.IntroActivity
@@ -32,12 +31,14 @@ import com.standup.app.authentication.verification.VerifyEmailActivity
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object AuthenticationModule {
+class AuthenticationModule(hook: AuthenticationHook) {
 
-    internal lateinit var authenticationHook: AuthenticationHook
+    companion object {
+        internal var authenticationHook: AuthenticationHook? = null
+    }
 
-    fun init(authenticationHook: AuthenticationHook) {
-        this.authenticationHook = authenticationHook
+    init {
+        authenticationHook = hook
     }
 
     fun openIntroScreen(context: Context, isNewTask: Boolean = false) {
@@ -56,7 +57,7 @@ object AuthenticationModule {
         VerifyEmailActivity.launch(context)
     }
 
-    fun verifyEmailLink(context: Context, verificationLink: Uri) {
+    fun verifyEmailLink(context: Context, verificationLink: String) {
         EmailLinkVerificationActivity.launch(context, verificationLink)
     }
 

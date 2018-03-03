@@ -25,7 +25,6 @@ import android.support.annotation.VisibleForTesting
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import butterknife.ButterKnife
 import com.kevalpatel2106.utils.ViewUtils
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -44,8 +43,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun setContentView(@LayoutRes layoutResID: Int) {
         super.setContentView(layoutResID)
-        //Bind butter knife
-        ButterKnife.bind(this)
         onNewIntent(intent)
     }
 

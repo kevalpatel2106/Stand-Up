@@ -46,12 +46,12 @@ class StringResponsesTests {
     private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", path)
 
     private val mockServerManager = MockServerManager()
-    private lateinit var mNetworkApi: NetworkApi
+    private lateinit var mNetworkModule: NetworkModule
 
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
-        mNetworkApi = NetworkApi()
+        mNetworkModule = NetworkModule()
     }
 
     @After
@@ -64,7 +64,7 @@ class StringResponsesTests {
     fun checkForTheStringSuccessResponse() {
         mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"), "text/plain")
 
-        val response = mNetworkApi.getRetrofitClient(mockServerManager.getBaseUrl())
+        val response = mNetworkModule.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseString()
                 .execute()
@@ -83,7 +83,7 @@ class StringResponsesTests {
                 .setHeader("Content-Type", "text/html")
                 .setBody(FileReader.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
 
-        val response = mNetworkApi.getRetrofitClient(mockServerManager.getBaseUrl())
+        val response = mNetworkModule.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
                 .callBaseString()
                 .execute()

@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.utils.utilsTest
+package com.kevalpatel2106.utils.timeUtilsTest
 
 import com.kevalpatel2106.utils.TimeUtils
 import org.junit.Assert
@@ -32,11 +32,11 @@ import java.io.IOException
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @RunWith(Enclosed::class)
-class CheckMonthName {
+class CheckMonthInitials {
 
     @RunWith(Parameterized::class)
-    class CheckMonthNameParameterize(private val input: Int,
-                                     private val expected: String) {
+    class CheckMonthInitialsParameterize(private val input: Int,
+                                         private val expected: String) {
 
         companion object {
 
@@ -44,18 +44,18 @@ class CheckMonthName {
             @Parameterized.Parameters
             fun data(): ArrayList<Array<out Any?>> {
                 return arrayListOf(
-                        arrayOf(0, "January"),
-                        arrayOf(1, "February"),
-                        arrayOf(2, "March"),
-                        arrayOf(3, "April"),
-                        arrayOf(4, "May"),
-                        arrayOf(5, "June"),
-                        arrayOf(6, "July"),
-                        arrayOf(7, "August"),
-                        arrayOf(8, "September"),
-                        arrayOf(9, "October"),
-                        arrayOf(10, "November"),
-                        arrayOf(11, "December")
+                        arrayOf(0, "JAN"),
+                        arrayOf(1, "FEB"),
+                        arrayOf(2, "MAR"),
+                        arrayOf(3, "APR"),
+                        arrayOf(4, "MAY"),
+                        arrayOf(5, "JUN"),
+                        arrayOf(6, "JUL"),
+                        arrayOf(7, "AUG"),
+                        arrayOf(8, "SEP"),
+                        arrayOf(9, "OCT"),
+                        arrayOf(10, "NOV"),
+                        arrayOf(11, "DEC")
                 )
             }
         }
@@ -63,18 +63,18 @@ class CheckMonthName {
         @Test
         @Throws(IOException::class)
         fun checkMonthInput() {
-            Assert.assertEquals(expected, TimeUtils.getMonthName(input))
+            Assert.assertEquals(expected, TimeUtils.getMonthInitials(input))
         }
     }
 
     @RunWith(JUnit4::class)
-    class CheckMonthNameNotParameterize {
+    class CheckMonthInitialsNotParameterize {
 
         @Test
         @Throws(IOException::class)
         fun checkInvalidMonthNumber() {
             try {
-                TimeUtils.getMonthName(12)
+                TimeUtils.getMonthInitials(12)
                 Assert.fail()
             } catch (e: IllegalArgumentException) {
                 //Test passed

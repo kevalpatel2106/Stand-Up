@@ -29,6 +29,8 @@
     <string name="btn_title_retry">Retry</string>
 
     <string name="notification_update_title">New update is available.</string>
+    <string name="error_invalid_verification_link">Invalid verification link.</string>
+    <string name="error_user_already_verified">User already verified.</string>
 
     <!-- TODO: remove this placeholder text -->
 </resources>

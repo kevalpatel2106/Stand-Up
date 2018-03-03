@@ -16,33 +16,39 @@
  */
 
 apply plugin: 'com.android.library'
-modulePlugins.each { plugins.apply(it) }
+Plugins.modulePlugins.each { plugins.apply(it) }
 
 android {
     signingConfigs signingConfig
 
-    compileSdkVersion buidlConfig.compile
-    buildToolsVersion buidlConfig.buildToolVersion
+    compileSdkVersion DefaultConfig.compile
+    buildToolsVersion DefaultConfig.buildToolVersion
 
     defaultConfig libDefaultConfig
 
     buildTypes {
         release {
             signingConfig signingConfigs.playStore
-            resValue "string", "server_client_id", RELEASE_SERVER_CLIENT_ID
-            resValue "string", "facebook_app_id", RELEASE_FACEBOOK_APP_ID
-            resValue "string", "application_name", RELEASE_APPLICATION_NAME
-            buildConfigField "String", "BASE_URL", "\"" + RELEASE_SERVER_BASE_URL + "\""
+
+            buildConfigField "String", "BASE_URL", "\"" + ReleaseConfig.RELEASE_SERVER_BASE_URL + "\""
+            resValue "string", "application_name", ReleaseConfig.RELEASE_APPLICATION_NAME
+            resValue "string", "package_name", ReleaseConfig.RELEASE_PACKAGE_ID
+            resValue "string", "api_host", "\"" + ReleaseConfig.RELEASE_SERVER_BASE_URL.replace("https://", "") + "\""
+            resValue "string", "server_client_id", ReleaseConfig.RELEASE_SERVER_CLIENT_ID
+            resValue "string", "android_api_key", ReleaseConfig.RELEASE_ANDROID_API_KEY
         }
         debug {
             crunchPngs false
             testCoverageEnabled true
 
             signingConfig signingConfigs.debugKey
-            resValue "string", "application_name", DEBUG_APPLICATION_NAME
-            resValue "string", "server_client_id", SERVER_CLIENT_ID
-            resValue "string", "facebook_app_id", FACEBOOK_APP_ID
-            buildConfigField "String", "BASE_URL", "\"" + SERVER_BASE_URL + "\""
+
+            buildConfigField "String", "BASE_URL", "\"" + DebugConfig.SERVER_BASE_URL + "\""
+            resValue "string", "application_name", DebugConfig.APPLICATION_NAME
+            resValue "string", "package_name", DebugConfig.PACKAGE_NAME
+            resValue "string", "api_host", "\"" + DebugConfig.SERVER_BASE_URL.replace("https://", "") + "\""
+            resValue "string", "server_client_id", DebugConfig.SERVER_CLIENT_ID
+            resValue "string", "android_api_key", DebugConfig.ANDROID_API_KEY
         }
     }
 
@@ -69,27 +75,34 @@ dependencies {
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
-    ide.each { add("implementation", it) }
-    rxLib.each { add("implementation", it) }
-    debugLibs.each { add(it.configuration, it.dependency) }
-    dagger.each { add(it.configuration, it.dependency) }
+    implementation(Deps.kotlinRefflect)
+    implementation(Deps.kotlinStdLib)
+    implementation(Deps.constraintLayout)
 
-    //Butter knife
-    implementation(butterKnifeLib.butterKnife, excludeGrp)
-    kapt(butterKnifeLib.annotationProcessor, excludeGrp)
+    implementation(Deps.rxJava)
+    implementation(Deps.rxAndroid)
+
+    implementation(Deps.timber)
+
+    //Dagger
+    implementation(Deps.daggerAndroid)
+    implementation(Deps.daggerAndroidSupport)
+    kapt(Deps.daggerAnnotations)
+    kapt(Deps.daggerCompiler)
+    compileOnly(Deps.jsr250)
 
     //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation supportLib.design
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation Deps.design
 
     //Room & Arch components
-    implementation archComponent.lifecycle
+    implementation Deps.lifecycle
 
-    implementation retrofitLib.retrofit
-    implementation(otherLib.gson, excludeGrp)
+    implementation Deps.retrofit
+    implementation(Deps.gson, excludeGrp)
 
-    implementation(firebaseLib.core, excludeGrp)
-    implementation(firebaseLib.fcm, excludeGrp)
-    implementation(otherLib.lottie, excludeGrp)
+    implementation(Deps.firebaseCore, excludeGrp)
+    implementation(Deps.fcm, excludeGrp)
+    implementation(Deps.lottie, excludeGrp)
 }

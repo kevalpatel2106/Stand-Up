@@ -25,7 +25,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.ButterKnife
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -61,10 +60,6 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //Bind butter knife
-        ButterKnife.bind(this, view)
-
         if (savedInstanceState == null && !mIsAlreadyCreated) {
             mIsAlreadyCreated = true
             runForFirstCreation()

@@ -23,7 +23,7 @@ import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.common.prefs.UserSettingsManager
-import com.kevalpatel2106.network.NetworkApi
+import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -73,7 +73,7 @@ class DashboardViewModelTest {
                 UserSettingsManager(sharedPrefsProvider),
                 userActivityDao,
                 CorePrefsProvider(sharedPrefsProvider),
-                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())
+                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())
         )
 
         model = DashboardViewModel(dashboardRepo)

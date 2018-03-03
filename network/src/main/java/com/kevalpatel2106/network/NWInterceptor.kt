@@ -19,8 +19,6 @@ package com.kevalpatel2106.network
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.support.v4.content.LocalBroadcastManager
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import org.apache.commons.codec.binary.Base64
@@ -35,7 +33,7 @@ import java.net.HttpURLConnection
  *
  * @author [&#39;https://github.com/kevalpatel2106&#39;]['https://github.com/kevalpatel2106']
  */
-internal class NWInterceptor(private val context: Context?,
+internal class NWInterceptor(private val networkHook: NetworkHook?,
                              private val userId: String?,
                              private val token: String?) : Interceptor {
 
@@ -86,7 +84,7 @@ internal class NWInterceptor(private val context: Context?,
             //Check if the json response.
             if (response.header("Content-type").equals("application/json")) {
 
-                return processJsonResponse(response, context)
+                return processJsonResponse(response, networkHook)
             } else {
 
                 //String response. Cannot do anything.
@@ -97,9 +95,7 @@ internal class NWInterceptor(private val context: Context?,
 
             //Broadcast to the app module that user is not authorized.
             //Log out.
-            if (context != null) {
-                LocalBroadcastManager.getInstance(context).sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
-            }
+            networkHook?.onAuthenticationFailed()
 
             return response.newBuilder()
                     .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)
@@ -139,7 +135,7 @@ internal class NWInterceptor(private val context: Context?,
         }
     }
 
-    private fun processJsonResponse(response: Response, context: Context?): Response {
+    private fun processJsonResponse(response: Response, networkHook: NetworkHook?): Response {
         //Read the response.
         val responseStr = response.body()?.string() ?: return createEmptyResponse(response)
         val baseResponse = gson.fromJson(responseStr, BaseResponse::class.java)
@@ -161,9 +157,8 @@ internal class NWInterceptor(private val context: Context?,
                 //You are unauthorized.
                 //Broadcast to the app module that user is not authorized.
                 //Log out.
-                if (context != null) {
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(Intent(NetworkConfig.BROADCAST_UNAUTHORIZED))
-                }
+                networkHook?.onAuthenticationFailed()
+
                 return response.newBuilder()
                         .body(ResponseBody.create(MediaType.parse("application/json"), responseStr))
                         .message(NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG)

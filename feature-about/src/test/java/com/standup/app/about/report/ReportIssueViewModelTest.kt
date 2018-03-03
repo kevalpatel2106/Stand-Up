@@ -20,7 +20,7 @@ package com.standup.app.about.report
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkApi
+import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -72,7 +72,7 @@ class ReportIssueViewModelTest {
         mockServerManager.startMockWebServer()
 
         model = ReportIssueViewModel(AboutRepositoryImpl(
-                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),    /* Mock web server */
+                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),    /* Mock web server */
                 UserSessionManager(SharedPrefsProvider(MockSharedPreference()))     /* Mock shared prefrance*/
         ))
     }

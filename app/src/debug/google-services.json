@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "921769590451",
+    "firebase_url": "https://raspberry-pi-home-169503.firebaseio.com",
+    "project_id": "raspberry-pi-home-169503",
+    "storage_bucket": "raspberry-pi-home-169503.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921769590451:android:0ad63a7a7776d8a0",
+        "android_client_info": {
+          "package_name": "com.standup.app.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921769590451-8uhalbgqsmlp5fgp2p7o06rf9uutrmph.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.standup.app.debug",
+            "certificate_hash": "70d445aaaca5fd2fdcc035ce6c69135eac857176"
+          }
+        },
+        {
+          "client_id": "921769590451-vi8kka7s7tnk5k8u8utiu9i9fsg68hn0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFRY0avJi_VGNdXxiRcH2-3Sewa7EkRok"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921769590451-vi8kka7s7tnk5k8u8utiu9i9fsg68hn0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

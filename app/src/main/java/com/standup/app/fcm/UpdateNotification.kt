@@ -23,6 +23,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.annotation.VisibleForTesting
@@ -39,31 +40,42 @@ internal object UpdateNotification {
 
     @SuppressLint("VisibleForTests")
     internal fun notify(context: Context, message: String) {
+
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         nm.addOtherNotificationChannel(context.applicationContext)
-        nm.notify(NOTIFICATION_ID, buildNotification(context, message).build())
+        nm.notify(NOTIFICATION_ID,
+                buildNotification(context,
+                        message,
+                        BitmapFactory.decodeResource(context.resources, R.drawable.ic_notification_launcher),
+                        getPendingIntent(context))
+                        .build())
     }
 
     @VisibleForTesting
-    internal fun buildNotification(context: Context, message: String): NotificationCompat.Builder {
+    internal fun buildNotification(context: Context,
+                                   message: String,
+                                   largeIcon: Bitmap? = null,
+                                   pendingIntent: PendingIntent? = null): NotificationCompat.Builder {
+
         return NotificationCompat.Builder(context)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setSmallIcon(R.drawable.ic_notification_launcher)
                 .setContentTitle(context.getString(R.string.notification_update_title))
                 .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.ic_notification_launcher))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setLargeIcon(largeIcon)
                 .setTicker(message)
                 .setChannelId(NotificationChannelType.OTHER_NOTIFICATION_CHANNEL)
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-                .setContentIntent(getPendingIntent(context))
+                .setContentIntent(pendingIntent)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(message)
                         .setBigContentTitle(context.getString(R.string.notification_update_title)))
     }
 
-    private fun getPendingIntent(context: Context): PendingIntent {
+    @VisibleForTesting
+    internal fun getPendingIntent(context: Context): PendingIntent {
         return PendingIntent.getActivity(context,
                 PENDING_INTENT_REQUEST_CODE,
                 Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.play_store_app_url))),
