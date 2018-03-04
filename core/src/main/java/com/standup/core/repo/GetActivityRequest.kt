@@ -31,4 +31,11 @@ data class GetActivityRequest(
         @SerializedName("oldestTime")
         @Expose
         val oldestTimeStamp: Long
-)
+) {
+
+    init {
+        if (oldestTimeStamp > System.currentTimeMillis()) {
+            throw IllegalArgumentException("Oldest time cannot more than current time.")
+        }
+    }
+}

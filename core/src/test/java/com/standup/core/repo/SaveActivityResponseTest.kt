@@ -102,6 +102,21 @@ class SaveActivityResponseTest {
         Assert.assertNotEquals(data, "String Object")
     }
 
+    @Test
+    fun checkInit() {
+        val id = 8237L
+        val startTime = System.currentTimeMillis()
+        val endTime = System.currentTimeMillis() + 1000
+        val userId = 10L
+        val type = 1
+        val data = SaveActivityResponse(id, startTime, endTime, type, userId)
+
+        Assert.assertEquals(id, data.id)
+        Assert.assertEquals(startTime, data.startTime)
+        Assert.assertEquals(endTime, data.endTime)
+        Assert.assertEquals(type, data.type)
+        Assert.assertEquals(userId, data.userId)
+    }
 
     @Test
     fun checkEquals() {
