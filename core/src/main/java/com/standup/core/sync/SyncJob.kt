@@ -25,7 +25,6 @@ import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.rxbus.Event
 import com.kevalpatel2106.utils.rxbus.RxBus
 import com.standup.core.CoreConfig
@@ -83,7 +82,7 @@ import javax.inject.Inject
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-internal class SyncJob : AsyncJob {
+internal class SyncJob : AsyncJob() {
 
     /**
      * [CompositeDisposable] for collecting all [io.reactivex.disposables.Disposable]. It will get
@@ -203,31 +202,15 @@ internal class SyncJob : AsyncJob {
     @Inject
     internal lateinit var corePrefsProvider: CorePrefsProvider
 
-    /**
-     * Zero parameter constructor to initiate by [JobManager].
-     */
-    constructor() {
+    @SuppressLint("VisibleForTests")
+    override fun onRunJobAsync(params: Params) {
+
         //Inject dependencies
         DaggerCoreComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SyncJob)
-    }
 
-    @VisibleForTesting
-    @OnlyForTesting
-    internal constructor(userSettingsManager: UserSettingsManager,
-                         userSessionManager: UserSessionManager,
-                         coreRepo: CoreRepo,
-                         corePrefsProvider: CorePrefsProvider) {
-        this.userSessionManager = userSessionManager
-        this.userSettingsManager = userSettingsManager
-        this.coreRepo = coreRepo
-        this.corePrefsProvider = corePrefsProvider
-    }
-
-    @SuppressLint("VisibleForTests")
-    override fun onRunJobAsync(params: Params) {
         if (SyncJobHelper.shouldRunJob(userSessionManager, userSettingsManager)) {
 
             //Add the new value to database.

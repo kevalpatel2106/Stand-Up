@@ -17,10 +17,13 @@
 
 package com.standup.core.dndManager
 
+import android.annotation.SuppressLint
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.annotations.Helper
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 
 /**
  * Created by Keval on 19/01/18.
@@ -42,7 +45,7 @@ internal object AutoDndMonitoringHelper {
      * @see TimeUtils.getTodaysCalender12AM
      */
     @JvmStatic
-    fun getAutoDndStartTiming(userSettingsManager: UserSettingsManager): Long {
+    internal fun getAutoDndStartTiming(userSettingsManager: UserSettingsManager): Long {
         return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.autoDndStartTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
@@ -66,7 +69,7 @@ internal object AutoDndMonitoringHelper {
      * @see TimeUtils.getTodaysCalender12AM
      */
     @JvmStatic
-    fun getAutoDndEndTiming(userSettingsManager: UserSettingsManager): Long {
+    internal fun getAutoDndEndTiming(userSettingsManager: UserSettingsManager): Long {
         return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.autoDndEndTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
@@ -90,8 +93,17 @@ internal object AutoDndMonitoringHelper {
      *
      * @return True if the DND should be enabled.
      */
-    fun isCurrentlyInAutoDndMode(userSettingsManager: UserSettingsManager): Boolean {
-        val currentTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis())
+    @SuppressLint("VisibleForTests")
+    internal fun isCurrentlyInAutoDndMode(userSettingsManager: UserSettingsManager): Boolean {
+        return isCurrentlyInAutoDndMode(userSettingsManager,
+                TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()))
+    }
+
+    @OnlyForTesting
+    @VisibleForTesting
+    internal fun isCurrentlyInAutoDndMode(userSettingsManager: UserSettingsManager,
+                                          @OnlyForTesting currentTimeFrom12Am: Long): Boolean {
+
         return userSettingsManager.isAutoDndEnable
                 && (currentTimeFrom12Am >= userSettingsManager.autoDndStartTime)
                 && (currentTimeFrom12Am <= userSettingsManager.autoDndEndTime)
@@ -106,8 +118,8 @@ internal object AutoDndMonitoringHelper {
      *
      * @return True if application is good to schedule/run the [AutoDndMonitoringJob] or else false.
      */
-    fun shouldRunningThisJob(userSettingsManager: UserSettingsManager,
-                             userSessionManager: UserSessionManager): Boolean {
+    internal fun shouldRunningThisJob(userSettingsManager: UserSettingsManager,
+                                      userSessionManager: UserSessionManager): Boolean {
         return userSessionManager.isUserLoggedIn && userSettingsManager.isAutoDndEnable
     }
 }

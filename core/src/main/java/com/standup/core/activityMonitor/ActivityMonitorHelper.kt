@@ -17,7 +17,6 @@
 
 package com.standup.core.activityMonitor
 
-import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
 import com.google.android.gms.location.DetectedActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivity
@@ -49,7 +48,6 @@ internal object ActivityMonitorHelper {
      * @throws IllegalStateException If the most confidante [DetectedActivity] in [detectedActivities]
      * is [DetectedActivity.TILTING] or [DetectedActivity.UNKNOWN].
      */
-    @VisibleForTesting
     internal fun isUserSitting(detectedActivities: ArrayList<DetectedActivity>): Boolean {
         if (detectedActivities.size <= 0)
             throw IllegalStateException("Detected activity list must have at least one item.")
@@ -105,19 +103,19 @@ internal object ActivityMonitorHelper {
     internal fun sortDescendingByConfidence(detectedActivities: ArrayList<DetectedActivity>): ArrayList<DetectedActivity> {
         //Sort the array by confidence level
         //Descending
-        Collections.sort(detectedActivities) { p0, p1 ->
+        detectedActivities.sortWith(Comparator { p0, p1 ->
             val diff = p1.confidence - p0.confidence
 
             if (diff == 0) {
                 if (p1.type == DetectedActivity.STILL || p1.type == DetectedActivity.IN_VEHICLE) {
-                    return@sort 1
+                    1
                 } else {
-                    return@sort -1
+                    -1
                 }
             } else {
-                return@sort diff
+                diff
             }
-        }
+        })
 
         return detectedActivities
     }

@@ -32,6 +32,7 @@ import com.kevalpatel2106.utils.isScreenOn
 import com.standup.core.sleepManager.SleepModeMonitoringHelper
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  * Created by Keval on 05/01/18.
@@ -95,7 +96,7 @@ internal object NotificationSchedulerHelper {
      * @see [AudioManager.isBluetoothScoOn]
      * @see [SOF](https://stackoverflow.com/a/45726363)
      */
-    fun isHeadsetOn(audioManager: AudioManager): Boolean {
+    internal fun isHeadsetOn(audioManager: AudioManager): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return audioManager.isWiredHeadsetOn || audioManager.isBluetoothA2dpOn
         } else {
@@ -103,6 +104,7 @@ internal object NotificationSchedulerHelper {
             for (i in devices.indices) {
                 val device = devices[i]
                 if (device.type == AudioDeviceInfo.TYPE_WIRED_HEADPHONES
+                        || device.type == AudioDeviceInfo.TYPE_WIRED_HEADSET
                         || device.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP
                         || device.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO) {
                     return true
@@ -116,33 +118,41 @@ internal object NotificationSchedulerHelper {
     /**
      * Check if the device should vibrate while playing the notifications or not?
      */
-    fun shouldVibrate(context: Context, userSettingsManager: UserSettingsManager): Boolean {
+    internal fun shouldVibrate(context: Context, userSettingsManager: UserSettingsManager): Boolean {
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
         return userSettingsManager.shouldVibrate && am.ringerMode != AudioManager.RINGER_MODE_SILENT
     }
 
 
-    fun playSound(context: Context, uri: Uri) {
-        Completable.create({
+    internal fun playSound(context: Context, uri: Uri): Completable {
+        return Completable.create({
 
             //If the media stream is in silent
             //Set the volume 4 points below the max volume.
             //We will reset the volume to current value when playback completes.
-            val audio = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-            val currentVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC)
+            val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
             if (currentVolume <= 0) {
-                audio.setStreamVolume(AudioManager.STREAM_MUSIC,
-                        audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC).minus(4), 0)
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                        audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC).minus(4), 0)
             }
 
-            val mediaPlayer = MediaPlayer.create(context, uri)
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-            mediaPlayer.setOnCompletionListener({ mp ->
-                audio.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0)
-                mp.release()
-            })
-            mediaPlayer.start()
-        }).subscribeOn(Schedulers.newThread()).subscribe()
+            try {
+
+                val mediaPlayer = MediaPlayer.create(context, uri)
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+                mediaPlayer.setOnCompletionListener({ mp ->
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVolume, 0)
+                    mp.release()
+
+                    it.onComplete()
+                })
+                mediaPlayer.start()
+            } catch (e: Exception) {
+                Timber.e(e)
+                it.onError(Throwable(e))
+            }
+        }).subscribeOn(Schedulers.newThread())
     }
 
     /**
@@ -157,20 +167,25 @@ internal object NotificationSchedulerHelper {
      * @see isHeadsetOn
      * @see [AudioManager.getRingerMode]
      */
-    fun shouldPlaySound(context: Context, userSettingsManager: UserSettingsManager): Boolean {
+    internal fun shouldPlaySound(context: Context, userSettingsManager: UserSettingsManager): Boolean {
         val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        return if (am.ringerMode == AudioManager.RINGER_MODE_SILENT
+        if (am.ringerMode == AudioManager.RINGER_MODE_SILENT
                 || am.ringerMode == AudioManager.RINGER_MODE_VIBRATE) { /* Phone is in silent mode. */
 
-            //Check which setting user has selected?
-            when {
-                userSettingsManager.shouldPlayReminderSoundAlways -> true   /* No matter what, play the sound. */
-                userSettingsManager.shouldPlayReminderSoundWithHeadphones -> NotificationSchedulerHelper.isHeadsetOn(am) /* Play the sound only when head phone connected. */
-                else -> false
+            return if (userSettingsManager.shouldPlayReminderSoundInSilent) {
+
+                //Check which setting user has selected?
+                when {
+                    userSettingsManager.shouldPlayReminderSoundAlways -> true   /* No matter what, play the sound. */
+                    userSettingsManager.shouldPlayReminderSoundWithHeadphones -> NotificationSchedulerHelper.isHeadsetOn(am) /* Play the sound only when head phone connected. */
+                    else -> false
+                }
+            } else {
+                false
             }
         } else {
-            true
+            return true
         }
     }
 }

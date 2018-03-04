@@ -78,7 +78,7 @@ internal class ReminderNotification {
         }
 
         if (NotificationSchedulerHelper.shouldPlaySound(context, userSettingsManager)) {
-            NotificationSchedulerHelper.playSound(context, userSettingsManager.getReminderToneUri)
+            NotificationSchedulerHelper.playSound(context, userSettingsManager.getReminderToneUri).subscribe()
         }
     }
 

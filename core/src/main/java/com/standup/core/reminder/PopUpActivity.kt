@@ -67,7 +67,7 @@ class PopUpActivity : BaseActivity() {
 
         if (NotificationSchedulerHelper.shouldPlaySound(this@PopUpActivity, userSettingsManager)) {
             NotificationSchedulerHelper.playSound(this@PopUpActivity,
-                    userSettingsManager.getReminderToneUri)
+                    userSettingsManager.getReminderToneUri).subscribe()
         }
     }
 
