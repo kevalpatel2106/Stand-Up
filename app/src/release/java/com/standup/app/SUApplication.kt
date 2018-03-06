@@ -23,11 +23,6 @@ import com.facebook.FacebookSdk
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.kevalpatel2106.common.application.BaseApplication
-import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.common.prefs.UserSettingsManager
-import com.kevalpatel2106.utils.SharedPrefsProvider
-import com.standup.app.BuildConfig
-import com.standup.core.Core
 import io.fabric.sdk.android.Fabric
 import timber.log.Timber
 
@@ -63,10 +58,6 @@ class SUApplication : BaseApplication() {
 
         //Enable firebase analytics
         FirebaseAnalytics.getInstance(this@SUApplication).setAnalyticsCollectionEnabled(true)
-
-        val prefProvider = SharedPrefsProvider(this@SUApplication)
-        Core(UserSessionManager(prefProvider), UserSettingsManager(prefProvider), prefProvider)
-                .turnOn(this@SUApplication)
     }
 
 }
