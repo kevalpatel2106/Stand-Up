@@ -40,20 +40,20 @@ class AutoDndMonitoringHelperTest {
     @Test
     fun checkAutoDndStartTiming_ForToday() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val autoDndStartTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 1800_000L
+        val autoDndStartTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
                 .thenReturn(autoDndStartTimeFrom12Am)
 
         val nextAlarmTime = AutoDndMonitoringHelper.getAutoDndStartTiming(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTodaysCalender12AM().timeInMillis + autoDndStartTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.todayMidnightCal().timeInMillis + autoDndStartTimeFrom12Am)
     }
 
     @Test
     fun checkAutoDndStartTiming_ForTomorrow() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val autoDndStartTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 1800_000
+        val autoDndStartTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
@@ -61,26 +61,26 @@ class AutoDndMonitoringHelperTest {
 
 
         val nextAlarmTime = AutoDndMonitoringHelper.getAutoDndStartTiming(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTommorowsCalender12AM().timeInMillis + autoDndStartTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.tomorrowMidnightCal().timeInMillis + autoDndStartTimeFrom12Am)
     }
 
     @Test
     fun checkAutoDndEndTiming_ForToday() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val autoDndEndTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 1800_000L
+        val autoDndEndTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
                 .thenReturn(autoDndEndTimeFrom12Am)
 
         val nextAlarmTime = AutoDndMonitoringHelper.getAutoDndEndTiming(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTodaysCalender12AM().timeInMillis + autoDndEndTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.todayMidnightCal().timeInMillis + autoDndEndTimeFrom12Am)
     }
 
     @Test
     fun checkAutoDndEndTiming_ForTomorrow() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val autoDndEndTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 1800_000
+        val autoDndEndTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
@@ -88,7 +88,7 @@ class AutoDndMonitoringHelperTest {
 
 
         val nextAlarmTime = AutoDndMonitoringHelper.getAutoDndEndTiming(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTommorowsCalender12AM().timeInMillis + autoDndEndTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.tomorrowMidnightCal().timeInMillis + autoDndEndTimeFrom12Am)
     }
 
     @Test
@@ -140,7 +140,7 @@ class AutoDndMonitoringHelperTest {
 
         //Half an hour before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 1800_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000L)
 
         Assert.assertFalse(AutoDndMonitoringHelper.isCurrentlyInAutoDndMode(UserSettingsManager(sharedPrefsProvider)))
     }
@@ -153,11 +153,11 @@ class AutoDndMonitoringHelperTest {
 
         //Half an hour before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys.PREF_KEY_AUTO_DND_START_TIME_FROM_12AM), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 1800_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000L)
 
         //15 mins before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys.PREF_KEY_AUTO_DND_END_TIME_FROM_12AM), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 900_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 900_000L)
 
         Assert.assertFalse(AutoDndMonitoringHelper.isCurrentlyInAutoDndMode(UserSettingsManager(sharedPrefsProvider)))
     }
@@ -170,11 +170,11 @@ class AutoDndMonitoringHelperTest {
 
         //15 mins before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys.PREF_KEY_AUTO_DND_START_TIME_FROM_12AM), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 900_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 900_000L)
 
         //15 mins after current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys.PREF_KEY_AUTO_DND_END_TIME_FROM_12AM), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 900_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 900_000L)
 
         Assert.assertTrue(AutoDndMonitoringHelper.isCurrentlyInAutoDndMode(UserSettingsManager(sharedPrefsProvider)))
     }
@@ -185,7 +185,7 @@ class AutoDndMonitoringHelperTest {
         //Make auto dnd enable
         Mockito.`when`(sharedPrefsProvider.getBoolFromPreferences(anyString(), anyBoolean())).thenReturn(true)
 
-        val currentTime = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis())
+        val currentTime = TimeUtils.millsFromMidnight(System.currentTimeMillis())
 
         //Set the start time to the current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys
@@ -207,7 +207,7 @@ class AutoDndMonitoringHelperTest {
         //Make auto dnd enable
         Mockito.`when`(sharedPrefsProvider.getBoolFromPreferences(anyString(), anyBoolean())).thenReturn(true)
 
-        val currentTime = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis())
+        val currentTime = TimeUtils.millsFromMidnight(System.currentTimeMillis())
 
         //Set the start time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys

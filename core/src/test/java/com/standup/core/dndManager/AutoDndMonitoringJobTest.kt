@@ -92,8 +92,8 @@ class AutoDndMonitoringJobTest {
     }
 
     private fun scheduleJob() {
-        val dndStartTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 900_000L
-        val dndEndTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 1800_000L
+        val dndStartTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 900_000L
+        val dndEndTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
 
         //Set dnd enable

@@ -72,20 +72,20 @@ class DailyReviewHelperTest {
     @Test
     fun checkNextAlarmTime_ForToday() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val dailyAlarmTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 1800_000L
+        val dailyAlarmTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
                 .thenReturn(dailyAlarmTimeFrom12Am)
 
         val nextAlarmTime = DailyReviewHelper.getNextAlarmTime(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTodaysCalender12AM().timeInMillis + dailyAlarmTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.todayMidnightCal().timeInMillis + dailyAlarmTimeFrom12Am)
     }
 
     @Test
     fun checkNextAlarmTime_ForTomorrow() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val dailyAlarmTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 1800_000
+        val dailyAlarmTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
@@ -93,6 +93,6 @@ class DailyReviewHelperTest {
 
 
         val nextAlarmTime = DailyReviewHelper.getNextAlarmTime(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTommorowsCalender12AM().timeInMillis + dailyAlarmTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.tomorrowMidnightCal().timeInMillis + dailyAlarmTimeFrom12Am)
     }
 }

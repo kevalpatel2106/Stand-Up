@@ -38,11 +38,11 @@ internal object SleepModeMonitoringHelper {
      * next day.
      *
      * @see UserSettingsManager.sleepStartTime
-     * @see TimeUtils.getTodaysCalender12AM
+     * @see TimeUtils.todayMidnightCal
      */
     @JvmStatic
     fun getSleepStartTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.sleepStartTime) {
+        return with(TimeUtils.todayMidnightCal().timeInMillis + userSettingsManager.sleepStartTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
@@ -62,11 +62,11 @@ internal object SleepModeMonitoringHelper {
      * next day.
      *
      * @see UserSettingsManager.sleepEndTime
-     * @see TimeUtils.getTodaysCalender12AM
+     * @see TimeUtils.todayMidnightCal
      */
     @JvmStatic
     fun getSleepEndTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.sleepEndTime) {
+        return with(TimeUtils.todayMidnightCal().timeInMillis + userSettingsManager.sleepEndTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
@@ -90,7 +90,7 @@ internal object SleepModeMonitoringHelper {
      * @return True if the DND should be enabled.
      */
     fun isCurrentlyInSleepMode(userSettingsManager: UserSettingsManager): Boolean {
-        val currentTimeFrom12Am = System.currentTimeMillis() - TimeUtils.getTodaysCalender12AM().timeInMillis
+        val currentTimeFrom12Am = System.currentTimeMillis() - TimeUtils.todayMidnightCal().timeInMillis
         return (userSettingsManager.sleepStartTime <= currentTimeFrom12Am)
                 && (userSettingsManager.sleepEndTime >= currentTimeFrom12Am)
     }

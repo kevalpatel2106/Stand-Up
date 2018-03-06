@@ -18,7 +18,6 @@
 package com.kevalpatel2106.utils.timeUtilsTest
 
 import com.kevalpatel2106.utils.TimeUtils
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -64,7 +63,6 @@ class TimeUtilsTest {
         assertEquals(TimeUtils.convertToMilli(0), 0)
     }
 
-
     @Test
     @Throws(Exception::class)
     fun checkConvertToMilli_NegativeMills() {
@@ -74,52 +72,48 @@ class TimeUtilsTest {
 
     @Test
     @Throws(Exception::class)
-    fun checkGetCalender12AMWithMills() {
-        val today12AmCal = Calendar.getInstance()
-        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
-        today12AmCal.set(Calendar.MINUTE, 0)
-        today12AmCal.set(Calendar.SECOND, 0)
-        today12AmCal.set(Calendar.MILLISECOND, 0)
-
-        assertEquals(TimeUtils.getCalender12AM(System.currentTimeMillis()).timeInMillis,
-                today12AmCal.timeInMillis)
+    fun checkCurrentTimeMills() {
+        assertTrue(Math.abs(System.currentTimeMillis() - TimeUtils.currentTimeMills()) < 10 /* 10 ms */)
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkGetTodays12AM() {
-        val today12AmCal = Calendar.getInstance()
-        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
-        today12AmCal.set(Calendar.MINUTE, 0)
-        today12AmCal.set(Calendar.SECOND, 0)
-        today12AmCal.set(Calendar.MILLISECOND, 0)
-
-        assertEquals(TimeUtils.getTodaysCalender12AM().timeInMillis, today12AmCal.timeInMillis)
+    fun checkCurrentMillsFromMidnight() {
+        assertEquals(System.currentTimeMillis() % TimeUtils.ONE_DAY_MILLISECONDS,
+                TimeUtils.currentMillsFromMidnight())
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkGetCalender12AM_WithDate() {
-        val today12AmCal = Calendar.getInstance()
-        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
-        today12AmCal.set(Calendar.MINUTE, 0)
-        today12AmCal.set(Calendar.SECOND, 0)
-        today12AmCal.set(Calendar.MILLISECOND, 0)
+    fun checkTodayMidnightMills() {
+        val nowUtc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        val midnightCal = TimeUtils.todayMidnightCal()
+        assertEquals(midnightCal.timeInMillis % TimeUtils.ONE_DAY_MILLISECONDS, 0)
 
-        assertEquals(TimeUtils.getCalender12AM(today12AmCal.get(Calendar.DAY_OF_MONTH),
-                today12AmCal.get(Calendar.MONTH),
-                today12AmCal.get(Calendar.YEAR)).timeInMillis,
-                today12AmCal.timeInMillis)
+        assertEquals(midnightCal.timeZone.rawOffset, 0) //UTC
+
+        assertEquals(midnightCal.get(Calendar.HOUR_OF_DAY), 0)
+        assertEquals(midnightCal.get(Calendar.MILLISECOND), 0)
+        assertEquals(midnightCal.get(Calendar.MINUTE), 0)
+        assertEquals(midnightCal.get(Calendar.SECOND), 0)
+
+        assertEquals(midnightCal.get(Calendar.DAY_OF_YEAR), nowUtc.get(Calendar.DAY_OF_YEAR))
+        assertEquals(midnightCal.get(Calendar.MONTH), nowUtc.get(Calendar.MONTH))
+        assertEquals(midnightCal.get(Calendar.YEAR), nowUtc.get(Calendar.YEAR))
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkGetMilliSecFrom12AM_WithZeroTime() {
-        try {
-            TimeUtils.getMilliSecFrom12AM(0)
-            Assert.fail()
-        } catch (e: IllegalArgumentException) {
-            //Test Passed
-        }
+    fun checkTodayMidnightMills_And_CurrentMillsFromMidnight() {
+        val midnightCal = TimeUtils.todayMidnightCal()
+        assertEquals(System.currentTimeMillis() - TimeUtils.currentMillsFromMidnight(),
+                midnightCal.timeInMillis)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkTodayMidnightMills_And_GetMidnightCal() {
+        assertTrue(Math.abs(TimeUtils.getMidnightCal(System.currentTimeMillis()).timeInMillis
+                - TimeUtils.todayMidnightCal().timeInMillis) < 1000)
     }
 }

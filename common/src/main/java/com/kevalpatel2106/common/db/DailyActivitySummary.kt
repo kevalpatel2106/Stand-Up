@@ -102,8 +102,8 @@ constructor(
         // The end time will be either the 23:59:59 of that day if the summary day is not current day
         // or current time if the summary is for today.
         //----------------//
-        val summaryDayCal = TimeUtils.getCalender12AM(dayOfMonth, monthOfYear, year)
-        val todayCal = TimeUtils.getTodaysCalender12AM()
+        val summaryDayCal = TimeUtils.getMidnightCal(dayOfMonth, monthOfYear, year)
+        val todayCal = TimeUtils.todayMidnightCal()
 
         //Calculate start time for the event.
         startTimeMills = summaryDayCal.timeInMillis
@@ -264,7 +264,7 @@ constructor(
                 }
 
                 //If the event is ending next day...
-                val thisDayStartMills = TimeUtils.getCalender12AM(value.eventStartTimeMills).timeInMillis
+                val thisDayStartMills = TimeUtils.getMidnightCal(value.eventStartTimeMills).timeInMillis
                 val thisDayEndingMills = thisDayStartMills + TimeUtils.ONE_DAY_MILLISECONDS - 1_000L
                 if (value.eventEndTimeMills > thisDayEndingMills) {
                     //Consider it ending on this day 12 AM.

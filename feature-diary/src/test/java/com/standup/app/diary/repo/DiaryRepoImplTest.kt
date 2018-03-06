@@ -156,7 +156,7 @@ class DiaryRepoImplTest {
 
         Assert.assertEquals(2, it.size)
 
-        val cal12Am = TimeUtils.getCalender12AM(cal.timeInMillis)
+        val cal12Am = TimeUtils.getMidnightCal(cal.timeInMillis)
         //Assert the oldest item has the start time after 12 AM today
         Assert.assertTrue(it.last().eventStartTimeMills >= cal12Am.timeInMillis)
 
@@ -215,7 +215,7 @@ class DiaryRepoImplTest {
 
     private fun insert2EventsInEachDayFor7Days() {
         //Set fake db items so that we have at least one user activity with past 10 days.
-        val cal = TimeUtils.getTodaysCalender12AM()
+        val cal = TimeUtils.todayMidnightCal()
 
         for (i in DiaryRepo.PAGE_SIZE + 4 downTo 1) {
 
@@ -237,7 +237,7 @@ class DiaryRepoImplTest {
 
     private fun insert5EventsInEachDayFor1Day() {
         //Set fake db items so that we have all the 5 activities in one single day
-        val cal = TimeUtils.getTodaysCalender12AM()
+        val cal = TimeUtils.todayMidnightCal()
 
         for (i in 15 downTo 1) {
             val startTime = cal.timeInMillis + (i * DIFF_BETWEEN_END_AND_START)
@@ -256,7 +256,7 @@ class DiaryRepoImplTest {
 
     private fun insertOneEventsInEachDayFor15Days() {
         //Set fake db items so that we have at least one user activity with past 10 days.
-        val cal = TimeUtils.getTodaysCalender12AM()
+        val cal = TimeUtils.todayMidnightCal()
 
         for (i in DiaryRepo.PAGE_SIZE + 5 downTo 1) {
             cal.add(Calendar.DAY_OF_MONTH, -1)

@@ -36,49 +36,76 @@ object TimeUtils {
 
     fun convertToMilli(timeInNano: Long): Long = TimeUnit.NANOSECONDS.toMillis(timeInNano)
 
-    fun getMilliSecFrom12AM(unixMills: Long): Long {
+    fun currentTimeMills() = System.currentTimeMillis()
+
+    fun getMidnightCal(dayOfMonth: Int, monthOfYear: Int, year: Int): Calendar {
+        val midnightCal = Calendar.getInstance()
+        midnightCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        midnightCal.set(Calendar.MONTH, monthOfYear)
+        midnightCal.set(Calendar.YEAR, year)
+
+        midnightCal.set(Calendar.HOUR_OF_DAY, 0)
+        midnightCal.set(Calendar.MINUTE, 0)
+        midnightCal.set(Calendar.SECOND, 0)
+        midnightCal.set(Calendar.MILLISECOND, 0)
+
+        midnightCal.timeZone = TimeZone.getTimeZone("UTC")
+
+        return midnightCal
+    }
+
+    fun getMidnightCal(unixMills: Long): Calendar {
+        val midnightCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        midnightCal.timeInMillis = unixMills
+
+        midnightCal.set(Calendar.HOUR_OF_DAY, 0)
+        midnightCal.set(Calendar.MINUTE, 0)
+        midnightCal.set(Calendar.SECOND, 0)
+        midnightCal.set(Calendar.MILLISECOND, 0)
+
+        return midnightCal
+    }
+
+    fun todayMidnightCal(): Calendar {
+        return getMidnightCal(currentTimeMills())
+    }
+
+    //TODO Write test
+    fun tomorrowMidnightCal(): Calendar {
+        val cal = getMidnightCal(currentTimeMills())
+        cal.add(Calendar.DAY_OF_YEAR, 1)
+        return cal
+    }
+
+    fun millsFromMidnight(unixMills: Long): Long {
         if (unixMills <= 0)
             throw IllegalArgumentException("Invalid unix time: ".plus(unixMills))
-
-        val today12AmCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        today12AmCal.timeInMillis = unixMills
-        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
-        today12AmCal.set(Calendar.MINUTE, 0)
-        today12AmCal.set(Calendar.SECOND, 0)
-        today12AmCal.set(Calendar.MILLISECOND, 0)
-        return unixMills - today12AmCal.timeInMillis
+        return unixMills - getMidnightCal(unixMills).timeInMillis
     }
 
-    fun getMilliSecFrom12AM(hourOfTheDay: Int, minutes: Int): Long {
+    fun millsFromMidnight(hourOfTheDay: Int, minutes: Int): Long {
         if (hourOfTheDay !in 0..23 || minutes !in 0..59)
             throw IllegalArgumentException("Invalid hours: $hourOfTheDay:$minutes")
-        return hourOfTheDay.times(TimeUtils.ONE_HOUR_MILLS) + minutes.times(TimeUtils.ONE_MIN_MILLS)
+
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, hourOfTheDay)
+        cal.set(Calendar.MINUTE, minutes)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+
+        cal.timeZone = TimeZone.getTimeZone("UTC")
+
+        val unixMills = cal.timeInMillis
+        return unixMills - getMidnightCal(unixMills).timeInMillis
     }
 
-    fun getCalender12AM(dayOfMonth: Int, monthOfYear: Int, year: Int): Calendar {
-        val calender12Am = getTodaysCalender12AM()
-        calender12Am.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        calender12Am.set(Calendar.MONTH, monthOfYear)
-        calender12Am.set(Calendar.YEAR, year)
-        return calender12Am
+    //TODO Write test
+    fun todayMidnightMills(): Long {
+        return millsFromMidnight(currentTimeMills())
     }
 
-    fun getCalender12AM(unixMills: Long): Calendar {
-        val calender12Am = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        calender12Am.timeInMillis = unixMills
-        calender12Am.set(Calendar.HOUR_OF_DAY, 0)
-        calender12Am.set(Calendar.MINUTE, 0)
-        calender12Am.set(Calendar.SECOND, 0)
-        calender12Am.set(Calendar.MILLISECOND, 0)
-        return calender12Am
-    }
-
-    fun getTodaysCalender12AM(): Calendar {
-        return getCalender12AM(System.currentTimeMillis())
-    }
-
-    fun getTommorowsCalender12AM(): Calendar {
-        return getCalender12AM(System.currentTimeMillis() + TimeUtils.ONE_DAY_MILLISECONDS)
+    fun currentMillsFromMidnight(): Long {
+        return millsFromMidnight(currentTimeMills())
     }
 
     //*********** Human readable month formats *********//

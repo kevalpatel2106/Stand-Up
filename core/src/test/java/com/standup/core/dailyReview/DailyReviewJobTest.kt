@@ -51,7 +51,7 @@ class DailyReviewJobTest {
     @Test
     fun checkScheduleJob_DailyReviewNotEnable() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val dailyAlarmTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 1800_000L
+        val dailyAlarmTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong()))
@@ -88,7 +88,7 @@ class DailyReviewJobTest {
 
     private fun scheduleJob() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val dailyAlarmTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 1800_000L
+        val dailyAlarmTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong()))

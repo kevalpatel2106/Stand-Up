@@ -40,20 +40,20 @@ class SleepModeMonitoringHelperTest {
     @Test
     fun checkSleepStartTiming_ForToday() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val sleepStartTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 1800_000L
+        val sleepStartTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
                 .thenReturn(sleepStartTimeFrom12Am)
 
         val nextAlarmTime = SleepModeMonitoringHelper.getSleepStartTiming(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTodaysCalender12AM().timeInMillis + sleepStartTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.todayMidnightCal().timeInMillis + sleepStartTimeFrom12Am)
     }
 
     @Test
     fun checkSleepStartTiming_ForTomorrow() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val sleepStartTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 1800_000
+        val sleepStartTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
@@ -61,26 +61,26 @@ class SleepModeMonitoringHelperTest {
 
 
         val nextAlarmTime = SleepModeMonitoringHelper.getSleepStartTiming(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTommorowsCalender12AM().timeInMillis + sleepStartTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.tomorrowMidnightCal().timeInMillis + sleepStartTimeFrom12Am)
     }
 
     @Test
     fun checkSleepEndTiming_ForToday() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val sleepEndTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 1800_000L
+        val sleepEndTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
                 .thenReturn(sleepEndTimeFrom12Am)
 
         val nextAlarmTime = SleepModeMonitoringHelper.getSleepEndTiming(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTodaysCalender12AM().timeInMillis + sleepEndTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.todayMidnightCal().timeInMillis + sleepEndTimeFrom12Am)
     }
 
     @Test
     fun checkSleepEndTiming_ForTomorrow() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val sleepEndTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 1800_000
+        val sleepEndTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
@@ -88,7 +88,7 @@ class SleepModeMonitoringHelperTest {
 
 
         val nextAlarmTime = SleepModeMonitoringHelper.getSleepEndTiming(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.getTommorowsCalender12AM().timeInMillis + sleepEndTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.tomorrowMidnightCal().timeInMillis + sleepEndTimeFrom12Am)
     }
 
     @Test
@@ -115,7 +115,7 @@ class SleepModeMonitoringHelperTest {
 
         //Half an hour before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 1800_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000L)
 
         Assert.assertFalse(SleepModeMonitoringHelper.isCurrentlyInSleepMode(UserSettingsManager(sharedPrefsProvider)))
     }
@@ -125,11 +125,11 @@ class SleepModeMonitoringHelperTest {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
         //Half an hour before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys.PREF_KEY_SLEEP_START_TIME_FROM_12AM), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 1800_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000L)
 
         //15 mins before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys.PREF_KEY_SLEEP_END_TIME_FROM_12AM), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 900_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 900_000L)
 
         Assert.assertFalse(SleepModeMonitoringHelper.isCurrentlyInSleepMode(UserSettingsManager(sharedPrefsProvider)))
     }
@@ -140,11 +140,11 @@ class SleepModeMonitoringHelperTest {
 
         //15 mins before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys.PREF_KEY_SLEEP_START_TIME_FROM_12AM), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) - 900_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 900_000L)
 
         //15 mins after current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(startsWith(SharedPreferenceKeys.PREF_KEY_SLEEP_END_TIME_FROM_12AM), anyLong()))
-                .thenReturn(TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 900_000L)
+                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 900_000L)
 
         Assert.assertTrue(SleepModeMonitoringHelper.isCurrentlyInSleepMode(UserSettingsManager(sharedPrefsProvider)))
     }

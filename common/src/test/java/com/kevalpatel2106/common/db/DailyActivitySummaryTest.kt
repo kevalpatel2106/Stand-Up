@@ -159,7 +159,7 @@ class DailyActivitySummaryTest {
                     dayActivity = getMockUserActivityList())
 
             //Check end time
-            val tempCal = TimeUtils.getCalender12AM(dayOfMonth = 1,
+            val tempCal = TimeUtils.getMidnightCal(dayOfMonth = 1,
                     monthOfYear = 11,
                     year = 2017)
             Assert.assertEquals(summary.endTimeMills, tempCal.timeInMillis + TimeUtils.ONE_DAY_MILLISECONDS)
@@ -205,7 +205,7 @@ class DailyActivitySummaryTest {
                     year = nowCal.get(Calendar.YEAR),
                     dayActivity = userActivities)
 
-            Assert.assertEquals(TimeUtils.getMilliSecFrom12AM(timeMills), summary.totalDuration)
+            Assert.assertEquals(TimeUtils.millsFromMidnight(timeMills), summary.totalDuration)
         } catch (e: IllegalArgumentException) {
             //Test passed.
             //NO OP
@@ -226,7 +226,7 @@ class DailyActivitySummaryTest {
             Assert.assertTrue(System.currentTimeMillis() - summary.endTimeMills < 2_000L /* 2 seconds delta */)
 
             //Check for the duration
-            val expectedDuration = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis())
+            val expectedDuration = TimeUtils.millsFromMidnight(System.currentTimeMillis())
 
             val duration = summary.endTimeMills - summary.startTimeMills
             Assert.assertTrue(Math.abs(duration - expectedDuration) < 1_000L)
@@ -442,7 +442,7 @@ class DailyActivitySummaryTest {
         Assert.assertEquals(summary.monthInitials, TimeUtils.getMonthInitials(expectedMonth))
 
         //Check the duration
-        val expectedDuration = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis())
+        val expectedDuration = TimeUtils.millsFromMidnight(System.currentTimeMillis())
         val actualDuration = summary.endTimeMills - summary.startTimeMills
         Assert.assertTrue(Math.abs(expectedDuration - actualDuration) < 5000L /* Allow 5 second difference*/)
 

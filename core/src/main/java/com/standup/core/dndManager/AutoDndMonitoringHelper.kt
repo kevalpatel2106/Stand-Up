@@ -42,11 +42,11 @@ internal object AutoDndMonitoringHelper {
      * next day.
      *
      * @see UserSettingsManager.autoDndStartTime
-     * @see TimeUtils.getTodaysCalender12AM
+     * @see TimeUtils.todayMidnightCal
      */
     @JvmStatic
     internal fun getAutoDndStartTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.autoDndStartTime) {
+        return with(TimeUtils.todayMidnightCal().timeInMillis + userSettingsManager.autoDndStartTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
@@ -66,11 +66,11 @@ internal object AutoDndMonitoringHelper {
      * next day.
      *
      * @see UserSettingsManager.autoDndEndTime
-     * @see TimeUtils.getTodaysCalender12AM
+     * @see TimeUtils.todayMidnightCal
      */
     @JvmStatic
     internal fun getAutoDndEndTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(TimeUtils.getTodaysCalender12AM().timeInMillis + userSettingsManager.autoDndEndTime) {
+        return with(TimeUtils.todayMidnightCal().timeInMillis + userSettingsManager.autoDndEndTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
@@ -96,7 +96,7 @@ internal object AutoDndMonitoringHelper {
     @SuppressLint("VisibleForTests")
     internal fun isCurrentlyInAutoDndMode(userSettingsManager: UserSettingsManager): Boolean {
         return isCurrentlyInAutoDndMode(userSettingsManager,
-                TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()))
+                TimeUtils.millsFromMidnight(System.currentTimeMillis()))
     }
 
     @OnlyForTesting

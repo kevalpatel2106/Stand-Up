@@ -101,7 +101,7 @@ internal class DailyReviewSettingsViewModel : BaseViewModel {
 
         val dialog = GridTimePickerDialog.newInstance({ _, hourOfDay, minute ->
             //Save new time
-            settingsManager.dailyReviewTimeFrom12Am = TimeUtils.getMilliSecFrom12AM(hourOfDay, minute)
+            settingsManager.dailyReviewTimeFrom12Am = TimeUtils.millsFromMidnight(hourOfDay, minute)
 
             //daily review timing changed. Update the alarms.
             onDailyReviewSettingChange()

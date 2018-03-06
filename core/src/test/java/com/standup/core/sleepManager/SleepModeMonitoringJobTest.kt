@@ -91,8 +91,8 @@ class SleepModeMonitoringJobTest {
     }
 
     private fun scheduleJob() {
-        val sleepStartTime12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 900_000L
-        val sleepEndTime12Am = TimeUtils.getMilliSecFrom12AM(System.currentTimeMillis()) + 1800_000L
+        val sleepStartTime12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 900_000L
+        val sleepEndTime12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
 
         //Set dnd enable

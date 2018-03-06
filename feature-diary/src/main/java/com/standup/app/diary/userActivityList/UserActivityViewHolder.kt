@@ -59,7 +59,7 @@ internal class UserActivityViewHolder(itemView: View) : RecyclerView.ViewHolder(
         @VisibleForTesting
         internal fun getDuration(endTime: Long, startTime: Long): String {
             return if (endTime == 0L) {
-                TimeUtils.convertToHourMinutes(TimeUtils.getCalender12AM(startTime).timeInMillis
+                TimeUtils.convertToHourMinutes(TimeUtils.getMidnightCal(startTime).timeInMillis
                         + TimeUtils.ONE_DAY_MILLISECONDS - startTime)
             } else {
                 TimeUtils.convertToHourMinutes(endTime - startTime)

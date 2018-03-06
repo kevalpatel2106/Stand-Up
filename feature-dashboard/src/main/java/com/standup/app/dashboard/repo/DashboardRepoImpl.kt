@@ -63,7 +63,7 @@ internal class DashboardRepoImpl constructor(private val application: Applicatio
     }
 
     override fun getTodaySummary(): Flowable<DailyActivitySummary> {
-        val calendar = TimeUtils.getTodaysCalender12AM()
+        val calendar = TimeUtils.todayMidnightCal()
         val startTimeMills = calendar.timeInMillis
 
         calendar.set(Calendar.HOUR_OF_DAY, 24)

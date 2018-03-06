@@ -126,8 +126,8 @@ internal class DndSettingsViewModel : BaseViewModel {
                                         endMins: Int) {
 
                 //Save the time
-                val startTimeMills = TimeUtils.getMilliSecFrom12AM(startHourOfDay, startMinutes)
-                val endTimeMils = TimeUtils.getMilliSecFrom12AM(endHourOfDay, endMins)
+                val startTimeMills = TimeUtils.millsFromMidnight(startHourOfDay, startMinutes)
+                val endTimeMils = TimeUtils.millsFromMidnight(endHourOfDay, endMins)
                 userSettingsManager.setAutoDndTime(startTimeMills, endTimeMils)
 
                 onAutoDndChanged()
@@ -148,8 +148,8 @@ internal class DndSettingsViewModel : BaseViewModel {
                                         endMins: Int) {
 
                 //Save the time
-                val startTimeMills = TimeUtils.getMilliSecFrom12AM(startHourOfDay, startMinutes)
-                val endTimeMils = TimeUtils.getMilliSecFrom12AM(endHourOfDay, endMins)
+                val startTimeMills = TimeUtils.millsFromMidnight(startHourOfDay, startMinutes)
+                val endTimeMils = TimeUtils.millsFromMidnight(endHourOfDay, endMins)
                 userSettingsManager.setSleepTime(startTimeMills, endTimeMils)
 
                 onSleepTimeChanged()

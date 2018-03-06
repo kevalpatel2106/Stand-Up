@@ -111,7 +111,7 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
         dayCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         dayCal.set(Calendar.MONTH, month)
         dayCal.set(Calendar.YEAR, year)
-        dayCal = TimeUtils.getCalender12AM(dayCal.timeInMillis)
+        dayCal = TimeUtils.getMidnightCal(dayCal.timeInMillis)
 
         val startTimeMills = dayCal.timeInMillis
 

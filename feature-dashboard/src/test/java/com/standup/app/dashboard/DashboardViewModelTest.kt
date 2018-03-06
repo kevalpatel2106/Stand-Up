@@ -109,7 +109,7 @@ class DashboardViewModelTest {
 
     private fun insertEventsForToday(capacity: Int = 10) {
         //Set fake db items so that we have at least one user activity with past 10 days.
-        val cal = TimeUtils.getTodaysCalender12AM()
+        val cal = TimeUtils.todayMidnightCal()
 
         for (i in capacity downTo 1) {
             cal.add(Calendar.HOUR_OF_DAY, 1)

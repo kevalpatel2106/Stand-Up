@@ -213,7 +213,7 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
         //Get the calender for 12 AM of that day
         var dayCal = Calendar.getInstance()
         dayCal.add(Calendar.DAY_OF_MONTH, -2)       //Previous day
-        dayCal = TimeUtils.getCalender12AM(dayCal.timeInMillis)
+        dayCal = TimeUtils.getMidnightCal(dayCal.timeInMillis)
 
         val startTimeMills = dayCal.timeInMillis
 
