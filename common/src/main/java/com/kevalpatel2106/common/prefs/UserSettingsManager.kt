@@ -21,6 +21,8 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.net.Uri
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.TimeUtils
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 
 /**
  * Created by Keval on 14/01/18.
@@ -162,10 +164,9 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
     private val DEFAULT_SLEEP_START_TIME = 22 * 3600000L
     private val DEFAULT_SLEEP_END_TIME = 7 * 3600000L
 
-    var isCurrentlyDndEnable: Boolean
+    val isCurrentlyInDnd: Boolean
         get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE,
-                DEFAULT_MANNUAL_DND_ENABLE)
-        set(value) = sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE, value)
+                DEFAULT_MANNUAL_DND_ENABLE) || isCurrentlyInAutoDndMode()
 
     /**
      * Set the [startTimeMillsFrom12Am] and the [endTimeMillsFrom12Am] for the auto DND. These timings
@@ -226,11 +227,38 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
                 DEFAULT_AUTO_DND_END_TIME)
 
 
+    /**
+     * Check if DND mode should be turned on based on the auto dnd timings? Based on the return value
+     * application figure out [UserSettingsManager.isCurrentlyInDnd] to set true or false.
+     *
+     * The application should be in DND mode currently if [UserSettingsManager.isAutoDndEnable] is
+     * true (i.e. Auto DND feature is turned on) and current time (i.e. [System.currentTimeMillis] is
+     * between [UserSettingsManager.autoDndStartTime] and [UserSettingsManager.autoDndEndTime].
+     *
+     * @return True if the DND should be enabled.
+     */
+    internal fun isCurrentlyInAutoDndMode(
+            @OnlyForTesting currentTimeFrom12Am: Long = TimeUtils.currentMillsFromMidnight()): Boolean {
+
+        return isAutoDndEnable
+                && currentTimeFrom12Am >= autoDndStartTime
+                && currentTimeFrom12Am <= autoDndEndTime
+    }
+
     //************ sleep settings *************//
 
-    var isCurrentlyInSleepMode: Boolean
-        get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_IN_SLEEP_MODE_ON, false)
-        set(value) = sharedPrefProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IN_SLEEP_MODE_ON, value)
+    /**
+     * Check if Sleep mode should be turned on based on the sleep timings? Based on the return value
+     * application figure out [isCurrentlyInSleepMode] to set true or false.
+     *
+     * The application should be in Sleep mode currently if current time (i.e. [System.currentTimeMillis] is
+     * between [sleepStartTime] and [sleepEndTime].
+     *
+     * @return True if the DND should be enabled.
+     */
+    fun isCurrentlyInSleepMode(): Boolean {
+        return TimeUtils.currentMillsFromMidnight() in sleepStartTime..sleepEndTime
+    }
 
     /**
      * Save the [startTimeMillsFrom12Am] and [endTimeMillsFrom12Am]. When the sleep time start,

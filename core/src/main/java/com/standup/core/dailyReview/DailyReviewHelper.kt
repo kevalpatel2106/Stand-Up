@@ -44,7 +44,7 @@ internal object DailyReviewHelper {
      * @see UserSettingsManager.dailyReviewTimeFrom12Am
      */
     internal fun getNextAlarmTime(userSettingsManager: UserSettingsManager): Long {
-        return with(TimeUtils.todayMidnightCal().timeInMillis + userSettingsManager.dailyReviewTimeFrom12Am) {
+        return with(TimeUtils.todayMidnightMills() + userSettingsManager.dailyReviewTimeFrom12Am) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 

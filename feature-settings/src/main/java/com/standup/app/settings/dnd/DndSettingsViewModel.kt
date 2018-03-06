@@ -67,7 +67,7 @@ internal class DndSettingsViewModel : BaseViewModel {
     internal val sleepTime = MutableLiveData<String>()
 
     fun init() {
-        isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
+        isDndEnable.value = userSettingsManager.isCurrentlyInDnd
         isAutoDndEnable.value = userSettingsManager.isAutoDndEnable
         autoDndTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndEndTime)}"
         sleepTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.sleepEndTime)}"
@@ -78,7 +78,7 @@ internal class DndSettingsViewModel : BaseViewModel {
      */
     fun onManualDadChanged() {
         //Check iff the DND status
-        isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
+        isDndEnable.value = userSettingsManager.isCurrentlyInDnd
 
         //Schedule the dnd monitoring job
         core.refresh()
@@ -92,7 +92,7 @@ internal class DndSettingsViewModel : BaseViewModel {
         isAutoDndEnable.value = userSettingsManager.isAutoDndEnable
 
         //Check iff the DND status
-        isDndEnable.value = userSettingsManager.isCurrentlyDndEnable
+        isDndEnable.value = userSettingsManager.isCurrentlyInDnd
 
         //Publish the update
         autoDndTime.value = "${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndStartTime)} - ${TimeUtils.convertToHHmmaFrom12Am(userSettingsManager.autoDndEndTime)}"

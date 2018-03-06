@@ -39,57 +39,44 @@ class ShouldMonitorActivityTest {
 
     @Test
     @Throws(IOException::class)
-    fun checkShouldMonitorWhenUserNotLoggedIn() {
+    fun checkShouldMonitor_UserNotLoggedIn() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn(null)
-        Mockito.`when`(sharedPref.getBoolean(anyString(), anyBoolean())).thenReturn(false)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.isCurrentlyInSleepMode()).thenReturn(true)
 
         Assert.assertFalse(ActivityMonitorHelper.shouldMonitoringActivity(
-                UserSessionManager(SharedPrefsProvider(sharedPref)),
-                UserSettingsManager(SharedPrefsProvider(sharedPref)))
-        )
+                UserSessionManager(SharedPrefsProvider(sharedPref)), userSettingsManager))
     }
 
     @Test
     @Throws(IOException::class)
-    fun checkShouldMonitorWhenUserLoggedIn() {
+    fun checkShouldMonitor_InSleepModeUserLogIn() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
-        Mockito.`when`(sharedPref.getBoolean(anyString(), anyBoolean())).thenReturn(false)
 
-        Assert.assertTrue(ActivityMonitorHelper.shouldMonitoringActivity(
-                UserSessionManager(SharedPrefsProvider(sharedPref)),
-                UserSettingsManager(SharedPrefsProvider(sharedPref)))
-        )
-    }
-
-    @Test
-    @Throws(IOException::class)
-    fun checkShouldMonitorInSleepMode() {
-        val sharedPref = Mockito.mock(SharedPreferences::class.java)
-        Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
-        Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
-        Mockito.`when`(sharedPref.getBoolean(anyString(), anyBoolean())).thenReturn(true)
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.isCurrentlyInSleepMode()).thenReturn(true)
 
         Assert.assertFalse(ActivityMonitorHelper.shouldMonitoringActivity(
-                UserSessionManager(SharedPrefsProvider(sharedPref)),
-                UserSettingsManager(SharedPrefsProvider(sharedPref)))
-        )
+                UserSessionManager(SharedPrefsProvider(sharedPref)), userSettingsManager))
     }
 
     @Test
     @Throws(IOException::class)
-    fun checkShouldMonitorWithoutSleepModeUserLogIn() {
+    fun checkShouldMonitor_NoSleepModeUserLogIn() {
         val sharedPref = Mockito.mock(SharedPreferences::class.java)
         Mockito.`when`(sharedPref.getLong(anyString(), anyLong())).thenReturn(12345L)
         Mockito.`when`(sharedPref.getString(anyString(), isNull())).thenReturn("test-reponseToken")
-        Mockito.`when`(sharedPref.getBoolean(anyString(), anyBoolean())).thenReturn(false)
+
+        val userSettingsManager = Mockito.mock(UserSettingsManager::class.java)
+        Mockito.`when`(userSettingsManager.isCurrentlyInSleepMode()).thenReturn(false)
 
         Assert.assertTrue(ActivityMonitorHelper.shouldMonitoringActivity(
-                UserSessionManager(SharedPrefsProvider(sharedPref)),
-                UserSettingsManager(SharedPrefsProvider(sharedPref)))
+                UserSessionManager(SharedPrefsProvider(sharedPref)), userSettingsManager)
         )
     }
 }

@@ -79,7 +79,7 @@ class DailyReviewHelperTest {
                 .thenReturn(dailyAlarmTimeFrom12Am)
 
         val nextAlarmTime = DailyReviewHelper.getNextAlarmTime(UserSettingsManager(sharedPrefsProvider))
-        Assert.assertEquals(nextAlarmTime, TimeUtils.todayMidnightCal().timeInMillis + dailyAlarmTimeFrom12Am)
+        Assert.assertEquals(nextAlarmTime, TimeUtils.todayMidnightMills() + dailyAlarmTimeFrom12Am)
     }
 
     @Test

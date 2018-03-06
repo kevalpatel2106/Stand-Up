@@ -69,7 +69,7 @@ internal class SleepModeMonitoringJob : Job() {
          * will reschedule this job for the next day.
          *
          *
-         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpSleepMode]
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.standup.core.Core.setUpSleepMode]
          * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
          *
          * @return True if both the jobs are scheduled successfully else false.
@@ -157,9 +157,6 @@ internal class SleepModeMonitoringJob : Job() {
     }
 
     private fun sleepModeStarted() {
-        //Turn on sleep mode
-        userSettingsManager.isCurrentlyInSleepMode = true
-
         core.get().refresh()
 
         SleepModeStartNotification.notify(context)
@@ -167,8 +164,6 @@ internal class SleepModeMonitoringJob : Job() {
 
     private fun sleepModeEnded() {
         //Turn off sleep mode
-        userSettingsManager.isCurrentlyInSleepMode = false
-
         core.get().refresh()
 
         //Schedule the next sleep monitoring job

@@ -48,10 +48,10 @@ internal class DashboardRepoImpl constructor(private val application: Applicatio
 
     override fun getNextReminderStatus(): String {
         return when {
-            userSettingsManager.isCurrentlyDndEnable -> {
+            userSettingsManager.isCurrentlyInDnd -> {
                 application.getString(R.string.dnd_mode_is_enabled)
             }
-            userSettingsManager.isCurrentlyInSleepMode -> {
+            userSettingsManager.isCurrentlyInSleepMode() -> {
                 application.getString(R.string.sleep_mode_is_enabled)
             }
             else -> {

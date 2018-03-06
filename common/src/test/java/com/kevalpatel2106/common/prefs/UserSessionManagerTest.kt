@@ -15,9 +15,8 @@
  *
  */
 
-package com.kevalpatel2106.common
+package com.kevalpatel2106.common.prefs
 
-import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import org.junit.Assert

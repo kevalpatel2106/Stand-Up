@@ -56,11 +56,11 @@ internal class AutoDndMonitoringJob : Job() {
          * - Job with the tag [AUTO_DND_START_JOB_TAG] will run this job whenever the auto DND mode
          * starts. This job is scheduled to run on [AutoDndMonitoringHelper.getAutoDndStartTiming]
          * unix milliseconds. At this time, job will cancelJob the [NotificationSchedulerJob] to prevent
-         * stand up reminder notifications. This will set [UserSettingsManager.isCurrentlyDndEnable].
+         * stand up reminder notifications. This will set [UserSettingsManager.isCurrentlyInDnd].
          * - Job with the tag [AUTO_DND_END_JOB_TAG] will run this job whenever the auto DND mode
          * ends. This job is scheduled to run on [AutoDndMonitoringHelper.getAutoDndEndTiming]
          * unix milliseconds. At this time, job will reschedule the [NotificationSchedulerJob] to
-         * display reminder notifications. This will reset [UserSettingsManager.isCurrentlyDndEnable].
+         * display reminder notifications. This will reset [UserSettingsManager.isCurrentlyInDnd].
          *
          * This job is one-shot job not periodic. At the end of [AUTO_DND_END_JOB_TAG] job, it
          * will reschedule this job for the next day.
@@ -132,7 +132,8 @@ internal class AutoDndMonitoringJob : Job() {
 
 
         //Check if the user has stopped auto DND manually?
-        if (!AutoDndMonitoringHelper.shouldRunningThisJob(userSettingsManager, userSessionManager)) {
+        if (!userSettingsManager.isCurrentlyInDnd) {
+
             //Auto DND is not enabled. Don't start/stop DND mode.
             cancelScheduledJob()
             return Result.SUCCESS
@@ -148,16 +149,12 @@ internal class AutoDndMonitoringJob : Job() {
     }
 
     /**
-     * Turn on auto DND mode. This will set [UserSettingsManager.isCurrentlyDndEnable] and refresh
-     * all the other jobs.
+     * Turn on auto DND mode.
      *
      * @see Core.refresh
      * @see AutoDndStartNotification
      */
     private fun autoDndStarted() {
-        //Turn on the DND mode
-        userSettingsManager.isCurrentlyDndEnable = true
-
         core.get().refresh()
 
         //DND mode started notification.
@@ -165,16 +162,12 @@ internal class AutoDndMonitoringJob : Job() {
     }
 
     /**
-     * Turn off auto DND mode. This will reset [UserSettingsManager.isCurrentlyDndEnable] and refresh
-     * all the other jobs.
+     * Turn off auto DND mode.
      *
      * @see Core.refresh
      * @see AutoDndStartNotification
      */
     private fun autoDndEnded() {
-        //Turn off the DND mode
-        userSettingsManager.isCurrentlyDndEnable = false
-
         core.get().refresh()
 
         //Cancel notification

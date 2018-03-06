@@ -2,20 +2,25 @@
 *.exec
 .gradle
 /local.properties
-/.idea/workspace.xml
-/.idea/libraries
 *.DS_Store
 /build
 /reports
 /gen
 /captures
 .externalNativeBuild
-/misc/keystore.jks
 /responses/
 /projectFilesBackup/
 /projectFilesBackup1/
 /ajcore.*.txt
+
+## idea files
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/modules.xml
+
+## Custom ignores
 /output/
 /app/google-services.json
+/misc/keystore.jks
 /app/src/release/google-services.json
 /buildSrc/src/main/java/ReleaseConfig.kt

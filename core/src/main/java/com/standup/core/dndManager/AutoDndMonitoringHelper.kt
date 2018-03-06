@@ -17,13 +17,10 @@
 
 package com.standup.core.dndManager
 
-import android.annotation.SuppressLint
-import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.annotations.Helper
-import com.kevalpatel2106.utils.annotations.OnlyForTesting
 
 /**
  * Created by Keval on 19/01/18.
@@ -46,7 +43,7 @@ internal object AutoDndMonitoringHelper {
      */
     @JvmStatic
     internal fun getAutoDndStartTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(TimeUtils.todayMidnightCal().timeInMillis + userSettingsManager.autoDndStartTime) {
+        return with(TimeUtils.todayMidnightMills() + userSettingsManager.autoDndStartTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
@@ -70,7 +67,7 @@ internal object AutoDndMonitoringHelper {
      */
     @JvmStatic
     internal fun getAutoDndEndTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(TimeUtils.todayMidnightCal().timeInMillis + userSettingsManager.autoDndEndTime) {
+        return with(TimeUtils.todayMidnightMills() + userSettingsManager.autoDndEndTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
@@ -81,32 +78,6 @@ internal object AutoDndMonitoringHelper {
                 return@with this
             }
         }
-    }
-
-    /**
-     * Check if DND mode should be turned on based on the auto dnd timings? Based on the return value
-     * application figure out [UserSettingsManager.isCurrentlyDndEnable] to set true or false.
-     *
-     * The application should be in DND mode currently if [UserSettingsManager.isAutoDndEnable] is
-     * true (i.e. Auto DND feature is turned on) and current time (i.e. [System.currentTimeMillis] is
-     * between [UserSettingsManager.autoDndStartTime] and [UserSettingsManager.autoDndEndTime].
-     *
-     * @return True if the DND should be enabled.
-     */
-    @SuppressLint("VisibleForTests")
-    internal fun isCurrentlyInAutoDndMode(userSettingsManager: UserSettingsManager): Boolean {
-        return isCurrentlyInAutoDndMode(userSettingsManager,
-                TimeUtils.millsFromMidnight(System.currentTimeMillis()))
-    }
-
-    @OnlyForTesting
-    @VisibleForTesting
-    internal fun isCurrentlyInAutoDndMode(userSettingsManager: UserSettingsManager,
-                                          @OnlyForTesting currentTimeFrom12Am: Long): Boolean {
-
-        return userSettingsManager.isAutoDndEnable
-                && (currentTimeFrom12Am >= userSettingsManager.autoDndStartTime)
-                && (currentTimeFrom12Am <= userSettingsManager.autoDndEndTime)
     }
 
     /**

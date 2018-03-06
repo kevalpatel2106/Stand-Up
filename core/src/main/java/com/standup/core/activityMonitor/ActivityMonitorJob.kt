@@ -238,6 +238,9 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
         } else {
             Timber.i("User activity should not be monitored. Canceling the future activity monitoring jobs.")
             stopJob(Result.SUCCESS)
+
+            //Reschedule all the jobs
+            core.get().refresh()
         }
     }
 

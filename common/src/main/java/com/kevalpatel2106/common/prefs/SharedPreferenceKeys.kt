@@ -165,13 +165,6 @@ object SharedPreferenceKeys {
     const val PREF_KEY_IS_FORCE_DND_ENABLE = "pref_key_dnd_enable"
 
     /**
-     * Boolean to indicate weather application is currently in sleep mode or not?
-     *
-     * @see [com.kevalpatel2106.standup.misc.UserSettingsManager.isCurrentlyInSleepMode]
-     */
-    const val PREF_KEY_IN_SLEEP_MODE_ON = "pref_key_in_sleep_mode_on"
-
-    /**
      * Boolean to indicate weather the auto dnd is enabled or not? Default value is false.
      *
      * DON'T CHANGE THE VALUE OF THIS KEY. THIS KEY IS ALSO REPLICATED TO `@string/pref_key` FILE.

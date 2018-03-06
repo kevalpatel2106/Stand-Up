@@ -107,12 +107,6 @@ class MainActivity : BaseActivity() {
         supportActionBar!!.setHomeButtonEnabled(true)
 
         setUpDrawer(savedInstanceState == null)
-
-        if (savedInstanceState == null) {
-
-            //Refresh the core.
-            core.get().refresh()
-        }
     }
 
     /**

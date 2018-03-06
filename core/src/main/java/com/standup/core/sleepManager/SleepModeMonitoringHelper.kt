@@ -42,7 +42,7 @@ internal object SleepModeMonitoringHelper {
      */
     @JvmStatic
     fun getSleepStartTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(TimeUtils.todayMidnightCal().timeInMillis + userSettingsManager.sleepStartTime) {
+        return with(TimeUtils.todayMidnightMills() + userSettingsManager.sleepStartTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
@@ -66,7 +66,7 @@ internal object SleepModeMonitoringHelper {
      */
     @JvmStatic
     fun getSleepEndTiming(userSettingsManager: UserSettingsManager): Long {
-        return with(TimeUtils.todayMidnightCal().timeInMillis + userSettingsManager.sleepEndTime) {
+        return with(TimeUtils.todayMidnightMills() + userSettingsManager.sleepEndTime) {
 
             if (this < System.currentTimeMillis()) {    //Auto dnd start time is already passed.
 
@@ -77,22 +77,6 @@ internal object SleepModeMonitoringHelper {
                 return@with this
             }
         }
-    }
-
-
-    /**
-     * Check if Sleep mode should be turned on based on the sleep timings? Based on the return value
-     * application figure out [UserSettingsManager.isCurrentlyInSleepMode] to set true or false.
-     *
-     * The application should be in Sleep mode currently if current time (i.e. [System.currentTimeMillis] is
-     * between [UserSettingsManager.sleepStartTime] and [UserSettingsManager.sleepEndTime].
-     *
-     * @return True if the DND should be enabled.
-     */
-    fun isCurrentlyInSleepMode(userSettingsManager: UserSettingsManager): Boolean {
-        val currentTimeFrom12Am = System.currentTimeMillis() - TimeUtils.todayMidnightCal().timeInMillis
-        return (userSettingsManager.sleepStartTime <= currentTimeFrom12Am)
-                && (userSettingsManager.sleepEndTime >= currentTimeFrom12Am)
     }
 
     /**

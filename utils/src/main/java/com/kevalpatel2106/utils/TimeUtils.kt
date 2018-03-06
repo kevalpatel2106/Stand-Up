@@ -70,7 +70,6 @@ object TimeUtils {
         return getMidnightCal(currentTimeMills())
     }
 
-    //TODO Write test
     fun tomorrowMidnightCal(): Calendar {
         val cal = getMidnightCal(currentTimeMills())
         cal.add(Calendar.DAY_OF_YEAR, 1)
@@ -86,22 +85,11 @@ object TimeUtils {
     fun millsFromMidnight(hourOfTheDay: Int, minutes: Int): Long {
         if (hourOfTheDay !in 0..23 || minutes !in 0..59)
             throw IllegalArgumentException("Invalid hours: $hourOfTheDay:$minutes")
-
-        val cal = Calendar.getInstance()
-        cal.set(Calendar.HOUR_OF_DAY, hourOfTheDay)
-        cal.set(Calendar.MINUTE, minutes)
-        cal.set(Calendar.SECOND, 0)
-        cal.set(Calendar.MILLISECOND, 0)
-
-        cal.timeZone = TimeZone.getTimeZone("UTC")
-
-        val unixMills = cal.timeInMillis
-        return unixMills - getMidnightCal(unixMills).timeInMillis
+        return hourOfTheDay * ONE_HOUR_MILLS + minutes * ONE_MIN_MILLS - TimeZone.getDefault().rawOffset
     }
 
-    //TODO Write test
     fun todayMidnightMills(): Long {
-        return millsFromMidnight(currentTimeMills())
+        return todayMidnightCal().timeInMillis
     }
 
     fun currentMillsFromMidnight(): Long {
@@ -201,7 +189,7 @@ object TimeUtils {
         if (millsFrom12Am !in 0 until TimeUtils.ONE_DAY_MILLISECONDS)
             throw IllegalArgumentException("Time is invalid: $millsFrom12Am")
 
-        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        val cal = Calendar.getInstance(TimeZone.getDefault())
         cal.timeInMillis = millsFrom12Am
 
         return String.format("%s:%s %s",

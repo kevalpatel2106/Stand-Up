@@ -29,7 +29,6 @@ import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.annotations.Helper
 import com.kevalpatel2106.utils.isDeviceLocked
 import com.kevalpatel2106.utils.isScreenOn
-import com.standup.core.sleepManager.SleepModeMonitoringHelper
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -46,7 +45,7 @@ internal object NotificationSchedulerHelper {
      * Is it okay to run/schedule the [NotificationSchedulerJob]?
      *
      * [NotificationSchedulerJob] should only be running if DND is turned off (i.e.
-     * [UserSettingsManager.isCurrentlyDndEnable] is false), Sleep is turned off (i.e.
+     * [UserSettingsManager.isCurrentlyInDnd] is false), Sleep is turned off (i.e.
      * [UserSettingsManager.isCurrentlyInSleepMode] is false) and user is logged in (i.e.
      * [UserSessionManager.isUserLoggedIn] is true.).
      *
@@ -55,16 +54,15 @@ internal object NotificationSchedulerHelper {
     internal fun shouldDisplayNotification(userSessionManager: UserSessionManager,
                                            userSettingsManager: UserSettingsManager): Boolean {
         return userSessionManager.isUserLoggedIn
-                && !userSettingsManager.isCurrentlyInSleepMode
-                && !SleepModeMonitoringHelper.isCurrentlyInSleepMode(userSettingsManager)
-                && !userSettingsManager.isCurrentlyDndEnable
+                && !userSettingsManager.isCurrentlyInSleepMode()
+                && !userSettingsManager.isCurrentlyInDnd
     }
 
     /**
      * Is it okay to run/schedule the [NotificationSchedulerJob]?
      *
      * [NotificationSchedulerJob] should only be running if DND is turned off (i.e.
-     * [UserSettingsManager.isCurrentlyDndEnable] is false), Sleep is turned off (i.e.
+     * [UserSettingsManager.isCurrentlyInDnd] is false), Sleep is turned off (i.e.
      * [UserSettingsManager.isCurrentlyInSleepMode] is false) and user is logged in (i.e.
      * [UserSessionManager.isUserLoggedIn] is true.).
      *

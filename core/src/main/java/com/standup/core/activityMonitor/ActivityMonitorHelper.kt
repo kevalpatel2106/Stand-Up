@@ -150,12 +150,13 @@ internal object ActivityMonitorHelper {
      */
     internal fun shouldMonitoringActivity(userSessionManager: UserSessionManager,
                                           userSettingsManager: UserSettingsManager): Boolean {
-        return userSessionManager.isUserLoggedIn && !userSettingsManager.isCurrentlyInSleepMode
+        return userSessionManager.isUserLoggedIn && !userSettingsManager.isCurrentlyInSleepMode()
     }
 
     /**
      * @return True if the [ActivityMonitorJob] is scheduled else false.
      */
     internal fun isAnyJobScheduled(): Boolean = JobManager.instance()
-            .getAllJobRequestsForTag(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG).isNotEmpty()
+            .getAllJobRequestsForTag(ActivityMonitorJob.ACTIVITY_MONITOR_JOB_TAG)
+            .isNotEmpty()
 }

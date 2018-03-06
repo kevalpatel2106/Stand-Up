@@ -43,7 +43,6 @@ class TimeUtilsTest {
         assertEquals(TimeUtils.convertToNano(0), 0)
     }
 
-
     @Test
     @Throws(Exception::class)
     fun checkConvertToNano_NegativeMills() {
@@ -73,19 +72,19 @@ class TimeUtilsTest {
     @Test
     @Throws(Exception::class)
     fun checkCurrentTimeMills() {
-        assertTrue(Math.abs(System.currentTimeMillis() - TimeUtils.currentTimeMills()) < 10 /* 10 ms */)
+        assertTrue(Math.abs(System.currentTimeMillis() - TimeUtils.currentTimeMills()) < 5 /* 5 ms */)
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkCurrentMillsFromMidnight() {
+    fun checkCurrentMillsFromMidnight_IsInUTC() {
         assertEquals(System.currentTimeMillis() % TimeUtils.ONE_DAY_MILLISECONDS,
                 TimeUtils.currentMillsFromMidnight())
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkTodayMidnightMills() {
+    fun checkTodayMidnightCal() {
         val nowUtc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         val midnightCal = TimeUtils.todayMidnightCal()
         assertEquals(midnightCal.timeInMillis % TimeUtils.ONE_DAY_MILLISECONDS, 0)
@@ -104,7 +103,7 @@ class TimeUtilsTest {
 
     @Test
     @Throws(Exception::class)
-    fun checkTodayMidnightMills_And_CurrentMillsFromMidnight() {
+    fun checkTodayMidnightCal_And_CurrentMillsFromMidnight() {
         val midnightCal = TimeUtils.todayMidnightCal()
         assertEquals(System.currentTimeMillis() - TimeUtils.currentMillsFromMidnight(),
                 midnightCal.timeInMillis)
@@ -112,8 +111,57 @@ class TimeUtilsTest {
 
     @Test
     @Throws(Exception::class)
-    fun checkTodayMidnightMills_And_GetMidnightCal() {
+    fun checkTodayMidnightCal_And_GetMidnightCal() {
         assertTrue(Math.abs(TimeUtils.getMidnightCal(System.currentTimeMillis()).timeInMillis
-                - TimeUtils.todayMidnightCal().timeInMillis) < 1000)
+                - TimeUtils.todayMidnightMills()) < 1000)
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkTomorrowMidnightCal() {
+        val tomUtc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        tomUtc.add(Calendar.DAY_OF_MONTH, 1)
+
+        val tomMidnightCal = TimeUtils.tomorrowMidnightCal()
+        assertEquals(tomMidnightCal.timeInMillis % TimeUtils.ONE_DAY_MILLISECONDS, 0)
+
+        assertEquals(tomMidnightCal.timeZone.rawOffset, 0) //UTC
+
+        assertEquals(tomMidnightCal.get(Calendar.HOUR_OF_DAY), 0)
+        assertEquals(tomMidnightCal.get(Calendar.MILLISECOND), 0)
+        assertEquals(tomMidnightCal.get(Calendar.MINUTE), 0)
+        assertEquals(tomMidnightCal.get(Calendar.SECOND), 0)
+
+        assertEquals(tomMidnightCal.get(Calendar.DAY_OF_YEAR), tomUtc.get(Calendar.DAY_OF_YEAR))
+        assertEquals(tomMidnightCal.get(Calendar.MONTH), tomUtc.get(Calendar.MONTH))
+        assertEquals(tomMidnightCal.get(Calendar.YEAR), tomUtc.get(Calendar.YEAR))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkTomorrowMidnightCal_And_TodayMidnightCal() {
+        val todayMidnightCal = TimeUtils.todayMidnightCal()
+        val tomMidnightCal = TimeUtils.tomorrowMidnightCal()
+
+        assertEquals(tomMidnightCal.timeInMillis - todayMidnightCal.timeInMillis, TimeUtils.ONE_DAY_MILLISECONDS)
+        assertEquals(tomMidnightCal.get(Calendar.DAY_OF_YEAR) - todayMidnightCal.get(Calendar.DAY_OF_YEAR), 1)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkTomorrowMidnightCal_GreaterThanCurrentTime() {
+        val tomMidnightCal = TimeUtils.tomorrowMidnightCal()
+        assertTrue(tomMidnightCal.timeInMillis > System.currentTimeMillis())
+    }
+
+
+    @Test
+    @Throws(Exception::class)
+    fun checkTodayMidnightMills() {
+        val todayMidnightMills = TimeUtils.todayMidnightMills()
+        val todayMidnightCal = TimeUtils.todayMidnightCal()
+
+        assertEquals(todayMidnightMills, todayMidnightCal.timeInMillis)
+    }
+
 }

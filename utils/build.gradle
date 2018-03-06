@@ -64,4 +64,6 @@ dependencies {
     //Support
     implementation Deps.supportv4
     implementation Deps.annotations
+
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.0.5'
 }
