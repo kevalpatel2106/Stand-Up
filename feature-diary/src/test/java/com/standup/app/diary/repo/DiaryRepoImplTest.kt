@@ -166,11 +166,8 @@ class DiaryRepoImplTest {
     }
 
     @Test
-    fun checkLoadUserActivityByDayWithItemStartingOnPreviousDay() {
-        val cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_MONTH, -1)
-
-        val startTime = cal.timeInMillis
+    fun checkLoadUserActivityByDay_WithItemStartingOnPreviousDay() {
+        val startTime = System.currentTimeMillis() - TimeUtils.ONE_DAY_MILLISECONDS
         val endTime = System.currentTimeMillis()
 
         userActivityDao.insert(UserActivity(eventStartTimeMills = startTime,
@@ -179,7 +176,7 @@ class DiaryRepoImplTest {
                 isSynced = false))
 
         val it = dairyRepoImpl.loadUserActivityByDay(Calendar.getInstance())
-        Assert.assertEquals(0, it.size)
+        Assert.assertEquals(1, it.size)
     }
 
     @Test
