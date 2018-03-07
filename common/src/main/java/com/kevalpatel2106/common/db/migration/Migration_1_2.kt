@@ -21,6 +21,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.migration.Migration
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.db.userActivity.UserActivity
+import timber.log.Timber
 
 /**
  * Created by Kevalpatel2106 on 07-Mar-18.
@@ -41,8 +42,10 @@ object Migration_1_2 : Migration(1, 2) {
     private const val TEMP_TABLE = "tmp_table"
 
     override fun migrate(database: SupportSQLiteDatabase) {
+        //Rename the current table to temporary table
         database.execSQL("ALTER TABLE ${UserActivity.USER_ACTIVITY_TABLE} RENAME TO $TEMP_TABLE;")
 
+        //Create table
         database.execSQL("CREATE TABLE IF NOT EXISTS ${UserActivity.USER_ACTIVITY_TABLE} (" +
                 "${UserActivity.ID} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "${UserActivity.REMOTE_ID} INTEGER NOT NULL, " +
@@ -51,10 +54,27 @@ object Migration_1_2 : Migration(1, 2) {
                 "${UserActivity.ACTIVITY_TYPE} TEXT NOT NULL, " +
                 "${UserActivity.IS_SYNCED} INTEGER NOT NULL)")
 
+        //Create indexes
+        createIndex(database)
+
+        //Copy all the data from temporary table to new table
         database.execSQL("INSERT INTO ${UserActivity.USER_ACTIVITY_TABLE}(${UserActivity.ID}, ${UserActivity.REMOTE_ID}, ${UserActivity.EVENT_START_TIME}, ${UserActivity.EVENT_END_TIME}, ${UserActivity.ACTIVITY_TYPE}, ${UserActivity.IS_SYNCED})" +
                 " SELECT ${UserActivity.ID}, ${UserActivity.REMOTE_ID}, $OLD_COLUMN_EVENT_START, $OLD_COLUMN_EVENT_END, ${UserActivity.ACTIVITY_TYPE}, ${UserActivity.IS_SYNCED} FROM $TEMP_TABLE;")
 
+        // Drop the temporary table.
         database.execSQL("DROP TABLE $TEMP_TABLE;")
     }
 
+    private fun createIndex(db: SupportSQLiteDatabase) {
+        try {
+            db.execSQL("CREATE INDEX ${UserActivity.INDEX_START_END_TIME} ON " +
+                    "${UserActivity.USER_ACTIVITY_TABLE}(${UserActivity.EVENT_START_TIME}, ${UserActivity.EVENT_END_TIME});")
+
+            db.execSQL("CREATE INDEX ${UserActivity.INDEX_IS_SYNC} ON " +
+                    "${UserActivity.USER_ACTIVITY_TABLE}(${UserActivity.IS_SYNCED});")
+        } catch (e: Exception) {
+            Timber.e(e)
+        }
+
+    }
 }

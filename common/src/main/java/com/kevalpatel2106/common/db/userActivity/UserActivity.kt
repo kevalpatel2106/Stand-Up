@@ -20,6 +20,7 @@ package com.kevalpatel2106.common.db.userActivity
 import android.annotation.SuppressLint
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import com.kevalpatel2106.utils.annotations.Model
 import java.io.Serializable
@@ -30,7 +31,14 @@ import java.io.Serializable
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Model
-@Entity(tableName = UserActivity.USER_ACTIVITY_TABLE)
+@Entity(tableName = UserActivity.USER_ACTIVITY_TABLE, indices = [
+    Index(value = [UserActivity.EVENT_START_TIME, UserActivity.EVENT_END_TIME],
+            unique = false,
+            name = UserActivity.INDEX_START_END_TIME),
+    Index(value = [UserActivity.IS_SYNCED],
+            unique = false,
+            name = UserActivity.INDEX_IS_SYNC)
+])
 data class UserActivity(
         @ColumnInfo(name = REMOTE_ID)
         var remoteId: Long = 0,
@@ -77,5 +85,9 @@ data class UserActivity(
         const val ACTIVITY_TYPE = "type"
         const val IS_SYNCED = "is_synced"
         //---- [End] Column names
+
+        //******************* INDEXES ***********************//
+        const val INDEX_START_END_TIME = "start_end_time_index"
+        const val INDEX_IS_SYNC = "is_sync_index"
     }
 }

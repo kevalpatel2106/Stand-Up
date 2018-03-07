@@ -37,7 +37,6 @@ import timber.log.Timber
 abstract class StandUpDb : RoomDatabase() {
 
     companion object {
-
         const val DB_NAME = "StandUpDb"
 
         private var sDatabase: StandUpDb? = null
@@ -63,6 +62,7 @@ abstract class StandUpDb : RoomDatabase() {
 
         fun getDb(application: Application): StandUpDb = sDatabase
                 ?: createDb(application)
+
     }
 
     abstract fun userActivityDao(): UserActivityDao

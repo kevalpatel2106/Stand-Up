@@ -63,7 +63,13 @@ class MigrationTest {
                 " VALUES ($id, $remoteId, $startTime, $endTime, \"$activityType\", $isSync);")
 
         //Run the migration
-        migrationHelper.runMigrationsAndValidate(TEST_DB_NAME, 2, true, Migration_1_2)
+        try {
+            migrationHelper.runMigrationsAndValidate(TEST_DB_NAME, 2, true, Migration_1_2)
+        } catch (e: Exception) {
+            //Migration failed.
+            Assert.fail(e.message)
+            return
+        }
 
         // Get the data back from version 2.
         val dbActivity = StandUpDb.getDb(InstrumentationRegistry.getContext().applicationContext as Application)
