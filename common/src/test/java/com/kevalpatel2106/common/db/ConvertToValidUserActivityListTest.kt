@@ -34,15 +34,27 @@ import org.junit.runners.JUnit4
 class ConvertToValidUserActivityListTest {
 
     @Test
+    fun checkWithEmptyList() {
+        try {
+            val emptyList = ArrayList<UserActivity>()
+            DailyActivitySummary.convertToValidUserActivityList(emptyList)
+
+            Assert.assertTrue(emptyList.isEmpty())
+        } catch (e: Exception) {
+            Assert.fail()
+        }
+    }
+
+    @Test
     fun checkWithInvalidStartTime() {
         val dayActivity = ArrayList<UserActivity>()
         dayActivity.add(UserActivity(eventStartTimeMills = 0,
-                eventEndTimeMills = System.currentTimeMillis(),
+                eventEndTimeMills = System.currentTimeMillis() - 60000,
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
         //Ending activity
-        dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 60000,
-                eventEndTimeMills = System.currentTimeMillis(),
+        dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis(),
+                eventEndTimeMills = System.currentTimeMillis() + 60000,
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
 
@@ -103,16 +115,39 @@ class ConvertToValidUserActivityListTest {
     }
 
     @Test
-    fun checkWithMiddleActivityEndingAnotherDay() {
+    fun checkWithListOfActivityStretchingMoreThanADay() {
         val dayActivity = ArrayList<UserActivity>()
         val yesterdayMills = System.currentTimeMillis() - TimeUtils.ONE_DAY_MILLISECONDS
 
-        dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 120000,
+        dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 120_000,
                 eventEndTimeMills = (yesterdayMills + TimeUtils.ONE_DAY_MILLISECONDS),   //Ending today
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
-        dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 60000,
+        dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 60_000,
                 eventEndTimeMills = yesterdayMills,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+
+        try {
+            DailyActivitySummary.convertToValidUserActivityList(dayActivity)
+            Assert.fail()
+        } catch (e: IllegalArgumentException) {
+            //Test passed
+        }
+    }
+
+    @Test
+    fun checkWithFirstActivityOnPreviousDay() {
+        val dayActivity = ArrayList<UserActivity>()
+        val currentDay = System.currentTimeMillis()
+
+        dayActivity.add(UserActivity(eventStartTimeMills = currentDay - TimeUtils.ONE_DAY_MILLISECONDS,
+                eventEndTimeMills = currentDay,   //Ending today
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        dayActivity.add(UserActivity(eventStartTimeMills = currentDay + 60_000L,
+                eventEndTimeMills = currentDay + 120_000L,
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
 
@@ -122,12 +157,12 @@ class ConvertToValidUserActivityListTest {
         //Check the user activity list
         Assert.assertEquals(resultArray.size, dayActivity.size)
 
-        //Check the first item
-        Assert.assertEquals(resultArray[0].eventStartTimeMills, dayActivity[0].eventStartTimeMills)
+        //Check the remaining item
+        Assert.assertEquals(TimeUtils.getMidnightCal(currentDay, false).timeInMillis,
+                dayActivity[0].eventStartTimeMills)
         Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
 
-        //Check the second/last item
-        Assert.assertEquals(resultArray[1].eventStartTimeMills, yesterdayMills - 60000)
-        Assert.assertEquals(resultArray[1].eventEndTimeMills, yesterdayMills)
+        Assert.assertEquals(resultArray[1].eventStartTimeMills, dayActivity[1].eventStartTimeMills)
+        Assert.assertEquals(resultArray[1].eventEndTimeMills, dayActivity[1].eventEndTimeMills)
     }
 }

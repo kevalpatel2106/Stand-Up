@@ -37,7 +37,7 @@ import kotlin.collections.ArrayList
 @Suppress("DEPRECATION")
 @RunWith(JUnit4::class)
 class DailyActivitySummaryTest {
-    private val DIFF_BETWEEN_END_AND_START = 60000L   //60 Sec
+    private val DIFF_BETWEEN_END_AND_START = 60_000L   //60 Sec
     private val NUMBER_OF_ITEM = 10
     private val STANDING_EVENT_POS = arrayOf(2, 6, 8)
     private val SITTING_EVENT_POS = arrayOf(1, 4, 7, 9)
@@ -161,7 +161,8 @@ class DailyActivitySummaryTest {
             //Check end time
             val tempCal = TimeUtils.getMidnightCal(dayOfMonth = 1,
                     monthOfYear = 11,
-                    year = 2017)
+                    year = 2017,
+                    isUtc = false)
             Assert.assertEquals(summary.endTimeMills, tempCal.timeInMillis + TimeUtils.ONE_DAY_MILLISECONDS)
 
             //Check duration
@@ -226,7 +227,7 @@ class DailyActivitySummaryTest {
             Assert.assertTrue(System.currentTimeMillis() - summary.endTimeMills < 2_000L /* 2 seconds delta */)
 
             //Check for the duration
-            val expectedDuration = TimeUtils.millsFromMidnight(System.currentTimeMillis())
+            val expectedDuration = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + TimeZone.getDefault().rawOffset
 
             val duration = summary.endTimeMills - summary.startTimeMills
             Assert.assertTrue(Math.abs(duration - expectedDuration) < 1_000L)
@@ -442,7 +443,7 @@ class DailyActivitySummaryTest {
         Assert.assertEquals(summary.monthInitials, TimeUtils.getMonthInitials(expectedMonth))
 
         //Check the duration
-        val expectedDuration = TimeUtils.millsFromMidnight(System.currentTimeMillis())
+        val expectedDuration = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + TimeZone.getDefault().rawOffset
         val actualDuration = summary.endTimeMills - summary.startTimeMills
         Assert.assertTrue(Math.abs(expectedDuration - actualDuration) < 5000L /* Allow 5 second difference*/)
 

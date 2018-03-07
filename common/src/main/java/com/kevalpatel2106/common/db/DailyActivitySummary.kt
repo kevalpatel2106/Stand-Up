@@ -27,6 +27,7 @@ import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import java.io.Serializable
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by Kevalpatel2106 on 25-Dec-17.
@@ -237,15 +238,28 @@ constructor(
                     dayActivity = dayActivity)
         }
 
-        fun convertToValidUserActivityList(dayActivity: ArrayList<UserActivity>) {
+        //TODO Write it into the functional style
+        fun convertToValidUserActivityList(dailyActivity: ArrayList<UserActivity>) {
+            val dayActivity = ArrayList<UserActivity>()
+            dailyActivity.filter { it.eventStartTimeMills > 0L }
+                    .filter { it.eventEndTimeMills > 0L }
+                    .forEach { dayActivity.add(it) }
+
+            if (dayActivity.isEmpty()) {//List is empty
+                dailyActivity.clear()
+                return
+            }
+
             //Sort by the event start time in descending order
             dayActivity.sortWith(Comparator { o1, o2 ->
                 (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt()
             })
 
+            if (dayActivity.first().eventEndTimeMills - dayActivity.last().eventStartTimeMills > TimeUtils.ONE_DAY_MILLISECONDS)
+                throw IllegalArgumentException("List of events can't be stretched from more than one day. $dayActivity")
+
             //Remove the last incomplete event
             val iter = dayActivity.iterator()
-            if (!iter.hasNext()) return //List is empty
 
             val thisDayStartMills = TimeUtils.getMidnightCal(dayActivity.first().eventEndTimeMills, false).timeInMillis
             val thisDayEndingMills = thisDayStartMills + TimeUtils.ONE_DAY_MILLISECONDS - 1_000L
@@ -254,12 +268,6 @@ constructor(
                 val value = iter.next()
 
                 //=============  Starting event time modifications ============= //
-                //Remove invalid event
-                //If the start time is 0, than it's invalid data. Remove it.
-                if (value.eventStartTimeMills <= 0L) {
-                    iter.remove()
-                    continue
-                }
                 //If the event is started on previous day...
                 if (value.eventStartTimeMills < thisDayStartMills) {
                     //Consider it starting on this day 12 AM.
@@ -267,12 +275,6 @@ constructor(
                 }
 
                 //=============  Ending event time modifications ============= //
-                //If it is not last event and this event is not ended yet...it's invalid event
-                if (value.eventEndTimeMills <= 0L) {
-                    iter.remove()
-                    continue
-                }
-
                 //If the event is ending next day...
                 if (value.eventEndTimeMills > thisDayEndingMills) {
                     //Consider it ending on next day 12 AM.
@@ -280,6 +282,8 @@ constructor(
                 }
             }
 
+            dailyActivity.clear()
+            dailyActivity.addAll(dayActivity)
         }
     }
 }
