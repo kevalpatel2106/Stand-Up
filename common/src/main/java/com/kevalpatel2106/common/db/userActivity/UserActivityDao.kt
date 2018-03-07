@@ -44,7 +44,7 @@ interface UserActivityDao {
     fun getLatestActivity(): UserActivity?
 
     @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE
-            + " WHERE " + UserActivity.EVENT_START_TIME + " > :afterTimeMills AND "
+            + " WHERE " + UserActivity.EVENT_END_TIME + " > :afterTimeMills AND "
             + UserActivity.EVENT_START_TIME + " < :beforeTimeMills")
     fun getActivityBetweenDuration(afterTimeMills: Long, beforeTimeMills: Long): List<UserActivity>
 

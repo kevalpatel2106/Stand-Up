@@ -102,8 +102,8 @@ constructor(
         // The end time will be either the 23:59:59 of that day if the summary day is not current day
         // or current time if the summary is for today.
         //----------------//
-        val summaryDayCal = TimeUtils.getMidnightCal(dayOfMonth, monthOfYear, year)
-        val todayCal = TimeUtils.todayMidnightCal()
+        val summaryDayCal = TimeUtils.getMidnightCal(dayOfMonth, monthOfYear, year, false)
+        val todayCal = TimeUtils.todayMidnightCal(false)
 
         //Calculate start time for the event.
         startTimeMills = summaryDayCal.timeInMillis
@@ -239,10 +239,17 @@ constructor(
 
         fun convertToValidUserActivityList(dayActivity: ArrayList<UserActivity>) {
             //Sort by the event start time in descending order
-            Collections.sort(dayActivity) { o1, o2 -> (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt() }
+            dayActivity.sortWith(Comparator { o1, o2 ->
+                (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt()
+            })
 
             //Remove the last incomplete event
             val iter = dayActivity.iterator()
+            if (!iter.hasNext()) return //List is empty
+
+            val thisDayStartMills = TimeUtils.getMidnightCal(dayActivity.first().eventEndTimeMills, false).timeInMillis
+            val thisDayEndingMills = thisDayStartMills + TimeUtils.ONE_DAY_MILLISECONDS - 1_000L
+
             while (iter.hasNext()) {
                 val value = iter.next()
 
@@ -253,8 +260,11 @@ constructor(
                     iter.remove()
                     continue
                 }
-                //TODO handle events started before the current day and ended in current day
-
+                //If the event is started on previous day...
+                if (value.eventStartTimeMills < thisDayStartMills) {
+                    //Consider it starting on this day 12 AM.
+                    value.eventStartTimeMills = thisDayStartMills
+                }
 
                 //=============  Ending event time modifications ============= //
                 //If it is not last event and this event is not ended yet...it's invalid event
@@ -264,10 +274,8 @@ constructor(
                 }
 
                 //If the event is ending next day...
-                val thisDayStartMills = TimeUtils.getMidnightCal(value.eventStartTimeMills).timeInMillis
-                val thisDayEndingMills = thisDayStartMills + TimeUtils.ONE_DAY_MILLISECONDS - 1_000L
                 if (value.eventEndTimeMills > thisDayEndingMills) {
-                    //Consider it ending on this day 12 AM.
+                    //Consider it ending on next day 12 AM.
                     value.eventEndTimeMills = thisDayEndingMills
                 }
             }

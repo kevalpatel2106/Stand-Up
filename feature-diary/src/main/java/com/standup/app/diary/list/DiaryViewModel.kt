@@ -31,6 +31,7 @@ import com.standup.app.diary.di.DaggerDiaryComponent
 import com.standup.app.diary.repo.DiaryRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -151,6 +152,8 @@ internal class DiaryViewModel : BaseViewModel {
 
                 }, {
                     blockUi.value = false
+
+                    Timber.e(it)
 
                     val message = ErrorMessage(it.message)
                     message.errorImage = LottieJson.PERSON_FALLING_FROM_UFO

@@ -58,7 +58,7 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
         val flowable = Flowable.create(FlowableOnSubscribe<List<UserActivity>> { e ->
 
             //Setup the calender object.
-            val calender = Calendar.getInstance()
+            val calender = Calendar.getInstance(TimeZone.getDefault())
             calender.timeInMillis = beforeMills
 
             //Get the oldest day
@@ -128,7 +128,6 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
                 .map { t -> ArrayList(t) }
                 .map { arrayList ->
                     //Generate the summary
-                    DailyActivitySummary.convertToValidUserActivityList(arrayList)
                     DailyActivitySummary.fromDayActivityList(arrayList)
                 }
     }
@@ -138,7 +137,7 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        val startTimeMills = calendar.timeInMillis - 1
+        val startTimeMills = calendar.timeInMillis
 
         calendar.set(Calendar.HOUR_OF_DAY, 23)
         calendar.set(Calendar.MINUTE, 59)

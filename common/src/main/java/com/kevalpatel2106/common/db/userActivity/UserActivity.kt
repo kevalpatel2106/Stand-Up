@@ -36,7 +36,7 @@ data class UserActivity(
         var remoteId: Long = 0,
 
         @ColumnInfo(name = EVENT_START_TIME)
-        val eventStartTimeMills: Long,
+        var eventStartTimeMills: Long,
 
         @ColumnInfo(name = EVENT_END_TIME)
         var eventEndTimeMills: Long,
@@ -72,7 +72,7 @@ data class UserActivity(
         //---- [Start] Column names
         const val ID = "_id"
         const val REMOTE_ID = "remote_id"
-        const val EVENT_START_TIME = "event_end_time"
+        const val EVENT_START_TIME = "event_end_time"   //TODO Column names are swapped
         const val EVENT_END_TIME = "event_start_time"
         const val ACTIVITY_TYPE = "type"
         const val IS_SYNCED = "is_synced"

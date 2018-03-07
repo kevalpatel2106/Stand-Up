@@ -38,7 +38,7 @@ object TimeUtils {
 
     fun currentTimeMills() = System.currentTimeMillis()
 
-    fun getMidnightCal(dayOfMonth: Int, monthOfYear: Int, year: Int): Calendar {
+    fun getMidnightCal(dayOfMonth: Int, monthOfYear: Int, year: Int, isUtc: Boolean = true): Calendar {
         val midnightCal = Calendar.getInstance()
         midnightCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         midnightCal.set(Calendar.MONTH, monthOfYear)
@@ -49,13 +49,13 @@ object TimeUtils {
         midnightCal.set(Calendar.SECOND, 0)
         midnightCal.set(Calendar.MILLISECOND, 0)
 
-        midnightCal.timeZone = TimeZone.getTimeZone("UTC")
+        if (isUtc) midnightCal.timeZone = TimeZone.getTimeZone("UTC")
 
         return midnightCal
     }
 
-    fun getMidnightCal(unixMills: Long): Calendar {
-        val midnightCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+    fun getMidnightCal(unixMills: Long, isUtc: Boolean = true): Calendar {
+        val midnightCal = Calendar.getInstance(if (isUtc) TimeZone.getTimeZone("UTC") else TimeZone.getDefault())
         midnightCal.timeInMillis = unixMills
 
         midnightCal.set(Calendar.HOUR_OF_DAY, 0)
@@ -66,12 +66,12 @@ object TimeUtils {
         return midnightCal
     }
 
-    fun todayMidnightCal(): Calendar {
-        return getMidnightCal(currentTimeMills())
+    fun todayMidnightCal(isUtc: Boolean = true): Calendar {
+        return getMidnightCal(currentTimeMills(), isUtc)
     }
 
-    fun tomorrowMidnightCal(): Calendar {
-        val cal = getMidnightCal(currentTimeMills())
+    fun tomorrowMidnightCal(isUtc: Boolean = true): Calendar {
+        val cal = getMidnightCal(currentTimeMills(), isUtc)
         cal.add(Calendar.DAY_OF_YEAR, 1)
         return cal
     }
