@@ -115,7 +115,7 @@ class DiaryViewModelTest {
     }
 
     @Test
-    fun checkLoadNextPageWithSecondPage() {
+    fun checkLoadNextPage_WithSecondPage() {
         //Generate fake data
         insert2EventsInDifferentDaysOfDifferentMonths(16)
 

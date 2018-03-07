@@ -137,7 +137,7 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        val startTimeMills = calendar.timeInMillis
+        val startTimeMills = calendar.timeInMillis - 1
 
         calendar.set(Calendar.HOUR_OF_DAY, 23)
         calendar.set(Calendar.MINUTE, 59)

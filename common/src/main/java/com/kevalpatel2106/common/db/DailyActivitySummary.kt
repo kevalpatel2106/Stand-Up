@@ -27,7 +27,6 @@ import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import java.io.Serializable
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by Kevalpatel2106 on 25-Dec-17.
@@ -239,14 +238,28 @@ constructor(
         }
 
         //TODO Write it into the functional style
-        fun convertToValidUserActivityList(dailyActivity: ArrayList<UserActivity>) {
-            val dayActivity = ArrayList<UserActivity>()
-            dailyActivity.filter { it.eventStartTimeMills > 0L }
-                    .filter { it.eventEndTimeMills > 0L }
-                    .forEach { dayActivity.add(it) }
+        fun convertToValidUserActivityList(dayActivity: ArrayList<UserActivity>) {
+            val iter = dayActivity.iterator()
+            while (iter.hasNext()) {
+                val value = iter.next()
+
+                //Remove invalid event
+                //If the start time is 0, than it's invalid data. Remove it.
+                if (value.eventStartTimeMills <= 0L) {
+                    iter.remove()
+                    continue
+                }
+
+                //=============  Ending event time modifications ============= //
+                //If it is not last event and this event is not ended yet...it's invalid event
+                if (value.eventEndTimeMills <= 0L) {
+                    iter.remove()
+                    continue
+                }
+            }
 
             if (dayActivity.isEmpty()) {//List is empty
-                dailyActivity.clear()
+                dayActivity.clear()
                 return
             }
 
@@ -255,35 +268,31 @@ constructor(
                 (o1.eventStartTimeMills - o2.eventStartTimeMills).toInt()
             })
 
-            if (dayActivity.first().eventEndTimeMills - dayActivity.last().eventStartTimeMills > TimeUtils.ONE_DAY_MILLISECONDS)
+            //Validate the length of the list
+            if (dayActivity.size > 1
+                    && Math.abs(dayActivity.last().eventStartTimeMills - dayActivity.first().eventEndTimeMills)
+                    > TimeUtils.ONE_DAY_MILLISECONDS)
                 throw IllegalArgumentException("List of events can't be stretched from more than one day. $dayActivity")
 
-            //Remove the last incomplete event
-            val iter = dayActivity.iterator()
-
+            //Get the midnight milliseconds of the date.
             val thisDayStartMills = TimeUtils.getMidnightCal(dayActivity.first().eventEndTimeMills, false).timeInMillis
             val thisDayEndingMills = thisDayStartMills + TimeUtils.ONE_DAY_MILLISECONDS - 1_000L
 
-            while (iter.hasNext()) {
-                val value = iter.next()
-
+            dayActivity.forEach {
                 //=============  Starting event time modifications ============= //
                 //If the event is started on previous day...
-                if (value.eventStartTimeMills < thisDayStartMills) {
+                if (it.eventStartTimeMills < thisDayStartMills) {
                     //Consider it starting on this day 12 AM.
-                    value.eventStartTimeMills = thisDayStartMills
+                    it.eventStartTimeMills = thisDayStartMills
                 }
 
                 //=============  Ending event time modifications ============= //
                 //If the event is ending next day...
-                if (value.eventEndTimeMills > thisDayEndingMills) {
+                if (it.eventEndTimeMills > thisDayEndingMills) {
                     //Consider it ending on next day 12 AM.
-                    value.eventEndTimeMills = thisDayEndingMills
+                    it.eventEndTimeMills = thisDayEndingMills
                 }
             }
-
-            dailyActivity.clear()
-            dailyActivity.addAll(dayActivity)
         }
     }
 }

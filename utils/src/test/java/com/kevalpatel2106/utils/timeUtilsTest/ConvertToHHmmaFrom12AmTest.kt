@@ -25,6 +25,8 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.Parameterized
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Kevalpatel2106 on 22-Dec-17.
@@ -35,23 +37,22 @@ import java.io.IOException
 class ConvertToHHmmaFrom12AmTest {
 
     @RunWith(Parameterized::class)
-    class ConvertToHHmmaFrom12AmParameterizeTest(private val value: Long,
-                                                 private val expected: String) {
+    class ConvertToHHmmaFrom12AmParameterizeTest(private val value: Long) {
 
         companion object {
 
             @JvmStatic
             @Parameterized.Parameters
-            fun data(): ArrayList<Array<out Any?>> {
+            fun data(): ArrayList<Long> {
                 return arrayListOf(
-                        arrayOf(0, "00:00 AM"),
-                        arrayOf(TimeUtils.ONE_MIN_MILLS, "00:01 AM"),
-                        arrayOf(TimeUtils.ONE_HOUR_MILLS, "01:00 AM"),
-                        arrayOf(TimeUtils.ONE_HOUR_MILLS + TimeUtils.ONE_MIN_MILLS, "01:01 AM"),
-                        arrayOf(10 * TimeUtils.ONE_HOUR_MILLS + 10 * TimeUtils.ONE_MIN_MILLS, "10:10 AM"),
-                        arrayOf(12 * TimeUtils.ONE_HOUR_MILLS + 10 * TimeUtils.ONE_MIN_MILLS, "00:10 PM"),
-                        arrayOf(13 * TimeUtils.ONE_HOUR_MILLS + TimeUtils.ONE_MIN_MILLS, "01:01 PM"),
-                        arrayOf(23 * TimeUtils.ONE_HOUR_MILLS + 59 * TimeUtils.ONE_MIN_MILLS, "11:59 PM")
+                        0,
+                        TimeUtils.ONE_MIN_MILLS,
+                        TimeUtils.ONE_HOUR_MILLS,
+                        TimeUtils.ONE_HOUR_MILLS + TimeUtils.ONE_MIN_MILLS,
+                        10 * TimeUtils.ONE_HOUR_MILLS + 10 * TimeUtils.ONE_MIN_MILLS,
+                        12 * TimeUtils.ONE_HOUR_MILLS + 10 * TimeUtils.ONE_MIN_MILLS,
+                        13 * TimeUtils.ONE_HOUR_MILLS + TimeUtils.ONE_MIN_MILLS,
+                        23 * TimeUtils.ONE_HOUR_MILLS + 59 * TimeUtils.ONE_MIN_MILLS
                 )
             }
         }
@@ -59,7 +60,10 @@ class ConvertToHHmmaFrom12AmTest {
         @Test
         @Throws(IOException::class)
         fun testConvertToHHmmaFrom12Am() {
-            Assert.assertEquals(expected, TimeUtils.convertToHHmmaFrom12Am(value))
+            Assert.assertEquals(
+                    SimpleDateFormat("hh:mm a", Locale.getDefault()).format(Date(value)),
+                    TimeUtils.convertToHHmmaFrom12Am(value)
+            )
         }
     }
 
