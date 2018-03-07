@@ -29,7 +29,7 @@ import timber.log.Timber
 object UserActivityHelper {
 
     @JvmStatic
-    fun getActivityType(type: String): UserActivityType {
+    internal fun getActivityType(type: String): UserActivityType {
 
         return when (type) {
             "sitting" -> UserActivityType.SITTING

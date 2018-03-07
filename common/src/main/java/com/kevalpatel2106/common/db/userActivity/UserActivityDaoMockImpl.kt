@@ -27,6 +27,7 @@ import java.util.*
  */
 @OnlyForTesting
 class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserActivityDao {
+
     override fun getOldestTimestamp(): Long {
         return 0L //TODO
     }
@@ -68,7 +69,8 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
     override fun getActivityBetweenDuration(afterTimeMills: Long, beforeTimeMills: Long): List<UserActivity> {
         val activityBetweenDuration = ArrayList<UserActivity>()
 
-        tableItems.filter { it -> it.eventStartTimeMills in (afterTimeMills + 1)..(beforeTimeMills - 1) }
+        tableItems.filter { it -> it.eventStartTimeMills < beforeTimeMills - 1 }
+                .filter { it -> it.eventEndTimeMills > afterTimeMills - 1 }
                 .forEach { it -> activityBetweenDuration.add(it) }
         return activityBetweenDuration
     }
@@ -87,11 +89,18 @@ class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserAct
         return if (tableItems.isEmpty()) null else tableItems.last()
     }
 
+    @Suppress("JavaCollectionsStaticMethod")
     private fun sortDescendingByStartTime() = Collections.sort(tableItems) { o1, o2 ->
         val diff = (o2.eventStartTimeMills - o1.eventStartTimeMills)
         if (diff < 0) return@sort -1
         else if (diff > 0) return@sort 1
         return@sort 0
+    }
+
+    override fun getActivityForLocalId(localId: Long): UserActivity? {
+        var activity: UserActivity? = null
+        tableItems.filter { it -> it.localId == localId }.forEach { it -> activity = it }
+        return activity
     }
 
     override fun getPendingActivity(isPending: Boolean): List<UserActivity> {

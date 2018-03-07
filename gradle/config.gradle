@@ -48,6 +48,12 @@ ext {
         resConfigs DefaultConfig.supportedResConfig
 
         testInstrumentationRunner DefaultConfig.testRunnerClass
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": DefaultConfig.schemaPath.toString()]
+            }
+        }
     }
 
     libDefaultConfig = {
@@ -68,7 +74,7 @@ ext {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+                arguments = ["room.schemaLocation": DefaultConfig.schemaPath.toString()]
             }
         }
     }

@@ -63,7 +63,7 @@ data class UserActivity(
         get() = UserActivityHelper.getActivityType(type)
 
 
-    companion object {
+    internal companion object {
         /**
          * Name of the table. This is the primary key.
          */
@@ -72,8 +72,8 @@ data class UserActivity(
         //---- [Start] Column names
         const val ID = "_id"
         const val REMOTE_ID = "remote_id"
-        const val EVENT_START_TIME = "event_end_time"   //TODO Column names are swapped
-        const val EVENT_END_TIME = "event_start_time"
+        const val EVENT_START_TIME = "start_time"
+        const val EVENT_END_TIME = "end_time"
         const val ACTIVITY_TYPE = "type"
         const val IS_SYNCED = "is_synced"
         //---- [End] Column names

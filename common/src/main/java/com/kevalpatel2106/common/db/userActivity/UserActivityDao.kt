@@ -67,6 +67,9 @@ interface UserActivityDao {
             + UserActivity.USER_ACTIVITY_TABLE)
     fun getOldestTimestamp(): Long
 
+    @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE + " WHERE " + UserActivity.ID + " = :localId")
+    fun getActivityForLocalId(localId: Long): UserActivity?
+
     @Query("DELETE FROM " + UserActivity.USER_ACTIVITY_TABLE)
     fun nukeTable()
 }

@@ -6,7 +6,7 @@
     "entities": [
       {
         "tableName": "user_activity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `remote_id` INTEGER NOT NULL, `event_end_time` INTEGER NOT NULL, `event_start_time` INTEGER NOT NULL, `type` TEXT NOT NULL, `is_synced` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `remote_id` INTEGER NOT NULL, `start_time` INTEGER NOT NULL, `end_time` INTEGER NOT NULL, `type` TEXT NOT NULL, `is_synced` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "localId",
@@ -22,13 +22,13 @@
           },
           {
             "fieldPath": "eventStartTimeMills",
-            "columnName": "event_end_time",
+            "columnName": "start_time",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
             "fieldPath": "eventEndTimeMills",
-            "columnName": "event_start_time",
+            "columnName": "end_time",
             "affinity": "INTEGER",
             "notNull": true
           },

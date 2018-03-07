@@ -65,6 +65,7 @@ dependencies {
     api Deps.uiAutomator
     api Deps.mockWebServer
     api Deps.mockito
+    api Deps.roomTesting
 
     implementation(Deps.kotlinRefflect)
     implementation(Deps.kotlinStdLib)
