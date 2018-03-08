@@ -73,7 +73,7 @@ class DiaryRepoImplTest {
     }
 
     @Test
-    fun checkLoadDaysSummaryListWhenEmptyDb() {
+    fun checkLoadDaysSummaryList_WhenEmptyDb() {
         mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
                 + "/load_days_activity_empty_response.json"))
 
@@ -88,7 +88,7 @@ class DiaryRepoImplTest {
     }
 
     @Test
-    fun checkLoadDaysSummaryListWith1DayInDb() {
+    fun checkLoadDaysSummaryList_With1DayInDb() {
         insert5EventsInEachDayFor1Day()
 
         mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
@@ -105,7 +105,7 @@ class DiaryRepoImplTest {
     }
 
     @Test
-    fun checkLoadDaysSummaryListWith15DaysInDb() {
+    fun checkLoadDaysSummaryList_With15DaysInDb() {
         insertOneEventsInEachDayFor15Days()
 
         mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
@@ -122,7 +122,7 @@ class DiaryRepoImplTest {
     }
 
     @Test
-    fun checkLoadDaysSummaryListWith7DaysInDb() {
+    fun checkLoadDaysSummaryList_With7DaysInDb() {
         insert2EventsInEachDayFor7Days()
 
         mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
@@ -140,19 +140,19 @@ class DiaryRepoImplTest {
 
 
     @Test
-    fun checkLoadUserActivityByDayWithEmptyDb() {
-        val it = dairyRepoImpl.loadUserActivityByDay(Calendar.getInstance())
+    fun checkLoadUserActivityForDayFromCalender_WithEmptyDb() {
+        val it = dairyRepoImpl.loadUserActivityForDayFromCalender(Calendar.getInstance())
         Assert.assertEquals(0, it.size)
     }
 
 
     @Test
-    fun checkLoadUserActivityByDayWithItemsAvailableForDay() {
+    fun checkLoadUserActivityForDayFromCalender_WithItemsAvailableForDay() {
         insert2EventsInEachDayFor7Days()
 
         val cal = Calendar.getInstance()
         cal.timeInMillis = userActivityDao.tableItems.first().eventStartTimeMills
-        val it = dairyRepoImpl.loadUserActivityByDay(cal)
+        val it = dairyRepoImpl.loadUserActivityForDayFromCalender(cal)
 
         Assert.assertEquals(2, it.size)
 
@@ -166,7 +166,7 @@ class DiaryRepoImplTest {
     }
 
     @Test
-    fun checkLoadUserActivityByDay_WithItemStartingOnPreviousDay() {
+    fun checkLoadUserActivityForDayFromCalender_WithItemStartingOnPreviousDay() {
         val startTime = System.currentTimeMillis() - TimeUtils.ONE_DAY_MILLISECONDS
         val endTime = System.currentTimeMillis()
 
@@ -175,37 +175,38 @@ class DiaryRepoImplTest {
                 type = UserActivityType.NOT_TRACKED.name.toLowerCase(),
                 isSynced = false))
 
-        val it = dairyRepoImpl.loadUserActivityByDay(Calendar.getInstance())
+        val it = dairyRepoImpl.loadUserActivityForDayFromCalender(Calendar.getInstance())
         Assert.assertEquals(1, it.size)
+
+
+        Assert.assertEquals(startTime, it.first().eventStartTimeMills)
+        Assert.assertEquals(endTime, it.first().eventEndTimeMills)
     }
 
     @Test
-    fun checkLoadUserActivityByDayWithItemEndingOnNextDay() {
-        val cal = Calendar.getInstance()
-        val startTime = cal.timeInMillis
-
-        cal.add(Calendar.DAY_OF_MONTH, 1)
-        val endTime = cal.timeInMillis
+    fun checkLoadUserActivityForDayFromCalender_WithItemEndingOnNextDay() {
+        val startTime = System.currentTimeMillis()
+        val endTime = System.currentTimeMillis() + TimeUtils.ONE_DAY_MILLISECONDS
 
         userActivityDao.insert(UserActivity(eventStartTimeMills = startTime,
                 eventEndTimeMills = endTime,
                 type = UserActivityType.NOT_TRACKED.name.toLowerCase(),
                 isSynced = false))
 
-        val it = dairyRepoImpl.loadUserActivityByDay(Calendar.getInstance())
+        val it = dairyRepoImpl.loadUserActivityForDayFromCalender(Calendar.getInstance())
 
         Assert.assertEquals(1, it.size)
-        Assert.assertEquals(it.last().eventStartTimeMills, startTime)
-        Assert.assertEquals(it.first().eventEndTimeMills, endTime)
+        Assert.assertEquals(startTime, it.first().eventStartTimeMills)
+        Assert.assertEquals(endTime, it.first().eventEndTimeMills)
     }
 
     @Test
-    fun checkLoadUserActivityByDayWithItemsNotAvailableForDay() {
+    fun checkLoadUserActivityByDay_WithItemsNotAvailableForDay() {
         insert2EventsInEachDayFor7Days()
 
         val cal = Calendar.getInstance()
         cal.add(Calendar.DAY_OF_MONTH, -30)
-        val it = dairyRepoImpl.loadUserActivityByDay(cal)
+        val it = dairyRepoImpl.loadUserActivityForDayFromCalender(cal)
 
         Assert.assertEquals(0, it.size)
     }
