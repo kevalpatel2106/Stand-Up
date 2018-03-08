@@ -386,18 +386,18 @@ class CoreRepoImplTest {
     @Test
     fun checkLoadYesterdaySummary_ActivityInDbForYesterday() {
         try {
-            val todayMidnightMills = TimeUtils.todayMidnightCal(false).timeInMillis
+            val yesterdayMidnightMills = TimeUtils.todayMidnightCal(false).timeInMillis - TimeUtils.ONE_DAY_MILLISECONDS
 
             //Set fake data.
             userActivityDao.insert(UserActivity(
-                    eventStartTimeMills = todayMidnightMills - TimeUtils.ONE_DAY_MILLISECONDS,
-                    eventEndTimeMills = todayMidnightMills - TimeUtils.ONE_DAY_MILLISECONDS + 3600_000,
+                    eventStartTimeMills = yesterdayMidnightMills,
+                    eventEndTimeMills = yesterdayMidnightMills + 3600_000,
                     isSynced = false,
                     type = UserActivityType.MOVING.toString().toLowerCase())
             )
             userActivityDao.insert(UserActivity(
-                    eventStartTimeMills = todayMidnightMills - TimeUtils.ONE_DAY_MILLISECONDS + 3600_000,
-                    eventEndTimeMills = todayMidnightMills - TimeUtils.ONE_DAY_MILLISECONDS + 4000_000,
+                    eventStartTimeMills = yesterdayMidnightMills + 3700_000,
+                    eventEndTimeMills = yesterdayMidnightMills + 4000_000,
                     isSynced = false,
                     type = UserActivityType.SITTING.toString().toLowerCase())
             )

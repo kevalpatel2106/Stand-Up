@@ -31,10 +31,8 @@ import com.standup.core.CoreConfig
 import io.reactivex.*
 import retrofit2.Retrofit
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.collections.ArrayList
 
 /**
  * Created by Keval on 14/12/17.
@@ -213,14 +211,8 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
      */
     override fun loadYesterdaySummary(): Flowable<DailyActivitySummary> {
         //Get the calender for 12 AM of that day
-        var dayCal = Calendar.getInstance()
-        dayCal.add(Calendar.DAY_OF_MONTH, -2)       //Previous day
-        dayCal = TimeUtils.getMidnightCal(dayCal.timeInMillis)
-
-        val startTimeMills = dayCal.timeInMillis
-
-        dayCal.set(Calendar.HOUR_OF_DAY, 24)
-        val endTimeMills = dayCal.timeInMillis
+        val endTimeMills = TimeUtils.todayMidnightCal(false).timeInMillis
+        val startTimeMills = endTimeMills - TimeUtils.ONE_DAY_MILLISECONDS
 
         return Flowable.create(FlowableOnSubscribe<List<UserActivity>> {
             val item = userActivityDao.getActivityBetweenDuration(startTimeMills, endTimeMills)
