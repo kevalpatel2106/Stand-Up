@@ -28,6 +28,8 @@ import timber.log.Timber
 @Helper(UserActivity::class)
 object UserActivityHelper {
 
+    val endTimeCorrectionValue = 10_000L
+
     @JvmStatic
     internal fun getActivityType(type: String): UserActivityType {
 
@@ -45,7 +47,7 @@ object UserActivityHelper {
     @JvmStatic
     fun createLocalUserActivity(type: UserActivityType): UserActivity {
         return UserActivity(eventStartTimeMills = System.currentTimeMillis(),
-                eventEndTimeMills = 0, /*We don't know when the event will end*/
+                eventEndTimeMills = System.currentTimeMillis() + endTimeCorrectionValue, /*We don't know when the event will end*/
                 type = type.name.toLowerCase(),
                 isSynced = false)
     }

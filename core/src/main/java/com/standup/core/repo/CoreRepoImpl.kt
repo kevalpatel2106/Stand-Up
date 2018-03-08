@@ -17,11 +17,11 @@
 
 package com.standup.core.repo
 
-import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.common.repository.RepoBuilder
 import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
@@ -45,9 +45,6 @@ import kotlin.collections.ArrayList
 internal class CoreRepoImpl @Inject constructor(private val userActivityDao: UserActivityDao,
                                                 @Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit)
     : CoreRepo {
-
-    @VisibleForTesting
-    internal val endTimeCorrectionValue = 10_000L
 
     /**
      * This method will send the data of all the pending events to the server. This is going to run
@@ -126,6 +123,10 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
         }
     }
 
+    override fun insertNewUserActivity(newActivity: UserActivity): Single<Long> {
+        return insertNewUserActivity(newActivity, false)
+    }
+
     /**
      * This will store [newActivity] into the database and terminate the previous event with the
      * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
@@ -154,13 +155,14 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
      * @return Id of the newly inserted or updated record.
      * @throws IllegalArgumentException if the start time of [newActivity] is 0.
      */
-    override fun insertNewUserActivity(newActivity: UserActivity): Single<Long> { //Validate new activity
+    override fun insertNewUserActivity(newActivity: UserActivity,
+                                       doNotMergeWithPrevious: Boolean): Single<Long> { //Validate new activity
         if (newActivity.eventStartTimeMills == 0L)
             throw IllegalArgumentException("Start time invalid. Start time: ${newActivity.eventStartTimeMills}")
 
         //Make correction into the end date.
         if (newActivity.eventEndTimeMills <= 0L)
-            newActivity.eventEndTimeMills = newActivity.eventStartTimeMills + endTimeCorrectionValue
+            newActivity.eventEndTimeMills = newActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue
 
         return Single.create({
             val lastActivity = userActivityDao.getLatestActivity()
@@ -168,7 +170,7 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
             when {
 
             //There is no item into the database.
-                lastActivity == null -> {
+                lastActivity == null || doNotMergeWithPrevious -> {
                     //Add the first event to the database
                     val id = userActivityDao.insert(newActivity)
                     it.onSuccess(id)

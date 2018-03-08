@@ -19,6 +19,7 @@ package com.standup.core.repo
 
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
+import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager
@@ -107,7 +108,7 @@ class CoreRepoImplTest {
             Assert.assertEquals(userActivityDao.tableItems.size, 1)
             Assert.assertEquals(userActivityDao.tableItems[0].eventStartTimeMills, startTime)
             Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, startTime
-                    + reminderRepo.endTimeCorrectionValue)
+                    + UserActivityHelper.endTimeCorrectionValue)
 
             Assert.assertEquals(userActivityDao.tableItems[0].userActivityType, UserActivityType.MOVING)
         } catch (e: IllegalArgumentException) {

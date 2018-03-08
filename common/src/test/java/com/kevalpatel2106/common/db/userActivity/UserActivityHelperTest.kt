@@ -60,8 +60,9 @@ class UserActivityHelperTest {
     fun checkCreateLocalSittingUserActivity() {
         val localUserActivity = UserActivityHelper.createLocalUserActivity(UserActivityType.SITTING)
 
-        Assert.assertTrue(System.currentTimeMillis() - localUserActivity.eventStartTimeMills <= 10000/*10 seconds delta*/)
-        Assert.assertEquals(localUserActivity.eventEndTimeMills, 0)
+        Assert.assertTrue(System.currentTimeMillis() - localUserActivity.eventStartTimeMills <= 10_000/*10 seconds delta*/)
+        Assert.assertEquals(localUserActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue,
+                localUserActivity.eventEndTimeMills)
         Assert.assertEquals(localUserActivity.localId, 0)
         Assert.assertEquals(localUserActivity.remoteId, 0)
         Assert.assertFalse(localUserActivity.isSynced)
@@ -73,8 +74,9 @@ class UserActivityHelperTest {
     fun checkCreateLocNotTrackedUserActivity() {
         val localUserActivity = UserActivityHelper.createLocalUserActivity(UserActivityType.NOT_TRACKED)
 
-        Assert.assertTrue(System.currentTimeMillis() - localUserActivity.eventStartTimeMills <= 10000/*10 seconds delta*/)
-        Assert.assertEquals(localUserActivity.eventEndTimeMills, 0)
+        Assert.assertTrue(System.currentTimeMillis() - localUserActivity.eventStartTimeMills <= 10_000/*10 seconds delta*/)
+        Assert.assertEquals(localUserActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue,
+                localUserActivity.eventEndTimeMills)
         Assert.assertEquals(localUserActivity.localId, 0)
         Assert.assertEquals(localUserActivity.remoteId, 0)
         Assert.assertFalse(localUserActivity.isSynced)
@@ -86,8 +88,10 @@ class UserActivityHelperTest {
     fun checkCreateLocalMovingUserActivity() {
         val localUserActivity = UserActivityHelper.createLocalUserActivity(UserActivityType.MOVING)
 
-        Assert.assertTrue(System.currentTimeMillis() - localUserActivity.eventStartTimeMills <= 10000/*10 seconds delta*/)
-        Assert.assertEquals(localUserActivity.eventEndTimeMills, 0)
+        Assert.assertTrue(System.currentTimeMillis() - localUserActivity.eventStartTimeMills <= 10_000/*10 seconds delta*/)
+        Assert.assertEquals(localUserActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue,
+                localUserActivity.eventEndTimeMills)
+
         Assert.assertEquals(localUserActivity.localId, 0)
         Assert.assertEquals(localUserActivity.remoteId, 0)
         Assert.assertFalse(localUserActivity.isSynced)
