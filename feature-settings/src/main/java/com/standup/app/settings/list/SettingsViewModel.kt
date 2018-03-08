@@ -20,7 +20,6 @@ package com.standup.app.settings.list
 import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
-import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
@@ -58,7 +57,6 @@ internal class SettingsViewModel : BaseViewModel() {
         showLogoutConformation.value = false
     }
 
-    @VisibleForTesting
     internal fun prepareSettingsList(context: Context) {
         settingsItems.value?.let {
             it.clear()

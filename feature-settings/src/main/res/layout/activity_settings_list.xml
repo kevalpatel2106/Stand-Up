@@ -37,6 +37,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/include2"
-        tools:listitem="@layout/row_settings" />
+        app:layout_constraintTop_toBottomOf="@id/include2" />
 </android.support.constraint.ConstraintLayout>

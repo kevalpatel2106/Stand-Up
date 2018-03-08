@@ -80,6 +80,8 @@ class SettingsListActivity : BaseActivity() {
                         isTwoPane = true
                 )
             }
+
+            model.prepareSettingsList(this@SettingsListActivity)
         }
     }
 
@@ -98,7 +100,10 @@ class SettingsListActivity : BaseActivity() {
         })
 
         model.settingsItems.observe(this@SettingsListActivity, Observer {
-            it?.let { adapter.setData(it) }
+            it?.let {
+                adapter.setData(it)
+                adapter.notifyDataSetChanged()
+            }
         })
 
         model.showLogoutConformation.observe(this, Observer {
