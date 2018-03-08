@@ -48,7 +48,7 @@ class SingleLiveEventTest {
     }
 
     @Test
-    fun checkIfOnChangeCallsRegisteringObserveAfterSettingValue() {
+    fun checkIfOnChangeCallsRegisteringObserve_AfterSettingValue() {
         val testValue = 5
         val singleData = SingleLiveEvent<Int>()
 
