@@ -106,6 +106,7 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
             it.onNext(ArrayList(loadUserActivityForDayFromCalender(calendar)))
             it.onComplete()
         }, BackpressureStrategy.DROP)
+                .filter { !it.isEmpty() }
                 .map { arrayList ->
                     //Convert to valid list
                     DailyActivitySummary.convertToValidUserActivityList(arrayList)

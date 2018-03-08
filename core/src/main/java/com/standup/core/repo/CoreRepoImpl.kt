@@ -232,7 +232,6 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
                 .map { t -> ArrayList(t) }
                 .map { arrayList ->
                     //Generate the summary
-                    DailyActivitySummary.convertToValidUserActivityList(arrayList)
                     DailyActivitySummary.fromDayActivityList(arrayList)
                 }
     }
