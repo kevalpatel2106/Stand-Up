@@ -82,6 +82,23 @@
  *   limitations under the License.
  *
  */
+
+/*
+ *  Copyright 2018 Keval Patel.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
 /**
  * Created by Keval Patel on 02/03/18.
  * List of all the dependencies used in the project.
@@ -102,7 +119,7 @@ object Deps {
     const val uiAutomator = "com.android.support.test.uiautomator:uiautomator-v18:${Versions.uiAutomator}"
     const val mockWebServer = "com.squareup.okhttp3:mockwebserver:${Versions.okHttp}"
     const val mockito = "org.mockito:mockito-core:${Versions.mockito}"
-    const val roomTesting = "android.arch.persistence.room:testing:${Versions.archComponent}"
+    const val roomTesting = "android.arch.persistence.room:testing:${Versions.room}"
 
 
     //Support lib
@@ -119,11 +136,10 @@ object Deps {
     const val gridLayout = "com.android.support:gridlayout-v7:${Versions.supportLib}"
 
     //Architecture components
-    const val room = "android.arch.persistence.room:runtime:${Versions.archComponent}"
-    const val roomAnnotation = "android.arch.persistence.room:compiler:${Versions.archComponent}"
-    const val roomRx = "android.arch.persistence.room:rxjava2:${Versions.archComponent}"
+    const val room = "android.arch.persistence.room:runtime:${Versions.room}"
+    const val roomAnnotation = "android.arch.persistence.room:compiler:${Versions.room}"
+    const val lifecycleJava8 = "android.arch.lifecycle:common-java8:${Versions.archComponent}"
     const val lifecycle = "android.arch.lifecycle:extensions:${Versions.archComponent}"
-    const val lifecycleAnotations = "android.arch.lifecycle:compiler:${Versions.archComponent}"
 
     //Firebase
     const val firebaseCore = "com.google.firebase:firebase-core:${Versions.playService}"

@@ -91,4 +91,5 @@ dependencies {
 
     //Room & Arch components
     implementation Deps.lifecycle
+    implementation Deps.lifecycleJava8
 }

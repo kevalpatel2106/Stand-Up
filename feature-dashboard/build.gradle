@@ -94,6 +94,7 @@ dependencies {
     implementation(Deps.cardView, excludeGrp)
 
     //Room & Arch components
+    implementation Deps.lifecycleJava8
     implementation Deps.lifecycle
 
     implementation(Deps.chartLayout, excludeGrp)
