@@ -42,7 +42,6 @@ import com.standup.app.settings.notifications.NotificationSettingsFragment
 import com.standup.app.settings.syncing.SyncSettingsDetailActivity
 import com.standup.app.settings.syncing.SyncSettingsFragment
 import com.standup.app.settings.whitelisting.WhitelistingUtils
-import dagger.Lazy
 import io.reactivex.Single
 import io.reactivex.SingleOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -60,18 +59,6 @@ internal class SettingsViewModel : BaseViewModel {
 
     @Inject
     internal lateinit var userActivityDao: UserActivityDao
-
-    @Inject
-    internal lateinit var syncSettingsFragment: Lazy<SyncSettingsFragment>
-
-    @Inject
-    internal lateinit var dndSettingsFragment: Lazy<DndSettingsFragment>
-
-    @Inject
-    internal lateinit var notificationSettingsFragment: Lazy<NotificationSettingsFragment>
-
-    @Inject
-    internal lateinit var dailyReviewSettingsFragment: Lazy<DailyReviewSettingsFragment>
 
     internal var detailFragment = MutableLiveData<Fragment>()
 
@@ -104,6 +91,7 @@ internal class SettingsViewModel : BaseViewModel {
 
     private fun init() {
         settingsItems.value = ArrayList()
+        detailFragment.value = null
 
         showLogoutConformation.value = false
         openSyncSettings.value = false
@@ -120,16 +108,22 @@ internal class SettingsViewModel : BaseViewModel {
             it.clear()
 
             it.add(getSettingsCard())
-            addWhiteListAppCard(context, userActivityDao)
             it.add(getHelpCard())
             it.add(getLogoutCard(context))
 
             //Publish the update.
             settingsItems.value = it
+
+            addWhiteListAppCard(context, userActivityDao).subscribe({
+                if (it) settingsItems.value?.add(1, getWhiteListCard(context))
+            }, {
+                Timber.i(it.printStackTrace().toString())
+            })
         }
     }
 
-    private fun getSettingsCard(): MaterialAboutCard {
+    @VisibleForTesting
+    internal fun getSettingsCard(): MaterialAboutCard {
         val syncSettingsItem = prepareCard(
                 icon = R.drawable.ic_sync,
                 text = R.string.settings_name_sync,
@@ -171,7 +165,8 @@ internal class SettingsViewModel : BaseViewModel {
                 .build()
     }
 
-    private fun getLogoutCard(context: Context): MaterialAboutCard {
+    @VisibleForTesting
+    internal fun getLogoutCard(context: Context): MaterialAboutCard {
         val logoutItem = prepareCard(
                 icon = R.drawable.ic_logout,
                 text = R.string.settings_name_logout,
@@ -186,7 +181,8 @@ internal class SettingsViewModel : BaseViewModel {
                 .build()
     }
 
-    private fun getWhiteListCard(context: Context): MaterialAboutCard {
+    @VisibleForTesting
+    internal fun getWhiteListCard(context: Context): MaterialAboutCard {
         val whitelistItem = prepareCard(
                 icon = R.drawable.ic_battery_status,
                 text = R.string.settings_name_white_list,
@@ -202,7 +198,8 @@ internal class SettingsViewModel : BaseViewModel {
                 .build()
     }
 
-    private fun getHelpCard(): MaterialAboutCard {
+    @VisibleForTesting
+    internal fun getHelpCard(): MaterialAboutCard {
         val instructionItem = prepareCard(
                 icon = R.drawable.ic_instruction,
                 text = R.string.settings_name_instructions,
@@ -228,7 +225,7 @@ internal class SettingsViewModel : BaseViewModel {
 
     internal fun openSyncSettings(context: Context, isTwoPane: Boolean) {
         if (isTwoPane) {
-            detailFragment.value = syncSettingsFragment.get()
+            detailFragment.value = SyncSettingsFragment.getNewInstance()
         } else {
             SyncSettingsDetailActivity.launch(context)
         }
@@ -236,7 +233,7 @@ internal class SettingsViewModel : BaseViewModel {
 
     internal fun openDNDSettings(context: Context, isTwoPane: Boolean) {
         if (isTwoPane) {
-            detailFragment.value = dndSettingsFragment.get()
+            detailFragment.value = DndSettingsFragment.getNewInstance()
         } else {
             DndSettingsDetailActivity.launch(context)
         }
@@ -244,7 +241,7 @@ internal class SettingsViewModel : BaseViewModel {
 
     internal fun openNotificationSettings(context: Context, isTwoPane: Boolean) {
         if (isTwoPane) {
-            detailFragment.value = notificationSettingsFragment.get()
+            detailFragment.value = NotificationSettingsFragment.getNewInstance()
         } else {
             NotificationSettingsDetailActivity.launch(context)
         }
@@ -252,15 +249,15 @@ internal class SettingsViewModel : BaseViewModel {
 
     internal fun openDailyReviewSettings(context: Context, isTwoPane: Boolean) {
         if (isTwoPane) {
-            detailFragment.value = dailyReviewSettingsFragment.get()
+            detailFragment.value = DailyReviewSettingsFragment.getNewInstance()
         } else {
             DailyReviewSettingsDetailActivity.launch(context)
         }
     }
 
     @VisibleForTesting
-    internal fun addWhiteListAppCard(context: Context, userActivityDao: UserActivityDao) {
-        Single.create(SingleOnSubscribe<Boolean> {
+    internal fun addWhiteListAppCard(context: Context, userActivityDao: UserActivityDao): Single<Boolean> {
+        return Single.create(SingleOnSubscribe<Boolean> {
 
             if (WhitelistingUtils.shouldOpenWhiteListDialog(context)) {
                 val latestActivity = userActivityDao.getLatestActivity()
@@ -271,10 +268,5 @@ internal class SettingsViewModel : BaseViewModel {
             it.onSuccess(false)
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({
-                    if (it) settingsItems.value?.add(1, getWhiteListCard(context))
-                }, {
-                    Timber.i(it.printStackTrace().toString())
-                })
     }
 }

@@ -22,10 +22,6 @@ import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.kevalpatel2106.common.db.DbModule
 import com.standup.app.settings.SettingsHook
 import com.standup.app.settings.SettingsModule
-import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
-import com.standup.app.settings.dnd.DndSettingsFragment
-import com.standup.app.settings.notifications.NotificationSettingsFragment
-import com.standup.app.settings.syncing.SyncSettingsFragment
 import dagger.Module
 import dagger.Provides
 
@@ -47,29 +43,5 @@ internal class SettingsModule {
     @ApplicationScope
     fun provideAboutListAdapter(): MaterialAboutListAdapter {
         return MaterialAboutListAdapter()
-    }
-
-    @Provides
-    @ApplicationScope
-    fun provideSyncSettingsFragment(): SyncSettingsFragment {
-        return SyncSettingsFragment.getNewInstance()
-    }
-
-    @Provides
-    @ApplicationScope
-    fun provideDndSettingsFragment(): DndSettingsFragment {
-        return DndSettingsFragment.getNewInstance()
-    }
-
-    @Provides
-    @ApplicationScope
-    fun provideNotificationSettingsFragment(): NotificationSettingsFragment {
-        return NotificationSettingsFragment.getNewInstance()
-    }
-
-    @Provides
-    @ApplicationScope
-    fun provideDailyReviewSettingsFragment(): DailyReviewSettingsFragment {
-        return DailyReviewSettingsFragment.getNewInstance()
     }
 }
