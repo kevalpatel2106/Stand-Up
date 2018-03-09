@@ -18,7 +18,6 @@
 package com.kevalpatel2106.common.base.arch
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.Observer
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -68,14 +67,14 @@ class SingleLiveEventTest {
 //        }
 //        singleData.observeForever(observer)
 //    }
-
-    @Test
-    fun checkCallDoesNotTriggersOnChange() {
-        val singleData = SingleLiveEvent<Int>()
-
-        //Register for the first time
-        val observer = Observer<Int> { Assert.fail() }
-        singleData.observeForever(observer)
-        singleData.call()
-    }
+//
+//    @Test
+//    fun checkCallDoesNotTriggersOnChange() {
+//        val singleData = SingleLiveEvent<Int>()
+//
+//        //Register for the first time
+//        val observer = Observer<Int> { Assert.fail() }
+//        singleData.observeForever(observer)
+//        singleData.call()
+//    }
 }
