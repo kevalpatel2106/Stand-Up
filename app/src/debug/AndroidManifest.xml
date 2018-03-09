@@ -25,7 +25,8 @@
             tests.  Adding this permission to the manifest is not sufficient - you must also grant the
             permission over adb!
     -->
-    <uses-permission android:name="android.permission.SET_ANIMATION_SCALE" />
+    <uses-permission android:name="android.permission.SET_ANIMATION_SCALE"
+        tools:ignore="ProtectedPermissions" />
 
     <application tools:ignore="GoogleAppIndexingWarning">
 
