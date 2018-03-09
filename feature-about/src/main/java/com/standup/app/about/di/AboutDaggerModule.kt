@@ -34,7 +34,7 @@ import javax.inject.Named
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @Module
-internal class AboutModule {
+internal class AboutDaggerModule {
 
     /**
      * Get the instance of [AboutRepository].
