@@ -45,7 +45,8 @@ class SettingsListActivity : BaseActivity() {
 
     private var isTwoPane = false
 
-    private var adapter = MaterialAboutListAdapter()
+    @Inject
+    internal lateinit var adapter: MaterialAboutListAdapter
 
     @Inject
     lateinit var settingsHook: Lazy<SettingsHook>
