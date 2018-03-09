@@ -25,7 +25,6 @@ import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kevalpatel2106.common.view.BaseButton
 import com.kevalpatel2106.common.view.BaseTextView
 import com.standup.app.settings.R
 
@@ -49,7 +48,10 @@ class WhitelistDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<BaseTextView>(R.id.whitelist_app_dialog_btn).setOnClickListener {
-            context?.let { WhitelistingUtils.requestForWhitelisting(it) }
+            context?.let {
+                WhitelistingUtils.requestForWhitelisting(it)
+                dialog.dismiss()
+            }
         }
     }
 

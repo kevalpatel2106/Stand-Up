@@ -149,6 +149,7 @@ internal class SettingsViewModel : BaseViewModel() {
         val whitelistItem = prepareCard(
                 icon = R.drawable.ic_battery_status,
                 text = R.string.settings_name_white_list,
+                subtext = R.string.settings_subtitle_white_list,
                 clickListener = MaterialAboutItemOnClickAction {
                     showWhitelistDialog.value = true
                 }

@@ -40,7 +40,7 @@
 
     <com.kevalpatel2106.common.view.BaseImageView
         android:id="@+id/whitelist_app_dialog_icon"
-        android:layout_width="@dimen/white_list_app_dialog_icon_dimen"
+        android:layout_width="0dp"
         android:layout_height="@dimen/white_list_app_dialog_icon_dimen"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="@+id/guideline"

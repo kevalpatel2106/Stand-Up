@@ -81,9 +81,12 @@ class SettingsListActivity : BaseActivity() {
                         isTwoPane = true
                 )
             }
-
-            model.prepareSettingsList(this@SettingsListActivity)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        model.prepareSettingsList(this@SettingsListActivity)
     }
 
     private fun setViewModel() {

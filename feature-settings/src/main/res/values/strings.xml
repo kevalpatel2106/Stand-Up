@@ -49,7 +49,8 @@
     <string name="settings_name_dnd">DND</string>
     <string name="settings_name_daily_review">Daily Review</string>
     <string name="settings_name_logout">Logout</string>
-    <string name="settings_name_white_list">White list the app</string>
+    <string name="settings_name_white_list">Application stops detecting your movements?</string>
+    <string name="settings_subtitle_white_list">To fix this issue, click here to white list "Stand Up" and allow application to ignore android battery optimizations.</string>
     <string name="settings_name_instructions">Instruction</string>
     <string name="settings_name_privacy">Privacy Policy</string>
     <string name="whitelist_app_dialog_btn_title">Update In Settings</string>
