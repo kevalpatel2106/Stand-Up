@@ -25,13 +25,13 @@ import dagger.Component
 
 /**
  * Created by Kevalpatel2106 on 09-Jan-18.
- * A dagger [Component] for the about module. This [Component] includes [AboutModule].
+ * A dagger [Component] for the about module. This [Component] includes [AboutDaggerModule].
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
- * @see AboutModule
+ * @see AboutDaggerModule
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [AboutModule::class])
+@Component(dependencies = [AppComponent::class], modules = [AboutDaggerModule::class])
 internal interface AboutComponent {
 
     fun inject(aboutViewModel: AboutViewModel)
