@@ -14,8 +14,8 @@
   ~   limitations under the License.
   ~
   -->
-
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/colorPrimary" android:state_pressed="true" />
-    <item android:color="@android:color/transparent" />
+    <item android:color="@android:color/holo_green_dark" android:state_pressed="true" />
+    <item android:color="@android:color/holo_green_dark" android:state_focused="true" />
+    <item android:color="@android:color/holo_green_light" />
 </selector>

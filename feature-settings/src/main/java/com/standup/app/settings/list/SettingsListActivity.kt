@@ -34,6 +34,7 @@ import com.kevalpatel2106.utils.alert
 import com.standup.app.settings.R
 import com.standup.app.settings.SettingsHook
 import com.standup.app.settings.di.DaggerSettingsComponent
+import com.standup.app.settings.whitelisting.WhitelistDialog
 import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_settings_list.*
 import javax.inject.Inject
@@ -81,7 +82,7 @@ class SettingsListActivity : BaseActivity() {
                 )
             }
 
-            model.prepareSettingsList()
+            model.prepareSettingsList(this@SettingsListActivity)
         }
     }
 
@@ -142,6 +143,14 @@ class SettingsListActivity : BaseActivity() {
             it?.let {
                 if (it) {
                     model.openDNDSettings(this@SettingsListActivity, isTwoPane)
+                }
+            }
+        })
+
+        model.showWhitelistDialog.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    WhitelistDialog.showDialog(this@SettingsListActivity, supportFragmentManager)
                 }
             }
         })

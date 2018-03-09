@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/spacing_small"
+    android:paddingTop="@dimen/spacing_small">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/spacing_small"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/spacing_small"/>
+
+    <com.kevalpatel2106.common.view.BaseImageView
+        android:id="@+id/whitelist_app_dialog_icon"
+        android:layout_width="@dimen/white_list_app_dialog_icon_dimen"
+        android:layout_height="@dimen/white_list_app_dialog_icon_dimen"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_full_sensor"/>
+
+    <com.kevalpatel2106.common.view.BaseTextView
+        android:id="@+id/whitelist_app_dialog_title_tv"
+        style="@style/MediumText.Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_micro"
+        android:gravity="center_horizontal"
+        android:text="@string/whitelist_app_dialog_title_text"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/whitelist_app_dialog_icon"/>
+
+    <com.kevalpatel2106.common.view.BaseTextView
+        android:id="@+id/whitelist_app_dialog_subtitle_tv"
+        style="@style/SmallText.Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_micro"
+        android:text="@string/whitelist_app_dialog_subtitle_text"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/whitelist_app_dialog_title_tv"/>
+
+    <com.kevalpatel2106.common.view.BaseTextView
+        android:id="@+id/whitelist_app_dialog_btn"
+        style="@style/SmallText.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/md_button_height"
+        android:layout_marginTop="@dimen/spacing_small"
+        android:background="@color/colorPrimary"
+        android:elevation="@dimen/md_button_elevation"
+        android:gravity="center"
+        android:paddingEnd="@dimen/spacing_small"
+        android:paddingStart="@dimen/spacing_small"
+        android:text="@string/whitelist_app_dialog_btn_title"
+        android:textColor="@color/update_in_settings_text_color"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/whitelist_app_dialog_subtitle_tv"/>
+</android.support.constraint.ConstraintLayout>

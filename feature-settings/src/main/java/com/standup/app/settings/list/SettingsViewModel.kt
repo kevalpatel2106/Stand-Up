@@ -25,6 +25,7 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.SingleLiveEvent
+import com.kevalpatel2106.utils.getColorCompat
 import com.standup.app.settings.R
 import com.standup.app.settings.dailyReview.DailyReviewSettingsDetailActivity
 import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
@@ -34,6 +35,7 @@ import com.standup.app.settings.notifications.NotificationSettingsDetailActivity
 import com.standup.app.settings.notifications.NotificationSettingsFragment
 import com.standup.app.settings.syncing.SyncSettingsDetailActivity
 import com.standup.app.settings.syncing.SyncSettingsFragment
+import com.standup.app.settings.whitelisting.WhitelistingUtils
 
 /**
  * Created by Keval on 11/01/18.
@@ -52,6 +54,7 @@ internal class SettingsViewModel : BaseViewModel() {
     internal var openDailyReview = SingleLiveEvent<Boolean>()
     internal var openInstructions = SingleLiveEvent<Boolean>()
     internal var openPrivacyPolicy = SingleLiveEvent<Boolean>()
+    internal var showWhitelistDialog = SingleLiveEvent<Boolean>()
 
     internal var settingsItems = MutableLiveData<ArrayList<MaterialAboutCard>>()
 
@@ -65,15 +68,20 @@ internal class SettingsViewModel : BaseViewModel() {
         openDailyReview.value = false
         openInstructions.value = false
         openPrivacyPolicy.value = false
+        showWhitelistDialog.value = false
     }
 
-    internal fun prepareSettingsList() {
+    internal fun prepareSettingsList(context: Context) {
         settingsItems.value?.let {
             it.clear()
 
             it.add(getSettingsCard())
+
+            if (WhitelistingUtils.shouldOpenWhiteListDialog(context))
+                it.add(getWhiteListCard(context))
+
             it.add(getHelpCard())
-            it.add(getLogoutCard())
+            it.add(getLogoutCard(context))
 
             //Publish the update.
             settingsItems.value = it
@@ -122,7 +130,7 @@ internal class SettingsViewModel : BaseViewModel() {
                 .build()
     }
 
-    private fun getLogoutCard(): MaterialAboutCard {
+    private fun getLogoutCard(context: Context): MaterialAboutCard {
         val logoutItem = prepareCard(
                 icon = R.drawable.ic_logout,
                 text = R.string.settings_name_logout,
@@ -133,6 +141,22 @@ internal class SettingsViewModel : BaseViewModel() {
 
         return MaterialAboutCard.Builder()
                 .addItem(logoutItem)
+                .cardColor(context.getColorCompat(R.color.logout_card_background))
+                .build()
+    }
+
+    private fun getWhiteListCard(context: Context): MaterialAboutCard {
+        val whitelistItem = prepareCard(
+                icon = R.drawable.ic_battery_status,
+                text = R.string.settings_name_white_list,
+                clickListener = MaterialAboutItemOnClickAction {
+                    showWhitelistDialog.value = true
+                }
+        )
+
+        return MaterialAboutCard.Builder()
+                .addItem(whitelistItem)
+                .cardColor(context.getColorCompat(R.color.white_list_card_background))
                 .build()
     }
 

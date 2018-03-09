@@ -28,15 +28,17 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-fun prepareCard(
+internal fun prepareCard(
         @DrawableRes icon: Int,
         @StringRes text: Int,
+        @StringRes subtext: Int = 0,
         clickListener: MaterialAboutItemOnClickAction? = null
 ): MaterialAboutActionItem {
     return MaterialAboutActionItem.Builder()
             .icon(icon)
             .setIconGravity(Gravity.START)
             .text(text)
+            .subText(subtext)
             .setOnClickAction(clickListener)
             .build()
             .setShouldShowIcon(true)

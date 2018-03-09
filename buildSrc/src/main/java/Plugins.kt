@@ -68,12 +68,12 @@ object Plugins {
     const val testLogger = "com.adarshr:gradle-test-logger-plugin:1.1.2"
 
     val modulePlugins = arrayListOf(
-            "com.vanniktech.android.junit.jacoco",
             "kotlin-android",
+            "kotlin-kapt",
             "kotlin-android-extensions",
+            "com.vanniktech.android.junit.jacoco",
             "com.getkeepsafe.dexcount",
             "org.jetbrains.dokka",
-            "kotlin-kapt",
             "com.adarshr.test-logger"
     )
 }

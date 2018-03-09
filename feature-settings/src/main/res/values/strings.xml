@@ -49,7 +49,11 @@
     <string name="settings_name_dnd">DND</string>
     <string name="settings_name_daily_review">Daily Review</string>
     <string name="settings_name_logout">Logout</string>
+    <string name="settings_name_white_list">White list the app</string>
     <string name="settings_name_instructions">Instruction</string>
     <string name="settings_name_privacy">Privacy Policy</string>
+    <string name="whitelist_app_dialog_btn_title">Update In Settings</string>
+    <string name="whitelist_app_dialog_subtitle_text">To make sure Stand Up detects your activity perfectly</string>
+    <string name="whitelist_app_dialog_title_text">Permission Required</string>
 
 </resources>

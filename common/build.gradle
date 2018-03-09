@@ -68,7 +68,7 @@ kotlin kotlinOption
 dependencies {
     implementation project(':utils')
     implementation project(':network')
-    implementation project(':progress-button')
+    api project(':progress-button')
     implementation project(':timeline-view')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
