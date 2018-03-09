@@ -27,6 +27,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import com.danielstone.materialaboutlibrary.adapters.MaterialAboutListAdapter
 import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.utils.alert
@@ -37,23 +38,25 @@ import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_settings_list.*
 import javax.inject.Inject
 
-class SettingsListActivity : BaseActivity(), SettingsClickListener {
+class SettingsListActivity : BaseActivity() {
 
     private lateinit var model: SettingsViewModel
 
     private var isTwoPane = false
+
+    private var adapter = MaterialAboutListAdapter()
 
     @Inject
     lateinit var settingsHook: Lazy<SettingsHook>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings_list)
-
         DaggerSettingsComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SettingsListActivity)
+
+        setContentView(R.layout.activity_settings_list)
 
         //Set the actionbar
         setToolbar(R.id.include2, R.string.title_activity_settings, true)
@@ -61,19 +64,25 @@ class SettingsListActivity : BaseActivity(), SettingsClickListener {
         //This indicates that settings is running on the two pane mode in the tablet mode.
         isTwoPane = settings_detail_frame_layout != null
 
-        setViewModel()
-
         //Set the recycler view
         settings_list_rv.layoutManager = LinearLayoutManager(this@SettingsListActivity)
         settings_list_rv.itemAnimator = DefaultItemAnimator()
-        settings_list_rv.adapter = SettingsListAdapter(this@SettingsListActivity,
-                model.settingsItems.value!!, this@SettingsListActivity)
-        model.settingsItems.observe(this@SettingsListActivity, Observer {
-            it?.let { settings_list_rv.adapter.notifyDataSetChanged() }
-        })
+        settings_list_rv.adapter = adapter
 
-        //Select the first item by default
-        if (isTwoPane) onItemClick(model.settingsItems.value!![0])
+        setViewModel()
+
+        if (savedInstanceState == null) {        //For the first time activity created...
+
+            //Select the first item by default
+            if (isTwoPane) {
+                model.openSyncSettings(
+                        context = this@SettingsListActivity,
+                        isTwoPane = true
+                )
+            }
+
+            model.prepareSettingsList()
+        }
     }
 
     private fun setViewModel() {
@@ -90,10 +99,65 @@ class SettingsListActivity : BaseActivity(), SettingsClickListener {
             }
         })
 
+        model.settingsItems.observe(this@SettingsListActivity, Observer {
+            it?.let {
+                adapter.setData(it)
+                adapter.notifyDataSetChanged()
+            }
+        })
+
         model.showLogoutConformation.observe(this, Observer {
             it?.let {
                 if (it) {
                     showLogoutConfirmation()
+                }
+            }
+        })
+
+        model.openSyncSettings.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    model.openSyncSettings(this@SettingsListActivity, isTwoPane)
+                }
+            }
+        })
+
+        model.openNotificationSettings.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    model.openNotificationSettings(this@SettingsListActivity, isTwoPane)
+                }
+            }
+        })
+
+        model.openDailyReview.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    model.openDailyReviewSettings(this@SettingsListActivity, isTwoPane)
+                }
+            }
+        })
+
+        model.openDndSettings.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    model.openDNDSettings(this@SettingsListActivity, isTwoPane)
+                }
+            }
+        })
+
+        model.openPrivacyPolicy.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    /* TODO Open privacy policy */
+                }
+            }
+        })
+
+        model.openInstructions.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    /* TODO Open instructions */
                 }
             }
         })
@@ -118,10 +182,6 @@ class SettingsListActivity : BaseActivity(), SettingsClickListener {
                     negativeButton(android.R.string.cancel, { /* NO OP */ })
                 }
         )
-    }
-
-    override fun onItemClick(clickedItem: SettingsItem) {
-        model.onSettingsClicked(this@SettingsListActivity, clickedItem, isTwoPane)
     }
 
     companion object {

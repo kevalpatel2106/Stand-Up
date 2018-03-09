@@ -97,6 +97,7 @@ dependencies {
     implementation Deps.design
 
     //Room & Arch components
+    implementation Deps.lifecycleJava8
     implementation Deps.lifecycle
 
     implementation Deps.retrofit

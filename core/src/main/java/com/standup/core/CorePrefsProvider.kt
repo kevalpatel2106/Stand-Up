@@ -39,7 +39,7 @@ class CorePrefsProvider @Inject constructor(private val sharedPrefsProvider: Sha
         /**
          * This ket holds the time of the next standing notification in milliseconds.
          */
-        internal const val PREF_KEY_NEXT_NOTIFICATION_TIME = "next_notification_time"
+        const val PREF_KEY_NEXT_NOTIFICATION_TIME = "next_notification_time"
     }
 
     val lastSyncTime: Long

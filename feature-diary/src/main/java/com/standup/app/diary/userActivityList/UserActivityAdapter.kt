@@ -31,7 +31,7 @@ internal class UserActivityAdapter(private val context: Context,
                                    private val userActivities: ArrayList<UserActivity>)
     : RecyclerView.Adapter<UserActivityViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): UserActivityViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserActivityViewHolder {
         return UserActivityViewHolder.createViewHolder(context, parent)
     }
 

@@ -39,6 +39,15 @@ internal interface CoreRepo {
      *
      * @see CoreRepoImpl.insertNewUserActivity for how it's implemented.
      */
+    fun insertNewUserActivity(newActivity: UserActivity, doNotMergeWithPrevious: Boolean): Single<Long>
+
+    /**
+     * This will store [newActivity] into the database and terminate the previous event with the
+     * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
+     * inert [newActivity].
+     *
+     * @see CoreRepoImpl.insertNewUserActivity for how it's implemented.
+     */
     fun insertNewUserActivity(newActivity: UserActivity): Single<Long>
 
     /**

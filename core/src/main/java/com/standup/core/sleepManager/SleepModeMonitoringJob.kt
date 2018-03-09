@@ -21,6 +21,8 @@ import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
+import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -28,7 +30,10 @@ import com.standup.core.Core
 import com.standup.core.activityMonitor.ActivityMonitorJob
 import com.standup.core.di.DaggerCoreComponent
 import com.standup.core.reminder.NotificationSchedulerJob
+import com.standup.core.repo.CoreRepo
 import dagger.Lazy
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -133,6 +138,9 @@ internal class SleepModeMonitoringJob : Job() {
     @Inject
     lateinit var core: Lazy<Core>
 
+    @Inject
+    lateinit var coreRepo: CoreRepo
+
     override fun onRunJob(params: Params): Result {
         //Inject dependencies.
         DaggerCoreComponent.builder()
@@ -163,12 +171,26 @@ internal class SleepModeMonitoringJob : Job() {
     }
 
     private fun sleepModeEnded() {
-        //Turn off sleep mode
-        core.get().refresh()
+        //Insert the fake starting activity
+        coreRepo.insertNewUserActivity(
+                newActivity = UserActivityHelper.createLocalUserActivity(UserActivityType.SITTING),
+                doNotMergeWithPrevious = true
+        ).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
 
-        //Schedule the next sleep monitoring job
-        scheduleJob(userSettingsManager)
+                    //Turn off sleep mode
+                    core.get().refresh()
 
-        SleepModeStartNotification.cancel(context)
+                    //Schedule the next sleep monitoring job
+                    scheduleJob(userSettingsManager)
+
+                    //Dismiss the sleep mode notification
+                    SleepModeStartNotification.cancel(context)
+                }, {
+                    //Error.
+                    //NO OP
+                    Timber.e(it.printStackTrace().toString())
+                })
     }
 }

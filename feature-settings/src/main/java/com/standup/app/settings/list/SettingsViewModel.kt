@@ -20,9 +20,11 @@ package com.standup.app.settings.list
 import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
-import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
+import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
+import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.common.base.arch.SingleLiveEvent
 import com.standup.app.settings.R
 import com.standup.app.settings.dailyReview.DailyReviewSettingsDetailActivity
 import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
@@ -43,85 +45,150 @@ internal class SettingsViewModel : BaseViewModel() {
 
     internal var detailFragment = MutableLiveData<Fragment>()
 
-    internal var showLogoutConformation = MutableLiveData<Boolean>()
+    internal var showLogoutConformation = SingleLiveEvent<Boolean>()
+    internal var openSyncSettings = SingleLiveEvent<Boolean>()
+    internal var openDndSettings = SingleLiveEvent<Boolean>()
+    internal var openNotificationSettings = SingleLiveEvent<Boolean>()
+    internal var openDailyReview = SingleLiveEvent<Boolean>()
+    internal var openInstructions = SingleLiveEvent<Boolean>()
+    internal var openPrivacyPolicy = SingleLiveEvent<Boolean>()
 
-    internal var settingsItems = MutableLiveData<ArrayList<SettingsItem>>()
+    internal var settingsItems = MutableLiveData<ArrayList<MaterialAboutCard>>()
 
     init {
         settingsItems.value = ArrayList()
-        showLogoutConformation.value = false
 
-        prepareSettingsList()
+        showLogoutConformation.value = false
+        openSyncSettings.value = false
+        openDndSettings.value = false
+        openNotificationSettings.value = false
+        openDailyReview.value = false
+        openInstructions.value = false
+        openPrivacyPolicy.value = false
     }
 
-    @VisibleForTesting
     internal fun prepareSettingsList() {
         settingsItems.value?.let {
             it.clear()
 
-            //Add sync
-            it.add(SettingsItem(SettingsId.SYNC, "Sync", R.drawable.ic_sync))
-
-            //Add DND
-            it.add(SettingsItem(SettingsId.DND, "DND", R.drawable.ic_dnd_on))
-
-            //Add daily review
-            it.add(SettingsItem(SettingsId.DAILY_REVIEW, "Daily Review", R.drawable.ic_daily_review_notification))
-
-            //Add Notifications
-            it.add(SettingsItem(SettingsId.NOTIFICATION, "Notifications", R.drawable.ic_notifications_bell))
-
-            //Add Sleep hour
-            it.add(SettingsItem(SettingsId.LOGOUT, "Logout", R.drawable.ic_logout))
+            it.add(getSettingsCard())
+            it.add(getHelpCard())
+            it.add(getLogoutCard())
 
             //Publish the update.
             settingsItems.value = it
         }
     }
 
-    fun onSettingsClicked(context: Context, settingsItem: SettingsItem, isTwoPane: Boolean) {
-        when (settingsItem.id) {
-            SettingsId.SYNC -> {
-                if (isTwoPane) {
-                    detailFragment.value = SyncSettingsFragment.getNewInstance()
-                } else {
-                    SyncSettingsDetailActivity.launch(context)
+    private fun getSettingsCard(): MaterialAboutCard {
+        val syncSettingsItem = prepareCard(
+                icon = R.drawable.ic_sync,
+                text = R.string.settings_name_sync,
+                clickListener = MaterialAboutItemOnClickAction {
+                    openSyncSettings.value = true
                 }
-            }
-            SettingsId.DND -> {
-                if (isTwoPane) {
-                    detailFragment.value = DndSettingsFragment.getNewInstance()
-                } else {
-                    DndSettingsDetailActivity.launch(context)
-                }
-            }
-            SettingsId.NOTIFICATION -> {
-                if (isTwoPane) {
-                    detailFragment.value = NotificationSettingsFragment.getNewInstance()
-                } else {
-                    NotificationSettingsDetailActivity.launch(context)
-                }
-            }
-            SettingsId.DAILY_REVIEW -> {
-                if (isTwoPane) {
-                    detailFragment.value = DailyReviewSettingsFragment.getNewInstance()
-                } else {
-                    DailyReviewSettingsDetailActivity.launch(context)
-                }
-            }
-            SettingsId.LOGOUT -> {
-                showLogoutConformation.value = true
-                return
-            }
-        }
+        )
 
-        //Set selection
+        val notificationsSettingsItem = prepareCard(
+                icon = R.drawable.ic_notifications_bell,
+                text = R.string.settings_name_notifications,
+                clickListener = MaterialAboutItemOnClickAction {
+                    openNotificationSettings.value = true
+                }
+        )
+
+        val dndSettingsItem = prepareCard(
+                icon = R.drawable.ic_dnd_on,
+                text = R.string.settings_name_dnd,
+                clickListener = MaterialAboutItemOnClickAction {
+                    openDndSettings.value = true
+                }
+        )
+
+        val dailyReviewItem = prepareCard(
+                icon = R.drawable.ic_daily_review_notification,
+                text = R.string.settings_name_daily_review,
+                clickListener = MaterialAboutItemOnClickAction {
+                    openDailyReview.value = true
+                }
+        )
+
+        return MaterialAboutCard.Builder()
+                .title(R.string.title_activity_settings)
+                .addItem(syncSettingsItem)
+                .addItem(dndSettingsItem)
+                .addItem(dailyReviewItem)
+                .addItem(notificationsSettingsItem)
+                .build()
+    }
+
+    private fun getLogoutCard(): MaterialAboutCard {
+        val logoutItem = prepareCard(
+                icon = R.drawable.ic_logout,
+                text = R.string.settings_name_logout,
+                clickListener = MaterialAboutItemOnClickAction {
+                    showLogoutConformation.value = true
+                }
+        )
+
+        return MaterialAboutCard.Builder()
+                .addItem(logoutItem)
+                .build()
+    }
+
+    private fun getHelpCard(): MaterialAboutCard {
+        val instructionItem = prepareCard(
+                icon = R.drawable.ic_instruction,
+                text = R.string.settings_name_instructions,
+                clickListener = MaterialAboutItemOnClickAction {
+                    openInstructions.value = true
+                }
+        )
+
+        val privacyPolicyItem = prepareCard(
+                icon = R.drawable.ic_privacy,
+                text = R.string.settings_name_privacy,
+                clickListener = MaterialAboutItemOnClickAction {
+                    openPrivacyPolicy.value = true
+                }
+        )
+
+        return MaterialAboutCard.Builder()
+                .title(R.string.title_card_help)
+                .addItem(instructionItem)
+                .addItem(privacyPolicyItem)
+                .build()
+    }
+
+    fun openSyncSettings(context: Context, isTwoPane: Boolean) {
         if (isTwoPane) {
-            settingsItems.value?.forEach { it.isSelected = false }
-            settingsItem.isSelected = true
+            detailFragment.value = SyncSettingsFragment.getNewInstance()
+        } else {
+            SyncSettingsDetailActivity.launch(context)
+        }
+    }
 
-            //Publish the update.
-            settingsItems.value = settingsItems.value
+    fun openDNDSettings(context: Context, isTwoPane: Boolean) {
+        if (isTwoPane) {
+            detailFragment.value = DndSettingsFragment.getNewInstance()
+        } else {
+            DndSettingsDetailActivity.launch(context)
+        }
+    }
+
+    fun openNotificationSettings(context: Context, isTwoPane: Boolean) {
+        if (isTwoPane) {
+            detailFragment.value = NotificationSettingsFragment.getNewInstance()
+        } else {
+            NotificationSettingsDetailActivity.launch(context)
+        }
+    }
+
+    fun openDailyReviewSettings(context: Context, isTwoPane: Boolean) {
+        if (isTwoPane) {
+            detailFragment.value = DailyReviewSettingsFragment.getNewInstance()
+        } else {
+            DailyReviewSettingsDetailActivity.launch(context)
         }
     }
 }

@@ -17,12 +17,27 @@
 
 package com.standup.app.settings.list
 
+import android.support.annotation.DrawableRes
+import android.support.annotation.StringRes
+import android.view.Gravity
+import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
+import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 
 /**
- * Created by Keval on 11/01/18.
+ * Created by Kevalpatel2106 on 08-Mar-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal interface SettingsClickListener {
-    fun onItemClick(clickedItem: SettingsItem)
+fun prepareCard(
+        @DrawableRes icon: Int,
+        @StringRes text: Int,
+        clickListener: MaterialAboutItemOnClickAction? = null
+): MaterialAboutActionItem {
+    return MaterialAboutActionItem.Builder()
+            .icon(icon)
+            .setIconGravity(Gravity.START)
+            .text(text)
+            .setOnClickAction(clickListener)
+            .build()
+            .setShouldShowIcon(true)
 }

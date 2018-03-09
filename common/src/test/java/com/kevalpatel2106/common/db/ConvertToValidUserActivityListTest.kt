@@ -46,8 +46,31 @@ class ConvertToValidUserActivityListTest {
     }
 
     @Test
-    fun checkWithInvalidStartTime() {
+    fun checkWithAllInvalidActivities() {
         val dayActivity = ArrayList<UserActivity>()
+        //Not starting activity
+        dayActivity.add(UserActivity(eventStartTimeMills = 0,
+                eventEndTimeMills = System.currentTimeMillis() - 60_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        //Not ending activity
+        dayActivity.add(UserActivity(eventStartTimeMills = 30_000,
+                eventEndTimeMills = 0,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        val resultArray = ArrayList<UserActivity>(dayActivity)
+        DailyActivitySummary.convertToValidUserActivityList(resultArray)
+
+        //Check the user activity list
+        Assert.assertTrue(resultArray.isEmpty())
+    }
+
+
+    @Test
+    fun checkWithInvalidStartTime_AtStart() {
+        val dayActivity = ArrayList<UserActivity>()
+        //Not starting activity
         dayActivity.add(UserActivity(eventStartTimeMills = 0,
                 eventEndTimeMills = System.currentTimeMillis() - 60000,
                 type = UserActivityType.SITTING.name,
@@ -65,9 +88,35 @@ class ConvertToValidUserActivityListTest {
         Assert.assertEquals(resultArray.size, 1)
     }
 
+
     @Test
-    fun checkWithNotEndingActivityInTheMiddle() {
+    fun checkWithInvalidEndTime_AtStart() {
         val dayActivity = ArrayList<UserActivity>()
+        dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 60000,
+                eventEndTimeMills = 0,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        //Not ending activity
+        dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis(),
+                eventEndTimeMills = System.currentTimeMillis() + 60000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        val resultArray = ArrayList<UserActivity>(dayActivity)
+        DailyActivitySummary.convertToValidUserActivityList(resultArray)
+
+        //Check the user activity list
+        Assert.assertEquals(resultArray.size, 1)
+    }
+
+    @Test
+    fun checkWithNotEndingActivity_InTheMiddle() {
+        val dayActivity = ArrayList<UserActivity>()
+        //Ending activity
+        dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 300_000,
+                eventEndTimeMills = System.currentTimeMillis() - 240_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
         //Not ending activity
         dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 120000,
                 eventEndTimeMills = 0,
@@ -86,12 +135,49 @@ class ConvertToValidUserActivityListTest {
         Assert.assertEquals(resultArray.size, dayActivity.size - 1)
 
         //Check the remaining item
-        Assert.assertEquals(resultArray[0].eventStartTimeMills, dayActivity[1].eventStartTimeMills)
-        Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[1].eventEndTimeMills)
+        Assert.assertEquals(resultArray[0].eventStartTimeMills, dayActivity[0].eventStartTimeMills)
+        Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
+
+        Assert.assertEquals(resultArray[1].eventStartTimeMills, dayActivity[2].eventStartTimeMills)
+        Assert.assertEquals(resultArray[1].eventEndTimeMills, dayActivity[2].eventEndTimeMills)
     }
 
     @Test
-    fun checkWithNotEndingLastActivity() {
+    fun checkWithNotStartingActivity_InTheMiddle() {
+        val dayActivity = ArrayList<UserActivity>()
+        //Ending activity
+        dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 300_000,
+                eventEndTimeMills = System.currentTimeMillis() - 240_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        //Not starting activity
+        dayActivity.add(UserActivity(eventStartTimeMills = 0,
+                eventEndTimeMills = System.currentTimeMillis() - 120_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        //Ending activity
+        dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 60000,
+                eventEndTimeMills = System.currentTimeMillis(),
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        val resultArray = ArrayList<UserActivity>(dayActivity)
+        DailyActivitySummary.convertToValidUserActivityList(resultArray)
+
+        //Check the user activity list
+        Assert.assertEquals(resultArray.size, dayActivity.size - 1)
+
+        //Check the remaining item
+        Assert.assertEquals(resultArray[0].eventStartTimeMills, dayActivity[0].eventStartTimeMills)
+        Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
+
+        //Check the remaining item
+        Assert.assertEquals(resultArray[1].eventStartTimeMills, dayActivity[2].eventStartTimeMills)
+        Assert.assertEquals(resultArray[1].eventEndTimeMills, dayActivity[2].eventEndTimeMills)
+    }
+
+    @Test
+    fun checkWithNotEndingActivity_Last() {
         val dayActivity = ArrayList<UserActivity>()
         dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 120000,
                 eventEndTimeMills = System.currentTimeMillis() - 60000,
@@ -115,19 +201,42 @@ class ConvertToValidUserActivityListTest {
     }
 
     @Test
-    fun checkWithListOfActivityStretchingMoreThanADay() {
+    fun checkWithNotStartingActivity_Last() {
+        val dayActivity = ArrayList<UserActivity>()
+        dayActivity.add(UserActivity(eventStartTimeMills = System.currentTimeMillis() - 120000,
+                eventEndTimeMills = System.currentTimeMillis() - 60000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        //Not starting activity
+        dayActivity.add(UserActivity(eventStartTimeMills = 0,
+                eventEndTimeMills = System.currentTimeMillis() - 120_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        val resultArray = ArrayList<UserActivity>(dayActivity)
+        DailyActivitySummary.convertToValidUserActivityList(resultArray)
+
+        //Check the user activity list
+        Assert.assertEquals(resultArray.size, dayActivity.size - 1)
+
+        //Check the remaining item
+        Assert.assertEquals(resultArray[0].eventStartTimeMills, dayActivity[0].eventStartTimeMills)
+        Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
+    }
+
+    @Test
+    fun checkWithListOfActivity_StretchingMoreThanADay() {
         val dayActivity = ArrayList<UserActivity>()
         val yesterdayMills = System.currentTimeMillis() - TimeUtils.ONE_DAY_MILLISECONDS
 
         dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 120_000,
-                eventEndTimeMills = (yesterdayMills + TimeUtils.ONE_DAY_MILLISECONDS),   //Ending today
+                eventEndTimeMills = (yesterdayMills + TimeUtils.ONE_DAY_MILLISECONDS + 120_000 /* Buffer */),   //Ending today
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
         dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 60_000,
                 eventEndTimeMills = yesterdayMills,
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
-
 
         try {
             DailyActivitySummary.convertToValidUserActivityList(dayActivity)
@@ -138,16 +247,41 @@ class ConvertToValidUserActivityListTest {
     }
 
     @Test
-    fun checkWithFirstActivityOnPreviousDay() {
+    fun checkWithSingleActivity_StretchingMoreThanADay() {
         val dayActivity = ArrayList<UserActivity>()
-        val currentDay = System.currentTimeMillis()
 
-        dayActivity.add(UserActivity(eventStartTimeMills = currentDay - TimeUtils.ONE_DAY_MILLISECONDS,
-                eventEndTimeMills = currentDay,   //Ending today
+        val nowMills = System.currentTimeMillis() - 120_000
+        val yesterdayMills = nowMills - TimeUtils.ONE_DAY_MILLISECONDS
+        val tomorrowMills = nowMills + TimeUtils.ONE_DAY_MILLISECONDS
+
+        dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 240_000 /* Buffer */,
+                eventEndTimeMills = (nowMills + 120_000 /* Buffer */),
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
-        dayActivity.add(UserActivity(eventStartTimeMills = currentDay + 60_000L,
-                eventEndTimeMills = currentDay + 120_000L,
+
+        try {
+            DailyActivitySummary.convertToValidUserActivityList(dayActivity)
+
+            //Check the remaining item
+            Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(nowMills, false).timeInMillis
+                    - dayActivity[0].eventStartTimeMills) < 2_000 /* 2 sec*/)
+        } catch (e: IllegalArgumentException) {
+            Assert.fail()
+        }
+    }
+
+    @Test
+    fun checkWithFirstActivity_OnPreviousDay() {
+        val dayActivity = ArrayList<UserActivity>()
+        val nowMills = System.currentTimeMillis() - 300_000
+        val yesterdayMills = nowMills - TimeUtils.ONE_DAY_MILLISECONDS
+
+        dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills,  //Started yesterday
+                eventEndTimeMills = nowMills,   //Ending today
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        dayActivity.add(UserActivity(eventStartTimeMills = nowMills + 60_000L,
+                eventEndTimeMills = nowMills + 120_000L,
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
 
@@ -158,11 +292,166 @@ class ConvertToValidUserActivityListTest {
         Assert.assertEquals(resultArray.size, dayActivity.size)
 
         //Check the remaining item
-        Assert.assertEquals(TimeUtils.getMidnightCal(currentDay, false).timeInMillis,
-                dayActivity[0].eventStartTimeMills)
+        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(nowMills, false).timeInMillis
+                - resultArray[0].eventStartTimeMills) < 2_000 /* 2 sec*/)
         Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
 
         Assert.assertEquals(resultArray[1].eventStartTimeMills, dayActivity[1].eventStartTimeMills)
         Assert.assertEquals(resultArray[1].eventEndTimeMills, dayActivity[1].eventEndTimeMills)
+    }
+
+    @Test
+    fun checkWith_LastActivity_OnNextDay() {
+        val dayActivity = ArrayList<UserActivity>()
+        val nowMills = System.currentTimeMillis() - 300_000
+        val tomorrowMills = nowMills + TimeUtils.ONE_DAY_MILLISECONDS
+
+        dayActivity.add(UserActivity(eventStartTimeMills = nowMills,
+                eventEndTimeMills = nowMills + 60_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        dayActivity.add(UserActivity(eventStartTimeMills = nowMills + 120_000,
+                eventEndTimeMills = tomorrowMills,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        val resultArray = ArrayList<UserActivity>(dayActivity)
+        DailyActivitySummary.convertToValidUserActivityList(resultArray)
+
+        //Check the user activity list
+        Assert.assertEquals(resultArray.size, dayActivity.size)
+
+        //Check the remaining item
+        Assert.assertEquals(resultArray[0].eventStartTimeMills, dayActivity[0].eventStartTimeMills)
+        Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
+
+        Assert.assertEquals(resultArray[1].eventStartTimeMills, dayActivity[1].eventStartTimeMills)
+        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(tomorrowMills, false).timeInMillis -
+                resultArray[1].eventEndTimeMills) < 2_000 /* 2 sec*/)
+    }
+
+    @Test
+    fun checkWithLastActivity_OnNextDay() {
+        val dayActivity = ArrayList<UserActivity>()
+        val nowMills = System.currentTimeMillis() - 300_000
+        val yesterdayMills = nowMills - TimeUtils.ONE_DAY_MILLISECONDS
+        val tomorrowMills = nowMills + TimeUtils.ONE_DAY_MILLISECONDS
+
+        dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills,  //Started yesterday
+                eventEndTimeMills = nowMills,   //Ending today
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        dayActivity.add(UserActivity(eventStartTimeMills = nowMills,
+                eventEndTimeMills = nowMills + 60_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+        dayActivity.add(UserActivity(eventStartTimeMills = nowMills + 120_000,  //Started today
+                eventEndTimeMills = tomorrowMills,  //Ending next day
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        val resultArray = ArrayList<UserActivity>(dayActivity)
+        DailyActivitySummary.convertToValidUserActivityList(resultArray)
+
+        //Check the user activity list
+        Assert.assertEquals(resultArray.size, dayActivity.size)
+
+        //Check the remaining item
+        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(nowMills, false).timeInMillis
+                - resultArray[0].eventStartTimeMills) < 2_000 /* 2 sec*/)
+        Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
+
+        Assert.assertEquals(resultArray[1].eventStartTimeMills, dayActivity[1].eventStartTimeMills)
+        Assert.assertEquals(resultArray[1].eventEndTimeMills, dayActivity[1].eventEndTimeMills)
+
+        Assert.assertEquals(resultArray[2].eventStartTimeMills, dayActivity[2].eventStartTimeMills)
+        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(tomorrowMills, false).timeInMillis -
+                resultArray[2].eventEndTimeMills) < 2_000 /* 2 sec*/)
+    }
+
+    @Test
+    fun checkWithActivity_OnSameDay() {
+        val dayActivity = ArrayList<UserActivity>()
+        val nowMills = System.currentTimeMillis() - 400_000
+
+        //Second activity
+        dayActivity.add(UserActivity(eventStartTimeMills = nowMills + 120_000,
+                eventEndTimeMills = nowMills + 240_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        //First activity
+        dayActivity.add(UserActivity(eventStartTimeMills = nowMills,
+                eventEndTimeMills = nowMills + 60_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        //Third activity
+        dayActivity.add(UserActivity(eventStartTimeMills = nowMills + 300_000,
+                eventEndTimeMills = nowMills + 360_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        val resultArray = ArrayList<UserActivity>(dayActivity)
+        DailyActivitySummary.convertToValidUserActivityList(resultArray)
+
+        //Check the user activity list
+        Assert.assertEquals(resultArray.size, dayActivity.size)
+
+        //Check the remaining item
+        Assert.assertEquals(resultArray[0].eventStartTimeMills, dayActivity[1].eventStartTimeMills)
+        Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[1].eventEndTimeMills)
+
+        Assert.assertEquals(resultArray[1].eventStartTimeMills, dayActivity[0].eventStartTimeMills)
+        Assert.assertEquals(resultArray[1].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
+
+        Assert.assertEquals(resultArray[2].eventStartTimeMills, dayActivity[2].eventStartTimeMills)
+        Assert.assertEquals(resultArray[2].eventEndTimeMills, dayActivity[2].eventEndTimeMills)
+
+    }
+
+    @Test
+    fun checkWithActivity_OnSameDay_ExactOneDayScratch() {
+        val dayActivity = ArrayList<UserActivity>()
+        val endMills = TimeUtils.getMidnightCal(System.currentTimeMillis()).timeInMillis
+        val startMills = endMills - TimeUtils.ONE_DAY_MILLISECONDS
+
+        //First activity
+        dayActivity.add(UserActivity(eventStartTimeMills = startMills - 60_000,
+                eventEndTimeMills = startMills,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        //Second activity
+        dayActivity.add(UserActivity(eventStartTimeMills = startMills + 120_000,
+                eventEndTimeMills = startMills + 240_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        //Third activity
+        dayActivity.add(UserActivity(eventStartTimeMills = endMills,
+                eventEndTimeMills = endMills + 300_000,
+                type = UserActivityType.SITTING.name,
+                isSynced = true))
+
+        val resultArray = ArrayList<UserActivity>(dayActivity)
+        DailyActivitySummary.convertToValidUserActivityList(resultArray)
+
+        //Measure the stretch
+        Assert.assertEquals(dayActivity.last().eventStartTimeMills - dayActivity.first().eventEndTimeMills,
+                TimeUtils.ONE_DAY_MILLISECONDS)
+
+        //Check the user activity list
+        Assert.assertEquals(resultArray.size, dayActivity.size)
+
+        //Check the remaining item
+        Assert.assertEquals(resultArray[0].eventStartTimeMills, dayActivity[0].eventStartTimeMills)
+        Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
+
+        Assert.assertEquals(resultArray[1].eventStartTimeMills, dayActivity[1].eventStartTimeMills)
+        Assert.assertEquals(resultArray[1].eventEndTimeMills, dayActivity[1].eventEndTimeMills)
+
+        Assert.assertEquals(resultArray[2].eventStartTimeMills, dayActivity[2].eventStartTimeMills)
+        Assert.assertEquals(resultArray[2].eventEndTimeMills, dayActivity[2].eventEndTimeMills)
     }
 }

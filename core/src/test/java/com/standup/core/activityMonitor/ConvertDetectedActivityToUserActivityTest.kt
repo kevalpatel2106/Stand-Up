@@ -18,6 +18,7 @@
 package com.standup.core.activityMonitor
 
 import com.google.android.gms.location.DetectedActivity
+import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import org.junit.Assert
 import org.junit.Test
@@ -49,7 +50,8 @@ class ConvertDetectedActivityToUserActivityTest {
 
         Assert.assertNotNull(userActivity)
         Assert.assertEquals(userActivity!!.userActivityType, UserActivityType.SITTING)
-        Assert.assertEquals(userActivity.eventEndTimeMills, 0)
+        Assert.assertEquals(userActivity.eventEndTimeMills,
+                userActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue)
         Assert.assertEquals(userActivity.isSynced, false)
         Assert.assertEquals(userActivity.remoteId, 0)
         Assert.assertEquals(userActivity.type, UserActivityType.SITTING.name.toLowerCase())
@@ -73,7 +75,8 @@ class ConvertDetectedActivityToUserActivityTest {
 
         Assert.assertNotNull(userActivity)
         Assert.assertEquals(userActivity!!.userActivityType, UserActivityType.MOVING)
-        Assert.assertEquals(userActivity.eventEndTimeMills, 0)
+        Assert.assertEquals(userActivity.eventEndTimeMills,
+                userActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue)
         Assert.assertEquals(userActivity.isSynced, false)
         Assert.assertEquals(userActivity.remoteId, 0)
         Assert.assertEquals(userActivity.type, UserActivityType.MOVING.name.toLowerCase())

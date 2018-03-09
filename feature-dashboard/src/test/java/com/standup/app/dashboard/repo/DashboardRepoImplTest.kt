@@ -22,20 +22,24 @@ import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.TimeUtils
+import com.standup.app.dashboard.R
 import com.standup.core.CorePrefsProvider
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mockito
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -46,30 +50,142 @@ import java.util.*
 @RunWith(JUnit4::class)
 class DashboardRepoImplTest {
     private val DIFF_BETWEEN_END_AND_START: Int = 30000
+    private val TEXT_DND_RUNNING = "test_dnd_running"
+    private val TEXT_SLEEP_RUNNING = "test_sleep_mode_running"
+    private val TEXT_NEXT_REMINDER = "test_sleep_mode_running %1\$s."
 
-    private lateinit var userActivityDao: UserActivityDaoMockImpl
+    private val mockSharedPrefsProvider = SharedPrefsProvider(MockSharedPreference())
+    private lateinit var mockUserActivityDao: UserActivityDaoMockImpl
+    private lateinit var mockUserSettingsManager: UserSettingsManager
+    private lateinit var mockApplication: Application
+    private lateinit var mockCorePrefsProvider: CorePrefsProvider
     private val mockServerManager = MockServerManager()
+
     private lateinit var dashboardRepo: DashboardRepo
 
     @Before
     fun setUp() {
-        val context = Mockito.mock(Application::class.java)
-        val sharedPrefsProvider = SharedPrefsProvider(MockSharedPreference())
+        mockApplication = Mockito.mock(Application::class.java)
+        Mockito.`when`(mockApplication.getString(R.string.dnd_mode_is_enabled))
+                .thenReturn(TEXT_DND_RUNNING)
+        Mockito.`when`(mockApplication.getString(R.string.sleep_mode_is_enabled))
+                .thenReturn(TEXT_SLEEP_RUNNING)
+        Mockito.`when`(mockApplication.getString(R.string.next_notification_time))
+                .thenReturn(TEXT_NEXT_REMINDER)
+
+        mockUserActivityDao = UserActivityDaoMockImpl(ArrayList())
+        mockCorePrefsProvider = CorePrefsProvider(mockSharedPrefsProvider)
+        mockUserSettingsManager = UserSettingsManager(mockSharedPrefsProvider)
         mockServerManager.startMockWebServer()
 
-        userActivityDao = UserActivityDaoMockImpl(ArrayList())
         dashboardRepo = DashboardRepoImpl(
-                context,
-                UserSettingsManager(sharedPrefsProvider),
-                userActivityDao,
-                CorePrefsProvider(sharedPrefsProvider),
-                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())
+                application = mockApplication,
+                userSettingsManager = mockUserSettingsManager,
+                userActivityDao = mockUserActivityDao,
+                corePrefsProvider = mockCorePrefsProvider,
+                retrofit = NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())
         )
     }
 
     @After
     fun tearUp() {
         mockServerManager.close()
+    }
+
+    @Test
+    fun checkGetNextReminderStatus_InAutoDndMode() {
+        //Dnd mode start
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE, true)
+        mockUserSettingsManager.setAutoDndTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() + 10_000
+        )
+        //Sleep mode off
+        mockUserSettingsManager.setSleepTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+        )
+
+        Assert.assertEquals(dashboardRepo.getNextReminderStatus(), TEXT_DND_RUNNING)
+    }
+
+    @Test
+    fun checkGetNextReminderStatus_InForceDndMode() {
+        //Dnd mode start
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE, true)
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE, false)
+        mockUserSettingsManager.setAutoDndTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+        )
+        //Sleep mode off
+        mockUserSettingsManager.setSleepTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+        )
+
+        Assert.assertEquals(dashboardRepo.getNextReminderStatus(), TEXT_DND_RUNNING)
+    }
+
+    @Test
+    fun checkGetNextReminderStatus_InSleepMode() {
+        //Dnd mode start
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE, false)
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE, false)
+        mockUserSettingsManager.setAutoDndTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+        )
+        //Sleep mode off
+        mockUserSettingsManager.setSleepTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() + 10_000
+        )
+
+        Assert.assertEquals(dashboardRepo.getNextReminderStatus(), TEXT_SLEEP_RUNNING)
+    }
+
+    @Test
+    fun checkGetNextReminderStatus_WithNextNotificationTime() {
+        val nextNotificationTime = System.currentTimeMillis()
+
+        //Dnd mode start
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE, false)
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE, false)
+        mockSharedPrefsProvider.savePreferences(CorePrefsProvider.PREF_KEY_NEXT_NOTIFICATION_TIME, nextNotificationTime)
+        mockUserSettingsManager.setAutoDndTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+        )
+        //Sleep mode off
+        mockUserSettingsManager.setSleepTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000
+        )
+
+        val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        Assert.assertEquals(dashboardRepo.getNextReminderStatus(),
+                String.format(TEXT_NEXT_REMINDER, sdf.format(nextNotificationTime)))
+    }
+
+    @Test
+    fun checkGetNextReminderStatus_WithNoNextNotificationTime() {
+        //Dnd mode start
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE, false)
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE, false)
+        mockUserSettingsManager.setAutoDndTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+        )
+        //Sleep mode off
+        mockUserSettingsManager.setSleepTime(
+                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
+                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000
+        )
+
+        val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        Assert.assertEquals(dashboardRepo.getNextReminderStatus(),
+                String.format(TEXT_NEXT_REMINDER, sdf.format(0)))
     }
 
     @Test
@@ -96,7 +212,7 @@ class DashboardRepoImplTest {
                     it.year == Calendar.getInstance().get(Calendar.YEAR)
                 }
                 .assertValueAt(0) {
-                    it.dayActivity.size == userActivityDao.tableItems.size
+                    it.dayActivity.size == mockUserActivityDao.tableItems.size
                 }
                 .assertValueAt(0) {
                     it.monthOfYear == Calendar.getInstance().get(Calendar.MONTH)
@@ -117,7 +233,7 @@ class DashboardRepoImplTest {
             val startTime = cal.timeInMillis
             val endTime = startTime + DIFF_BETWEEN_END_AND_START
 
-            userActivityDao.insert(UserActivity(eventStartTimeMills = startTime,
+            mockUserActivityDao.insert(UserActivity(eventStartTimeMills = startTime,
                     eventEndTimeMills = endTime,
                     type = when {
                         i.rem(2) == 0 -> UserActivityType.SITTING.name.toLowerCase()

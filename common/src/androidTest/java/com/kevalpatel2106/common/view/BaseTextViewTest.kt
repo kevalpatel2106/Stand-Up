@@ -15,12 +15,11 @@
  *
  */
 
-package com.kevalpatel2106.common
+package com.kevalpatel2106.common.view
 
 import android.app.Activity
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
-import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.testutils.BaseTestClass
 import org.junit.Assert.assertTrue
 import org.junit.Before

@@ -17,6 +17,8 @@
 
 package com.standup.app.diary.repo
 
+import android.annotation.SuppressLint
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
@@ -47,11 +49,11 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
      * and emit the summary for each day one-by-one. The emitted days will order by the day of year
      * in descending order.
      *
-     * Internally this will load the [UserActivity] data from locally cached database using [loadUserActivityByDay]
+     * Internally this will load the [UserActivity] data from locally cached database using [loadUserActivityForDayFromCalender]
      * and or from the network if the database cache is missing. After that, it will process the
      * [UserActivity] and create the summary of the day in [DailyActivitySummary] and emmit the data.
      *
-     * @see loadUserActivityByDay
+     * @see loadUserActivityForDayFromCalender
      */
     override fun loadDaysSummaryList(beforeMills: Long): Flowable<DailyActivitySummary> {
 
@@ -67,7 +69,7 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
             //Loop until the oldest event received
             while (oldestActivity != null && calender.timeInMillis > oldestActivity.eventStartTimeMills) {
                 //Query the database.
-                val dbList = ArrayList(loadUserActivityByDay(calender.clone() as Calendar))
+                val dbList = ArrayList(loadUserActivityForDayFromCalender(calender.clone() as Calendar))
 
                 //Emit the list if data is available
                 DailyActivitySummary.convertToValidUserActivityList(dbList)
@@ -94,15 +96,23 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
                 })
     }
 
+    @SuppressLint("VisibleForTests")
     override fun loadUserActivityByDay(dayOfMonth: Int, month: Int, year: Int): Flowable<ArrayList<UserActivity>> {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         calendar.set(Calendar.MONTH, month)
         calendar.set(Calendar.YEAR, year)
-        return Flowable.create({
-            it.onNext(ArrayList(loadUserActivityByDay(calendar)))
+        return Flowable.create<ArrayList<UserActivity>>({
+            it.onNext(ArrayList(loadUserActivityForDayFromCalender(calendar)))
             it.onComplete()
         }, BackpressureStrategy.DROP)
+                .filter { !it.isEmpty() }
+                .map { arrayList ->
+                    //Convert to valid list
+                    DailyActivitySummary.convertToValidUserActivityList(arrayList)
+
+                    return@map arrayList
+                }
     }
 
     override fun loadSummary(dayOfMonth: Int, month: Int, year: Int): Flowable<DailyActivitySummary> {
@@ -132,12 +142,13 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
                 }
     }
 
-    internal fun loadUserActivityByDay(calendar: Calendar): List<UserActivity> {
+    @VisibleForTesting
+    internal fun loadUserActivityForDayFromCalender(calendar: Calendar): List<UserActivity> {
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        val startTimeMills = calendar.timeInMillis
+        val startTimeMills = calendar.timeInMillis - 1
 
         calendar.set(Calendar.HOUR_OF_DAY, 23)
         calendar.set(Calendar.MINUTE, 59)

@@ -93,6 +93,7 @@ dependencies {
     implementation(Deps.customtabs, excludeGrp)
 
     //Room & Arch components
+    implementation Deps.lifecycleJava8
     implementation Deps.lifecycle
 
     implementation Deps.retrofit

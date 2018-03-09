@@ -34,7 +34,7 @@ class MidnightCalenderTest {
 
     @Test
     @Throws(Exception::class)
-    fun checkGetMidnightCal_WithMills_LocalTimeZone() {
+    fun checkGetMidnightCalMills_FromUTCMidnight_ComparedLocalTimeZone() {
         val unixMills = System.currentTimeMillis()
 
         val today12AmCal = Calendar.getInstance(TimeZone.getDefault())
@@ -45,12 +45,12 @@ class MidnightCalenderTest {
         today12AmCal.set(Calendar.MILLISECOND, 0)
 
         Assert.assertEquals(today12AmCal.timeInMillis + TimeZone.getDefault().rawOffset,
-                TimeUtils.getMidnightCal(unixMills).timeInMillis)
+                TimeUtils.getMidnightCal(unixMills, true).timeInMillis)
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkGetMidnightCal_WithMills_UTCTimeZone() {
+    fun checkGetMidnightCalMills_FromUTCMidnight_ComparedUTCTimeZone() {
         val unixMills = System.currentTimeMillis()
 
         val today12AmCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -61,12 +61,28 @@ class MidnightCalenderTest {
         today12AmCal.set(Calendar.MILLISECOND, 0)
 
         Assert.assertEquals(today12AmCal.timeInMillis,
-                TimeUtils.getMidnightCal(unixMills).timeInMillis)
+                TimeUtils.getMidnightCal(unixMills, true).timeInMillis)
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkGetMidnightCal_WithDate_LocalTimeZone() {
+    fun checkGetMidnightCalMills_FromLocalMidnight_ComparedLocalTimeZone() {
+        val unixMills = System.currentTimeMillis()
+
+        val today12AmCal = Calendar.getInstance(TimeZone.getDefault())
+        today12AmCal.timeInMillis = unixMills
+        today12AmCal.set(Calendar.HOUR_OF_DAY, 0)
+        today12AmCal.set(Calendar.MINUTE, 0)
+        today12AmCal.set(Calendar.SECOND, 0)
+        today12AmCal.set(Calendar.MILLISECOND, 0)
+
+        Assert.assertEquals(today12AmCal.timeInMillis,
+                TimeUtils.getMidnightCal(unixMills, false).timeInMillis)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkGetMidnightCalDate_FromUTCMidnight_ComparedLocalTimeZone() {
         val testCal = Calendar.getInstance(TimeZone.getDefault())
         testCal.set(Calendar.HOUR_OF_DAY, 0)
         testCal.set(Calendar.MINUTE, 0)
@@ -76,12 +92,13 @@ class MidnightCalenderTest {
         Assert.assertEquals(testCal.timeInMillis + TimeZone.getDefault().rawOffset,
                 TimeUtils.getMidnightCal(dayOfMonth = testCal.get(Calendar.DAY_OF_MONTH),
                         monthOfYear = testCal.get(Calendar.MONTH),
-                        year = testCal.get(Calendar.YEAR)).timeInMillis)
+                        year = testCal.get(Calendar.YEAR),
+                        isUtc = true).timeInMillis)
     }
 
     @Test
     @Throws(Exception::class)
-    fun checkGetMidnightCal_WithDate_UTCTimeZone() {
+    fun checkGetMidnightCalDate_FromUTCMidnight_ComparedUTCTimeZone() {
         val testCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         testCal.set(Calendar.HOUR_OF_DAY, 0)
         testCal.set(Calendar.MINUTE, 0)
@@ -91,7 +108,24 @@ class MidnightCalenderTest {
         Assert.assertEquals(testCal.timeInMillis,
                 TimeUtils.getMidnightCal(dayOfMonth = testCal.get(Calendar.DAY_OF_MONTH),
                         monthOfYear = testCal.get(Calendar.MONTH),
-                        year = testCal.get(Calendar.YEAR)).timeInMillis)
+                        year = testCal.get(Calendar.YEAR),
+                        isUtc = true).timeInMillis)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkGetMidnightCalDate_FromLocalMidnight_ComparedLocalTimeZone() {
+        val testCal = Calendar.getInstance(TimeZone.getDefault())
+        testCal.set(Calendar.HOUR_OF_DAY, 0)
+        testCal.set(Calendar.MINUTE, 0)
+        testCal.set(Calendar.SECOND, 0)
+        testCal.set(Calendar.MILLISECOND, 0)
+
+        Assert.assertEquals(testCal.timeInMillis,
+                TimeUtils.getMidnightCal(dayOfMonth = testCal.get(Calendar.DAY_OF_MONTH),
+                        monthOfYear = testCal.get(Calendar.MONTH),
+                        year = testCal.get(Calendar.YEAR),
+                        isUtc = false).timeInMillis)
     }
 
     @Test

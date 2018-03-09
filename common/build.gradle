@@ -49,6 +49,10 @@ android {
         }
     }
 
+    sourceSets {
+        androidTest.assets.srcDirs += files(DefaultConfig.schemaPath.toString())
+    }
+
     compileOptions compileOption
     packagingOptions packageExcludes
     lintOptions lintOption
@@ -98,7 +102,8 @@ dependencies {
 
     //Room & Arch components
     implementation Deps.lifecycle
-    implementation Deps.roomRx
+    implementation Deps.lifecycleJava8
+    implementation Deps.room
     kapt Deps.roomAnnotation
 
     implementation Deps.retrofit

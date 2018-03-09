@@ -298,7 +298,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
                 }, {
                     //Error.
                     //NO OP
-                    Timber.e(it.message)
+                    Timber.e(it.printStackTrace().toString())
                 })
     }
 }

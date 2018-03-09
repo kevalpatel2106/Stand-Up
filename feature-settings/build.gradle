@@ -91,11 +91,16 @@ dependencies {
     implementation Deps.design
     implementation Deps.prefrance
     implementation Deps.prefrancev14
-    implementation Deps.gridLayout
+    implementation Deps.cardView
 
     //Room & Arch components
+    implementation Deps.lifecycleJava8
     implementation Deps.lifecycle
 
+    implementation(Deps.aboutlibraries, excludeGrp)
     implementation(Deps.ringtonePicker, excludeGrp)
     implementation(Deps.bottomsheetPicker, excludeGrp)
 }
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'

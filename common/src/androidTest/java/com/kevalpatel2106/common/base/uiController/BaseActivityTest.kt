@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.common
+package com.kevalpatel2106.common.base.uiController
 
 import android.app.Activity
 import android.support.test.espresso.Espresso
@@ -26,6 +26,8 @@ import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withContentDescription
 import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import com.kevalpatel2106.common.R
+import com.kevalpatel2106.common.TestActivity
 import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
 import io.reactivex.Observable

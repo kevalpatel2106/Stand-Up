@@ -75,21 +75,23 @@ internal class UserActivityListModel : BaseViewModel {
                 }
                 .doOnTerminate {
                     blockUi.value = false
+
+                    userActivities.value?.let {
+                        if (it.isEmpty()) {
+
+                            val errorMsg = ErrorMessage("No user activities found for $dayOfMonth ${TimeUtils.getMonthInitials(month)} $year")
+                            errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
+                                fetchData(dayOfMonth, month, year)
+                            })
+                            errorMsg.errorImage = LottieJson.CLOUD_FLOATING
+                            errorMessage.value = errorMsg
+                        }
+                    }
                 }
                 .subscribe({
-
-                    if (it.isEmpty()) {
-                        val errorMsg = ErrorMessage("No user activities found for $dayOfMonth ${TimeUtils.getMonthInitials(month)} $year")
-                        errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
-                            fetchData(dayOfMonth, month, year)
-                        })
-                        errorMsg.errorImage = LottieJson.CLOUD_FLOATING
-                        errorMessage.value = errorMsg
-                    } else {
-                        userActivities.value?.clear()
-                        userActivities.value?.addAll(it)
-                        userActivities.value = userActivities.value
-                    }
+                    userActivities.value?.clear()
+                    userActivities.value?.addAll(it)
+                    userActivities.value = userActivities.value
                 }, {
                     val errorMsg = ErrorMessage(it.message)
                     errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {

@@ -137,7 +137,7 @@ abstract class PageRecyclerViewAdapter<VH : PageRecyclerViewAdapter.PageViewHold
     }
 
     @CallSuper
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): PageViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageViewHolder {
         return if (viewType == TYPE_LOADER) {
 
             //Prepare view holder for loader row.

@@ -40,5 +40,16 @@
     <string name="dnd_pref_auto_dnd_switch_summary_off">Do not disturb mode won\'t start automatically. You can turn it on on/off manually though.</string>
     <string name="dnd_pref_auto_dnd_switch_title_off">Disable</string>
     <string name="dnd_pref_auto_dnd_switch_title_on">Enable</string>
+    <string name="title_card_help">Help</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings_name_sync">Sync</string>
+    <string name="settings_name_notifications">Notifications</string>
+    <string name="settings_name_dnd">DND</string>
+    <string name="settings_name_daily_review">Daily Review</string>
+    <string name="settings_name_logout">Logout</string>
+    <string name="settings_name_instructions">Instruction</string>
+    <string name="settings_name_privacy">Privacy Policy</string>
 
 </resources>
