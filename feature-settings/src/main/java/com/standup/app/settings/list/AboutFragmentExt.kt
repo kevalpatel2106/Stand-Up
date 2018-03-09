@@ -30,19 +30,6 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
  */
 fun prepareCard(
         @DrawableRes icon: Int,
-        @StringRes text: String,
-        clickListener: MaterialAboutItemOnClickAction? = null
-): MaterialAboutActionItem {
-    return MaterialAboutActionItem.Builder()
-            .icon(icon)
-            .setIconGravity(Gravity.START)
-            .text(text)
-            .setOnClickAction(clickListener)
-            .build()
-}
-
-fun prepareCard(
-        @DrawableRes icon: Int,
         @StringRes text: Int,
         clickListener: MaterialAboutItemOnClickAction? = null
 ): MaterialAboutActionItem {
@@ -52,4 +39,5 @@ fun prepareCard(
             .text(text)
             .setOnClickAction(clickListener)
             .build()
+            .setShouldShowIcon(true)
 }

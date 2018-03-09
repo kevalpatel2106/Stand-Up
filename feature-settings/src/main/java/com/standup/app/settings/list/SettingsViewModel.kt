@@ -24,6 +24,7 @@ import android.support.v4.app.Fragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.common.base.arch.SingleLiveEvent
 import com.standup.app.settings.R
 import com.standup.app.settings.dailyReview.DailyReviewSettingsDetailActivity
 import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
@@ -44,36 +45,45 @@ internal class SettingsViewModel : BaseViewModel() {
 
     internal var detailFragment = MutableLiveData<Fragment>()
 
-    internal var showLogoutConformation = MutableLiveData<Boolean>()
-    internal var openSyncSettings = MutableLiveData<Boolean>()
-    internal var openDndSettings = MutableLiveData<Boolean>()
-    internal var openNotificationSettings = MutableLiveData<Boolean>()
-    internal var openDailyReview = MutableLiveData<Boolean>()
+    internal var showLogoutConformation = SingleLiveEvent<Boolean>()
+    internal var openSyncSettings = SingleLiveEvent<Boolean>()
+    internal var openDndSettings = SingleLiveEvent<Boolean>()
+    internal var openNotificationSettings = SingleLiveEvent<Boolean>()
+    internal var openDailyReview = SingleLiveEvent<Boolean>()
+    internal var openInstructions = SingleLiveEvent<Boolean>()
+    internal var openPrivacyPolicy = SingleLiveEvent<Boolean>()
 
     internal var settingsItems = MutableLiveData<ArrayList<MaterialAboutCard>>()
 
     init {
         settingsItems.value = ArrayList()
+
         showLogoutConformation.value = false
+        openSyncSettings.value = false
+        openDndSettings.value = false
+        openNotificationSettings.value = false
+        openDailyReview.value = false
+        openInstructions.value = false
+        openPrivacyPolicy.value = false
     }
 
-    internal fun prepareSettingsList(context: Context) {
+    internal fun prepareSettingsList() {
         settingsItems.value?.let {
             it.clear()
 
-            it.add(getSettingsCard(context))
-            it.add(getLogoutCard())
+            it.add(getSettingsCard())
             it.add(getHelpCard())
+            it.add(getLogoutCard())
 
             //Publish the update.
             settingsItems.value = it
         }
     }
 
-    private fun getSettingsCard(context: Context): MaterialAboutCard {
+    private fun getSettingsCard(): MaterialAboutCard {
         val syncSettingsItem = prepareCard(
                 icon = R.drawable.ic_sync,
-                text = "Sync",
+                text = R.string.settings_name_sync,
                 clickListener = MaterialAboutItemOnClickAction {
                     openSyncSettings.value = true
                 }
@@ -81,7 +91,7 @@ internal class SettingsViewModel : BaseViewModel() {
 
         val notificationsSettingsItem = prepareCard(
                 icon = R.drawable.ic_notifications_bell,
-                text = "Notifications",
+                text = R.string.settings_name_notifications,
                 clickListener = MaterialAboutItemOnClickAction {
                     openNotificationSettings.value = true
                 }
@@ -89,7 +99,7 @@ internal class SettingsViewModel : BaseViewModel() {
 
         val dndSettingsItem = prepareCard(
                 icon = R.drawable.ic_dnd_on,
-                text = "DND",
+                text = R.string.settings_name_dnd,
                 clickListener = MaterialAboutItemOnClickAction {
                     openDndSettings.value = true
                 }
@@ -97,14 +107,14 @@ internal class SettingsViewModel : BaseViewModel() {
 
         val dailyReviewItem = prepareCard(
                 icon = R.drawable.ic_daily_review_notification,
-                text = "Daily Review",
+                text = R.string.settings_name_daily_review,
                 clickListener = MaterialAboutItemOnClickAction {
                     openDailyReview.value = true
                 }
         )
 
         return MaterialAboutCard.Builder()
-                .title(context.getString(R.string.title_activity_settings))
+                .title(R.string.title_activity_settings)
                 .addItem(syncSettingsItem)
                 .addItem(dndSettingsItem)
                 .addItem(dailyReviewItem)
@@ -115,7 +125,7 @@ internal class SettingsViewModel : BaseViewModel() {
     private fun getLogoutCard(): MaterialAboutCard {
         val logoutItem = prepareCard(
                 icon = R.drawable.ic_logout,
-                text = "Logout",
+                text = R.string.settings_name_logout,
                 clickListener = MaterialAboutItemOnClickAction {
                     showLogoutConformation.value = true
                 }
@@ -127,16 +137,26 @@ internal class SettingsViewModel : BaseViewModel() {
     }
 
     private fun getHelpCard(): MaterialAboutCard {
-        val logoutItem = prepareCard(
-                icon = R.drawable.ic_logout,
-                text = "Help",
+        val instructionItem = prepareCard(
+                icon = R.drawable.ic_instruction,
+                text = R.string.settings_name_instructions,
                 clickListener = MaterialAboutItemOnClickAction {
-                    //TODO Handle help card click
+                    openInstructions.value = true
+                }
+        )
+
+        val privacyPolicyItem = prepareCard(
+                icon = R.drawable.ic_privacy,
+                text = R.string.settings_name_privacy,
+                clickListener = MaterialAboutItemOnClickAction {
+                    openPrivacyPolicy.value = true
                 }
         )
 
         return MaterialAboutCard.Builder()
-                .addItem(logoutItem)
+                .title(R.string.title_card_help)
+                .addItem(instructionItem)
+                .addItem(privacyPolicyItem)
                 .build()
     }
 

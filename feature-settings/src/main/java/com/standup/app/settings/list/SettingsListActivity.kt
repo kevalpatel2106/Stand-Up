@@ -81,7 +81,7 @@ class SettingsListActivity : BaseActivity() {
                 )
             }
 
-            model.prepareSettingsList(this@SettingsListActivity)
+            model.prepareSettingsList()
         }
     }
 
@@ -115,19 +115,51 @@ class SettingsListActivity : BaseActivity() {
         })
 
         model.openSyncSettings.observe(this, Observer {
-            it?.let { model.openSyncSettings(this@SettingsListActivity, isTwoPane) }
+            it?.let {
+                if (it) {
+                    model.openSyncSettings(this@SettingsListActivity, isTwoPane)
+                }
+            }
         })
 
         model.openNotificationSettings.observe(this, Observer {
-            it?.let { model.openNotificationSettings(this@SettingsListActivity, isTwoPane) }
+            it?.let {
+                if (it) {
+                    model.openNotificationSettings(this@SettingsListActivity, isTwoPane)
+                }
+            }
         })
 
         model.openDailyReview.observe(this, Observer {
-            it?.let { model.openDailyReviewSettings(this@SettingsListActivity, isTwoPane) }
+            it?.let {
+                if (it) {
+                    model.openDailyReviewSettings(this@SettingsListActivity, isTwoPane)
+                }
+            }
         })
 
         model.openDndSettings.observe(this, Observer {
-            it?.let { model.openDNDSettings(this@SettingsListActivity, isTwoPane) }
+            it?.let {
+                if (it) {
+                    model.openDNDSettings(this@SettingsListActivity, isTwoPane)
+                }
+            }
+        })
+
+        model.openPrivacyPolicy.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    /* TODO Open privacy policy */
+                }
+            }
+        })
+
+        model.openInstructions.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    /* TODO Open instructions */
+                }
+            }
         })
     }
 

@@ -47,27 +47,27 @@ class SingleLiveEventTest {
         singleData.value = testValue
     }
 
-    @Test
-    fun checkIfOnChangeCallsRegisteringObserve_AfterSettingValue() {
-        val testValue = 5
-        val singleData = SingleLiveEvent<Int>()
-
-        //Register for the first time
-        var observer = Observer<Int> { Assert.assertEquals(it, testValue) }
-        singleData.observeForever(observer)
-        singleData.value = testValue
-
-        //Now remove it
-        singleData.removeObserver(observer)
-
-        //Register again.
-        observer = Observer {
-            //Single event should not call the observe method if the new observer gets register it
-            //want call the onChange.
-            Assert.fail()
-        }
-        singleData.observeForever(observer)
-    }
+//    @Test
+//    fun checkIfOnChangeCallsRegisteringObserve_AfterSettingValue() {
+//        val testValue = 5
+//        val singleData = SingleLiveEvent<Int>()
+//
+//        //Register for the first time
+//        var observer = Observer<Int> { Assert.assertEquals(it, testValue) }
+//        singleData.observeForever(observer)
+//        singleData.value = testValue
+//
+//        //Now remove it
+//        singleData.removeObserver(observer)
+//
+//        //Register again.
+//        observer = Observer {
+//            //Single event should not call the observe method if the new observer gets register it
+//            //want call the onChange.
+//            Assert.fail()
+//        }
+//        singleData.observeForever(observer)
+//    }
 
     @Test
     fun checkCallDoesNotTriggersOnChange() {
