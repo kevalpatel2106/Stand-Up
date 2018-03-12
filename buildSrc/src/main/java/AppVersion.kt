@@ -24,14 +24,14 @@ object AppVersion {
     /**
      * Version code of the application.
      */
-    const val versionCode = 5
+    const val versionCode = 6
 
     // Prepare the version name.
     // Version name scheme: major.minor.patch
 
     private const val versionMajor = 0
-    private const val versionMinor = 3
-    private const val versionPatch = 1
+    private const val versionMinor = 4
+    private const val versionPatch = 0
 
     /**
      * Prepare the version name in [versionMajor].[versionMinor].[versionPatch] format.
