@@ -18,6 +18,7 @@
 package com.standup.app.settings.instructions
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.view.ViewGroup
 import com.bignerdranch.expandablerecyclerview.ExpandableRecyclerAdapter
 
@@ -32,6 +33,8 @@ internal class InstructionAdapter(private val context: Context,
 
     init {
         setExpandCollapseListener(object : ExpandCollapseListener {
+
+            @VisibleForTesting
             internal var lastExpandedPosition = -1
 
             override fun onParentExpanded(parentPosition: Int) {

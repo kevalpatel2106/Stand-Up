@@ -163,6 +163,7 @@ ext {
     testOption = {
         unitTests.all {
             minHeapSize = "1024m"
+            includeAndroidResources = true
 
             // set heap size for the test JVM(s)
             maxParallelForks 1

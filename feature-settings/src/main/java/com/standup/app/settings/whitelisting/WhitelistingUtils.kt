@@ -32,7 +32,7 @@ import timber.log.Timber
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal object WhitelistingUtils {
+internal class WhitelistingUtils {
 
     @SuppressLint("NewApi")
     internal fun shouldOpenWhiteListDialog(context: Context): Boolean {

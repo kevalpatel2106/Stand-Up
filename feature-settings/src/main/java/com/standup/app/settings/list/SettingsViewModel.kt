@@ -60,6 +60,9 @@ internal class SettingsViewModel : BaseViewModel {
     @Inject
     internal lateinit var userActivityDao: UserActivityDao
 
+    @Inject
+    internal lateinit var whitelistingUtils: WhitelistingUtils
+
     internal var detailFragment = MutableLiveData<Fragment>()
 
     internal var showLogoutConformation = SingleLiveEvent<Boolean>()
@@ -84,8 +87,9 @@ internal class SettingsViewModel : BaseViewModel {
 
     @OnlyForTesting
     @VisibleForTesting
-    constructor(userActivityDao: UserActivityDao) {
+    constructor(userActivityDao: UserActivityDao, whitelistingUtils: WhitelistingUtils) {
         this.userActivityDao = userActivityDao
+        this.whitelistingUtils = whitelistingUtils
         init()
     }
 
@@ -114,7 +118,7 @@ internal class SettingsViewModel : BaseViewModel {
             //Publish the update.
             settingsItems.value = it
 
-            addWhiteListAppCard(context, userActivityDao).subscribe({
+            addWhiteListAppCard(context, userActivityDao, whitelistingUtils).subscribe({
                 if (it) settingsItems.value?.add(1, getWhiteListCard(context))
             }, {
                 Timber.i(it.printStackTrace().toString())
@@ -256,10 +260,12 @@ internal class SettingsViewModel : BaseViewModel {
     }
 
     @VisibleForTesting
-    internal fun addWhiteListAppCard(context: Context, userActivityDao: UserActivityDao): Single<Boolean> {
+    internal fun addWhiteListAppCard(context: Context,
+                                     userActivityDao: UserActivityDao,
+                                     whitelistingUtils: WhitelistingUtils): Single<Boolean> {
         return Single.create(SingleOnSubscribe<Boolean> {
 
-            if (WhitelistingUtils.shouldOpenWhiteListDialog(context)) {
+            if (whitelistingUtils.shouldOpenWhiteListDialog(context)) {
                 val latestActivity = userActivityDao.getLatestActivity()
                 it.onSuccess(latestActivity == null ||
                         System.currentTimeMillis() - latestActivity.eventEndTimeMills > TimeUtils.ONE_DAY_MILLISECONDS)

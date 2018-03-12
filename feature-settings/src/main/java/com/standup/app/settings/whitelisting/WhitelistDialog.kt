@@ -52,7 +52,7 @@ class WhitelistDialog : DialogFragment() {
             context?.let {
                 it.logEvent(AnalyticsEvents.EVENT_WHITELIST_APP)
 
-                WhitelistingUtils.requestForWhitelisting(it)
+                WhitelistingUtils().requestForWhitelisting(it)
                 dialog.dismiss()
             }
         }
@@ -63,7 +63,7 @@ class WhitelistDialog : DialogFragment() {
         @SuppressLint("NewApi")
         fun showDialog(context: Context, fragmentManager: FragmentManager) {
 
-            if (WhitelistingUtils.shouldOpenWhiteListDialog(context))
+            if (WhitelistingUtils().shouldOpenWhiteListDialog(context))
                 WhitelistDialog().show(fragmentManager, WhitelistDialog::class.simpleName)
         }
     }

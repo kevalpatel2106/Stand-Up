@@ -22,10 +22,15 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
+import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.common.db.userActivity.UserActivityDao
 import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
+import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
+import com.kevalpatel2106.utils.TimeUtils
 import com.standup.app.settings.R
+import com.standup.app.settings.whitelisting.WhitelistingUtils
+import io.reactivex.observers.TestObserver
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -54,6 +59,7 @@ class SettingsViewModelTest {
     private lateinit var mockUserActivityDao: UserActivityDao
     private lateinit var mockContext: Context
     private lateinit var mockResources: Resources
+    private lateinit var mockWhitelistingUtils: WhitelistingUtils
 
     private lateinit var model: SettingsViewModel
 
@@ -61,10 +67,11 @@ class SettingsViewModelTest {
     fun setUp() {
         mockContext = Mockito.mock(Context::class.java)
         mockResources = Mockito.mock(Resources::class.java)
+        mockWhitelistingUtils = Mockito.mock(WhitelistingUtils::class.java)
         Mockito.`when`(mockContext.resources).thenReturn(mockResources)
 
         mockUserActivityDao = UserActivityDaoMockImpl(ArrayList())
-        model = SettingsViewModel(mockUserActivityDao)
+        model = SettingsViewModel(mockUserActivityDao, mockWhitelistingUtils)
     }
 
     @Test
@@ -224,62 +231,134 @@ class SettingsViewModelTest {
         dailyReviewItem.onClickAction.onClick()
         Assert.assertTrue(model.openInstructions.value!!)
     }
-//
-//    @Test
-//    @Throws(Exception::class)
-//    fun checkAddWhiteListCard_NoLatestItem() {
-//        val testSubscriber = TestObserver<Boolean>()
-//
-//        model.addWhiteListAppCard(mockContext, mockUserActivityDao).subscribe(testSubscriber)
-//        testSubscriber.awaitTerminalEvent()
-//
-//        testSubscriber.assertNoErrors()
-//                .assertComplete()
-//                .assertValueCount(1)
-//                .assertValueAt(0, true)
-//    }
-//
-//    @Test
-//    @Throws(Exception::class)
-//    fun checkAddWhiteListCard_RecentLastEvent() {
-//        mockUserActivityDao.insert(UserActivity(
-//                remoteId = 0,
-//                type = UserActivityType.SITTING.toString().toLowerCase(),
-//                isSynced = true,
-//                eventEndTimeMills = System.currentTimeMillis(),
-//                eventStartTimeMills = System.currentTimeMillis() - 10_000
-//        ))
-//        val testSubscriber = TestObserver<Boolean>()
-//
-//        model.addWhiteListAppCard(mockContext, mockUserActivityDao).subscribe(testSubscriber)
-//        testSubscriber.awaitTerminalEvent()
-//
-//        testSubscriber.assertNoErrors()
-//                .assertComplete()
-//                .assertValueCount(1)
-//                .assertValueAt(0, false)
-//    }
-//
-//    @Test
-//    @Throws(Exception::class)
-//    fun checkAddWhiteListCard_LastEventBeforeOneDay() {
-//        val yesterDayMills = System.currentTimeMillis() - TimeUtils.ONE_DAY_MILLISECONDS
-//        mockUserActivityDao.insert(UserActivity(
-//                remoteId = 0,
-//                type = UserActivityType.SITTING.toString().toLowerCase(),
-//                isSynced = true,
-//                eventEndTimeMills = yesterDayMills,
-//                eventStartTimeMills = yesterDayMills - 10_000
-//        ))
-//        val testSubscriber = TestObserver<Boolean>()
-//
-//        model.addWhiteListAppCard(mockContext, mockUserActivityDao).subscribe(testSubscriber)
-//        testSubscriber.awaitTerminalEvent()
-//
-//        testSubscriber.assertNoErrors()
-//                .assertComplete()
-//                .assertValueCount(1)
-//                .assertValueAt(0, true)
-//    }
 
+
+    @Test
+    @Throws(Exception::class)
+    fun checkAddWhiteListCard_WhiteListNotAllowed() {
+        val testSubscriber = TestObserver<Boolean>()
+        Mockito.`when`(mockWhitelistingUtils.shouldOpenWhiteListDialog(mockContext)).thenReturn(false)
+
+        model.addWhiteListAppCard(mockContext, mockUserActivityDao, mockWhitelistingUtils).subscribe(testSubscriber)
+        testSubscriber.awaitTerminalEvent()
+
+        testSubscriber.assertNoErrors()
+                .assertComplete()
+                .assertValueCount(1)
+                .assertValueAt(0, false)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkAddWhiteListCard_NoLatestItem() {
+        val testSubscriber = TestObserver<Boolean>()
+        Mockito.`when`(mockWhitelistingUtils.shouldOpenWhiteListDialog(mockContext)).thenReturn(true)
+
+        model.addWhiteListAppCard(mockContext, mockUserActivityDao, mockWhitelistingUtils).subscribe(testSubscriber)
+        testSubscriber.awaitTerminalEvent()
+
+        testSubscriber.assertNoErrors()
+                .assertComplete()
+                .assertValueCount(1)
+                .assertValueAt(0, true)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkAddWhiteListCard_RecentLastEvent() {
+        mockUserActivityDao.insert(UserActivity(
+                remoteId = 0,
+                type = UserActivityType.SITTING.toString().toLowerCase(),
+                isSynced = true,
+                eventEndTimeMills = System.currentTimeMillis(),
+                eventStartTimeMills = System.currentTimeMillis() - 10_000
+        ))
+        val testSubscriber = TestObserver<Boolean>()
+        Mockito.`when`(mockWhitelistingUtils.shouldOpenWhiteListDialog(mockContext)).thenReturn(true)
+
+        model.addWhiteListAppCard(mockContext, mockUserActivityDao, mockWhitelistingUtils).subscribe(testSubscriber)
+        testSubscriber.awaitTerminalEvent()
+
+        testSubscriber.assertNoErrors()
+                .assertComplete()
+                .assertValueCount(1)
+                .assertValueAt(0, false)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkAddWhiteListCard_LastEventBeforeOneDay() {
+        val yesterDayMills = System.currentTimeMillis() - TimeUtils.ONE_DAY_MILLISECONDS
+        mockUserActivityDao.nukeTable()
+        mockUserActivityDao.insert(UserActivity(
+
+                remoteId = 0,
+                type = UserActivityType.SITTING.toString().toLowerCase(),
+                isSynced = true,
+                eventEndTimeMills = yesterDayMills,
+                eventStartTimeMills = yesterDayMills - 10_000
+        ))
+        val testSubscriber = TestObserver<Boolean>()
+        Mockito.`when`(mockWhitelistingUtils.shouldOpenWhiteListDialog(mockContext)).thenReturn(true)
+
+        model.addWhiteListAppCard(mockContext, mockUserActivityDao, mockWhitelistingUtils).subscribe(testSubscriber)
+        testSubscriber.awaitTerminalEvent()
+
+        testSubscriber.assertNoErrors()
+                .assertComplete()
+                .assertValueCount(1)
+                .assertValueAt(0, true)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkPrepareList_WithWhiteList_OldLatestItemAvailable() {
+        val yesterDayMills = System.currentTimeMillis() - TimeUtils.ONE_DAY_MILLISECONDS
+        mockUserActivityDao.insert(UserActivity(
+                remoteId = 0,
+                type = UserActivityType.SITTING.toString().toLowerCase(),
+                isSynced = true,
+                eventEndTimeMills = yesterDayMills,
+                eventStartTimeMills = yesterDayMills - 10_000
+        ))
+
+        Mockito.`when`(mockWhitelistingUtils.shouldOpenWhiteListDialog(mockContext)).thenReturn(true)
+
+        model.prepareSettingsList(mockContext)
+
+        Assert.assertNotNull(model.settingsItems.value)
+        Assert.assertEquals(model.settingsItems.value!!.size, 4)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkPrepareList_WithWhiteList_LatestItemNotAvailable() {
+        Mockito.`when`(mockWhitelistingUtils.shouldOpenWhiteListDialog(mockContext)).thenReturn(true)
+        mockUserActivityDao.nukeTable()
+
+        model.prepareSettingsList(mockContext)
+
+        Assert.assertNotNull(model.settingsItems.value)
+        Assert.assertEquals(model.settingsItems.value!!.size, 4)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkPrepareList_WithWhiteListNotAllowed_LatestItemAvailable() {
+        val yesterDayMills = System.currentTimeMillis() - TimeUtils.ONE_DAY_MILLISECONDS
+        mockUserActivityDao.insert(UserActivity(
+                remoteId = 0,
+                type = UserActivityType.SITTING.toString().toLowerCase(),
+                isSynced = true,
+                eventEndTimeMills = yesterDayMills,
+                eventStartTimeMills = yesterDayMills - 10_000
+        ))
+
+        Mockito.`when`(mockWhitelistingUtils.shouldOpenWhiteListDialog(mockContext)).thenReturn(false)
+
+        model.prepareSettingsList(mockContext)
+
+        Assert.assertNotNull(model.settingsItems.value)
+        Assert.assertEquals(model.settingsItems.value!!.size, 3)
+    }
 }

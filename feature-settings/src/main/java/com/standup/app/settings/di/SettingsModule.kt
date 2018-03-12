@@ -22,6 +22,7 @@ import com.kevalpatel2106.common.application.di.ApplicationScope
 import com.kevalpatel2106.common.db.DbModule
 import com.standup.app.settings.SettingsHook
 import com.standup.app.settings.SettingsModule
+import com.standup.app.settings.whitelisting.WhitelistingUtils
 import dagger.Module
 import dagger.Provides
 
@@ -43,5 +44,11 @@ internal class SettingsModule {
     @ApplicationScope
     fun provideAboutListAdapter(): MaterialAboutListAdapter {
         return MaterialAboutListAdapter()
+    }
+
+    @Provides
+    @ApplicationScope
+    fun provideWhiteListUtils(): WhitelistingUtils {
+        return WhitelistingUtils()
     }
 }
