@@ -67,6 +67,7 @@ dependencies {
     implementation project(':core')
     implementation project(':spinner-time-picker')
     testImplementation project(':test-utils')
+    testImplementation(Deps.roboElectric)
     androidTestImplementation project(':test-utils')
 
     implementation(Deps.kotlinRefflect)
@@ -97,10 +98,8 @@ dependencies {
     implementation Deps.lifecycleJava8
     implementation Deps.lifecycle
 
+    implementation(Deps.expandableRv, excludeGrp)
     implementation(Deps.aboutlibraries, excludeGrp)
     implementation(Deps.ringtonePicker, excludeGrp)
     implementation(Deps.bottomsheetPicker, excludeGrp)
 }
-
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'

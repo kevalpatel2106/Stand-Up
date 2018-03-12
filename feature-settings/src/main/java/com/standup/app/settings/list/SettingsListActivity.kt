@@ -34,6 +34,8 @@ import com.kevalpatel2106.utils.alert
 import com.standup.app.settings.R
 import com.standup.app.settings.SettingsHook
 import com.standup.app.settings.di.DaggerSettingsComponent
+import com.standup.app.settings.instructions.InstructionActivity
+import com.standup.app.settings.whitelisting.WhitelistDialog
 import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_settings_list.*
 import javax.inject.Inject
@@ -44,10 +46,14 @@ class SettingsListActivity : BaseActivity() {
 
     private var isTwoPane = false
 
-    private var adapter = MaterialAboutListAdapter()
+    @Inject
+    internal lateinit var adapter: MaterialAboutListAdapter
 
     @Inject
     lateinit var settingsHook: Lazy<SettingsHook>
+
+    private var refreshList: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,8 +87,13 @@ class SettingsListActivity : BaseActivity() {
                 )
             }
 
-            model.prepareSettingsList()
+            model.prepareSettingsList(this@SettingsListActivity)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (refreshList) model.prepareSettingsList(this@SettingsListActivity)
     }
 
     private fun setViewModel() {
@@ -146,6 +157,15 @@ class SettingsListActivity : BaseActivity() {
             }
         })
 
+        model.showWhitelistDialog.observe(this, Observer {
+            it?.let {
+                if (it) {
+                    refreshList = true
+                    WhitelistDialog.showDialog(this@SettingsListActivity, supportFragmentManager)
+                }
+            }
+        })
+
         model.openPrivacyPolicy.observe(this, Observer {
             it?.let {
                 if (it) {
@@ -157,7 +177,7 @@ class SettingsListActivity : BaseActivity() {
         model.openInstructions.observe(this, Observer {
             it?.let {
                 if (it) {
-                    /* TODO Open instructions */
+                    InstructionActivity.launch(this@SettingsListActivity)
                 }
             }
         })

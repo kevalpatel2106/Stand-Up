@@ -17,7 +17,6 @@
 
 <resources>
     <string name="title_activity_settings">Settings</string>
-
     <string name="title_activity_sync_settings">Sync Settings</string>
     <string name="title_activity_dnd_settings">DND Settings</string>
     <string name="title_activity_notification_settings">Notifications Settings</string>
@@ -41,15 +40,17 @@
     <string name="dnd_pref_auto_dnd_switch_title_off">Disable</string>
     <string name="dnd_pref_auto_dnd_switch_title_on">Enable</string>
     <string name="title_card_help">Help</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="settings_name_sync">Sync</string>
     <string name="settings_name_notifications">Notifications</string>
     <string name="settings_name_dnd">DND</string>
     <string name="settings_name_daily_review">Daily Review</string>
     <string name="settings_name_logout">Logout</string>
+    <string name="settings_name_white_list">Application stops detecting your movements?</string>
+    <string name="settings_subtitle_white_list">To fix this issue, click here to white list "Stand Up" and allow application to ignore android battery optimizations.</string>
     <string name="settings_name_instructions">Instruction</string>
     <string name="settings_name_privacy">Privacy Policy</string>
-
+    <string name="whitelist_app_dialog_btn_title">Update In Settings</string>
+    <string name="whitelist_app_dialog_subtitle_text">To make sure Stand Up detects your activity perfectly</string>
+    <string name="whitelist_app_dialog_title_text">Permission Required</string>
+    <string name="title_activity_instruction">Instructions</string>
 </resources>

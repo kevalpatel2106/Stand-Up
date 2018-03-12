@@ -17,9 +17,12 @@
 
 package com.standup.app.settings.di
 
+import com.danielstone.materialaboutlibrary.adapters.MaterialAboutListAdapter
 import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.kevalpatel2106.common.db.DbModule
 import com.standup.app.settings.SettingsHook
 import com.standup.app.settings.SettingsModule
+import com.standup.app.settings.whitelisting.WhitelistingUtils
 import dagger.Module
 import dagger.Provides
 
@@ -28,12 +31,24 @@ import dagger.Provides
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module
+@Module(includes = [DbModule::class])
 internal class SettingsModule {
 
     @Provides
     @ApplicationScope
     fun provideSettingHook(): SettingsHook {
         return SettingsModule.settingsHook!!
+    }
+
+    @Provides
+    @ApplicationScope
+    fun provideAboutListAdapter(): MaterialAboutListAdapter {
+        return MaterialAboutListAdapter()
+    }
+
+    @Provides
+    @ApplicationScope
+    fun provideWhiteListUtils(): WhitelistingUtils {
+        return WhitelistingUtils()
     }
 }

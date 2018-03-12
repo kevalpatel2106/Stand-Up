@@ -20,20 +20,34 @@ package com.standup.app.settings.list
 import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
+import com.kevalpatel2106.common.application.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.SingleLiveEvent
+import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.utils.TimeUtils
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
+import com.kevalpatel2106.utils.getColorCompat
 import com.standup.app.settings.R
 import com.standup.app.settings.dailyReview.DailyReviewSettingsDetailActivity
 import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
+import com.standup.app.settings.di.DaggerSettingsComponent
 import com.standup.app.settings.dnd.DndSettingsDetailActivity
 import com.standup.app.settings.dnd.DndSettingsFragment
 import com.standup.app.settings.notifications.NotificationSettingsDetailActivity
 import com.standup.app.settings.notifications.NotificationSettingsFragment
 import com.standup.app.settings.syncing.SyncSettingsDetailActivity
 import com.standup.app.settings.syncing.SyncSettingsFragment
+import com.standup.app.settings.whitelisting.WhitelistingUtils
+import io.reactivex.Single
+import io.reactivex.SingleOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Created by Keval on 11/01/18.
@@ -41,7 +55,13 @@ import com.standup.app.settings.syncing.SyncSettingsFragment
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @SuppressLint("VisibleForTests")
-internal class SettingsViewModel : BaseViewModel() {
+internal class SettingsViewModel : BaseViewModel {
+
+    @Inject
+    internal lateinit var userActivityDao: UserActivityDao
+
+    @Inject
+    internal lateinit var whitelistingUtils: WhitelistingUtils
 
     internal var detailFragment = MutableLiveData<Fragment>()
 
@@ -52,11 +72,30 @@ internal class SettingsViewModel : BaseViewModel() {
     internal var openDailyReview = SingleLiveEvent<Boolean>()
     internal var openInstructions = SingleLiveEvent<Boolean>()
     internal var openPrivacyPolicy = SingleLiveEvent<Boolean>()
+    internal var showWhitelistDialog = SingleLiveEvent<Boolean>()
 
     internal var settingsItems = MutableLiveData<ArrayList<MaterialAboutCard>>()
 
-    init {
+    @Suppress("unused")
+    constructor() {
+        DaggerSettingsComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@SettingsViewModel)
+        init()
+    }
+
+    @OnlyForTesting
+    @VisibleForTesting
+    constructor(userActivityDao: UserActivityDao, whitelistingUtils: WhitelistingUtils) {
+        this.userActivityDao = userActivityDao
+        this.whitelistingUtils = whitelistingUtils
+        init()
+    }
+
+    private fun init() {
         settingsItems.value = ArrayList()
+        detailFragment.value = null
 
         showLogoutConformation.value = false
         openSyncSettings.value = false
@@ -65,22 +104,30 @@ internal class SettingsViewModel : BaseViewModel() {
         openDailyReview.value = false
         openInstructions.value = false
         openPrivacyPolicy.value = false
+        showWhitelistDialog.value = false
     }
 
-    internal fun prepareSettingsList() {
+    internal fun prepareSettingsList(context: Context) {
         settingsItems.value?.let {
             it.clear()
 
             it.add(getSettingsCard())
             it.add(getHelpCard())
-            it.add(getLogoutCard())
+            it.add(getLogoutCard(context))
 
             //Publish the update.
             settingsItems.value = it
+
+            addWhiteListAppCard(context, userActivityDao, whitelistingUtils).subscribe({
+                if (it) settingsItems.value?.add(1, getWhiteListCard(context))
+            }, {
+                Timber.i(it.printStackTrace().toString())
+            })
         }
     }
 
-    private fun getSettingsCard(): MaterialAboutCard {
+    @VisibleForTesting
+    internal fun getSettingsCard(): MaterialAboutCard {
         val syncSettingsItem = prepareCard(
                 icon = R.drawable.ic_sync,
                 text = R.string.settings_name_sync,
@@ -122,7 +169,8 @@ internal class SettingsViewModel : BaseViewModel() {
                 .build()
     }
 
-    private fun getLogoutCard(): MaterialAboutCard {
+    @VisibleForTesting
+    internal fun getLogoutCard(context: Context): MaterialAboutCard {
         val logoutItem = prepareCard(
                 icon = R.drawable.ic_logout,
                 text = R.string.settings_name_logout,
@@ -133,10 +181,29 @@ internal class SettingsViewModel : BaseViewModel() {
 
         return MaterialAboutCard.Builder()
                 .addItem(logoutItem)
+                .cardColor(context.getColorCompat(R.color.logout_card_background))
                 .build()
     }
 
-    private fun getHelpCard(): MaterialAboutCard {
+    @VisibleForTesting
+    internal fun getWhiteListCard(context: Context): MaterialAboutCard {
+        val whitelistItem = prepareCard(
+                icon = R.drawable.ic_battery_status,
+                text = R.string.settings_name_white_list,
+                subtext = R.string.settings_subtitle_white_list,
+                clickListener = MaterialAboutItemOnClickAction {
+                    showWhitelistDialog.value = true
+                }
+        )
+
+        return MaterialAboutCard.Builder()
+                .addItem(whitelistItem)
+                .cardColor(context.getColorCompat(R.color.white_list_card_background))
+                .build()
+    }
+
+    @VisibleForTesting
+    internal fun getHelpCard(): MaterialAboutCard {
         val instructionItem = prepareCard(
                 icon = R.drawable.ic_instruction,
                 text = R.string.settings_name_instructions,
@@ -160,7 +227,7 @@ internal class SettingsViewModel : BaseViewModel() {
                 .build()
     }
 
-    fun openSyncSettings(context: Context, isTwoPane: Boolean) {
+    internal fun openSyncSettings(context: Context, isTwoPane: Boolean) {
         if (isTwoPane) {
             detailFragment.value = SyncSettingsFragment.getNewInstance()
         } else {
@@ -168,7 +235,7 @@ internal class SettingsViewModel : BaseViewModel() {
         }
     }
 
-    fun openDNDSettings(context: Context, isTwoPane: Boolean) {
+    internal fun openDNDSettings(context: Context, isTwoPane: Boolean) {
         if (isTwoPane) {
             detailFragment.value = DndSettingsFragment.getNewInstance()
         } else {
@@ -176,7 +243,7 @@ internal class SettingsViewModel : BaseViewModel() {
         }
     }
 
-    fun openNotificationSettings(context: Context, isTwoPane: Boolean) {
+    internal fun openNotificationSettings(context: Context, isTwoPane: Boolean) {
         if (isTwoPane) {
             detailFragment.value = NotificationSettingsFragment.getNewInstance()
         } else {
@@ -184,11 +251,28 @@ internal class SettingsViewModel : BaseViewModel() {
         }
     }
 
-    fun openDailyReviewSettings(context: Context, isTwoPane: Boolean) {
+    internal fun openDailyReviewSettings(context: Context, isTwoPane: Boolean) {
         if (isTwoPane) {
             detailFragment.value = DailyReviewSettingsFragment.getNewInstance()
         } else {
             DailyReviewSettingsDetailActivity.launch(context)
         }
+    }
+
+    @VisibleForTesting
+    internal fun addWhiteListAppCard(context: Context,
+                                     userActivityDao: UserActivityDao,
+                                     whitelistingUtils: WhitelistingUtils): Single<Boolean> {
+        return Single.create(SingleOnSubscribe<Boolean> {
+
+            if (whitelistingUtils.shouldOpenWhiteListDialog(context)) {
+                val latestActivity = userActivityDao.getLatestActivity()
+                it.onSuccess(latestActivity == null ||
+                        System.currentTimeMillis() - latestActivity.eventEndTimeMills > TimeUtils.ONE_DAY_MILLISECONDS)
+            }
+
+            it.onSuccess(false)
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
     }
 }
