@@ -34,6 +34,7 @@ import com.kevalpatel2106.utils.alert
 import com.standup.app.settings.R
 import com.standup.app.settings.SettingsHook
 import com.standup.app.settings.di.DaggerSettingsComponent
+import com.standup.app.settings.instructions.InstructionActivity
 import com.standup.app.settings.whitelisting.WhitelistDialog
 import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_settings_list.*
@@ -50,6 +51,9 @@ class SettingsListActivity : BaseActivity() {
 
     @Inject
     lateinit var settingsHook: Lazy<SettingsHook>
+
+    private var refreshList: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,12 +86,14 @@ class SettingsListActivity : BaseActivity() {
                         isTwoPane = true
                 )
             }
+
+            model.prepareSettingsList(this@SettingsListActivity)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        model.prepareSettingsList(this@SettingsListActivity)
+        if (refreshList) model.prepareSettingsList(this@SettingsListActivity)
     }
 
     private fun setViewModel() {
@@ -154,6 +160,7 @@ class SettingsListActivity : BaseActivity() {
         model.showWhitelistDialog.observe(this, Observer {
             it?.let {
                 if (it) {
+                    refreshList = true
                     WhitelistDialog.showDialog(this@SettingsListActivity, supportFragmentManager)
                 }
             }
@@ -170,7 +177,7 @@ class SettingsListActivity : BaseActivity() {
         model.openInstructions.observe(this, Observer {
             it?.let {
                 if (it) {
-                    /* TODO Open instructions */
+                    InstructionActivity.launch(this@SettingsListActivity)
                 }
             }
         })

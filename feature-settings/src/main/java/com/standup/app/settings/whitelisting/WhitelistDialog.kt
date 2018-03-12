@@ -25,6 +25,8 @@ import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.kevalpatel2106.common.AnalyticsEvents
+import com.kevalpatel2106.common.logEvent
 import com.kevalpatel2106.common.view.BaseTextView
 import com.standup.app.settings.R
 
@@ -40,7 +42,6 @@ class WhitelistDialog : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
         return inflater.inflate(R.layout.dialog_white_list_info, container, false)
     }
 
@@ -49,6 +50,8 @@ class WhitelistDialog : DialogFragment() {
 
         view.findViewById<BaseTextView>(R.id.whitelist_app_dialog_btn).setOnClickListener {
             context?.let {
+                it.logEvent(AnalyticsEvents.EVENT_WHITELIST_APP)
+
                 WhitelistingUtils.requestForWhitelisting(it)
                 dialog.dismiss()
             }

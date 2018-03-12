@@ -101,6 +101,3 @@ dependencies {
     implementation(Deps.ringtonePicker, excludeGrp)
     implementation(Deps.bottomsheetPicker, excludeGrp)
 }
-
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'

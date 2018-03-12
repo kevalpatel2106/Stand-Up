@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright 2018 Keval Patel.
   ~
   ~  Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,14 +13,12 @@
   ~   See the License for the specific language governing permissions and
   ~   limitations under the License.
   ~
-  -->
-
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.standup.app.settings">
 
     <application>
-
         <activity
             android:name=".list.SettingsListActivity"
             android:resizeableActivity="true"
@@ -51,5 +49,12 @@
             android:theme="@style/AppTheme.Settings"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
+        <activity
+            android:name=".instructions.InstructionActivity"
+            android:resizeableActivity="true"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute" />
     </application>
+
 </manifest>
