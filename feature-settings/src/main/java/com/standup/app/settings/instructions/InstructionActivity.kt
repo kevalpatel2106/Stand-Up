@@ -22,13 +22,13 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.standup.app.settings.R
 import kotlinx.android.synthetic.main.activity_instruction.*
 
-class InstructionActivity : AppCompatActivity() {
+class InstructionActivity : BaseActivity() {
 
     companion object {
 
@@ -42,6 +42,8 @@ class InstructionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_instruction)
+
+        setToolbar(R.id.toolbar, R.string.title_activity_instruction, true)
 
         model = ViewModelProviders.of(this@InstructionActivity).get(InstructionViewModel::class.java)
         instruction_list.layoutManager = LinearLayoutManager(this@InstructionActivity)

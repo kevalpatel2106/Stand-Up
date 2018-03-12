@@ -16,40 +16,42 @@
   -->
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:background="@color/colorWindowBackground">
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content"
+                                             tools:background="@color/colorWindowBackground">
 
 
     <com.kevalpatel2106.common.view.BaseImageView
         android:id="@+id/instruction_title_iv"
-        android:layout_width="@dimen/spacing_large"
-        android:layout_height="@dimen/spacing_large"
+        android:layout_width="@dimen/spacing_xlarge"
+        android:layout_height="@dimen/spacing_xlarge"
+        android:background="@drawable/bg_intro_gray_round"
         android:tint="@color/instruction_title_icon_tint"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="@+id/guideline5"
-        tools:src="@drawable/common_full_open_on_phone" />
+        tools:src="@drawable/ic_intro_battery_saving"/>
 
     <com.kevalpatel2106.common.view.BaseTextView
         android:id="@+id/instruction_title_tv"
-        style="@style/MediumText.Secondary"
+        style="@style/SmallText.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_small"
         android:layout_toEndOf="@id/instruction_title_iv"
         android:textColor="@color/instruction_title_text_color"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toEndOf="@+id/instruction_title_iv"
         app:layout_constraintTop_toTopOf="@+id/guideline5"
-        tools:text="@tools:sample/cities" />
+        tools:text="@tools:sample/cities"/>
 
     <View
-        android:layout_width="0dp"
-        android:layout_height="2px"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
         android:layout_below="@id/instruction_title_tv"
         android:background="@color/divider"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -61,26 +63,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/spacing_small" />
+        app:layout_constraintGuide_begin="@dimen/spacing_small"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/spacing_small" />
+        app:layout_constraintGuide_end="@dimen/spacing_small"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/spacing_small" />
+        app:layout_constraintGuide_begin="@dimen/spacing_small"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="@dimen/spacing_small" />
+        app:layout_constraintGuide_end="@dimen/spacing_small"/>
 </android.support.constraint.ConstraintLayout>

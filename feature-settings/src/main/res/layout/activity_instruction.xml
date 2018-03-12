@@ -15,12 +15,21 @@
   ~
   -->
 
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                                        xmlns:tools="http://schemas.android.com/tools"
-                                        android:id="@+id/instruction_list"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:scrollbars="none"
-                                        tools:background="@color/colorWindowBackground"
-                                        tools:context=".instructions.InstructionActivity"
-                                        tools:listitem="@layout/row_instruction_parent" />
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_simple_toolbar"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/instruction_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        tools:background="@color/colorWindowBackground"
+        tools:context=".instructions.InstructionActivity"
+        tools:listitem="@layout/row_instruction_parent"/>
+</LinearLayout>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportHeight="36.0"
+        android:viewportWidth="36.0">
+    <group
+        android:translateX="12.6"
+        android:translateY="9.9">
+        <path
+            android:fillColor="#ffffff"
+            android:pathData="M9.338503 1.695011L7.310231 1.695011L7.310231 0.4307193C7.310231 0.1944021 7.128951 0.0053656 6.90233 0.0053656L2.857157 0.0053656C2.630537 0.0053656 2.449229 0.1944021 2.449229 0.4307193L2.449229 1.695011L0.4209855 1.695011C0.1943648 1.695011 0.01305724 1.884076 0.01305724 2.120393L0.01305724 15.63773C0.01305724 15.86225 0.1943648 16.06311 0.4209855 16.06311L9.338503 16.06311C9.565124 16.06311 9.746403 15.87404 9.746403 15.63773L9.746403 2.108566C9.746403 1.884076 9.565124 1.695011 9.338503 1.695011ZM0.8402281 2.533948L8.941916 2.533948L8.941916 15.21237L0.8402281 15.21237Z"/>
+        <path
+            android:fillColor="#ffffff"
+            android:pathData="M2.0526431 14.503422h5.6655163c0.2266207 0 0.4079283 -0.189066 0.4079283 -0.425383V4.778962c0 -0.2363172 -0.1813076 -0.4253825 -0.4079283 -0.4253825H2.0526431c-0.2266206 0 -0.4079282 0.1890653 -0.4079282 0.4253825v9.299077c0 0.236317 0.1813076 0.425383 0.4079282 0.425383zM3.2084029 9.9188617L5.7578852 6.3859307c0.067997 -0.094533 0.2266207 -0.023655 0.1926221 0.094504L5.3386426 8.9854202h1.3370673c0.090654 0 0.1359669 0.1063312 0.090654 0.1772379L4.1602262 12.813748c-0.067997 0.09453 -0.2266206 0.02363 -0.1926496 -0.09453L4.5568124 10.107927H3.2990567c-0.042906 0 -0.082161 -0.0253 -0.1013596 -0.06534 -0.019171 -0.04001 -0.015049 -0.087927 0.010706 -0.1237263z"/>
+    </group>
+</vector>

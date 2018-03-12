@@ -52,7 +52,7 @@
         <activity
             android:name=".instructions.InstructionActivity"
             android:resizeableActivity="true"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.NoActionbar"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute" />
     </application>

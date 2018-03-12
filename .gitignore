@@ -28,3 +28,4 @@
 /misc/keystore.jks
 /app/src/release/google-services.json
 /buildSrc/src/main/java/ReleaseConfig.kt
+/.idea/assetWizardSettings.xml

@@ -1,0 +1,31 @@
+<!--
+  ~  Copyright 2018 Keval Patel.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~   Unless required by applicable law or agreed to in writing, software
+  ~   distributed under the License is distributed on an "AS IS" BASIS,
+  ~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~   See the License for the specific language governing permissions and
+  ~   limitations under the License.
+  ~
+  -->
+
+<resources>
+    <string name="instruction_title_1">How to use?</string>
+    <string name="instruction_message_1">Application will track your physical activity by using the sensors from your phone. Application will fire a reminder notification based on your past activities and remind you to stand up. Please keep your phone with you.</string>
+    <string name="instruction_title_2">Counting while driving?</string>
+    <string name="instruction_message_2">Yes application will keep tracking weather you are standing or walking while you are driving. It will remind you to pull over the car and stretch your legs if you were sitting in the car for more than one hour.</string>
+    <string name="instruction_message_3">We use built in sensors from the phone, such as accelerometer and your network to calculate your movement. The accuracy will depend on how good your phone sensors are.</string>
+    <string name="instruction_title_3">Accuracy</string>
+    <string name="instruction_message_4">We suggest you to put your phone in pocket, bag, keep it in your hand. Just make sure your phone stays somewhere close to your body.</string>
+    <string name="instruction_title_4">Device placement suggestions</string>
+    <string name="instruction_title_5">Battery saving</string>
+    <string name="instruction_message_5">We use built-in sensors from your phone to track your activity. We are not using GPS or any other power hungry sensors to consume less power. Application will stop tracking your activities automatically when your in sleep (i.e. Sleep mode is enabled).</string>
+    <string name="instruction_title_6">Application stops monitoring movement?</string>
+    <string name="instruction_message_6">Due to limitations of some device or security, Stand up may forcibly. stopped. Make the app whitelisted and allow it to run in background.</string>
+</resources>
