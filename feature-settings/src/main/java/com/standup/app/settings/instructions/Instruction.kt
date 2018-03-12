@@ -17,13 +17,15 @@
 
 package com.standup.app.settings.instructions
 
+import com.bignerdranch.expandablerecyclerview.model.Parent
+
 /**
  * Created by Keval on 11/03/18.
  * Instruction POJO to display the instructions in [InstructionActivity].
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-data class Instruction(
+internal data class Instruction(
 
         /**
          * Title of the instruction. (e.g. How the activity recognition works?)
@@ -40,4 +42,13 @@ data class Instruction(
          * Icon to display besides of the [heading]
          */
         val icon: Int
-)
+) : Parent<String> {
+
+        override fun getChildList(): List<String> {
+                return arrayListOf(message)
+        }
+
+        override fun isInitiallyExpanded(): Boolean {
+                return false
+        }
+}

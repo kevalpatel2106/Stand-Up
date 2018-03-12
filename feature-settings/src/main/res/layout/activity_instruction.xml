@@ -15,14 +15,12 @@
   ~
   -->
 
-<ExpandableListView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/instruction_list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipToPadding="true"
-    android:groupIndicator="@null"
-    android:scrollbars="none"
-    tools:background="@color/colorWindowBackground"
-    tools:context=".instructions.InstructionActivity"
-    tools:listitem="@layout/row_instruction_parent" />
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                                        xmlns:tools="http://schemas.android.com/tools"
+                                        android:id="@+id/instruction_list"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:scrollbars="none"
+                                        tools:background="@color/colorWindowBackground"
+                                        tools:context=".instructions.InstructionActivity"
+                                        tools:listitem="@layout/row_instruction_parent" />

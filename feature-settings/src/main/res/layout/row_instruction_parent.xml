@@ -49,12 +49,12 @@
 
     <View
         android:layout_width="0dp"
-        android:layout_height="0.5dp"
+        android:layout_height="2px"
         android:layout_below="@id/instruction_title_tv"
         android:background="@color/divider"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toStartOf="@+id/guideline2" />
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"

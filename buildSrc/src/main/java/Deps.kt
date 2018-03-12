@@ -88,6 +88,7 @@ object Deps {
     const val bottomsheetPicker = "com.philliphsu:bottomsheetpickers:2.4.1"
     const val ringtonePicker = "com.kevalpatel2106:ringtonepicker:1.1"
     const val constraintLayout = "com.android.support.constraint:constraint-layout:${Versions.constrainLayout}"
+    const val expandableRv = "com.bignerdranch.android:expandablerecyclerview:3.0.0-RC1"
 
     //Kotlin libs
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"

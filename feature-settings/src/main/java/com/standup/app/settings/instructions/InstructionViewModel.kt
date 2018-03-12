@@ -45,6 +45,7 @@ internal class InstructionViewModel : BaseViewModel {
         init()
     }
 
+    @Suppress("unused")
     constructor(application: Application) {
         this.application = application
 

@@ -23,6 +23,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.LinearLayoutManager
 import com.standup.app.settings.R
 import kotlinx.android.synthetic.main.activity_instruction.*
 
@@ -42,14 +44,14 @@ class InstructionActivity : AppCompatActivity() {
         setContentView(R.layout.activity_instruction)
 
         model = ViewModelProviders.of(this@InstructionActivity).get(InstructionViewModel::class.java)
-
-        instruction_list.setAdapter(InstructionAdapter(this@InstructionActivity,
-                model.instructions.value!!))
+        instruction_list.layoutManager = LinearLayoutManager(this@InstructionActivity)
+        instruction_list.itemAnimator = DefaultItemAnimator()
+        instruction_list.adapter = InstructionAdapter(this@InstructionActivity,
+                model.instructions.value!!)
 
 
         model.instructions.observe(this@InstructionActivity, Observer {
-            it?.let {
-            }
+            it?.let { instruction_list.adapter.notifyDataSetChanged() }
         })
     }
 }
