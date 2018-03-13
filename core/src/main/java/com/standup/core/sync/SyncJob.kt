@@ -202,7 +202,7 @@ internal class SyncJob : AsyncJob() {
     @Inject
     internal lateinit var corePrefsProvider: CorePrefsProvider
 
-    @SuppressLint("VisibleForTests")
+    @SuppressLint("VisibleForTests", "CheckResult")
     override fun onRunJobAsync(params: Params) {
 
         //Inject dependencies
@@ -215,7 +215,7 @@ internal class SyncJob : AsyncJob() {
 
             //Add the new value to database.
             coreRepo.sendPendingActivitiesToServer()
-//                    .concatWith(coreRepo.getActivitiesToServer())
+                    .concatWith(coreRepo.getActivitiesFromServer())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe {
@@ -235,7 +235,7 @@ internal class SyncJob : AsyncJob() {
                     }, {
                         //Error.
                         //NO OP
-                        Timber.e(it.message)
+                        Timber.e(it.printStackTrace().toString())
                     })
         } else {
             //You shouldn't be syncing.

@@ -19,6 +19,7 @@ package com.standup.core.repo
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.kevalpatel2106.utils.TimeUtils
 
 /**
  * Created by Keval on 30/01/18.
@@ -30,11 +31,15 @@ data class GetActivityRequest(
 
         @SerializedName("oldestTime")
         @Expose
-        val oldestTimeStamp: Long
+        val oldestTimeStampNano: Long
 ) {
 
     init {
-        if (oldestTimeStamp > System.currentTimeMillis()) {
+        if (oldestTimeStampNano < System.currentTimeMillis()) { //TODO Think how to detect milli seconds
+            throw IllegalArgumentException("Oldest time must be in nano seconds")
+        }
+
+        if (oldestTimeStampNano > TimeUtils.convertToNano(System.currentTimeMillis())) {
             throw IllegalArgumentException("Oldest time cannot more than current time.")
         }
     }

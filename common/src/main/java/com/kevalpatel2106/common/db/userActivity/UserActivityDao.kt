@@ -70,6 +70,9 @@ interface UserActivityDao {
     @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE + " WHERE " + UserActivity.ID + " = :localId")
     fun getActivityForLocalId(localId: Long): UserActivity?
 
+    @Query("SELECT * FROM " + UserActivity.USER_ACTIVITY_TABLE + " WHERE " + UserActivity.REMOTE_ID + " = :remoteId")
+    fun getActivityForRemoteId(remoteId: Long): UserActivity?
+
     @Query("DELETE FROM " + UserActivity.USER_ACTIVITY_TABLE)
     fun nukeTable()
 }

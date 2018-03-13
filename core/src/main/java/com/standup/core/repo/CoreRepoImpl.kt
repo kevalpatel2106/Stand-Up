@@ -17,6 +17,7 @@
 
 package com.standup.core.repo
 
+import android.support.annotation.WorkerThread
 import com.kevalpatel2106.common.application.di.AppModule
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
@@ -51,6 +52,7 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
      *
      * Implementation:
      */
+    @WorkerThread
     override fun sendPendingActivitiesToServer(): Completable {
         return Completable.create {
             //Get all the pending to sync activities.
@@ -90,10 +92,12 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
         }
     }
 
-    override fun getActivitiesToServer(): Completable {
+    @WorkerThread
+    override fun getActivitiesFromServer(): Completable {
         return Completable.create {
             //Get all the pending to sync activities.
-            val oldestTimeStamp = userActivityDao.getOldestTimestamp()
+            var oldestTimeStamp = TimeUtils.convertToNano(userActivityDao.getOldestTimestamp())
+            if (oldestTimeStamp == 0L) oldestTimeStamp = TimeUtils.convertToNano(System.currentTimeMillis())
 
             //Execute the network call.
             val call = retrofit.create(CoreApiService::class.java)
@@ -113,7 +117,13 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
                                     it.isSynced = true
                                     return@map it
                                 }
-                                .forEach { userActivityDao.update(it) }
+                                .forEach {
+                                    if (userActivityDao.getActivityForRemoteId(it.remoteId) == null) {
+                                        userActivityDao.insert(it)
+                                    } else {
+                                        userActivityDao.update(it)
+                                    }
+                                }
                     }, {
                         //API call failed.
                         Timber.i("Get activity API call failed. Message: ${it.message}")
@@ -183,6 +193,7 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
 
                         //Update the end time.
                         lastActivity.eventEndTimeMills = newActivity.eventStartTimeMills
+                        lastActivity.isSynced = false
                         userActivityDao.update(lastActivity)
                     }
 
@@ -195,6 +206,7 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
                 else -> {
                     //Update the end time into the database.
                     lastActivity.eventEndTimeMills = newActivity.eventEndTimeMills
+                    lastActivity.isSynced = false
                     userActivityDao.update(lastActivity)
 
                     it.onSuccess(lastActivity.localId)

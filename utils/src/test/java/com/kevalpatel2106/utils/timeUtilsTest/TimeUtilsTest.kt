@@ -78,8 +78,8 @@ class TimeUtilsTest {
     @Test
     @Throws(Exception::class)
     fun checkCurrentMillsFromMidnight_IsInUTC() {
-        assertEquals(System.currentTimeMillis() % TimeUtils.ONE_DAY_MILLISECONDS,
-                TimeUtils.currentMillsFromMidnight())
+        assertTrue(Math.abs(System.currentTimeMillis() % TimeUtils.ONE_DAY_MILLISECONDS -
+                TimeUtils.currentMillsFromMidnight()) < 1_000 /* 1 second buffer */)
     }
 
     @Test

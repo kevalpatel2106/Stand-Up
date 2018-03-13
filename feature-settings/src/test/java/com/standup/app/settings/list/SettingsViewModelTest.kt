@@ -295,8 +295,8 @@ class SettingsViewModelTest {
                 remoteId = 0,
                 type = UserActivityType.SITTING.toString().toLowerCase(),
                 isSynced = true,
-                eventEndTimeMills = yesterDayMills,
-                eventStartTimeMills = yesterDayMills - 10_000
+                eventEndTimeMills = yesterDayMills - 1_000   /* 1 sec */,
+                eventStartTimeMills = yesterDayMills - 10_000   /* 10 sec */
         ))
         val testSubscriber = TestObserver<Boolean>()
         Mockito.`when`(mockWhitelistingUtils.shouldOpenWhiteListDialog(mockContext)).thenReturn(true)

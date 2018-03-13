@@ -27,6 +27,9 @@ import java.util.*
  */
 @OnlyForTesting
 class UserActivityDaoMockImpl(val tableItems: ArrayList<UserActivity>) : UserActivityDao {
+    override fun getActivityForRemoteId(remoteId: Long): UserActivity? {
+        TODO("not implemented")
+    }
 
     override fun getOldestTimestamp(): Long {
         return 0L //TODO

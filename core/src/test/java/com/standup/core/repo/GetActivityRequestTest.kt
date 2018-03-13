@@ -17,6 +17,7 @@
 
 package com.standup.core.repo
 
+import com.kevalpatel2106.utils.TimeUtils
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,10 +34,10 @@ class GetActivityRequestTest {
     @Test
     fun checkInit() {
         try {
-            val oldestTime = System.currentTimeMillis()
+            val oldestTime = TimeUtils.convertToNano(System.currentTimeMillis())
             val request = GetActivityRequest(oldestTime)
 
-            Assert.assertEquals(oldestTime, request.oldestTimeStamp)
+            Assert.assertEquals(oldestTime, request.oldestTimeStampNano)
         } catch (e: IllegalArgumentException) {
             Assert.fail()
         }
@@ -45,7 +46,7 @@ class GetActivityRequestTest {
     @Test
     fun checkInvalidOldestTime() {
         try {
-            val oldestTime = System.currentTimeMillis() + 10_000L /* 10 secs */
+            val oldestTime = TimeUtils.convertToNano(System.currentTimeMillis() + 10_000L /* 10 secs */)
             GetActivityRequest(oldestTime)
             Assert.fail()
         } catch (e: IllegalArgumentException) {
@@ -55,10 +56,10 @@ class GetActivityRequestTest {
 
     @Test
     fun checkEquals() {
-        val oldestTime = System.currentTimeMillis()
+        val oldestTime = TimeUtils.convertToNano(System.currentTimeMillis())
         val request = GetActivityRequest(oldestTime)
         val request1 = GetActivityRequest(oldestTime)
-        val request2 = GetActivityRequest(oldestTime - 10_000L /* 10 secs */)
+        val request2 = GetActivityRequest(oldestTime - 10_000L /* 10000 nano seconds */)
 
 
         Assert.assertEquals(request, request1)
