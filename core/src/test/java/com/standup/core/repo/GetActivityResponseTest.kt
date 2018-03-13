@@ -44,14 +44,13 @@ class GetActivityResponseTest {
     @Test
     fun checkInit_WithFilledList() {
         try {
-
             val serverActivities = java.util.ArrayList<ServerActivity>(1)
-            serverActivities.add(ServerActivity(eventStartTimeMills = System.currentTimeMillis(),
-                    eventEndTimeMills = System.currentTimeMillis() + 60_000,
+            serverActivities.add(ServerActivity(eventStartTimeNano = System.currentTimeMillis(),
+                    eventEndTimeNano = System.currentTimeMillis() + 60_000,
                     type = 1,
                     remoteId = 894375L))
-            serverActivities.add(ServerActivity(eventStartTimeMills = System.currentTimeMillis(),
-                    eventEndTimeMills = System.currentTimeMillis() + 120_000,
+            serverActivities.add(ServerActivity(eventStartTimeNano = System.currentTimeMillis(),
+                    eventEndTimeNano = System.currentTimeMillis() + 120_000,
                     type = 0,
                     remoteId = 994375L))
 
@@ -69,19 +68,44 @@ class GetActivityResponseTest {
     fun checkEquals() {
 
         val serverActivities = java.util.ArrayList<ServerActivity>(1)
-        serverActivities.add(ServerActivity(eventStartTimeMills = System.currentTimeMillis(),
-                eventEndTimeMills = System.currentTimeMillis() + 60_000,
+        serverActivities.add(ServerActivity(eventStartTimeNano = System.currentTimeMillis(),
+                eventEndTimeNano = System.currentTimeMillis() + 60_000,
                 type = 1,
                 remoteId = 894375L))
-        serverActivities.add(ServerActivity(eventStartTimeMills = System.currentTimeMillis(),
-                eventEndTimeMills = System.currentTimeMillis() + 120_000,
+        serverActivities.add(ServerActivity(eventStartTimeNano = System.currentTimeMillis(),
+                eventEndTimeNano = System.currentTimeMillis() + 120_000,
                 type = 0,
                 remoteId = 994375L))
 
         val response = GetActivityResponse(serverActivities)
         val response1 = GetActivityResponse(serverActivities)
+        val response2 = GetActivityResponse(ArrayList())
 
         Assert.assertEquals(response, response1)
+        Assert.assertNotEquals(response, response2)
+        Assert.assertNotEquals(response1, response2)
+    }
+
+    @Test
+    fun checkEqualsWithHashcode() {
+
+        val serverActivities = java.util.ArrayList<ServerActivity>(1)
+        serverActivities.add(ServerActivity(eventStartTimeNano = System.currentTimeMillis(),
+                eventEndTimeNano = System.currentTimeMillis() + 60_000,
+                type = 1,
+                remoteId = 894375L))
+        serverActivities.add(ServerActivity(eventStartTimeNano = System.currentTimeMillis(),
+                eventEndTimeNano = System.currentTimeMillis() + 120_000,
+                type = 0,
+                remoteId = 994375L))
+
+        val response = GetActivityResponse(serverActivities)
+        val response1 = GetActivityResponse(serverActivities)
+        val response2 = GetActivityResponse(ArrayList())
+
+        Assert.assertEquals(response.hashCode(), response1.hashCode())
+        Assert.assertNotEquals(response.hashCode(), response2.hashCode())
+        Assert.assertNotEquals(response1.hashCode(), response2.hashCode())
     }
 
 }

@@ -36,22 +36,23 @@ internal data class ServerActivity(
 
         @Expose
         @SerializedName("startTime")
-        var eventStartTimeMills: Long,
+        var eventStartTimeNano: Long,
 
         @Expose
         @SerializedName("endTime")
-        var eventEndTimeMills: Long,
+        var eventEndTimeNano: Long,
 
         @Expose
         @SerializedName("type")
         val type: Int
 ) {
+
     fun getUserActivity(): UserActivity {
         return UserActivity(
                 remoteId = remoteId,
                 isSynced = true,
-                eventEndTimeMills = TimeUtils.convertToMilli(eventEndTimeMills),
-                eventStartTimeMills = TimeUtils.convertToMilli(eventStartTimeMills),
+                eventEndTimeMills = TimeUtils.convertToMilli(eventEndTimeNano),
+                eventStartTimeMills = TimeUtils.convertToMilli(eventStartTimeNano),
                 type = when (type) {
                     0 -> UserActivityType.SITTING.name.toLowerCase()
                     1 -> UserActivityType.MOVING.name.toLowerCase()
