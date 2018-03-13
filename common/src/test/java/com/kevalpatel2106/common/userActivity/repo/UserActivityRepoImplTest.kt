@@ -21,7 +21,7 @@ import com.kevalpatel2106.common.userActivity.UserActivity
 import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.userActivity.UserActivityHelper
 import com.kevalpatel2106.common.userActivity.UserActivityType
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.observers.TestObserver
@@ -62,7 +62,7 @@ class UserActivityRepoImplTest {
 
             userActivityRepoImpl = UserActivityRepoImpl(
                     userActivityDao,
-                    NetworkModule().getRetrofitClient(mockWebServerManager.getBaseUrl())
+                    NetworkApi().getRetrofitClient(mockWebServerManager.getBaseUrl())
             )
         }
 
@@ -368,7 +368,7 @@ class UserActivityRepoImplTest {
 
             userActivityRepo = UserActivityRepoImpl(
                     userActivityDao,
-                    NetworkModule("78653456", "test-token").getRetrofitClient(mockWebServerManager.getBaseUrl())
+                    NetworkApi("78653456", "test-token").getRetrofitClient(mockWebServerManager.getBaseUrl())
             )
         }
 
@@ -621,7 +621,7 @@ class UserActivityRepoImplTest {
 
             userActivityRepo = UserActivityRepoImpl(
                     userActivityDao,
-                    NetworkModule("78653456", "test-token").getRetrofitClient(mockWebServerManager.getBaseUrl())
+                    NetworkApi("78653456", "test-token").getRetrofitClient(mockWebServerManager.getBaseUrl())
             )
         }
 

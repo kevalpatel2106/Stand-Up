@@ -22,7 +22,7 @@ import android.content.Context
 import com.kevalpatel2106.common.ReminderMessageProvider
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import dagger.Module
 import dagger.Provides
@@ -75,13 +75,13 @@ class AppModule(private val appContext: Application, private val baseUrl: String
     @Singleton
     @Named(WITH_TOKEN)
     fun provideRetrofitClient(userSessionManager: UserSessionManager): Retrofit =
-            NetworkModule(userSessionManager.userId.toString(), userSessionManager.token.toString())
+            NetworkApi(userSessionManager.userId.toString(), userSessionManager.token.toString())
                     .getRetrofitClient(baseUrl)
 
     @Provides
     @Singleton
     @Named(WITHOUT_TOKEN)
-    fun provideRetrofitClientWithoutToken(): Retrofit = NetworkModule().getRetrofitClient(baseUrl)
+    fun provideRetrofitClientWithoutToken(): Retrofit = NetworkApi().getRetrofitClient(baseUrl)
 
     @Provides
     @Singleton

@@ -20,10 +20,10 @@ package com.standup.app.profile.repo
 import com.kevalpatel2106.common.di.AppModule
 import com.kevalpatel2106.common.misc.AppConfig
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.common.repository.RepoBuilder
-import com.kevalpatel2106.common.repository.RepoData
-import com.kevalpatel2106.common.repository.cache.Cache
-import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
+import com.kevalpatel2106.network.repository.RepoBuilder
+import com.kevalpatel2106.network.repository.RepoData
+import com.kevalpatel2106.network.repository.cache.Cache
+import com.kevalpatel2106.network.repository.refresher.RetrofitNetworkRefresher
 import com.kevalpatel2106.utils.annotations.Repository
 import com.kevalpatel2106.utils.toFloatSafe
 import io.reactivex.Flowable

@@ -24,7 +24,7 @@ import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import com.kevalpatel2106.common.userActivity.UserActivity
 import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.userActivity.UserActivityType
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -83,7 +83,7 @@ class DashboardRepoImplTest {
                 userSettingsManager = mockUserSettingsManager,
                 userActivityDao = mockUserActivityDao,
                 corePrefsProvider = mockCorePrefsProvider,
-                retrofit = NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())
+                retrofit = NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())
         )
     }
 

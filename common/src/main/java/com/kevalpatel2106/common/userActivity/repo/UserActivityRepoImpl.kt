@@ -19,12 +19,12 @@ package com.kevalpatel2106.common.userActivity.repo
 
 import android.support.annotation.WorkerThread
 import com.kevalpatel2106.common.di.AppModule
-import com.kevalpatel2106.common.repository.RepoBuilder
 import com.kevalpatel2106.common.userActivity.UserActivity
 import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.kevalpatel2106.common.userActivity.UserActivityHelper
 import com.kevalpatel2106.common.userActivity.UserActivityType
-import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
+import com.kevalpatel2106.network.repository.RepoBuilder
+import com.kevalpatel2106.network.repository.refresher.RetrofitNetworkRefresher
 import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.Completable
 import io.reactivex.Single

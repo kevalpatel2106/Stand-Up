@@ -20,7 +20,7 @@ package com.standup.app.profile.repo
 import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.reactivex.subscribers.TestSubscriber
@@ -74,7 +74,7 @@ class UserProfileRepoImplTest {
 
         mockServerManager.startMockWebServer()
         mUserProfileRepoImpl = UserProfileRepoImpl(
-                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),
+                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))
         )
     }

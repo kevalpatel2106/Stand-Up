@@ -21,7 +21,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.userActivity.UserActivity
 import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.userActivity.UserActivityType
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.standup.app.diary.repo.DiaryRepo
@@ -60,7 +60,7 @@ class DiaryViewModelTest {
     fun setUp() {
         mockServerManager.startMockWebServer()
         diaryRepo = DiaryRepoImpl(
-                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),
+                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
                 userActivityDao
         )
     }

@@ -20,7 +20,7 @@ package com.standup.app.diary.repo
 import com.kevalpatel2106.common.userActivity.UserActivity
 import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.userActivity.UserActivityType
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.TimeUtils
 import org.junit.experimental.runners.Enclosed
@@ -55,7 +55,7 @@ internal object DiaryRepoImplHelperTest {
         userActivityDao = UserActivityDaoMockImpl(ArrayList())
 
         dairyRepoImpl = DiaryRepoImpl(
-                NetworkModule().getRetrofitClient(mockWebServerManager.getBaseUrl()),
+                NetworkApi().getRetrofitClient(mockWebServerManager.getBaseUrl()),
                 userActivityDao
         )
     }
