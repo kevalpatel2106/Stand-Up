@@ -18,15 +18,14 @@
 package com.standup.core.repo
 
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.common.db.userActivity.UserActivity
 
 /**
  * Created by Kevalpatel2106 on 27-Feb-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-data class GetActivityResponse(
+internal data class GetActivityResponse(
 
         @SerializedName("activities")
-        val activities: ArrayList<UserActivity>
+        val activities: ArrayList<ServerActivity>
 )

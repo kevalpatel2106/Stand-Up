@@ -22,8 +22,6 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
 import com.kevalpatel2106.utils.annotations.Model
 import java.io.Serializable
 
@@ -43,23 +41,15 @@ import java.io.Serializable
 ])
 data class UserActivity(
 
-        @Expose
-        @SerializedName("id")
         @ColumnInfo(name = REMOTE_ID)
         var remoteId: Long = 0,
 
-        @Expose
-        @SerializedName("startTime")
         @ColumnInfo(name = EVENT_START_TIME)
         var eventStartTimeMills: Long,
 
-        @Expose
-        @SerializedName("endTime")
         @ColumnInfo(name = EVENT_END_TIME)
         var eventEndTimeMills: Long,
 
-        @Expose
-        @SerializedName("type")
         @ColumnInfo(name = ACTIVITY_TYPE)
         val type: String,
 

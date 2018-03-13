@@ -36,7 +36,6 @@ import com.standup.core.sync.SyncJob.Companion.cancelScheduledSync
 import com.standup.core.sync.SyncJob.Companion.isSyncing
 import com.standup.core.sync.SyncJob.Companion.syncNow
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -83,14 +82,6 @@ import javax.inject.Inject
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 internal class SyncJob : AsyncJob() {
-
-    /**
-     * [CompositeDisposable] for collecting all [io.reactivex.disposables.Disposable]. It will get
-     * cleared when the service stops.
-     *
-     * @see destroyJob
-     */
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     companion object {
 
@@ -219,7 +210,6 @@ internal class SyncJob : AsyncJob() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe {
-                        compositeDisposable.add(it)
 
                         //Let others know sync started.
                         SyncJobHelper.notifySyncStarted()
@@ -251,6 +241,5 @@ internal class SyncJob : AsyncJob() {
      */
     private fun destroyJob() {
         stopJob(Result.SUCCESS)
-        compositeDisposable.dispose()
     }
 }

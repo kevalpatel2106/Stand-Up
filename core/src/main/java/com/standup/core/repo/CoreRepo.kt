@@ -20,7 +20,6 @@ package com.standup.core.repo
 import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.db.userActivity.UserActivity
 import com.kevalpatel2106.utils.annotations.Repository
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 
@@ -52,10 +51,10 @@ internal interface CoreRepo {
 
     /**
      * This method will send the data of all the pending events to the server. This is going to run
-     * on asynchronous background thread. It will return [Completable] to notify whenever sync is
-     * completed or failed.
+     * on asynchronous background thread. It will return [Single] to notify whenever sync is
+     * completed or failed. onSuccess in the single will emit the number of activities synced.
      */
-    fun sendPendingActivitiesToServer(): Completable
+    fun sendPendingActivitiesToServer(): Single<Int>
 
     /**
      * Load user activity summary for the previous day.
@@ -64,5 +63,8 @@ internal interface CoreRepo {
      */
     fun loadYesterdaySummary(): Flowable<DailyActivitySummary>
 
-    fun getActivitiesFromServer(): Completable
+    /**
+     * onSuccess in the single will emit the number of activities received from the server.
+     */
+    fun getActivitiesFromServer(): Single<Int>
 }

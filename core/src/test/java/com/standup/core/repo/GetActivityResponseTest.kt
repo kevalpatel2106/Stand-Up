@@ -17,8 +17,6 @@
 
 package com.standup.core.repo
 
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,21 +45,21 @@ class GetActivityResponseTest {
     fun checkInit_WithFilledList() {
         try {
 
-            val userActivities = java.util.ArrayList<UserActivity>(1)
-            userActivities.add(UserActivity(eventStartTimeMills = System.currentTimeMillis(),
+            val serverActivities = java.util.ArrayList<ServerActivity>(1)
+            serverActivities.add(ServerActivity(eventStartTimeMills = System.currentTimeMillis(),
                     eventEndTimeMills = System.currentTimeMillis() + 60_000,
-                    isSynced = true,
-                    type = UserActivityType.MOVING.name.toLowerCase()))
-            userActivities.add(UserActivity(eventStartTimeMills = System.currentTimeMillis(),
+                    type = 1,
+                    remoteId = 894375L))
+            serverActivities.add(ServerActivity(eventStartTimeMills = System.currentTimeMillis(),
                     eventEndTimeMills = System.currentTimeMillis() + 120_000,
-                    isSynced = true,
-                    type = UserActivityType.SITTING.name.toLowerCase()))
+                    type = 0,
+                    remoteId = 994375L))
 
-            val response = GetActivityResponse(userActivities)
+            val response = GetActivityResponse(serverActivities)
 
             Assert.assertEquals(2, response.activities.size)
-            Assert.assertEquals(UserActivityType.MOVING, response.activities[0].userActivityType)
-            Assert.assertEquals(UserActivityType.SITTING, response.activities[1].userActivityType)
+            Assert.assertEquals(1, response.activities[0].type)
+            Assert.assertEquals(0, response.activities[1].type)
         } catch (e: IllegalArgumentException) {
             Assert.fail()
         }
@@ -69,18 +67,19 @@ class GetActivityResponseTest {
 
     @Test
     fun checkEquals() {
-        val userActivities = java.util.ArrayList<UserActivity>(1)
-        userActivities.add(UserActivity(eventStartTimeMills = System.currentTimeMillis(),
-                eventEndTimeMills = System.currentTimeMillis() + 60_000,
-                isSynced = true,
-                type = UserActivityType.MOVING.name.toLowerCase()))
-        userActivities.add(UserActivity(eventStartTimeMills = System.currentTimeMillis(),
-                eventEndTimeMills = System.currentTimeMillis() + 120_000,
-                isSynced = true,
-                type = UserActivityType.SITTING.name.toLowerCase()))
 
-        val response = GetActivityResponse(userActivities)
-        val response1 = GetActivityResponse(userActivities)
+        val serverActivities = java.util.ArrayList<ServerActivity>(1)
+        serverActivities.add(ServerActivity(eventStartTimeMills = System.currentTimeMillis(),
+                eventEndTimeMills = System.currentTimeMillis() + 60_000,
+                type = 1,
+                remoteId = 894375L))
+        serverActivities.add(ServerActivity(eventStartTimeMills = System.currentTimeMillis(),
+                eventEndTimeMills = System.currentTimeMillis() + 120_000,
+                type = 0,
+                remoteId = 994375L))
+
+        val response = GetActivityResponse(serverActivities)
+        val response1 = GetActivityResponse(serverActivities)
 
         Assert.assertEquals(response, response1)
     }

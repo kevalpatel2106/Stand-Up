@@ -48,22 +48,23 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
     /**
      * This method will send the data of all the pending events to the server. This is going to run
      * on asynchronous background thread. It will return [Completable] to notify whenever sync is
-     * completed or failed.
+     * completed or failed. onSuccess in the single will emit the number of activities synced.
      *
      * Implementation:
      */
     @WorkerThread
-    override fun sendPendingActivitiesToServer(): Completable {
-        return Completable.create {
+    override fun sendPendingActivitiesToServer(): Single<Int> {
+        return Single.create {
             //Get all the pending to sync activities.
             val pendingActivities = userActivityDao.getPendingActivity(false)
 
             if (pendingActivities.isEmpty()) {
                 //No item to sync
-                it.onComplete()
+                it.onSuccess(0)
                 return@create
             }
 
+            var numOfSync = 0       //Holds the count of number of items synced.
             pendingActivities
                     .filter { it.userActivityType == UserActivityType.SITTING || it.userActivityType == UserActivityType.MOVING }
                     .forEach {
@@ -82,19 +83,24 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
                                     activityToSync.remoteId = it.id                 //Add the remote id.
                                     activityToSync.isSynced = true                  //Mark it as synced.
                                     userActivityDao.update(activityToSync)          //Save it to the database
+
+                                    numOfSync++
                                 }, {
                                     //API call failed.
                                     Timber.i("Save activity API call failed. Message: ${it.message}")
                                 })
                     }
 
-            it.onComplete()
+            it.onSuccess(numOfSync)
         }
     }
 
     @WorkerThread
-    override fun getActivitiesFromServer(): Completable {
-        return Completable.create {
+    override fun getActivitiesFromServer(): Single<Int> {
+
+        return Single.create {
+            val emitter = it
+
             //Get all the pending to sync activities.
             var oldestTimeStamp = TimeUtils.convertToNano(userActivityDao.getOldestTimestamp())
             if (oldestTimeStamp == 0L) oldestTimeStamp = TimeUtils.convertToNano(System.currentTimeMillis())
@@ -107,26 +113,33 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
                     .addRefresher(RetrofitNetworkRefresher(call))
                     .build()
                     .fetch()
-                    .doOnTerminate { it.onComplete() }
                     .map { it.data!!.activities }
                     .subscribe({
 
                         //Save every thing into the database.
                         it.filter { it.remoteId != 0L }
                                 .map {
-                                    it.isSynced = true
-                                    return@map it
+                                    return@map it.getUserActivity()
                                 }
                                 .forEach {
-                                    if (userActivityDao.getActivityForRemoteId(it.remoteId) == null) {
-                                        userActivityDao.insert(it)
-                                    } else {
-                                        userActivityDao.update(it)
+
+                                    with(userActivityDao.getActivityForRemoteId(it.remoteId)) {
+
+                                        @Suppress("IMPLICIT_CAST_TO_ANY")
+                                        if (this == null) {
+                                            userActivityDao.insert(it)
+                                        } else {
+                                            it.localId = this.localId
+                                            userActivityDao.update(it)
+                                        }
                                     }
                                 }
+
+                        emitter.onSuccess(it.size)
                     }, {
                         //API call failed.
                         Timber.i("Get activity API call failed. Message: ${it.message}")
+                        emitter.onError(it)
                     })
         }
     }

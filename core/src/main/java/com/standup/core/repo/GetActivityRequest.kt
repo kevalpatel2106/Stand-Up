@@ -27,7 +27,7 @@ import com.kevalpatel2106.utils.TimeUtils
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @Suppress("MemberVisibilityCanBePrivate")
-data class GetActivityRequest(
+internal data class GetActivityRequest(
 
         @SerializedName("oldestTime")
         @Expose
