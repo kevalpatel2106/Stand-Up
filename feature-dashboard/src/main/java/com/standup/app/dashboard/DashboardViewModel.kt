@@ -19,11 +19,11 @@ package com.standup.app.dashboard
 
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.CallbackEvent
 import com.kevalpatel2106.common.base.arch.ErrorMessage
-import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.annotations.ViewModel
 import com.kevalpatel2106.utils.rxbus.RxBus

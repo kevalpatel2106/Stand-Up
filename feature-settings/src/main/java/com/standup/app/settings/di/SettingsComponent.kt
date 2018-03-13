@@ -17,8 +17,8 @@
 
 package com.standup.app.settings.di
 
-import com.kevalpatel2106.common.application.di.AppComponent
-import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.kevalpatel2106.common.di.AppComponent
+import com.kevalpatel2106.common.di.ApplicationScope
 import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
 import com.standup.app.settings.dailyReview.DailyReviewSettingsViewModel
 import com.standup.app.settings.dnd.DndSettingsViewModel
@@ -38,7 +38,7 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [SettingsModule::class])
+@Component(dependencies = [AppComponent::class], modules = [SettingsDaggerModule::class])
 internal interface SettingsComponent {
 
     fun inject(syncSettingsViewModel: SyncSettingsViewModel)

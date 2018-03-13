@@ -20,7 +20,7 @@ package com.standup.app.diary.userActivityList
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
-import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivity
 
 /**
  * Created by Kevalpatel2106 on 22-Jan-18.

@@ -20,8 +20,8 @@ package com.standup.app.profile
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.content.SharedPreferences
-import com.kevalpatel2106.common.AppConfig
 import com.kevalpatel2106.common.Validator
+import com.kevalpatel2106.common.misc.AppConfig
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager

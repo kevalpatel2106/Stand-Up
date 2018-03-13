@@ -17,7 +17,7 @@
 
 package com.standup.app.diary.repo
 
-import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before

@@ -21,9 +21,10 @@ import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.rxbus.Event
 import com.kevalpatel2106.utils.rxbus.RxBus
@@ -31,7 +32,6 @@ import com.standup.core.CoreConfig
 import com.standup.core.CorePrefsProvider
 import com.standup.core.di.DaggerCoreComponent
 import com.standup.core.misc.AsyncJob
-import com.standup.core.repo.CoreRepo
 import com.standup.core.sync.SyncJob.Companion.cancelScheduledSync
 import com.standup.core.sync.SyncJob.Companion.isSyncing
 import com.standup.core.sync.SyncJob.Companion.syncNow
@@ -188,7 +188,7 @@ internal class SyncJob : AsyncJob() {
     internal lateinit var userSettingsManager: UserSettingsManager
 
     @Inject
-    internal lateinit var coreRepo: CoreRepo
+    internal lateinit var userActivityRepo: UserActivityRepo
 
     @Inject
     internal lateinit var corePrefsProvider: CorePrefsProvider
@@ -205,8 +205,8 @@ internal class SyncJob : AsyncJob() {
         if (SyncJobHelper.shouldRunJob(userSessionManager, userSettingsManager)) {
 
             //Add the new value to database.
-            coreRepo.sendPendingActivitiesToServer()
-                    .concatWith(coreRepo.getActivitiesFromServer())
+            userActivityRepo.sendPendingActivitiesToServer()
+                    .concatWith(userActivityRepo.getActivitiesFromServer())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe {

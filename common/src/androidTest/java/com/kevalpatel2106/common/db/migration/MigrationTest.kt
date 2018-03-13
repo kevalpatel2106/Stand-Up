@@ -23,8 +23,8 @@ import android.arch.persistence.room.testing.MigrationTestHelper
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import com.kevalpatel2106.common.db.StandUpDb
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivityType
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test

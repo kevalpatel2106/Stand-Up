@@ -19,10 +19,10 @@ package com.standup.app.diary.repo
 
 import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.application.di.AppModule
-import com.kevalpatel2106.common.db.DailyActivitySummary
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.di.AppModule
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.app.diary.repo.DiaryRepo.Companion.PAGE_SIZE
 import io.reactivex.BackpressureStrategy

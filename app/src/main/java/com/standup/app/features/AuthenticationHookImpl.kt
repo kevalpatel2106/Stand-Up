@@ -19,13 +19,13 @@ package com.standup.app.features
 
 import android.content.Context
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.standup.app.authentication.AuthenticationHook
 import com.standup.app.features.di.DaggerFeatureComponent
 import com.standup.app.main.MainActivity
-import com.standup.app.profile.ProfileModule
+import com.standup.app.profile.ProfileApi
 import com.standup.app.splash.SplashActivity
 import javax.inject.Inject
 
@@ -38,8 +38,8 @@ internal class AuthenticationHookImpl : AuthenticationHook {
 
     @OnlyForTesting
     @VisibleForTesting
-    constructor(profileModule: ProfileModule) {
-        this.profileModule = profileModule
+    constructor(profileApi: ProfileApi) {
+        this.mProfileApi = profileApi
     }
 
     constructor() {
@@ -50,10 +50,10 @@ internal class AuthenticationHookImpl : AuthenticationHook {
     }
 
     @Inject
-    internal lateinit var profileModule: ProfileModule
+    internal lateinit var mProfileApi: ProfileApi
 
     override fun openEditUserProfile(context: Context, userSessionManager: UserSessionManager) {
-        profileModule.openProfile(context, userSessionManager)
+        mProfileApi.openProfile(context, userSessionManager)
     }
 
     override fun openMainScreen(context: Context) {

@@ -18,9 +18,9 @@
 package com.standup.app.fcm
 
 import com.google.firebase.iid.FirebaseInstanceIdService
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.standup.app.authentication.AuthenticationModule
+import com.standup.app.authentication.AuthenticationApi
 import javax.inject.Inject
 
 /**
@@ -37,7 +37,7 @@ class InstanceIdService : FirebaseInstanceIdService() {
     lateinit var userSessionManager: UserSessionManager
 
     @Inject
-    lateinit var authenticationModule: AuthenticationModule
+    lateinit var mAuthenticationApi: AuthenticationApi
 
     override fun onCreate() {
         super.onCreate()
@@ -52,7 +52,7 @@ class InstanceIdService : FirebaseInstanceIdService() {
         super.onTokenRefresh()
 
         //Start syncing the new token
-        if (userSessionManager.isUserLoggedIn) authenticationModule.registerDeviceSilently(this)
+        if (userSessionManager.isUserLoggedIn) mAuthenticationApi.registerDeviceSilently(this)
     }
 
 }

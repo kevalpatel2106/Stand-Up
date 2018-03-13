@@ -68,8 +68,8 @@ kotlin kotlinOption
 dependencies {
     implementation project(':utils')
     implementation project(':network')
-    api project(':progress-button')
     implementation project(':timeline-view')
+    api project(':progress-button')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
     testImplementation(Deps.roboElectric, excludeGrp)

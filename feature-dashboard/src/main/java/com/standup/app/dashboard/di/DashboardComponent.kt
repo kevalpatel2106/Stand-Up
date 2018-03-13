@@ -17,8 +17,8 @@
 
 package com.standup.app.dashboard.di
 
-import com.kevalpatel2106.common.application.di.AppComponent
-import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.kevalpatel2106.common.di.AppComponent
+import com.kevalpatel2106.common.di.ApplicationScope
 import com.standup.app.dashboard.DashboardViewModel
 import dagger.Component
 
@@ -28,7 +28,7 @@ import dagger.Component
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [DashboardModule::class])
+@Component(dependencies = [AppComponent::class], modules = [DashboardDaggerModule::class])
 internal interface DashboardComponent {
 
     fun inject(dashboardViewModel: DashboardViewModel)

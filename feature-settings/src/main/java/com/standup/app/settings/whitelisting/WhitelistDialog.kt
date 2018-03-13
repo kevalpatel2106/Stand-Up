@@ -25,8 +25,8 @@ import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kevalpatel2106.common.AnalyticsEvents
-import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.misc.AnalyticsEvents
+import com.kevalpatel2106.common.misc.logEvent
 import com.kevalpatel2106.common.view.BaseTextView
 import com.standup.app.settings.R
 

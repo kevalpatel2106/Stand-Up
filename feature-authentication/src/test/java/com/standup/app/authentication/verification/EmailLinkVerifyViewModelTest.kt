@@ -18,7 +18,7 @@
 package com.standup.app.authentication.verification
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.common.misc.LottieJson
+import com.kevalpatel2106.common.misc.lottie.LottieJson
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.network.NetworkModule
 import com.kevalpatel2106.testutils.MockServerManager

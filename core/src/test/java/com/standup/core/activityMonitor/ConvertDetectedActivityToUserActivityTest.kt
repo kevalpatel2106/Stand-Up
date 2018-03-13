@@ -18,8 +18,8 @@
 package com.standup.core.activityMonitor
 
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.UserActivityHelper
+import com.kevalpatel2106.common.userActivity.UserActivityType
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith

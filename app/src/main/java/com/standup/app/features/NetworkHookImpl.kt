@@ -19,9 +19,9 @@ package com.standup.app.features
 
 import android.app.Application
 import android.content.Context
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.network.NetworkHook
-import com.standup.app.authentication.AuthenticationModule
+import com.standup.app.authentication.AuthenticationApi
 import com.standup.app.features.di.DaggerFeatureComponent
 import javax.inject.Inject
 
@@ -33,7 +33,7 @@ import javax.inject.Inject
 class NetworkHookImpl : NetworkHook {
 
     @Inject
-    internal lateinit var authenticationModule: AuthenticationModule
+    internal lateinit var mAuthenticationApi: AuthenticationApi
 
     @Inject
     internal lateinit var application: Application
@@ -46,7 +46,7 @@ class NetworkHookImpl : NetworkHook {
     }
 
     override fun onAuthenticationFailed() {
-        authenticationModule.logout()
+        mAuthenticationApi.logout()
     }
 
     override fun getContext(): Context = application

@@ -19,10 +19,10 @@ package com.standup.core.dailyReview
 
 import android.content.Context
 import android.support.v4.app.NotificationCompat
-import com.kevalpatel2106.common.db.DailyActivitySummary
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.common.notifications.NotificationChannelType
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivityType
 import com.standup.core.R
 import org.junit.Assert
 import org.junit.Assert.assertEquals

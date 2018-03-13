@@ -17,10 +17,10 @@
 
 package com.standup.app.diary.di
 
-import com.kevalpatel2106.common.application.di.AppModule
-import com.kevalpatel2106.common.application.di.ApplicationScope
-import com.kevalpatel2106.common.db.DbModule
-import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.di.AppModule
+import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.common.di.CommonsDaggerModule
+import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.standup.app.diary.repo.DiaryRepo
 import com.standup.app.diary.repo.DiaryRepoImpl
 import dagger.Module
@@ -33,7 +33,7 @@ import javax.inject.Named
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module(includes = [DbModule::class])
+@Module(includes = [CommonsDaggerModule::class])
 internal class DiaryModule {
 
     @Provides

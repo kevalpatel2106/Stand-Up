@@ -17,7 +17,7 @@
 
 package com.standup.app.about.repo
 
-import com.kevalpatel2106.common.application.di.AppModule
+import com.kevalpatel2106.common.di.AppModule
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.repository.RepoBuilder
 import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher

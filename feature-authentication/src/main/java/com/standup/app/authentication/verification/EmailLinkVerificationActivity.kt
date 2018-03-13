@@ -26,12 +26,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.VisibleForTesting
 import android.view.View
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.base.uiController.BaseActivity
-import com.kevalpatel2106.common.misc.LottieJson
-import com.kevalpatel2106.common.misc.playAnotherAnimation
-import com.kevalpatel2106.common.misc.playRepeatAnimation
+import com.kevalpatel2106.common.misc.lottie.LottieJson
+import com.kevalpatel2106.common.misc.lottie.playAnotherAnimation
+import com.kevalpatel2106.common.misc.lottie.playRepeatAnimation
 import com.kevalpatel2106.utils.annotations.UIController
 import com.standup.app.authentication.AuthenticationHook
 import com.standup.app.authentication.R
