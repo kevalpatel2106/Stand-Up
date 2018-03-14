@@ -39,6 +39,10 @@ class MockServerManager : Closeable {
     @SuppressLint("NewApi")
     fun getResponsesPath(): String {
 
+        if (System.getenv("CI") == "true") {
+            return "/bitrise/src/Stand-Up"
+        }
+
         @Suppress("UselessCallOnNotNull")
         val rootDirPath = Paths.get("").toAbsolutePath().toString().let {
             if (it.isNullOrEmpty()) {
