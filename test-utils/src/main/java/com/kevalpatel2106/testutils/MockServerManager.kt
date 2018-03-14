@@ -39,8 +39,14 @@ class MockServerManager : Closeable {
     @SuppressLint("NewApi")
     fun getResponsesPath(): String {
 
-        val rootDirPath = Paths.get("").toAbsolutePath().toString().let {
-            it.substring(0 until it.lastIndexOf("Stand-Up")).plus("Stand-Up")
+        @Suppress("IfThenToElvis")
+        val rootDirPath = Paths.get("").toAbsolutePath().let {
+            if (it != null) {
+                it.toString().substring(0 until it.toString().lastIndexOf("Stand-Up"))
+                        .plus("Stand-Up")
+            } else {
+                System.getenv("PROJECT_ROOT")
+            }
         }
 
         return "$rootDirPath/test-utils/src/main/res/raw"
