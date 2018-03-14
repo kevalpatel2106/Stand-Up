@@ -38,7 +38,6 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 
 /**
@@ -48,11 +47,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class DeviceRegViewModelTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-authentication")) it else it.plus("/feature-authentication")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/authentication/repo", path)
-
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
@@ -127,7 +121,7 @@ class DeviceRegViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkRegister_WithDeviceRegSuccess() {
-        mockServerManager.enqueueResponse(File("$RESPONSE_DIR_PATH/device_reg_success.json"))
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/device_reg_success.json"))
 
         deviceRegViewModel.register("test-device-id", "test-firebase-id")
 
@@ -138,7 +132,7 @@ class DeviceRegViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkRegister_WithDeviceRegFieldMissing() {
-        mockServerManager.enqueueResponse(File("$RESPONSE_DIR_PATH/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/authentication_field_missing.json"))
 
         deviceRegViewModel.register("test-device-id", "test-firebase-id")
 
@@ -149,7 +143,7 @@ class DeviceRegViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkSync_SyncFailed() {
-        mockServerManager.enqueueResponse(File("$RESPONSE_DIR_PATH/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/authentication_field_missing.json"))
 
         Assert.assertFalse(deviceRegViewModel.syncComplete.value!!)
 
@@ -163,7 +157,7 @@ class DeviceRegViewModelTest {
     @Test
     @Throws(IOException::class)
     fun checkSync_SyncComplete() {
-        mockServerManager.enqueueResponse(File("$RESPONSE_DIR_PATH/get_activity_response.json"))
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/get_activity_response.json"))
 
         Assert.assertFalse(deviceRegViewModel.syncComplete.value!!)
 

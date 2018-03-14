@@ -34,7 +34,6 @@ import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
-import java.nio.file.Paths
 import java.util.*
 
 /**
@@ -347,13 +346,6 @@ class UserActivityRepoImplTest {
 
     @RunWith(JUnit4::class)
     class SendPendingActivitiesToServerTest {
-
-        private val path = Paths.get("").toAbsolutePath().toString().let {
-            return@let if (it.endsWith("common")) it else it.plus("/common")
-        }
-        val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/common/userActivity/repo", path)
-
-
         private lateinit var userActivityRepo: UserActivityRepo
         private lateinit var userActivityDao: UserActivityDaoMockImpl
         private lateinit var mockWebServerManager: MockServerManager
@@ -469,9 +461,9 @@ class UserActivityRepoImplTest {
                     type = UserActivityType.MOVING.toString().toLowerCase())
             )
 
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/save_activity_response.json"))
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/save_activity_response.json"))
 
             val testSubscribe = TestSubscriber<Int>()
@@ -517,9 +509,9 @@ class UserActivityRepoImplTest {
                     type = UserActivityType.MOVING.toString().toLowerCase())
             )
 
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/save_activity_response.json"))
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/authentication_field_missing.json"))
 
             val testSubscribe = TestSubscriber<Int>()
@@ -566,9 +558,9 @@ class UserActivityRepoImplTest {
                     type = UserActivityType.MOVING.toString().toLowerCase())
             )
 
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/authentication_field_missing.json"))
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/authentication_field_missing.json"))
 
             val testSubscribe = TestSubscriber<Int>()
@@ -600,13 +592,6 @@ class UserActivityRepoImplTest {
 
     @RunWith(JUnit4::class)
     class GetActivitiesFromServerTest {
-
-        private val path = Paths.get("").toAbsolutePath().toString().let {
-            return@let if (it.endsWith("common")) it else it.plus("/common")
-        }
-        val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/common/userActivity/repo", path)
-
-
         private lateinit var userActivityRepo: UserActivityRepo
         private lateinit var userActivityDao: UserActivityDaoMockImpl
         private lateinit var mockWebServerManager: MockServerManager
@@ -634,7 +619,7 @@ class UserActivityRepoImplTest {
         @Test
         @Throws(Exception::class)
         fun checkWithNoActivity() {
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/get_activity_response.json"))
 
             val testSubscribe = TestSubscriber<Int>()
@@ -691,7 +676,7 @@ class UserActivityRepoImplTest {
                     type = UserActivityType.MOVING.toString().toLowerCase())
             )
 
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/get_activity_response.json"))
 
             val testSubscribe = TestSubscriber<Int>()
@@ -748,7 +733,7 @@ class UserActivityRepoImplTest {
                     type = UserActivityType.SITTING.toString().toLowerCase())
             )
 
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/get_activity_response.json"))
 
             val testSubscribe = TestSubscriber<Int>()
@@ -788,7 +773,7 @@ class UserActivityRepoImplTest {
         @Test
         @Throws(Exception::class)
         fun checkErrorFromServer() {
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/authentication_field_missing.json"))
 
             val testSubscribe = TestSubscriber<Int>()
@@ -810,7 +795,7 @@ class UserActivityRepoImplTest {
         @Test
         @Throws(Exception::class)
         fun checkEmptyResponseFromServer() {
-            mockWebServerManager.enqueueResponse(File(RESPONSE_DIR_PATH
+            mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/get_activity_empty_response.json"))
 
             val testSubscribe = TestSubscriber<Int>()

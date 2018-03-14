@@ -30,7 +30,6 @@ import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
-import java.nio.file.Paths
 
 
 /**
@@ -41,11 +40,6 @@ import java.nio.file.Paths
 
 @RunWith(JUnit4::class)
 class StringResponsesTests {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("network")) it else it.plus("/network")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", path)
-
     private val mockServerManager = MockServerManager()
     private lateinit var mNetworkApi: NetworkApi
 
@@ -63,7 +57,7 @@ class StringResponsesTests {
     @Test
     @Throws(IOException::class)
     fun checkForTheStringSuccessResponse() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"), "text/plain")
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/sucess_sample.json"), "text/plain")
 
         val response = mNetworkApi.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -72,7 +66,7 @@ class StringResponsesTests {
 
         Assert.assertTrue(response.isSuccessful)
         Assert.assertEquals(response.code(), HttpURLConnection.HTTP_OK)
-        Assert.assertEquals(response.body(), FileReader.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json")))
+        Assert.assertEquals(response.body(), FileReader.getStringFromFile(File(mockServerManager.getResponsesPath() + "/sucess_sample.json")))
         Assert.assertEquals(response.message(), "OK")
     }
 
@@ -82,7 +76,7 @@ class StringResponsesTests {
         mockServerManager.mockWebServer.enqueue(MockResponse()
                 .setResponseCode(HttpURLConnection.HTTP_FORBIDDEN)
                 .setHeader("Content-Type", "text/html")
-                .setBody(FileReader.getStringFromFile(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))))
+                .setBody(FileReader.getStringFromFile(File(mockServerManager.getResponsesPath() + "/sucess_sample.json"))))
 
         val response = mNetworkApi.getRetrofitClient(mockServerManager.getBaseUrl())
                 .create(TestApiService::class.java)

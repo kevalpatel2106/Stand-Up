@@ -26,7 +26,6 @@ import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.TimeUtils
 import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
-import java.nio.file.Paths
 import java.util.*
 
 /**
@@ -36,12 +35,6 @@ import java.util.*
  */
 @RunWith(Enclosed::class)
 internal object DiaryRepoImplHelperTest {
-
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-diary")) it else it.plus("/feature-diary")
-    }
-    val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/diary/repo", path)
-
     lateinit var dairyRepoImpl: DiaryRepoImpl
     lateinit var userActivityDao: UserActivityDaoMockImpl
     val mockWebServerManager = MockServerManager()
@@ -97,7 +90,7 @@ internal object DiaryRepoImplHelperTest {
         //Set fake db items so that we have all the 5 activities in one single day
         val cal = TimeUtils.todayMidnightCal()
 
-        for (i in 15 downTo 1) {
+        for (i in 5 downTo 1) {
             val startTime = cal.timeInMillis + (i * DIFF_BETWEEN_END_AND_START)
             val endTime = startTime + DIFF_BETWEEN_END_AND_START
 

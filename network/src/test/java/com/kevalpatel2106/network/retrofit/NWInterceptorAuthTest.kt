@@ -29,7 +29,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 /**
  * Created by Keval on 12/11/17.
@@ -40,12 +39,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class NWInterceptorAuthTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("network")) it else it.plus("/network")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", path)
-
-
     private val TEST_PREF_STRING = "TestValue"
     private val TEST_PREF_STRING_2 = "TestValue2"
 
@@ -88,7 +81,7 @@ class NWInterceptorAuthTest {
     fun checkApiRequestWithAuthHeader() {
         mNetworkApi = NetworkApi(TEST_PREF_STRING, TEST_PREF_STRING_2)
 
-        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
+        mockWebServer.enqueueResponse(File(mockWebServer.getResponsesPath() + "/sucess_sample.json"))
 
         val response = mNetworkApi.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -106,7 +99,7 @@ class NWInterceptorAuthTest {
     fun checkApiRequestWithoutUserId() {
         mNetworkApi = NetworkApi(null, TEST_PREF_STRING_2)
 
-        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
+        mockWebServer.enqueueResponse(File(mockWebServer.getResponsesPath() + "/sucess_sample.json"))
 
         val response = mNetworkApi.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -121,7 +114,7 @@ class NWInterceptorAuthTest {
     fun checkApiRequestWithoutToken() {
         mNetworkApi = NetworkApi(TEST_PREF_STRING_2, null)
 
-        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
+        mockWebServer.enqueueResponse(File(mockWebServer.getResponsesPath() + "/sucess_sample.json"))
 
         val response = mNetworkApi.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -136,7 +129,7 @@ class NWInterceptorAuthTest {
     fun checkApiRequestWithoutAuthHeader() {
         mNetworkApi = NetworkApi(TEST_PREF_STRING, TEST_PREF_STRING_2)
 
-        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
+        mockWebServer.enqueueResponse(File(mockWebServer.getResponsesPath() + "/sucess_sample.json"))
 
         val response = mNetworkApi.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -151,7 +144,7 @@ class NWInterceptorAuthTest {
     fun checkApiWithNullUserSession() {
         mNetworkApi = NetworkApi(TEST_PREF_STRING, TEST_PREF_STRING_2)
 
-        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
+        mockWebServer.enqueueResponse(File(mockWebServer.getResponsesPath() + "/sucess_sample.json"))
 
         mNetworkApi = NetworkApi(null, null)
         val response = mNetworkApi.getRetrofitClient(mockWebServer.getBaseUrl())

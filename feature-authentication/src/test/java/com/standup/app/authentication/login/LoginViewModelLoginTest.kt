@@ -32,7 +32,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 /**
  * Created by Keval on 20/11/17.
@@ -42,11 +41,6 @@ import java.nio.file.Paths
 @RunWith(JUnit4::class)
 //TODO check user session manager also
 class LoginViewModelLoginTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-authentication")) it else it.plus("/feature-authentication")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/authentication/repo", path)
-
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
@@ -128,7 +122,7 @@ class LoginViewModelLoginTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateLoginSuccess() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/user_login_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/user_login_success.json"))
 
         //Make the api call to the mock server
         loginViewModel.performSignIn("test@example.com", "1234567989")
@@ -146,7 +140,7 @@ class LoginViewModelLoginTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateLoginFieldMissing() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/authentication_field_missing.json"))
 
         //Make the api call to the mock server
         loginViewModel.performSignIn("test@example.com", "1234567989")

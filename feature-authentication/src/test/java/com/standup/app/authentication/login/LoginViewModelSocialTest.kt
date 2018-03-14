@@ -35,7 +35,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 /**
  * Created by Keval on 20/11/17.
@@ -44,11 +43,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class LoginViewModelSocialTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-authentication")) it else it.plus("/feature-authentication")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/authentication/repo", path)
-
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
@@ -121,7 +115,7 @@ class LoginViewModelSocialTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateSocialUserSignUpSuccess() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_sign_up_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/social_user_sign_up_success.json"))
 
         //Make the api call to the mock server
         val signInRequest = SignUpRequest("test@example.com", "Test User", null, null)
@@ -140,7 +134,7 @@ class LoginViewModelSocialTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateSocialUserLoginSuccess() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/social_user_login_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/social_user_login_success.json"))
 
         //Make the api call to the mock server
         val signInRequest = SignUpRequest("test@example.com", "Test User", null, null)
@@ -159,7 +153,7 @@ class LoginViewModelSocialTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateSocialUserFieldMissing() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/authentication_field_missing.json"))
 
         //Make the api call to the mock server
         loginViewModel.authenticateSocialUser(SignUpRequest("test@example.com", "Test User", null, null))

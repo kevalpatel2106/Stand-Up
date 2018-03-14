@@ -54,6 +54,7 @@ internal class DiaryRepoImpl @Inject constructor(private val userActivityRepo: U
      *
      * @see loadUserActivityForDayFromCalender
      */
+    @Suppress("NAME_SHADOWING")
     @SuppressLint("CheckResult")
     override fun loadDaysSummaryList(beforeMills: Long): Flowable<DailyActivitySummary> {
 

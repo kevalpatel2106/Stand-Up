@@ -30,7 +30,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 /**
  * Created by Keval on 12/11/17.
@@ -41,11 +40,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class NWInterceptorCacheTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("network")) it else it.plus("/network")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/kevalpatel2106/network/responses", path)
-
     private val mockWebServer = MockServerManager()
     private lateinit var mNetworkApi: NetworkApi
 
@@ -84,7 +78,7 @@ class NWInterceptorCacheTest {
     @Test
     @Throws(IOException::class)
     fun checkNoCacheHeader() {
-        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
+        mockWebServer.enqueueResponse(File(mockWebServer.getResponsesPath() + "/sucess_sample.json"))
 
         val response = mNetworkApi.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)
@@ -98,7 +92,7 @@ class NWInterceptorCacheTest {
     @Test
     @Throws(IOException::class)
     fun checkCacheHeader() {
-        mockWebServer.enqueueResponse(File(RESPONSE_DIR_PATH + "/sucess_sample.json"))
+        mockWebServer.enqueueResponse(File(mockWebServer.getResponsesPath() + "/sucess_sample.json"))
 
         val response = mNetworkApi.getRetrofitClient(mockWebServer.getBaseUrl())
                 .create(TestApiService::class.java)

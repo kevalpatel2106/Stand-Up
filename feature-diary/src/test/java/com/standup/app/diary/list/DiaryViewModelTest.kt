@@ -34,6 +34,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.io.File
 import java.util.*
 
 
@@ -58,26 +59,30 @@ class DiaryViewModelTest {
     private val mockServerManager = MockServerManager()
     private lateinit var diaryRepo: DiaryRepo
 
+    private lateinit var dairyViewModel: DiaryViewModel
+
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
+
+        mockServerManager.enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                + "/get_activity_empty_response.json"))
+
         val mockUserActivityRepo = UserActivityRepoImpl(
-                userActivityDao = DiaryRepoImplHelperTest.userActivityDao,
+                userActivityDao = userActivityDao,
                 retrofit = NetworkApi("test-user-id", "test-token")
-                        .getRetrofitClient(DiaryRepoImplHelperTest.mockWebServerManager.getBaseUrl())
+                        .getRetrofitClient(mockServerManager.getBaseUrl())
         )
 
-        DiaryRepoImplHelperTest.dairyRepoImpl = DiaryRepoImpl(
+        diaryRepo = DiaryRepoImpl(
                 userActivityRepo = mockUserActivityRepo,
-                userActivityDao = DiaryRepoImplHelperTest.userActivityDao
+                userActivityDao = userActivityDao
         )
+        dairyViewModel = DiaryViewModel(diaryRepo)
     }
 
     @Test
     fun checkLoadNextPageWithEmptyDb() {
-
-        val dairyViewModel = DiaryViewModel(diaryRepo)
-
         Assert.assertTrue(dairyViewModel.noMoreData.value!!)
         Assert.assertFalse(dairyViewModel.blockUi.value!!)
         Assert.assertTrue(dairyViewModel.activities.value!!.isEmpty())

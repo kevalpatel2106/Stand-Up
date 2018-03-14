@@ -43,8 +43,9 @@ class LoadUserActivityByDayTest {
 
     @Test
     fun checkLoadUserActivityByDay_WithEmptyDb() {
-        DiaryRepoImplHelperTest.mockWebServerManager.enqueueResponse(File(DiaryRepoImplHelperTest.RESPONSE_DIR_PATH
-                + "/load_days_activity_empty_response.json"))
+        DiaryRepoImplHelperTest.mockWebServerManager
+                .enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                        + "/get_activity_empty_response.json"))
 
         val testSubscriber = TestSubscriber<ArrayList<UserActivity>>()
         DiaryRepoImplHelperTest.dairyRepoImpl.loadUserActivityByDay(12, 2, 2018)

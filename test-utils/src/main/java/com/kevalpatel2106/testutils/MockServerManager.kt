@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.testutils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -24,6 +25,7 @@ import java.io.Closeable
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.nio.file.Paths
 
 /**
  * Created by Keval on 05/12/17.
@@ -33,6 +35,19 @@ import java.net.HttpURLConnection
 class MockServerManager : Closeable {
 
     lateinit var mockWebServer: MockWebServer
+
+    @SuppressLint("NewApi")
+    fun getResponsesPath(): String {
+        return String.format(
+                "%s/src/main/res/raw",
+                Paths.get("").toAbsolutePath().toString().let {
+                    if (!it.endsWith("Stand-Up")) {
+                        it.substring(0..it.lastIndexOf("\\")).plus("/test-utils")
+                    } else {
+                        it.plus("/test-utils")
+                    }
+                })
+    }
 
     /**
      * Start mock web server for the wikipedia api.
