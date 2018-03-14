@@ -49,7 +49,6 @@ internal class DashboardDaggerModule {
                              @Named(AppModule.WITH_TOKEN) retrofit: Retrofit): DashboardRepo = DashboardRepoImpl(application,
             userSettingsManager,
             userActivityDao,
-            CorePrefsProvider(sharedPrefsProvider),
-            retrofit
+            CorePrefsProvider(sharedPrefsProvider)
     )
 }

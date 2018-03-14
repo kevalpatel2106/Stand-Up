@@ -21,11 +21,13 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.userActivity.UserActivity
 import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepoImpl
 import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.standup.app.diary.repo.DiaryRepo
 import com.standup.app.diary.repo.DiaryRepoImpl
+import com.standup.app.diary.repo.DiaryRepoImplHelperTest
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -59,9 +61,15 @@ class DiaryViewModelTest {
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
-        diaryRepo = DiaryRepoImpl(
-                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
-                userActivityDao
+        val mockUserActivityRepo = UserActivityRepoImpl(
+                userActivityDao = DiaryRepoImplHelperTest.userActivityDao,
+                retrofit = NetworkApi("test-user-id", "test-token")
+                        .getRetrofitClient(DiaryRepoImplHelperTest.mockWebServerManager.getBaseUrl())
+        )
+
+        DiaryRepoImplHelperTest.dairyRepoImpl = DiaryRepoImpl(
+                userActivityRepo = mockUserActivityRepo,
+                userActivityDao = DiaryRepoImplHelperTest.userActivityDao
         )
     }
 

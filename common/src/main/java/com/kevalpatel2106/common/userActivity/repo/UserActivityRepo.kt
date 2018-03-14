@@ -18,6 +18,7 @@
 package com.kevalpatel2106.common.userActivity.repo
 
 import com.kevalpatel2106.common.userActivity.UserActivity
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 /**
@@ -54,10 +55,10 @@ interface UserActivityRepo {
      * on asynchronous background thread. It will return [Single] to notify whenever sync is
      * completed or failed. onSuccess in the single will emit the number of activities synced.
      */
-    fun sendPendingActivitiesToServer(): Single<Int>
+    fun sendPendingActivitiesToServer(): Flowable<Int>
 
     /**
      * onSuccess in the single will emit the number of activities received from the server.
      */
-    fun getActivitiesFromServer(): Single<Int>
+    fun getActivitiesFromServer(): Flowable<Int>
 }

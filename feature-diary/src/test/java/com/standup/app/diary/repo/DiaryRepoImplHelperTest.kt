@@ -20,6 +20,7 @@ package com.standup.app.diary.repo
 import com.kevalpatel2106.common.userActivity.UserActivity
 import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
 import com.kevalpatel2106.common.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepoImpl
 import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.TimeUtils
@@ -54,9 +55,15 @@ internal object DiaryRepoImplHelperTest {
         //Mock database table
         userActivityDao = UserActivityDaoMockImpl(ArrayList())
 
+        val mockUserActivityRepo = UserActivityRepoImpl(
+                userActivityDao = userActivityDao,
+                retrofit = NetworkApi("test-user-id", "test-token")
+                        .getRetrofitClient(mockWebServerManager.getBaseUrl())
+        )
+
         dairyRepoImpl = DiaryRepoImpl(
-                NetworkApi().getRetrofitClient(mockWebServerManager.getBaseUrl()),
-                userActivityDao
+                userActivityRepo = mockUserActivityRepo,
+                userActivityDao = userActivityDao
         )
     }
 
