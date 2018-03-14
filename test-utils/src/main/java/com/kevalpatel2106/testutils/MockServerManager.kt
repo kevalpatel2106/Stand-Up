@@ -39,13 +39,13 @@ class MockServerManager : Closeable {
     @SuppressLint("NewApi")
     fun getResponsesPath(): String {
 
-        @Suppress("IfThenToElvis")
-        val rootDirPath = Paths.get("").toAbsolutePath().let {
-            if (it != null) {
-                it.toString().substring(0 until it.toString().lastIndexOf("Stand-Up"))
-                        .plus("Stand-Up")
-            } else {
+        @Suppress("UselessCallOnNotNull")
+        val rootDirPath = Paths.get("").toAbsolutePath().toString().let {
+            if (it.isNullOrEmpty()) {
                 System.getenv("PROJECT_ROOT")
+            } else {
+                it.substring(0 until it.lastIndexOf("Stand-Up"))
+                        .plus("Stand-Up")
             }
         }
 
