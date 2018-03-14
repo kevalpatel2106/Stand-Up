@@ -40,7 +40,7 @@ class MockServerManager : Closeable {
     fun getResponsesPath(): String {
 
         if (System.getenv("CI") == "true") {
-            return "/bitrise/src/Stand-Up/test-utils/src/main/res/raw"
+            return "/bitrise/src/test-utils/src/main/res/raw"
         }
 
         @Suppress("UselessCallOnNotNull")
