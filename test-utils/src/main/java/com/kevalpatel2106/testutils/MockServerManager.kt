@@ -38,15 +38,12 @@ class MockServerManager : Closeable {
 
     @SuppressLint("NewApi")
     fun getResponsesPath(): String {
-        return String.format(
-                "%s/src/main/res/raw",
-                Paths.get("").toAbsolutePath().toString().let {
-                    if (!it.endsWith("Stand-Up")) {
-                        it.substring(0..it.lastIndexOf("\\")).plus("/test-utils")
-                    } else {
-                        it.plus("/test-utils")
-                    }
-                })
+
+        val rootDirPath = Paths.get("").toAbsolutePath().toString().let {
+            it.substring(0 until it.lastIndexOf("Stand-Up")).plus("Stand-Up")
+        }
+
+        return "$rootDirPath/test-utils/src/main/res/raw"
     }
 
     /**
