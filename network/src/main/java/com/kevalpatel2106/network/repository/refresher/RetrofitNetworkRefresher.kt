@@ -17,6 +17,8 @@
 
 package com.kevalpatel2106.network.repository.refresher
 
+import android.annotation.SuppressLint
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.network.repository.RepoData
 import com.kevalpatel2106.network.repository.SourceType
 import com.kevalpatel2106.network.retrofit.NetworkConfig
@@ -28,11 +30,12 @@ import retrofit2.Response
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class RetrofitNetworkRefresher<out T>(private val call: Call<T>) : Refresher<T> {
+class RetrofitNetworkRefresher<T>(private val call: Call<T>) : Refresher<T> {
 
     /**
      * Read from the cache. This is the internal method not part of the public api.
      */
+    @SuppressLint("VisibleForTests")
     override fun read(): RepoData<T> {
         val response = call.execute()
 
@@ -52,7 +55,8 @@ class RetrofitNetworkRefresher<out T>(private val call: Call<T>) : Refresher<T> 
         }
     }
 
-    private fun parseErrorBody(errorCode: Int, response: Response<T>): String {
+    @VisibleForTesting
+    internal fun parseErrorBody(errorCode: Int, response: Response<T>): String {
         return response.message() ?: NetworkConfig.ERROR_MESSAGE_SOMETHING_WRONG
     }
 }

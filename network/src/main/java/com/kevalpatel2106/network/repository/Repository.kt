@@ -34,7 +34,7 @@ class Repository<T> internal constructor() {
 
     internal val mCaches: ArrayList<Cache<T>> = ArrayList()
 
-    internal val mRefresher: ArrayList<Refresher<T>> = ArrayList()
+    internal var mRefresher: Refresher<T>? = null
 
     fun fetch(): Flowable<RepoData<T>> {
 
@@ -62,27 +62,21 @@ class Repository<T> internal constructor() {
             }
 
             //Check for the data refresher.
-            for (it in mRefresher) {
-                val freshData = it.read()
+            val freshData = mRefresher!!.read()
+            if (freshData.isError) {
+                //Error occurred.
+                //May be network is down? OR bad response from the server
+                //Send error message and error code.
+                emitter.onError(RefreshException(freshData.errorMessage, freshData.errorCode))
+            } else {
+                //We hit the cache.
+                //Pass the result.
+                freshData.source = SourceType.NETWORK
 
-                if (freshData.isError) {
-                    //Error occurred.
-                    //May be network is down? OR bad response from the server
-                    //Send error message and error code.
-                    emitter.onError(RefreshException(freshData.errorMessage, freshData.errorCode))
-                } else {
-                    //We hit the cache.
-                    //Pass the result.
-                    freshData.source = SourceType.NETWORK
+                emitter.onNext(freshData)
 
-                    emitter.onNext(freshData)
-
-                    //Write the data to all the cache
-                    mCaches.forEach { it.write(freshData.data) }
-
-                    //No need the check the next refresher
-                    break
-                }
+                //Write the data to all the cache
+                mCaches.forEach { it.write(freshData.data) }
             }
 
             emitter.onComplete()

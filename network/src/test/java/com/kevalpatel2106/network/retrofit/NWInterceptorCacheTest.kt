@@ -18,6 +18,7 @@
 package com.kevalpatel2106.network.retrofit
 
 import com.kevalpatel2106.network.NetworkApi
+import com.kevalpatel2106.network.TestApiService
 import com.kevalpatel2106.testutils.MockServerManager
 import okhttp3.Protocol
 import okhttp3.Request

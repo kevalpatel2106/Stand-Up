@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.network.repository
 
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.network.repository.cache.Cache
 import com.kevalpatel2106.network.repository.refresher.Refresher
 
@@ -27,7 +28,8 @@ import com.kevalpatel2106.network.repository.refresher.Refresher
  */
 class RepoBuilder<T> {
 
-    private val mRepository: Repository<T> = Repository()
+    @VisibleForTesting
+    internal val mRepository: Repository<T> = Repository()
 
     fun addCache(cache: Cache<T>): RepoBuilder<T> {
         mRepository.mCaches.add(cache)
@@ -35,12 +37,12 @@ class RepoBuilder<T> {
     }
 
     fun addRefresher(refresher: Refresher<T>): RepoBuilder<T> {
-        mRepository.mRefresher.add(refresher)
+        mRepository.mRefresher = refresher
         return this
     }
 
     fun build(): Repository<T> {
-        if (mRepository.mRefresher.isEmpty() && mRepository.mCaches.isEmpty())
+        if (mRepository.mRefresher == null && mRepository.mCaches.isEmpty())
             throw IllegalStateException("No cache or refresher added.")
         return mRepository
     }

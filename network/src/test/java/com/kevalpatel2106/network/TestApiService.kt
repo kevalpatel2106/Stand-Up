@@ -15,7 +15,7 @@
  *
  */
 
-package com.kevalpatel2106.network.retrofit
+package com.kevalpatel2106.network
 
 import retrofit2.Call
 import retrofit2.http.GET
@@ -30,6 +30,9 @@ internal interface TestApiService {
 
     @GET("test")
     fun callBase(): Call<TestData>
+
+    @GET("test")
+    fun callBaseWithSuccessSample(): Call<SuccessSampleData>
 
     @GET("test")
     fun callBaseString(): Call<String>
