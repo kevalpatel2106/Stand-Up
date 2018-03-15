@@ -21,8 +21,8 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.kevalpatel2106.common.application.BaseApplication
-import com.standup.app.authentication.AuthenticationModule
+import com.kevalpatel2106.common.base.BaseApplication
+import com.standup.app.authentication.AuthenticationApi
 import dagger.Lazy
 import timber.log.Timber
 import javax.inject.Inject
@@ -42,7 +42,7 @@ class FcmMessagingService : FirebaseMessagingService() {
     lateinit var firebaseServiceHelper: FcmMessagingServiceHelper
 
     @Inject
-    lateinit var authenticationModule: Lazy<AuthenticationModule>
+    lateinit var mAuthenticationApi: Lazy<AuthenticationApi>
 
     private val updateNotificationListener = Observer<String> {
         it?.let { UpdateNotification.notify(this.applicationContext, it) }
@@ -53,7 +53,7 @@ class FcmMessagingService : FirebaseMessagingService() {
     }
 
     private val authenticationNotificationListener = Observer<String> {
-        it?.let { authenticationModule.get().fireEmailVerifiedNotification(this.applicationContext, it) }
+        it?.let { mAuthenticationApi.get().fireEmailVerifiedNotification(this.applicationContext, it) }
     }
 
     override fun onCreate() {

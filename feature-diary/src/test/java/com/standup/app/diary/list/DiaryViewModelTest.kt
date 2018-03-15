@@ -18,20 +18,23 @@
 package com.standup.app.diary.list
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.common.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
+import com.kevalpatel2106.common.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepoImpl
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.standup.app.diary.repo.DiaryRepo
 import com.standup.app.diary.repo.DiaryRepoImpl
+import com.standup.app.diary.repo.DiaryRepoImplHelperTest
 import junit.framework.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.io.File
 import java.util.*
 
 
@@ -56,20 +59,30 @@ class DiaryViewModelTest {
     private val mockServerManager = MockServerManager()
     private lateinit var diaryRepo: DiaryRepo
 
+    private lateinit var dairyViewModel: DiaryViewModel
+
     @Before
     fun setUp() {
         mockServerManager.startMockWebServer()
-        diaryRepo = DiaryRepoImpl(
-                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),
-                userActivityDao
+
+        mockServerManager.enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                + "/get_activity_empty_response.json"))
+
+        val mockUserActivityRepo = UserActivityRepoImpl(
+                userActivityDao = userActivityDao,
+                retrofit = NetworkApi("test-user-id", "test-token")
+                        .getRetrofitClient(mockServerManager.getBaseUrl())
         )
+
+        diaryRepo = DiaryRepoImpl(
+                userActivityRepo = mockUserActivityRepo,
+                userActivityDao = userActivityDao
+        )
+        dairyViewModel = DiaryViewModel(diaryRepo)
     }
 
     @Test
     fun checkLoadNextPageWithEmptyDb() {
-
-        val dairyViewModel = DiaryViewModel(diaryRepo)
-
         Assert.assertTrue(dairyViewModel.noMoreData.value!!)
         Assert.assertFalse(dairyViewModel.blockUi.value!!)
         Assert.assertTrue(dairyViewModel.activities.value!!.isEmpty())

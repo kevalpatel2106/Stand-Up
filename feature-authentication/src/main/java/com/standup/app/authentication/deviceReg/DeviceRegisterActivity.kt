@@ -27,17 +27,21 @@ import android.os.Handler
 import android.support.annotation.VisibleForTesting
 import android.view.View
 import com.google.firebase.iid.FirebaseInstanceId
-import com.kevalpatel2106.common.AnalyticsEvents
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
-import com.kevalpatel2106.common.logEvent
-import com.kevalpatel2106.common.misc.LottieJson
-import com.kevalpatel2106.common.misc.playAnotherAnimation
-import com.kevalpatel2106.common.misc.playAnotherRepeatAnimation
+import com.kevalpatel2106.common.misc.AnalyticsEvents
+import com.kevalpatel2106.common.misc.logEvent
+import com.kevalpatel2106.common.misc.lottie.LottieJson
+import com.kevalpatel2106.common.misc.lottie.playAnotherAnimation
+import com.kevalpatel2106.common.misc.lottie.playAnotherRepeatAnimation
 import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.userActivity.UserActivityDao
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepoImpl
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.utils.Utils
 import com.standup.app.authentication.AuthenticationHook
+import com.standup.app.authentication.BuildConfig
 import com.standup.app.authentication.R
 import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.authentication.verification.VerifyEmailActivity
@@ -59,6 +63,9 @@ class DeviceRegisterActivity : BaseActivity() {
     @Inject
     internal lateinit var authenticationHook: AuthenticationHook
 
+    @Inject
+    internal lateinit var userActivityDao: UserActivityDao
+
     @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +80,6 @@ class DeviceRegisterActivity : BaseActivity() {
 
 
         setModel()
-        model.register(Utils.getDeviceId(this@DeviceRegisterActivity), FirebaseInstanceId.getInstance().token)
     }
 
     @Suppress("ObjectLiteralToLambda")
@@ -85,13 +91,27 @@ class DeviceRegisterActivity : BaseActivity() {
                 //Recreate the app component to use all the new session tokens
                 (application as BaseApplication).recreateAppComponent()
 
-                device_reg_tv.text = getString(R.string.set_up_complete)
-                device_reg_iv.playAnotherAnimation(LottieJson.CORRECT_TICK_INSIDE_GREEN_CIRCLE)
-
-                Handler().postDelayed({ navigateToNextScreen() }, 2_000L /* 2 seconds delay */)
+                device_reg_tv.text = getString(R.string.set_up_syncing)
 
                 //Log the analytics event
                 this.logEvent(AnalyticsEvents.EVENT_DEVICE_REGISTERED)
+
+                //Start syncing old data.
+                model.syncOldActivities(UserActivityRepoImpl(userActivityDao,
+                        NetworkApi(
+                                userId = userSessionManager.userId.toString(),
+                                token = userSessionManager.token
+                        ).getRetrofitClient(BuildConfig.BASE_URL)))
+            }
+        })
+        model.syncComplete.observe(this@DeviceRegisterActivity, Observer {
+            it?.let {
+                if (it) {
+                    device_reg_tv.text = getString(R.string.set_up_complete)
+
+                    device_reg_iv.playAnotherAnimation(LottieJson.CORRECT_TICK_INSIDE_GREEN_CIRCLE)
+                    Handler().postDelayed({ navigateToNextScreen() }, 2_000L /* 2 seconds delay */)
+                }
             }
         })
         model.blockUi.observe(this@DeviceRegisterActivity, Observer {
@@ -125,6 +145,10 @@ class DeviceRegisterActivity : BaseActivity() {
                 })
             }
         })
+        model.register(
+                deviceId = Utils.getDeviceId(this@DeviceRegisterActivity),
+                fcmId = FirebaseInstanceId.getInstance().token
+        )
     }
 
     /**

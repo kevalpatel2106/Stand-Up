@@ -19,11 +19,11 @@ package com.standup.app.diary.userActivityList
 
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.misc.LottieJson
+import com.kevalpatel2106.common.misc.lottie.LottieJson
+import com.kevalpatel2106.common.userActivity.UserActivity
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.annotations.ViewModel
 import com.standup.app.diary.R

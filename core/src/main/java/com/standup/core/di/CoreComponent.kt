@@ -17,8 +17,8 @@
 
 package com.standup.core.di
 
-import com.kevalpatel2106.common.application.di.AppComponent
-import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.kevalpatel2106.common.di.AppComponent
+import com.kevalpatel2106.common.di.ApplicationScope
 import com.standup.core.CorePrefsProvider
 import com.standup.core.SystemEventReceiver
 import com.standup.core.activityMonitor.ActivityMonitorJob
@@ -38,7 +38,7 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [CoreModule::class])
+@Component(dependencies = [AppComponent::class], modules = [CoreDaggerModule::class])
 internal interface CoreComponent {
 
     fun inject(activityMonitorJob: ActivityMonitorJob)

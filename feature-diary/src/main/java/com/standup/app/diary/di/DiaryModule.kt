@@ -17,28 +17,29 @@
 
 package com.standup.app.diary.di
 
-import com.kevalpatel2106.common.application.di.AppModule
-import com.kevalpatel2106.common.application.di.ApplicationScope
-import com.kevalpatel2106.common.db.DbModule
-import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.common.di.CommonsDaggerModule
+import com.kevalpatel2106.common.userActivity.UserActivityDao
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepo
 import com.standup.app.diary.repo.DiaryRepo
 import com.standup.app.diary.repo.DiaryRepoImpl
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
-import javax.inject.Named
 
 /**
  * Created by Keval on 10/01/18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-@Module(includes = [DbModule::class])
+@Module(includes = [CommonsDaggerModule::class])
 internal class DiaryModule {
 
     @Provides
     @ApplicationScope
     fun provideDiaryRepo(userActivityDao: UserActivityDao,
-                         @Named(AppModule.WITH_TOKEN) retrofit: Retrofit): DiaryRepo = DiaryRepoImpl(retrofit, userActivityDao)
+                         userActivityRepo: UserActivityRepo): DiaryRepo = DiaryRepoImpl(
+            userActivityRepo = userActivityRepo,
+            userActivityDao = userActivityDao
+    )
 
 }

@@ -18,9 +18,9 @@
 package com.standup.app.features
 
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
-import com.standup.app.authentication.AuthenticationModule
+import com.standup.app.authentication.AuthenticationApi
 import com.standup.app.features.di.DaggerFeatureComponent
 import com.standup.app.settings.SettingsHook
 import javax.inject.Inject
@@ -33,12 +33,12 @@ import javax.inject.Inject
 internal class SettingsHookImpl : SettingsHook {
 
     @Inject
-    lateinit var authenticationModule: AuthenticationModule
+    lateinit var mAuthenticationApi: AuthenticationApi
 
     @OnlyForTesting
     @VisibleForTesting
-    constructor(authenticationModule: AuthenticationModule) {
-        this.authenticationModule = authenticationModule
+    constructor(authenticationApi: AuthenticationApi) {
+        this.mAuthenticationApi = authenticationApi
     }
 
     constructor() {
@@ -49,7 +49,7 @@ internal class SettingsHookImpl : SettingsHook {
     }
 
     override fun logout() {
-        authenticationModule.logout()
+        mAuthenticationApi.logout()
     }
 
 }

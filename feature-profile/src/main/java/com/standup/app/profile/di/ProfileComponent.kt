@@ -17,8 +17,8 @@
 
 package com.standup.app.profile.di
 
-import com.kevalpatel2106.common.application.di.AppComponent
-import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.kevalpatel2106.common.di.AppComponent
+import com.kevalpatel2106.common.di.ApplicationScope
 import com.standup.app.profile.EditProfileActivity
 import com.standup.app.profile.EditProfileModel
 import dagger.Component
@@ -29,7 +29,7 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [ProfileModule::class])
+@Component(dependencies = [AppComponent::class], modules = [ProfileDaggerModule::class])
 internal interface ProfileComponent {
 
     fun inject(editProfileModel: EditProfileModel)

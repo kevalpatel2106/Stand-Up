@@ -20,7 +20,7 @@ package com.kevalpatel2106.common.db.migration
 import android.arch.persistence.db.SupportSQLiteDatabase
 import android.arch.persistence.room.migration.Migration
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivity
 import timber.log.Timber
 
 /**

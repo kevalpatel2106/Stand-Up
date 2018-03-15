@@ -19,11 +19,11 @@ package com.standup.core.activityMonitor
 
 import com.evernote.android.job.JobManager
 import com.google.android.gms.location.DetectedActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
+import com.kevalpatel2106.common.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivityHelper
+import com.kevalpatel2106.common.userActivity.UserActivityType
 import com.kevalpatel2106.utils.annotations.Helper
 import com.standup.core.CoreConfig
 import java.util.*

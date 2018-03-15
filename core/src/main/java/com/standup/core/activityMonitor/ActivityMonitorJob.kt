@@ -28,12 +28,13 @@ import com.google.android.gms.awareness.snapshot.DetectedActivityResponse
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.OnSuccessListener
-import com.kevalpatel2106.common.AnalyticsEvents
-import com.kevalpatel2106.common.application.BaseApplication
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
-import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.base.BaseApplication
+import com.kevalpatel2106.common.misc.AnalyticsEvents
+import com.kevalpatel2106.common.misc.logEvent
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
+import com.kevalpatel2106.common.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.core.Core
 import com.standup.core.CoreConfig
@@ -158,7 +159,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
      * @see CoreRepo
      */
     @Inject
-    lateinit var coreRepo: CoreRepo
+    lateinit var userActivityRepo: UserActivityRepo
 
     /**
      * Shared preferences
@@ -288,7 +289,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
         }
 
         //Add the new value to database.
-        coreRepo.insertNewUserActivity(userActivity)
+        userActivityRepo.insertNewUserActivity(userActivity)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe { compositeDisposable.add(it) }

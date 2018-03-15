@@ -21,9 +21,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.kevalpatel2106.common.AnalyticsEvents
-import com.kevalpatel2106.common.application.BaseApplication
-import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.base.BaseApplication
+import com.kevalpatel2106.common.misc.AnalyticsEvents
+import com.kevalpatel2106.common.misc.logEvent
 import com.standup.app.authentication.di.DaggerUserAuthComponent
 
 /**

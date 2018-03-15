@@ -74,4 +74,12 @@ dependencies {
     implementation Deps.retrofit
     implementation Deps.retrofitGsonPlugin
     implementation Deps.httpLogger       //TODO Make it debug only
+
+    //Dagger
+    implementation(Deps.daggerAndroid)
+    implementation(Deps.daggerAndroidSupport)
+    kapt(Deps.daggerAnnotations)
+    kapt(Deps.daggerCompiler)
+    compileOnly(Deps.jsr250)
+
 }

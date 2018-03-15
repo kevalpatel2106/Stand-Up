@@ -20,7 +20,7 @@ package com.standup.app.about.report
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -36,7 +36,6 @@ import org.junit.runners.JUnit4
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
-import java.nio.file.Paths
 
 /**
  * Created by Keval on 23/12/17.
@@ -45,10 +44,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class ReportIssueViewModelTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-about")) it else it.plus("/feature-about")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/about/repo", path)
 
     @Rule
     @JvmField
@@ -72,7 +67,7 @@ class ReportIssueViewModelTest {
         mockServerManager.startMockWebServer()
 
         model = ReportIssueViewModel(AboutRepositoryImpl(
-                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),    /* Mock web server */
+                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),    /* Mock web server */
                 UserSessionManager(SharedPrefsProvider(MockSharedPreference()))     /* Mock shared prefrance*/
         ))
     }
@@ -93,7 +88,7 @@ class ReportIssueViewModelTest {
 
     @Test
     fun testCheckForUpdatesWithUpdateAvailable() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_update_available.json"))
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/get_latest_version_success_update_available.json"))
 
         model.checkForUpdate()
 
@@ -107,7 +102,7 @@ class ReportIssueViewModelTest {
 
     @Test
     fun testCheckForUpdatesWithUpdateNotAvailable() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_latest_available.json"))
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/get_latest_version_success_latest_available.json"))
 
         model.checkForUpdate()
 
@@ -118,7 +113,7 @@ class ReportIssueViewModelTest {
 
     @Test
     fun testCheckForUpdatesFail() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/authentication_field_missing.json"))
 
         model.checkForUpdate()
 

@@ -17,14 +17,19 @@
 
 package com.standup.app.diary.repo
 
-import com.kevalpatel2106.common.db.DailyActivitySummary
+import android.arch.core.executor.testing.InstantTaskExecutorRule
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
+import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
+import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
+import java.util.*
 
 /**
  * Created by Kevalpatel2106 on 08-Mar-18.
@@ -34,6 +39,14 @@ import java.io.File
 @RunWith(JUnit4::class)
 class LoadDaysSummaryListTest {
 
+    @Rule
+    @JvmField
+    val rule = InstantTaskExecutorRule()
+
+    @Rule
+    @JvmField
+    val rule1 = RxSchedulersOverrideRule()
+
     @Before
     fun setUp() = DiaryRepoImplHelperTest.setUpForAllTests()
 
@@ -41,49 +54,179 @@ class LoadDaysSummaryListTest {
     fun tearUp() = DiaryRepoImplHelperTest.tearUpForAllTests()
 
     @Test
-    fun checkLoadDaysSummaryList_WhenEmptyDb() {
-        DiaryRepoImplHelperTest.mockWebServerManager.enqueueResponse(File(DiaryRepoImplHelperTest.RESPONSE_DIR_PATH
-                + "/load_days_activity_empty_response.json"))
+    fun checkLoadDaysSummaryList_WhenEmptyDb_NoDataFromServer() {
+        //Prepare the data
+        DiaryRepoImplHelperTest.mockWebServerManager
+                .enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                        + "/get_activity_empty_response.json"))
 
         val testSubscriber = TestSubscriber<DailyActivitySummary>()
-        DiaryRepoImplHelperTest.dairyRepoImpl.loadDaysSummaryList(System.currentTimeMillis())
+        DiaryRepoImplHelperTest.dairyRepoImpl.loadDaysSummaryList(
+                TimeUtils.getMidnightCal(unixMills = System.currentTimeMillis(), isUtc = false).timeInMillis)
                 .subscribe(testSubscriber)
 
         testSubscriber.awaitTerminalEvent()
+
+        //Verify the response
         testSubscriber.assertNoErrors()
                 .assertValueCount(0)
                 .assertComplete()
     }
 
     @Test
-    fun checkLoadDaysSummaryList_With1DayInDb() {
-        DiaryRepoImplHelperTest.insert5EventsInEachDayFor1Day()
+    fun checkLoadDaysSummaryList_WhenEmptyDb_DataFromServerForOlderDay() {
+        //Prepare the data
+        DiaryRepoImplHelperTest.mockWebServerManager
+                .enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                        + "/get_activity_response.json"))
 
-        DiaryRepoImplHelperTest.mockWebServerManager.enqueueResponse(File(DiaryRepoImplHelperTest.RESPONSE_DIR_PATH
-                + "/load_days_activity_empty_response.json"))
+        val testSubscriber = TestSubscriber<DailyActivitySummary>()
+        DiaryRepoImplHelperTest.dairyRepoImpl.loadDaysSummaryList(System.currentTimeMillis())
+                .subscribe(testSubscriber)
+
+        testSubscriber.awaitTerminalEvent()
+
+        //Verify the response
+        testSubscriber.assertNoErrors()
+                .assertValueCount(1)
+                .assertValueAt(0, {
+                    it.dayActivity.size == 2
+                })
+                .assertValueAt(0, {
+                    it.dayActivity[0].remoteId == 5110359589388288L /* From response */
+                })
+                .assertValueAt(0, {
+                    it.dayActivity[1].remoteId == 5653294995210240L /* From response */
+                })
+                .assertValueAt(0, {
+                    TimeUtils.getMidnightCal(1520585420827, false).get(Calendar.DAY_OF_MONTH) == it.dayOfMonth
+                })
+                .assertValueAt(0, {
+                    TimeUtils.getMidnightCal(1520585420827, false).get(Calendar.MONTH) == it.monthOfYear
+                })
+                .assertValueAt(0, {
+                    TimeUtils.getMidnightCal(1520585420827, false).get(Calendar.YEAR) == it.year
+                })
+                .assertComplete()
+    }
+
+    @Test
+    fun checkLoadDaysSummaryList_WhenEmptyDb_DataFromServerForNewDays() {
+        //Prepare the data
+        DiaryRepoImplHelperTest.mockWebServerManager
+                .enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                        + "/get_activity_response.json"))
+
+        val testSubscriber = TestSubscriber<DailyActivitySummary>()
+        DiaryRepoImplHelperTest.dairyRepoImpl.loadDaysSummaryList(
+                TimeUtils.getMidnightCal(1, 3, 2016).timeInMillis)
+                .subscribe(testSubscriber)
+
+        testSubscriber.awaitTerminalEvent()
+
+        //Verify the response
+        testSubscriber.assertNoErrors()
+                .assertValueCount(0)
+                .assertComplete()
+    }
+
+    @Test
+    fun checkLoadDaysSummaryList_WhenEmptyDb_ErrorServerFor() {
+        //Prepare the data
+        DiaryRepoImplHelperTest.mockWebServerManager
+                .enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                        + "/authentication_field_missing.json"))
+
+        val testSubscriber = TestSubscriber<DailyActivitySummary>()
+        DiaryRepoImplHelperTest.dairyRepoImpl.loadDaysSummaryList(
+                TimeUtils.getMidnightCal(1, 3, 2016).timeInMillis)
+                .subscribe(testSubscriber)
+
+        testSubscriber.awaitTerminalEvent()
+
+        //Verify the response
+        testSubscriber.assertNoErrors()
+                .assertValueCount(0)
+                .assertComplete()
+    }
+
+    @Test
+    fun checkLoadDaysSummaryList_With1DayInDb_NoDataFromServer() {
+        //Prepare the data
+        DiaryRepoImplHelperTest.insert5EventsInEachDayFor1Day()
+        DiaryRepoImplHelperTest.mockWebServerManager
+                .enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                + "/get_activity_empty_response.json"))
+
+        val testSubscriber = TestSubscriber<DailyActivitySummary>()
+        DiaryRepoImplHelperTest.dairyRepoImpl
+                .loadDaysSummaryList(DiaryRepoImplHelperTest.userActivityDao.tableItems.last().eventEndTimeMills)
+                .subscribe(testSubscriber)
+
+        testSubscriber.awaitTerminalEvent()
+
+        //Verify the response
+        testSubscriber.assertNoErrors()
+                .assertValueCount(1)
+                .assertComplete()
+                .assertValueAt(0, {
+                    it.dayActivity.size == 5
+                })
+                .assertValueAt(0, {
+                    TimeUtils.todayMidnightCal().get(Calendar.DAY_OF_MONTH) == it.dayOfMonth
+                })
+                .assertValueAt(0, {
+                    TimeUtils.todayMidnightCal().get(Calendar.MONTH) == it.monthOfYear
+                })
+                .assertValueAt(0, {
+                    TimeUtils.todayMidnightCal().get(Calendar.YEAR) == it.year
+                })
+    }
+
+    @Test
+    fun checkLoadDaysSummaryList_With1DayInDb_WithDatFromServer() {
+        //Prepare the data
+        DiaryRepoImplHelperTest.insert5EventsInEachDayFor1Day()
+        DiaryRepoImplHelperTest.mockWebServerManager
+                .enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                        + "/get_activity_response.json"))
 
         val testSubscriber = TestSubscriber<DailyActivitySummary>()
         DiaryRepoImplHelperTest.dairyRepoImpl.loadDaysSummaryList(DiaryRepoImplHelperTest.userActivityDao.tableItems.last().eventEndTimeMills)
                 .subscribe(testSubscriber)
 
         testSubscriber.awaitTerminalEvent()
+
+        //Verify the response
         testSubscriber.assertNoErrors()
                 .assertValueCount(1)
+                .assertValueAt(0, {
+                    TimeUtils.todayMidnightCal().get(Calendar.DAY_OF_MONTH) == it.dayOfMonth
+                })
+                .assertValueAt(0, {
+                    TimeUtils.todayMidnightCal().get(Calendar.MONTH) == it.monthOfYear
+                })
+                .assertValueAt(0, {
+                    TimeUtils.todayMidnightCal().get(Calendar.YEAR) == it.year
+                })
                 .assertComplete()
     }
 
     @Test
     fun checkLoadDaysSummaryList_With15DaysInDb() {
+        //Prepare the data
         DiaryRepoImplHelperTest.insertOneEventsInEachDayFor15Days()
-
-        DiaryRepoImplHelperTest.mockWebServerManager.enqueueResponse(File(DiaryRepoImplHelperTest.RESPONSE_DIR_PATH
-                + "/load_days_activity_empty_response.json"))
+        DiaryRepoImplHelperTest.mockWebServerManager
+                .enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                        + "/get_activity_empty_response.json"))
 
         val testSubscriber = TestSubscriber<DailyActivitySummary>()
-        DiaryRepoImplHelperTest.dairyRepoImpl.loadDaysSummaryList(DiaryRepoImplHelperTest.userActivityDao.tableItems.first().eventEndTimeMills)
+        DiaryRepoImplHelperTest.dairyRepoImpl
+                .loadDaysSummaryList(DiaryRepoImplHelperTest.userActivityDao.tableItems.first().eventEndTimeMills)
                 .subscribe(testSubscriber)
-
         testSubscriber.awaitTerminalEvent()
+
+        //Verify the response
         testSubscriber.assertNoErrors()
                 .assertValueCount(DiaryRepo.PAGE_SIZE)
                 .assertComplete()
@@ -91,16 +234,19 @@ class LoadDaysSummaryListTest {
 
     @Test
     fun checkLoadDaysSummaryList_With7DaysInDb() {
+        //Prepare the data
         DiaryRepoImplHelperTest.insert2EventsInEachDayFor7Days()
-
-        DiaryRepoImplHelperTest.mockWebServerManager.enqueueResponse(File(DiaryRepoImplHelperTest.RESPONSE_DIR_PATH
-                + "/load_days_activity_empty_response.json"))
+        DiaryRepoImplHelperTest.mockWebServerManager
+                .enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
+                        + "/get_activity_empty_response.json"))
 
         val testSubscriber = TestSubscriber<DailyActivitySummary>()
         DiaryRepoImplHelperTest.dairyRepoImpl.loadDaysSummaryList(DiaryRepoImplHelperTest.userActivityDao.tableItems.first().eventEndTimeMills)
                 .subscribe(testSubscriber)
 
         testSubscriber.awaitTerminalEvent()
+
+        //Verify the response
         testSubscriber.assertNoErrors()
                 .assertValueCount((DiaryRepo.PAGE_SIZE + 4) / 2)
                 .assertComplete()

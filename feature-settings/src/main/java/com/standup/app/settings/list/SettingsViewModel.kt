@@ -24,10 +24,10 @@ import android.support.annotation.VisibleForTesting
 import android.support.v4.app.Fragment
 import com.danielstone.materialaboutlibrary.items.MaterialAboutItemOnClickAction
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.SingleLiveEvent
-import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.getColorCompat

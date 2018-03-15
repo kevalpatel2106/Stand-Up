@@ -22,10 +22,10 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityDao
-import com.kevalpatel2106.common.db.userActivity.UserActivityDaoMockImpl
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivityDao
+import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
+import com.kevalpatel2106.common.userActivity.UserActivityType
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.app.settings.R
@@ -295,8 +295,8 @@ class SettingsViewModelTest {
                 remoteId = 0,
                 type = UserActivityType.SITTING.toString().toLowerCase(),
                 isSynced = true,
-                eventEndTimeMills = yesterDayMills,
-                eventStartTimeMills = yesterDayMills - 10_000
+                eventEndTimeMills = yesterDayMills - 1_000   /* 1 sec */,
+                eventStartTimeMills = yesterDayMills - 10_000   /* 10 sec */
         ))
         val testSubscriber = TestObserver<Boolean>()
         Mockito.`when`(mockWhitelistingUtils.shouldOpenWhiteListDialog(mockContext)).thenReturn(true)

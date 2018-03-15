@@ -27,7 +27,7 @@ import android.support.annotation.ColorInt
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
 import com.kevalpatel2106.common.ReminderMessageProvider
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.common.notifications.addReminderNotificationChannel
 import com.kevalpatel2106.common.prefs.UserSettingsManager

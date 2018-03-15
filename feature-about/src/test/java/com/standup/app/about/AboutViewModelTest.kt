@@ -20,7 +20,7 @@ package com.standup.app.about
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -35,7 +35,6 @@ import org.junit.runners.JUnit4
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
-import java.nio.file.Paths
 
 /**
  * Created by Kevalpatel2106 on 01-Jan-18.
@@ -44,10 +43,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class AboutViewModelTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-about")) it else it.plus("/feature-about")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/about/repo", path)
     private val TEST_USER_ID: Long = 12L
 
     @Rule
@@ -72,7 +67,7 @@ class AboutViewModelTest {
 
         mockServerManager.startMockWebServer()
         val aboutRepository = AboutRepositoryImpl(
-                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),
+                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))
         )
         viewModel = AboutViewModel(aboutRepository)
@@ -81,7 +76,7 @@ class AboutViewModelTest {
 
     @Test
     fun checkGetLatestVersionSuccessUpdateAvailable() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_update_available.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/get_latest_version_success_update_available.json"))
 
         Assert.assertFalse(viewModel.isCheckingUpdate.value!!)
 
@@ -96,7 +91,7 @@ class AboutViewModelTest {
 
     @Test
     fun checkGetLatestVersionSuccessLatestVersionAvailable() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_latest_available.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/get_latest_version_success_latest_available.json"))
 
         Assert.assertFalse(viewModel.isCheckingUpdate.value!!)
 
@@ -111,7 +106,7 @@ class AboutViewModelTest {
 
     @Test
     fun checkGetLatestVersionError() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/authentication_field_missing.json"))
 
         Assert.assertFalse(viewModel.isCheckingUpdate.value!!)
 

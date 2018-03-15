@@ -20,7 +20,7 @@ package com.standup.app.profile.repo
 import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.reactivex.subscribers.TestSubscriber
@@ -35,7 +35,6 @@ import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 /**
  * Created by Kevalpatel2106 on 05-Dec-17.
@@ -44,11 +43,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class UserProfileRepoImplTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-profile")) it else it.plus("/feature-profile")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/profile/repo", path)
-
     private val mockServerManager = MockServerManager()
     private lateinit var mUserProfileRepoImpl: UserProfileRepoImpl
     private lateinit var sharedPrefs: SharedPreferences
@@ -74,7 +68,7 @@ class UserProfileRepoImplTest {
 
         mockServerManager.startMockWebServer()
         mUserProfileRepoImpl = UserProfileRepoImpl(
-                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),
+                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))
         )
     }
@@ -93,7 +87,7 @@ class UserProfileRepoImplTest {
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(123456789)
         Mockito.`when`(sharedPrefs.getBoolean(anyString(), anyBoolean())).thenReturn(true)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_profile_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/get_profile_success.json"))
 
 
         val testSubscriber = TestSubscriber<GetProfileResponse>()
@@ -116,7 +110,7 @@ class UserProfileRepoImplTest {
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(123456789)
         Mockito.`when`(sharedPrefs.getBoolean(anyString(), anyBoolean())).thenReturn(true)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_profile_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/get_profile_success.json"))
 
         val testSubscriber = TestSubscriber<GetProfileResponse>()
         mUserProfileRepoImpl.getUserProfile(12345678).subscribe(testSubscriber)
@@ -134,7 +128,7 @@ class UserProfileRepoImplTest {
         //Mock the shared prefrance
         Mockito.`when`(sharedPrefs.getString(anyString(), isNull())).thenReturn(null)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_profile_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/get_profile_success.json"))
 
         val testSubscriber = TestSubscriber<GetProfileResponse>()
         mUserProfileRepoImpl.getUserProfile(12345678).subscribe(testSubscriber)
@@ -154,7 +148,7 @@ class UserProfileRepoImplTest {
         Mockito.`when`(sharedPrefs.getString(anyString(), anyString())).thenReturn("149.3")
         Mockito.`when`(sharedPrefs.getLong(anyString(), anyLong())).thenReturn(123456789)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/save_profile_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/save_profile_success.json"))
 
         val testSubscriber = TestSubscriber<SaveProfileResponse>()
         mUserProfileRepoImpl.saveUserProfile(name = "Test User",

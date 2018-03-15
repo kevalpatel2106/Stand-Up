@@ -74,6 +74,8 @@ dependencies {
     implementation(Deps.kotlinStdLib)
     implementation(Deps.constraintLayout)
 
+    implementation(Deps.retrofit)
+
     implementation(Deps.rxJava)
     implementation(Deps.rxAndroid)
 

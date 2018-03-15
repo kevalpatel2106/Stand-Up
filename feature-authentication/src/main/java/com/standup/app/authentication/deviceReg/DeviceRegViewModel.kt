@@ -21,12 +21,13 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.Validator
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
-import com.kevalpatel2106.common.misc.LottieJson
+import com.kevalpatel2106.common.misc.lottie.LottieJson
 import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
 import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.app.authentication.R
 import com.standup.app.authentication.di.DaggerUserAuthComponent
@@ -34,6 +35,7 @@ import com.standup.app.authentication.repo.DeviceRegisterRequest
 import com.standup.app.authentication.repo.UserAuthRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -45,16 +47,24 @@ internal class DeviceRegViewModel : BaseViewModel {
 
     @Inject
     lateinit var userAuthRepo: UserAuthRepository
+
     @Inject
     lateinit var sharedPrefsProvider: SharedPrefsProvider
+
     @Inject
     lateinit var userSessionManager: UserSessionManager
+
+    internal val reposeToken = MutableLiveData<String>()
+
+    internal val syncComplete = MutableLiveData<Boolean>()
 
     constructor() {
         DaggerUserAuthComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@DeviceRegViewModel)
+
+        init()
     }
 
     @VisibleForTesting
@@ -64,10 +74,14 @@ internal class DeviceRegViewModel : BaseViewModel {
         this.userAuthRepo = userAuthRepo
         this.sharedPrefsProvider = sharedPrefsProvider
         this.userSessionManager = userSessionManager
+
+        init()
     }
 
-
-    internal val reposeToken = MutableLiveData<String>()
+    private fun init() {
+        reposeToken.value = null
+        syncComplete.value = false
+    }
 
     @SuppressLint("VisibleForTests")
     internal fun register(deviceId: String, fcmId: String?) {
@@ -114,20 +128,22 @@ internal class DeviceRegViewModel : BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({
-                    blockUi.postValue(true)
+                    markDeviceRegFailed()
+
+                    blockUi.value = true
                 })
                 .doAfterTerminate({
                     blockUi.value = false
                 })
                 .subscribe({ data ->
                     data?.let {
-                        sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
+                        markDeviceRegSuccess()
+
                         userSessionManager.token = data.token
                         reposeToken.value = data.token
                     }
-
                 }, {
-                    sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+                    Timber.d(it.printStackTrace().toString())
 
                     val errorMsg = ErrorMessage(it.message)
                     errorMsg.setErrorBtn(R.string.error_retry_try_again, { sendDeviceDataToServer(regId, deviceId) })
@@ -136,5 +152,32 @@ internal class DeviceRegViewModel : BaseViewModel {
                 }))
     }
 
-    fun markDeviceRegFailed() = sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+    @VisibleForTesting
+    internal fun markDeviceRegSuccess() = sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
+
+    internal fun markDeviceRegFailed() = sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
+
+    internal fun syncOldActivities(userActivityRepo: UserActivityRepo) {
+        addDisposable(userActivityRepo
+                .getActivitiesFromServer()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe({
+                    blockUi.value = true
+                    syncComplete.value = false
+                })
+                .doAfterTerminate({
+                    blockUi.value = false
+                })
+                .subscribe({
+                    syncComplete.value = true
+                }, {
+                    Timber.d(it.printStackTrace().toString())
+
+                    val errorMsg = ErrorMessage(it.message)
+                    errorMsg.setErrorBtn(R.string.error_retry_try_again, { syncOldActivities(userActivityRepo) })
+                    errorMsg.errorImage = LottieJson.WARNING
+                    errorMessage.value = errorMsg
+                }))
+    }
 }

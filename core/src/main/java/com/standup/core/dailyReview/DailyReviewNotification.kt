@@ -26,9 +26,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.support.annotation.VisibleForTesting
 import android.support.v4.app.NotificationCompat
-import com.kevalpatel2106.common.db.DailyActivitySummary
 import com.kevalpatel2106.common.notifications.NotificationChannelType
 import com.kevalpatel2106.common.notifications.addDailySummaryNotificationChannel
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import com.standup.core.Core
 import com.standup.core.R
 import java.util.*

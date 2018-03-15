@@ -33,7 +33,7 @@ import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.common.misc.TimeLineFullActivity
 import com.kevalpatel2106.common.misc.setPieChart
 import com.kevalpatel2106.common.misc.setPieChartData
-import com.kevalpatel2106.common.misc.setUserActivities
+import com.kevalpatel2106.common.misc.timeline.setUserActivities
 import com.kevalpatel2106.common.view.BaseTextView
 import com.standup.timelineview.TimeLineView
 import kotlinx.android.synthetic.main.fragment_dashboard.*

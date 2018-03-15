@@ -17,12 +17,9 @@
 
 package com.standup.core.repo
 
-import com.kevalpatel2106.common.db.DailyActivitySummary
-import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import com.kevalpatel2106.utils.annotations.Repository
-import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Single
 
 /**
  * Created by Keval on 15/12/17.
@@ -33,36 +30,9 @@ import io.reactivex.Single
 internal interface CoreRepo {
 
     /**
-     * This will store [newActivity] into the database and terminate the previous event with the
-     * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
-     * inert [newActivity].
-     *
-     * @see CoreRepoImpl.insertNewUserActivity for how it's implemented.
-     */
-    fun insertNewUserActivity(newActivity: UserActivity, doNotMergeWithPrevious: Boolean): Single<Long>
-
-    /**
-     * This will store [newActivity] into the database and terminate the previous event with the
-     * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
-     * inert [newActivity].
-     *
-     * @see CoreRepoImpl.insertNewUserActivity for how it's implemented.
-     */
-    fun insertNewUserActivity(newActivity: UserActivity): Single<Long>
-
-    /**
-     * This method will send the data of all the pending events to the server. This is going to run
-     * on asynchronous background thread. It will return [Completable] to notify whenever sync is
-     * completed or failed.
-     */
-    fun sendPendingActivitiesToServer(): Completable
-
-    /**
      * Load user activity summary for the previous day.
      *
      * @see DailyActivitySummary
      */
     fun loadYesterdaySummary(): Flowable<DailyActivitySummary>
-
-    fun getActivitiesToServer(): Completable
 }

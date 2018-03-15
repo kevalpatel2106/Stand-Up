@@ -20,7 +20,7 @@ package com.standup.app.settings.instructions
 import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.standup.app.settings.R
 import com.standup.app.settings.di.DaggerSettingsComponent

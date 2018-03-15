@@ -29,7 +29,7 @@ import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.misc.TimeLineFullActivity
 import com.kevalpatel2106.common.misc.setPieChart
 import com.kevalpatel2106.common.misc.setPieChartData
-import com.kevalpatel2106.common.misc.setUserActivities
+import com.kevalpatel2106.common.misc.timeline.setUserActivities
 import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.app.diary.R

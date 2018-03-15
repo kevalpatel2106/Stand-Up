@@ -25,10 +25,10 @@ import android.content.Intent
 import android.net.Uri
 import android.support.annotation.VisibleForTesting
 import com.google.android.gms.appinvite.AppInviteInvitation
-import com.kevalpatel2106.common.CommonUtils
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.base.arch.ErrorMessage
+import com.kevalpatel2106.common.misc.CommonUtils
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.LibsBuilder
 import com.standup.app.about.di.DaggerAboutComponent

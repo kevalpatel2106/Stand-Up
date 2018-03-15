@@ -29,9 +29,9 @@ import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem
 import com.danielstone.materialaboutlibrary.model.MaterialAboutCard
 import com.danielstone.materialaboutlibrary.model.MaterialAboutList
 import com.google.android.gms.appinvite.AppInviteInvitation
-import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.base.uiController.showSnack
-import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.misc.AnalyticsEvents
+import com.kevalpatel2106.common.misc.logEvent
 import com.kevalpatel2106.utils.alert
 import com.standup.app.about.repo.CheckVersionResponse
 

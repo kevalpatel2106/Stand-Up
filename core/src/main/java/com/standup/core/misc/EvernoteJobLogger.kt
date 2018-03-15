@@ -31,7 +31,7 @@ import timber.log.Timber
 internal class EvernoteJobLogger : JobLogger {
 
     override fun log(priority: Int, tag: String, message: String, t: Throwable?) {
-        t?.let { Timber.e(t.message) }
-        Timber.i("Job $tag is scheduled. $message")
+//        t?.let { Timber.e(t.message) }
+//        Timber.i("Job $tag is scheduled. $message")
     }
 }
