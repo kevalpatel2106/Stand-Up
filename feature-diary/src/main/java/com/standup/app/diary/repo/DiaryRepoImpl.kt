@@ -19,10 +19,10 @@ package com.standup.app.diary.repo
 
 import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.application.di.AppModule
-import com.kevalpatel2106.common.db.DailyActivitySummary
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityDao
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivityDao
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.app.diary.repo.DiaryRepo.Companion.PAGE_SIZE
 import io.reactivex.BackpressureStrategy
@@ -30,10 +30,9 @@ import io.reactivex.Flowable
 import io.reactivex.FlowableOnSubscribe
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function
-import retrofit2.Retrofit
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
-import javax.inject.Named
 import kotlin.collections.ArrayList
 
 /**
@@ -41,7 +40,7 @@ import kotlin.collections.ArrayList
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) private val retrofit: Retrofit,
+internal class DiaryRepoImpl @Inject constructor(private val userActivityRepo: UserActivityRepo,
                                                  private val userActivityDao: UserActivityDao) : DiaryRepo {
 
     /**
@@ -55,19 +54,35 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
      *
      * @see loadUserActivityForDayFromCalender
      */
+    @Suppress("NAME_SHADOWING")
+    @SuppressLint("CheckResult")
     override fun loadDaysSummaryList(beforeMills: Long): Flowable<DailyActivitySummary> {
 
-        val flowable = Flowable.create(FlowableOnSubscribe<List<UserActivity>> { e ->
+        val dailyActivitySummary = Flowable.create(FlowableOnSubscribe<List<UserActivity>> { e ->
+            //Get the oldest day
+            var oldestActivity = userActivityDao.getOldestActivity()
+
+            //If there are no oldest activity or the oldest activity is not older than beforeMills...
+            //Need to load more activities from the server
+            if (oldestActivity == null || oldestActivity.eventStartTimeMills > beforeMills) {
+                userActivityRepo.getActivitiesFromServer()
+                        .doAfterTerminate {
+                            //Reload the oldest time stamp.
+                            oldestActivity = userActivityDao.getOldestActivity()
+                        }
+                        .subscribe({
+                            //Do nothing
+                        }, {
+                            Timber.w(it)
+                        })
+            }
 
             //Setup the calender object.
             val calender = Calendar.getInstance(TimeZone.getDefault())
             calender.timeInMillis = beforeMills
 
-            //Get the oldest day
-            val oldestActivity = userActivityDao.getOldestActivity()
-
             //Loop until the oldest event received
-            while (oldestActivity != null && calender.timeInMillis > oldestActivity.eventStartTimeMills) {
+            while (oldestActivity != null && calender.timeInMillis > oldestActivity!!.eventStartTimeMills - TimeUtils.ONE_DAY_MILLISECONDS) {
                 //Query the database.
                 val dbList = ArrayList(loadUserActivityForDayFromCalender(calender.clone() as Calendar))
 
@@ -81,7 +96,6 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
                 calender.add(Calendar.DAY_OF_MONTH, -1)
             }
 
-            //TODO call the server for more events.
 
             //Nothing from the network
             e.onComplete()
@@ -90,9 +104,12 @@ internal class DiaryRepoImpl @Inject constructor(@Named(AppModule.WITH_TOKEN) pr
                     return@Function DailyActivitySummary.fromDayActivityList(ArrayList(it))
                 })
 
-        return flowable.zipWith(Flowable.range(1, DiaryRepo.PAGE_SIZE)  /*Flowable that emits 1 to 10*/,
-                BiFunction<DailyActivitySummary, Int, DailyActivitySummary> { t1, _ ->
-                    t1 /* Emit the DailyActivitySummary list */
+
+        val pageSizeFlowable = Flowable.range(1, DiaryRepo.PAGE_SIZE)  /* Flowable that emits 1 to 10 */
+
+        return dailyActivitySummary.zipWith(pageSizeFlowable,
+                BiFunction<DailyActivitySummary, Int, DailyActivitySummary> { dailyActivitySummary, _ ->
+                    dailyActivitySummary /* Emit the DailyActivitySummary list */
                 })
     }
 

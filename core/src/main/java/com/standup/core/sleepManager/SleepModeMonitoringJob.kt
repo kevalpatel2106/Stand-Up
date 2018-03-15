@@ -17,20 +17,21 @@
 
 package com.standup.core.sleepManager
 
+import android.annotation.SuppressLint
 import com.evernote.android.job.Job
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.common.application.BaseApplication
-import com.kevalpatel2106.common.db.userActivity.UserActivityHelper
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
+import com.kevalpatel2106.common.userActivity.UserActivityHelper
+import com.kevalpatel2106.common.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.standup.core.Core
 import com.standup.core.activityMonitor.ActivityMonitorJob
 import com.standup.core.di.DaggerCoreComponent
 import com.standup.core.reminder.NotificationSchedulerJob
-import com.standup.core.repo.CoreRepo
 import dagger.Lazy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -139,7 +140,7 @@ internal class SleepModeMonitoringJob : Job() {
     lateinit var core: Lazy<Core>
 
     @Inject
-    lateinit var coreRepo: CoreRepo
+    lateinit var userActivityRepo: UserActivityRepo
 
     override fun onRunJob(params: Params): Result {
         //Inject dependencies.
@@ -170,9 +171,10 @@ internal class SleepModeMonitoringJob : Job() {
         SleepModeStartNotification.notify(context)
     }
 
+    @SuppressLint("CheckResult")
     private fun sleepModeEnded() {
         //Insert the fake starting activity
-        coreRepo.insertNewUserActivity(
+        userActivityRepo.insertNewUserActivity(
                 newActivity = UserActivityHelper.createLocalUserActivity(UserActivityType.SITTING),
                 doNotMergeWithPrevious = true
         ).observeOn(AndroidSchedulers.mainThread())

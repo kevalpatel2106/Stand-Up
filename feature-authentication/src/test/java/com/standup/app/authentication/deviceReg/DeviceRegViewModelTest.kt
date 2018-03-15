@@ -21,7 +21,10 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepo
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepoImpl
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -35,7 +38,6 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 
 /**
@@ -45,11 +47,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class DeviceRegViewModelTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-authentication")) it else it.plus("/feature-authentication")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/authentication/repo", path)
-
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
@@ -58,6 +55,7 @@ class DeviceRegViewModelTest {
     @JvmField
     val rxRule: RxSchedulersOverrideRule = RxSchedulersOverrideRule()
 
+    private lateinit var mockUserActivityRepo: UserActivityRepo
     private lateinit var deviceRegViewModel: DeviceRegViewModel
     private lateinit var userSessionManager: UserSessionManager
     private lateinit var sharedPrefProvider: SharedPrefsProvider
@@ -77,8 +75,13 @@ class DeviceRegViewModelTest {
         //Init server
         sharedPrefProvider = SharedPrefsProvider(sharedPrefs)
         userSessionManager = UserSessionManager(sharedPrefProvider)
+
+        val mockRetrofitClient = NetworkApi("test_user_id", "test_user_name")
+                .getRetrofitClient(mockServerManager.getBaseUrl())
+        mockUserActivityRepo = UserActivityRepoImpl(UserActivityDaoMockImpl(ArrayList()), mockRetrofitClient)
+
         deviceRegViewModel = DeviceRegViewModel(
-                UserAuthRepositoryImpl(NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())),
+                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
                 sharedPrefProvider,
                 userSessionManager
         )
@@ -93,12 +96,14 @@ class DeviceRegViewModelTest {
     @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(deviceRegViewModel.blockUi.value!!)
+        Assert.assertFalse(deviceRegViewModel.syncComplete.value!!)
         Assert.assertNull(deviceRegViewModel.errorMessage.value)
+        Assert.assertNull(deviceRegViewModel.reposeToken.value)
     }
 
     @Test
     @Throws(IOException::class)
-    fun checkInvalidDeviceId() {
+    fun checkRegister_WithInvalidDeviceId() {
         deviceRegViewModel.register("", "test-firebase-id")
 
         Assert.assertEquals(deviceRegViewModel.errorMessage.value!!.errorMessageRes,
@@ -107,7 +112,7 @@ class DeviceRegViewModelTest {
 
     @Test
     @Throws(IOException::class)
-    fun checkInvalidFcmId() {
+    fun checkRegister_WithInvalidFcmId() {
         deviceRegViewModel.register("test-device-id", null)
 
         Assert.assertEquals(deviceRegViewModel.errorMessage.value!!.errorMessageRes, R.string.device_reg_error_invalid_fcm_id)
@@ -115,8 +120,8 @@ class DeviceRegViewModelTest {
 
     @Test
     @Throws(IOException::class)
-    fun checkInvalidDeviceRegSuccess() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/device_reg_success.json"))
+    fun checkRegister_WithDeviceRegSuccess() {
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/device_reg_success.json"))
 
         deviceRegViewModel.register("test-device-id", "test-firebase-id")
 
@@ -126,12 +131,40 @@ class DeviceRegViewModelTest {
 
     @Test
     @Throws(IOException::class)
-    fun checkInvalidDeviceRegFieldMissing() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+    fun checkRegister_WithDeviceRegFieldMissing() {
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/authentication_field_missing.json"))
 
         deviceRegViewModel.register("test-device-id", "test-firebase-id")
 
         Assert.assertEquals(deviceRegViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
         Assert.assertNull(deviceRegViewModel.reposeToken.value)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkSync_SyncFailed() {
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/authentication_field_missing.json"))
+
+        Assert.assertFalse(deviceRegViewModel.syncComplete.value!!)
+
+        deviceRegViewModel.syncOldActivities(mockUserActivityRepo)
+
+        Assert.assertEquals(deviceRegViewModel.errorMessage.value!!.getMessage(null), "Required field missing.")
+        Assert.assertFalse(deviceRegViewModel.syncComplete.value!!)
+        Assert.assertFalse(deviceRegViewModel.blockUi.value!!)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkSync_SyncComplete() {
+        mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/get_activity_response.json"))
+
+        Assert.assertFalse(deviceRegViewModel.syncComplete.value!!)
+
+        deviceRegViewModel.syncOldActivities(mockUserActivityRepo)
+
+        Assert.assertNull(deviceRegViewModel.errorMessage.value)
+        Assert.assertTrue(deviceRegViewModel.syncComplete.value!!)
+        Assert.assertFalse(deviceRegViewModel.blockUi.value!!)
     }
 }

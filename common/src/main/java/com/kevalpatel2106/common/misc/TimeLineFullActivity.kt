@@ -22,7 +22,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.kevalpatel2106.common.R
-import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.common.misc.timeline.setUserActivities
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import com.standup.timelineview.TimeLineLength
 import kotlinx.android.synthetic.main.activity_time_line_full.*
 

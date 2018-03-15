@@ -24,8 +24,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivityType
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.app.diary.R
 import kotlinx.android.synthetic.main.row_user_activity.view.*

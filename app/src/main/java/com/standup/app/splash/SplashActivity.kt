@@ -22,12 +22,12 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.standup.app.authentication.AuthenticationModule
+import com.standup.app.authentication.AuthenticationApi
 import com.standup.app.main.MainActivity
-import com.standup.app.profile.ProfileModule
+import com.standup.app.profile.ProfileApi
 import com.standup.core.Core
 import javax.inject.Inject
 
@@ -45,10 +45,10 @@ class SplashActivity : BaseActivity() {
     lateinit var userSessionManager: UserSessionManager
 
     @Inject
-    lateinit var authenticationModule: AuthenticationModule
+    lateinit var mAuthenticationApi: AuthenticationApi
 
     @Inject
-    lateinit var profileModule: ProfileModule
+    lateinit var mProfileApi: ProfileApi
 
     @Inject
     lateinit var core: Core
@@ -98,7 +98,7 @@ class SplashActivity : BaseActivity() {
         model.openIntro.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {
-                    authenticationModule.openIntroScreen(this@SplashActivity)
+                    mAuthenticationApi.openIntroScreen(this@SplashActivity)
                     finish()
                 }
             }
@@ -107,7 +107,7 @@ class SplashActivity : BaseActivity() {
         model.openDeviceRegister.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {
-                    authenticationModule.registerDevice(context = this@SplashActivity,
+                    mAuthenticationApi.registerDevice(context = this@SplashActivity,
                             isNewUser = false,
                             isVerified = userSessionManager.isUserVerified)
                     finish()
@@ -118,7 +118,7 @@ class SplashActivity : BaseActivity() {
         model.openVerifyEmail.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {
-                    authenticationModule.openVerifyEmailScreen(this@SplashActivity)
+                    mAuthenticationApi.openVerifyEmailScreen(this@SplashActivity)
                     finish()
                 }
             }
@@ -127,7 +127,7 @@ class SplashActivity : BaseActivity() {
         model.openProfile.observe(this@SplashActivity, Observer {
             it?.let {
                 if (it) {
-                    profileModule.openProfile(this@SplashActivity, userSessionManager)
+                    mProfileApi.openProfile(this@SplashActivity, userSessionManager)
                     finish()
                 }
             }

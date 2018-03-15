@@ -17,8 +17,9 @@
 
 package com.kevalpatel2106.common.db
 
-import com.kevalpatel2106.common.db.userActivity.UserActivity
-import com.kevalpatel2106.common.db.userActivity.UserActivityType
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.UserActivityType
 import com.kevalpatel2106.utils.TimeUtils
 import org.junit.Assert
 import org.junit.Test

@@ -17,8 +17,8 @@
 
 package com.standup.app.diary.repo
 
-import com.kevalpatel2106.common.db.DailyActivitySummary
-import com.kevalpatel2106.common.db.userActivity.UserActivity
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.UserActivity
 import io.reactivex.Flowable
 
 /**

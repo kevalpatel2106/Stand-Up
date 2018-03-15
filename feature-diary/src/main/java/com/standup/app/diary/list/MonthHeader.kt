@@ -17,7 +17,7 @@
 
 package com.standup.app.diary.list
 
-import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 
 /**
  * Created by Keval on 27/12/17.

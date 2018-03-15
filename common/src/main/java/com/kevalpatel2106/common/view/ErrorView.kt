@@ -25,7 +25,7 @@ import android.widget.LinearLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.kevalpatel2106.common.R
 import com.kevalpatel2106.common.base.arch.ErrorMessage
-import com.kevalpatel2106.common.misc.playRepeatAnimation
+import com.kevalpatel2106.common.misc.lottie.playRepeatAnimation
 
 /**
  * Created by Keval on 24/12/17.

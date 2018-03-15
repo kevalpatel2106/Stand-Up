@@ -17,7 +17,7 @@
 
 package com.standup.app.profile.repo
 
-import com.kevalpatel2106.common.AppConfig
+import com.kevalpatel2106.common.misc.AppConfig
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith

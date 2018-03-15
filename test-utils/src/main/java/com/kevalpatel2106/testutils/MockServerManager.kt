@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.testutils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -24,6 +25,7 @@ import java.io.Closeable
 import java.io.File
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.nio.file.Paths
 
 /**
  * Created by Keval on 05/12/17.
@@ -33,6 +35,26 @@ import java.net.HttpURLConnection
 class MockServerManager : Closeable {
 
     lateinit var mockWebServer: MockWebServer
+
+    @SuppressLint("NewApi")
+    fun getResponsesPath(): String {
+
+        if (System.getenv("CI") == "true") {
+            return "/bitrise/src/test-utils/src/main/res/raw"
+        }
+
+        @Suppress("UselessCallOnNotNull")
+        val rootDirPath = Paths.get("").toAbsolutePath().toString().let {
+            if (it.isNullOrEmpty()) {
+                System.getenv("PROJECT_ROOT")
+            } else {
+                it.substring(0 until it.lastIndexOf("Stand-Up"))
+                        .plus("Stand-Up")
+            }
+        }
+
+        return "$rootDirPath/test-utils/src/main/res/raw"
+    }
 
     /**
      * Start mock web server for the wikipedia api.

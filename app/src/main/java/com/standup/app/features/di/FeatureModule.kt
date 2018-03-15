@@ -17,16 +17,16 @@
 
 package com.standup.app.features.di
 
-import com.kevalpatel2106.common.application.di.ApplicationScope
-import com.standup.app.about.AboutModule
-import com.standup.app.authentication.AuthenticationModule
-import com.standup.app.dashboard.DashboardModule
+import com.kevalpatel2106.common.di.ApplicationScope
+import com.standup.app.about.AboutApi
+import com.standup.app.authentication.AuthenticationApi
+import com.standup.app.dashboard.DashboardApi
 import com.standup.app.diary.DiaryModule
 import com.standup.app.features.AuthenticationHookImpl
 import com.standup.app.features.ProfileHookImpl
 import com.standup.app.features.SettingsHookImpl
-import com.standup.app.profile.ProfileModule
-import com.standup.app.settings.SettingsModule
+import com.standup.app.profile.ProfileApi
+import com.standup.app.settings.SettingsApi
 import com.standup.app.stats.StatsModule
 import dagger.Module
 import dagger.Provides
@@ -41,11 +41,11 @@ internal class FeatureModule {
 
     @Provides
     @ApplicationScope
-    fun provideSettingsModule(): SettingsModule = SettingsModule(SettingsHookImpl())
+    fun provideSettingsModule(): SettingsApi = SettingsApi(SettingsHookImpl())
 
     @Provides
     @ApplicationScope
-    fun provideProfileModule(): ProfileModule = ProfileModule(ProfileHookImpl())
+    fun provideProfileModule(): ProfileApi = ProfileApi(ProfileHookImpl())
 
     @Provides
     @ApplicationScope
@@ -53,7 +53,7 @@ internal class FeatureModule {
 
     @Provides
     @ApplicationScope
-    fun provideAboutModule(): AboutModule = AboutModule()
+    fun provideAboutModule(): AboutApi = AboutApi()
 
     @Provides
     @ApplicationScope
@@ -61,9 +61,9 @@ internal class FeatureModule {
 
     @Provides
     @ApplicationScope
-    fun provideAuthenticationModule(): AuthenticationModule = AuthenticationModule(AuthenticationHookImpl())
+    fun provideAuthenticationModule(): AuthenticationApi = AuthenticationApi(AuthenticationHookImpl())
 
     @Provides
     @ApplicationScope
-    fun provideDashboardModule(): DashboardModule = DashboardModule()
+    fun provideDashboardModule(): DashboardApi = DashboardApi()
 }

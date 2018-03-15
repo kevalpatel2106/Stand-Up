@@ -20,7 +20,7 @@ package com.standup.app
 import android.os.StrictMode
 import com.facebook.FacebookSdk
 import com.google.firebase.FirebaseApp
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.squareup.leakcanary.LeakCanary
 import com.standup.app.features.CoreHookImpl
 import com.standup.core.Core

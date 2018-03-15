@@ -22,7 +22,7 @@ import com.crashlytics.android.core.CrashlyticsCore
 import com.facebook.FacebookSdk
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.standup.app.features.CoreHookImpl
 import com.standup.core.Core
 import io.fabric.sdk.android.Fabric

@@ -21,7 +21,7 @@ import android.content.Context
 import android.support.annotation.VisibleForTesting
 import android.view.ViewGroup
 import com.kevalpatel2106.common.base.paging.PageRecyclerViewAdapter
-import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import com.standup.app.diary.detail.DetailActivity
 import com.standup.app.diary.repo.DiaryRepo
 

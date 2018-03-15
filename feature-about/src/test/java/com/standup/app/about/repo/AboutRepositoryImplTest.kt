@@ -19,7 +19,7 @@ package com.standup.app.about.repo
 
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import io.reactivex.subscribers.TestSubscriber
@@ -31,7 +31,6 @@ import org.junit.runners.JUnit4
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
-import java.nio.file.Paths
 
 /**
  * Created by Kevalpatel2106 on 01-Jan-18.
@@ -40,11 +39,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class AboutRepositoryImplTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-about")) it else it.plus("/feature-about")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/about/repo", path)
-
     private val mockServerManager = MockServerManager()
     private lateinit var aboutRepository: AboutRepository
 
@@ -59,7 +53,7 @@ class AboutRepositoryImplTest {
 
         mockServerManager.startMockWebServer()
         aboutRepository = AboutRepositoryImpl(
-                NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),
+                NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))
         )
     }
@@ -71,7 +65,8 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkGetLatestVersionSuccessUpdateAvailable() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_update_available.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath()
+                + "/get_latest_version_success_update_available.json"))
 
         val testSubscriber = TestSubscriber<CheckVersionResponse>()
         aboutRepository.getLatestVersion().subscribe(testSubscriber)
@@ -90,7 +85,8 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkGetLatestVersionSuccessLatestVersionAvailable() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/get_latest_version_success_latest_available.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath()
+                + "/get_latest_version_success_latest_available.json"))
 
         val testSubscriber = TestSubscriber<CheckVersionResponse>()
         aboutRepository.getLatestVersion().subscribe(testSubscriber)
@@ -109,7 +105,8 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkGetLatestVersionError() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath()
+                + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<CheckVersionResponse>()
         aboutRepository.getLatestVersion().subscribe(testSubscriber)
@@ -121,7 +118,8 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkReportIssueSuccess() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/report_issue_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath()
+                + "/report_issue_success.json"))
 
         val testSubscriber = TestSubscriber<ReportIssueResponse>()
         aboutRepository.reportIssue("This is test title.",
@@ -137,7 +135,8 @@ class AboutRepositoryImplTest {
 
     @Test
     fun checkReportIssueError() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath()
+                + "/authentication_field_missing.json"))
 
         val testSubscriber = TestSubscriber<ReportIssueResponse>()
         aboutRepository.reportIssue("This is test title.",

@@ -18,9 +18,9 @@
 package com.standup.app.authentication.verification
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kevalpatel2106.common.misc.LottieJson
+import com.kevalpatel2106.common.misc.lottie.LottieJson
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -32,7 +32,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 /**
  * Created by Kevalpatel2106 on 28-Dec-17.
@@ -41,11 +40,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class EmailLinkVerifyViewModelTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-authentication")) it else it.plus("/feature-authentication")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/authentication/repo", path)
-
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
@@ -63,7 +57,7 @@ class EmailLinkVerifyViewModelTest {
         //Set the repo
         mockServerManager.startMockWebServer()
         emailLinkVerifyViewModel = EmailLinkVerifyViewModel(
-                UserAuthRepositoryImpl(NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())),
+                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
                 userSessionManager
         )
     }
@@ -82,7 +76,7 @@ class EmailLinkVerifyViewModelTest {
     @Test
     @Throws(IOException::class)
     fun testVerifyEmailSuccess() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/email_verify_success.html"), "text/html")
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/email_verify_success.html"), "text/html")
 
         emailLinkVerifyViewModel.verifyEmail(mockServerManager.getBaseUrl())
 
@@ -94,7 +88,7 @@ class EmailLinkVerifyViewModelTest {
     @Test
     @Throws(IOException::class)
     fun testVerifyEmailError() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/authentication_field_missing.json"))
 
         emailLinkVerifyViewModel.verifyEmail(mockServerManager.getBaseUrl())
 

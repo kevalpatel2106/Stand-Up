@@ -28,10 +28,10 @@ import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
-import com.kevalpatel2106.common.AnalyticsEvents
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
-import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.misc.AnalyticsEvents
+import com.kevalpatel2106.common.misc.logEvent
 import com.kevalpatel2106.facebookauth.FacebookHelper
 import com.kevalpatel2106.facebookauth.FacebookResponse
 import com.kevalpatel2106.facebookauth.FacebookUser

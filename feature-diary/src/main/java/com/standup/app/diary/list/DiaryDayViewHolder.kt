@@ -21,7 +21,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import com.standup.app.diary.R
 import kotlinx.android.synthetic.main.row_dairy_list_item.view.*
 

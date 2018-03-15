@@ -17,10 +17,10 @@
 
 package com.standup.app.about.repo
 
-import com.kevalpatel2106.common.application.di.AppModule
+import com.kevalpatel2106.common.di.AppModule
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.common.repository.RepoBuilder
-import com.kevalpatel2106.network.executor.refresher.RetrofitNetworkRefresher
+import com.kevalpatel2106.network.repository.RepoBuilder
+import com.kevalpatel2106.network.repository.refresher.RetrofitNetworkRefresher
 import io.reactivex.Flowable
 import retrofit2.Retrofit
 import javax.inject.Named

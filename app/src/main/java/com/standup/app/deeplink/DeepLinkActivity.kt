@@ -22,10 +22,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showToast
-import com.standup.app.authentication.AuthenticationModule
+import com.standup.app.authentication.AuthenticationApi
 import com.standup.app.splash.SplashActivity
 import dagger.Lazy
 import javax.inject.Inject
@@ -38,7 +38,7 @@ import javax.inject.Inject
 class DeepLinkActivity : BaseActivity() {
 
     @Inject
-    internal lateinit var authenticationModule: Lazy<AuthenticationModule>
+    internal lateinit var mAuthenticationApi: Lazy<AuthenticationApi>
 
     internal lateinit var model: DeepLinkViewModel
 
@@ -74,7 +74,7 @@ class DeepLinkActivity : BaseActivity() {
 
         model.verifyEmailLink.observe(this@DeepLinkActivity, Observer<String> {
             it?.let {
-                authenticationModule.get().verifyEmailLink(this@DeepLinkActivity, it)
+                mAuthenticationApi.get().verifyEmailLink(this@DeepLinkActivity, it)
                 finish()
             }
         })

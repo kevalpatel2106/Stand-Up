@@ -18,7 +18,7 @@
 package com.standup.app.diary.list
 
 import android.content.Context
-import com.kevalpatel2106.common.db.DailyActivitySummary
+import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import com.standup.app.diary.repo.DiaryRepo
 import org.junit.Assert
 import org.junit.Before

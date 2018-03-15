@@ -21,12 +21,12 @@ import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
 import android.support.annotation.VisibleForTesting
-import com.kevalpatel2106.common.AnalyticsEvents
-import com.kevalpatel2106.common.application.BaseApplication
-import com.kevalpatel2106.common.db.userActivity.UserActivityDao
-import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.base.BaseApplication
+import com.kevalpatel2106.common.misc.AnalyticsEvents
+import com.kevalpatel2106.common.misc.logEvent
 import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
 import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import com.standup.app.authentication.AuthenticationHook

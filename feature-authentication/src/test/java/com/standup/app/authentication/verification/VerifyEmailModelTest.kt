@@ -20,7 +20,7 @@ package com.standup.app.authentication.verification
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -34,7 +34,6 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 /**
  * Created by Keval on 20/11/17.
@@ -43,10 +42,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class VerifyEmailModelTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-authentication")) it else it.plus("/feature-authentication")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/authentication/repo", path)
     private val TEST_USER_ID = 12L
 
     @Rule
@@ -71,7 +66,7 @@ class VerifyEmailModelTest {
         //Set the repo
         mockServerManager.startMockWebServer()
         verifyEmailViewModel = VerifyEmailViewModel(
-                UserAuthRepositoryImpl(NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())),
+                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))
         )
     }
@@ -92,7 +87,7 @@ class VerifyEmailModelTest {
     @Test
     @Throws(IOException::class)
     fun checkResendVerificationEmailSuccess() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/resend_verification_email_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/resend_verification_email_success.json"))
 
         Assert.assertNull(verifyEmailViewModel.resendInProgress.value)
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
@@ -108,7 +103,7 @@ class VerifyEmailModelTest {
     @Test
     @Throws(IOException::class)
     fun checkResendVerificationEmailFieldMissing() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/authentication_field_missing.json"))
 
         Assert.assertFalse(verifyEmailViewModel.blockUi.value!!)
         Assert.assertNull(verifyEmailViewModel.resendInProgress.value)

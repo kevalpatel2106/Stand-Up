@@ -20,10 +20,10 @@ package com.standup.app.profile
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.content.Context
 import android.content.SharedPreferences
-import com.kevalpatel2106.common.AppConfig
 import com.kevalpatel2106.common.Validator
+import com.kevalpatel2106.common.misc.AppConfig
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
@@ -36,7 +36,6 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 /**
  * Created by Kevalpatel2106 on 05-Dec-17.
@@ -45,11 +44,6 @@ import java.nio.file.Paths
  */
 @RunWith(JUnit4::class)
 class EditProfileModelTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-profile")) it else it.plus("/feature-profile")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/profile/repo", path)
-
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
@@ -75,7 +69,7 @@ class EditProfileModelTest {
         mockServerManager.startMockWebServer()
         editProfileModel = EditProfileModel(
                 UserProfileRepoImpl(
-                        NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl()),
+                        NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl()),
                         UserSessionManager(SharedPrefsProvider(sharedPrefs))
                 ),
                 UserSessionManager(SharedPrefsProvider(sharedPrefs))
@@ -105,7 +99,7 @@ class EditProfileModelTest {
         Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(123456789)
         Mockito.`when`(sharedPrefs.getBoolean(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean())).thenReturn(true)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/save_profile_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/save_profile_success.json"))
 
         //Make the api call to the mock server
         editProfileModel.loadMyProfile()
@@ -132,7 +126,7 @@ class EditProfileModelTest {
         Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(123456789)
         Mockito.`when`(sharedPrefs.getBoolean(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean())).thenReturn(true)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/profile_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/profile_field_missing.json"))
 
         //Make the api call to the mock server
         editProfileModel.loadMyProfile()
@@ -153,7 +147,7 @@ class EditProfileModelTest {
     @Test
     @Throws(IOException::class)
     fun checkLoadProfileErrorWithoutCache() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/profile_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/profile_field_missing.json"))
 
         //Make the api call to the mock server
         editProfileModel.loadMyProfile()
@@ -171,7 +165,7 @@ class EditProfileModelTest {
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("test@example.com")
         Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(123456789)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/save_profile_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/save_profile_success.json"))
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test User", photo = null, isMale = true,
@@ -197,7 +191,7 @@ class EditProfileModelTest {
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("test@example.com")
         Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(123456789)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/profile_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/profile_field_missing.json"))
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test User", photo = null, isMale = true,
@@ -216,7 +210,7 @@ class EditProfileModelTest {
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("test@example.com")
         Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(123456789)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/profile_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/profile_field_missing.json"))
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test", photo = null, isMale = true,
@@ -234,7 +228,7 @@ class EditProfileModelTest {
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("test@example.com")
         Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(123456789)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/profile_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/profile_field_missing.json"))
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test User", photo = null, isMale = true,
@@ -252,7 +246,7 @@ class EditProfileModelTest {
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("test@example.com")
         Mockito.`when`(sharedPrefs.getLong(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong())).thenReturn(123456789)
 
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/profile_field_missing.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/profile_field_missing.json"))
 
         //Make the api call to the mock server
         editProfileModel.saveMyProfile(name = "Test User", photo = null, isMale = true,

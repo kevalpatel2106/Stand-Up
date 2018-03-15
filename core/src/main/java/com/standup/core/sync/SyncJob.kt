@@ -21,9 +21,10 @@ import android.annotation.SuppressLint
 import android.support.annotation.VisibleForTesting
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
+import com.kevalpatel2106.common.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.rxbus.Event
 import com.kevalpatel2106.utils.rxbus.RxBus
@@ -31,12 +32,10 @@ import com.standup.core.CoreConfig
 import com.standup.core.CorePrefsProvider
 import com.standup.core.di.DaggerCoreComponent
 import com.standup.core.misc.AsyncJob
-import com.standup.core.repo.CoreRepo
 import com.standup.core.sync.SyncJob.Companion.cancelScheduledSync
 import com.standup.core.sync.SyncJob.Companion.isSyncing
 import com.standup.core.sync.SyncJob.Companion.syncNow
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
@@ -83,14 +82,6 @@ import javax.inject.Inject
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 internal class SyncJob : AsyncJob() {
-
-    /**
-     * [CompositeDisposable] for collecting all [io.reactivex.disposables.Disposable]. It will get
-     * cleared when the service stops.
-     *
-     * @see destroyJob
-     */
-    private val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     companion object {
 
@@ -197,12 +188,12 @@ internal class SyncJob : AsyncJob() {
     internal lateinit var userSettingsManager: UserSettingsManager
 
     @Inject
-    internal lateinit var coreRepo: CoreRepo
+    internal lateinit var userActivityRepo: UserActivityRepo
 
     @Inject
     internal lateinit var corePrefsProvider: CorePrefsProvider
 
-    @SuppressLint("VisibleForTests")
+    @SuppressLint("VisibleForTests", "CheckResult")
     override fun onRunJobAsync(params: Params) {
 
         //Inject dependencies
@@ -214,12 +205,11 @@ internal class SyncJob : AsyncJob() {
         if (SyncJobHelper.shouldRunJob(userSessionManager, userSettingsManager)) {
 
             //Add the new value to database.
-            coreRepo.sendPendingActivitiesToServer()
-//                    .concatWith(coreRepo.getActivitiesToServer())
+            userActivityRepo.sendPendingActivitiesToServer()
+                    .concatWith(userActivityRepo.getActivitiesFromServer())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe {
-                        compositeDisposable.add(it)
 
                         //Let others know sync started.
                         SyncJobHelper.notifySyncStarted()
@@ -235,7 +225,7 @@ internal class SyncJob : AsyncJob() {
                     }, {
                         //Error.
                         //NO OP
-                        Timber.e(it.message)
+                        Timber.e(it.printStackTrace().toString())
                     })
         } else {
             //You shouldn't be syncing.
@@ -251,6 +241,5 @@ internal class SyncJob : AsyncJob() {
      */
     private fun destroyJob() {
         stopJob(Result.SUCCESS)
-        compositeDisposable.dispose()
     }
 }

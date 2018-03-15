@@ -27,13 +27,13 @@ import android.support.annotation.VisibleForTesting
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ProgressBar
-import com.kevalpatel2106.common.AnalyticsEvents
-import com.kevalpatel2106.common.AppConfig
 import com.kevalpatel2106.common.Validator
-import com.kevalpatel2106.common.application.BaseApplication
+import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
-import com.kevalpatel2106.common.logEvent
+import com.kevalpatel2106.common.misc.AnalyticsEvents
+import com.kevalpatel2106.common.misc.AppConfig
+import com.kevalpatel2106.common.misc.logEvent
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.rulerview.ObservableHorizontalScrollView
 import com.kevalpatel2106.utils.annotations.UIController

@@ -19,7 +19,7 @@ package com.standup.app.authentication.login
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.prefs.UserSessionManager
-import com.kevalpatel2106.network.NetworkModule
+import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -32,7 +32,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.io.File
 import java.io.IOException
-import java.nio.file.Paths
 
 /**
  * Created by Keval on 20/11/17.
@@ -42,11 +41,6 @@ import java.nio.file.Paths
 @RunWith(JUnit4::class)
 //TODO check user session manager also
 class LoginViewModelSignUpTest {
-    private val path = Paths.get("").toAbsolutePath().toString().let {
-        return@let if (it.endsWith("feature-authentication")) it else it.plus("/feature-authentication")
-    }
-    private val RESPONSE_DIR_PATH = String.format("%s/src/test/java/com/standup/app/authentication/repo", path)
-
     @Rule
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
@@ -65,7 +59,7 @@ class LoginViewModelSignUpTest {
         //Set the repo
         mockServerManager.startMockWebServer()
         loginViewModel = LoginViewModel(
-                UserAuthRepositoryImpl(NetworkModule().getRetrofitClient(mockServerManager.getBaseUrl())),
+                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
                 userSessionManager
         )
     }
@@ -144,7 +138,7 @@ class LoginViewModelSignUpTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateSignUpSuccess() {
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/user_sign_up_success.json"))
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/user_sign_up_success.json"))
 
         //Make the api call to the mock server
         loginViewModel.performSignUp("test@example.com", "1234567989", "Test User", "1234567989")
@@ -162,8 +156,8 @@ class LoginViewModelSignUpTest {
     @Test
     @Throws(IOException::class)
     fun checkAuthenticateSignUpFieldMissing() {
-        println("Path :" + RESPONSE_DIR_PATH)
-        mockServerManager.enqueueResponse(File(RESPONSE_DIR_PATH + "/authentication_field_missing.json"))
+        println("Path :" + mockServerManager.getResponsesPath())
+        mockServerManager.enqueueResponse(File(mockServerManager.getResponsesPath() + "/authentication_field_missing.json"))
 
         //Make the api call to the mock server
         loginViewModel.performSignUp("test@example.com", "1234567989", "Test User", "1234567989")

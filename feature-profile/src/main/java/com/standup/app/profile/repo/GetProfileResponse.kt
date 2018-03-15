@@ -18,7 +18,7 @@
 package com.standup.app.profile.repo
 
 import com.google.gson.annotations.SerializedName
-import com.kevalpatel2106.common.AppConfig
+import com.kevalpatel2106.common.misc.AppConfig
 import com.kevalpatel2106.utils.toFloatSafe
 
 /**

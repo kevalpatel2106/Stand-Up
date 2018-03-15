@@ -17,8 +17,8 @@
 
 package com.standup.app.about.di
 
-import com.kevalpatel2106.common.application.di.AppModule
-import com.kevalpatel2106.common.application.di.ApplicationScope
+import com.kevalpatel2106.common.di.AppModule
+import com.kevalpatel2106.common.di.ApplicationScope
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.standup.app.about.repo.AboutRepository
 import com.standup.app.about.repo.AboutRepositoryImpl
