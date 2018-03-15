@@ -48,7 +48,7 @@ class RepoBuilderTest {
                 .build()
 
         Assert.assertEquals(repo.mCaches.size, 1)
-        Assert.assertTrue(repo.mRefresher.isEmpty())
+        Assert.assertNull(repo.mRefresher)
     }
 
     @Test
@@ -62,7 +62,7 @@ class RepoBuilderTest {
                 })
                 .build()
 
-        Assert.assertEquals(repo.mRefresher.size, 1)
+        Assert.assertNotNull(repo.mRefresher)
         Assert.assertTrue(repo.mCaches.isEmpty())
     }
 
@@ -87,7 +87,7 @@ class RepoBuilderTest {
                 })
                 .build()
 
-        Assert.assertEquals(repo.mRefresher.size, 1)
+        Assert.assertNotNull(repo.mRefresher)
         Assert.assertEquals(repo.mCaches.size, 1)
     }
 

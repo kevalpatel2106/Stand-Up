@@ -28,27 +28,52 @@ import org.junit.Test
 class RepoDataTest {
 
     @Test
-    fun checkConstructorInit() {
+    fun checkSuccess_WithoutErrorMessage() {
+        val repoData = RepoData(false, "This is test data.")
+
+        Assert.assertFalse(repoData.isError)
+        Assert.assertEquals(repoData.data, "This is test data.")
+
+        Assert.assertNull(repoData.errorMessage)
+        Assert.assertEquals(repoData.errorCode, 0)
+    }
+
+    @Test
+    fun checkSuccess_WithoutData() {
+        val repoData = RepoData<String>(false)
+
+        Assert.assertFalse(repoData.isError)
+        Assert.assertNull(repoData.data)
+
+        Assert.assertNull(repoData.errorMessage)
+        Assert.assertEquals(repoData.errorCode, 0)
+    }
+
+
+    @Test
+    fun checkError_WithoutErrorMessage() {
         val repoData = RepoData(true, "This is test data.")
 
         Assert.assertTrue(repoData.isError)
         Assert.assertEquals(repoData.data, "This is test data.")
+
         Assert.assertNull(repoData.errorMessage)
         Assert.assertEquals(repoData.errorCode, 0)
     }
 
     @Test
-    fun checkConstructorInit1() {
+    fun checkError_WithoutData() {
         val repoData = RepoData<String>(true)
 
         Assert.assertTrue(repoData.isError)
         Assert.assertNull(repoData.data)
+
         Assert.assertNull(repoData.errorMessage)
         Assert.assertEquals(repoData.errorCode, 0)
     }
 
     @Test
-    fun checkSettingError() {
+    fun checkError_WithoutData_WithErrorMessage() {
         val repoData = RepoData<String>(true)
 
         Assert.assertTrue(repoData.isError)
@@ -61,22 +86,40 @@ class RepoDataTest {
     }
 
     @Test
-    fun checkGetErrorMessageWithoutError() {
+    fun checkGetErrorMessage_WithoutError_WithoutData() {
         val repoData = RepoData<String>(false)
 
         repoData.errorMessage = "This is test message."
-        repoData.errorCode = 401
 
         Assert.assertNull(repoData.errorMessage)
+        Assert.assertEquals(repoData.errorCode, 0)
+    }
+
+    @Test
+    fun checkErrorCode_WithoutError() {
+        val repoData = RepoData<String>(false)
+        repoData.errorCode = 401
         Assert.assertEquals(repoData.errorCode, 401)
     }
 
     @Test
-    fun checkSourceType() {
+    fun checkErrorCode_WithError() {
+        val repoData = RepoData<String>(true)
+        repoData.errorCode = 401
+        Assert.assertEquals(repoData.errorCode, 401)
+    }
+
+    @Test
+    fun checkSourceTypeCache() {
         val repoData = RepoData<String>(false)
 
         repoData.source = SourceType.CACHE
         Assert.assertEquals(repoData.source, SourceType.CACHE)
+    }
+
+    @Test
+    fun checkSourceTypeNetwork() {
+        val repoData = RepoData<String>(false)
 
         repoData.source = SourceType.NETWORK
         Assert.assertEquals(repoData.source, SourceType.NETWORK)
