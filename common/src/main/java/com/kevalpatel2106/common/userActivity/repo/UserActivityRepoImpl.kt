@@ -26,9 +26,7 @@ import com.kevalpatel2106.common.userActivity.UserActivityType
 import com.kevalpatel2106.network.repository.RepoBuilder
 import com.kevalpatel2106.network.repository.refresher.RetrofitNetworkRefresher
 import com.kevalpatel2106.utils.TimeUtils
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Single
 import retrofit2.Retrofit
 import timber.log.Timber
@@ -51,15 +49,14 @@ class UserActivityRepoImpl(private val userActivityDao: UserActivityDao,
      * Implementation:
      */
     @WorkerThread
-    override fun sendPendingActivitiesToServer(): Flowable<Int> {
-        return Flowable.create({
+    override fun sendPendingActivitiesToServer(): Single<Int> {
+        return Single.create<Int>({
             //Get all the pending to sync activities.
             val pendingActivities = userActivityDao.getPendingActivity(false)
 
             if (pendingActivities.isEmpty()) {
                 //No item to sync
-                it.onNext(0)
-                it.onComplete()
+                it.onSuccess(0)
                 return@create
             }
 
@@ -90,45 +87,50 @@ class UserActivityRepoImpl(private val userActivityDao: UserActivityDao,
                                 })
                     }
 
-            it.onNext(numOfSync)
-            it.onComplete()
-        }, BackpressureStrategy.BUFFER)
+            it.onSuccess(numOfSync)
+        })
     }
 
     @WorkerThread
-    override fun getActivitiesFromServer(): Flowable<Int> {
+    override fun getActivitiesFromServer(): Single<Int> {
 
-        //Get all the pending to sync activities.
-        var oldestTimeStamp = TimeUtils.convertToNano(userActivityDao.getOldestTimestamp())
-        if (oldestTimeStamp == 0L) oldestTimeStamp = TimeUtils.convertToNano(System.currentTimeMillis())
+        return Single.create<Int> {
+            val emitter = it
 
-        //Execute the network call.
-        val call = retrofit.create(CoreApiService::class.java)
-                .getActivities(GetActivityRequest(oldestTimeStamp))
+            //Get all the pending to sync activities.
+            var oldestTimeStamp = TimeUtils.convertToNano(userActivityDao.getOldestTimestamp())
+            if (oldestTimeStamp == 0L) oldestTimeStamp = TimeUtils.convertToNano(System.currentTimeMillis())
 
-        return RepoBuilder<GetActivityResponse>()
-                .addRefresher(RetrofitNetworkRefresher(call))
-                .build()
-                .fetch()
-                .map { it.data!!.activities }
-                .map { it.filter { it.remoteId != 0L }.map { it.getUserActivity() } }
-                .map {
-                    //Save every thing into the database.
-                    it.forEach {
-                        with(userActivityDao.getActivityForRemoteId(it.remoteId)) {
+            //Execute the network call.
+            val call = retrofit.create(CoreApiService::class.java)
+                    .getActivities(GetActivityRequest(oldestTimeStamp))
 
-                            @Suppress("IMPLICIT_CAST_TO_ANY")
-                            if (this == null) {
-                                userActivityDao.insert(it)
-                            } else {
-                                it.localId = this.localId
-                                userActivityDao.update(it)
+            RepoBuilder<GetActivityResponse>()
+                    .addRefresher(RetrofitNetworkRefresher(call))
+                    .build()
+                    .fetch()
+                    .map { it.data!!.activities }
+                    .map { it.filter { it.remoteId != 0L }.map { it.getUserActivity() } }
+                    .subscribe({
+                        //Save every thing into the database.
+                        it.forEach {
+                            with(userActivityDao.getActivityForRemoteId(it.remoteId)) {
+
+                                @Suppress("IMPLICIT_CAST_TO_ANY")
+                                if (this == null) {
+                                    userActivityDao.insert(it)
+                                } else {
+                                    it.localId = this.localId
+                                    userActivityDao.update(it)
+                                }
                             }
                         }
-                    }
 
-                    return@map it.size
-                }
+                        emitter.onSuccess(it.size)
+                    }, {
+                        emitter.onError(it)
+                    })
+        }
     }
 
     override fun insertNewUserActivity(newActivity: UserActivity): Single<Long> {

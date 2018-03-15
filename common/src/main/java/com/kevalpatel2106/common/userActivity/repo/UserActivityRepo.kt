@@ -18,7 +18,6 @@
 package com.kevalpatel2106.common.userActivity.repo
 
 import com.kevalpatel2106.common.userActivity.UserActivity
-import io.reactivex.Flowable
 import io.reactivex.Single
 
 /**
@@ -37,7 +36,7 @@ interface UserActivityRepo {
      * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
      * inert [newActivity].
      *
-     * @see CoreRepoImpl.insertNewUserActivity for how it's implemented.
+     * @see UserActivityRepoImpl.insertNewUserActivity for how it's implemented.
      */
     fun insertNewUserActivity(newActivity: UserActivity, doNotMergeWithPrevious: Boolean): Single<Long>
 
@@ -46,7 +45,7 @@ interface UserActivityRepo {
      * [newActivity] start time. If the previous [UserActivity] is already terminated it will just
      * inert [newActivity].
      *
-     * @see CoreRepoImpl.insertNewUserActivity for how it's implemented.
+     * @see UserActivityRepoImpl.insertNewUserActivity for how it's implemented.
      */
     fun insertNewUserActivity(newActivity: UserActivity): Single<Long>
 
@@ -55,10 +54,10 @@ interface UserActivityRepo {
      * on asynchronous background thread. It will return [Single] to notify whenever sync is
      * completed or failed. onSuccess in the single will emit the number of activities synced.
      */
-    fun sendPendingActivitiesToServer(): Flowable<Int>
+    fun sendPendingActivitiesToServer(): Single<Int>
 
     /**
      * onSuccess in the single will emit the number of activities received from the server.
      */
-    fun getActivitiesFromServer(): Flowable<Int>
+    fun getActivitiesFromServer(): Single<Int>
 }

@@ -25,7 +25,6 @@ import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.TimeUtils
 import io.reactivex.observers.TestObserver
-import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -374,7 +373,7 @@ class UserActivityRepoImplTest {
         @Throws(Exception::class)
         fun checkWithNoActivity() {
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.sendPendingActivitiesToServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -403,7 +402,7 @@ class UserActivityRepoImplTest {
                     type = UserActivityType.MOVING.toString().toLowerCase())
             )
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.sendPendingActivitiesToServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -432,7 +431,7 @@ class UserActivityRepoImplTest {
                     type = UserActivityType.NOT_TRACKED.toString().toLowerCase())
             )
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.sendPendingActivitiesToServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -466,7 +465,7 @@ class UserActivityRepoImplTest {
             mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/save_activity_response.json"))
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.sendPendingActivitiesToServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -514,7 +513,7 @@ class UserActivityRepoImplTest {
             mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/authentication_field_missing.json"))
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.sendPendingActivitiesToServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -563,7 +562,7 @@ class UserActivityRepoImplTest {
             mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/authentication_field_missing.json"))
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.sendPendingActivitiesToServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -622,7 +621,7 @@ class UserActivityRepoImplTest {
             mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/get_activity_response.json"))
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.getActivitiesFromServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -679,7 +678,7 @@ class UserActivityRepoImplTest {
             mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/get_activity_response.json"))
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.getActivitiesFromServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -736,7 +735,7 @@ class UserActivityRepoImplTest {
             mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/get_activity_response.json"))
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.getActivitiesFromServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -776,7 +775,7 @@ class UserActivityRepoImplTest {
             mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/authentication_field_missing.json"))
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.getActivitiesFromServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()
@@ -798,7 +797,7 @@ class UserActivityRepoImplTest {
             mockWebServerManager.enqueueResponse(File(mockWebServerManager.getResponsesPath()
                     + "/get_activity_empty_response.json"))
 
-            val testSubscribe = TestSubscriber<Int>()
+            val testSubscribe = TestObserver<Int>()
             userActivityRepo.getActivitiesFromServer().subscribe(testSubscribe)
 
             testSubscribe.awaitTerminalEvent()

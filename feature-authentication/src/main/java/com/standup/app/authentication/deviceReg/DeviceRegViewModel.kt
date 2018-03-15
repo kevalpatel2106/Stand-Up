@@ -35,6 +35,7 @@ import com.standup.app.authentication.repo.DeviceRegisterRequest
 import com.standup.app.authentication.repo.UserAuthRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -142,6 +143,8 @@ internal class DeviceRegViewModel : BaseViewModel {
                         reposeToken.value = data.token
                     }
                 }, {
+                    Timber.d(it.printStackTrace().toString())
+
                     val errorMsg = ErrorMessage(it.message)
                     errorMsg.setErrorBtn(R.string.error_retry_try_again, { sendDeviceDataToServer(regId, deviceId) })
                     errorMsg.errorImage = LottieJson.WARNING
@@ -169,6 +172,8 @@ internal class DeviceRegViewModel : BaseViewModel {
                 .subscribe({
                     syncComplete.value = true
                 }, {
+                    Timber.d(it.printStackTrace().toString())
+
                     val errorMsg = ErrorMessage(it.message)
                     errorMsg.setErrorBtn(R.string.error_retry_try_again, { syncOldActivities(userActivityRepo) })
                     errorMsg.errorImage = LottieJson.WARNING
