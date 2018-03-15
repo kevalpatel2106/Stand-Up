@@ -59,8 +59,10 @@ internal class DailyReviewSettingsViewModel : BaseViewModel {
     internal val isDailyReviewEnable = MutableLiveData<Boolean>()
 
     @VisibleForTesting
-    constructor(settingsManager: UserSettingsManager) {
+    constructor(settingsManager: UserSettingsManager,
+                core: Core) {
         this.settingsManager = settingsManager
+        this.core = core
         init()
     }
 

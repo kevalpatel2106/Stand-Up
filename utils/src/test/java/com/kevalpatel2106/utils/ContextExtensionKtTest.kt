@@ -18,6 +18,7 @@
 package com.kevalpatel2106.utils
 
 import android.app.KeyguardManager
+import android.graphics.Color
 import android.os.PowerManager
 import android.os.Vibrator
 import org.junit.Assert
@@ -42,6 +43,12 @@ class ContextExtensionKtTest {
     @RunWith(RobolectricTestRunner::class)
     @Config(sdk = [21], manifest = Config.NONE)
     class ContextExtensionKtApi19Test {
+
+        @Test
+        @Throws(Exception::class)
+        fun testGetColor() {
+            Assert.assertEquals(Color.WHITE, RuntimeEnvironment.application.getColorCompat(android.R.color.white))
+        }
 
         @Test
         @Throws(Exception::class)
@@ -95,6 +102,12 @@ class ContextExtensionKtTest {
     @RunWith(RobolectricTestRunner::class)
     @Config(sdk = [26], manifest = Config.NONE)
     class ContextExtensionKtApi26Test {
+
+        @Test
+        @Throws(Exception::class)
+        fun testGetColor() {
+            Assert.assertEquals(Color.WHITE, RuntimeEnvironment.application.getColorCompat(android.R.color.white))
+        }
 
         @Test
         @Throws(Exception::class)
