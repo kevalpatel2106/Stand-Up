@@ -31,12 +31,12 @@ object DefaultConfig {
     /**
      * Target SDK.
      */
-    const val target = 26
+    const val target = 27
 
     /**
      * Compile SDK.
      */
-    const val compile = 26
+    const val compile = 27
 
     /**
      * Build tool version.
@@ -49,9 +49,18 @@ object DefaultConfig {
      */
     const val applicationId = "com.standup.app"
 
+    /**
+     * Test runner class.
+     */
     const val testRunnerClass = "com.kevalpatel2106.testutils.CustomTestRunner"
 
+    /**
+     * Supported resources languages.
+     */
     const val supportedResConfig = "en"
 
+    /**
+     * Room schema path.
+     */
     const val schemaPath = "../schemas"
 }
