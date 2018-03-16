@@ -159,7 +159,7 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
     //************ do not disturb settings *************//
     private val DEFAULT_MANNUAL_DND_ENABLE = false
     private val DEFAULT_AUTO_DND_ENABLE = false
-    private val DEFAULT_AUTO_DND_START_TIME = 9 * TimeUtils.ONE_HOUR_MILLS    //09:00 AM
+    private val DEFAULT_AUTO_DND_START_TIME = 9 * TimeUtils.ONE_DAY_MILLISECONDS    //09:00 AM
     private val DEFAULT_AUTO_DND_END_TIME = 10 * TimeUtils.ONE_HOUR_MILLS     //10:00 AM
 
     val isCurrentlyInDnd: Boolean
@@ -236,11 +236,11 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
      * @return True if the DND should be enabled.
      */
     internal fun isCurrentlyInAutoDndMode(
-            @OnlyForTesting currentTimeFrom12Am: Long = TimeUtils.currentMillsFromMidnight()): Boolean {
+            @OnlyForTesting
+            currentTimeFrom12Am: Long = System.currentTimeMillis() - TimeUtils.todayMidnightCal(false).timeInMillis)
+            : Boolean {
 
-        return isAutoDndEnable
-                && currentTimeFrom12Am >= autoDndStartTime
-                && currentTimeFrom12Am <= autoDndEndTime
+        return isAutoDndEnable && currentTimeFrom12Am in autoDndStartTime - 1..autoDndEndTime + 1
     }
 
     //************ sleep settings *************//
