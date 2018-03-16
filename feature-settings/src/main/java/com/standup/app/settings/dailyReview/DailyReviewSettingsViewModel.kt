@@ -26,6 +26,7 @@ import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.utils.TimeUtils
+import com.philliphsu.bottomsheetpickers.time.BottomSheetTimePickerDialog
 import com.philliphsu.bottomsheetpickers.time.grid.GridTimePickerDialog
 import com.standup.app.settings.di.DaggerSettingsComponent
 import com.standup.app.settings.setApplicationTheme
@@ -48,6 +49,9 @@ internal class DailyReviewSettingsViewModel : BaseViewModel {
     @Inject
     lateinit var settingsManager: UserSettingsManager
 
+    /**
+     * [Core] instance.
+     */
     @Inject
     lateinit var core: Core
 
@@ -56,7 +60,19 @@ internal class DailyReviewSettingsViewModel : BaseViewModel {
      */
     internal val dailyReviewTimeSummary = MutableLiveData<String>()
 
+    /**
+     * Bool to indicate is daily review feature enabled.
+     */
     internal val isDailyReviewEnable = MutableLiveData<Boolean>()
+
+    @VisibleForTesting
+    internal val onTimeSetListener = BottomSheetTimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+        //Save new time
+        settingsManager.dailyReviewTimeFrom12Am = TimeUtils.millsFromMidnight(hourOfDay, minute)
+
+        //daily review timing changed. Update the alarms.
+        onDailyReviewSettingChange()
+    }
 
     @VisibleForTesting
     constructor(settingsManager: UserSettingsManager,
@@ -101,13 +117,12 @@ internal class DailyReviewSettingsViewModel : BaseViewModel {
         val cal = Calendar.getInstance(TimeZone.getDefault())
         cal.timeInMillis = settingsManager.dailyReviewTimeFrom12Am
 
-        val dialog = GridTimePickerDialog.newInstance({ _, hourOfDay, minute ->
-            //Save new time
-            settingsManager.dailyReviewTimeFrom12Am = TimeUtils.millsFromMidnight(hourOfDay, minute)
-
-            //daily review timing changed. Update the alarms.
-            onDailyReviewSettingChange()
-        }, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), false)
+        val dialog = GridTimePickerDialog.newInstance(
+                onTimeSetListener,
+                cal.get(Calendar.HOUR_OF_DAY),
+                cal.get(Calendar.MINUTE),
+                false
+        )
         dialog.setApplicationTheme(context)
         dialog.show(fragmentManager, "DailyReviewTimePicker")
     }

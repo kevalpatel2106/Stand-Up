@@ -64,7 +64,7 @@ internal class InstructionViewModel : BaseViewModel {
 
     @VisibleForTesting
     internal fun loadInstructions() {
-        instructions.value?.let {
+        instructions.value!!.let {
             it.clear()
 
             it.add(Instruction(application.getString(R.string.instruction_title_1),

@@ -61,7 +61,9 @@ class ConvertToHHmmaFrom12AmTest {
         @Throws(IOException::class)
         fun testConvertToHHmmaFrom12Am() {
             Assert.assertEquals(
-                    SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(value)).replace("12", "00"),
+                    SimpleDateFormat("hh:mm a", Locale.ENGLISH)
+                            .format(Date(value - TimeZone.getDefault().rawOffset))
+                            .replace("12", "00"),
                     TimeUtils.convertToHHmmaFrom12Am(value)
             )
         }

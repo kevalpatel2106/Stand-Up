@@ -47,8 +47,13 @@ internal class NotificationsSettingsViewModel : BaseViewModel {
 
     @VisibleForTesting
     @OnlyForTesting
-    constructor(sharedPrefsProvider: SharedPrefsProvider) {
+    constructor(
+            sharedPrefsProvider: SharedPrefsProvider,
+            userSettingsManager: UserSettingsManager
+    ) {
         this.sharedPrefsProvider = sharedPrefsProvider
+        this.userSettingsManager = userSettingsManager
+
         init()
     }
 
@@ -62,7 +67,7 @@ internal class NotificationsSettingsViewModel : BaseViewModel {
     }
 
 
-    fun init() {
+    private fun init() {
         reminderToneName.value = userSettingsManager.getReminderToneName
     }
 
@@ -82,5 +87,4 @@ internal class NotificationsSettingsViewModel : BaseViewModel {
                 }
                 .show()
     }
-
 }

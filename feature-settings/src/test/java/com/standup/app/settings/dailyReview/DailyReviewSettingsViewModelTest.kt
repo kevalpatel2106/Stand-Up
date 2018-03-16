@@ -18,8 +18,8 @@
 package com.standup.app.settings.dailyReview
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
+import android.view.ViewGroup
 import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
-import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
@@ -32,6 +32,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.mockito.Mockito
 import java.util.*
 
 /**
@@ -53,20 +54,14 @@ class DailyReviewSettingsViewModelTest {
     private lateinit var model: DailyReviewSettingsViewModel
     private lateinit var mockSharedPrefsProvider: SharedPrefsProvider
     private lateinit var mockSettingsProvider: UserSettingsManager
-    private lateinit var mockSessionProvider: UserSessionManager
     private lateinit var mockCore: Core
 
     @Before
     fun setUp() {
         mockSharedPrefsProvider = SharedPrefsProvider(MockSharedPreference())
         mockSettingsProvider = UserSettingsManager(mockSharedPrefsProvider)
-        mockSessionProvider = UserSessionManager(mockSharedPrefsProvider)
 
-        mockCore = Core(
-                userSessionManager = mockSessionProvider,
-                userSettingsManager = mockSettingsProvider,
-                sharedPrefsProvider = mockSharedPrefsProvider
-        )
+        mockCore = Mockito.mock(Core::class.java)
 
         model = DailyReviewSettingsViewModel(
                 settingsManager = mockSettingsProvider,
@@ -80,7 +75,6 @@ class DailyReviewSettingsViewModelTest {
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_ENABLE, true)
         mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS - TimeZone.getDefault().rawOffset
 
-
         model = DailyReviewSettingsViewModel(
                 settingsManager = mockSettingsProvider,
                 core = mockCore
@@ -89,5 +83,48 @@ class DailyReviewSettingsViewModelTest {
         Assert.assertTrue(model.isDailyReviewEnable.value!!)
         Assert.assertNotNull(model.dailyReviewTimeSummary.value)
         Assert.assertEquals(model.dailyReviewTimeSummary.value, "08:00 AM")
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkOnTimeChangeListener() {
+        var isCoreRefreshed = false
+        Mockito.`when`(mockCore.refresh()).thenAnswer {
+            isCoreRefreshed = true
+            return@thenAnswer Any()
+        }
+
+        model.onTimeSetListener.onTimeSet(Mockito.mock(ViewGroup::class.java), 2, 23)
+
+        //Check the time
+        Assert.assertEquals(
+                mockSettingsProvider.dailyReviewTimeFrom12Am,
+                2 * TimeUtils.ONE_HOUR_MILLS + 23 * TimeUtils.ONE_MIN_MILLS
+        )
+
+        Assert.assertNotNull(model.dailyReviewTimeSummary.value)
+        Assert.assertEquals(model.dailyReviewTimeSummary.value, "02:23 AM")
+
+        //Check if the core refreshed
+        Assert.assertTrue(isCoreRefreshed)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkOnDailyReviewSettingChange() {
+        var isCoreRefreshed = false
+        Mockito.`when`(mockCore.refresh()).thenAnswer {
+            isCoreRefreshed = true
+            return@thenAnswer Any()
+        }
+        mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS - TimeZone.getDefault().rawOffset
+
+        model.onDailyReviewSettingChange()
+
+        Assert.assertNotNull(model.dailyReviewTimeSummary.value)
+        Assert.assertEquals(model.dailyReviewTimeSummary.value, "08:00 AM")
+
+        //Check if the core refreshed
+        Assert.assertTrue(isCoreRefreshed)
     }
 }
