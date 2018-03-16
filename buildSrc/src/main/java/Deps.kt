@@ -61,7 +61,6 @@ object Deps {
     const val firebaseCore = "com.google.firebase:firebase-core:${Versions.playService}"
     const val fcm = "com.google.firebase:firebase-messaging:${Versions.playService}"
     const val firebasePreformance = "com.google.firebase:firebase-perf:${Versions.playService}"
-    const val remoteConfig = "com.google.firebase:firebase-config:${Versions.playService}"
     const val firebaseInvites = "com.google.firebase:firebase-invites:${Versions.playService}"
 
     //Play service

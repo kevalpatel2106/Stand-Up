@@ -46,6 +46,38 @@ internal class DndSettingsViewModel : BaseViewModel {
     @Inject
     lateinit var core: Core
 
+    @VisibleForTesting
+    internal val autoDndTimePickerListener = object : DualTimePickerListener {
+        override fun onTimeSelected(startHourOfDay: Int,
+                                    startMinutes: Int,
+                                    endHourOfDay: Int,
+                                    endMins: Int) {
+
+            //Save the time
+            val startTimeMills = TimeUtils.millsFromMidnight(startHourOfDay, startMinutes)
+            val endTimeMils = TimeUtils.millsFromMidnight(endHourOfDay, endMins)
+            userSettingsManager.setAutoDndTime(startTimeMills, endTimeMils)
+
+            onAutoDndChanged()
+        }
+    }
+
+    @VisibleForTesting
+    internal val sleepTimePickerListener = object : DualTimePickerListener {
+        override fun onTimeSelected(startHourOfDay: Int,
+                                    startMinutes: Int,
+                                    endHourOfDay: Int,
+                                    endMins: Int) {
+
+            //Save the time
+            val startTimeMills = TimeUtils.millsFromMidnight(startHourOfDay, startMinutes)
+            val endTimeMils = TimeUtils.millsFromMidnight(endHourOfDay, endMins)
+            userSettingsManager.setSleepTime(startTimeMills, endTimeMils)
+
+            onSleepTimeChanged()
+        }
+    }
+
     @Suppress("unused")
     constructor() {
         DaggerSettingsComponent.builder()
@@ -56,8 +88,10 @@ internal class DndSettingsViewModel : BaseViewModel {
     }
 
     @VisibleForTesting
-    constructor(userSettingsManager: UserSettingsManager) {
+    constructor(userSettingsManager: UserSettingsManager, core: Core) {
         this.userSettingsManager = userSettingsManager
+        this.core = core
+
         init()
     }
 
@@ -76,7 +110,7 @@ internal class DndSettingsViewModel : BaseViewModel {
     /**
      * Call this method when user turns on/off DND mode manually.
      */
-    fun onManualDadChanged() {
+    fun onForceDndChanged() {
         //Check iff the DND status
         isDndEnable.value = userSettingsManager.isCurrentlyInDnd
 
@@ -118,21 +152,10 @@ internal class DndSettingsViewModel : BaseViewModel {
      * auto dnd from the user.
      */
     fun onSelectAutoDndTime(supportFragmentManager: FragmentManager) {
-
-        DualTimePicker.show(supportFragmentManager = supportFragmentManager, dualTimePickerListener = object : DualTimePickerListener {
-            override fun onTimeSelected(startHourOfDay: Int,
-                                        startMinutes: Int,
-                                        endHourOfDay: Int,
-                                        endMins: Int) {
-
-                //Save the time
-                val startTimeMills = TimeUtils.millsFromMidnight(startHourOfDay, startMinutes)
-                val endTimeMils = TimeUtils.millsFromMidnight(endHourOfDay, endMins)
-                userSettingsManager.setAutoDndTime(startTimeMills, endTimeMils)
-
-                onAutoDndChanged()
-            }
-        })
+        DualTimePicker.show(
+                supportFragmentManager = supportFragmentManager,
+                dualTimePickerListener = autoDndTimePickerListener
+        )
     }
 
     /**
@@ -141,19 +164,9 @@ internal class DndSettingsViewModel : BaseViewModel {
      */
     fun onSelectSleepTime(supportFragmentManager: FragmentManager) {
 
-        DualTimePicker.show(supportFragmentManager = supportFragmentManager, dualTimePickerListener = object : DualTimePickerListener {
-            override fun onTimeSelected(startHourOfDay: Int,
-                                        startMinutes: Int,
-                                        endHourOfDay: Int,
-                                        endMins: Int) {
-
-                //Save the time
-                val startTimeMills = TimeUtils.millsFromMidnight(startHourOfDay, startMinutes)
-                val endTimeMils = TimeUtils.millsFromMidnight(endHourOfDay, endMins)
-                userSettingsManager.setSleepTime(startTimeMills, endTimeMils)
-
-                onSleepTimeChanged()
-            }
-        })
+        DualTimePicker.show(
+                supportFragmentManager = supportFragmentManager,
+                dualTimePickerListener = sleepTimePickerListener
+        )
     }
 }

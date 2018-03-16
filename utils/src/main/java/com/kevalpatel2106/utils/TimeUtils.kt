@@ -85,7 +85,7 @@ object TimeUtils {
     fun millsFromMidnight(hourOfTheDay: Int, minutes: Int): Long {
         if (hourOfTheDay !in 0..23 || minutes !in 0..59)
             throw IllegalArgumentException("Invalid hours: $hourOfTheDay:$minutes")
-        return hourOfTheDay * ONE_HOUR_MILLS + minutes * ONE_MIN_MILLS - TimeZone.getDefault().rawOffset
+        return hourOfTheDay * ONE_HOUR_MILLS + minutes * ONE_MIN_MILLS
     }
 
     fun todayMidnightMills(): Long {
@@ -128,6 +128,17 @@ object TimeUtils {
         10 -> "November"
         11 -> "December"
         else -> throw IllegalArgumentException("Invalid month: ".plus(monthOfYear))
+    }
+
+    fun getDayOfWeek(dayOfWeek: Int): String = when (dayOfWeek) {
+        1 -> "Sunday"
+        2 -> "Monday"
+        3 -> "Tuesday"
+        4 -> "Wednesday"
+        5 -> "Thursday"
+        6 -> "Friday"
+        7 -> "Saturday"
+        else -> throw IllegalArgumentException("Invalid day of week: ".plus(dayOfWeek))
     }
 
     //*********** Human readable time formats *********//
@@ -189,7 +200,7 @@ object TimeUtils {
         if (millsFrom12Am !in 0 until TimeUtils.ONE_DAY_MILLISECONDS)
             throw IllegalArgumentException("Time is invalid: $millsFrom12Am")
 
-        val cal = Calendar.getInstance(TimeZone.getDefault())
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
         cal.timeInMillis = millsFrom12Am
 
         return String.format("%s:%s %s",

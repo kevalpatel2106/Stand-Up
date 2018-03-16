@@ -82,6 +82,8 @@ class InstructionViewModelTest {
         Mockito.`when`(application.getString(R.string.instruction_title_1)).thenReturn(TITLE)
         Mockito.`when`(application.getString(R.string.instruction_message_1)).thenReturn(MESSAGE)
 
+        model.loadInstructions()
+
         assertEquals(TITLE, model.instructions.value!![0].heading)
         assertEquals(MESSAGE, model.instructions.value!![0].message)
         assertEquals(R.drawable.ic_intro_how_to, model.instructions.value!![0].icon)
@@ -92,6 +94,8 @@ class InstructionViewModelTest {
     fun checkSecondInstruction() {
         Mockito.`when`(application.getString(R.string.instruction_title_2)).thenReturn(TITLE)
         Mockito.`when`(application.getString(R.string.instruction_message_2)).thenReturn(MESSAGE)
+
+        model.loadInstructions()
 
         assertEquals(TITLE, model.instructions.value!![1].heading)
         assertEquals(MESSAGE, model.instructions.value!![1].message)
@@ -104,6 +108,8 @@ class InstructionViewModelTest {
         Mockito.`when`(application.getString(R.string.instruction_title_3)).thenReturn(TITLE)
         Mockito.`when`(application.getString(R.string.instruction_message_3)).thenReturn(MESSAGE)
 
+        model.loadInstructions()
+
         assertEquals(TITLE, model.instructions.value!![2].heading)
         assertEquals(MESSAGE, model.instructions.value!![2].message)
         assertEquals(R.drawable.ic_intro_accuracy, model.instructions.value!![2].icon)
@@ -114,6 +120,8 @@ class InstructionViewModelTest {
     fun checkFourthInstruction() {
         Mockito.`when`(application.getString(R.string.instruction_title_4)).thenReturn(TITLE)
         Mockito.`when`(application.getString(R.string.instruction_message_4)).thenReturn(MESSAGE)
+
+        model.loadInstructions()
 
         assertEquals(TITLE, model.instructions.value!![3].heading)
         assertEquals(MESSAGE, model.instructions.value!![3].message)
@@ -126,6 +134,8 @@ class InstructionViewModelTest {
         Mockito.`when`(application.getString(R.string.instruction_title_5)).thenReturn(TITLE)
         Mockito.`when`(application.getString(R.string.instruction_message_5)).thenReturn(MESSAGE)
 
+        model.loadInstructions()
+
         assertEquals(TITLE, model.instructions.value!![4].heading)
         assertEquals(MESSAGE, model.instructions.value!![4].message)
         assertEquals(R.drawable.ic_intro_battery_saving, model.instructions.value!![4].icon)
@@ -136,6 +146,8 @@ class InstructionViewModelTest {
     fun checkSixInstruction() {
         Mockito.`when`(application.getString(R.string.instruction_title_6)).thenReturn(TITLE)
         Mockito.`when`(application.getString(R.string.instruction_message_6)).thenReturn(MESSAGE)
+
+        model.loadInstructions()
 
         assertEquals(TITLE, model.instructions.value!![5].heading)
         assertEquals(MESSAGE, model.instructions.value!![5].message)

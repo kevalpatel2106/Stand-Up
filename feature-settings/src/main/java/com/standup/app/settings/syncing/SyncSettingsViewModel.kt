@@ -54,8 +54,13 @@ internal class SyncSettingsViewModel : BaseViewModel {
     internal val lastSyncTime = MutableLiveData<String>()
 
     @VisibleForTesting
-    constructor(sharedPrefsProvider: SharedPrefsProvider) {
+    constructor(sharedPrefsProvider: SharedPrefsProvider,
+                corePrefsProvider: CorePrefsProvider,
+                core: Core) {
         this.sharedPrefsProvider = sharedPrefsProvider
+        this.corePrefsProvider = corePrefsProvider
+        this.core = core
+
         init()
     }
 
@@ -65,6 +70,7 @@ internal class SyncSettingsViewModel : BaseViewModel {
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@SyncSettingsViewModel)
+
         init()
     }
 

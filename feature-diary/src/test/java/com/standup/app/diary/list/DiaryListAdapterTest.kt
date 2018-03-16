@@ -45,7 +45,7 @@ class DiaryListAdapterTest {
     }
 
     @Test
-    fun checkPrepareViewTypeForHeaderType() {
+    fun checkPrepareViewType_ForHeaderType() {
         arrayList.add(MonthHeader(9, 2016))
         val type = diaryListAdapter.prepareViewType(0)
 
@@ -53,7 +53,7 @@ class DiaryListAdapterTest {
     }
 
     @Test
-    fun checkPrepareViewTypeForUserActivityType() {
+    fun checkPrepareViewType_ForUserActivityType() {
         @Suppress("DEPRECATION")
         arrayList.add(DailyActivitySummary(
                 dayOfMonth = 1,

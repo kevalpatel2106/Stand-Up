@@ -55,7 +55,7 @@ class DndSettingsFragment : PreferenceFragmentCompat() {
      */
     private val prefChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         when (key) {
-            getString(R.string.pref_key_dnd_enable) -> model.onManualDadChanged()
+            getString(R.string.pref_key_dnd_enable) -> model.onForceDndChanged()
             getString(R.string.pref_key_auto_dnd_enable) -> model.onAutoDndChanged()
         }
     }

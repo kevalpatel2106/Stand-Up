@@ -42,7 +42,7 @@ import com.kevalpatel2106.utils.annotations.OnlyForTesting
 class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
 
     //************ Background sync settings *************//
-    private val DEFAULT_SYNC_INTERVAL = 3600000.toString()    /* 1 hour */
+    private val DEFAULT_SYNC_INTERVAL = TimeUtils.ONE_HOUR_MILLS.toString()    /* 1 hour */
     private val DEFAULT_ENABLE_BACKGROUND_SYNC = true
 
 
@@ -144,7 +144,7 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
 
     //************ daily review settings *************//
     private val DEFAULT_DAILY_NOTIFICATION_ENABLE = true
-    private val DEFAULT_DAILY_REVIEW_TIME = 9 * 3600000L
+    private val DEFAULT_DAILY_REVIEW_TIME = 9 * TimeUtils.ONE_HOUR_MILLS
 
     val isDailyReviewEnable: Boolean
         get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_ENABLE,
@@ -159,10 +159,8 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
     //************ do not disturb settings *************//
     private val DEFAULT_MANNUAL_DND_ENABLE = false
     private val DEFAULT_AUTO_DND_ENABLE = false
-    private val DEFAULT_AUTO_DND_START_TIME = 9 * 3600000L
-    private val DEFAULT_AUTO_DND_END_TIME = 10 * 3600000L
-    private val DEFAULT_SLEEP_START_TIME = 22 * 3600000L
-    private val DEFAULT_SLEEP_END_TIME = 7 * 3600000L
+    private val DEFAULT_AUTO_DND_START_TIME = 9 * TimeUtils.ONE_DAY_MILLISECONDS    //09:00 AM
+    private val DEFAULT_AUTO_DND_END_TIME = 10 * TimeUtils.ONE_HOUR_MILLS     //10:00 AM
 
     val isCurrentlyInDnd: Boolean
         get() = sharedPrefProvider.getBoolFromPreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE,
@@ -238,14 +236,16 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
      * @return True if the DND should be enabled.
      */
     internal fun isCurrentlyInAutoDndMode(
-            @OnlyForTesting currentTimeFrom12Am: Long = TimeUtils.currentMillsFromMidnight()): Boolean {
+            @OnlyForTesting
+            currentTimeFrom12Am: Long = System.currentTimeMillis() - TimeUtils.todayMidnightCal(false).timeInMillis)
+            : Boolean {
 
-        return isAutoDndEnable
-                && currentTimeFrom12Am >= autoDndStartTime
-                && currentTimeFrom12Am <= autoDndEndTime
+        return isAutoDndEnable && currentTimeFrom12Am in autoDndStartTime - 1..autoDndEndTime + 1
     }
 
     //************ sleep settings *************//
+    private val DEFAULT_SLEEP_START_TIME = 22 * TimeUtils.ONE_HOUR_MILLS      //10:00 PM
+    private val DEFAULT_SLEEP_END_TIME = 7 * TimeUtils.ONE_HOUR_MILLS         //07:00 AM
 
     /**
      * Check if Sleep mode should be turned on based on the sleep timings? Based on the return value
@@ -257,7 +257,7 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
      * @return True if the DND should be enabled.
      */
     fun isCurrentlyInSleepMode(): Boolean {
-        return TimeUtils.currentMillsFromMidnight() in sleepStartTime..sleepEndTime
+        return System.currentTimeMillis() - TimeUtils.todayMidnightCal(false).timeInMillis in sleepStartTime..sleepEndTime
     }
 
     /**
