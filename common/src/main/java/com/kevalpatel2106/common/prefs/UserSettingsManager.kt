@@ -257,7 +257,7 @@ class UserSettingsManager(private val sharedPrefProvider: SharedPrefsProvider) {
      * @return True if the DND should be enabled.
      */
     fun isCurrentlyInSleepMode(): Boolean {
-        return TimeUtils.currentMillsFromMidnight() in sleepStartTime..sleepEndTime
+        return System.currentTimeMillis() - TimeUtils.todayMidnightCal(false).timeInMillis in sleepStartTime..sleepEndTime
     }
 
     /**

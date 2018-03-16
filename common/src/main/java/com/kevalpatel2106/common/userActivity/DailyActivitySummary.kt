@@ -61,6 +61,8 @@ constructor(
      */
     val monthInitials: String
 
+    val dayOfWeek: String
+
     /**
      * Total sitting activity time in milliseconds.
      */
@@ -102,6 +104,8 @@ constructor(
         //----------------//
         val summaryDayCal = TimeUtils.getMidnightCal(dayOfMonth, monthOfYear, year, false)
         val todayCal = TimeUtils.todayMidnightCal(false)
+
+        dayOfWeek = TimeUtils.getDayOfWeek(summaryDayCal.get(Calendar.DAY_OF_WEEK))
 
         //Calculate start time for the event.
         startTimeMills = summaryDayCal.timeInMillis

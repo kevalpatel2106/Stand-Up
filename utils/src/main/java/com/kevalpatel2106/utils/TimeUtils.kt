@@ -130,6 +130,17 @@ object TimeUtils {
         else -> throw IllegalArgumentException("Invalid month: ".plus(monthOfYear))
     }
 
+    fun getDayOfWeek(dayOfWeek: Int): String = when (dayOfWeek) {
+        1 -> "Sunday"
+        2 -> "Monday"
+        3 -> "Tuesday"
+        4 -> "Wednesday"
+        5 -> "Thursday"
+        6 -> "Friday"
+        7 -> "Saturday"
+        else -> throw IllegalArgumentException("Invalid day of week: ".plus(dayOfWeek))
+    }
+
     //*********** Human readable time formats *********//
 
     fun calculateHumanReadableDurationFromNow(timeToCalculate: Long,

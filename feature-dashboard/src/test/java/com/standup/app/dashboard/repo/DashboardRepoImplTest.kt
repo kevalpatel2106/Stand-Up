@@ -92,34 +92,38 @@ class DashboardRepoImplTest {
 
     @Test
     fun checkGetNextReminderStatus_InAutoDndMode() {
+        val timeFrom12Am = System.currentTimeMillis() - TimeUtils.getMidnightCal(System.currentTimeMillis(), false).timeInMillis
+
         //Dnd mode start
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE, true)
         mockUserSettingsManager.setAutoDndTime(
-                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
-                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() + 10_000
+                startTimeMillsFrom12Am = timeFrom12Am - 10_000,
+                endTimeMillsFrom12Am = timeFrom12Am + 10_000
         )
         //Sleep mode off
         mockUserSettingsManager.setSleepTime(
-                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
-                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+                startTimeMillsFrom12Am = timeFrom12Am - 10_000,
+                endTimeMillsFrom12Am = timeFrom12Am - 5_000
         )
 
-        Assert.assertEquals(dashboardRepo.getNextReminderStatus(), TEXT_DND_RUNNING)
+        Assert.assertEquals(TEXT_DND_RUNNING, dashboardRepo.getNextReminderStatus())
     }
 
     @Test
     fun checkGetNextReminderStatus_InForceDndMode() {
+        val timeFrom12Am = System.currentTimeMillis() - TimeUtils.getMidnightCal(System.currentTimeMillis(), false).timeInMillis
+
         //Dnd mode start
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE, true)
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE, false)
         mockUserSettingsManager.setAutoDndTime(
-                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
-                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+                startTimeMillsFrom12Am = timeFrom12Am - 10_000,
+                endTimeMillsFrom12Am = timeFrom12Am - 5_000
         )
         //Sleep mode off
         mockUserSettingsManager.setSleepTime(
-                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
-                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+                startTimeMillsFrom12Am = timeFrom12Am - 10_000,
+                endTimeMillsFrom12Am = timeFrom12Am - 5_000
         )
 
         Assert.assertEquals(dashboardRepo.getNextReminderStatus(), TEXT_DND_RUNNING)
@@ -127,17 +131,19 @@ class DashboardRepoImplTest {
 
     @Test
     fun checkGetNextReminderStatus_InSleepMode() {
+        val timeFrom12Am = System.currentTimeMillis() - TimeUtils.getMidnightCal(System.currentTimeMillis(), false).timeInMillis
+
         //Dnd mode start
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE, false)
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE, false)
         mockUserSettingsManager.setAutoDndTime(
-                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
-                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 5_000
+                startTimeMillsFrom12Am = timeFrom12Am - 10_000,
+                endTimeMillsFrom12Am = timeFrom12Am - 5_000
         )
         //Sleep mode off
         mockUserSettingsManager.setSleepTime(
-                startTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() - 10_000,
-                endTimeMillsFrom12Am = TimeUtils.currentMillsFromMidnight() + 10_000
+                startTimeMillsFrom12Am = timeFrom12Am - 10_000,
+                endTimeMillsFrom12Am = timeFrom12Am + 10_000
         )
 
         Assert.assertEquals(dashboardRepo.getNextReminderStatus(), TEXT_SLEEP_RUNNING)

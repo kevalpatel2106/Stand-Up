@@ -15,11 +15,8 @@
  *
  */
 
-package com.kevalpatel2106.common.db
+package com.kevalpatel2106.common.userActivity
 
-import com.kevalpatel2106.common.userActivity.DailyActivitySummary
-import com.kevalpatel2106.common.userActivity.UserActivity
-import com.kevalpatel2106.common.userActivity.UserActivityType
 import com.kevalpatel2106.utils.TimeUtils
 import com.kevalpatel2106.utils.Utils
 import org.junit.Assert
@@ -459,7 +456,6 @@ class DailyActivitySummaryTest {
         Assert.assertEquals(SITTING_EVENT_POS.size.toString().plus("m").plus(" 0s"), summary.sittingTimeHours)
     }
 
-
     @Test
     @Throws(IOException::class)
     fun checkMonthInitials() {
@@ -470,6 +466,23 @@ class DailyActivitySummaryTest {
                     dayActivity = getMockUserActivityList())
 
             Assert.assertEquals(summary.monthInitials, "DEC")
+        } catch (e: Exception) {
+            Assert.fail(e.message)
+        }
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun checkDayOfWeek() {
+        try {
+            val cal = Calendar.getInstance()
+
+            val summary = DailyActivitySummary(dayOfMonth = cal.get(Calendar.DAY_OF_MONTH),
+                    monthOfYear = cal.get(Calendar.MONTH),
+                    year = cal.get(Calendar.YEAR),
+                    dayActivity = getMockUserActivityList())
+
+            Assert.assertEquals(summary.dayOfWeek, TimeUtils.getDayOfWeek(cal.get(Calendar.DAY_OF_WEEK)))
         } catch (e: Exception) {
             Assert.fail(e.message)
         }

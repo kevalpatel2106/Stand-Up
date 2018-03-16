@@ -49,7 +49,7 @@ internal class DiaryDayViewHolder(itemView: View) : DiaryBaseViewHolder(itemView
         itemView.dairy_row_month_tv.text = summary.monthInitials
         itemView.dairy_row_month_tv.setOnClickListener { onClick.invoke() }
 
-        itemView.dairy_row_day_of_week_tv.text = "Monday"   //TODO
+        itemView.dairy_row_day_of_week_tv.text = summary.dayOfWeek
         itemView.dairy_row_day_of_week_tv.setOnClickListener { onClick.invoke() }
 
         itemView.dairy_row_sitting_percent_tv.text = summary.sittingPercent.toString()
