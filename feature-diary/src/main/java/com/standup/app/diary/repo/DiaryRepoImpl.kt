@@ -138,6 +138,7 @@ internal class DiaryRepoImpl @Inject constructor(private val userActivityRepo: U
         dayCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         dayCal.set(Calendar.MONTH, month)
         dayCal.set(Calendar.YEAR, year)
+
         dayCal = TimeUtils.getMidnightCal(dayCal.timeInMillis)
 
         val startTimeMills = dayCal.timeInMillis

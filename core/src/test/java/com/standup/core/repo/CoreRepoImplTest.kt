@@ -79,21 +79,21 @@ class CoreRepoImplTest {
     @Test
     fun checkLoadYesterdaySummary_NoActivityInDbForYesterday() {
         try {
-            val now = TimeUtils.todayMidnightCal(false).timeInMillis
+            val today12am = TimeUtils.todayMidnightMills()
 
             //Set fake data.
             //Todays activity
             userActivityDao.insert(UserActivity(
-                    eventStartTimeMills = now,
-                    eventEndTimeMills = now + 4200_000,
+                    eventStartTimeMills = today12am,
+                    eventEndTimeMills = today12am + 4200_000,
                     isSynced = false,
                     type = UserActivityType.MOVING.toString().toLowerCase())
             )
 
             //3 days before activity
             userActivityDao.insert(UserActivity(
-                    eventStartTimeMills = now - 2 * TimeUtils.ONE_DAY_MILLISECONDS,
-                    eventEndTimeMills = now - 2 * TimeUtils.ONE_DAY_MILLISECONDS + 3600_000,
+                    eventStartTimeMills = today12am - 2 * TimeUtils.ONE_DAY_MILLISECONDS,
+                    eventEndTimeMills = today12am - 2 * TimeUtils.ONE_DAY_MILLISECONDS + 3600_000,
                     isSynced = false,
                     type = UserActivityType.MOVING.toString().toLowerCase())
             )
@@ -113,18 +113,18 @@ class CoreRepoImplTest {
     @Test
     fun checkLoadYesterdaySummary_ActivityInDbForYesterday() {
         try {
-            val yesterdayMidnightMills = TimeUtils.todayMidnightCal(false).timeInMillis - TimeUtils.ONE_DAY_MILLISECONDS
+            val yesterday12am = TimeUtils.todayMidnightMills() - TimeUtils.ONE_DAY_MILLISECONDS
 
             //Set fake data.
             userActivityDao.insert(UserActivity(
-                    eventStartTimeMills = yesterdayMidnightMills,
-                    eventEndTimeMills = yesterdayMidnightMills + 3600_000,
+                    eventStartTimeMills = yesterday12am,
+                    eventEndTimeMills = yesterday12am + 3600_000,
                     isSynced = false,
                     type = UserActivityType.MOVING.toString().toLowerCase())
             )
             userActivityDao.insert(UserActivity(
-                    eventStartTimeMills = yesterdayMidnightMills + 3700_000,
-                    eventEndTimeMills = yesterdayMidnightMills + 4000_000,
+                    eventStartTimeMills = yesterday12am + 3700_000,
+                    eventEndTimeMills = yesterday12am + 4000_000,
                     isSynced = false,
                     type = UserActivityType.SITTING.toString().toLowerCase())
             )

@@ -43,7 +43,7 @@ internal class CoreRepoImpl @Inject constructor(private val userActivityDao: Use
      */
     override fun loadYesterdaySummary(): Flowable<DailyActivitySummary> {
         //Get the calender for 12 AM of that day
-        val endTimeMills = TimeUtils.todayMidnightCal(false).timeInMillis
+        val endTimeMills = TimeUtils.todayMidnightMills()
         val startTimeMills = endTimeMills - TimeUtils.ONE_DAY_MILLISECONDS
 
         return Flowable.create(FlowableOnSubscribe<List<UserActivity>> {

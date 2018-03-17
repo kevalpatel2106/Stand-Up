@@ -44,17 +44,16 @@ class MillsFromMidnightUnixMillsTest {
             @JvmStatic
             @Parameterized.Parameters
             fun data(): ArrayList<Array<out Any?>> {
-                val now = System.currentTimeMillis()
+                val offset = TimeZone.getDefault().rawOffset
 
                 return arrayListOf(
-                        arrayOf(60_000, 60_000),            // 00:01 hours
-                        arrayOf(86_400_000, 0),             // 24:00 hours
-                        arrayOf(2 * 86_400_000, 0),         // 48:00 hours
-                        arrayOf(86_460_000, 60_000),        // 24:01 hours
-                        arrayOf(2 * 86_460_000, 120_000),   // 24:01 hours
-                        arrayOf(now, now % TimeUtils.ONE_DAY_MILLISECONDS),
+                        arrayOf(60_000, 60_000 + offset),            // 00:01 hours
+                        arrayOf(86_400_000, 0 + offset),             // 24:00 hours
+                        arrayOf(2 * 86_400_000, 0 + offset),         // 48:00 hours
+                        arrayOf(86_460_000, 60_000 + offset),        // 24:01 hours
+                        arrayOf(2 * 86_460_000, 120_000 + offset),   // 24:01 hours
                         arrayOf(1537533123000 /* Fri Sep 21 2018 12:32:03 UTC */,
-                                1537533123000 /* Fri Sep 21 2018 12:32:03 UTC */ - 1537488000000 /* Fri Sep 21 2018 00:00:00 UTC */)
+                                1537533123000 /* Fri Sep 21 2018 12:32:03 UTC */ - 1537488000000 /* Fri Sep 21 2018 00:00:00 UTC */ + offset)
                 )
             }
         }
@@ -103,7 +102,7 @@ class MillsFromMidnightUnixMillsTest {
 
                 Assert.assertEquals(1 * TimeUtils.ONE_HOUR_MILLS
                         + 10 * TimeUtils.ONE_MIN_MILLS
-                        + 10 * 1000,
+                        + 10 * 1000 + TimeZone.getDefault().rawOffset,
                         TimeUtils.millsFromMidnight(testCal.timeInMillis))
             } catch (e: IllegalArgumentException) {
                 Assert.fail()

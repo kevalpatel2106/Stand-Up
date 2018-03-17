@@ -72,7 +72,7 @@ class DailyReviewHelperTest {
     @Test
     fun checkNextAlarmTime_ForToday() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val dailyAlarmTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
+        val dailyAlarmTimeFrom12Am = TimeUtils.currentMillsFromMidnight() + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))

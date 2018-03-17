@@ -92,7 +92,7 @@ class DashboardRepoImplTest {
 
     @Test
     fun checkGetNextReminderStatus_InAutoDndMode() {
-        val timeFrom12Am = System.currentTimeMillis() - TimeUtils.getMidnightCal(System.currentTimeMillis(), false).timeInMillis
+        val timeFrom12Am = System.currentTimeMillis() - TimeUtils.todayMidnightMills()
 
         //Dnd mode start
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_AUTO_DND_ENABLE, true)
@@ -111,7 +111,7 @@ class DashboardRepoImplTest {
 
     @Test
     fun checkGetNextReminderStatus_InForceDndMode() {
-        val timeFrom12Am = System.currentTimeMillis() - TimeUtils.getMidnightCal(System.currentTimeMillis(), false).timeInMillis
+        val timeFrom12Am = System.currentTimeMillis() - TimeUtils.todayMidnightMills()
 
         //Dnd mode start
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE, true)
@@ -131,7 +131,7 @@ class DashboardRepoImplTest {
 
     @Test
     fun checkGetNextReminderStatus_InSleepMode() {
-        val timeFrom12Am = System.currentTimeMillis() - TimeUtils.getMidnightCal(System.currentTimeMillis(), false).timeInMillis
+        val timeFrom12Am = System.currentTimeMillis() - TimeUtils.todayMidnightMills()
 
         //Dnd mode start
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_IS_FORCE_DND_ENABLE, false)

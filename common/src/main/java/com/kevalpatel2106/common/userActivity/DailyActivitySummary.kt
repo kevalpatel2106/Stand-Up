@@ -102,8 +102,8 @@ constructor(
         // The end time will be either the 23:59:59 of that day if the summary day is not current day
         // or current time if the summary is for today.
         //----------------//
-        val summaryDayCal = TimeUtils.getMidnightCal(dayOfMonth, monthOfYear, year, false)
-        val todayCal = TimeUtils.todayMidnightCal(false)
+        val summaryDayCal = TimeUtils.getMidnightCal(dayOfMonth, monthOfYear, year)
+        val todayCal = TimeUtils.todayMidnightCal()
 
         dayOfWeek = TimeUtils.getDayOfWeek(summaryDayCal.get(Calendar.DAY_OF_WEEK))
 
@@ -239,7 +239,6 @@ constructor(
                     dayActivity = dayActivity)
         }
 
-        //TODO Write it into the functional style
         fun convertToValidUserActivityList(dayActivity: ArrayList<UserActivity>) {
             val iter = dayActivity.iterator()
             while (iter.hasNext()) {
@@ -277,7 +276,7 @@ constructor(
                 throw IllegalArgumentException("List of events can't be stretched from more than one day. $dayActivity")
 
             //Get the midnight milliseconds of the date.
-            val thisDayStartMills = TimeUtils.getMidnightCal(dayActivity.first().eventEndTimeMills, false).timeInMillis
+            val thisDayStartMills = TimeUtils.getMidnightCal(dayActivity.first().eventEndTimeMills).timeInMillis
             val thisDayEndingMills = thisDayStartMills + TimeUtils.ONE_DAY_MILLISECONDS - 1_000L
 
             dayActivity.forEach {

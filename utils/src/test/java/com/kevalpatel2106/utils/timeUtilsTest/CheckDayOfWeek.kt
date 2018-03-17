@@ -69,7 +69,7 @@ class CheckDayOfWeek {
         @Throws(IOException::class)
         fun checkInvalidDayOfWeekNumber() {
             try {
-                TimeUtils.getDayOfWeek(7)
+                TimeUtils.getDayOfWeek(8)
                 Assert.fail()
             } catch (e: IllegalArgumentException) {
                 //Test passed

@@ -388,7 +388,7 @@ class UserActivityRepoImplTest {
         @Throws(Exception::class)
         fun checkWithNoPendingActivity() {
             //Set fake data. All activities are synced.
-            val now = TimeUtils.todayMidnightCal(false).timeInMillis
+            val now = TimeUtils.todayMidnightMills()
             userActivityDao.insert(UserActivity(
                     eventStartTimeMills = now,
                     eventEndTimeMills = now + 4200_000,
@@ -417,7 +417,7 @@ class UserActivityRepoImplTest {
         @Throws(Exception::class)
         fun checkWithAllNotTrackedPendingActivity() {
             //Set fake data. All activities are synced.
-            val now = TimeUtils.todayMidnightCal(false).timeInMillis
+            val now = TimeUtils.todayMidnightMills()
             userActivityDao.insert(UserActivity(
                     eventStartTimeMills = now,
                     eventEndTimeMills = now + 4200_000,
@@ -446,7 +446,7 @@ class UserActivityRepoImplTest {
         @Throws(Exception::class)
         fun check_SyncPendingActivity_AllSyncSuccess() {
             //Set fake data. All activities are synced.
-            val now = TimeUtils.todayMidnightCal(false).timeInMillis
+            val now = TimeUtils.todayMidnightMills()
             userActivityDao.insert(UserActivity(
                     eventStartTimeMills = now,
                     eventEndTimeMills = now + 4200_000,
@@ -494,7 +494,7 @@ class UserActivityRepoImplTest {
         @Throws(Exception::class)
         fun check_SyncPendingActivity_OneSyncFailed() {
             //Set fake data. All activities are synced.
-            val now = TimeUtils.todayMidnightCal(false).timeInMillis
+            val now = TimeUtils.todayMidnightMills()
             userActivityDao.insert(UserActivity(
                     eventStartTimeMills = now,
                     eventEndTimeMills = now + 4200_000,
@@ -543,7 +543,7 @@ class UserActivityRepoImplTest {
         @Throws(Exception::class)
         fun check_SyncPendingActivity_AllSyncFailed() {
             //Set fake data. All activities are synced.
-            val now = TimeUtils.todayMidnightCal(false).timeInMillis
+            val now = TimeUtils.todayMidnightMills()
             userActivityDao.insert(UserActivity(
                     eventStartTimeMills = now,
                     eventEndTimeMills = now + 4200_000,
@@ -659,7 +659,7 @@ class UserActivityRepoImplTest {
         @Throws(Exception::class)
         fun checkWithActivityDifferentRemoteId() {
             //Set fake data. All activities are synced.
-            val now = TimeUtils.todayMidnightCal(false).timeInMillis
+            val now = TimeUtils.todayMidnightMills()
             userActivityDao.insert(UserActivity(
                     remoteId = 43857643L,
                     eventStartTimeMills = now,
@@ -716,7 +716,7 @@ class UserActivityRepoImplTest {
         @Throws(Exception::class)
         fun checkWithActivitySameRemoteId() {
             //Set fake data. All activities are synced.
-            val now = TimeUtils.todayMidnightCal(false).timeInMillis
+            val now = TimeUtils.todayMidnightMills()
             userActivityDao.insert(UserActivity(
                     remoteId = 5653294995210240L,
                     eventStartTimeMills = now,

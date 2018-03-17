@@ -39,7 +39,7 @@ class AutoDndMonitoringHelperTest {
     @Test
     fun checkAutoDndStartTiming_ForToday() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val autoDndStartTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
+        val autoDndStartTimeFrom12Am = TimeUtils.currentMillsFromMidnight() + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
@@ -52,7 +52,7 @@ class AutoDndMonitoringHelperTest {
     @Test
     fun checkAutoDndStartTiming_ForTomorrow() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val autoDndStartTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000
+        val autoDndStartTimeFrom12Am = TimeUtils.currentMillsFromMidnight() - 1800_000
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
@@ -66,7 +66,7 @@ class AutoDndMonitoringHelperTest {
     @Test
     fun checkAutoDndEndTiming_ForToday() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val autoDndEndTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 1800_000L
+        val autoDndEndTimeFrom12Am = TimeUtils.currentMillsFromMidnight() + 1800_000L
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))
@@ -79,7 +79,7 @@ class AutoDndMonitoringHelperTest {
     @Test
     fun checkAutoDndEndTiming_ForTomorrow() {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
-        val autoDndEndTimeFrom12Am = TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000
+        val autoDndEndTimeFrom12Am = TimeUtils.currentMillsFromMidnight() - 1800_000
 
         //Set the future day.
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(anyString(), anyLong()))

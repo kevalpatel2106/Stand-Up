@@ -62,7 +62,7 @@ class LoadDaysSummaryListTest {
 
         val testSubscriber = TestSubscriber<DailyActivitySummary>()
         DiaryRepoImplHelperTest.dairyRepoImpl.loadDaysSummaryList(
-                TimeUtils.getMidnightCal(unixMills = System.currentTimeMillis(), isUtc = false).timeInMillis)
+                TimeUtils.todayMidnightMills())
                 .subscribe(testSubscriber)
 
         testSubscriber.awaitTerminalEvent()
@@ -99,13 +99,13 @@ class LoadDaysSummaryListTest {
                     it.dayActivity[1].remoteId == 5653294995210240L /* From response */
                 })
                 .assertValueAt(0, {
-                    TimeUtils.getMidnightCal(1520585420827, false).get(Calendar.DAY_OF_MONTH) == it.dayOfMonth
+                    TimeUtils.getMidnightCal(1520585420827).get(Calendar.DAY_OF_MONTH) == it.dayOfMonth
                 })
                 .assertValueAt(0, {
-                    TimeUtils.getMidnightCal(1520585420827, false).get(Calendar.MONTH) == it.monthOfYear
+                    TimeUtils.getMidnightCal(1520585420827).get(Calendar.MONTH) == it.monthOfYear
                 })
                 .assertValueAt(0, {
-                    TimeUtils.getMidnightCal(1520585420827, false).get(Calendar.YEAR) == it.year
+                    TimeUtils.getMidnightCal(1520585420827).get(Calendar.YEAR) == it.year
                 })
                 .assertComplete()
     }

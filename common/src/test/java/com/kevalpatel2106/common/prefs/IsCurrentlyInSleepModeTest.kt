@@ -40,7 +40,7 @@ class IsCurrentlyInSleepModeTest {
 
         //Half an hour before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() - 1800_000L)
 
         Assert.assertFalse(UserSettingsManager(sharedPrefsProvider).isCurrentlyInSleepMode())
     }
@@ -50,11 +50,11 @@ class IsCurrentlyInSleepModeTest {
         val sharedPrefsProvider = Mockito.mock(SharedPrefsProvider::class.java)
         //Half an hour before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.startsWith(SharedPreferenceKeys.PREF_KEY_SLEEP_START_TIME_FROM_12AM), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() - 1800_000L)
 
         //15 mins before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.startsWith(SharedPreferenceKeys.PREF_KEY_SLEEP_END_TIME_FROM_12AM), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 900_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() - 900_000L)
 
         Assert.assertFalse(UserSettingsManager(sharedPrefsProvider).isCurrentlyInSleepMode())
     }
@@ -65,11 +65,11 @@ class IsCurrentlyInSleepModeTest {
 
         //15 mins before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.startsWith(SharedPreferenceKeys.PREF_KEY_SLEEP_START_TIME_FROM_12AM), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 900_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() - 900_000L)
 
         //15 mins after current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.startsWith(SharedPreferenceKeys.PREF_KEY_SLEEP_END_TIME_FROM_12AM), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 900_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() + 900_000L)
 
         Assert.assertTrue(UserSettingsManager(sharedPrefsProvider).isCurrentlyInSleepMode())
     }

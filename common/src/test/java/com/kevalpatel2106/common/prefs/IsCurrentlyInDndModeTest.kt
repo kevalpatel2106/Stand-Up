@@ -52,7 +52,7 @@ class IsCurrentlyInDndModeTest {
 
         //Half an hour before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.anyString(), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() - 1800_000L)
 
         Assert.assertFalse(UserSettingsManager(sharedPrefsProvider).isCurrentlyInAutoDndMode())
     }
@@ -67,12 +67,12 @@ class IsCurrentlyInDndModeTest {
         //Half an hour before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers
                 .startsWith(SharedPreferenceKeys.PREF_KEY_AUTO_DND_START_TIME_FROM_12AM), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 1800_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() - 1800_000L)
 
         //15 mins before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers
                 .startsWith(SharedPreferenceKeys.PREF_KEY_AUTO_DND_END_TIME_FROM_12AM), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 900_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() - 900_000L)
 
         Assert.assertFalse(UserSettingsManager(sharedPrefsProvider).isCurrentlyInAutoDndMode())
     }
@@ -87,12 +87,12 @@ class IsCurrentlyInDndModeTest {
         //15 mins before current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers
                 .startsWith(SharedPreferenceKeys.PREF_KEY_AUTO_DND_START_TIME_FROM_12AM), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) - 900_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() - 900_000L)
 
         //15 mins after current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers
                 .startsWith(SharedPreferenceKeys.PREF_KEY_AUTO_DND_END_TIME_FROM_12AM), ArgumentMatchers.anyLong()))
-                .thenReturn(TimeUtils.millsFromMidnight(System.currentTimeMillis()) + 900_000L)
+                .thenReturn(TimeUtils.currentMillsFromMidnight() + 900_000L)
 
         Assert.assertTrue(UserSettingsManager(sharedPrefsProvider).isCurrentlyInAutoDndMode())
     }
@@ -104,7 +104,7 @@ class IsCurrentlyInDndModeTest {
         Mockito.`when`(sharedPrefsProvider.getBoolFromPreferences(ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyBoolean())).thenReturn(true)
 
-        val currentTime = TimeUtils.millsFromMidnight(System.currentTimeMillis())
+        val currentTime = TimeUtils.currentMillsFromMidnight()
 
         //Set the start time to the current time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.startsWith(SharedPreferenceKeys
@@ -126,7 +126,7 @@ class IsCurrentlyInDndModeTest {
         Mockito.`when`(sharedPrefsProvider.getBoolFromPreferences(ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyBoolean())).thenReturn(true)
 
-        val currentTime = TimeUtils.millsFromMidnight(System.currentTimeMillis())
+        val currentTime = TimeUtils.currentMillsFromMidnight()
 
         //Set the start time
         Mockito.`when`(sharedPrefsProvider.getLongFromPreference(ArgumentMatchers.startsWith(SharedPreferenceKeys

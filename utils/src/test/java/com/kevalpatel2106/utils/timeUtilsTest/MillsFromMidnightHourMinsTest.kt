@@ -45,14 +45,13 @@ class MillsFromMidnightHourMinsTest {
             @JvmStatic
             @Parameterized.Parameters
             fun data(): ArrayList<Array<out Any?>> {
-                val offset = TimeZone.getDefault().rawOffset
 
                 return arrayListOf(
-                        arrayOf(0, 0, 0 - offset),                                       // 00:00 hours
-                        arrayOf(0, 1, 60_000 - offset),                                  // 00:01 hours
-                        arrayOf(1, 1, 3600_000 + 60_000 - offset),                       // 01:01 hours
-                        arrayOf(23, 0, 23 * 3600_000 - offset),                          // 23:00 hours
-                        arrayOf(23, 59, 23 * 3600_000 + 59 * 60_000 - offset)            // 23:59 hours
+                        arrayOf(0, 0, 0),                                       // 00:00 hours
+                        arrayOf(0, 1, 60_000),                                  // 00:01 hours
+                        arrayOf(1, 1, 3600_000 + 60_000),                       // 01:01 hours
+                        arrayOf(23, 0, 23 * 3600_000),                          // 23:00 hours
+                        arrayOf(23, 59, 23 * 3600_000 + 59 * 60_000)            // 23:59 hours
                 )
             }
         }

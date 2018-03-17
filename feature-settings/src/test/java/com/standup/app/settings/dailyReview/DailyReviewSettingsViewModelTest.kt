@@ -33,7 +33,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mockito
-import java.util.*
 
 /**
  * Created by Kevalpatel2106 on 15-Mar-18.
@@ -73,7 +72,7 @@ class DailyReviewSettingsViewModelTest {
     @Throws(Exception::class)
     fun checkInit() {
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_ENABLE, true)
-        mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS - TimeZone.getDefault().rawOffset
+        mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS
 
         model = DailyReviewSettingsViewModel(
                 settingsManager = mockSettingsProvider,
@@ -117,7 +116,7 @@ class DailyReviewSettingsViewModelTest {
             isCoreRefreshed = true
             return@thenAnswer Any()
         }
-        mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS - TimeZone.getDefault().rawOffset
+        mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS
 
         model.onDailyReviewSettingChange()
 

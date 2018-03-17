@@ -36,10 +36,8 @@ object TimeUtils {
 
     fun convertToMilli(timeInNano: Long): Long = TimeUnit.NANOSECONDS.toMillis(timeInNano)
 
-    fun currentTimeMills() = System.currentTimeMillis()
-
-    fun getMidnightCal(dayOfMonth: Int, monthOfYear: Int, year: Int, isUtc: Boolean = true): Calendar {
-        val midnightCal = Calendar.getInstance()
+    fun getMidnightCal(dayOfMonth: Int, monthOfYear: Int, year: Int): Calendar {
+        val midnightCal = Calendar.getInstance(TimeZone.getDefault())
         midnightCal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         midnightCal.set(Calendar.MONTH, monthOfYear)
         midnightCal.set(Calendar.YEAR, year)
@@ -49,13 +47,11 @@ object TimeUtils {
         midnightCal.set(Calendar.SECOND, 0)
         midnightCal.set(Calendar.MILLISECOND, 0)
 
-        if (isUtc) midnightCal.timeZone = TimeZone.getTimeZone("UTC")
-
         return midnightCal
     }
 
-    fun getMidnightCal(unixMills: Long, isUtc: Boolean = true): Calendar {
-        val midnightCal = Calendar.getInstance(if (isUtc) TimeZone.getTimeZone("UTC") else TimeZone.getDefault())
+    fun getMidnightCal(unixMills: Long): Calendar {
+        val midnightCal = Calendar.getInstance(TimeZone.getDefault())
         midnightCal.timeInMillis = unixMills
 
         midnightCal.set(Calendar.HOUR_OF_DAY, 0)
@@ -66,12 +62,12 @@ object TimeUtils {
         return midnightCal
     }
 
-    fun todayMidnightCal(isUtc: Boolean = true): Calendar {
-        return getMidnightCal(currentTimeMills(), isUtc)
+    fun todayMidnightCal(): Calendar {
+        return getMidnightCal(System.currentTimeMillis())
     }
 
-    fun tomorrowMidnightCal(isUtc: Boolean = true): Calendar {
-        val cal = getMidnightCal(currentTimeMills(), isUtc)
+    fun tomorrowMidnightCal(): Calendar {
+        val cal = getMidnightCal(System.currentTimeMillis())
         cal.add(Calendar.DAY_OF_YEAR, 1)
         return cal
     }
@@ -93,7 +89,7 @@ object TimeUtils {
     }
 
     fun currentMillsFromMidnight(): Long {
-        return millsFromMidnight(currentTimeMills())
+        return millsFromMidnight(System.currentTimeMillis())
     }
 
     //*********** Human readable month formats *********//

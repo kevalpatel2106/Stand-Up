@@ -71,34 +71,20 @@ class TimeUtilsTest {
 
     @Test
     @Throws(Exception::class)
-    fun checkCurrentTimeMills() {
-        assertTrue(Math.abs(System.currentTimeMillis() - TimeUtils.currentTimeMills()) < 5 /* 5 ms */)
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun checkCurrentMillsFromMidnight_IsInUTC() {
-        assertTrue(Math.abs(System.currentTimeMillis() % TimeUtils.ONE_DAY_MILLISECONDS -
-                TimeUtils.currentMillsFromMidnight()) < 1_000 /* 1 second buffer */)
-    }
-
-    @Test
-    @Throws(Exception::class)
     fun checkTodayMidnightCal() {
-        val nowUtc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        val now = Calendar.getInstance()
         val midnightCal = TimeUtils.todayMidnightCal()
-        assertEquals(midnightCal.timeInMillis % TimeUtils.ONE_DAY_MILLISECONDS, 0)
 
-        assertEquals(midnightCal.timeZone.rawOffset, 0) //UTC
+        assertEquals(midnightCal.timeZone.rawOffset, TimeZone.getDefault().rawOffset)
 
         assertEquals(midnightCal.get(Calendar.HOUR_OF_DAY), 0)
         assertEquals(midnightCal.get(Calendar.MILLISECOND), 0)
         assertEquals(midnightCal.get(Calendar.MINUTE), 0)
         assertEquals(midnightCal.get(Calendar.SECOND), 0)
 
-        assertEquals(midnightCal.get(Calendar.DAY_OF_YEAR), nowUtc.get(Calendar.DAY_OF_YEAR))
-        assertEquals(midnightCal.get(Calendar.MONTH), nowUtc.get(Calendar.MONTH))
-        assertEquals(midnightCal.get(Calendar.YEAR), nowUtc.get(Calendar.YEAR))
+        assertEquals(midnightCal.get(Calendar.DAY_OF_YEAR), now.get(Calendar.DAY_OF_YEAR))
+        assertEquals(midnightCal.get(Calendar.MONTH), now.get(Calendar.MONTH))
+        assertEquals(midnightCal.get(Calendar.YEAR), now.get(Calendar.YEAR))
     }
 
     @Test
@@ -119,22 +105,20 @@ class TimeUtilsTest {
     @Test
     @Throws(Exception::class)
     fun checkTomorrowMidnightCal() {
-        val tomUtc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        tomUtc.add(Calendar.DAY_OF_MONTH, 1)
+        val tomCal = Calendar.getInstance()
+        tomCal.add(Calendar.DAY_OF_MONTH, 1)
 
         val tomMidnightCal = TimeUtils.tomorrowMidnightCal()
-        assertEquals(tomMidnightCal.timeInMillis % TimeUtils.ONE_DAY_MILLISECONDS, 0)
-
-        assertEquals(tomMidnightCal.timeZone.rawOffset, 0) //UTC
+        assertEquals(tomCal.timeZone.rawOffset, TimeZone.getDefault().rawOffset)
 
         assertEquals(tomMidnightCal.get(Calendar.HOUR_OF_DAY), 0)
         assertEquals(tomMidnightCal.get(Calendar.MILLISECOND), 0)
         assertEquals(tomMidnightCal.get(Calendar.MINUTE), 0)
         assertEquals(tomMidnightCal.get(Calendar.SECOND), 0)
 
-        assertEquals(tomMidnightCal.get(Calendar.DAY_OF_YEAR), tomUtc.get(Calendar.DAY_OF_YEAR))
-        assertEquals(tomMidnightCal.get(Calendar.MONTH), tomUtc.get(Calendar.MONTH))
-        assertEquals(tomMidnightCal.get(Calendar.YEAR), tomUtc.get(Calendar.YEAR))
+        assertEquals(tomMidnightCal.get(Calendar.DAY_OF_YEAR), tomCal.get(Calendar.DAY_OF_YEAR))
+        assertEquals(tomMidnightCal.get(Calendar.MONTH), tomCal.get(Calendar.MONTH))
+        assertEquals(tomMidnightCal.get(Calendar.YEAR), tomCal.get(Calendar.YEAR))
     }
 
     @Test

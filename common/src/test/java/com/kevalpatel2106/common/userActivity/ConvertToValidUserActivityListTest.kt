@@ -250,7 +250,6 @@ class ConvertToValidUserActivityListTest {
 
         val nowMills = System.currentTimeMillis() - 120_000
         val yesterdayMills = nowMills - TimeUtils.ONE_DAY_MILLISECONDS
-        val tomorrowMills = nowMills + TimeUtils.ONE_DAY_MILLISECONDS
 
         dayActivity.add(UserActivity(eventStartTimeMills = yesterdayMills - 240_000 /* Buffer */,
                 eventEndTimeMills = (nowMills + 120_000 /* Buffer */),
@@ -261,8 +260,9 @@ class ConvertToValidUserActivityListTest {
             DailyActivitySummary.convertToValidUserActivityList(dayActivity)
 
             //Check the remaining item
-            Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(nowMills, false).timeInMillis
+            Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(nowMills).timeInMillis
                     - dayActivity[0].eventStartTimeMills) < 2_000 /* 2 sec*/)
+
         } catch (e: IllegalArgumentException) {
             Assert.fail()
         }
@@ -290,7 +290,7 @@ class ConvertToValidUserActivityListTest {
         Assert.assertEquals(resultArray.size, dayActivity.size)
 
         //Check the remaining item
-        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(nowMills, false).timeInMillis
+        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(nowMills).timeInMillis
                 - resultArray[0].eventStartTimeMills) < 2_000 /* 2 sec*/)
         Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
 
@@ -324,7 +324,7 @@ class ConvertToValidUserActivityListTest {
         Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
 
         Assert.assertEquals(resultArray[1].eventStartTimeMills, dayActivity[1].eventStartTimeMills)
-        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(tomorrowMills, false).timeInMillis -
+        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(tomorrowMills).timeInMillis -
                 resultArray[1].eventEndTimeMills) < 2_000 /* 2 sec*/)
     }
 
@@ -355,7 +355,7 @@ class ConvertToValidUserActivityListTest {
         Assert.assertEquals(resultArray.size, dayActivity.size)
 
         //Check the remaining item
-        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(nowMills, false).timeInMillis
+        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(nowMills).timeInMillis
                 - resultArray[0].eventStartTimeMills) < 2_000 /* 2 sec*/)
         Assert.assertEquals(resultArray[0].eventEndTimeMills, dayActivity[0].eventEndTimeMills)
 
@@ -363,7 +363,7 @@ class ConvertToValidUserActivityListTest {
         Assert.assertEquals(resultArray[1].eventEndTimeMills, dayActivity[1].eventEndTimeMills)
 
         Assert.assertEquals(resultArray[2].eventStartTimeMills, dayActivity[2].eventStartTimeMills)
-        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(tomorrowMills, false).timeInMillis -
+        Assert.assertTrue(Math.abs(TimeUtils.getMidnightCal(tomorrowMills).timeInMillis -
                 resultArray[2].eventEndTimeMills) < 2_000 /* 2 sec*/)
     }
 
