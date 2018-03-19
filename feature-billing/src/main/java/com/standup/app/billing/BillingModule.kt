@@ -18,6 +18,8 @@
 package com.standup.app.billing
 
 import android.content.Context
+import com.standup.app.billing.purchaseActivity.PurchaseActivity
+import io.reactivex.Single
 
 /**
  * Created by Keval on 17/03/18.
@@ -30,8 +32,11 @@ object BillingModule {
         PurchaseActivity.launch(context)
     }
 
-    fun isPremiumPurchased(): Boolean {
-        //TODO Read from the shared preferences.
-        return false
+    fun isPremiumPurchased(): Single<Boolean> {
+
+        return Single.create {
+
+
+        }
     }
 }

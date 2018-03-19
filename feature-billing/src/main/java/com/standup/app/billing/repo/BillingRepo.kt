@@ -15,26 +15,24 @@
  *
  */
 
+package com.standup.app.billing.repo
+
+import android.app.Activity
+import io.reactivex.Single
+
 /**
- * Created by Keval on 02/03/18.
+ * Created by Kevalpatel2106 on 19-Mar-18.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object AppVersion {
-    /**
-     * Version code of the application.
-     */
-    const val versionCode = 9
+interface BillingRepo {
 
-    // Prepare the version name.
-    // Version name scheme: major.minor.patch
-
-    private const val versionMajor = 0
-    private const val versionMinor = 6
-    private const val versionPatch = 0
 
     /**
-     * Prepare the version name in [versionMajor].[versionMinor].[versionPatch] format.
+     * Check if the premium product is purchased or not? This is an async call that will return true
+     * in the success of [Single] if the premium item is purchased.
      */
-    val versionName = "$versionMajor.$versionMinor.$versionPatch"
+    fun isPremiumPurchased(): Single<Boolean>
+
+    fun purchasePremium(activity: Activity): Single<Boolean>
 }

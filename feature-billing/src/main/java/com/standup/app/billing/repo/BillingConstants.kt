@@ -15,19 +15,18 @@
  *
  */
 
-package com.standup.app.billing
+package com.standup.app.billing.repo
 
 
 import com.android.billingclient.api.BillingClient
-
-import java.util.Arrays
+import java.util.*
 
 /**
  * Static fields and methods useful for billing
  */
 internal object BillingConstants {
 
-    val SKU_PREMIUM = "premium"
+    val SKU_PREMIUM = "premium_101."
 
     private val IN_APP_SKUS = arrayOf(SKU_PREMIUM)
 

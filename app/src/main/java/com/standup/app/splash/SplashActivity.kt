@@ -26,6 +26,7 @@ import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.standup.app.authentication.AuthenticationApi
+import com.standup.app.billing.BillingModule
 import com.standup.app.main.MainActivity
 import com.standup.app.profile.ProfileApi
 import com.standup.core.Core
@@ -85,7 +86,8 @@ class SplashActivity : BaseActivity() {
 
         setModel()
 
-        model.initiateFlow()
+//        model.initiateFlow()
+        BillingModule.openPurchaseScreen(this@SplashActivity)
 
         //Set core
         core.refresh()

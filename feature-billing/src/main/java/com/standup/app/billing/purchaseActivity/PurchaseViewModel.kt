@@ -15,27 +15,11 @@
  *
  */
 
-package com.standup.app.billing
+package com.standup.app.billing.purchaseActivity
 
-import android.content.Context
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-
-class PurchaseActivity : AppCompatActivity() {
-
-    companion object {
-
-        /**
-         * Launch the [PurchaseActivity].
-         */
-        internal fun launch(context: Context){
-            context.startActivity(Intent(context, PurchaseActivity::class.java))
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_purchase)
-    }
-}
+/**
+ * Created by Kevalpatel2106 on 19-Mar-18.
+ *
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
+ */
+class PurchaseViewModel

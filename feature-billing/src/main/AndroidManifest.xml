@@ -18,7 +18,7 @@
     package="com.standup.app.billing">
 
     <application>
-        <activity android:name=".PurchaseActivity"></activity>
+        <activity android:name=".purchaseActivity.PurchaseActivity"></activity>
     </application>
 
 </manifest>

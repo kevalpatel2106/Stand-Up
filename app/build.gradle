@@ -88,6 +88,7 @@ dependencies {
     implementation project(':feature-profile')
     implementation project(':feature-settings')
     implementation project(':feature-stats')
+    implementation project(':feature-billing')
     implementation project(':utils')
     implementation project(':network')
     implementation project(':core')

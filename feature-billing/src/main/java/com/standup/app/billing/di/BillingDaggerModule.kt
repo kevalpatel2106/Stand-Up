@@ -15,26 +15,26 @@
  *
  */
 
+package com.standup.app.billing.di
+
+import android.app.Application
+import com.kevalpatel2106.common.di.ApplicationScope
+import com.standup.app.billing.repo.BillingRepo
+import com.standup.app.billing.repo.BillingRepoImpl
+import dagger.Module
+import dagger.Provides
+
 /**
- * Created by Keval on 02/03/18.
+ * Created by Kevalpatel2106 on 19-Mar-18.
  *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-object AppVersion {
-    /**
-     * Version code of the application.
-     */
-    const val versionCode = 9
+@Module
+class BillingDaggerModule {
 
-    // Prepare the version name.
-    // Version name scheme: major.minor.patch
-
-    private const val versionMajor = 0
-    private const val versionMinor = 6
-    private const val versionPatch = 0
-
-    /**
-     * Prepare the version name in [versionMajor].[versionMinor].[versionPatch] format.
-     */
-    val versionName = "$versionMajor.$versionMinor.$versionPatch"
+    @ApplicationScope
+    @Provides
+    fun providesBillingRepo(application: Application): BillingRepo {
+        return BillingRepoImpl(application)
+    }
 }

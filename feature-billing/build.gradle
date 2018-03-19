@@ -63,7 +63,7 @@ kotlin kotlinOption
 
 dependencies {
     api project(':progress-button')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    api project(':common')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
     testImplementation(Deps.roboElectric, excludeGrp)
@@ -96,6 +96,3 @@ dependencies {
 
     implementation(Deps.iap, excludeGrp)
 }
-
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'

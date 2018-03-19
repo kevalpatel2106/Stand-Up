@@ -15,28 +15,21 @@
  *
  */
 
-package com.standup.app.billing
+package com.standup.app.billing.di
 
-import com.android.billingclient.api.Purchase
+import com.kevalpatel2106.common.di.AppComponent
+import com.kevalpatel2106.common.di.ApplicationScope
+import com.standup.app.billing.purchaseActivity.PurchaseActivity
+import dagger.Component
 
 /**
- * Created by Keval on 17/03/18.
+ * Created by Kevalpatel2106 on 19-Mar-18.
  *
- * Listener to the updates that happen when purchases list was updated or consumption of the
- * item was finished.
- *
- * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal interface BillingUpdatesListener {
+@ApplicationScope
+@Component(dependencies = [AppComponent::class], modules = [BillingDaggerModule::class])
+internal interface BillingComponent {
 
-    /**
-     * This callback will be called when ever the purchased items are updated. [purchases] contains
-     * the list of [Purchase].
-     */
-    fun onPurchasesUpdated(purchases: List<Purchase>)
-
-    /**
-     * Callback when error occurred.
-     */
-    fun onError(errorCode: Int)
+    fun inject(purchaseActivity: PurchaseActivity)
 }
