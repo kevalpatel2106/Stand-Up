@@ -14,31 +14,21 @@
  *   limitations under the License.
  *
  */
-include ':app'
 
-//Features
-include ':feature-diary'
-include ':feature-about'
-include ':feature-profile'
-include ':feature-settings'
-include ':feature-stats'
-include ':feature-authentication'
-include ':feature-dashboard'
-include ':feature-billing'
+package com.standup.app.billing;
 
-// Base layer modules.
-include ':common'
-include ':test-utils'
-include ':utils'
-include ':network'
-include ':core'
+import org.junit.Test;
 
-//Social login
-include ':facebook-auth'
-include ':google-auth'
+import static org.junit.Assert.*;
 
-//Custom views
-include ':timeline-view'
-include ':ruler-view'
-include ':progress-button'
-include ':spinner-time-picker'
+/**
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ */
+public class ExampleUnitTest {
+    @Test
+    public void addition_isCorrect() {
+        assertEquals(4, 2 + 2);
+    }
+}

@@ -140,7 +140,6 @@ dependencies {
 
     //Other libs
     implementation(Deps.circleImagView, excludeGrp)
-    implementation(Deps.iap, excludeGrp)
     implementation(Deps.facebook, excludeGrp)
     releaseImplementation(Deps.crashalytics) { transitive = true }
 }

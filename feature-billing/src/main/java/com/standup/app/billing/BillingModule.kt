@@ -14,31 +14,24 @@
  *   limitations under the License.
  *
  */
-include ':app'
 
-//Features
-include ':feature-diary'
-include ':feature-about'
-include ':feature-profile'
-include ':feature-settings'
-include ':feature-stats'
-include ':feature-authentication'
-include ':feature-dashboard'
-include ':feature-billing'
+package com.standup.app.billing
 
-// Base layer modules.
-include ':common'
-include ':test-utils'
-include ':utils'
-include ':network'
-include ':core'
+import android.content.Context
 
-//Social login
-include ':facebook-auth'
-include ':google-auth'
+/**
+ * Created by Keval on 17/03/18.
+ *
+ * @author [kevalpatel2106](https://github.com/kevalpatel2106)
+ */
+object BillingModule {
 
-//Custom views
-include ':timeline-view'
-include ':ruler-view'
-include ':progress-button'
-include ':spinner-time-picker'
+    fun openPurchaseScreen(context: Context) {
+        PurchaseActivity.launch(context)
+    }
+
+    fun isPremiumPurchased(): Boolean {
+        //TODO Read from the shared preferences.
+        return false
+    }
+}
