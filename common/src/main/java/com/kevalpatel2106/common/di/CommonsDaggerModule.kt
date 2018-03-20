@@ -22,6 +22,7 @@ import com.kevalpatel2106.common.db.StandUpDb
 import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.kevalpatel2106.common.userActivity.repo.UserActivityRepo
 import com.kevalpatel2106.common.userActivity.repo.UserActivityRepoImpl
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

@@ -69,6 +69,7 @@ dependencies {
     implementation project(':utils')
     implementation project(':network')
     implementation project(':timeline-view')
+    implementation project(':play-billing')
     api project(':progress-button')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')

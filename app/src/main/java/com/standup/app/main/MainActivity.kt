@@ -18,6 +18,7 @@
 package com.standup.app.main
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -34,6 +35,7 @@ import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
 import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.purchase.PurchaseActivity
 import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector
@@ -169,6 +171,9 @@ class MainActivity : BaseActivity() {
             }
         })
 
+        model.isDisplayBuyPro.observe(this@MainActivity, Observer {
+            it?.let { dashboard_navigation_view.menu.findItem(R.id.nav_buy_pro).isVisible = !it }
+        })
 
         if (isFirstRun) {
             //Set the home as selected
@@ -244,6 +249,11 @@ class MainActivity : BaseActivity() {
                 mAboutApi.openAbout(this@MainActivity)
                 false
             }
+            DrawerItem.BUY_PRO -> {
+                //Launch the about screen
+                PurchaseActivity.launch(this@MainActivity)
+                false
+            }
         }
     }
 
@@ -289,6 +299,8 @@ class MainActivity : BaseActivity() {
             R.id.nav_settings -> DrawerItem.SETTING
 
             R.id.nav_about -> DrawerItem.ABOUT
+
+            R.id.nav_buy_pro -> DrawerItem.BUY_PRO
             else -> throw IllegalStateException("Invalid menu resource id.")
         }
     }

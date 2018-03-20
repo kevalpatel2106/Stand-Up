@@ -64,4 +64,7 @@ dependencies {
     //Support
     implementation Deps.supportv4
     implementation Deps.annotations
+
+    implementation(Deps.daggerAndroid)
+    kapt(Deps.daggerAnnotations)
 }

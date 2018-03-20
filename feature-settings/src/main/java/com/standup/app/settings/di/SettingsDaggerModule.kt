@@ -18,8 +18,8 @@
 package com.standup.app.settings.di
 
 import com.danielstone.materialaboutlibrary.adapters.MaterialAboutListAdapter
-import com.kevalpatel2106.common.di.ApplicationScope
 import com.kevalpatel2106.common.di.CommonsDaggerModule
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.settings.SettingsApi
 import com.standup.app.settings.SettingsHook
 import com.standup.app.settings.whitelisting.WhitelistingUtils

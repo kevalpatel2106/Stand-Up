@@ -17,14 +17,19 @@
 
 package com.standup.app.main
 
+import android.app.Application
+import android.arch.lifecycle.MutableLiveData
+import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.standup.app.billing.repo.BillingRepo
 import com.standup.app.dashboard.DashboardApi
 import com.standup.app.dashboard.DashboardFragment
 import com.standup.app.diary.DiaryModule
 import com.standup.app.diary.list.DiaryFragment
 import com.standup.app.stats.StatsFragment
 import com.standup.app.stats.StatsModule
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -48,20 +53,46 @@ internal class MainViewModel : BaseViewModel() {
     internal lateinit var statsModule: StatsModule
 
     @Inject
-    internal lateinit var mDashboardApi: DashboardApi
+    internal lateinit var dashboardApi: DashboardApi
+
+    @Inject
+    internal lateinit var application: Application
+
+    @Inject
+    internal lateinit var billingRepo: BillingRepo
+
+    internal val isDisplayBuyPro = MutableLiveData<Boolean>()
 
     /**
      * [DashboardFragment] instance to display in the [MainActivity].
      */
-    val homeFragment = mDashboardApi.getDashboard()
+    internal val homeFragment = dashboardApi.getDashboard()
 
     /**
      * [DiaryFragment] instance to display in the [MainActivity].
      */
-    val diaryFragment = dairyModule.getDiary()
+    internal val diaryFragment = dairyModule.getDiary()
 
     /**
      * [StatsFragment] instance to display in the [MainActivity].
      */
-    val statsFragment = statsModule.getStatsFragment()
+    internal val statsFragment = statsModule.getStatsFragment()
+
+    init {
+        isDisplayBuyPro.value = false
+
+        //Check is pro version already purchased?
+        checkIfToDisplayBuyPro()
+    }
+
+    @VisibleForTesting
+    internal fun checkIfToDisplayBuyPro() {
+        billingRepo.isPremiumPurchased(application)
+                .subscribe({
+                    isDisplayBuyPro.value = it
+                }, {
+                    Timber.e(it.stackTrace.toString())
+                    isDisplayBuyPro.value = false
+                })
+    }
 }

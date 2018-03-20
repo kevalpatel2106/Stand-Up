@@ -24,7 +24,7 @@ include ':feature-settings'
 include ':feature-stats'
 include ':feature-authentication'
 include ':feature-dashboard'
-include ':feature-billing'
+include ':play-billing'
 
 // Base layer modules.
 include ':common'

@@ -17,9 +17,9 @@
 
 package com.standup.core.di
 
-import com.kevalpatel2106.common.di.ApplicationScope
 import com.kevalpatel2106.common.di.CommonsDaggerModule
 import com.kevalpatel2106.common.userActivity.UserActivityDao
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.core.Core
 import com.standup.core.CoreHook
 import com.standup.core.repo.CoreRepo

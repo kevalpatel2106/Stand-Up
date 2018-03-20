@@ -26,6 +26,13 @@
             android:theme="@style/AppTheme.TimeLine"
             android:windowSoftInputMode="stateHidden"
             tools:ignore="UnusedAttribute"/>
+        <activity
+            android:name="com.kevalpatel2106.common.purchase.PurchaseActivity"
+            android:resizeableActivity="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionbar"
+            android:windowSoftInputMode="stateHidden"
+            tools:ignore="UnusedAttribute"/>
     </application>
 
 </manifest>

@@ -31,5 +31,7 @@ internal enum class DrawerItem {
     PROFILE,
     SETTING,
 
-    ABOUT
+    ABOUT,
+
+    BUY_PRO
 }

@@ -17,8 +17,8 @@
 
 package com.standup.app.authentication.deviceReg
 
+import android.app.Application
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.content.Context
 import android.content.SharedPreferences
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
@@ -63,10 +63,10 @@ class DeviceRegViewModelTest {
 
     @Before
     fun setUp() {
-        val context = Mockito.mock(Context::class.java)
+        val mockApplication = Mockito.mock(Application::class.java)
         val sharedPrefs = Mockito.mock(SharedPreferences::class.java)
         val sharedPrefsEditor = Mockito.mock(SharedPreferences.Editor::class.java)
-        Mockito.`when`(context.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
+        Mockito.`when`(mockApplication.getSharedPreferences(ArgumentMatchers.anyString(), ArgumentMatchers.anyInt())).thenReturn(sharedPrefs)
         Mockito.`when`(sharedPrefs.edit()).thenReturn(sharedPrefsEditor)
         Mockito.`when`(sharedPrefs.getString(ArgumentMatchers.anyString(), ArgumentMatchers.isNull())).thenReturn("149.3")
 
@@ -81,9 +81,10 @@ class DeviceRegViewModelTest {
         mockUserActivityRepo = UserActivityRepoImpl(UserActivityDaoMockImpl(ArrayList()), mockRetrofitClient)
 
         deviceRegViewModel = DeviceRegViewModel(
-                UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
-                sharedPrefProvider,
-                userSessionManager
+                application = mockApplication,
+                userAuthRepo = UserAuthRepositoryImpl(NetworkApi().getRetrofitClient(mockServerManager.getBaseUrl())),
+                sharedPrefsProvider = sharedPrefProvider,
+                userSessionManager = userSessionManager
         )
     }
 

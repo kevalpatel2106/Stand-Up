@@ -32,7 +32,7 @@ android {
             applicationIdSuffix ".debug"
             crunchPngs false
             testCoverageEnabled false   //https://stackoverflow.com/a/47050632/4690731
-            debuggable true
+            debuggable false
             jniDebuggable true
             renderscriptDebuggable false
             signingConfig signingConfigs.debugKey
@@ -88,7 +88,7 @@ dependencies {
     implementation project(':feature-profile')
     implementation project(':feature-settings')
     implementation project(':feature-stats')
-    implementation project(':feature-billing')
+    implementation project(':play-billing')
     implementation project(':utils')
     implementation project(':network')
     implementation project(':core')

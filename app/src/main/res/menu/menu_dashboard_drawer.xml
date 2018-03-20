@@ -64,4 +64,13 @@
             android:icon="@drawable/ic_info_black"
             android:title="@string/nav_header_about" />
     </group>
+    <group
+        android:id="@+id/nav_buy_pro_extra"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_buy_pro"
+            android:checkable="true"
+            android:icon="@drawable/ic_monetization_on_black"
+            android:title="@string/nav_header_purchase"/>
+    </group>
 </menu>

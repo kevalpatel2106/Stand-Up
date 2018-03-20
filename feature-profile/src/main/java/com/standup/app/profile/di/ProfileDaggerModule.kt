@@ -18,8 +18,8 @@
 package com.standup.app.profile.di
 
 import com.kevalpatel2106.common.di.AppModule
-import com.kevalpatel2106.common.di.ApplicationScope
 import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.profile.ProfileApi
 import com.standup.app.profile.ProfileHook
 import com.standup.app.profile.repo.UserProfileRepo

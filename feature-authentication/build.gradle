@@ -72,6 +72,7 @@ dependencies {
     implementation project(':progress-button')
     implementation project(':facebook-auth')
     implementation project(':google-auth')
+    implementation project(':play-billing')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
 
