@@ -30,8 +30,8 @@ object AppVersion {
     // Version name scheme: major.minor.patch
 
     private const val versionMajor = 0
-    private const val versionMinor = 6
-    private const val versionPatch = 0
+    private const val versionMinor = 5
+    private const val versionPatch = 2
 
     /**
      * Prepare the version name in [versionMajor].[versionMinor].[versionPatch] format.

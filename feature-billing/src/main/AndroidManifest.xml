@@ -17,8 +17,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.standup.app.billing">
 
+    <uses-permission android:name="com.android.vending.BILLING" />
+
     <application>
-        <activity android:name=".purchaseActivity.PurchaseActivity"></activity>
+        <activity android:name=".purchaseActivity.PurchaseActivity"/>
     </application>
 
 </manifest>
