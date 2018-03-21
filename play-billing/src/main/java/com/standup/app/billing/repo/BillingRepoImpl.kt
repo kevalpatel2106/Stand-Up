@@ -54,7 +54,7 @@ class BillingRepoImpl @Inject constructor() : BillingRepo {
 
                 override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
                     if (billingResponseCode != BillingClient.BillingResponse.OK) {
-                        it.onError(Throwable("Cannot connect to google play for purchase."))
+                        if (!it.isDisposed()) it.onError(Throwable("Cannot connect to google play for purchase."))
                         return
                     }
 
@@ -95,7 +95,7 @@ class BillingRepoImpl @Inject constructor() : BillingRepo {
                     .setListener { responseCode, purchases ->
                         // Have we been disposed of in the meantime?
                         if (responseCode != BillingClient.BillingResponse.OK || purchases == null) {
-                            it.onError(Throwable("Cannot get users purchases."))
+                            if (!it.isDisposed()) it.onError(Throwable("Cannot get users purchases."))
                             return@setListener
                         }
 
@@ -108,7 +108,7 @@ class BillingRepoImpl @Inject constructor() : BillingRepo {
 
                 override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
                     if (billingResponseCode != BillingClient.BillingResponse.OK) {
-                        it.onError(Throwable("Cannot connect to google play for purchase."))
+                        if (!it.isDisposed()) it.onError(Throwable("Cannot connect to google play for purchase."))
                         return
                     }
 

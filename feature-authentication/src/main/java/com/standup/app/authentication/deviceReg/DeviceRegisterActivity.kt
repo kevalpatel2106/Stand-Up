@@ -18,23 +18,16 @@
 package com.standup.app.authentication.deviceReg
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.annotation.VisibleForTesting
 import android.view.View
-import com.google.firebase.iid.FirebaseInstanceId
 import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
-import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.common.misc.AnalyticsEvents
-import com.kevalpatel2106.common.misc.logEvent
 import com.kevalpatel2106.common.misc.lottie.LottieJson
-import com.kevalpatel2106.common.misc.lottie.playAnotherAnimation
-import com.kevalpatel2106.common.misc.lottie.playAnotherRepeatAnimation
 import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.kevalpatel2106.common.userActivity.repo.UserActivityRepoImpl
@@ -45,8 +38,6 @@ import com.standup.app.authentication.BuildConfig
 import com.standup.app.authentication.R
 import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.authentication.verification.VerifyEmailActivity
-import com.standup.app.billing.repo.BillingRepo
-import kotlinx.android.synthetic.main.activity_device_register.*
 import javax.inject.Inject
 
 
@@ -93,7 +84,7 @@ class DeviceRegisterActivity : BaseActivity() {
 
         model = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
         model.reposeToken.observe(this@DeviceRegisterActivity, Observer {
-            it?.let {
+            it.let {
                 //Recreate the app component to use all the new session tokens
                 (application as BaseApplication).recreateAppComponent()
 
@@ -111,22 +102,22 @@ class DeviceRegisterActivity : BaseActivity() {
             }
         })
         model.syncComplete.observe(this@DeviceRegisterActivity, Observer {
-            it?.let {
+            it.let {
                 if (it) {
-                    device_reg_tv.text = getString(R.string.error_cannot_restore_purchases)
+                    device_reg_tv.text = getString(R.string.restore_purchases)
                     model.restorePurchases(billingRepo)
                 }
             }
         })
-        model.syncComplete.observe(this@DeviceRegisterActivity, Observer {
-            it?.let {
+        model.isPremiumPurchased.observe(this@DeviceRegisterActivity, Observer {
+            it.let {
                 device_reg_tv.text = getString(R.string.set_up_complete)
                 device_reg_iv.playAnotherAnimation(LottieJson.CORRECT_TICK_INSIDE_GREEN_CIRCLE)
                 Handler().postDelayed({ navigateToNextScreen() }, 2_000L /* 2 seconds delay */)
             }
         })
         model.blockUi.observe(this@DeviceRegisterActivity, Observer {
-            it?.let {
+            it.let {
                 if (it) {
                     //Registration is progress
                     device_reg_iv.playAnotherRepeatAnimation(LottieJson.ANIMATING_CLOCK)
@@ -134,7 +125,7 @@ class DeviceRegisterActivity : BaseActivity() {
             }
         })
         model.errorMessage.observe(this@DeviceRegisterActivity, Observer {
-            it?.let {
+            it.let {
 
                 //Set error view
                 device_reg_iv.playAnotherAnimation(LottieJson.WARNING)
@@ -144,7 +135,7 @@ class DeviceRegisterActivity : BaseActivity() {
                         actionName = it.getErrorBtnText(),
                         actionListener = object : View.OnClickListener {
                             override fun onClick(v: View?) {
-                                it.getOnErrorClick()?.invoke()
+                                it.getOnErrorClick().invoke()
                             }
                         }
                 )

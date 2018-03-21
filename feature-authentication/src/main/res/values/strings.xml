@@ -24,6 +24,7 @@
     <string name="error_google_signin_fail">Cannot login with Google account.</string>
     <string name="error_facebook_signin_fail">Cannot login with Facebook account.</string>
     <string name="error_retry_try_again">Try Again</string>
+    <string name="restore_purchases">Restoring your old purchases.</string>
     <string name="error_cannot_restore_purchases">Cannot restore purchases.</string>
     <string name="error_google_login_email_not_found">Cannot authenticate you with Google. Try creating new account or logging with email.</string>
     <string name="error_fb_login_email_not_found">Cannot authenticate you with Facebook. Try creating new account or logging with email.</string>
