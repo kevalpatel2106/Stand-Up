@@ -24,13 +24,13 @@ include ':feature-settings'
 include ':feature-stats'
 include ':feature-authentication'
 include ':feature-dashboard'
-include ':play-billing'
 
 // Base layer modules.
 include ':shared-mobile'
+include ':play-billing'
 include ':test-utils'
-include ':utils'
 include ':network'
+include ':utils'
 include ':core'
 
 //Social login

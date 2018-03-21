@@ -16,12 +16,13 @@
   ~
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             xmlns:tools="http://schemas.android.com/tools"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             tools:context="com.kevalpatel2106.common.purchase.PurchaseActivity">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kevalpatel2106.common.purchase.PurchaseActivity">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
@@ -37,13 +38,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="@dimen/spacing_small"/>
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="@dimen/spacing_micro"/>
-
     <include
         android:id="@+id/include"
         layout="@layout/layout_simple_toolbar"/>
@@ -53,7 +47,7 @@
         style="@style/LargeText.Secondary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_small"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/include"
@@ -77,12 +71,13 @@
         style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_purchase_ripple"
+        android:elevation="@dimen/spacing_small"
         android:text="@string/btn_title_purchase"
         android:textColor="?attr/colorPrimary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:spinning_bar_color="@android:color/white"/>
 </android.support.constraint.ConstraintLayout>
