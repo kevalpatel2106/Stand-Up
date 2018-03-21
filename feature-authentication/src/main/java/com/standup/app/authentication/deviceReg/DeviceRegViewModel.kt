@@ -97,6 +97,7 @@ internal class DeviceRegViewModel : BaseViewModel {
         isPremiumPurchased.value = false
     }
 
+
     @SuppressLint("VisibleForTests")
     internal fun register(deviceId: String, fcmId: String?) {
 

@@ -47,6 +47,7 @@ import com.standup.core.Core
 import dagger.Lazy
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_drawer_footer.*
 import javax.inject.Inject
 
 /**
@@ -109,6 +110,7 @@ class MainActivity : BaseActivity() {
         supportActionBar!!.setHomeButtonEnabled(true)
 
         setUpDrawer(savedInstanceState == null)
+        setBuyProButton()
     }
 
     /**
@@ -171,10 +173,6 @@ class MainActivity : BaseActivity() {
             }
         })
 
-        model.isDisplayBuyPro.observe(this@MainActivity, Observer {
-            it?.let { dashboard_navigation_view.menu.findItem(R.id.nav_buy_pro).isVisible = !it }
-        })
-
         if (isFirstRun) {
             //Set the home as selected
             handleDrawerNavigation(DrawerItem.HOME)
@@ -198,6 +196,21 @@ class MainActivity : BaseActivity() {
                         .setStartDelay(600L)
                         .start()
             }
+        }
+    }
+
+    /**
+     * Set the buy pro button at the footer of the navigation drawer.
+     */
+    private fun setBuyProButton() {
+
+        model.isDisplayBuyPro.observe(this@MainActivity, Observer {
+            it?.let { nav_buy_pro.visibility = if (it) View.GONE else View.VISIBLE }
+        })
+
+        nav_buy_pro.setOnClickListener {
+            //Launch the about screen
+            PurchaseActivity.launch(this@MainActivity)
         }
     }
 
@@ -249,11 +262,6 @@ class MainActivity : BaseActivity() {
                 mAboutApi.openAbout(this@MainActivity)
                 false
             }
-            DrawerItem.BUY_PRO -> {
-                //Launch the about screen
-                PurchaseActivity.launch(this@MainActivity)
-                false
-            }
         }
     }
 
@@ -300,7 +308,6 @@ class MainActivity : BaseActivity() {
 
             R.id.nav_about -> DrawerItem.ABOUT
 
-            R.id.nav_buy_pro -> DrawerItem.BUY_PRO
             else -> throw IllegalStateException("Invalid menu resource id.")
         }
     }

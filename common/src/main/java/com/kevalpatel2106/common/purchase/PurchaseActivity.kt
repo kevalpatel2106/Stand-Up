@@ -17,9 +17,10 @@
 
 package com.kevalpatel2106.common.purchase
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -27,6 +28,8 @@ import android.view.View
 import com.kevalpatel2106.common.R
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
+import com.kevalpatel2106.common.base.uiController.showToast
+import com.kevalpatel2106.utils.alert
 import kotlinx.android.synthetic.main.activity_purchase.*
 
 class PurchaseActivity : BaseActivity() {
@@ -41,17 +44,43 @@ class PurchaseActivity : BaseActivity() {
         }
     }
 
+    /**
+     * Instance of the [PurchaseViewModel].
+     */
     internal lateinit var model: PurchaseViewModel
 
-    @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_purchase)
 
+        setToolbar(R.id.include, R.string.title_purchase_activity, true)
+
+        setViewModel()
+
+        //Purchase title
+        premium_title_tv.text = getString(R.string.premium_features_title)
+
+        //Purchase message
+        premium_message_tv.text = getString(R.string.premium_features_list)
+
+        //Purchase button.
+        purchase_button.setOnClickListener {
+            model.buyPro(this@PurchaseActivity)
+        }
+    }
+
+    /**
+     * Set up [PurchaseViewModel].
+     */
+    private fun setViewModel() {
         model = ViewModelProviders.of(this@PurchaseActivity).get(PurchaseViewModel::class.java)
+
+        //Display the progressbar if the purchase is in progress
         model.blockUi.observe(this@PurchaseActivity, Observer {
             it?.let { purchase_button.displayLoader(it) }
         })
+
+        //Display the error message in the alert dialog
         model.errorMessage.observe(this@PurchaseActivity, Observer {
             it?.let {
                 @Suppress("ObjectLiteralToLambda")
@@ -66,12 +95,54 @@ class PurchaseActivity : BaseActivity() {
                 )
             }
         })
+
+        //Change the state of the buy button if the premium button is visible
         model.isPremiumPurchased.observe(this@PurchaseActivity, Observer {
-            it?.let { purchase_button.isEnabled = !it }
+            it?.let { purchase_button.visibility = if (it) View.GONE else View.VISIBLE }
         })
 
-        purchase_button.setOnClickListener {
-            model.buyPro(this@PurchaseActivity)
-        }
+        //Handle the buy premium success.
+        model.premiumOrderId.observe(this@PurchaseActivity, Observer {
+            it?.let {
+
+                alert(titleResource = R.string.buy_pro_success_title,
+                        messageResource = R.string.buy_pro_success_message,
+                        func = {
+                            positiveButton(android.R.string.ok, {
+                                //Do nothing
+                                finish()
+                            })
+                            negativeButton(android.R.string.copy, {
+                                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                val clip = ClipData.newPlainText("Order id:", it)
+                                clipboard.primaryClip = clip
+
+                                showToast(R.string.copied_to_clip_board)
+
+                                finish()
+                            })
+                        }
+                ).show()
+            }
+        })
+
+        //Handle the error while purchasing
+        model.buyPremiumErrorMessage.observe(this@PurchaseActivity, Observer {
+            it?.let {
+
+                alert(title = getString(R.string.buy_pro_failed_error_message),
+                        message = it,
+                        func = {
+                            positiveButton(android.R.string.ok, {
+                                //Do nothing
+                            })
+                            negativeButton(R.string.error_view_btn_title_retry, {
+                                //Retry the purchase
+                                model.buyPro(this@PurchaseActivity)
+                            })
+                        }
+                ).show()
+            }
+        })
     }
 }

@@ -38,4 +38,12 @@
     <string name="notification_channel_title_reminders">Reminder</string>
     <string name="notification_channel_title_daily_summary">Daily summary</string>
     <string name="notification_channel_title_other">Other</string>
+    <string name="copied_to_clip_board">Copied to clipboard.</string>
+    <string name="buy_pro_failed_error_message">Purchase failed!</string>
+    <string name="buy_pro_success_title">Purchase successful.</string>
+    <string name="buy_pro_success_message">Congratulations!!! You have unlocked all the premium features of the application. Your order id is <b>$it</b>.</string>
+    <string name="title_purchase_activity">Stand Up Premium Features</string>
+    <string name="btn_title_purchase">Purchase</string>
+    <string name="premium_features_list">List of all the premium features</string>
+    <string name="premium_features_title">Pro features</string>
 </resources>

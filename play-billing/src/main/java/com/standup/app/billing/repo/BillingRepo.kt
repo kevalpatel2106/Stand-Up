@@ -35,5 +35,5 @@ interface BillingRepo {
      */
     fun isPremiumPurchased(application: Application): Single<Boolean>
 
-    fun purchasePremium(activity: Activity): Single<Boolean>
+    fun purchasePremium(activity: Activity): Single<String>
 }

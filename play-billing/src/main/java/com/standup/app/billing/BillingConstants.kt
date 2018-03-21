@@ -26,5 +26,5 @@ internal object BillingConstants {
     /**
      * Premium package SKU id.
      */
-    val SKU_PREMIUM = "premium_101."
+    const val SKU_PREMIUM = "premium_101."
 }

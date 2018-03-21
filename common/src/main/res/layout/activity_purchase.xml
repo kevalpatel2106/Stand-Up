@@ -23,17 +23,66 @@
                                              android:layout_height="match_parent"
                                              tools:context="com.kevalpatel2106.common.purchase.PurchaseActivity">
 
-    <com.kevalpatel2106.common.view.BaseButton
-        android:id="@+id/purchase_button"
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/spacing_small"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/spacing_small"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/spacing_micro"/>
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/layout_simple_toolbar"/>
+
+    <TextView
+        android:id="@+id/premium_title_tv"
+        style="@style/LargeText.Secondary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Purchase"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_marginTop="@dimen/spacing_small"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        tools:text="@tools:sample/lorem"/>
+
+    <TextView
+        android:id="@+id/premium_message_tv"
+        style="@style/SmallText.Primary"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/spacing_nano"
+        android:layout_marginTop="@dimen/spacing_micro"
+        app:layout_constraintBottom_toTopOf="@+id/purchase_button"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/premium_title_tv"
+        tools:text="@tools:sample/lorem/random"/>
+
+    <com.kevalpatel2106.common.view.BaseButton
+        android:id="@+id/purchase_button"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_title_purchase"
+        android:textColor="?attr/colorPrimary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:spinning_bar_color="@android:color/white"/>
 </android.support.constraint.ConstraintLayout>

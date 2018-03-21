@@ -27,14 +27,13 @@ import com.standup.app.billing.BillingConstants
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.Exceptions
-import javax.inject.Inject
 
 /**
  * Created by Kevalpatel2106 on 19-Mar-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-class BillingRepoImpl @Inject constructor() : BillingRepo {
+class BillingRepoImpl : BillingRepo {
 
     /**
      * Check if the premium product is purchased or not? This is an async call that will return true
@@ -54,7 +53,7 @@ class BillingRepoImpl @Inject constructor() : BillingRepo {
 
                 override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
                     if (billingResponseCode != BillingClient.BillingResponse.OK) {
-                        if (!it.isDisposed()) it.onError(Throwable("Cannot connect to google play for purchase."))
+                        if (!it.isDisposed) it.onError(Throwable("Cannot connect to google play for purchase."))
                         return
                     }
 
@@ -82,12 +81,12 @@ class BillingRepoImpl @Inject constructor() : BillingRepo {
     }
 
     /**
-     * Purchase the premium product.
+     * Purchase the premium product. It will return [Single] witch will return false in onNext.
      */
     @UiThread
-    override fun purchasePremium(activity: Activity): Single<Boolean> {
+    override fun purchasePremium(activity: Activity): Single<String> {
 
-        return Single.create<Boolean> {
+        return Single.create<String> {
 
             //Prepare billing client
             val billingClient: BillingClient = BillingClient
@@ -95,11 +94,17 @@ class BillingRepoImpl @Inject constructor() : BillingRepo {
                     .setListener { responseCode, purchases ->
                         // Have we been disposed of in the meantime?
                         if (responseCode != BillingClient.BillingResponse.OK || purchases == null) {
-                            if (!it.isDisposed()) it.onError(Throwable("Cannot get users purchases."))
+                            if (!it.isDisposed) it.onError(Throwable("Cannot get users purchases."))
                             return@setListener
                         }
 
-                        it.onSuccess(purchases.find { it.sku == BillingConstants.SKU_PREMIUM } != null)
+                        val premiumSku = purchases.find { it.sku == BillingConstants.SKU_PREMIUM }
+
+                        if (premiumSku != null) {
+                            it.onSuccess(premiumSku.orderId)
+                        } else if (!it.isDisposed) {
+                            it.onError(Throwable("Cannot get users purchases."))
+                        }
                     }
                     .build()
 
@@ -108,7 +113,7 @@ class BillingRepoImpl @Inject constructor() : BillingRepo {
 
                 override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
                     if (billingResponseCode != BillingClient.BillingResponse.OK) {
-                        if (!it.isDisposed()) it.onError(Throwable("Cannot connect to google play for purchase."))
+                        if (!it.isDisposed) it.onError(Throwable("Cannot connect to google play for purchase."))
                         return
                     }
 

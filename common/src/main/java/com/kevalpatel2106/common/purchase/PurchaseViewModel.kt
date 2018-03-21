@@ -49,12 +49,18 @@ class PurchaseViewModel : BaseViewModel {
 
     internal val isPremiumPurchased = MutableLiveData<Boolean>()
 
+    internal val premiumOrderId = MutableLiveData<String>()
+
+    internal val buyPremiumErrorMessage = MutableLiveData<String>()
+
     @Suppress("unused")
     constructor() {
         DaggerCommonsComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@PurchaseViewModel)
+
+        init()
     }
 
     @OnlyForTesting
@@ -65,8 +71,24 @@ class PurchaseViewModel : BaseViewModel {
         this.application = application
         this.sharedPrefProvider = sharedPrefProvider
         this.billingRepo = billingRepo
+
+        init()
     }
 
+    /**
+     * Set the initial values of [MutableLiveData].
+     */
+    private fun init() {
+        isPremiumPurchased.value = false
+        premiumOrderId.value = null
+        buyPremiumErrorMessage.value = null
+
+        checkIfToDisplayBuyPro()
+    }
+
+    /**
+     * Check if to display buy pro version button.
+     */
     @VisibleForTesting
     internal fun checkIfToDisplayBuyPro() {
         addDisposable(billingRepo.isPremiumPurchased(application)
@@ -85,21 +107,25 @@ class PurchaseViewModel : BaseViewModel {
                 }))
     }
 
-    @VisibleForTesting
+    /**
+     * Buy the pro version.
+     */
     internal fun buyPro(activity: PurchaseActivity) {
         addDisposable(billingRepo.purchasePremium(activity)
                 .doOnSubscribe { blockUi.value = true }
                 .doAfterTerminate { blockUi.value = false }
                 .subscribe({
-                    isPremiumPurchased.value = it
+                    //Premium item purchased
+                    isPremiumPurchased.value = it != null
+
+                    //Order id of the premium product
+                    premiumOrderId.value = it
                 }, {
                     Timber.e(it.stackTrace.toString())
                     isPremiumPurchased.value = false
 
                     //Error
-                    val errorMsg = ErrorMessage(it.message)
-                    errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, { buyPro(activity) })
-                    errorMessage.value = errorMsg
+                    buyPremiumErrorMessage.value = it.message
                 }))
     }
 }
