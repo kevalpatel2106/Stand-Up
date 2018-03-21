@@ -27,15 +27,15 @@ include ':feature-dashboard'
 include ':play-billing'
 
 // Base layer modules.
-include ':common'
+include ':shared-mobile'
 include ':test-utils'
 include ':utils'
 include ':network'
 include ':core'
 
 //Social login
-include ':facebook-auth'
-include ':google-auth'
+include ':auth-facebook'
+include ':auth-google'
 
 //Custom views
 include ':timeline-view'

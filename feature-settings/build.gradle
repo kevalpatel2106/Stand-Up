@@ -63,7 +63,7 @@ kotlin kotlinOption
 
 dependencies {
     implementation project(':utils')
-    implementation project(':common')
+    implementation project(':shared-mobile')
     implementation project(':core')
     implementation project(':spinner-time-picker')
     testImplementation project(':test-utils')

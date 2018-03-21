@@ -63,7 +63,7 @@ kotlin kotlinOption
 
 dependencies {
     implementation project(':utils')
-    implementation project(':common')
+    implementation project(':shared-mobile')
     testImplementation project(':test-utils')
     testImplementation project(':network')
     androidTestImplementation project(':test-utils')

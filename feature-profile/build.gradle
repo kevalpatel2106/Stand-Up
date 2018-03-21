@@ -64,7 +64,7 @@ kotlin kotlinOption
 
 dependencies {
     implementation project(':utils')
-    implementation project(':common')
+    implementation project(':shared-mobile')
     implementation project(':network')
     implementation project(':ruler-view')
     testImplementation project(':test-utils')

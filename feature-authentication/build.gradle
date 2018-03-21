@@ -66,12 +66,12 @@ kotlin kotlinOption
 
 dependencies {
     implementation project(':utils')
-    implementation project(':common')
+    implementation project(':shared-mobile')
     implementation project(':network')
     implementation project(':core')
     implementation project(':progress-button')
-    implementation project(':facebook-auth')
-    implementation project(':google-auth')
+    implementation project(':auth-facebook')
+    implementation project(':auth-google')
     implementation project(':play-billing')
     testImplementation project(':test-utils')
     androidTestImplementation project(':test-utils')
