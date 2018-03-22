@@ -21,6 +21,7 @@ package com.standup.app.diary.list
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
@@ -30,6 +31,7 @@ import android.view.ViewGroup
 import com.kevalpatel2106.common.base.paging.PageRecyclerViewAdapter
 import com.kevalpatel2106.common.base.uiController.BaseFragment
 import com.kevalpatel2106.common.base.uiController.showSnack
+import com.kevalpatel2106.common.purchase.PurchaseActivity
 import com.kevalpatel2106.common.userActivity.DailyActivitySummary
 import com.standup.app.diary.R
 import kotlinx.android.synthetic.main.fragment_diary.*
@@ -114,13 +116,33 @@ class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListen
         model.noMoreData.observe(this@DiaryFragment, Observer {
             it?.let { adapter.hasNextPage = !it }
         })
+
+        model.moreItemsBlocked.observe(this@DiaryFragment, Observer {
+            it?.let {
+                if (it) {
+                    showSnack(
+                            message = R.string.diary_list_buy_now_message,
+                            actionName = R.string.diary_list_buy_now_btn_title,
+                            actionListener = View.OnClickListener {
+                                context?.let { PurchaseActivity.launch(it) }
+                            },
+                            duration = Snackbar.LENGTH_INDEFINITE
+                    )
+                    adapter.hasNextPage = false
+                }
+            }
+        })
+    }
+
+    private fun displayBuyPremium() {
+
     }
 
     override fun onPageComplete(lastItem: DailyActivitySummary) {
-        model.loadNext(lastItem.dayActivity.first().eventStartTimeMills)
+        model.loadDailySummaryPage(lastItem.dayActivity.first().eventStartTimeMills)
     }
 
     override fun onItemSelected(pos: Int, item: DailyActivitySummary) {
-        //TODO Open the detail page
+        // Do nothing
     }
 }

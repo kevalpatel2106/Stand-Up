@@ -143,7 +143,7 @@ class DiaryViewModelTest {
         //Load the next page
         val oldestTime = dairyViewModel.activities.value!!.last().dayActivity.first().eventStartTimeMills
 
-        dairyViewModel.loadNext(oldestTime)
+        dairyViewModel.loadDailySummaryPage(oldestTime)
         Assert.assertTrue(dairyViewModel.noMoreData.value!!)
         Assert.assertFalse(dairyViewModel.blockUi.value!!)
         Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
