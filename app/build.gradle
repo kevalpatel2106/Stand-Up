@@ -32,7 +32,7 @@ android {
             applicationIdSuffix ".debug"
             crunchPngs false
             testCoverageEnabled false   //https://stackoverflow.com/a/47050632/4690731
-            debuggable false
+            debuggable true
             jniDebuggable true
             renderscriptDebuggable false
             signingConfig signingConfigs.debugKey

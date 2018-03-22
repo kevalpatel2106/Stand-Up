@@ -74,8 +74,6 @@ internal class DeviceRegViewModel : BaseViewModel {
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@DeviceRegViewModel)
-
-        init()
     }
 
     @VisibleForTesting
@@ -87,14 +85,6 @@ internal class DeviceRegViewModel : BaseViewModel {
         this.userAuthRepo = userAuthRepo
         this.sharedPrefsProvider = sharedPrefsProvider
         this.userSessionManager = userSessionManager
-
-        init()
-    }
-
-    private fun init() {
-        reposeToken.value = null
-        syncComplete.value = false
-        isPremiumPurchased.value = false
     }
 
 
