@@ -24,6 +24,7 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.standup.app.billing.BillingConstants
+import com.standup.app.billing.IAPException
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.exceptions.Exceptions
@@ -53,7 +54,7 @@ class BillingRepoImpl : BillingRepo {
 
                 override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
                     if (billingResponseCode != BillingClient.BillingResponse.OK) {
-                        if (!it.isDisposed) it.onError(Throwable("Cannot connect to google play for purchase."))
+                        if (!it.isDisposed) it.onError(IAPException(billingResponseCode))
                         return
                     }
 
@@ -62,19 +63,19 @@ class BillingRepoImpl : BillingRepo {
 
                 override fun onBillingServiceDisconnected() {
                     //IAP service connection failed.
-                    it.onError(Throwable("Cannot connect to google play for purchase."))
+                    it.onError(IAPException(BillingClient.BillingResponse.SERVICE_UNAVAILABLE))
                 }
             })
-        }.map { it.queryPurchases(BillingClient.SkuType.INAPP) }
-                .map {
-                    // Have we been disposed of in the meantime?
-                    if (it.responseCode != BillingClient.BillingResponse.OK)
-                        throw Exceptions.propagate(Throwable("Cannot get users purchases."))
+        }.map {
+            it.queryPurchases(BillingClient.SkuType.INAPP)
+        }.map {
 
-                    val purchases = it.purchasesList
-                    return@map purchases.find { it.sku == BillingConstants.SKU_PREMIUM } != null
-                }
-                .subscribeOn(AndroidSchedulers.mainThread())
+            if (it.responseCode != BillingClient.BillingResponse.OK)
+                throw Exceptions.propagate(IAPException(it.responseCode))
+
+            val purchases = it.purchasesList
+            return@map purchases.find { it.sku == BillingConstants.SKU_PREMIUM } != null
+        }.subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { if (billingClient.isReady) billingClient.endConnection() }
                 .doAfterTerminate { billingClient.endConnection() }
@@ -92,9 +93,10 @@ class BillingRepoImpl : BillingRepo {
             val billingClient: BillingClient = BillingClient
                     .newBuilder(activity)
                     .setListener { responseCode, purchases ->
+
                         // Have we been disposed of in the meantime?
                         if (responseCode != BillingClient.BillingResponse.OK || purchases == null) {
-                            if (!it.isDisposed) it.onError(Throwable("Cannot get users purchases."))
+                            if (!it.isDisposed) it.onError(IAPException(responseCode))
                             return@setListener
                         }
 
@@ -103,7 +105,7 @@ class BillingRepoImpl : BillingRepo {
                         if (premiumSku != null) {
                             it.onSuccess(premiumSku.orderId)
                         } else if (!it.isDisposed) {
-                            it.onError(Throwable("Cannot get users purchases."))
+                            it.onError(IAPException(BillingClient.BillingResponse.ITEM_NOT_OWNED))
                         }
                     }
                     .build()
@@ -113,7 +115,7 @@ class BillingRepoImpl : BillingRepo {
 
                 override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
                     if (billingResponseCode != BillingClient.BillingResponse.OK) {
-                        if (!it.isDisposed) it.onError(Throwable("Cannot connect to google play for purchase."))
+                        it.onError(IAPException(billingResponseCode))
                         return
                     }
 
@@ -128,12 +130,12 @@ class BillingRepoImpl : BillingRepo {
 
                     // Have we been disposed of in the meantime?
                     if (responseCode != BillingClient.BillingResponse.OK)
-                        it.onError(Throwable("Cannot get users purchases."))
+                        it.onError(IAPException(BillingClient.BillingResponse.SERVICE_UNAVAILABLE))
                 }
 
                 override fun onBillingServiceDisconnected() {
                     //IAP service connection failed.
-                    it.onError(Throwable("Cannot connect to google play for purchase."))
+                    it.onError(IAPException(BillingClient.BillingResponse.SERVICE_UNAVAILABLE))
                 }
             })
         }.subscribeOn(AndroidSchedulers.mainThread())

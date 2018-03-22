@@ -27,6 +27,7 @@ import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.common.di.DaggerCommonsComponent
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
+import com.standup.app.billing.IAPException
 import com.standup.app.billing.repo.BillingRepo
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,7 +52,7 @@ class PurchaseViewModel : BaseViewModel {
 
     internal val premiumOrderId = MutableLiveData<String>()
 
-    internal val buyPremiumErrorMessage = MutableLiveData<String>()
+    internal val buyPremiumErrorCode = MutableLiveData<Int>()
 
     @Suppress("unused")
     constructor() {
@@ -81,7 +82,7 @@ class PurchaseViewModel : BaseViewModel {
     private fun init() {
         isPremiumPurchased.value = false
         premiumOrderId.value = null
-        buyPremiumErrorMessage.value = null
+        buyPremiumErrorCode.value = null
 
         checkIfToDisplayBuyPro()
     }
@@ -125,7 +126,7 @@ class PurchaseViewModel : BaseViewModel {
                     isPremiumPurchased.value = false
 
                     //Error
-                    buyPremiumErrorMessage.value = it.message
+                    buyPremiumErrorCode.value = (it as IAPException).errorCode
                 }))
     }
 }

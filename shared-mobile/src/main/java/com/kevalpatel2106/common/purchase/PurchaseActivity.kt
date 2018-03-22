@@ -30,6 +30,7 @@ import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
 import com.kevalpatel2106.common.base.uiController.showToast
 import com.kevalpatel2106.utils.alert
+import com.standup.app.billing.InAppFailDialog
 import kotlinx.android.synthetic.main.activity_purchase.*
 
 class PurchaseActivity : BaseActivity() {
@@ -127,21 +128,13 @@ class PurchaseActivity : BaseActivity() {
         })
 
         //Handle the error while purchasing
-        model.buyPremiumErrorMessage.observe(this@PurchaseActivity, Observer {
+        model.buyPremiumErrorCode.observe(this@PurchaseActivity, Observer {
             it?.let {
-
-                alert(title = getString(R.string.buy_pro_failed_error_message),
-                        message = it,
-                        func = {
-                            positiveButton(android.R.string.ok, {
-                                //Do nothing
-                            })
-                            negativeButton(R.string.error_view_btn_title_retry, {
-                                //Retry the purchase
-                                model.buyPro(this@PurchaseActivity)
-                            })
-                        }
-                ).show()
+                InAppFailDialog.launch(
+                        context = this@PurchaseActivity,
+                        fragmentManager = supportFragmentManager,
+                        errorCode = it
+                )
             }
         })
     }

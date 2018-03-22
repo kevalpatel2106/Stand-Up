@@ -29,11 +29,17 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.playStore
+
+            //Inject build parameters
+            buildConfigField "String", "PRO_VERSION_ID", "\"" + DebugConfig.PRO_VERSION_ID + "\""
         }
         debug {
             crunchPngs false
             testCoverageEnabled true
             signingConfig signingConfigs.debugKey
+
+            //Inject build parameters
+            buildConfigField "String", "PRO_VERSION_ID", "\"" + ReleaseConfig.PRO_VERSION_ID + "\""
         }
     }
 
@@ -74,6 +80,7 @@ dependencies {
     //Support
     implementation Deps.appCompat
     implementation Deps.supportv4
+    implementation Deps.design
 
     implementation(Deps.iap, excludeGrp)
 }
