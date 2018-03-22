@@ -97,9 +97,7 @@ class DeviceRegViewModelTest {
     @Throws(IOException::class)
     fun checkInitialization() {
         Assert.assertFalse(deviceRegViewModel.blockUi.value!!)
-        Assert.assertFalse(deviceRegViewModel.syncComplete.value!!)
         Assert.assertNull(deviceRegViewModel.errorMessage.value)
-        Assert.assertNull(deviceRegViewModel.reposeToken.value)
     }
 
     @Test
@@ -146,7 +144,7 @@ class DeviceRegViewModelTest {
     fun checkSync_SyncFailed() {
         mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/authentication_field_missing.json"))
 
-        Assert.assertFalse(deviceRegViewModel.syncComplete.value!!)
+        Assert.assertNull(deviceRegViewModel.syncComplete.value)
 
         deviceRegViewModel.syncOldActivities(mockUserActivityRepo)
 
@@ -160,7 +158,7 @@ class DeviceRegViewModelTest {
     fun checkSync_SyncComplete() {
         mockServerManager.enqueueResponse(File("${mockServerManager.getResponsesPath()}/get_activity_response.json"))
 
-        Assert.assertFalse(deviceRegViewModel.syncComplete.value!!)
+        Assert.assertNull(deviceRegViewModel.syncComplete.value)
 
         deviceRegViewModel.syncOldActivities(mockUserActivityRepo)
 

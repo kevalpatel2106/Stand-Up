@@ -81,14 +81,6 @@ class EditProfileModelTest {
         mockServerManager.close()
     }
 
-    @Test
-    @Throws(IOException::class)
-    fun checkInitialization() {
-        Assert.assertFalse(editProfileModel.blockUi.value!!)
-        Assert.assertFalse(editProfileModel.isSavingProfile.value!!)
-        Assert.assertFalse(editProfileModel.blockUi.value!!)
-    }
-
 
     @Test
     @Throws(IOException::class)
