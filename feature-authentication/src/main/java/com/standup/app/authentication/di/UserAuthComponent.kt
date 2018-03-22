@@ -18,7 +18,7 @@
 package com.standup.app.authentication.di
 
 import com.kevalpatel2106.common.di.AppComponent
-import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.authentication.UnauthorizedReceiver
 import com.standup.app.authentication.deviceReg.DeviceRegViewModel
 import com.standup.app.authentication.deviceReg.DeviceRegisterActivity
@@ -30,6 +30,7 @@ import com.standup.app.authentication.verification.EmailLinkVerificationActivity
 import com.standup.app.authentication.verification.EmailLinkVerifyViewModel
 import com.standup.app.authentication.verification.VerifyEmailActivity
 import com.standup.app.authentication.verification.VerifyEmailViewModel
+import com.standup.app.billing.di.BillingDaggerModule
 import dagger.Component
 
 /**
@@ -38,7 +39,7 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [UserAuthDaggerModule::class])
+@Component(dependencies = [AppComponent::class], modules = [UserAuthDaggerModule::class, BillingDaggerModule::class])
 internal interface UserAuthComponent {
 
     fun inject(deviceRegViewModel: DeviceRegViewModel)

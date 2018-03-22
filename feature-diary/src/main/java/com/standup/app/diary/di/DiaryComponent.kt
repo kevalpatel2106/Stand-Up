@@ -18,7 +18,7 @@
 package com.standup.app.diary.di
 
 import com.kevalpatel2106.common.di.AppComponent
-import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.diary.detail.DetailViewModel
 import com.standup.app.diary.list.DiaryViewModel
 import com.standup.app.diary.userActivityList.UserActivityListModel

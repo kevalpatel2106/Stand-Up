@@ -18,7 +18,8 @@
 package com.standup.app.main
 
 import com.kevalpatel2106.common.di.AppComponent
-import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.utils.annotations.ApplicationScope
+import com.standup.app.billing.di.BillingDaggerModule
 import com.standup.app.features.di.FeatureModule
 import dagger.Component
 
@@ -28,7 +29,7 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [FeatureModule::class])
+@Component(dependencies = [AppComponent::class], modules = [FeatureModule::class, BillingDaggerModule::class])
 internal interface MainComponent {
 
     fun inject(mainActivity: MainActivity)

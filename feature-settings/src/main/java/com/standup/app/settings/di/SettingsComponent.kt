@@ -18,7 +18,7 @@
 package com.standup.app.settings.di
 
 import com.kevalpatel2106.common.di.AppComponent
-import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.settings.dailyReview.DailyReviewSettingsFragment
 import com.standup.app.settings.dailyReview.DailyReviewSettingsViewModel
 import com.standup.app.settings.dnd.DndSettingsViewModel

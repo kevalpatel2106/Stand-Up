@@ -19,11 +19,11 @@ package com.standup.app.dashboard.di
 
 import android.app.Application
 import com.kevalpatel2106.common.di.AppModule
-import com.kevalpatel2106.common.di.ApplicationScope
 import com.kevalpatel2106.common.di.CommonsDaggerModule
 import com.kevalpatel2106.common.prefs.UserSettingsManager
 import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.dashboard.repo.DashboardRepo
 import com.standup.app.dashboard.repo.DashboardRepoImpl
 import com.standup.core.CorePrefsProvider

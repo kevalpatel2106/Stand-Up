@@ -23,6 +23,9 @@
 /.idea/codeStyles/
 /.idea/modules.xml
 /.idea/dictionaries/
+/.idea/markdown-navigator.xml
+/.idea/markdown-navigator/
+/.idea/inspectionProfiles/
 
 ## Custom ignores
 /.idea/assetWizardSettings.xml
@@ -30,5 +33,3 @@
 /misc/keystore.jks
 /app/src/release/google-services.json
 /buildSrc/src/main/java/ReleaseConfig.kt
-/.idea/markdown-navigator.xml
-/.idea/markdown-navigator/

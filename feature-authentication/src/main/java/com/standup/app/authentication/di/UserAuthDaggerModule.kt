@@ -18,8 +18,8 @@
 package com.standup.app.authentication.di
 
 import com.kevalpatel2106.common.di.AppModule
-import com.kevalpatel2106.common.di.ApplicationScope
 import com.kevalpatel2106.common.di.CommonsDaggerModule
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.authentication.AuthenticationApi
 import com.standup.app.authentication.AuthenticationHook
 import com.standup.app.authentication.repo.UserAuthRepository

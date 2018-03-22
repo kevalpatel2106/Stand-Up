@@ -18,7 +18,7 @@
 package com.standup.app.splash
 
 import com.kevalpatel2106.common.di.AppComponent
-import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.features.di.FeatureModule
 import dagger.Component
 

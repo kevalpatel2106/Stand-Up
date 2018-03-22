@@ -23,6 +23,7 @@
  */
 object DebugConfig {
 
+    //####################### Application basic configs
     /**
      * Name of the application to display.
      */
@@ -34,7 +35,8 @@ object DebugConfig {
      */
     const val PACKAGE_NAME = "${DefaultConfig.applicationId}.debug"
 
-    //Debug key config
+
+    //####################### Debug key config
     /**
      * Relative path to the keystore file (.jks). Note that the build.gradle file for each module will
      * be located at ./module-dir/build.gradle.
@@ -56,7 +58,8 @@ object DebugConfig {
      */
     const val KEYSTORE_PASSWORD = "2ea8249e-8ffa-4b77-adde-c70ad4d99edc"
 
-    // Google keys
+
+    //####################### Google cloud console / Firebase config
     // See: https://console.developers.google.com/apis/credentials
     /**
      * Server/Client id for the debug key and [PACKAGE_NAME]. You can get this from the cloud console.
@@ -68,7 +71,8 @@ object DebugConfig {
      */
     const val ANDROID_API_KEY = "AIzaSyBd3eBhrPv3HlTkQjlufwOAEsbwOkllYE4"
 
-    // Facebook credentials (For facebook login)
+
+    //####################### Facebook credentials (For facebook login)
     // See: https://developers.facebook.com/docs/facebook-login/android/
     /**
      * Unique identifier for the Facebook app. You can get this app id from Facebook Developer Console.
@@ -80,9 +84,17 @@ object DebugConfig {
      */
     const val FB_LOGIN_PROTOCOL_SCHEME = "fb154534775066463"
 
-    // Server config
+
+    //####################### Server config
     /**
      * URL of Stand Up server with out trailing '/'.
      */
     const val SERVER_BASE_URL = "https://raspberry-pi-home-169503.appspot.com"
+
+
+    //####################### Play store console configs
+    /**
+     * Pro version product id.
+     */
+    const val PRO_VERSION_ID = "premium_version.101"
 }

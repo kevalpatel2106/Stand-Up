@@ -18,7 +18,7 @@
 package com.standup.app.features.di
 
 import com.kevalpatel2106.common.di.AppComponent
-import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.features.AuthenticationHookImpl
 import com.standup.app.features.CoreHookImpl
 import com.standup.app.features.NetworkHookImpl

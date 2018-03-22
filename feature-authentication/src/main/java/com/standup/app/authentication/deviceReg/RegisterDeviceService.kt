@@ -40,7 +40,7 @@ import com.kevalpatel2106.utils.Utils
 class RegisterDeviceService : Service() {
 
     companion object {
-        private val ARG_STOP_SERVICE = "arg_stop_service"
+        private const val ARG_STOP_SERVICE = "arg_stop_service"
 
         /**
          * Start the service.
@@ -86,8 +86,10 @@ class RegisterDeviceService : Service() {
         model.errorMessage.observeForever(errorObserver)
 
         //Make the service foreground by assigning notification
-        startForeground(DeviceRegisterNotification.FOREGROUND_NOTIFICATION_ID,
-                DeviceRegisterNotification.getNotification(this@RegisterDeviceService.applicationContext))
+        startForeground(
+                DeviceRegisterNotification.FOREGROUND_NOTIFICATION_ID,
+                DeviceRegisterNotification.getNotification(this@RegisterDeviceService.applicationContext)
+        )
     }
 
     @SuppressLint("VisibleForTests")

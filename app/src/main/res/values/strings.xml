@@ -25,6 +25,7 @@
     <string name="nav_header_profile">Profile</string>
     <string name="nav_header_logout">Logout</string>
     <string name="nav_header_about">About</string>
+    <string name="nav_header_purchase">Buy pro version</string>
 
     <string name="btn_title_retry">Retry</string>
 

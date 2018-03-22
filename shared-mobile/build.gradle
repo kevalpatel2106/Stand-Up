@@ -1,0 +1,114 @@
+/*
+ *  Copyright 2018 Keval Patel.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ *
+ */
+
+apply plugin: 'com.android.library'
+Plugins.modulePlugins.each { plugins.apply(it) }
+
+android {
+    signingConfigs signingConfig
+
+    compileSdkVersion DefaultConfig.compile
+    buildToolsVersion DefaultConfig.buildToolVersion
+
+    defaultConfig libDefaultConfig
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.playStore
+
+            buildConfigField "String", "BASE_URL", "\"" + ReleaseConfig.RELEASE_SERVER_BASE_URL + "\""
+            resValue "string", "application_name", ReleaseConfig.RELEASE_APPLICATION_NAME
+            resValue "string", "package_name", ReleaseConfig.RELEASE_PACKAGE_ID
+            resValue "string", "api_host", "\"" + ReleaseConfig.RELEASE_SERVER_BASE_URL.replace("https://", "") + "\""
+            resValue "string", "android_api_key", ReleaseConfig.RELEASE_ANDROID_API_KEY
+        }
+        debug {
+            crunchPngs false
+            testCoverageEnabled true
+            signingConfig signingConfigs.debugKey
+
+            buildConfigField "String", "BASE_URL", "\"" + DebugConfig.SERVER_BASE_URL + "\""
+            resValue "string", "application_name", DebugConfig.APPLICATION_NAME
+            resValue "string", "package_name", DebugConfig.PACKAGE_NAME
+            resValue "string", "api_host", "\"" + DebugConfig.SERVER_BASE_URL.replace("https://", "") + "\""
+            resValue "string", "android_api_key", DebugConfig.ANDROID_API_KEY
+        }
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files(DefaultConfig.schemaPath.toString())
+    }
+
+    compileOptions compileOption
+    packagingOptions packageExcludes
+    lintOptions lintOption
+    aaptOptions aaptOption
+    dexOptions dexOption
+    testOptions testOption
+    adbOptions adbOption
+}
+
+dokka dokkaConfig
+kotlin kotlinOption
+
+dependencies {
+    implementation project(':utils')
+    implementation project(':network')
+    implementation project(':timeline-view')
+    implementation project(':play-billing')
+    api project(':progress-button')
+    testImplementation project(':test-utils')
+    androidTestImplementation project(':test-utils')
+    testImplementation(Deps.roboElectric, excludeGrp)
+
+    implementation(Deps.kotlinRefflect)
+    implementation(Deps.kotlinStdLib)
+    implementation(Deps.constraintLayout)
+
+    implementation(Deps.rxJava)
+    implementation(Deps.rxAndroid)
+
+    implementation(Deps.timber)
+
+    //Dagger
+    implementation(Deps.daggerAndroid)
+    implementation(Deps.daggerAndroidSupport)
+    kapt(Deps.daggerAnnotations)
+    kapt(Deps.daggerCompiler)
+    compileOnly(Deps.jsr250)
+
+    implementation(Deps.firebaseCore, excludeGrp)
+    implementation(Deps.bottomsheet, excludeGrp)
+
+    //Support
+    implementation Deps.appCompat
+    implementation Deps.supportv4
+    implementation(Deps.recyclerView, excludeGrp)
+    implementation(Deps.cardView, excludeGrp)
+    implementation Deps.design
+
+    //Room & Arch components
+    implementation Deps.lifecycle
+    implementation Deps.lifecycleJava8
+    implementation Deps.room
+    kapt Deps.roomAnnotation
+
+    implementation Deps.retrofit
+
+    implementation(Deps.lottie, excludeGrp)
+    implementation(Deps.chartLayout, excludeGrp)
+}

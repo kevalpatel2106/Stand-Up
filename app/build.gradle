@@ -80,7 +80,7 @@ dokka dokkaConfig
 kotlin kotlinOption
 
 dependencies {
-    implementation project(':common')
+    implementation project(':shared-mobile')
     implementation project(':feature-authentication')
     implementation project(':feature-dashboard')
     implementation project(':feature-diary')
@@ -88,6 +88,7 @@ dependencies {
     implementation project(':feature-profile')
     implementation project(':feature-settings')
     implementation project(':feature-stats')
+    implementation project(':play-billing')
     implementation project(':utils')
     implementation project(':network')
     implementation project(':core')
@@ -140,7 +141,6 @@ dependencies {
 
     //Other libs
     implementation(Deps.circleImagView, excludeGrp)
-    implementation(Deps.iap, excludeGrp)
     implementation(Deps.facebook, excludeGrp)
     releaseImplementation(Deps.crashalytics) { transitive = true }
 }

@@ -18,6 +18,7 @@
 package com.standup.app.main
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -34,6 +35,7 @@ import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.prefs.SharedPreferenceKeys
 import com.kevalpatel2106.common.prefs.UserSessionManager
+import com.kevalpatel2106.common.purchase.PurchaseActivity
 import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.SwipeDetector
@@ -45,6 +47,7 @@ import com.standup.core.Core
 import dagger.Lazy
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_drawer_footer.*
 import javax.inject.Inject
 
 /**
@@ -107,6 +110,7 @@ class MainActivity : BaseActivity() {
         supportActionBar!!.setHomeButtonEnabled(true)
 
         setUpDrawer(savedInstanceState == null)
+        setBuyProButton()
     }
 
     /**
@@ -169,7 +173,6 @@ class MainActivity : BaseActivity() {
             }
         })
 
-
         if (isFirstRun) {
             //Set the home as selected
             handleDrawerNavigation(DrawerItem.HOME)
@@ -193,6 +196,21 @@ class MainActivity : BaseActivity() {
                         .setStartDelay(600L)
                         .start()
             }
+        }
+    }
+
+    /**
+     * Set the buy pro button at the footer of the navigation drawer.
+     */
+    private fun setBuyProButton() {
+
+        model.isDisplayBuyPro.observe(this@MainActivity, Observer {
+            it?.let { nav_buy_pro.visibility = if (it) View.GONE else View.VISIBLE }
+        })
+
+        nav_buy_pro.setOnClickListener {
+            //Launch the about screen
+            PurchaseActivity.launch(this@MainActivity)
         }
     }
 
@@ -289,6 +307,7 @@ class MainActivity : BaseActivity() {
             R.id.nav_settings -> DrawerItem.SETTING
 
             R.id.nav_about -> DrawerItem.ABOUT
+
             else -> throw IllegalStateException("Invalid menu resource id.")
         }
     }
