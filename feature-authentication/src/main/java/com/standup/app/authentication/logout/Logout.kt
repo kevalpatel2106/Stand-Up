@@ -30,7 +30,6 @@ import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.kevalpatel2106.utils.SharedPrefsProvider
 import com.kevalpatel2106.utils.Utils
 import com.standup.app.authentication.AuthenticationHook
-import com.standup.app.authentication.deviceReg.RegisterDeviceService
 import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.authentication.repo.LogoutRequest
 import com.standup.app.authentication.repo.UserAuthRepository
@@ -91,9 +90,6 @@ internal class Logout {
      */
     @VisibleForTesting
     internal fun clearSession() {
-        //Stop the device registration service.
-        RegisterDeviceService.stop(application)
-
         //Clear shared prefs
         sharedPrefsProvider.removePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED)
         sharedPrefsProvider.removePreferences(SharedPreferenceKeys.IS_NAVIGATION_DRAWER_DISPLAYED)

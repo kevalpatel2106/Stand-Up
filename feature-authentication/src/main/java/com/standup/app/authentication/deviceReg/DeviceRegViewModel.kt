@@ -18,6 +18,7 @@
 package com.standup.app.authentication.deviceReg
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.Validator
@@ -33,6 +34,7 @@ import com.standup.app.authentication.R
 import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.authentication.repo.DeviceRegisterRequest
 import com.standup.app.authentication.repo.UserAuthRepository
+import com.standup.app.billing.repo.BillingRepo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -54,34 +56,37 @@ internal class DeviceRegViewModel : BaseViewModel {
     @Inject
     lateinit var userSessionManager: UserSessionManager
 
+    @Inject
+    lateinit var application: Application
+
     internal val reposeToken = MutableLiveData<String>()
 
     internal val syncComplete = MutableLiveData<Boolean>()
+
+    /**
+     * Boolean [MutableLiveData] that will be set as true if the premium item is purchased else it
+     * will remain false.
+     */
+    internal val isPremiumPurchased = MutableLiveData<Boolean>()
 
     constructor() {
         DaggerUserAuthComponent.builder()
                 .appComponent(BaseApplication.getApplicationComponent())
                 .build()
                 .inject(this@DeviceRegViewModel)
-
-        init()
     }
 
     @VisibleForTesting
-    constructor(userAuthRepo: UserAuthRepository,
+    constructor(application: Application,
+                userAuthRepo: UserAuthRepository,
                 sharedPrefsProvider: SharedPrefsProvider,
                 userSessionManager: UserSessionManager) {
+        this.application = application
         this.userAuthRepo = userAuthRepo
         this.sharedPrefsProvider = sharedPrefsProvider
         this.userSessionManager = userSessionManager
-
-        init()
     }
 
-    private fun init() {
-        reposeToken.value = null
-        syncComplete.value = false
-    }
 
     @SuppressLint("VisibleForTests")
     internal fun register(deviceId: String, fcmId: String?) {
@@ -107,6 +112,11 @@ internal class DeviceRegViewModel : BaseViewModel {
         //Register device on the server
         sendDeviceDataToServer(fcmId!!, deviceId)
     }
+
+    @VisibleForTesting
+    internal fun markDeviceRegSuccess() = sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
+
+    internal fun markDeviceRegFailed() = sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
 
     /**
      * Save the device information and FCM id to the server.
@@ -152,11 +162,9 @@ internal class DeviceRegViewModel : BaseViewModel {
                 }))
     }
 
-    @VisibleForTesting
-    internal fun markDeviceRegSuccess() = sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, true)
-
-    internal fun markDeviceRegFailed() = sharedPrefsProvider.savePreferences(SharedPreferenceKeys.IS_DEVICE_REGISTERED, false)
-
+    /**
+     * Sync and download old activities to the device.
+     */
     internal fun syncOldActivities(userActivityRepo: UserActivityRepo) {
         addDisposable(userActivityRepo
                 .getActivitiesFromServer()
@@ -176,6 +184,32 @@ internal class DeviceRegViewModel : BaseViewModel {
 
                     val errorMsg = ErrorMessage(it.message)
                     errorMsg.setErrorBtn(R.string.error_retry_try_again, { syncOldActivities(userActivityRepo) })
+                    errorMsg.errorImage = LottieJson.WARNING
+                    errorMessage.value = errorMsg
+                }))
+    }
+
+    /**
+     * Restore all the old purchases.
+     */
+    internal fun restorePurchases(billingRepo: BillingRepo) {
+        addDisposable(billingRepo
+                .isPremiumPurchased(application)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe({
+                    blockUi.value = true
+                })
+                .doAfterTerminate({
+                    blockUi.value = false
+                })
+                .subscribe({
+                    isPremiumPurchased.value = it
+                }, {
+                    Timber.d(it.printStackTrace().toString())
+
+                    val errorMsg = ErrorMessage(R.string.error_cannot_restore_purchases)
+                    errorMsg.setErrorBtn(R.string.error_retry_try_again, { restorePurchases(billingRepo) })
                     errorMsg.errorImage = LottieJson.WARNING
                     errorMessage.value = errorMsg
                 }))

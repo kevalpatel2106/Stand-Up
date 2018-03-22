@@ -18,7 +18,7 @@
 package com.standup.app.about.di
 
 import com.kevalpatel2106.common.di.AppComponent
-import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.about.AboutViewModel
 import com.standup.app.about.report.ReportIssueViewModel
 import dagger.Component

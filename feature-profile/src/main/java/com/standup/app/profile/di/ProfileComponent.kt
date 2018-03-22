@@ -18,7 +18,7 @@
 package com.standup.app.profile.di
 
 import com.kevalpatel2106.common.di.AppComponent
-import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.profile.EditProfileActivity
 import com.standup.app.profile.EditProfileModel
 import dagger.Component

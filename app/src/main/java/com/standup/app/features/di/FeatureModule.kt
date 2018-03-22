@@ -17,7 +17,7 @@
 
 package com.standup.app.features.di
 
-import com.kevalpatel2106.common.di.ApplicationScope
+import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.about.AboutApi
 import com.standup.app.authentication.AuthenticationApi
 import com.standup.app.dashboard.DashboardApi

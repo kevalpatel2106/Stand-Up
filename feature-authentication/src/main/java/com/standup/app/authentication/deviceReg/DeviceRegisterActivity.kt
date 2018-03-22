@@ -45,6 +45,7 @@ import com.standup.app.authentication.BuildConfig
 import com.standup.app.authentication.R
 import com.standup.app.authentication.di.DaggerUserAuthComponent
 import com.standup.app.authentication.verification.VerifyEmailActivity
+import com.standup.app.billing.repo.BillingRepo
 import kotlinx.android.synthetic.main.activity_device_register.*
 import javax.inject.Inject
 
@@ -66,6 +67,9 @@ class DeviceRegisterActivity : BaseActivity() {
     @Inject
     internal lateinit var userActivityDao: UserActivityDao
 
+    @Inject
+    internal lateinit var billingRepo: BillingRepo
+
     @SuppressLint("VisibleForTests")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,9 +89,11 @@ class DeviceRegisterActivity : BaseActivity() {
     @Suppress("ObjectLiteralToLambda")
     @SuppressLint("VisibleForTests")
     private fun setModel() {
+        device_reg_tv.text = getString(R.string.setting_up_your_device)
+
         model = ViewModelProviders.of(this).get(DeviceRegViewModel::class.java)
         model.reposeToken.observe(this@DeviceRegisterActivity, Observer {
-            it?.let {
+            it.let {
                 //Recreate the app component to use all the new session tokens
                 (application as BaseApplication).recreateAppComponent()
 
@@ -107,11 +113,16 @@ class DeviceRegisterActivity : BaseActivity() {
         model.syncComplete.observe(this@DeviceRegisterActivity, Observer {
             it?.let {
                 if (it) {
-                    device_reg_tv.text = getString(R.string.set_up_complete)
-
-                    device_reg_iv.playAnotherAnimation(LottieJson.CORRECT_TICK_INSIDE_GREEN_CIRCLE)
-                    Handler().postDelayed({ navigateToNextScreen() }, 2_000L /* 2 seconds delay */)
+                    device_reg_tv.text = getString(R.string.restore_purchases)
+                    model.restorePurchases(billingRepo)
                 }
+            }
+        })
+        model.isPremiumPurchased.observe(this@DeviceRegisterActivity, Observer {
+            it.let {
+                device_reg_tv.text = getString(R.string.set_up_complete)
+                device_reg_iv.playAnotherAnimation(LottieJson.CORRECT_TICK_INSIDE_GREEN_CIRCLE)
+                Handler().postDelayed({ navigateToNextScreen() }, 2_000L /* 2 seconds delay */)
             }
         })
         model.blockUi.observe(this@DeviceRegisterActivity, Observer {
@@ -119,7 +130,6 @@ class DeviceRegisterActivity : BaseActivity() {
                 if (it) {
                     //Registration is progress
                     device_reg_iv.playAnotherRepeatAnimation(LottieJson.ANIMATING_CLOCK)
-                    device_reg_tv.text = getString(R.string.setting_up_your_device)
                 }
             }
         })
@@ -145,6 +155,7 @@ class DeviceRegisterActivity : BaseActivity() {
                 })
             }
         })
+
         model.register(
                 deviceId = Utils.getDeviceId(this@DeviceRegisterActivity),
                 fcmId = FirebaseInstanceId.getInstance().token
