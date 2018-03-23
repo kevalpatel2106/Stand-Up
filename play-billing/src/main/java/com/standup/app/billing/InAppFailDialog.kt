@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.support.v4.app.DialogFragment
 import android.support.v4.app.FragmentManager
 import com.android.billingclient.api.BillingClient
@@ -42,35 +43,47 @@ class InAppFailDialog : DialogFragment() {
          */
         private const val ARG_MESSAGE = "arg_message"
 
+
         /**
-         * Launch the [InAppFailDialog] which displays [message].
+         * Display the error dialog with proper error message whenever IAP fails. Function will return
+         * true if the dialog is displayed or else it will return false.
+         *
+         * - This dialog will display error message based on [errorCode].
+         * - If the user cancels the IAP (i.e. [errorCode] is [BillingClient.BillingResponse.USER_CANCELED]),
+         * dialog won't be display.
+         *
+         * @see getErrorMessage
          */
-        fun launch(fragmentManager: FragmentManager, message: String) {
-            InAppFailDialog().apply {
-                this.arguments = Bundle().apply {
-                    this.putString(ARG_MESSAGE, message)
-                }
-            }.show(fragmentManager, InAppFailDialog::class.java.name)
-        }
-
-
         fun launch(context: Context,
                    fragmentManager: FragmentManager,
-                   @BillingClient.BillingResponse errorCode: Int) {
+                   @BillingClient.BillingResponse errorCode: Int): Boolean {
 
-            when (errorCode) {
+            return when (errorCode) {
                 BillingClient.BillingResponse.OK -> throw IllegalStateException("Success received.")
                 BillingClient.BillingResponse.USER_CANCELED -> {
-                    /* Do nothing */
+                    false
                 }
                 else -> {
-                    launch(fragmentManager, context.getString(getErrorMessage(errorCode)))
+                    InAppFailDialog().apply {
+                        this.arguments = Bundle().apply {
+                            this.putString(ARG_MESSAGE, context.getString(getErrorMessage(errorCode)))
+                        }
+                    }.show(fragmentManager, InAppFailDialog::class.java.name)
+                    true
                 }
             }
 
         }
 
-        private fun getErrorMessage(@BillingClient.BillingResponse errorCode: Int): Int {
+        /**
+         * Get the error message string resource id based on the [errorCode].
+         *
+         * @throws IllegalStateException if [errorCode] is [BillingClient.BillingResponse.USER_CANCELED]
+         * or [BillingClient.BillingResponse.OK] because for those error codes, error dialog shouldn't
+         * be displayed.
+         */
+        @VisibleForTesting
+        internal fun getErrorMessage(@BillingClient.BillingResponse errorCode: Int): Int {
             return when (errorCode) {
                 BillingClient.BillingResponse.OK -> {
                     throw IllegalStateException("Success received.")

@@ -51,7 +51,7 @@ class DiaryListAdapterUiTest {
     @Test
     @Throws(Exception::class)
     fun checkBindView_MonthView() {
-        arrayList.add(MonthHeader(1, 2000))
+        arrayList.add(MonthHeader(0, 2000))
         val monthViewHolder = DiaryMonthViewHolder.create(
                 context = InstrumentationRegistry.getContext(),
                 parent = RelativeLayout(InstrumentationRegistry.getContext())
@@ -59,8 +59,7 @@ class DiaryListAdapterUiTest {
 
         diaryListAdapter.bindView(monthViewHolder, arrayList.first())
 
-        Assert.assertEquals(monthViewHolder.itemView.findViewById<BaseTextView>(R.id.dairy_row_month_name_header_tv).text,
-                "Jan, 2000")
+        Assert.assertEquals("JAN, 2000", monthViewHolder.itemView.findViewById<BaseTextView>(R.id.dairy_row_month_name_header_tv).text)
     }
 
 }

@@ -132,6 +132,7 @@ internal class DiaryViewModel : BaseViewModel {
                         return@filter true
                     } else {
                         moreItemsBlocked.postValue(true)
+                        noMoreData.postValue(true)
                         return@filter false
                     }
                 }
@@ -154,6 +155,7 @@ internal class DiaryViewModel : BaseViewModel {
                     }
                 }
                 .doOnTerminate {
+                    blockUi.value = false
                     pageLoadingCompleteCallback.dispatch()
                 }
                 .doOnComplete {

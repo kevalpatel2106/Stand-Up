@@ -210,80 +210,52 @@ class DiaryViewModelTest {
         }
 
         @Test
-        fun checkLoadNextPageWithEmptyDb() {
+        fun emptyDb() {
             val dairyViewModel = DiaryViewModel(mockApplication, diaryRepo, billingRepo)
 
             Assert.assertTrue(dairyViewModel.noMoreData.value!!)
             Assert.assertFalse(dairyViewModel.blockUi.value!!)
             Assert.assertFalse(dairyViewModel.moreItemsBlocked.value!!)
             Assert.assertTrue(dairyViewModel.activities.value!!.isEmpty())
-            Assert.assertTrue(dairyViewModel.moreItemsBlocked.value!!)
+            Assert.assertFalse(dairyViewModel.moreItemsBlocked.value!!)
         }
-//
-//        @Test
-//        fun checkLoadNextPageWithAllActivitiesInSameMonth() {
-//            //Generate fake data
-//            DiaryViewModelTestUtils.insert2EventsInEachDayFor7DaysForSameMonth(userActivityDao)
-//
-//            val dairyViewModel = DiaryViewModel(mockApplication, diaryRepo, billingRepo)
-//
-//            Assert.assertTrue(dairyViewModel.noMoreData.value!!)
-//            Assert.assertFalse(dairyViewModel.blockUi.value!!)
-//            Assert.assertFalse(dairyViewModel.moreItemsBlocked.value!!)
-//            Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-//            Assert.assertEquals(dairyViewModel.activities.value!!.size, 7 /* Summary */ + 1 /* Days header */)
-//        }
-//
-//        @Test
-//        fun checkLoadNextPageWithAllActivitiesBetweenTwoMonth() {
-//            //Generate fake data
-//            DiaryViewModelTestUtils.insert2EventsInEachDayFor7DaysBetweenTwoMonth(userActivityDao)
-//
-//            val dairyViewModel = DiaryViewModel(mockApplication, diaryRepo, billingRepo)
-//
-//            Assert.assertTrue(dairyViewModel.noMoreData.value!!)
-//            Assert.assertFalse(dairyViewModel.blockUi.value!!)
-//            Assert.assertFalse(dairyViewModel.moreItemsBlocked.value!!)
-//            Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-//            Assert.assertEquals(dairyViewModel.activities.value!!.size, 7 /* Summary */ + 2 /* Days header */)
-//        }
-//
-//        @Test
-//        fun checkLoadNextPageWithAllActivitiesDifferentTwoMonth() {
-//            //Generate fake data
-//            DiaryViewModelTestUtils.insert2EventsInDifferentDaysOfDifferentMonths(userActivityDao = userActivityDao)
-//
-//            val dairyViewModel = DiaryViewModel(mockApplication, diaryRepo, billingRepo)
-//
-//            Assert.assertTrue(dairyViewModel.noMoreData.value!!)
-//            Assert.assertFalse(dairyViewModel.blockUi.value!!)
-//            Assert.assertFalse(dairyViewModel.moreItemsBlocked.value!!)
-//            Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-//            Assert.assertEquals(dairyViewModel.activities.value!!.size, 7 /* Summary */ + 7 /* Days header */)
-//        }
-//
-//        @Test
-//        fun checkLoadNextPage_WithSecondPage() {
-//            //Generate fake data
-//            DiaryViewModelTestUtils.insert2EventsInDifferentDaysOfDifferentMonths(16, userActivityDao)
-//
-//            //Load the first page
-//            val dairyViewModel = DiaryViewModel(mockApplication, diaryRepo, billingRepo)
-//
-//            Assert.assertFalse(dairyViewModel.noMoreData.value!!)
-//            Assert.assertFalse(dairyViewModel.blockUi.value!!)
-//            Assert.assertFalse(dairyViewModel.moreItemsBlocked.value!!)
-//            Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-//            Assert.assertEquals(dairyViewModel.activities.value!!.size, 10 /* Summary */ + 10 /* Days header */)
-//
-//            //Load the next page
-//            val oldestTime = dairyViewModel.activities.value!!.last().dayActivity.first().eventStartTimeMills
-//
-//            dairyViewModel.loadDailySummaryPage(oldestTime)
-//            Assert.assertTrue(dairyViewModel.noMoreData.value!!)
-//            Assert.assertFalse(dairyViewModel.blockUi.value!!)
-//            Assert.assertTrue(dairyViewModel.moreItemsBlocked.value!!)
-//            Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-//        }
+
+        @Test
+        fun loadFirstPage() {
+            //Generate fake data
+            DiaryViewModelTestUtils.insert2EventsInEachDayFor7DaysBetweenTwoMonth(userActivityDao)
+
+            val dairyViewModel = DiaryViewModel(mockApplication, diaryRepo, billingRepo)
+
+            Assert.assertTrue(dairyViewModel.noMoreData.value!!)
+            Assert.assertFalse(dairyViewModel.blockUi.value!!)
+            Assert.assertFalse(dairyViewModel.moreItemsBlocked.value!!)
+            Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
+            Assert.assertEquals(dairyViewModel.activities.value!!.size, 7 /* Summary */ + 2 /* Days header */)
+        }
+
+        @Test
+        fun loadSecondPage() {
+            //Generate fake data
+            DiaryViewModelTestUtils.insert2EventsInDifferentDaysOfDifferentMonths(16, userActivityDao)
+
+            //Load the first page
+            val dairyViewModel = DiaryViewModel(mockApplication, diaryRepo, billingRepo)
+
+            Assert.assertFalse(dairyViewModel.noMoreData.value!!)
+            Assert.assertFalse(dairyViewModel.blockUi.value!!)
+            Assert.assertFalse(dairyViewModel.moreItemsBlocked.value!!)
+            Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
+            Assert.assertEquals(dairyViewModel.activities.value!!.size, 10 /* Summary */ + 10 /* Days header */)
+
+            //Load the next page
+            val oldestTime = dairyViewModel.activities.value!!.last().dayActivity.first().eventStartTimeMills
+
+            dairyViewModel.loadDailySummaryPage(oldestTime)
+            Assert.assertTrue(dairyViewModel.noMoreData.value!!)
+            Assert.assertFalse(dairyViewModel.blockUi.value!!)
+            Assert.assertTrue(dairyViewModel.moreItemsBlocked.value!!)
+            Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
+        }
     }
 }

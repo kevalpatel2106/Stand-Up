@@ -128,7 +128,6 @@ class DiaryFragment : BaseFragment(), PageRecyclerViewAdapter.RecyclerViewListen
                             },
                             duration = Snackbar.LENGTH_INDEFINITE
                     )
-                    adapter.hasNextPage = false
                 }
             }
         })
