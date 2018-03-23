@@ -15,22 +15,11 @@
  *
  */
 
-package com.standup.timelineview
+package com.standup.app.settings
 
 /**
- * Created by Kevalpatel2106 on 15-Feb-18.
+ * Created by Kevalpatel2106 on 23-Mar-18.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal data class Label(
-
-        /**
-         * Title of the title.
-         */
-        val title: String,
-
-        /**
-         * X coordinate of the X.
-         */
-        val x: Float
-)
+class BaseSettingsDetailActivityImpl: BaseSettingsDetailActivity()

@@ -15,4 +15,13 @@
   ~
   -->
 
-<manifest package="com.standup.app.settings"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.standup.app.settings">
+
+    <application>
+        <activity
+            android:name=".BaseSettingsDetailActivityImpl"
+            android:theme="@style/AppTheme.Settings"/>
+    </application>
+
+</manifest>
