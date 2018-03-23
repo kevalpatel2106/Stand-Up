@@ -19,6 +19,7 @@ package com.standup.app.diary.di
 
 import com.kevalpatel2106.common.di.AppComponent
 import com.kevalpatel2106.utils.annotations.ApplicationScope
+import com.standup.app.billing.di.BillingDaggerModule
 import com.standup.app.diary.detail.DetailViewModel
 import com.standup.app.diary.list.DiaryViewModel
 import com.standup.app.diary.userActivityList.UserActivityListModel
@@ -30,7 +31,7 @@ import dagger.Component
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [DiaryModule::class])
+@Component(dependencies = [AppComponent::class], modules = [DiaryModule::class, BillingDaggerModule::class])
 internal interface DiaryComponent {
 
     fun inject(diaryViewModel: DiaryViewModel)

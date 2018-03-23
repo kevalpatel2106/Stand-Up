@@ -17,140 +17,21 @@
 
 package com.standup.app.diary.list
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.kevalpatel2106.common.userActivity.UserActivity
-import com.kevalpatel2106.common.userActivity.UserActivityDaoMockImpl
+import com.kevalpatel2106.common.userActivity.UserActivityDao
 import com.kevalpatel2106.common.userActivity.UserActivityType
-import com.kevalpatel2106.common.userActivity.repo.UserActivityRepoImpl
-import com.kevalpatel2106.network.NetworkApi
-import com.kevalpatel2106.testutils.MockServerManager
-import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.standup.app.diary.repo.DiaryRepo
-import com.standup.app.diary.repo.DiaryRepoImpl
-import com.standup.app.diary.repo.DiaryRepoImplHelperTest
-import junit.framework.Assert
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import java.io.File
 import java.util.*
 
-
 /**
- * Created by Kevalpatel2106 on 03-Jan-18.
+ * Created by Keval on 23/03/18.
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-@RunWith(JUnit4::class)
-class DiaryViewModelTest {
+internal object DiaryViewModelTestUtils {
     private val DIFF_BETWEEN_END_AND_START = 60000L   //60 Sec
 
-    @Rule
-    @JvmField
-    val rule = InstantTaskExecutorRule()
-
-    @Rule
-    @JvmField
-    val rule1 = RxSchedulersOverrideRule()
-
-    private val userActivityDao = UserActivityDaoMockImpl(ArrayList())
-    private val mockServerManager = MockServerManager()
-    private lateinit var diaryRepo: DiaryRepo
-
-    private lateinit var dairyViewModel: DiaryViewModel
-
-    @Before
-    fun setUp() {
-        mockServerManager.startMockWebServer()
-
-        mockServerManager.enqueueResponse(File(DiaryRepoImplHelperTest.mockWebServerManager.getResponsesPath()
-                + "/get_activity_empty_response.json"))
-
-        val mockUserActivityRepo = UserActivityRepoImpl(
-                userActivityDao = userActivityDao,
-                retrofit = NetworkApi("test-user-id", "test-token")
-                        .getRetrofitClient(mockServerManager.getBaseUrl())
-        )
-
-        diaryRepo = DiaryRepoImpl(
-                userActivityRepo = mockUserActivityRepo,
-                userActivityDao = userActivityDao
-        )
-        dairyViewModel = DiaryViewModel(diaryRepo)
-    }
-
-    @Test
-    fun checkLoadNextPageWithEmptyDb() {
-        Assert.assertTrue(dairyViewModel.noMoreData.value!!)
-        Assert.assertFalse(dairyViewModel.blockUi.value!!)
-        Assert.assertTrue(dairyViewModel.activities.value!!.isEmpty())
-    }
-
-    @Test
-    fun checkLoadNextPageWithAllActivitiesInSameMonth() {
-        //Generate fake data
-        insert2EventsInEachDayFor7DaysForSameMonth()
-
-        val dairyViewModel = DiaryViewModel(diaryRepo)
-
-        Assert.assertTrue(dairyViewModel.noMoreData.value!!)
-        Assert.assertFalse(dairyViewModel.blockUi.value!!)
-        Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-        Assert.assertEquals(dairyViewModel.activities.value!!.size, 7 /* Summary */ + 1 /* Days header */)
-    }
-
-    @Test
-    fun checkLoadNextPageWithAllActivitiesBetweenTwoMonth() {
-        //Generate fake data
-        insert2EventsInEachDayFor7DaysBetweenTwoMonth()
-
-        val dairyViewModel = DiaryViewModel(diaryRepo)
-
-        Assert.assertTrue(dairyViewModel.noMoreData.value!!)
-        Assert.assertFalse(dairyViewModel.blockUi.value!!)
-        Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-        Assert.assertEquals(dairyViewModel.activities.value!!.size, 7 /* Summary */ + 2 /* Days header */)
-    }
-
-    @Test
-    fun checkLoadNextPageWithAllActivitiesDifferentTwoMonth() {
-        //Generate fake data
-        insert2EventsInDifferentDaysOfDifferentMonths()
-
-        val dairyViewModel = DiaryViewModel(diaryRepo)
-
-        Assert.assertTrue(dairyViewModel.noMoreData.value!!)
-        Assert.assertFalse(dairyViewModel.blockUi.value!!)
-        Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-        Assert.assertEquals(dairyViewModel.activities.value!!.size, 7 /* Summary */ + 7 /* Days header */)
-    }
-
-    @Test
-    fun checkLoadNextPage_WithSecondPage() {
-        //Generate fake data
-        insert2EventsInDifferentDaysOfDifferentMonths(16)
-
-        //Load the first page
-        val dairyViewModel = DiaryViewModel(diaryRepo)
-
-        Assert.assertFalse(dairyViewModel.noMoreData.value!!)
-        Assert.assertFalse(dairyViewModel.blockUi.value!!)
-        Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-        Assert.assertEquals(dairyViewModel.activities.value!!.size, 10 /* Summary */ + 10 /* Days header */)
-
-        //Load the next page
-        val oldestTime = dairyViewModel.activities.value!!.last().dayActivity.first().eventStartTimeMills
-
-        dairyViewModel.loadNext(oldestTime)
-        Assert.assertTrue(dairyViewModel.noMoreData.value!!)
-        Assert.assertFalse(dairyViewModel.blockUi.value!!)
-        Assert.assertFalse(dairyViewModel.activities.value!!.isEmpty())
-        Assert.assertEquals(dairyViewModel.activities.value!!.size, 16 /* Summary */ + 16 /* Days header */)
-    }
-
-    private fun insert2EventsInEachDayFor7DaysForSameMonth() {
+    internal fun insert2EventsInEachDayFor7DaysForSameMonth(userActivityDao: UserActivityDao) {
         //Set fake db items so that we have at least one user activity with past 10 days.
         val cal = Calendar.getInstance()
         //Convert date to 30 dec 2017
@@ -181,7 +62,7 @@ class DiaryViewModelTest {
         }
     }
 
-    private fun insert2EventsInEachDayFor7DaysBetweenTwoMonth() {
+    internal fun insert2EventsInEachDayFor7DaysBetweenTwoMonth(userActivityDao: UserActivityDao) {
         //Set fake db items so that we have at least one user activity with past 10 days.
         val cal = Calendar.getInstance()
         //Convert date to 4 dec 2017
@@ -212,7 +93,10 @@ class DiaryViewModelTest {
         }
     }
 
-    private fun insert2EventsInDifferentDaysOfDifferentMonths(totalDays: Int = 7) {
+    internal fun insert2EventsInDifferentDaysOfDifferentMonths(
+            totalDays: Int = 7,
+            userActivityDao: UserActivityDao
+    ) {
         //Set fake db items so that we have at least one user activity with past 10 days.
         val cal = Calendar.getInstance()
         //Convert date to 30 dec 2017. No specific reason

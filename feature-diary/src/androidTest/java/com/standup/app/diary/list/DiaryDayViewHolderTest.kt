@@ -73,12 +73,12 @@ class DiaryDayViewHolderTest {
                 eventEndTimeMills = 0,
                 type = UserActivityType.SITTING.name,
                 isSynced = true))
-        val daySummary = DailyActivitySummary(1, 1, 2001, dayActivity)
+        val daySummary = DailyActivitySummary(1, 0, 2001, dayActivity)
         holder.setData(daySummary, { /* Do nothing */ })
 
         Assert.assertEquals(itemView.findViewById<BaseTextView>(R.id.dairy_row_date_tv).text, "1")
         Assert.assertEquals(itemView.findViewById<BaseTextView>(R.id.dairy_row_month_tv).text, "JAN")
-        Assert.assertEquals(itemView.findViewById<BaseTextView>(R.id.dairy_row_sitting_percent_tv).text, daySummary.sittingPercent)
+        Assert.assertEquals(itemView.findViewById<BaseTextView>(R.id.dairy_row_sitting_percent_tv).text, daySummary.sittingPercent.toString())
         Assert.assertEquals(itemView.findViewById<BaseTextView>(R.id.dairy_row_standing_time_tv).text, daySummary.standingTimeHours)
         Assert.assertEquals(itemView.findViewById<BaseTextView>(R.id.dairy_row_sitting_time_tv).text, daySummary.sittingTimeHours)
     }

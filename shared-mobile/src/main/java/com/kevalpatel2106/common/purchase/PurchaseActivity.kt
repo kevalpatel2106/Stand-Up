@@ -17,6 +17,7 @@
 
 package com.kevalpatel2106.common.purchase
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.ClipData
@@ -137,5 +138,13 @@ class PurchaseActivity : BaseActivity() {
                 )
             }
         })
+    }
+
+    /**
+     * @see https://stackoverflow.com/a/10261449/4690731
+     */
+    @SuppressLint("MissingSuperCall")
+    override fun onSaveInstanceState(outState: Bundle) {
+        //No call for super(). Bug on API Level > 11.
     }
 }

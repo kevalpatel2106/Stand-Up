@@ -55,9 +55,8 @@ class DiaryMonthViewHolderTest {
 
         val holder = DiaryMonthViewHolder(itemView)
 
-        holder.setData(MonthHeader(1, 2000))
+        holder.setData(MonthHeader(0, 2000))
 
-        Assert.assertEquals(itemView.findViewById<BaseTextView>(R.id.dairy_row_month_name_header_tv).text,
-                "Jan, 2000")
+        Assert.assertEquals("JAN, 2000", itemView.findViewById<BaseTextView>(R.id.dairy_row_month_name_header_tv).text)
     }
 }

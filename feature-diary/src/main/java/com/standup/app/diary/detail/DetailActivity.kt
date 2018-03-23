@@ -30,6 +30,7 @@ import com.kevalpatel2106.common.misc.TimeLineFullActivity
 import com.kevalpatel2106.common.misc.setPieChart
 import com.kevalpatel2106.common.misc.setPieChartData
 import com.kevalpatel2106.common.misc.timeline.setUserActivities
+import com.kevalpatel2106.common.purchase.PurchaseActivity
 import com.kevalpatel2106.common.view.BaseTextView
 import com.kevalpatel2106.utils.TimeUtils
 import com.standup.app.diary.R
@@ -78,8 +79,7 @@ class DetailActivity : BaseActivity() {
             view_user_activity_card.startAnimation(AnimationUtils
                     .loadAnimation(this@DetailActivity, R.anim.slide_in_bottom))
 
-            //Load the summary from the database
-            model.fetchData(dayOfMonth, month, year)
+            model.checkIsPremiumUser()
         }
 
         view_user_activity_card.setOnClickListener {
@@ -127,6 +127,17 @@ class DetailActivity : BaseActivity() {
                 findViewById<BaseTextView>(R.id.total_sitting_time_tv).text = it.sittingTimeHours
 
                 findViewById<TimeLineView>(R.id.today_time_line).setUserActivities(it.dayActivity)
+            }
+        })
+        model.isPremiumUser.observe(this@DetailActivity, Observer {
+            it?.let {
+                if (!it) {  //Not a pro user
+                    PurchaseActivity.launch(this@DetailActivity)
+                    finish()
+                } else {    //Pro user
+                    //Load the summary from the database
+                    model.fetchData(dayOfMonth, month, year)
+                }
             }
         })
     }
@@ -195,7 +206,6 @@ class DetailActivity : BaseActivity() {
                             dayOfMonth: Int,
                             monthOfYear: Int,
                             year: Int) {
-
             context.startActivity(launchIntent(context, dayOfMonth, monthOfYear, year))
         }
 
