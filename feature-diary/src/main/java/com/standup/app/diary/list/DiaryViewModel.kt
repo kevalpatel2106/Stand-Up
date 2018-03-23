@@ -60,8 +60,14 @@ internal class DiaryViewModel : BaseViewModel {
      * @param diaryRepo Add your own [DiaryRepo].
      */
     @VisibleForTesting
-    constructor(diaryRepo: DiaryRepo) : super() {
+    constructor(
+            application: Application,
+            diaryRepo: DiaryRepo,
+            billingRepo: BillingRepo
+    ) : super() {
+        this.application = application
         this.userActivityRepo = diaryRepo
+        this.billingRepo = billingRepo
 
         init()
     }
@@ -97,7 +103,7 @@ internal class DiaryViewModel : BaseViewModel {
         activities.value = ArrayList()
 
         //Load the first page
-        loadDailySummaryPage(System.currentTimeMillis(), false)
+        loadDailySummaryPage(System.currentTimeMillis(), true)
     }
 
 
@@ -122,6 +128,7 @@ internal class DiaryViewModel : BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .filter {
                     if (it || isFirstPage /* Premium user or the first page. */) {
+                        moreItemsBlocked.postValue(false)
                         return@filter true
                     } else {
                         moreItemsBlocked.postValue(true)
