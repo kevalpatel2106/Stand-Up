@@ -20,4 +20,9 @@
 
     <string name="title_activity_user_activity_list">User activities</string>
     <string name="view_user_activity_list">View activities</string>
+    <string name="error_diary_list_no_items_available">No data available!!</string>
+    <string name="error_in_app_is_purchased_fail">Error occurred while loading old summary.</string>
+    <string name="diary_list_buy_now_btn_title">Buy now</string>
+    <string name="diary_list_buy_now_message">Buy pro version to load past records.</string>
+    <string name="error_detail_no_user_activity_found">No user activities found for %1d %2s %3s</string>
 </resources>

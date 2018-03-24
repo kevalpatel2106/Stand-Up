@@ -24,7 +24,13 @@ package com.standup.timelineview
  */
 internal data class Label(
 
+        /**
+         * Title of the title.
+         */
         val title: String,
 
+        /**
+         * X coordinate of the X.
+         */
         val x: Float
 )

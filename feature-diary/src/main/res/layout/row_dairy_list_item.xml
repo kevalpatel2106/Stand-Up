@@ -21,7 +21,6 @@
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
     tools:layout_editor_absoluteY="81dp">
 
     <android.support.constraint.Guideline

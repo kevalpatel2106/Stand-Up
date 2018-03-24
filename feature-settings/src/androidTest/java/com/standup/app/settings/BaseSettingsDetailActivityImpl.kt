@@ -15,20 +15,11 @@
  *
  */
 
-package com.standup.app.billing;
-
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+package com.standup.app.settings
 
 /**
- * Example local unit test, which will execute on the development machine (host).
+ * Created by Kevalpatel2106 on 23-Mar-18.
  *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
-}
+class BaseSettingsDetailActivityImpl: BaseSettingsDetailActivity()

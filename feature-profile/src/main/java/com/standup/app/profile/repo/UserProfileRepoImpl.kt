@@ -69,28 +69,20 @@ internal class UserProfileRepoImpl @Inject constructor(@Named(AppModule.WITH_TOK
                     return errorData
                 }
 
-                try {
-                    val userProfile = GetProfileResponse(
-                            userId = userSessionManager.userId,
-                            isVerified = userSessionManager.isUserVerified,
-                            email = userSessionManager.email ?: "",
-                            weight = userSessionManager.weight.toString(),
-                            height = userSessionManager.height.toString(),
-                            name = userSessionManager.displayName ?: "",
-                            photo = userSessionManager.photo,
-                            gender = if (userSessionManager.isMale)
-                                AppConfig.GENDER_MALE
-                            else
-                                AppConfig.GENDER_FEMALE
-                    )
-                    return RepoData(false, userProfile)
-                } catch (e: Exception) {
-
-                    val errorData = RepoData<GetProfileResponse>(true)
-                    errorData.errorMessage = "Cannot get user profile."
-                    errorData.errorCode = HttpsURLConnection.HTTP_UNAUTHORIZED
-                    return errorData
-                }
+                val userProfile = GetProfileResponse(
+                        userId = userSessionManager.userId,
+                        isVerified = userSessionManager.isUserVerified,
+                        email = userSessionManager.email ?: "",
+                        weight = userSessionManager.weight.toString(),
+                        height = userSessionManager.height.toString(),
+                        name = userSessionManager.displayName ?: "",
+                        photo = userSessionManager.photo,
+                        gender = if (userSessionManager.isMale)
+                            AppConfig.GENDER_MALE
+                        else
+                            AppConfig.GENDER_FEMALE
+                )
+                return RepoData(false, userProfile)
             }
         }
 

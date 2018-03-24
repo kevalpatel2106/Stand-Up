@@ -15,26 +15,34 @@
  *
  */
 
+package com.standup.app.billing
+
+import org.junit.Assert
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+
 /**
- * Created by Keval on 02/03/18.
+ * Created by Kevalpatel2106 on 23-Mar-18.
  *
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
-object AppVersion {
-    /**
-     * Version code of the application.
-     */
-    const val versionCode = 12
+@RunWith(JUnit4::class)
+class IAPExceptionTest {
 
-    // Prepare the version name.
-    // Version name scheme: major.minor.patch
+    @Test
+    @Throws(Exception::class)
+    fun checkErrorCode() {
+        val errorCode = 1
+        val iapException = IAPException(errorCode)
 
-    private const val versionMajor = 0
-    private const val versionMinor = 6
-    private const val versionPatch = 0
+        Assert.assertEquals(errorCode, iapException.errorCode)
+    }
 
-    /**
-     * Prepare the version name in [versionMajor].[versionMinor].[versionPatch] format.
-     */
-    val versionName = "$versionMajor.$versionMinor.$versionPatch"
+    @Test
+    @Throws(Exception::class)
+    fun checkMessage() {
+        val iapException = IAPException(1)
+        Assert.assertNull(iapException.message)
+    }
 }
