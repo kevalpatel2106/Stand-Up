@@ -84,8 +84,9 @@ class AboutViewModelTest {
 
         Assert.assertFalse(viewModel.isCheckingUpdate.value!!)
         Assert.assertEquals(viewModel.versionUpdateResult.value!!.latestVersionName, "1.0")
-        Assert.assertTrue(viewModel.versionUpdateResult.value!!.isUpdate)
-        Assert.assertEquals(viewModel.versionUpdateResult.value!!.latestVersionCode, 5000)
+        Assert.assertEquals(viewModel.versionUpdateResult.value!!.latestVersionCode > BuildConfig.VERSION_CODE,
+                viewModel.versionUpdateResult.value!!.isUpdate)
+        Assert.assertEquals(viewModel.versionUpdateResult.value!!.latestVersionCode, 10000000)
         Assert.assertEquals(viewModel.versionUpdateResult.value!!.releaseNotes, "This is the release note for the version 3.")
     }
 
