@@ -91,3 +91,7 @@ subprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+// See: https://medium.com/@passsy/use-different-build-numbers-for-every-build-automatically-using-a-gradle-script-35577cd31b19
+// import the script which runs the version generation
+apply from: 'https://raw.githubusercontent.com/passsy/gradle-GitVersioner/master/git-versioner.gradle'
