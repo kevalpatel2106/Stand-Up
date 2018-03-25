@@ -1,5 +1,7 @@
 package com.standup.app.settings.whitelisting
 
+import android.app.Activity
+import android.os.Build
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
@@ -10,6 +12,7 @@ import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.UiSelector
+import com.kevalpatel2106.testutils.BaseTestClass
 import com.kevalpatel2106.testutils.CustomMatchers
 import com.kevalpatel2106.testutils.TestActivity
 import com.standup.app.settings.R
@@ -25,7 +28,11 @@ import org.junit.runner.RunWith
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 @RunWith(AndroidJUnit4::class)
-class WhitelistDialogTest {
+class WhitelistDialogTest : BaseTestClass() {
+
+    override fun getActivity(): Activity {
+        return rule.activity
+    }
 
     @JvmField
     @Rule
@@ -33,7 +40,7 @@ class WhitelistDialogTest {
 
     @Before
     fun setUp() {
-        WhitelistDialog.showDialog(rule.activity, rule.activity.supportFragmentManager)
+        WhitelistDialog().show(rule.activity.supportFragmentManager, WhitelistDialog::class.simpleName)
     }
 
     @Test
@@ -89,12 +96,14 @@ class WhitelistDialogTest {
                 .text(rule.activity.getString(R.string.whitelist_app_dialog_btn_title)))
         Assert.assertFalse(button.exists())
 
-        val current = rule.activity.resources.configuration.locale
-
         //This test will only run if the locale is set to english.
-        if (current.toLanguageTag().startsWith("en")) {
-            val settingsTitle = uiDevice.findObject(UiSelector().text("Battery optimisation"))
-            Assert.assertTrue(settingsTitle.exists())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            val current = rule.activity.resources.configuration.locale
+            if (current.toLanguageTag().startsWith("en")) {
+                val settingsTitle = uiDevice.findObject(UiSelector().text("Battery optimisation"))
+                Assert.assertTrue(settingsTitle.exists())
+            }
         }
     }
 }
