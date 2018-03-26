@@ -21,11 +21,6 @@
  * @author [kevalpatel2106](https://github.com/kevalpatel2106)
  */
 object AppVersion {
-    /**
-     * Version code of the application.
-     */
-    const val versionCode = 12
-
     // Prepare the version name.
     // Version name scheme: major.minor.patch
 

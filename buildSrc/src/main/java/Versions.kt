@@ -24,7 +24,7 @@
 internal object Versions {
 
     //Plugins version
-    const val kotlin = "1.2.30"
+    const val kotlin = "1.2.31"
     const val dokka = "0.9.16"
     const val buildPlugin = "3.1.0-rc03"
 

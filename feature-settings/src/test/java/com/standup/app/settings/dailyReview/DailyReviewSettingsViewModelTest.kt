@@ -70,7 +70,7 @@ class DailyReviewSettingsViewModelTest {
 
     @Test
     @Throws(Exception::class)
-    fun checkInit() {
+    fun checkInit_DailyReviewEnable() {
         mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_ENABLE, true)
         mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS
 
@@ -80,6 +80,23 @@ class DailyReviewSettingsViewModelTest {
         )
 
         Assert.assertTrue(model.isDailyReviewEnable.value!!)
+        Assert.assertNotNull(model.dailyReviewTimeSummary.value)
+        Assert.assertEquals(model.dailyReviewTimeSummary.value, "08:00 AM")
+    }
+
+
+    @Test
+    @Throws(Exception::class)
+    fun checkInit_DailyReviewDisable() {
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_ENABLE, false)
+        mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS
+
+        model = DailyReviewSettingsViewModel(
+                settingsManager = mockSettingsProvider,
+                core = mockCore
+        )
+
+        Assert.assertFalse(model.isDailyReviewEnable.value!!)
         Assert.assertNotNull(model.dailyReviewTimeSummary.value)
         Assert.assertEquals(model.dailyReviewTimeSummary.value, "08:00 AM")
     }
@@ -110,16 +127,39 @@ class DailyReviewSettingsViewModelTest {
 
     @Test
     @Throws(Exception::class)
-    fun checkOnDailyReviewSettingChange() {
+    fun checkOnDailyReviewSettingChange_DailyReviewDisable() {
         var isCoreRefreshed = false
         Mockito.`when`(mockCore.refresh()).thenAnswer {
             isCoreRefreshed = true
             return@thenAnswer Any()
         }
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_ENABLE, false)
         mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS
 
         model.onDailyReviewSettingChange()
 
+        Assert.assertFalse(model.isDailyReviewEnable.value!!)
+        Assert.assertNotNull(model.dailyReviewTimeSummary.value)
+        Assert.assertEquals(model.dailyReviewTimeSummary.value, "08:00 AM")
+
+        //Check if the core refreshed
+        Assert.assertTrue(isCoreRefreshed)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun checkOnDailyReviewSettingChange_DailyReviewEnable() {
+        var isCoreRefreshed = false
+        Mockito.`when`(mockCore.refresh()).thenAnswer {
+            isCoreRefreshed = true
+            return@thenAnswer Any()
+        }
+        mockSharedPrefsProvider.savePreferences(SharedPreferenceKeys.PREF_KEY_DAILY_REVIEW_ENABLE, true)
+        mockSettingsProvider.dailyReviewTimeFrom12Am = 8 * TimeUtils.ONE_HOUR_MILLS
+
+        model.onDailyReviewSettingChange()
+
+        Assert.assertTrue(model.isDailyReviewEnable.value!!)
         Assert.assertNotNull(model.dailyReviewTimeSummary.value)
         Assert.assertEquals(model.dailyReviewTimeSummary.value, "08:00 AM")
 

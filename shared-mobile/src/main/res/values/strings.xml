@@ -44,6 +44,6 @@
     <string name="buy_pro_success_message">Congratulations!!! You have unlocked all the premium features of the application. Your order id is <b>$it</b>.</string>
     <string name="title_purchase_activity">Stand Up Premium Features</string>
     <string name="btn_title_purchase">Purchase</string>
-    <string name="premium_features_list">List of all the premium features</string>
+    <string name="premium_features_list">- Access older records in the diary section.\n- See the detailed activities for the older days in the diary section.</string>
     <string name="premium_features_title">Pro features</string>
 </resources>

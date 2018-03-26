@@ -22,6 +22,7 @@ import com.kevalpatel2106.common.prefs.UserSessionManager
 import com.kevalpatel2106.network.NetworkApi
 import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.standup.app.about.BuildConfig
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
@@ -76,8 +77,8 @@ class AboutRepositoryImplTest {
                 .assertValueCount(1)
                 .assertValueAt(0) { t ->
                     t.latestVersionName == "1.0"
-                            && t.latestVersionCode == 5000
-                            && t.isUpdate
+                            && t.latestVersionCode == 10000000
+                            && t.latestVersionCode > BuildConfig.VERSION_CODE == t.isUpdate
                             && t.releaseNotes == "This is the release note for the version 3."
                 }
                 .assertComplete()

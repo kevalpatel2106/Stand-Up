@@ -40,9 +40,9 @@ ext {
         minSdkVersion DefaultConfig.min
         targetSdkVersion DefaultConfig.target
 
-        //CheckVersionResponse config
-        versionName AppVersion.versionName
-        versionCode AppVersion.versionCode
+        //Versions config
+        versionName AppVersion.versionName + "(" + gitVersionName + ")"
+        versionCode gitVersion.version
 
         //strip other than english resources
         resConfigs DefaultConfig.supportedResConfig
@@ -64,9 +64,9 @@ ext {
         //strip other than english resources
         resConfigs DefaultConfig.supportedResConfig
 
-        //CheckVersionResponse config
-        versionName AppVersion.versionName
-        versionCode AppVersion.versionCode
+        //Versions config
+        versionName AppVersion.versionName + "(" + gitVersionName + ")"
+        versionCode gitVersion.version
 
         consumerProguardFiles ProguardFiles.proguard, ProguardFiles.removeLogs
 
@@ -178,4 +178,11 @@ ext {
     kotlinOption = {
         jvmTarget = "1.8"
     }
+
+    gitVersioner = [
+            defaultBranch           : "master",         //Consider the count on the master commit
+            yearFactor              : 17520,            // increasing every 0.30h
+            snapshotEnabled         : true,             // display debug version with "-SNAPSHOT" postfix
+            localChangesCountEnabled: false             // default false, the (<commitCount>) before -SNAPSHOT
+    ]
 }

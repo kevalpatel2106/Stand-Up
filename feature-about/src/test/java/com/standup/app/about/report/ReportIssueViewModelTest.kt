@@ -25,6 +25,7 @@ import com.kevalpatel2106.testutils.MockServerManager
 import com.kevalpatel2106.testutils.MockSharedPreference
 import com.kevalpatel2106.testutils.RxSchedulersOverrideRule
 import com.kevalpatel2106.utils.SharedPrefsProvider
+import com.standup.app.about.BuildConfig
 import com.standup.app.about.R
 import com.standup.app.about.repo.AboutRepositoryImpl
 import org.junit.Assert
@@ -95,8 +96,9 @@ class ReportIssueViewModelTest {
         Assert.assertFalse(model.blockUi.value!!)
         Assert.assertNull(model.errorMessage.value)
         Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionName, "1.0")
-        Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionCode, 5000)
-        Assert.assertTrue(model.versionUpdateResult.value!!.isUpdate)
+        Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionCode, 10000000)
+        Assert.assertEquals(model.versionUpdateResult.value!!.latestVersionCode > BuildConfig.VERSION_CODE,
+                model.versionUpdateResult.value!!.isUpdate)
         Assert.assertEquals(model.versionUpdateResult.value!!.releaseNotes, "This is the release note for the version 3.")
     }
 

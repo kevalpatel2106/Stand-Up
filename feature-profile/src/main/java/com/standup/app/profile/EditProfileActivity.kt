@@ -42,6 +42,9 @@ import com.standup.app.profile.repo.GetProfileResponse
 import com.standup.app.profile.repo.SaveProfileResponse
 import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_edit_profile.*
+import kotlinx.android.synthetic.main.card_gender.*
+import kotlinx.android.synthetic.main.card_profile_height_weight.*
+import kotlinx.android.synthetic.main.card_profile_name.*
 import javax.inject.Inject
 
 
