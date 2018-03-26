@@ -88,7 +88,7 @@ class DiaryViewModelTest {
             billingRepo = MockBillingRepoImpl()
 
             //Premium member
-            billingRepo.buyPremiumError = false
+            billingRepo.isError = false
             billingRepo.isPremiumPurchased = true
 
         }
@@ -205,7 +205,7 @@ class DiaryViewModelTest {
             billingRepo = MockBillingRepoImpl()
 
             //Non premium user
-            billingRepo.buyPremiumError = false
+            billingRepo.isError = false
             billingRepo.isPremiumPurchased = false
         }
 

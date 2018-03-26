@@ -91,7 +91,7 @@ class DetailViewModelTest {
         model = DetailViewModel(diaryRepo, billingRepo, mockApplication)
 
         //Premium member
-        billingRepo.buyPremiumError = false
+        billingRepo.isError = false
         billingRepo.isPremiumPurchased = true
 
     }
@@ -109,7 +109,7 @@ class DetailViewModelTest {
     @Throws(Exception::class)
     fun checkIsPremium_ProUser() {
         //Premium member
-        billingRepo.buyPremiumError = false
+        billingRepo.isError = false
         billingRepo.isPremiumPurchased = true
 
         model.checkIsPremiumUser()
@@ -121,7 +121,7 @@ class DetailViewModelTest {
     @Throws(Exception::class)
     fun checkIsPremium_NotProUser() {
         //Premium member
-        billingRepo.buyPremiumError = false
+        billingRepo.isError = false
         billingRepo.isPremiumPurchased = false
 
         model.checkIsPremiumUser()
@@ -133,7 +133,7 @@ class DetailViewModelTest {
     @Throws(Exception::class)
     fun checkIsPremium_Error() {
         //Premium member
-        billingRepo.buyPremiumError = true
+        billingRepo.isError = true
         billingRepo.isPremiumPurchased = false
 
         model.checkIsPremiumUser()

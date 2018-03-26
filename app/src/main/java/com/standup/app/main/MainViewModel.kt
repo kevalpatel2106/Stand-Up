@@ -22,6 +22,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.standup.app.billing.repo.BillingRepo
 import com.standup.app.dashboard.DashboardApi
 import com.standup.app.dashboard.DashboardFragment
@@ -37,14 +38,7 @@ import javax.inject.Inject
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
-internal class MainViewModel : BaseViewModel() {
-
-    init {
-        DaggerMainComponent.builder()
-                .appComponent(BaseApplication.getApplicationComponent())
-                .build()
-                .inject(this@MainViewModel)
-    }
+internal class MainViewModel : BaseViewModel {
 
     @Inject
     internal lateinit var dairyModule: DiaryModule
@@ -66,19 +60,49 @@ internal class MainViewModel : BaseViewModel() {
     /**
      * [DashboardFragment] instance to display in the [MainActivity].
      */
-    internal val homeFragment = dashboardApi.getDashboard()
+    internal lateinit var homeFragment: DashboardFragment
 
     /**
      * [DiaryFragment] instance to display in the [MainActivity].
      */
-    internal val diaryFragment = dairyModule.getDiary()
+    internal lateinit var diaryFragment: DiaryFragment
 
     /**
      * [StatsFragment] instance to display in the [MainActivity].
      */
-    internal val statsFragment = statsModule.getStatsFragment()
+    internal lateinit var statsFragment: StatsFragment
 
-    init {
+    @OnlyForTesting
+    @VisibleForTesting
+    constructor(application: Application,
+                billingRepo: BillingRepo,
+                diaryModule: DiaryModule,
+                statsModule: StatsModule,
+                dashboardApi: DashboardApi) {
+        this.application = application
+        this.billingRepo = billingRepo
+        this.dairyModule = diaryModule
+        this.statsModule = statsModule
+        this.dashboardApi = dashboardApi
+
+        init()
+    }
+
+
+    @Suppress("unused")
+    constructor() {
+        DaggerMainComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@MainViewModel)
+        init()
+    }
+
+    fun init() {
+        homeFragment = dashboardApi.getDashboard()
+        diaryFragment = dairyModule.getDiary()
+        statsFragment = statsModule.getStatsFragment()
+
         isDisplayBuyPro.value = false
 
         //Check is pro version already purchased?

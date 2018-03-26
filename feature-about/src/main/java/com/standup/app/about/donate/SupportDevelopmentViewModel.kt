@@ -22,11 +22,10 @@ import android.arch.lifecycle.MutableLiveData
 import android.support.annotation.VisibleForTesting
 import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.arch.BaseViewModel
-import com.kevalpatel2106.common.base.arch.ErrorMessage
 import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.annotations.ViewModel
-import com.standup.app.about.R
 import com.standup.app.about.di.DaggerAboutComponent
+import com.standup.app.billing.IAPException
 import com.standup.app.billing.repo.BillingRepo
 import javax.inject.Inject
 
@@ -59,6 +58,8 @@ internal class SupportDevelopmentViewModel : BaseViewModel {
 
     internal val donationOrderId = MutableLiveData<String>()
 
+    internal val donationErrorCode = MutableLiveData<Int>()
+
     internal fun donate2Dollar(activity: Activity) {
         billingRepo.donate2Dollar(activity)
                 .doOnSubscribe { blockUi.value = true }
@@ -66,11 +67,7 @@ internal class SupportDevelopmentViewModel : BaseViewModel {
                 .subscribe({
                     donationOrderId.value = it
                 }, {
-                    val errorMsg = ErrorMessage(it.message)
-                    errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
-                        donate2Dollar(activity)
-                    })
-                    errorMessage.value = errorMsg
+                    donationErrorCode.value = (it as IAPException).errorCode
                 })
     }
 
@@ -81,11 +78,7 @@ internal class SupportDevelopmentViewModel : BaseViewModel {
                 .subscribe({
                     donationOrderId.value = it
                 }, {
-                    val errorMsg = ErrorMessage(it.message)
-                    errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
-                        donate2Dollar(activity)
-                    })
-                    errorMessage.value = errorMsg
+                    donationErrorCode.value = (it as IAPException).errorCode
                 })
     }
 
@@ -96,11 +89,7 @@ internal class SupportDevelopmentViewModel : BaseViewModel {
                 .subscribe({
                     donationOrderId.value = it
                 }, {
-                    val errorMsg = ErrorMessage(it.message)
-                    errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
-                        donate2Dollar(activity)
-                    })
-                    errorMessage.value = errorMsg
+                    donationErrorCode.value = (it as IAPException).errorCode
                 })
     }
 
@@ -111,11 +100,7 @@ internal class SupportDevelopmentViewModel : BaseViewModel {
                 .subscribe({
                     donationOrderId.value = it
                 }, {
-                    val errorMsg = ErrorMessage(it.message)
-                    errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
-                        donate2Dollar(activity)
-                    })
-                    errorMessage.value = errorMsg
+                    donationErrorCode.value = (it as IAPException).errorCode
                 })
     }
 }

@@ -26,6 +26,7 @@ import com.kevalpatel2106.utils.alert
 import com.kevalpatel2106.utils.annotations.UIController
 import com.kevalpatel2106.utils.copyToClipboard
 import com.standup.app.about.R
+import com.standup.app.billing.InAppFailDialog
 import kotlinx.android.synthetic.main.activity_support_developement.*
 
 /**
@@ -88,6 +89,17 @@ class SupportDevelopmentActivity : BaseActivity() {
                             })
                         }
                 ).show()
+            }
+        })
+
+        //Handle the error while purchasing
+        model.donationErrorCode.observe(this@SupportDevelopmentActivity, Observer {
+            it?.let {
+                InAppFailDialog.launch(
+                        context = this@SupportDevelopmentActivity,
+                        fragmentManager = supportFragmentManager,
+                        errorCode = it
+                )
             }
         })
     }
