@@ -22,7 +22,6 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
 
 
 /**
@@ -61,23 +60,5 @@ fun Fragment.showSnack(@StringRes message: Int,
                     actionName = actionName,
                     actionListener = actionListener,
                     duration = duration)
-    }
-}
-
-/**
- * Show the toast for [Toast.LENGTH_SHORT] duration.
- */
-fun Fragment.showToast(message: String) {
-    activity?.let {
-        if (activity is AppCompatActivity) (activity as AppCompatActivity).showToast(message = message)
-    }
-}
-
-/**
- * Show the toast for [Toast.LENGTH_SHORT] duration.
- */
-fun Fragment.showToast(@StringRes message: Int) {
-    activity?.let {
-        if (activity is AppCompatActivity) (activity as AppCompatActivity).showToast(message = message)
     }
 }

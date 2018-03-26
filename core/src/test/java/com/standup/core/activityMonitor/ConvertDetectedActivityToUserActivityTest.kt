@@ -51,7 +51,7 @@ class ConvertDetectedActivityToUserActivityTest {
         Assert.assertNotNull(userActivity)
         Assert.assertEquals(userActivity!!.userActivityType, UserActivityType.SITTING)
         Assert.assertEquals(userActivity.eventEndTimeMills,
-                userActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue)
+                userActivity.eventStartTimeMills + UserActivityHelper.END_TIME_CORRECTION_VALUE)
         Assert.assertEquals(userActivity.isSynced, false)
         Assert.assertEquals(userActivity.remoteId, 0)
         Assert.assertEquals(userActivity.type, UserActivityType.SITTING.name.toLowerCase())
@@ -76,7 +76,7 @@ class ConvertDetectedActivityToUserActivityTest {
         Assert.assertNotNull(userActivity)
         Assert.assertEquals(userActivity!!.userActivityType, UserActivityType.MOVING)
         Assert.assertEquals(userActivity.eventEndTimeMills,
-                userActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue)
+                userActivity.eventStartTimeMills + UserActivityHelper.END_TIME_CORRECTION_VALUE)
         Assert.assertEquals(userActivity.isSynced, false)
         Assert.assertEquals(userActivity.remoteId, 0)
         Assert.assertEquals(userActivity.type, UserActivityType.MOVING.name.toLowerCase())

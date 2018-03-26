@@ -172,7 +172,7 @@ class UserActivityRepoImpl(private val userActivityDao: UserActivityDao,
 
         //Make correction into the end date.
         if (newActivity.eventEndTimeMills <= 0L)
-            newActivity.eventEndTimeMills = newActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue
+            newActivity.eventEndTimeMills = newActivity.eventStartTimeMills + UserActivityHelper.END_TIME_CORRECTION_VALUE
 
         return Single.create({
             val lastActivity = userActivityDao.getLatestActivity()

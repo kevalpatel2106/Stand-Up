@@ -31,7 +31,11 @@ android {
             signingConfig signingConfigs.playStore
 
             //Inject build parameters
-            buildConfigField "String", "PRO_VERSION_ID", "\"" + DebugConfig.PRO_VERSION_ID + "\""
+            buildConfigField "String", "PRO_VERSION_ID", "\"" + InappPurchase.PRO_VERSION_ID + "\""
+            buildConfigField "String", "DONATE_2", "\"" + InappPurchase.DONTATE_2_DOLLAR + "\""
+            buildConfigField "String", "DONATE_5", "\"" + InappPurchase.DONTATE_5_DOLLAR + "\""
+            buildConfigField "String", "DONATE_10", "\"" + InappPurchase.DONTATE_10_DOLLAR + "\""
+            buildConfigField "String", "DONATE_20", "\"" + InappPurchase.DONTATE_20_DOLLAR + "\""
         }
         debug {
             crunchPngs false
@@ -39,7 +43,11 @@ android {
             signingConfig signingConfigs.debugKey
 
             //Inject build parameters
-            buildConfigField "String", "PRO_VERSION_ID", "\"" + ReleaseConfig.PRO_VERSION_ID + "\""
+            buildConfigField "String", "PRO_VERSION_ID", "\"" + InappPurchase.PRO_VERSION_ID + "\""
+            buildConfigField "String", "DONATE_2", "\"" + InappPurchase.DONTATE_2_DOLLAR + "\""
+            buildConfigField "String", "DONATE_5", "\"" + InappPurchase.DONTATE_5_DOLLAR + "\""
+            buildConfigField "String", "DONATE_10", "\"" + InappPurchase.DONTATE_10_DOLLAR + "\""
+            buildConfigField "String", "DONATE_20", "\"" + InappPurchase.DONTATE_20_DOLLAR + "\""
         }
     }
 

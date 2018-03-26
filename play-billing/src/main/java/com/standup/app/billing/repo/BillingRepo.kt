@@ -19,6 +19,7 @@ package com.standup.app.billing.repo
 
 import android.app.Activity
 import android.app.Application
+import com.standup.app.billing.BuildConfig
 import io.reactivex.Single
 
 /**
@@ -35,5 +36,33 @@ interface BillingRepo {
      */
     fun isPremiumPurchased(application: Application): Single<Boolean>
 
+    /**
+     * Purchase the premium version of the app. This method will buy product [BuildConfig.PRO_VERSION_ID]
+     * and return the order id.
+     */
     fun purchasePremium(activity: Activity): Single<String>
+
+    /**
+     * Donate $2. This method will buy product [BuildConfig.DONATE_2]
+     * and return the order id.
+     */
+    fun donate2Dollar(activity: Activity): Single<String>
+
+    /**
+     * Donate $5. This method will buy product [BuildConfig.DONATE_5]
+     * and return the order id.
+     */
+    fun donate5Dollar(activity: Activity): Single<String>
+
+    /**
+     * Donate $10. This method will buy product [BuildConfig.DONATE_10]
+     * and return the order id.
+     */
+    fun donate10Dollar(activity: Activity): Single<String>
+
+    /**
+     * Donate $20. This method will buy product [BuildConfig.DONATE_20]
+     * and return the order id.
+     */
+    fun donate20Dollar(activity: Activity): Single<String>
 }

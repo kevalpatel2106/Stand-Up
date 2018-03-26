@@ -23,7 +23,7 @@ import android.support.annotation.UiThread
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
-import com.standup.app.billing.BillingConstants
+import com.standup.app.billing.BuildConfig
 import com.standup.app.billing.IAPException
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -74,18 +74,34 @@ class BillingRepoImpl : BillingRepo {
                 throw Exceptions.propagate(IAPException(it.responseCode))
 
             val purchases = it.purchasesList
-            return@map purchases.find { it.sku == BillingConstants.SKU_PREMIUM } != null
+            return@map purchases.find { it.sku == BuildConfig.PRO_VERSION_ID } != null
         }.subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { if (billingClient.isReady) billingClient.endConnection() }
                 .doAfterTerminate { billingClient.endConnection() }
     }
 
-    /**
-     * Purchase the premium product. It will return [Single] witch will return false in onNext.
-     */
-    @UiThread
     override fun purchasePremium(activity: Activity): Single<String> {
+        return purchaseItem(activity, BuildConfig.PRO_VERSION_ID)
+    }
+
+    override fun donate2Dollar(activity: Activity): Single<String> {
+        return purchaseItem(activity, BuildConfig.DONATE_2)
+    }
+
+    override fun donate5Dollar(activity: Activity): Single<String> {
+        return purchaseItem(activity, BuildConfig.DONATE_5)
+    }
+
+    override fun donate10Dollar(activity: Activity): Single<String> {
+        return purchaseItem(activity, BuildConfig.DONATE_10)
+    }
+
+    override fun donate20Dollar(activity: Activity): Single<String> {
+        return purchaseItem(activity, BuildConfig.DONATE_20)
+    }
+
+    private fun purchaseItem(activity: Activity, productId: String): Single<String> {
 
         return Single.create<String> {
 
@@ -100,7 +116,7 @@ class BillingRepoImpl : BillingRepo {
                             return@setListener
                         }
 
-                        val premiumSku = purchases.find { it.sku == BillingConstants.SKU_PREMIUM }
+                        val premiumSku = purchases.find { it.sku == productId }
 
                         if (premiumSku != null) {
                             it.onSuccess(premiumSku.orderId)
@@ -121,7 +137,7 @@ class BillingRepoImpl : BillingRepo {
 
                     //Initiate the purchase flow
                     val purchaseParams = BillingFlowParams.newBuilder()
-                            .setSku(BillingConstants.SKU_PREMIUM)
+                            .setSku(productId)
                             .setType(BillingClient.SkuType.INAPP)
                             .setOldSkus(null)
                             .build()

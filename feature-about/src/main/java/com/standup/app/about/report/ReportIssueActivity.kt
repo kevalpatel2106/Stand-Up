@@ -27,11 +27,11 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
-import com.kevalpatel2106.common.base.uiController.showToast
 import com.kevalpatel2106.common.misc.CommonUtils
 import com.kevalpatel2106.common.view.BaseButton
 import com.kevalpatel2106.utils.Utils
 import com.kevalpatel2106.utils.alert
+import com.kevalpatel2106.utils.showToast
 import com.standup.app.about.AboutUtils
 import com.standup.app.about.R
 import kotlinx.android.synthetic.main.activity_report_issue.*

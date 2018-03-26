@@ -38,7 +38,6 @@
     <string name="issue_success_alert_title">Issue reported.</string>
     <string name="issue_success_alert_message">Your issue id: %d</string>
     <string name="report_issue_reporting_message">Reporting issue</string>
-    <string name="copied_to_clip_board">Copied to clipboard.</string>
     <string name="prefer_old_school_email"><u>Prefer old school email?</u></string>
     <string name="about_rate_this_app">Rate this app</string>
     <string name="about_report_issue_title">Report an issue</string>
@@ -61,4 +60,6 @@
     <string name="invitation_cta">Invite</string>
     <string name="about_card_title_about">About</string>
     <string name="about_card_title_author">Author</string>
+    <string name="donation_success_title">Donation successful.</string>
+    <string name="donation_success_message">Thank you for supporting us by donation. Your order id is <b>$it</b>.</string>
 </resources>

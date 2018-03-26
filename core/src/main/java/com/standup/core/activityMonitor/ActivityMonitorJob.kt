@@ -99,12 +99,12 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
          *
          * NOTE: If the user is in Sleep DND mode, i.e. if [UserSettingsManager.isCurrentlyInSleepMode]
          * is true, this method won't schedule the job and simply return. This job will automatically
-         * scheduled by [com.kevalpatel2106.standup.core.Core] whenever the sleep mode goes off.
+         * scheduled by [com.standup.core.Core] whenever the sleep mode goes off.
          *
          * NOTE: The scheduled job is not the periodic job. As periodic jobs will require with minimum
          * 15 minutes of period between two subsequent jobs as described [here](https://stackoverflow.com/a/44169179).
          *
-         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpActivityMonitoring]
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.standup.core.Core.setUpActivityMonitoring]
          * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
          *
          * @return True if the job is scheduled. False if the job is not scheduled.
@@ -130,7 +130,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
         /**
          * Cancel upcoming [ActivityMonitorJob].
          *
-         * THIS METHOD IS FOR INTERNAL USE. USE [com.kevalpatel2106.standup.core.Core.setUpActivityMonitoring]
+         * THIS METHOD IS FOR INTERNAL USE. USE [com.standup.core.Core.setUpActivityMonitoring]
          * FOR SCHEDULING OR CANCELING THE JOB BASED ON THE USER SETTINGS.
          */
         @JvmStatic
@@ -263,7 +263,7 @@ internal class ActivityMonitorJob : AsyncJob(), OnSuccessListener<DetectedActivi
      * Whenever the [DetectedActivityResponse] is success while detecting the user activity, this method
      * will be call. This method will analyse [activityResponse] and figure out user's current activity
      * (If user is sitting or moving/standing ?). It will also enter new
-     * [com.kevalpatel2106.common.db.userActivity.UserActivity] to the database.
+     * [com.kevalpatel2106.common.userActivity.UserActivity] to the database.
      */
     override fun onSuccess(activityResponse: DetectedActivityResponse) {
         Timber.i("Detected Activities: ".plus(activityResponse.activityRecognitionResult.probableActivities.toString()))

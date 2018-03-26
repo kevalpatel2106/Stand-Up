@@ -19,6 +19,8 @@ package com.kevalpatel2106.utils
 
 import android.annotation.SuppressLint
 import android.app.KeyguardManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.POWER_SERVICE
 import android.os.Build
@@ -26,7 +28,9 @@ import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.support.annotation.ColorRes
+import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
+import android.widget.Toast
 
 
 /**
@@ -64,4 +68,27 @@ fun Context.isScreenOn(): Boolean {
 fun Context.isDeviceLocked(): Boolean {
     val keyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
     return keyguardManager.inKeyguardRestrictedInputMode()
+}
+
+
+/**
+ * Show the toast for [Toast.LENGTH_SHORT] duration.
+ */
+fun Context.showToast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+/**
+ * Show the toast for [Toast.LENGTH_SHORT] duration.
+ */
+fun Context.showToast(@StringRes message: Int) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.copyToClipboard(copyItem: String) {
+    val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val clip = ClipData.newPlainText("Order id:", copyItem)
+    clipboard.primaryClip = clip
+
+    showToast(R.string.copied_to_clip_board)
 }

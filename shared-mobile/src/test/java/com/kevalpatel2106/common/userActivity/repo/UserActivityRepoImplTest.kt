@@ -114,7 +114,7 @@ class UserActivityRepoImplTest {
                 Assert.assertEquals(userActivityDao.tableItems.size, 1)
                 Assert.assertEquals(userActivityDao.tableItems[0].eventStartTimeMills, startTime)
                 Assert.assertEquals(userActivityDao.tableItems[0].eventEndTimeMills, startTime
-                        + UserActivityHelper.endTimeCorrectionValue)
+                        + UserActivityHelper.END_TIME_CORRECTION_VALUE)
 
                 Assert.assertEquals(userActivityDao.tableItems[0].userActivityType, UserActivityType.MOVING)
                 Assert.assertFalse(userActivityDao.tableItems[0].isSynced)

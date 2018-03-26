@@ -17,12 +17,12 @@
 
 package com.kevalpatel2106.common.base.uiController
 
+import android.annotation.SuppressLint
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.kevalpatel2106.common.R
 import com.kevalpatel2106.utils.getColorCompat
 
@@ -61,7 +61,8 @@ fun AppCompatActivity.showSnack(message: String,
     return showSnack(message, getString(actionName), actionListener, duration)
 }
 
-/**
+@SuppressLint("ResourceType")
+        /**
  * Display the snack bar.
  */
 fun AppCompatActivity.showSnack(@StringRes message: Int,
@@ -77,18 +78,4 @@ fun AppCompatActivity.showSnack(@StringRes message: Int,
 
     snackbar.show()
     return snackbar
-}
-
-/**
- * Show the toast for [Toast.LENGTH_SHORT] duration.
- */
-fun AppCompatActivity.showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
-/**
- * Show the toast for [Toast.LENGTH_SHORT] duration.
- */
-fun AppCompatActivity.showToast(@StringRes message: Int) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

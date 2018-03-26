@@ -24,7 +24,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.common.base.BaseApplication
 import com.kevalpatel2106.common.base.uiController.BaseActivity
-import com.kevalpatel2106.common.base.uiController.showToast
+import com.kevalpatel2106.utils.showToast
 import com.standup.app.authentication.AuthenticationApi
 import com.standup.app.splash.SplashActivity
 import dagger.Lazy
@@ -72,21 +72,21 @@ class DeepLinkActivity : BaseActivity() {
             }
         })
 
-        model.verifyEmailLink.observe(this@DeepLinkActivity, Observer<String> {
+        model.verifyEmailLink.observe(this@DeepLinkActivity, Observer {
             it?.let {
                 mAuthenticationApi.get().verifyEmailLink(this@DeepLinkActivity, it)
                 finish()
             }
         })
 
-        model.forgotPasswordLink.observe(this@DeepLinkActivity, Observer<String> {
+        model.forgotPasswordLink.observe(this@DeepLinkActivity, Observer {
             it?.let {
                 openLink(it)
                 finish()
             }
         })
 
-        model.otherLink.observe(this@DeepLinkActivity, Observer<String> {
+        model.otherLink.observe(this@DeepLinkActivity, Observer {
             it?.let {
                 openLink(it)
                 finish()

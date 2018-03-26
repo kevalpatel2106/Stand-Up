@@ -17,10 +17,18 @@
 
 package com.standup.app.about.donate
 
-import android.annotation.SuppressLint
-import android.support.annotation.StringRes
+import android.app.Activity
+import android.arch.lifecycle.MutableLiveData
+import android.support.annotation.VisibleForTesting
+import com.kevalpatel2106.common.base.BaseApplication
+import com.kevalpatel2106.common.base.arch.BaseViewModel
+import com.kevalpatel2106.common.base.arch.ErrorMessage
+import com.kevalpatel2106.utils.annotations.OnlyForTesting
 import com.kevalpatel2106.utils.annotations.ViewModel
 import com.standup.app.about.R
+import com.standup.app.about.di.DaggerAboutComponent
+import com.standup.app.billing.repo.BillingRepo
+import javax.inject.Inject
 
 /**
  * Created by Keval on 23/12/17.
@@ -30,22 +38,84 @@ import com.standup.app.about.R
  * @see SupportDevelopmentActivity
  */
 @ViewModel(SupportDevelopmentActivity::class)
-internal class SupportDevelopmentViewModel {
+internal class SupportDevelopmentViewModel : BaseViewModel {
 
-    /**
-     * Get the link for the PayPal.me donation base on the donation [amount]. Donation [amount] must
-     * be from [DonationAmount]. If the amount is other than [DonationAmount], this method will return
-     * [R.string.donate_2_dollar_link].
-     *
-     * @see DonationAmount
-     */
-    @SuppressLint("SwitchIntDef")
-    @StringRes
-    internal fun getDonationLink(@DonationAmount amount: Int): Int = when (amount) {
-        2 -> R.string.donate_2_dollar_link
-        5 -> R.string.donate_5_dollar_link
-        10 -> R.string.donate_10_dollar_link
-        20 -> R.string.donate_20_dollar_link
-        else -> R.string.donate_2_dollar_link /* We will return 2 dollar link */
+    @Inject
+    internal lateinit var billingRepo: BillingRepo
+
+    @VisibleForTesting
+    @OnlyForTesting
+    constructor(billingRepo: BillingRepo) {
+        this.billingRepo = billingRepo
+    }
+
+
+    constructor() {
+        DaggerAboutComponent.builder()
+                .appComponent(BaseApplication.getApplicationComponent())
+                .build()
+                .inject(this@SupportDevelopmentViewModel)
+    }
+
+    internal val donationOrderId = MutableLiveData<String>()
+
+    internal fun donate2Dollar(activity: Activity) {
+        billingRepo.donate2Dollar(activity)
+                .doOnSubscribe { blockUi.value = true }
+                .doAfterTerminate { blockUi.value = false }
+                .subscribe({
+                    donationOrderId.value = it
+                }, {
+                    val errorMsg = ErrorMessage(it.message)
+                    errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
+                        donate2Dollar(activity)
+                    })
+                    errorMessage.value = errorMsg
+                })
+    }
+
+    internal fun donate5Dollar(activity: Activity) {
+        billingRepo.donate5Dollar(activity)
+                .doOnSubscribe { blockUi.value = true }
+                .doAfterTerminate { blockUi.value = false }
+                .subscribe({
+                    donationOrderId.value = it
+                }, {
+                    val errorMsg = ErrorMessage(it.message)
+                    errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
+                        donate2Dollar(activity)
+                    })
+                    errorMessage.value = errorMsg
+                })
+    }
+
+    internal fun donate10Dollar(activity: Activity) {
+        billingRepo.donate10Dollar(activity)
+                .doOnSubscribe { blockUi.value = true }
+                .doAfterTerminate { blockUi.value = false }
+                .subscribe({
+                    donationOrderId.value = it
+                }, {
+                    val errorMsg = ErrorMessage(it.message)
+                    errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
+                        donate2Dollar(activity)
+                    })
+                    errorMessage.value = errorMsg
+                })
+    }
+
+    internal fun donate20Dollar(activity: Activity) {
+        billingRepo.donate20Dollar(activity)
+                .doOnSubscribe { blockUi.value = true }
+                .doAfterTerminate { blockUi.value = false }
+                .subscribe({
+                    donationOrderId.value = it
+                }, {
+                    val errorMsg = ErrorMessage(it.message)
+                    errorMsg.setErrorBtn(R.string.error_view_btn_title_retry, {
+                        donate2Dollar(activity)
+                    })
+                    errorMessage.value = errorMsg
+                })
     }
 }

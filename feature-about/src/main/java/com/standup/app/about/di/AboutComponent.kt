@@ -20,7 +20,9 @@ package com.standup.app.about.di
 import com.kevalpatel2106.common.di.AppComponent
 import com.kevalpatel2106.utils.annotations.ApplicationScope
 import com.standup.app.about.AboutViewModel
+import com.standup.app.about.donate.SupportDevelopmentViewModel
 import com.standup.app.about.report.ReportIssueViewModel
+import com.standup.app.billing.di.BillingDaggerModule
 import dagger.Component
 
 /**
@@ -31,10 +33,12 @@ import dagger.Component
  * @see AboutDaggerModule
  */
 @ApplicationScope
-@Component(dependencies = [AppComponent::class], modules = [AboutDaggerModule::class])
+@Component(dependencies = [AppComponent::class], modules = [AboutDaggerModule::class, BillingDaggerModule::class])
 internal interface AboutComponent {
 
     fun inject(aboutViewModel: AboutViewModel)
 
     fun inject(reportIssueViewModel: ReportIssueViewModel)
+
+    fun inject(supportDevelopmentViewModel: SupportDevelopmentViewModel)
 }

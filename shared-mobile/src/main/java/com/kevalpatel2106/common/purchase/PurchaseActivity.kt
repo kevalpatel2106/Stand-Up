@@ -20,8 +20,6 @@ package com.kevalpatel2106.common.purchase
 import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -29,8 +27,8 @@ import android.view.View
 import com.kevalpatel2106.common.R
 import com.kevalpatel2106.common.base.uiController.BaseActivity
 import com.kevalpatel2106.common.base.uiController.showSnack
-import com.kevalpatel2106.common.base.uiController.showToast
 import com.kevalpatel2106.utils.alert
+import com.kevalpatel2106.utils.copyToClipboard
 import com.standup.app.billing.InAppFailDialog
 import kotlinx.android.synthetic.main.activity_purchase.*
 
@@ -115,12 +113,7 @@ class PurchaseActivity : BaseActivity() {
                                 finish()
                             })
                             negativeButton(android.R.string.copy, {
-                                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val clip = ClipData.newPlainText("Order id:", it)
-                                clipboard.primaryClip = clip
-
-                                showToast(R.string.copied_to_clip_board)
-
+                                copyToClipboard(it)
                                 finish()
                             })
                         }

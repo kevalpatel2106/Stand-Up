@@ -13,17 +13,13 @@ import io.reactivex.Single
  */
 class MockBillingRepoImpl : BillingRepo {
 
-    var isPremiumPurchased: Boolean = true
-
-    var isPremiumPurchasedError: Boolean = false
-
+    var isError: Boolean = false
     var orderToken: String = ""
 
-    var buyPremiumError: Boolean = false
-
+    var isPremiumPurchased: Boolean = true
     override fun isPremiumPurchased(application: Application): Single<Boolean> {
         return Single.create {
-            if (isPremiumPurchasedError) {
+            if (isError) {
                 it.onError(IAPException(BillingClient.BillingResponse.ERROR))
             } else {
                 it.onSuccess(isPremiumPurchased)
@@ -33,7 +29,48 @@ class MockBillingRepoImpl : BillingRepo {
 
     override fun purchasePremium(activity: Activity): Single<String> {
         return Single.create {
-            if (buyPremiumError) {
+            if (isError) {
+                it.onError(IAPException(BillingClient.BillingResponse.ERROR))
+            } else {
+                it.onSuccess(orderToken)
+            }
+        }
+    }
+
+
+    override fun donate2Dollar(activity: Activity): Single<String> {
+        return Single.create {
+            if (isError) {
+                it.onError(IAPException(BillingClient.BillingResponse.ERROR))
+            } else {
+                it.onSuccess(orderToken)
+            }
+        }
+    }
+
+    override fun donate5Dollar(activity: Activity): Single<String> {
+        return Single.create {
+            if (isError) {
+                it.onError(IAPException(BillingClient.BillingResponse.ERROR))
+            } else {
+                it.onSuccess(orderToken)
+            }
+        }
+    }
+
+    override fun donate10Dollar(activity: Activity): Single<String> {
+        return Single.create {
+            if (isError) {
+                it.onError(IAPException(BillingClient.BillingResponse.ERROR))
+            } else {
+                it.onSuccess(orderToken)
+            }
+        }
+    }
+
+    override fun donate20Dollar(activity: Activity): Single<String> {
+        return Single.create {
+            if (isError) {
                 it.onError(IAPException(BillingClient.BillingResponse.ERROR))
             } else {
                 it.onSuccess(orderToken)

@@ -61,7 +61,7 @@ class UserActivityHelperTest {
         val localUserActivity = UserActivityHelper.createLocalUserActivity(UserActivityType.SITTING)
 
         Assert.assertTrue(System.currentTimeMillis() - localUserActivity.eventStartTimeMills <= 10_000/*10 seconds delta*/)
-        Assert.assertEquals(localUserActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue,
+        Assert.assertEquals(localUserActivity.eventStartTimeMills + UserActivityHelper.END_TIME_CORRECTION_VALUE,
                 localUserActivity.eventEndTimeMills)
         Assert.assertEquals(localUserActivity.localId, 0)
         Assert.assertEquals(localUserActivity.remoteId, 0)
@@ -75,7 +75,7 @@ class UserActivityHelperTest {
         val localUserActivity = UserActivityHelper.createLocalUserActivity(UserActivityType.NOT_TRACKED)
 
         Assert.assertTrue(System.currentTimeMillis() - localUserActivity.eventStartTimeMills <= 10_000/*10 seconds delta*/)
-        Assert.assertEquals(localUserActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue,
+        Assert.assertEquals(localUserActivity.eventStartTimeMills + UserActivityHelper.END_TIME_CORRECTION_VALUE,
                 localUserActivity.eventEndTimeMills)
         Assert.assertEquals(localUserActivity.localId, 0)
         Assert.assertEquals(localUserActivity.remoteId, 0)
@@ -89,7 +89,7 @@ class UserActivityHelperTest {
         val localUserActivity = UserActivityHelper.createLocalUserActivity(UserActivityType.MOVING)
 
         Assert.assertTrue(System.currentTimeMillis() - localUserActivity.eventStartTimeMills <= 10_000/*10 seconds delta*/)
-        Assert.assertEquals(localUserActivity.eventStartTimeMills + UserActivityHelper.endTimeCorrectionValue,
+        Assert.assertEquals(localUserActivity.eventStartTimeMills + UserActivityHelper.END_TIME_CORRECTION_VALUE,
                 localUserActivity.eventEndTimeMills)
 
         Assert.assertEquals(localUserActivity.localId, 0)

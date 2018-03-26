@@ -17,12 +17,14 @@
 
 package com.standup.app.about.donate
 
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.kevalpatel2106.common.base.uiController.BaseActivity
+import com.kevalpatel2106.utils.alert
 import com.kevalpatel2106.utils.annotations.UIController
-import com.standup.app.about.AboutUtils
+import com.kevalpatel2106.utils.copyToClipboard
 import com.standup.app.about.R
 import kotlinx.android.synthetic.main.activity_support_developement.*
 
@@ -30,7 +32,6 @@ import kotlinx.android.synthetic.main.activity_support_developement.*
  * Created by Kevalpatel2106 on 18-Dec-17.
  * A [BaseActivity] to display the support development screen. This screen contains options to
  * donate money via PayPal. User can donate any amount from [DonationAmount].
- * TODO : Convert PayPal donations to IAP.
  *
  * @author <a href="https://github.com/kevalpatel2106">kevalpatel2106</a>
  */
@@ -56,24 +57,39 @@ class SupportDevelopmentActivity : BaseActivity() {
         setToolbar(R.id.toolbar, "" /* Title is set in the xml. */, true)
 
         donate_two_dollar_card.setOnClickListener {
-            //Open the PayPal link
-            AboutUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(2)))
+            model.donate2Dollar(this@SupportDevelopmentActivity)
         }
 
         donate_five_dollar_card.setOnClickListener {
-            //Open the PayPal link
-            AboutUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(5)))
+            model.donate5Dollar(this@SupportDevelopmentActivity)
         }
 
         donate_ten_dollar_card.setOnClickListener {
-            //Open the PayPal link
-            AboutUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(10)))
+            model.donate10Dollar(this@SupportDevelopmentActivity)
         }
 
         donate_twenty_dollar_card.setOnClickListener {
-            //Open the PayPal link
-            AboutUtils.openLink(this@SupportDevelopmentActivity, getString(model.getDonationLink(20)))
+            model.donate20Dollar(this@SupportDevelopmentActivity)
         }
+
+        model.donationOrderId.observe(this@SupportDevelopmentActivity, Observer {
+            it?.let {
+
+                alert(titleResource = R.string.donation_success_title,
+                        messageResource = R.string.donation_success_message,
+                        func = {
+                            positiveButton(android.R.string.ok, {
+                                //Do nothing
+                                finish()
+                            })
+                            negativeButton(android.R.string.copy, {
+                                copyToClipboard(it)
+                                finish()
+                            })
+                        }
+                ).show()
+            }
+        })
     }
 
     companion object {

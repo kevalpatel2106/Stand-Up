@@ -90,11 +90,4 @@ object DebugConfig {
      * URL of Stand Up server with out trailing '/'.
      */
     const val SERVER_BASE_URL = "https://raspberry-pi-home-169503.appspot.com"
-
-
-    //####################### Play store console configs
-    /**
-     * Pro version product id.
-     */
-    const val PRO_VERSION_ID = "premium_version.101"
 }
