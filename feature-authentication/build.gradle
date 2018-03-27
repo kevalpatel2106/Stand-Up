@@ -31,6 +31,7 @@ android {
             signingConfig signingConfigs.playStore
 
             buildConfigField "String", "BASE_URL", "\"" + ReleaseConfig.RELEASE_SERVER_BASE_URL + "\""
+            buildConfigField "Boolean", "FEATURE_EMAIL_LOGIN", FeatureFlags.FEATURE_EMAIL_LOGIN
             resValue "string", "application_name", ReleaseConfig.RELEASE_APPLICATION_NAME
             resValue "string", "package_name", ReleaseConfig.RELEASE_PACKAGE_ID
             resValue "string", "api_host", "\"" + ReleaseConfig.RELEASE_SERVER_BASE_URL.replace("https://", "") + "\""
@@ -44,6 +45,7 @@ android {
             signingConfig signingConfigs.debugKey
 
             buildConfigField "String", "BASE_URL", "\"" + DebugConfig.SERVER_BASE_URL + "\""
+            buildConfigField "Boolean", "FEATURE_EMAIL_LOGIN", FeatureFlags.FEATURE_EMAIL_LOGIN
             resValue "string", "application_name", DebugConfig.APPLICATION_NAME
             resValue "string", "package_name", DebugConfig.PACKAGE_NAME
             resValue "string", "api_host", "\"" + DebugConfig.SERVER_BASE_URL.replace("https://", "") + "\""

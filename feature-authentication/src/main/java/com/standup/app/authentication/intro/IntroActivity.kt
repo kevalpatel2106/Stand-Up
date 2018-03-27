@@ -38,6 +38,7 @@ import com.kevalpatel2106.googleauth.GoogleAuthResponse
 import com.kevalpatel2106.googleauth.GoogleAuthUser
 import com.kevalpatel2106.googleauth.GoogleSignInHelper
 import com.kevalpatel2106.utils.annotations.UIController
+import com.standup.app.authentication.BuildConfig
 import com.standup.app.authentication.R
 import com.standup.app.authentication.deviceReg.DeviceRegisterActivity
 import com.standup.app.authentication.login.LoginActivity
@@ -101,10 +102,14 @@ class IntroActivity : BaseActivity(), GoogleAuthResponse, FacebookResponse {
             logEvent(AnalyticsEvents.EVENT_FACEBOOK_SIGN_UP)
         }
 
+        @Suppress("ConstantConditionIf")
+        btn_login_using_email.visibility = if (BuildConfig.FEATURE_EMAIL_LOGIN) View.VISIBLE else View.GONE
         btn_login_using_email.setOnClickListener {
             LoginActivity.launch(this@IntroActivity, false)
         }
 
+        @Suppress("ConstantConditionIf")
+        btn_create_account.visibility = if (BuildConfig.FEATURE_EMAIL_LOGIN) View.VISIBLE else View.GONE
         btn_create_account.setOnClickListener {
             LoginActivity.launch(this@IntroActivity, true)
         }
