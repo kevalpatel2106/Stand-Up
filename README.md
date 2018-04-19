@@ -10,7 +10,7 @@ Sitting is next cancer.
 ## Want to contribute?
 > Make sure you check out 👉[CONTRIBUTING.md](https://github.com/kevalpatel2106/Stand-Up/blob/master/.github/CONTRIBUTING.md)
 
-## Questions
+## Questions?
 Hit me on twitter [![Twitter](https://img.shields.io/badge/Twitter-@kevalpatel2106-blue.svg?style=flat)](https://twitter.com/kevalpatel2106) or join us on slack [![Slack](https://img.shields.io/badge/Join-Slack-red.svg?style=flat)](https://join.slack.com/t/stand-up-opensource/shared_invite/enQtMjkwODQ0MTQ1MTg4LTMwYjQyMmViYTc5ODkwODgxNzNlZmQzODAyNDNiMGEzZTM1YmUzZjZkNDAxOThjY2IyZmUxNWQ2ZTM2NDU1Yjg).
 
 ## License
